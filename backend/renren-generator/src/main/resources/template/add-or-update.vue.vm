@@ -1,0 +1,106 @@
+<template>
+  <el-card class="with-title">
+    <div slot="header" class="clearfix">
+      <div class="card-title">{{!dataForm.id ? '新增' : '修改'}}${className}</div>
+      <div class="buttons">
+        <el-button @click="cancleFormSubmit">取   消</el-button>
+      </div>
+    </div>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+      <el-form-item label="${column.comments}" prop="${column.attrname}">
+        <el-input v-model="dataForm.${column.attrname}" placeholder="${column.comments}"></el-input>
+      </el-form-item>
+#end
+#end
+    </el-form>
+    <span class="dialog-footer">
+      <el-button @click="cancleFormSubmit">取消</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+    </span>
+  </el-card>
+</template>
+
+<script>
+import { pick } from 'lodash'
+import { ${classname}Save, ${classname}Info } from '@/api/${pathName}'
+import DictSelect from '@/components/dict-select'
+import AreaSelect from '@/components/area-select'
+
+export default {
+  components: {
+    DictSelect,
+    AreaSelect
+  },
+  data () {
+    return {
+      dataForm: {
+#foreach($column in $columns)
+#if($column.columnName == $pk.columnName)
+        ${column.attrname}: 0,
+#else
+        ${column.attrname}: null#if($velocityCount != $columns.size()),#end
+
+#end
+#end
+      },
+      dataRule: {
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+        ${column.attrname}: [
+          { required: true, message: '${column.comments}不能为空', trigger: 'blur' }
+        ]#if($velocityCount != $columns.size()),#end
+
+#end
+#end
+      }
+    }
+  },
+  created () {
+    this.dataForm.${pk.attrname} = this.$route.params.id || 0
+    this.$nextTick(() => {
+      this.$refs['dataForm'].resetFields()
+      if (this.dataForm.${pk.attrname}) {
+        ${classname}Info(this.dataForm.id).then(({data}) => {
+          if (data && data.code === 0) {
+            Object.assign(
+              this.dataForm,
+              pick(data.${classname}, [ #foreach($column in $columns)#if($column.columnName != $pk.columnName)'${column.attrname}', #end#end ])
+            )
+          }
+        })
+      }
+    })
+  },
+  methods: {
+    // 取消信息
+    cancleFormSubmit () {
+      this.$store.commit('common/closeActiveTab')
+      #[[this.$router.push]]#({ name: '${moduleName}-${pathName}' })
+    },
+    // 表单提交
+    dataFormSubmit () {
+      #[[this.$refs['dataForm'].validate((valid) => {]]#
+        if (valid) {
+          ${classname}Save(this.dataForm.id, this.dataForm).then(({data}) => {
+            if (data && data.code === 0) {
+              #[[this.$message({]]#
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.$store.commit('common/closeActiveTab')
+                  #[[this.$router.push]]#({ name: '${moduleName}-${pathName}' })
+                }
+              })
+            } else {
+              #[[this.$message.error(data.msg)]]#
+            }
+          })
+        }
+      })
+    }
+  }
+}
+</script>

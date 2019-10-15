@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.sys.dao.SysDictTypeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="io.apj.modules.sys.entity.SysDictTypeEntity"
+		id="sysDictTypeMap">
+		<result property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+		<result property="ifLock" column="if_lock" />
+		<result property="createBy" column="create_by" />
+		<result property="createAt" column="create_at" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateAt" column="update_at" />
+		<result property="deleteAt" column="delete_at" />
+	</resultMap>
+
+	<!-- 根据字典类型和子项编码查询子项名称 -->
+	<select id="getNameByTypeAndCode" resultType="string">
+		SELECT
+		dict.`name`
+		as name
+		FROM
+		sys_dict dict
+		LEFT JOIN
+		sys_dict_type type ON
+		dict.dict_type_id = type.id
+		WHERE
+		dict.`code`=#{code} AND
+		type.type=#{type}
+	</select>
+
+	<!-- 根据字典类型和查询子项列表 -->
+	<select id="getListByType"
+		resultType="io.apj.modules.sys.entity.SysDictEntity">
+		SELECT
+		*
+		FROM
+		sys_dict dict
+		LEFT JOIN
+		sys_dict_type type ON
+		dict.dict_type_id = type.id
+		WHERE
+		type.type=#{type}
+		ORDER BY dict.code asc
+	</select>
+
+</mapper>
