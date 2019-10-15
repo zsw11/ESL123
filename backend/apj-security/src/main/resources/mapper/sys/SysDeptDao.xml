@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.sys.dao.SysDeptDao">
+
+	<resultMap type="io.apj.modules.basic.entity.MemberEntity"
+		id="sysDeptMap">
+		<result property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="name" column="name" />
+		<result property="orderNum" column="order_num" />
+		<result property="delFlag" column="del_flag" />
+		<result property="deptCode" column="dept_code" />
+		<result property="deptType" column="dept_type" />
+		<result property="deptLevel" column="dept_level" />
+		<result property="createBy" column="create_by" />
+		<result property="createAt" column="create_at" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateAt" column="update_at" />
+		<result property="deleteAt" column="delete_at" />
+	</resultMap>
+
+	<select id="queryDetpIdList" resultType="long">
+		select id from
+		sys_dept where parent_id = #{value} and del_flag = 0
+	</select>
+
+</mapper>

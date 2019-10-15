@@ -1,0 +1,38 @@
+package ${package}.${moduleName}.service;
+
+import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import ${mainPath}.common.utils.PageUtils;
+import ${package}.${moduleName}.entity.${className}Entity;
+
+import java.util.Map;
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Service extends IService<${className}Entity> {
+
+    PageUtils queryPage(Map<String, Object> params);
+    
+    /**
+	 * 保存配置信息
+	 */
+    public void save(${className}Entity ${classname});
+    
+    /**
+	 * 更新配置信息
+	 */
+	public void update(${className}Entity ${classname});
+	
+	/**
+	 * 删除配置信息
+	 */
+	public void deleteBatch(Long[] list);
+	
+}
+

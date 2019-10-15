@@ -1,0 +1,40 @@
+.gen-list-page{
+  .el-pagination{
+    text-align: center;
+  }
+  .filter-card {
+    .buttons {
+      height: 30px;
+      float: right;
+
+      &.with-complex {
+        float: none;
+        width: 100%;
+
+        .complex-button .el-button {
+          float: none;
+        }
+      }
+
+      .el-button {
+        float: right;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.el-card {
+  .dialog-footer {
+    display: block;
+    text-align: center;
+  }
+}
+
+.gen-edit-page {
+  .sub-block {
+    .sub-block-title {
+      font-weight: bold;
+    }
+  }
+}

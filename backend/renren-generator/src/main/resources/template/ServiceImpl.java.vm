@@ -1,0 +1,64 @@
+package ${package}.${moduleName}.service.impl;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Map;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import ${mainPath}.common.utils.PageUtils;
+import ${mainPath}.common.utils.Query;
+
+import ${package}.${moduleName}.dao.${className}Dao;
+import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.service.${className}Service;
+
+
+@Service("${classname}Service")
+public class ${className}ServiceImpl extends ServiceImpl<${className}Dao, ${className}Entity> implements ${className}Service {
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        Page<${className}Entity> page = this.selectPage(
+                new Query<${className}Entity>(params).getPage(),
+                new EntityWrapper<${className}Entity>()
+                	.isNull("delete_time")
+        );
+
+        return new PageUtils(page);
+    }
+    
+    @Override
+    public void save(${className}Entity ${classname}) {
+		this.insert(${classname});
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void update(${className}Entity ${classname}) {
+		${className}Entity entity = this.selectById(${classname}.getId());
+		${classname}.setCreateTime(entity.getCreateTime());
+		${classname}.setCreateUserId(entity.getCreateUserId());
+		this.updateAllColumnById(${classname});
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteBatch(Long[] ids) {
+		// 逻辑删除
+		List<${className}Entity> list = this.selectBatchIds(Arrays.asList(ids));
+		for (${className}Entity item : list) {
+			item.setDeleteTime(new Date());
+		}
+		this.updateBatchById(list, list.size());
+	}
+	
+	@Override
+	public List<${className}Entity> advancedSerach(Map<String, Object> params){
+		return baseMapper.advancedSerach(params);
+	}
+
+}
