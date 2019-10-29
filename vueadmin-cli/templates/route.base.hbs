@@ -1,0 +1,4 @@
+
+    // {{modelCnName}}
+    { path: '/add-{{toLower modelName}}', component: _import('modules/{{moduleName}}/{{toLower modelName}}-maintain'), name: 'add-{{toLower modelName}}', meta: { title: '新增{{modelCnName}}', isTab: true } },
+    { path: '/edit-{{toLower modelName}}/:id(\\d+)', component: _import('modules/{{moduleName}}/{{toLower modelName}}-maintain'), name: 'edit-{{toLower modelName}}', meta: { title: '编辑{{modelCnName}}', isTab: true } },
