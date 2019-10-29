@@ -1,0 +1,89 @@
+import request from '@/utils/httpRequest'
+
+// 获取{{modelCnName}}列表
+export function list{{upperFirst modelName}} (query) {
+  return request({
+    url: request.adornUrl('{{module}}/{{toLower modelName}}/list'),
+    method: 'get',
+    params: request.adornParams(query)
+  })
+}
+
+{{#compare operates 'includes' 'create'}}
+// 创建{{modelCnName}}
+export function create{{upperFirst modelName}} (data) {
+  return request({
+    url: request.adornUrl('{{module}}/{{toLower modelName}}/create'),
+    method: 'post',
+    data
+  })
+}
+{{/compare}}
+
+{{#compare operates 'includes' 'update'}}
+// 获取{{modelCnName}}详情
+export function fetch{{upperFirst modelName}} (params) {
+  return request({
+    url: request.adornUrl('{{module}}/{{toLower modelName}}/detail'),
+    method: 'get',
+    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+  })
+}
+
+// 修改{{modelCnName}}
+export function update{{upperFirst modelName}} (id, data) {
+  return request({
+    url: request.adornUrl('{{module}}/{{toLower modelName}}/update'),
+    method: 'put',
+    params: { id },
+    data
+  })
+}
+{{/compare}}
+
+{{#compare operates 'includes' 'delete'}}
+// 删除{{modelCnName}}
+export function delete{{upperFirst modelName}} (id) {
+  return request({
+    url: request.adornUrl('{{module}}/{{toLower modelName}}/delete'),
+    method: 'delete',
+    params: { id }
+  })
+}
+{{/compare}}
+
+{{#compare operates 'includesAny' "[\"advancedSearch\", \"showField\"]"}}
+// {{modelCnName}}高级查询
+export function {{modelName}}AdvancedSearch (data) {
+  return request({
+    url: request.adornUrl(`{{module}}/{{toLower modelName}}/advancedSearch`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+{{/compare}}
+
+{{#compare operates 'includes' 'import'}}
+// 导入{{modelCnName}}
+export function import{{upperFirst modelName}} (data) {
+  return request({
+    url: request.adornUrl(`{{module}}/{{toLower modelName}}/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+{{/compare}}
+
+{{#compare operates 'includes' 'export'}}
+// 导出{{modelCnName}}
+export function export{{upperFirst modelName}} (data) {
+  // 是否返回完整response
+  request.needOriginResponse = true
+  return request({
+    url: request.adornUrl(`{{module}}/{{toLower modelName}}/export?format=xlsx`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
+{{/compare}}
