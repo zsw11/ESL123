@@ -1,0 +1,159 @@
+[
+	{
+		"table": "basic_member",
+		"tableName": "人员信息",
+		"tableAlias": "member",
+		"join": " left Join sys_dept dept on dept.dept_id = member.dept_id left Join basic_job job on job.id = member.job_id ",
+		"fieldList": [
+			{
+				"code": "jobId",
+				"name": "工作岗位",
+				"type": "Long",
+				"field": "job_id"
+			},
+			{
+				"code": "deptId",
+				"name": "所属组织集团",
+				"type": "Long",
+				"field": "dept_id"
+			},
+			{
+				"code": "code",
+				"name": "人员编码",
+				"type": "string",
+				"field": "code"
+			},
+			{
+				"code": "name",
+				"name": "人员姓名",
+				"type": "string",
+				"field": "name",
+				"pinyin": "pinyin"
+			},
+			{
+				"code": "gender",
+				"name": "性别",
+				"type": "boolean",
+				"field": "gender"
+			},
+			{
+				"code": "mobilephone",
+				"name": "手机号码",
+				"type": "string",
+				"field": "mobilephone"
+			},
+			{
+				"code": "familyProvince",
+				"name": "家庭住址省份",
+				"type": "string",
+				"field": "family_province"
+			},
+			{
+				"code": "familyCity",
+				"name": "家庭住址市",
+				"type": "string",
+				"field": "family_city"
+			},
+			{
+				"code": "familyAddress",
+				"name": "家庭住址",
+				"type": "string",
+				"field": "family_address"
+			},
+			{
+				"code": "status",
+				"name": "在职状态",
+				"type": "string",
+				"field": "status"
+			},
+			{
+				"code": "remark",
+				"name": "备注",
+				"type": "string",
+				"field": "remark"
+			},
+			{
+				"code": "employmentDate",
+				"name": "入职日期",
+				"type": "date",
+				"field": "employment_date"
+			},
+			{
+				"code": "bussinessProvince",
+				"name": "工作地址省份",
+				"type": "string",
+				"field": "bussiness_province"
+			},
+			{
+				"code": "bussinessCity",
+				"name": "工作地址市",
+				"type": "string",
+				"field": "bussiness_city"
+			},
+			{
+				"code": "bussinessAddress",
+				"name": "工作地址",
+				"type": "string",
+				"field": "bussiness_address"
+			},
+			{
+				"code": "email",
+				"name": "邮箱",
+				"type": "string",
+				"field": "email"
+			},
+			{
+				"code": "birthDate",
+				"name": "出生日期",
+				"type": "date",
+				"field": "birth_date"
+			}
+		]
+	},
+	{
+		"table": "sys_dept",
+		"tableName": "部门信息",
+		"tableAlias": "dept",
+		"fieldList": [
+			{
+				"code": "name",
+				"name": "部门名称",
+				"type": "string",
+				"field": "name"
+			},
+			{
+				"code": "deptId",
+				"name": "部门id",
+				"type": "string",
+				"field": "dept_id"
+			}
+		]
+	},
+	{
+		"table": "basic_job",
+		"tableName": "岗位信息",
+		"tableAlias": "job",
+		"fieldList": [
+			{
+				"code": "code",
+				"name": "岗位编码",
+				"type": "string",
+				"field": "code"
+			},
+			{
+				"code": "name",
+				"name": "岗位名称",
+				"type": "string",
+				"field": "name",
+				"pinyin": "pinyin"
+			},
+			{
+				"code": "grade",
+				"name": "工程师等级",
+				"type": "string",
+				"field": "grade"
+			}
+		]
+	}
+]
+
