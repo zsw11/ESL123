@@ -1,0 +1,47 @@
+import request from '@/utils/request'
+
+// 获取{{resourceName}}列表
+export function fetch{{upperFirst resourceId}}List(query) {
+  return request({
+    url: '{{prefix}}/{{resourceId}}/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取{{resourceName}}详情
+export function fetch{{upperFirst resourceId}}(id) {
+  return request({
+    url: '{{prefix}}/{{resourceId}}/detail',
+    method: 'get',
+    params: { id }
+  })
+}
+
+// 创建{{resourceName}}
+export function create{{upperFirst resourceId}}(data) {
+  return request({
+    url: '{{prefix}}/{{resourceId}}/create',
+    method: 'post',
+    data
+  })
+}
+
+// 修改{{resourceName}}
+export function update{{upperFirst resourceId}}(id, data) {
+  return request({
+    url: '{{prefix}}/{{resourceId}}/update',
+    method: 'post',
+    params: { id },
+    data
+  })
+}
+
+// 删除{{resourceName}}
+export function delete{{upperFirst resourceId}}(id) {
+  return request({
+    url: '{{prefix}}/{{resourceId}}/delete',
+    method: 'delete',
+    params: { id }
+  })
+}
