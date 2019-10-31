@@ -18,7 +18,10 @@ const _import = require('./import-' + process.env.NODE_ENV)
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
   { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
-  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
+  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } },
+  // eslint-disable-next-line standard/object-curly-even-spacing
+  { path: '/analyzing', component: _import('analyzing'), name: 'analyzing', meta: { title: '分析表录入'}}
+
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
@@ -33,8 +36,10 @@ const mainRoutes = {
     // 1. isTab: 是否通过tab展示内容, true: 是, false: 否
     // 2. iframeUrl: 是否通过iframe嵌套展示内容, '以http[s]://开头': 是, '': 否
     // 提示: 如需要通过iframe嵌套展示内容, 但不通过tab打开, 请自行创建组件使用iframe处理!
+    // eslint-disable-next-line standard/object-curly-even-spacing
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } },
     { path: '/theme', component: _import('common/theme'), name: 'theme', meta: { title: '主题' } },
+    // eslint-disable-next-line standard/object-curly-even-spacing
     // 系统
     { path: '/add-user', component: _import('modules/sys/user-add-or-update'), name: 'add-user', meta: { title: '新增用户', isTab: true } },
     { path: '/edit-user/:id(\\d+)', component: _import('modules/sys/user-add-or-update'), name: 'edit-user', meta: { title: '编辑用户信息', isTab: true } },
