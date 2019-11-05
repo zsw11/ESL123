@@ -1,20 +1,25 @@
 <template>
   <div>
-  <div @keyup.219="showMore(1)" @keyup.222="showMore(2)" @keyup.enter="addRow" class="table" >
+  <div class="table"
+       @keyup.219="showMore(1)"
+       @keyup.222="showMore(2)"
+       @keyup.enter="addRow"
+       @keyup.115="copyEnd"
+       @keyup.118="copy"
+       @keyup.120="paste">
     <vxe-table
       border
       size="small"
       ref="xTable"
       :data="tableData"
       @cell-click="cellClickEvent"
-      @edit-actived="editActivedEvent"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="workMethod" title="workMethod" width="120" :edit-render="{name: 'input'}" >
+      <vxe-table-column field="workMethod" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
         <template v-slot:edit="{ row }">
           <input type="text" style="width: 90px" v-model="row.workMethod" ref="workInput" class="custom-input">
         </template>
@@ -69,32 +74,64 @@
     data () {
       return {
         flag: false,                      // 候选栏
-        workM: false,                     // 手顺
+        // workM: false,                     // 手顺
         rowIndex: 0,
         tableData: [{}],
-        allTable: [],
-        id: 0,
-        len: 10
+        allTable: [],                     // 所有工位的分析表
+        id: 0,                            // 当前工位分析表的索引
+        len: 10,
+        WMethod: ''
+        // row: {
+        //   H: null,
+        //   a1: null,
+        //   a2: null,
+        //   a3: null,
+        //   a4: null,
+        //   a5: null,
+        //   b1: null,
+        //   b2: null,
+        //   b3: null,
+        //   b4: null,
+        //   fre: null,
+        //   g1: null,
+        //   i: null,
+        //   key: null,
+        //   m: null,
+        //   p1: null,
+        //   p2: null,
+        //   p3: null,
+        //   remark: null,
+        //   scv: null,
+        //   timeValue: null,
+        //   tmu: null,
+        //   tool: null,
+        //   workMethod: '',
+        //   x: null}
       }
     },
     methods: {
       // 手顺候选模块
       showMore (i) {
-        if (this.workM) {
-          this.flag = true
-          i === 1 ? this.tableData[this.rowIndex].workMethod += ']'
-            : this.tableData[this.rowIndex].workMethod += '"'
-        }
+        this.flag = true
+        i === 1 ? this.tableData[this.rowIndex].workMethod += ']'
+          : this.tableData[this.rowIndex].workMethod += '"'
       },
       // 新增行模块
       addRow (event) {
-        console.log(event)
-        let keyValue = this.$refs.keys.value
-        this.flag = false
-        if (this.addrow) {
+        if (event.target.style.width !== '90px') {
+          // 新增行 唤醒手顺单元
+          let record = {
+            workMethod: ''
+          }
+          this.$refs.xTable.insertAt(record, -1)
+            .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'workMethod'))
+          let index = this.$refs.xTable.getInsertRecords().length - 1
+          this.tableData.push(this.$refs.xTable.getInsertRecords()[index])
+          // 调用对应快捷键
+          let keyValue = this.$refs.keys.value
           this.workKey(keyValue)
-          this.tableData.push({})
-          this.addrow = false
+          this.rowIndex ++
+          this.flag = false
         }
       },
       // 快捷键模块
@@ -109,7 +146,6 @@
       },
       // 切换工位
       toggle (index) {
-        console.log('切换')
         this.id = index
         this.tableData = this.allTable[index]
       },
@@ -125,21 +161,25 @@
         this.allTable.push([{}])
         localStorage.setItem('table', window.JSON.stringify(this.allTable))
       },
+      // 复制到最后
+      copyEnd () {
+        console.log('复制到最后')
+      },
+      copy () {
+        this.WMethod = this.tableData[this.rowIndex].workMethod
+      },
+      paste (event) {
+        event.target.value = this.WMethod
+        this.tableData[this.rowIndex].workMethod = this.WMethod
+      },
       // 单元格点击
       cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
         this.rowIndex = rowIndex
-        if (column.property.length === 2 || column.property === 'key') {
-          this.addrow = true
-        }
-        if (column.property === 'workMethod') {
-          this.workM = true
-        } else {
-          this.workM = false
-        }
-      },
-      editActivedEvent ({ row, column }, event) {
-        // console.log(`打开 ${column.title} 列编辑`);
-        // console.log(event.target.firstChild);
+        // if (column.property === 'workMethod') {
+        //   this.workM = true
+        // } else {
+        //   this.workM = false
+        // }
       },
       // 多选框全选点击
       selectAllEvent ({ checked }) {

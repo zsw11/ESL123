@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="bottom">
       <div class="btn">
-        <el-button style="width: 135px; height: 37px; font-size: 14px" type="primary">F5 手顺组合</el-button>
-        <el-button style="width: 154px; height: 37px; font-size: 14px" type="primary">F6 复制到最后</el-button>
+        <el-button style="width: 135px; height: 37px; font-size: 14px" type="primary">F2 手顺组合</el-button>
+        <el-button style="width: 154px; height: 37px; font-size: 14px" type="primary">F4 复制到最后</el-button>
         <el-button style="width: 96px; height: 37px; font-size: 14px" type="primary">F7 复制</el-button>
-        <el-button style="width: 96px; height: 37px; font-size: 14px" type="primary">F8 粘贴</el-button>
+        <el-button style="width: 96px; height: 37px; font-size: 14px" type="primary">F9 粘贴</el-button>
       </div>
       <analyzeTable ref="alyTable" :count="this.count"></analyzeTable>
       <div class="operation">
@@ -14,7 +14,7 @@
           <span slot="label" class="workNum" > 工位{{item}}</span>
         </el-tab-pane>
       </el-tabs>
-        <span class="span cache" @click="cache">缓存</span>
+        <span class="cache" @click="cache">缓存</span>
       </div>
       </div>
     </div>
@@ -35,9 +35,11 @@
       width: 600px;
     }
     .operation{
-      position: relative;
       background-color: #fff;
+      overflow: hidden;
+      position: relative;
       .toggleWork{
+        float: left;
         background-color: #F5F7FA;
         padding-right: 5px;
         box-shadow: none;
@@ -49,8 +51,10 @@
           text-align: center;
         }
       }
-      .span{
+      .cache{
         position: absolute;
+        right: 0;
+        bottom: 0;
         display: inline-block;
         text-align: center;
         font-size: 16px;
@@ -61,14 +65,8 @@
         box-sizing: border-box;
         cursor: pointer;
       }
-      .cache{
-        bottom: 0;
-        right: 0;
-      }
-      .add{
-        bottom: 0;
-        right: 100px;
-      }
+
+
     }
   }
 </style>
