@@ -119,8 +119,11 @@
       },
       // 新增行模块
       addRow (event) {
+        // 调用对应快捷键
+        let keyValue = this.$refs.keys.value
+        this.workKey(keyValue)
+        // 新增行 唤醒手顺单元
         if (event.target.style.width !== '90px' && this.add) {
-          // 新增行 唤醒手顺单元
           let record = {
             workMethod: ''
           }
@@ -128,9 +131,6 @@
             .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'workMethod'))
           let index = this.$refs.xTable.getInsertRecords().length - 1
           this.tableData.push(this.$refs.xTable.getInsertRecords()[index])
-          // 调用对应快捷键
-          let keyValue = this.$refs.keys.value
-          this.workKey(keyValue)
           this.rowIndex ++
           this.flag = false
         }
@@ -144,6 +144,14 @@
           this.tableData[this.rowIndex].b1 = 1
           this.tableData[this.rowIndex].b3 = 1
           this.tableData[this.rowIndex].m = 1
+        }
+        if (key === '2') {
+          console.log(this.tableData[this.rowIndex])
+          this.tableData[this.rowIndex].a2 = 0
+          this.tableData[this.rowIndex].a3 = 0
+          this.tableData[this.rowIndex].b1 = 0
+          this.tableData[this.rowIndex].b3 = 0
+          this.tableData[this.rowIndex].m = 0
         }
       },
       // 切换工位
@@ -177,6 +185,11 @@
       // 单元格点击
       cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
         this.rowIndex = rowIndex
+        if (this.rowIndex < this.tableData.length - 1) {
+          this.add = false
+        } else {
+          this.add = true
+        }
       },
       // 多选框全选点击
       selectAllEvent ({ checked }) {
