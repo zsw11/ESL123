@@ -65,8 +65,6 @@
         box-sizing: border-box;
         cursor: pointer;
       }
-
-
     }
   }
 </style>
@@ -88,7 +86,6 @@
       addWorkNum () {
         this.count ++
         this.$refs.alyTable.addWorkNum()
-        console.log(this.count)
       }
     },
     components: {

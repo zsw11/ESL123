@@ -1,8 +1,6 @@
 <template>
   <div>
   <div class="table"
-       @keyup.219="showMore(1)"
-       @keyup.222="showMore(2)"
        @keyup.enter="addRow"
        @keyup.115="copyEnd"
        @keyup.118="copy"
@@ -21,7 +19,9 @@
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="workMethod" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
         <template v-slot:edit="{ row }">
-          <input type="text" style="width: 90px" v-model="row.workMethod" ref="workInput" class="custom-input">
+          <input type="text" style="width: 90px" v-model="row.workMethod" ref="workInput" class="custom-input"
+                 @keyup.219="showMore(1)"
+                 @keyup.222="showMore(2)" >
         </template>
       </vxe-table-column>
       <vxe-table-column field="key" title="Key" width="60" :edit-render="{name: 'input'}">
@@ -80,7 +80,8 @@
         allTable: [],                     // 所有工位的分析表
         id: 0,                            // 当前工位分析表的索引
         len: 10,
-        WMethod: ''
+        WMethod: '',
+        add: true
         // row: {
         //   H: null,
         //   a1: null,
@@ -118,7 +119,7 @@
       },
       // 新增行模块
       addRow (event) {
-        if (event.target.style.width !== '90px') {
+        if (event.target.style.width !== '90px' && this.add) {
           // 新增行 唤醒手顺单元
           let record = {
             workMethod: ''
@@ -137,6 +138,7 @@
       // 快捷键模块
       workKey (key) {
         if (key === '1') {
+          console.log(this.tableData[this.rowIndex])
           this.tableData[this.rowIndex].a2 = 1
           this.tableData[this.rowIndex].a3 = 0
           this.tableData[this.rowIndex].b1 = 1
@@ -157,7 +159,7 @@
       // 添加工位
       addWorkNum () {
         this.len ++
-        this.id = (this.len - 1)
+        // this.id = (this.len - 1)
         this.allTable.push([{}])
         localStorage.setItem('table', window.JSON.stringify(this.allTable))
       },
@@ -175,11 +177,6 @@
       // 单元格点击
       cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
         this.rowIndex = rowIndex
-        // if (column.property === 'workMethod') {
-        //   this.workM = true
-        // } else {
-        //   this.workM = false
-        // }
       },
       // 多选框全选点击
       selectAllEvent ({ checked }) {
