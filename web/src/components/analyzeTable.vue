@@ -138,7 +138,6 @@
       // 快捷键模块
       workKey (key) {
         if (key === '1') {
-          console.log(this.tableData[this.rowIndex])
           this.tableData[this.rowIndex].a2 = 1
           this.tableData[this.rowIndex].a3 = 0
           this.tableData[this.rowIndex].b1 = 1
@@ -146,7 +145,6 @@
           this.tableData[this.rowIndex].m = 1
         }
         if (key === '2') {
-          console.log(this.tableData[this.rowIndex])
           this.tableData[this.rowIndex].a2 = 0
           this.tableData[this.rowIndex].a3 = 0
           this.tableData[this.rowIndex].b1 = 0
