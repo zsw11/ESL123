@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.masterData.dao.ModelDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.masterData.entity.ModelEntity" id="modelMap">
+        <result property="id" column="id"/>
+        <result property="modelSeriesId" column="model_series_id"/>
+        <result property="name" column="name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="code" column="code"/>
+        <result property="wsTime" column="ws_time"/>
+        <result property="esTime" column="es_time"/>
+        <result property="ampTime" column="amp_time"/>
+        <result property="mpTime" column="mp_time"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>
