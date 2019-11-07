@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: renren-generator
+Implementation-Version: 1.0.0
+Built-By: Luoyu
+Implementation-Vendor-Id: io.renren
+Build-Jdk: 1.8.0_191
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/renren-generator
+Created-By: Maven Integration for Eclipse
+
