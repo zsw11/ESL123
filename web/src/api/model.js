@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取机种列表
 export function listModel (query) {
   return request({
-    url: request.adornUrl('/model/list'),
+    url: request.adornUrl('/api/v1/model/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listModel (query) {
 // 创建机种
 export function createModel (data) {
   return request({
-    url: request.adornUrl('/model/create'),
+    url: request.adornUrl('/api/v1/model/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createModel (data) {
 // 获取机种详情
 export function fetchModel (params) {
   return request({
-    url: request.adornUrl('/model/detail'),
+    url: request.adornUrl('/api/v1/model/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchModel (params) {
 // 修改机种
 export function updateModel (id, data) {
   return request({
-    url: request.adornUrl('/model/update'),
+    url: request.adornUrl('/api/v1/model/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateModel (id, data) {
 // 删除机种
 export function deleteModel (id) {
   return request({
-    url: request.adornUrl('/model/delete'),
+    url: request.adornUrl('/api/v1/model/delete'),
     method: 'delete',
     params: { id }
   })

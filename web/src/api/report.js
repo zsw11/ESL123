@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取报表列表
 export function listReport (query) {
   return request({
-    url: request.adornUrl('/report/list'),
+    url: request.adornUrl('/api/v1/report/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listReport (query) {
 // 创建报表
 export function createReport (data) {
   return request({
-    url: request.adornUrl('/report/create'),
+    url: request.adornUrl('/api/v1/report/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createReport (data) {
 // 获取报表详情
 export function fetchReport (params) {
   return request({
-    url: request.adornUrl('/report/detail'),
+    url: request.adornUrl('/api/v1/report/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchReport (params) {
 // 修改报表
 export function updateReport (id, data) {
   return request({
-    url: request.adornUrl('/report/update'),
+    url: request.adornUrl('/api/v1/report/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateReport (id, data) {
 // 删除报表
 export function deleteReport (id) {
   return request({
-    url: request.adornUrl('/report/delete'),
+    url: request.adornUrl('/api/v1/report/delete'),
     method: 'delete',
     params: { id }
   })

@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取组织机构工位关系列表
 export function listDeptWorkstationRela (query) {
   return request({
-    url: request.adornUrl('/deptworkstationrela/list'),
+    url: request.adornUrl('/api/v1/deptworkstationrela/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listDeptWorkstationRela (query) {
 // 创建组织机构工位关系
 export function createDeptWorkstationRela (data) {
   return request({
-    url: request.adornUrl('/deptworkstationrela/create'),
+    url: request.adornUrl('/api/v1/deptworkstationrela/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createDeptWorkstationRela (data) {
 // 获取组织机构工位关系详情
 export function fetchDeptWorkstationRela (params) {
   return request({
-    url: request.adornUrl('/deptworkstationrela/detail'),
+    url: request.adornUrl('/api/v1/deptworkstationrela/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchDeptWorkstationRela (params) {
 // 修改组织机构工位关系
 export function updateDeptWorkstationRela (id, data) {
   return request({
-    url: request.adornUrl('/deptworkstationrela/update'),
+    url: request.adornUrl('/api/v1/deptworkstationrela/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateDeptWorkstationRela (id, data) {
 // 删除组织机构工位关系
 export function deleteDeptWorkstationRela (id) {
   return request({
-    url: request.adornUrl('/deptworkstationrela/delete'),
+    url: request.adornUrl('/api/v1/deptworkstationrela/delete'),
     method: 'delete',
     params: { id }
   })

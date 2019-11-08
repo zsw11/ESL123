@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取工位类型列表
 export function listWorkstationType (query) {
   return request({
-    url: request.adornUrl('/workstationtype/list'),
+    url: request.adornUrl('/api/v1/workstationtype/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listWorkstationType (query) {
 // 创建工位类型
 export function createWorkstationType (data) {
   return request({
-    url: request.adornUrl('/workstationtype/create'),
+    url: request.adornUrl('/api/v1/workstationtype/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createWorkstationType (data) {
 // 获取工位类型详情
 export function fetchWorkstationType (params) {
   return request({
-    url: request.adornUrl('/workstationtype/detail'),
+    url: request.adornUrl('/api/v1/workstationtype/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchWorkstationType (params) {
 // 修改工位类型
 export function updateWorkstationType (id, data) {
   return request({
-    url: request.adornUrl('/workstationtype/update'),
+    url: request.adornUrl('/api/v1/workstationtype/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateWorkstationType (id, data) {
 // 删除工位类型
 export function deleteWorkstationType (id) {
   return request({
-    url: request.adornUrl('/workstationtype/delete'),
+    url: request.adornUrl('/api/v1/workstationtype/delete'),
     method: 'delete',
     params: { id }
   })
