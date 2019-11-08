@@ -19,6 +19,7 @@ const _import = require('./import-' + process.env.NODE_ENV)
 const globalRoutes = [
   { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
   { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } },
+  // 内页分析表
   // eslint-disable-next-line standard/object-curly-even-spacing
   { path: '/analyzing', component: _import('analyzing'), name: 'analyzing', meta: { title: '分析表录入'}}
 
