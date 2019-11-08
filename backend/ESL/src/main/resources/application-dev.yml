@@ -6,7 +6,7 @@ spring:
             first:  #数据源1
                 url: jdbc:postgresql://localhost:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: postgres
-                password: xc19981216
+                password: admin
             second:  #数据源2
                 url: jdbc:mysql://localhost:3306/apj-security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: root
