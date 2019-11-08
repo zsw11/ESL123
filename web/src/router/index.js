@@ -84,7 +84,72 @@ const mainRoutes = {
     // 引用表
     { path: '/reference-list', component: _import('modules/sys/reference'), name: 'reference-list', meta: { title: '引用表管理', isTab: true } },
     { path: '/add-reference', component: _import('modules/sys/reference-maintain'), name: 'add-reference', meta: { title: '新增引用表', isTab: true } },
-    { path: '/edit-reference/:id(\\d+)', component: _import('modules/sys/reference-maintain'), name: 'edit-reference', meta: { title: '编辑引用表', isTab: true } }
+    { path: '/edit-reference/:id(\\d+)', component: _import('modules/sys/reference-maintain'), name: 'edit-reference', meta: { title: '编辑引用表', isTab: true } },
+
+    // 常用审批意见
+    { path: '/add-approveopininon', component: _import('modules/masterData/approveopininon-maintain'), name: 'add-approveopininon', meta: { title: '新增常用审批意见', isTab: true } },
+    { path: '/edit-approveopininon/:id(\\d+)', component: _import('modules/masterData/approveopininon-maintain'), name: 'edit-approveopininon', meta: { title: '编辑常用审批意见', isTab: true } },
+    // 组织机构关键词关系
+    { path: '/add-deptoperationrela', component: _import('modules/masterData/deptoperationrela-maintain'), name: 'add-deptoperationrela', meta: { title: '新增组织机构关键词关系', isTab: true } },
+    { path: '/edit-deptoperationrela/:id(\\d+)', component: _import('modules/masterData/deptoperationrela-maintain'), name: 'edit-deptoperationrela', meta: { title: '编辑组织机构关键词关系', isTab: true } },
+    // 机种
+    { path: '/add-model', component: _import('modules/masterData/model-maintain'), name: 'add-model', meta: { title: '新增机种', isTab: true } },
+    { path: '/edit-model/:id(\\d+)', component: _import('modules/masterData/model-maintain'), name: 'edit-model', meta: { title: '编辑机种', isTab: true } },
+
+    // 机种部品关系
+    { path: '/add-modelpartrela', component: _import('modules/masterData/modelpartrela-maintain'), name: 'add-modelpartrela', meta: { title: '新增机种部品关系', isTab: true } },
+    { path: '/edit-modelpartrela/:id(\\d+)', component: _import('modules/masterData/modelpartrela-maintain'), name: 'edit-modelpartrela', meta: { title: '编辑机种部品关系', isTab: true } },
+
+    // 机种系列
+    { path: '/add-modelseries', component: _import('modules/masterData/modelseries-maintain'), name: 'add-modelseries', meta: { title: '新增机种系列', isTab: true } },
+    { path: '/edit-modelseries/:id(\\d+)', component: _import('modules/masterData/modelseries-maintain'), name: 'edit-modelseries', meta: { title: '编辑机种系列', isTab: true } },
+
+    // 机种治工具关系
+    { path: '/add-modeltoolrela', component: _import('modules/masterData/modeltoolrela-maintain'), name: 'add-modeltoolrela', meta: { title: '新增机种治工具关系', isTab: true } },
+    { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterData/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种治工具关系', isTab: true } },
+
+    // 关键词
+    { path: '/add-operation', component: _import('modules/masterData/operation-maintain'), name: 'add-operation', meta: { title: '新增关键词', isTab: true } },
+    { path: '/edit-operation/:id(\\d+)', component: _import('modules/masterData/operation-maintain'), name: 'edit-operation', meta: { title: '编辑关键词', isTab: true } },
+
+    // 部品
+    { path: '/add-part', component: _import('modules/masterData/part-maintain'), name: 'add-part', meta: { title: '新增部品', isTab: true } },
+    { path: '/edit-part/:id(\\d+)', component: _import('modules/masterData/part-maintain'), name: 'edit-part', meta: { title: '编辑部品', isTab: true } },
+
+    // 生产阶段
+    { path: '/add-phase', component: _import('modules/masterData/phase-maintain'), name: 'add-phase', meta: { title: '新增生产阶段', isTab: true } },
+    { path: '/edit-phase/:id(\\d+)', component: _import('modules/masterData/phase-maintain'), name: 'edit-phase', meta: { title: '编辑生产阶段', isTab: true } },
+
+    // 报表
+    { path: '/add-report', component: _import('modules/masterData/report-maintain'), name: 'add-report', meta: { title: '新增报表', isTab: true } },
+    { path: '/edit-report/:id(\\d+)', component: _import('modules/masterData/report-maintain'), name: 'edit-report', meta: { title: '编辑报表', isTab: true } },
+    // 报表组
+    { path: '/add-reportgroup', component: _import('modules/masterData/reportgroup-maintain'), name: 'add-reportgroup', meta: { title: '新增报表组', isTab: true } },
+    { path: '/edit-reportgroup/:id(\\d+)', component: _import('modules/masterData/reportgroup-maintain'), name: 'edit-reportgroup', meta: { title: '编辑报表组', isTab: true } },
+
+    // 报表组报表关系
+    { path: '/add-reportgroupreportrela', component: _import('modules/masterData/reportgroupreportrela-maintain'), name: 'add-reportgroupreportrela', meta: { title: '新增报表组报表关系', isTab: true } },
+    { path: '/edit-reportgroupreportrela/:id(\\d+)', component: _import('modules/masterData/reportgroupreportrela-maintain'), name: 'edit-reportgroupreportrela', meta: { title: '编辑报表组报表关系', isTab: true } },
+
+    // 治工具
+    { path: '/add-tool', component: _import('modules/masterData/tool-maintain'), name: 'add-tool', meta: { title: '新增治工具', isTab: true } },
+    { path: '/edit-tool/:id(\\d+)', component: _import('modules/masterData/tool-maintain'), name: 'edit-tool', meta: { title: '编辑治工具', isTab: true } },
+
+    // 工位
+    { path: '/add-workstation', component: _import('modules/masterData/workstation-maintain'), name: 'add-workstation', meta: { title: '新增工位', isTab: true } },
+    { path: '/edit-workstation/:id(\\d+)', component: _import('modules/masterData/workstation-maintain'), name: 'edit-workstation', meta: { title: '编辑工位', isTab: true } },
+
+    // 工位类型
+    { path: '/add-workstationtype', component: _import('modules/masterData/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '新增工位类型', isTab: true } },
+    { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterData/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '编辑工位类型', isTab: true } },
+
+    // 工位类型节点
+    { path: '/add-workstationtypenode', component: _import('modules/masterData/workstationtypenode-maintain'), name: 'add-workstationtypenode', meta: { title: '新增工位类型节点', isTab: true } },
+    { path: '/edit-workstationtypenode/:id(\\d+)', component: _import('modules/masterData/workstationtypenode-maintain'), name: 'edit-workstationtypenode', meta: { title: '编辑工位类型节点', isTab: true } },
+
+    // 组织机构工位关系
+    { path: '/add-deptworkstationrela', component: _import('modules/masterData/deptworkstationrela-maintain'), name: 'add-deptworkstationrela', meta: { title: '新增组织机构工位关系', isTab: true } },
+    { path: '/edit-deptworkstationrela/:id(\\d+)', component: _import('modules/masterData/deptworkstationrela-maintain'), name: 'edit-deptworkstationrela', meta: { title: '编辑组织机构工位关系', isTab: true } }
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token
