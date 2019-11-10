@@ -5,14 +5,14 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'字典编码'" prop="code">
-          <el-input v-model="listQuery.code" clearable></el-input>
+        <el-form-item :label="'字典编码'" prop="type">
+          <el-input v-model="listQuery.type" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'字典名称'" prop="name">
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
-        <el-upload
+        <!-- <el-upload
           class="upload-demo"
           action="upload"
           multiple
@@ -22,7 +22,7 @@
           :file-list="fileList">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
+        </el-upload> -->
         <div class="buttons">
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -41,7 +41,7 @@
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;">
+        style="">
         <el-table-column
           type="selection"
           header-align="left"
@@ -51,7 +51,7 @@
 
         <el-table-column align="center" label="字典编码">
           <template slot-scope="scope">
-            <span>{{scope.row.code }}</span>
+            <span>{{scope.row.type }}</span>
           </template>
         </el-table-column>
 
@@ -69,9 +69,9 @@
 
       <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('sys:dict:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)" :disabled="scope.row.isLocked">修改</el-button>
+            <el-button v-if="isAuth('sys:dict:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)" :disabled="scope.row.ifLock">修改</el-button>
             <el-button v-if="isAuth('sys:dict:update')" type="text" size="small" @click="itemsHandle(scope.row.id)">字典项</el-button>
-            <el-button v-if="isAuth('sys:dict:delete')" size="mini" type="text" @click="deleteHandle(scope.row)" :disabled="scope.row.isLocked">删除</el-button>
+            <el-button v-if="isAuth('sys:dict:delete')" size="mini" type="text" @click="deleteHandle(scope.row)" :disabled="scope.row.ifLock">删除</el-button>
           </template>
         </el-table-column>
 
@@ -99,7 +99,7 @@ export default {
     return {
       dataButton: 'list',
       listQuery: {
-        code: null,
+        type: null,
         name: null
       },
       dataList: [],
@@ -123,7 +123,7 @@ export default {
   },
   computed: {
     batchDeleteDisabled () {
-      return this.dataListSelections.length <= 0 || !!this.dataListSelections.find(d => d.isLocked)
+      return this.dataListSelections.length <= 0 || !!this.dataListSelections.find(d => d.ifLock)
     }
   },
   methods: {
@@ -140,9 +140,9 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data
-        this.total = total
+      )).then(({data}) => {
+        this.dataList = data.page.data
+        this.total = data.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -194,10 +194,10 @@ export default {
     },
     // 删除数据
     deleteHandle (row) {
-      var ids = row ? row.id : this.dataListSelections.map(item => {
+      var ids = row ? [row.id] : this.dataListSelections.map(item => {
         return item.id
       })
-      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+      this.$confirm(`确定对选择的数据=${ids.join(',')}]进行[${row ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

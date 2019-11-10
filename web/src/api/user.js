@@ -49,8 +49,8 @@ export function userReset (data) {
 export function userDelete (id) {
   return request({
     url: request.adornUrl('/api/v1/user/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }
 

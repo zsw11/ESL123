@@ -72,7 +72,7 @@ public class SysDictController extends AbstractController {
 	 */
 	@SysLog("保存字典项")
 	@RequestMapping("/create")
-	@RequiresPermissions("sys:dict:create")
+//	@RequiresPermissions("sys:dict:create")
 	public ResponseEntity<Object> save(@RequestBody SysDictEntity sysDict) {
 		sysDict.setCreateAt(new Date());
 		sysDict.setUpdateAt(new Date());

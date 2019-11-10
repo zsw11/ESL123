@@ -11,7 +11,7 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="字典编码">
-              <span>{{dict.code}}</span>
+              <span>{{dict.type}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="11">
@@ -66,7 +66,7 @@
 
         <el-table-column align="center" label="排序号">
           <template slot-scope="scope">
-            <span>{{scope.row.orderNumber }}</span>
+            <span>{{scope.row.sort }}</span>
           </template>
         </el-table-column>
 
@@ -117,12 +117,9 @@ export default {
     // 普通查询
     getDataList () {
       this.dataListLoading = true
-      fetchDict({
-        id: this.dictId,
-        includeItems: true
-      }).then(({ data }) => {
+      fetchDict(this.dictId).then(({ data }) => {
         this.dict = data
-        this.dataList = data.items
+        this.dataList = data.dictList
       }).finally(() => {
         this.dataListLoading = false
       })
@@ -139,10 +136,10 @@ export default {
     },
     // 删除数据
     deleteHandle (row) {
-      var ids = row ? row.id : this.dataListSelections.map(item => {
+      var ids = row ? [row.id] : this.dataListSelections.map(item => {
         return item.id
       })
-      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+      this.$confirm(`确定对选择的数据=${ids.join(',')}]进行[${row ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

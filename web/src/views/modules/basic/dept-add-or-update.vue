@@ -149,7 +149,7 @@ export default {
           fetchDept(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
-              pick(data, [ 'name', 'orderNum', 'parentId', 'typeId', 'level' ])
+              pick(data.dept, [ 'name', 'orderNum', 'parentId', 'deptType', 'deptLevel' ])
             )
           }).finally(() => {
             this.inited = true
