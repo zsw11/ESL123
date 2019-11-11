@@ -2,160 +2,43 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'名称'" prop="name" >
-          <el-input v-model="listQuery.name" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'工位ID'" prop="workstationId" >
-          <el-input-number v-model="listQuery.workstationId"  clearable></el-input-number>
-        </el-form-item>
 
         <el-form-item :label="'备注'" prop="remark" >
-          <el-input v-model="listQuery.remark" clearable></el-input>
+          <textarea style="width: 900px;height: 85px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
         </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
-        <div class='buttons with-complex'>
-          <el-button @click="clearQuery()">清   空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-        </div>
       </el-form>
     </el-card>
     <el-card class="with-title">
-      <div slot="header" class="clearfix">
-        <div class="card-title">工位类型节点</div>
-        <div class="buttons">
-          <el-button v-if="isAuth('masterData:workstationtypenode:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
-          <el-button v-if="isAuth('masterData:workstationtypenode:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-        </div>
-      </div>
+    <div class="tableHeader">工位类型结构</div>
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;">
-        <el-table-column
-          type="selection"
-          header-align="left"
-          align="left"
-          width="50">
-        </el-table-column>
+        style="width: 400px;">
 
-        <el-table-column align="center" prop="id" label="ID" >
+
+      <el-table-column align="center"  :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
+            <el-button v-if="isAuth('masterData:workstationtypenode:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="name" label="名称" >
+        <el-table-column align="center" prop="name" label="工位类型名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="workstationId" label="工位ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.workstationId }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="remark" label="备注" >
-          <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createAt" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:workstationtypenode:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('masterData:workstationtypenode:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-
       </el-table>
-      <el-pagination
-        @size-change="sizeChangeHandle"
-        @current-change="currentChangeHandle"
-        :current-page="pageNo"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper">
-      </el-pagination>
 
+      <div style="text-align: center">
+        <el-button type="primary" size="medium">保存</el-button>
+        <el-button size="medium">取消</el-button>
+      </div>
     </el-card>
   </div>
 </template>
@@ -168,15 +51,7 @@ export default {
     return {
       dataButton: 'list',
       listQuery: {
-        id: null,
-        name: null,
-        workstationId: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        name: null
       },
 
       dataList: [],
@@ -189,17 +64,7 @@ export default {
         code: 'workstationTypeNode',
         name: '工位类型节点',
         children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'name', name: '名称', type: 'string', required: true },
-          { code: 'workstationId', name: '工位ID', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'name', name: '工位类型名称', type: 'string', required: true }
         ]
       }],
       complexFilters: []
@@ -236,14 +101,7 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
-        name: null,
-        workstationId: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        name: null
       })
     },
     // 每页数
@@ -299,3 +157,17 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .tableHeader{
+    width: 90px;
+    height: 30px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #1989FA;
+    line-height: 30px;
+    text-align: center;
+    font-size: 13px;
+    color: white;
+  }
+</style>

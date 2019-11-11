@@ -2,48 +2,25 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'审批操作'" prop="approveOperation" >
-          <el-input v-model="listQuery.approveOperation" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'审批意见'" prop="opininon" >
+        <el-form-item :label="'常用审批意见内容'" prop="opininon" >
           <el-input v-model="listQuery.opininon" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
+        <el-form-item :label="'审批状态'" prop="approveOperation" >
+          <el-select>
+            <el-option>
+            </el-option>
+          </el-select>
         </el-form-item>
 
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
 
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
-        <div class='buttons with-complex'>
+        <div style="float: right">
+          <el-button @click="etDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
         </div>
       </el-form>
     </el-card>
@@ -62,75 +39,28 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column
+          fixed="left"
           type="selection"
-          header-align="left"
-          align="left"
-          width="50">
+          width="55"
+          align="center">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="approveOperation" label="审批操作" >
-          <template slot-scope="scope">
-            <span>{{scope.row.approveOperation }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="opininon" label="审批意见" >
+        <el-table-column align="center" prop="opininon" label="常用审批意见内容" >
           <template slot-scope="scope">
             <span>{{scope.row.opininon }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
+        <el-table-column align="center" prop="approveOperation" label="审批状态" >
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
+            <span>{{scope.row.approveOperation }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createAt" label="创建时间" >
+      <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:approveopininon:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+            <el-button v-if="isAuth('masterData:approveopininon:update')" type="text" size="small" @click="">详情</el-button>
+            <el-button v-if="isAuth('masterData:part:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button v-if="isAuth('masterData:approveopininon:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -158,14 +88,8 @@ export default {
     return {
       dataButton: 'list',
       listQuery: {
-        id: null,
         approveOperation: null,
-        opininon: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        opininon: null
       },
       dataList: [],
       pageNo: 1,
@@ -174,19 +98,11 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       attributes: [{
-        code: 'approveOpininon',
-        name: '常用审批意见',
+        code: 'approveOpinion',
+        name: 'approveOpinion',
         children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'approveOperation', name: '审批操作', type: 'string', required: true },
-          { code: 'opininon', name: '审批意见', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'approveOperation', name: '审批状态', type: 'string', required: true },
+          { code: 'opininon', name: '常用审批意见内容', type: 'string', required: true }
         ]
       }],
       complexFilters: []
@@ -224,12 +140,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         approveOperation: null,
-        opininon: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        opininon: null
       })
     },
     // 每页数

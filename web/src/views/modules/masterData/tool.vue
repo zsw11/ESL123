@@ -2,61 +2,27 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'tools Name'" prop="name" >
+        <el-form-item :label="'治工具名称'" prop="name" >
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'If Commmon Use'" prop="ifCommmonUse" >
-          <el-switch v-model="listQuery.ifCommmonUse"></el-switch>
-        </el-form-item>
-
-        <el-form-item :label="'remark'" prop="remark" >
-          <el-input v-model="listQuery.remark" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
-        <div class='buttons with-complex'>
-          <el-button @click="clearQuery()">清   空</el-button>
+        <div style="float: right">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
         </div>
       </el-form>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">治工具</div>
+        <div class="card-title">治工具信息</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:tool:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
+          <el-button v-if="isAuth('masterData:tool:create')">导入</el-button>
+          <el-button v-if="isAuth('masterData:tool:create')">导出</el-button>
+          <el-button v-if="isAuth('masterData:tool:create')" @click="addOrUpdateHandle()">新增</el-button>
           <el-button v-if="isAuth('masterData:tool:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -66,81 +32,35 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column
+          fixed="left"
           type="selection"
           header-align="left"
           align="left"
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="name" label="tools Name" >
+        <el-table-column align="center" prop="name" label="治工具名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="ifCommmonUse" label="If Commmon Use" >
+        <el-table-column align="center" prop="ifCommmonUse" label="是否通用" >
           <template slot-scope="scope">
             <el-switch v-model="scope.row.ifCommmonUse" :disabled="true"></el-switch>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="remark" >
+        <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
-
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
+      <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createAt" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:tool:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="">详情</el-button>
+            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button v-if="isAuth('masterData:tool:update')" type="text" size="small" @click="">机种</el-button>
             <el-button v-if="isAuth('masterData:tool:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -168,15 +88,9 @@ export default {
     return {
       dataButton: 'list',
       listQuery: {
-        id: null,
         name: null,
         ifCommmonUse: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        remark: null
       },
 
       dataList: [],
@@ -187,19 +101,11 @@ export default {
       dataListSelections: [],
       attributes: [{
         code: 'tool',
-        name: '治工具',
+        name: '治工具信息',
         children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'name', name: 'tools Name', type: 'string', required: true },
-          { code: 'ifCommmonUse', name: 'If Commmon Use', type: 'string', required: true },
-          { code: 'remark', name: 'remark', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'name', name: '治工具名称', type: 'string', required: true },
+          { code: 'ifCommmonUse', name: '是否通用', type: 'string', required: true },
+          { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
       complexFilters: []
@@ -238,12 +144,7 @@ export default {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
         ifCommmonUse: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        remark: null
       })
     },
     // 每页数
