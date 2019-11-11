@@ -3,25 +3,25 @@ import request from '@/utils/httpRequest.js'
 // 字典列表
 export function listDict (query) {
   return request({
-    url: request.adornUrl('/api/v1/dict/list'),
+    url: request.adornUrl('/sys/dicttype/list'),
     method: 'get',
     params: request.adornParams(query)
   })
 };
 
 // 获取字典
-export function fetchDict (params) {
+export function fetchDict (id) {
   return request({
-    url: request.adornUrl('/api/v1/dict/detail'),
+    url: request.adornUrl(`/sys/dicttype/info/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
 // 创建字典
 export function createDict (data) {
   return request({
-    url: request.adornUrl(`/api/v1/dict/create`),
+    url: request.adornUrl(`/sys/dicttype/save`),
     method: 'post',
     data
   })
@@ -30,7 +30,7 @@ export function createDict (data) {
 // 修改字典
 export function updateDict (id, data) {
   return request({
-    url: request.adornUrl('/api/v1/dict/update'),
+    url: request.adornUrl('/sys/dicttype/update'),
     method: 'put',
     params: { id },
     data
@@ -40,9 +40,9 @@ export function updateDict (id, data) {
 // 删除字典
 export function deleteDict (id) {
   return request({
-    url: request.adornUrl('/api/v1/dict/delete'),
-    method: 'delete',
-    params: { id }
+    url: request.adornUrl('/sys/dicttype/delete'),
+    method: 'post',
+    data: id
   })
 }
 
@@ -58,7 +58,7 @@ export function listDictItem (query) {
 // 获取字典项详情
 export function fetchDictItem (id) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/detail'),
+    url: request.adornUrl('/api/v1/dict/detail'),
     method: 'get',
     params: { id }
   })
@@ -76,7 +76,7 @@ export function fetchDictItemByCode (dictCode, code) {
 // 创建字典项
 export function createDictItem (data) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/create'),
+    url: request.adornUrl('/api/v1/dict/create'),
     method: 'post',
     data
   })
@@ -85,7 +85,7 @@ export function createDictItem (data) {
 // 修改字典项
 export function updateDictItem (id, data) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/update'),
+    url: request.adornUrl('/api/v1/dict/update'),
     method: 'put',
     params: { id },
     data
@@ -95,8 +95,8 @@ export function updateDictItem (id, data) {
 // 删除字典项
 export function deleteDictItem (id) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/delete'),
-    method: 'delete',
-    params: { id }
+    url: request.adornUrl('/api/v1/dict/delete'),
+    method: 'post',
+    data: id
   })
 }

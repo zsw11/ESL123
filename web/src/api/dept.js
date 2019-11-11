@@ -21,9 +21,9 @@ export function filterListDept (data) {
 // 获取部门
 export function fetchDept (id) {
   return request({
-    url: request.adornUrl('/api/v1/dept/detail'),
+    url: request.adornUrl(`/api/v1/dept/info/${id}`),
     method: 'get',
-    params: { id }
+    params: request.adornParams()
   })
 }
 
@@ -50,7 +50,7 @@ export function updateDept (id, data) {
 export function deleteDept (id) {
   return request({
     url: request.adornUrl('/api/v1/dept/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: {deptId: id}
   })
 }

@@ -100,7 +100,6 @@ public class SysDeptController extends AbstractController {
 			}
 			deptId = parentId;
 		}
-
 		return R.ok().put("deptId", deptId);
 	}
 
@@ -109,10 +108,10 @@ public class SysDeptController extends AbstractController {
 	 */
 	@GetMapping("/info/{deptId}")
 	@RequiresPermissions("basic:dept:info")
-	public R info(@PathVariable("deptId") Long deptId) {
+	public ResponseEntity<Object> info(@PathVariable("deptId") Long deptId) {
 		SysDeptEntity dept = sysDeptService.selectById(deptId);
-
-		return R.ok().put("dept", dept);
+		return RD.ok(RD.build().put("dept", dept));
+//		return R.ok().put("dept", dept);
 	}
 
 	/**

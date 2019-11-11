@@ -138,7 +138,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 						(String) params.get("deptType"))
 				.in(StringUtils.isNotEmpty((String) params.get("deptLevel")), "dept_level",
 						(String) params.get("deptLevel"))
-				.like(StringUtils.isNotEmpty((CharSequence) params.get("name")), "name", (String) params.get("name"));
+				.like(StringUtils.isNotEmpty((CharSequence) params.get("name")), "name", (String) params.get("name")).isNull("delete_at");
 
 		// 开启数据权限过滤
 		if (params.get("filter") == null || !"false".equals(params.get("filter"))) {

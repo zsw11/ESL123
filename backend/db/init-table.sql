@@ -44,7 +44,7 @@ CREATE TABLE sys_user (
   create_at timestamp default now(),
   update_by bigint,
   update_at timestamp,
-  delete_at timestamp not null
+  delete_at timestamp
 );
 Create Unique Index index_username_UNQ On sys_user(username);
 comment on table sys_user is '系统用户';
@@ -103,7 +103,7 @@ comment on column sys_captcha.expire_time is '过期时间';
 -- 角色
 drop table if exists sys_role;
 CREATE TABLE sys_role (
-  id bigint PRIMARY KEY,
+  id serial PRIMARY KEY,
   role_name varchar(100),
   dept_id bigint,
   remark varchar(100),
@@ -126,7 +126,7 @@ comment on column sys_role.delete_at is '删除时间';
 -- 用户与角色对应关系
 drop table if exists sys_user_role;
 CREATE TABLE sys_user_role (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   user_id bigint,
   role_id bigint
 );
@@ -137,7 +137,7 @@ comment on column sys_user_role.role_id is '角色ID';
 -- 角色与菜单对应关系
 drop table if exists sys_role_menu;
 CREATE TABLE sys_role_menu (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   role_id bigint,
   menu_id bigint
 );
@@ -148,7 +148,7 @@ comment on column sys_role_menu.menu_id is '菜单ID';
 -- 系统配置信息
 drop table if exists sys_config;
 CREATE TABLE sys_config (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   param_key varchar(50),
   param_value varchar(2048),
   status smallint DEFAULT 1,
@@ -174,7 +174,7 @@ comment on column sys_config.delete_at is '删除时间';
 -- 系统日志
 drop table if exists sys_log;
 CREATE TABLE sys_log (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   username varchar(50),
   operation varchar(50),
   method varchar(200),
@@ -195,7 +195,7 @@ comment on column sys_log.create_date is '创建时间';
 -- 文件上传
 drop table if exists sys_oss;
 CREATE TABLE sys_oss (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   url varchar(200),
   create_date timestamp
 );
@@ -206,7 +206,7 @@ comment on column sys_oss.create_date is '创建时间';
 -- 定时任务
 drop table if exists schedule_job;
 CREATE TABLE schedule_job (
-  job_id bigint NOT NULL PRIMARY KEY,
+  job_id serial NOT NULL PRIMARY KEY,
   bean_name varchar(200) DEFAULT NULL,
   method_name varchar(100) DEFAULT NULL,
   params varchar(2000) DEFAULT NULL,
@@ -228,7 +228,7 @@ comment on column schedule_job.create_at is '创建时间';
 -- 定时任务日志
 drop table if exists schedule_job_log;
 CREATE TABLE schedule_job_log (
-  log_id bigint NOT NULL PRIMARY KEY,
+  log_id serial NOT NULL PRIMARY KEY,
   job_id bigint NOT NULL,
   bean_name varchar(200) DEFAULT NULL,
   method_name varchar(100) DEFAULT NULL,
@@ -254,14 +254,15 @@ comment on column schedule_job_log.log_id is '创建时间';
 -- 部门
 drop table if exists sys_dept;
 CREATE TABLE sys_dept (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   parent_id bigint,
   name varchar(50),
   order_num int,
   del_flag smallint DEFAULT 0,
   dept_code varchar(64),
   dept_type varchar(64),
-  dept_level varchar(64),  
+  dept_level varchar(64),
+  STLST varchar(8),
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
@@ -276,6 +277,7 @@ comment on column sys_dept.del_flag is '是否删除  -1：已删除  0：正常
 comment on column sys_dept.dept_code is '部门机构编码';
 comment on column sys_dept.dept_type is '部门机构类型';
 comment on column sys_dept.dept_level is '部门机构等级';
+comment on column sys_dept.STLST is 'ST/LST/Both';
 comment on column sys_dept.create_by is '创建者ID';
 comment on column sys_dept.create_at is '创建时间';
 comment on column sys_dept.update_by is '更新者ID';
@@ -285,7 +287,7 @@ comment on column sys_dept.delete_at is '删除时间';
 -- 角色与部门对应关系
 drop table if exists sys_role_dept;
 CREATE TABLE sys_role_dept (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   role_id bigint,
   dept_id bigint
 );
@@ -296,7 +298,7 @@ comment on column sys_role_dept.dept_id is '部门ID';
 -- 字典类型
 drop table if exists sys_dict;
 CREATE TABLE sys_dict (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   code varchar(64),
   name varchar(64),
   remark varchar(64),
@@ -325,7 +327,7 @@ comment on column sys_dict.delete_at is '删除时间';
 -- 字典项
 drop table if exists sys_dict_type;
 CREATE TABLE sys_dict_type (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   type varchar(64),
   name varchar(128),
   remark varchar(128),
@@ -351,7 +353,7 @@ comment on column sys_dict_type.delete_at is '删除时间';
 -- 人员信息
 drop table if exists basic_member;
 CREATE TABLE basic_member (
-  id BIGINT NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   job_id BIGINT NOT NULL,
   dept_id BIGINT NOT NULL,
   user_id bigint,
@@ -364,6 +366,7 @@ CREATE TABLE basic_member (
   remark varchar(256),
   employment_date date not null,
   email varchar(64),
+  job_number varchar(64),
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
@@ -384,6 +387,7 @@ comment on column basic_member.status is '在职状态';
 comment on column basic_member.remark is '备注';
 comment on column basic_member.employment_date is '入职日期';
 comment on column basic_member.email is '邮箱';
+comment on column basic_member.job_number is '工号';
 comment on column basic_member.create_by is '创建者ID';
 comment on column basic_member.create_at is '创建时间';
 comment on column basic_member.update_by is '更新者ID';
@@ -393,7 +397,7 @@ comment on column basic_member.delete_at is '删除时间';
 -- 岗位信息
 drop table if exists basic_job;
 CREATE TABLE IF NOT EXISTS basic_job (
-  id BIGINT NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   code varchar(64)  NOT NULL,
   name varchar(64)  NOT NULL,
   pinyin varchar(128) not null,
@@ -419,7 +423,7 @@ comment on column basic_job.delete_at is '删除时间';
 -- 编码规则
 drop table if exists sys_code_rule;
 CREATE TABLE sys_code_rule (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   code varchar(32) not null,
   name varchar(32) not null,
   current_serial_key varchar(64),
@@ -447,7 +451,7 @@ comment on column sys_code_rule.delete_at is '删除时间';
 -- 编码规则子项
 drop table if exists sys_code_rule_item;
 CREATE TABLE sys_code_rule_item (
-  id bigint NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   code_rule_id bigint not null,
   order_number integer not null,
   type varchar(32) not null,
@@ -478,7 +482,7 @@ comment on column sys_code_rule_item.delete_at is '删除时间';
 -- 引用表
 drop table if exists sys_reference;
 CREATE TABLE sys_reference (
- id bigint NOT NULL PRIMARY KEY,
+ id serial NOT NULL PRIMARY KEY,
   main_entity varchar(64) NULL,
   main_id bigint NULL,
   by_entity varchar(64) NULL,
@@ -493,7 +497,7 @@ comment on column sys_reference.by_id is '引用Id';
 -- 消息通知
 drop table if exists sys_message;
 CREATE TABLE sys_message (
-  id BIGINT NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   dept_id bigint NOT NULL,
   process_id bigint,
   type varchar(16) NOT NULL,
@@ -520,7 +524,7 @@ comment on column sys_message.create_at is '创建时间';
 -- 已读消息用户
 drop table if exists sys_message_read;
 CREATE TABLE sys_message_read (
-  id BIGINT NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   member_id bigint NOT NULL,
   message_id bigint NOT NULL,
   create_at timestamp default now() NOT NULL
@@ -536,7 +540,7 @@ comment on column sys_message_read.create_at is '创建时间';
 -- 文件引用关系表
 drop table if exists sys_file_reference;
 CREATE TABLE sys_file_reference (
-  id BIGINT NOT NULL PRIMARY KEY,
+  id serial NOT NULL PRIMARY KEY,
   name varchar(128) NOT NULL,
   file_name varchar(64) NOT NULL,
   file_path varchar(128) NOT NULL,

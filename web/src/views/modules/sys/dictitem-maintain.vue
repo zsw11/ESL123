@@ -17,8 +17,8 @@
         <el-input v-model="dataForm.name" placeholder="字典项名称" style="width:250px" :disabled="dataForm.ifLock"></el-input>
       </el-form-item>
 
-      <el-form-item label="排序" prop="orderNumber">
-        <el-input v-model.number="dataForm.orderNumber" placeholder="排序" type="number" style="width:100px"></el-input>
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model.number="dataForm.sort" placeholder="排序" type="number" style="width:100px"></el-input>
       </el-form-item>
 
       <el-form-item label="描述" >
@@ -44,12 +44,12 @@ export default {
     return {
       inited: false,
       dataForm: {
-        dictId: 0,
+        dictTypeId: 0,
         id: 0,
         code: null,
         name: null,
         remark: null,
-        orderNumber: 0
+        sort: 0
       },
       dataRules: {
         code: [
@@ -63,7 +63,7 @@ export default {
         remark: [
           { max: 256, message: '长度超过了256', trigger: 'blur' }
         ],
-        orderNumber: [
+        sort: [
           { required: true, message: '请填写排序号', trigger: 'blur' },
           { type: 'number', message: '排序号需为数字值' }
         ]
@@ -103,13 +103,13 @@ export default {
         changed: false
       })
       this.inited = false
-      this.dataForm.dictId = parseInt(this.$route.params.dictId) || 0
+      this.dataForm.dictTypeId = parseInt(this.$route.params.dictId) || 0
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchDictItem(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, ['dictId', 'code', 'name', 'remark', 'orderNumber'])
+            pick(data, ['dictTypeId', 'code', 'name', 'remark', 'sort'])
           )
         }).finally(() => {
           this.inited = true

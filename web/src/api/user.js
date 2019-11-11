@@ -1,4 +1,5 @@
 import request from '@/utils/httpRequest.js'
+import md5 from 'blueimp-md5'
 
 export function listUser (data) {
   return request({
@@ -37,6 +38,7 @@ export function updateUser (id, data) {
 }
 
 export function userReset (data) {
+  data.password = md5('security' + data.password.trim())
   return request({
     url: request.adornUrl(`/api/v1/user/reset`),
     method: 'put',
@@ -47,8 +49,8 @@ export function userReset (data) {
 export function userDelete (id) {
   return request({
     url: request.adornUrl('/api/v1/user/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }
 

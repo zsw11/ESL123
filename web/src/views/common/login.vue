@@ -64,7 +64,6 @@
       // 提交表单
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
-          console.log('login' + this.dataForm.username + this.dataForm.password)
           if (valid) {
             this.logining = true
             this.$store.dispatch('user/login', this.dataForm)

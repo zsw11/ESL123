@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import io.apj.modules.sys.service.SysDictTypeService;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 /**
  * 字典类型
@@ -44,23 +46,22 @@ public class SysDictTypeController extends AbstractController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("sys:dicttype:list")
-	public R list(@RequestParam Map<String, Object> params) {
+//	@RequiresPermissions("sys:dicttype:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysDictTypeService.queryPage(params);
-
-		return R.ok().put("page", page);
+		return RD.ok(RD.build().put("page", page));
 	}
 
 	/**
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("sys:dicttype:info")
+//	@RequiresPermissions("sys:dicttype:info")
 	public R info(@PathVariable("id") Long id) {
 		SysDictTypeEntity sysDictType = sysDictTypeService.selectById(id);
 
 		List<SysDictEntity> sysDictList = sysDictService
-				.selectList(new EntityWrapper<SysDictEntity>().eq("dict_type_id", sysDictType.getId()));
+				.selectList(new EntityWrapper<SysDictEntity>().eq("dict_type_id", sysDictType.getId()).isNull("delete_at"));
 
 		sysDictType.setDictList(sysDictList);
 		return R.ok().put("data", sysDictType);
@@ -114,14 +115,13 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@SysLog("保存字典类型")
 	@RequestMapping("/save")
-	@RequiresPermissions("sys:dicttype:save")
+//	@RequiresPermissions("sys:dicttype:save")
 	public R save(@RequestBody SysDictTypeEntity sysDictType) {
 		sysDictType.setCreateAt(new Date());
 		sysDictType.setUpdateAt(new Date());
 		sysDictType.setCreateBy(getUserId());
 		sysDictType.setIfLock(false);
 		sysDictTypeService.insert(sysDictType);
-
 		return R.ok();
 	}
 
@@ -130,7 +130,7 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@SysLog("修改字典类型")
 	@RequestMapping("/update")
-	@RequiresPermissions("sys:dicttype:update")
+//	@RequiresPermissions("sys:dicttype:update")
 	public R update(@RequestBody SysDictTypeEntity sysDictType) {
 
 		SysDictTypeEntity dict = sysDictTypeService.selectById(sysDictType.getId());
@@ -150,7 +150,7 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@SysLog("删除字典类型")
 	@RequestMapping("/delete")
-	@RequiresPermissions("sys:dicttype:delete")
+//	@RequiresPermissions("sys:dicttype:delete")
 	public R delete(@RequestBody Long[] ids) {
 //			sysDictTypeService.deleteBatchIds(Arrays.asList(ids));
 		// 逻辑删除

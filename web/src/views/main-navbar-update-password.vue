@@ -26,6 +26,7 @@
 
 <script>
   import { clearLoginInfo } from '@/utils'
+  import md5 from 'blueimp-md5'
   export default {
     data () {
       var validateConfirmPassword = (rule, value, callback) => {
@@ -77,15 +78,17 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.dataForm.password = md5('security' + this.dataForm.password.trim())
+            this.dataForm.newPassword = md5('security' + this.dataForm.newPassword.trim())
             this.$http({
-              url: this.$http.adornUrl('/sys/user/password'),
+              url: this.$http.adornUrl('/api/v1/user/password'),
               method: 'post',
               data: this.$http.adornData({
                 'password': this.dataForm.password,
                 'newPassword': this.dataForm.newPassword
               })
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

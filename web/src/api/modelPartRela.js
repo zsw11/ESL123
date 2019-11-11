@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取机种部品关系列表
 export function listModelPartRela (query) {
   return request({
-    url: request.adornUrl('/modelpartrela/list'),
+    url: request.adornUrl('/api/v1/modelpartrela/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listModelPartRela (query) {
 // 创建机种部品关系
 export function createModelPartRela (data) {
   return request({
-    url: request.adornUrl('/modelpartrela/create'),
+    url: request.adornUrl('/api/v1/modelpartrela/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createModelPartRela (data) {
 // 获取机种部品关系详情
 export function fetchModelPartRela (params) {
   return request({
-    url: request.adornUrl('/modelpartrela/detail'),
+    url: request.adornUrl('/api/v1/modelpartrela/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchModelPartRela (params) {
 // 修改机种部品关系
 export function updateModelPartRela (id, data) {
   return request({
-    url: request.adornUrl('/modelpartrela/update'),
+    url: request.adornUrl('/api/v1/modelpartrela/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateModelPartRela (id, data) {
 // 删除机种部品关系
 export function deleteModelPartRela (id) {
   return request({
-    url: request.adornUrl('/modelpartrela/delete'),
+    url: request.adornUrl('/api/v1/modelpartrela/delete'),
     method: 'delete',
     params: { id }
   })

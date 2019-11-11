@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取机种治工具关系列表
 export function listModelToolRela (query) {
   return request({
-    url: request.adornUrl('/modeltoolrela/list'),
+    url: request.adornUrl('/api/v1/modeltoolrela/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listModelToolRela (query) {
 // 创建机种治工具关系
 export function createModelToolRela (data) {
   return request({
-    url: request.adornUrl('/modeltoolrela/create'),
+    url: request.adornUrl('/api/v1/modeltoolrela/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createModelToolRela (data) {
 // 获取机种治工具关系详情
 export function fetchModelToolRela (params) {
   return request({
-    url: request.adornUrl('/modeltoolrela/detail'),
+    url: request.adornUrl('/api/v1/modeltoolrela/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchModelToolRela (params) {
 // 修改机种治工具关系
 export function updateModelToolRela (id, data) {
   return request({
-    url: request.adornUrl('/modeltoolrela/update'),
+    url: request.adornUrl('/api/v1/modeltoolrela/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateModelToolRela (id, data) {
 // 删除机种治工具关系
 export function deleteModelToolRela (id) {
   return request({
-    url: request.adornUrl('/modeltoolrela/delete'),
+    url: request.adornUrl('/api/v1/modeltoolrela/delete'),
     method: 'delete',
     params: { id }
   })

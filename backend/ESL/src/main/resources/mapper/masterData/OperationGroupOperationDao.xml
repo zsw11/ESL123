@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.masterData.dao.OperationGroupOperationDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.masterData.entity.OperationGroupOperationEntity" id="operationGroupOperationMap">
+        <result property="id" column="id"/>
+        <result property="operationGroupId" column="operation_group_id"/>
+        <result property="seqNumber" column="seq_number"/>
+        <result property="operation" column="operation"/>
+        <result property="measures" column="measures"/>
+        <result property="frequency" column="frequency"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

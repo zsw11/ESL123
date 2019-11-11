@@ -24,7 +24,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeDao, SysDictT
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<SysDictTypeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper
+		entityWrapper.isNull("delete_at")
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("type")), "type", (String) params.get("type"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("name")), "name", (String) params.get("name"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("remark")), "remark",

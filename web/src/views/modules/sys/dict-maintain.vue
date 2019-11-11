@@ -9,8 +9,8 @@
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
 
-      <el-form-item label="字典编码" prop="code">
-        <el-input v-model="dataForm.code" placeholder="字典编码" style="width:250px"></el-input>
+      <el-form-item label="字典编码" prop="type">
+        <el-input v-model="dataForm.type" placeholder="字典编码" style="width:250px"></el-input>
       </el-form-item>
 
       <el-form-item label="字典名称" prop="name">
@@ -41,12 +41,12 @@ export default {
       inited: false,
       dataForm: {
         id: 0,
-        code: null,
+        type: null,
         name: null,
         remark: null
       },
       dataRules: {
-        code: [
+        type: [
           { required: true, message: '请填写字典编码', trigger: 'blur' },
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
@@ -98,7 +98,7 @@ export default {
         fetchDict(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, ['code', 'name', 'remark'])
+            pick(data, ['type', 'name', 'remark'])
           )
         }).finally(() => {
           this.inited = true
