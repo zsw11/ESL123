@@ -261,7 +261,8 @@ CREATE TABLE sys_dept (
   del_flag smallint DEFAULT 0,
   dept_code varchar(64),
   dept_type varchar(64),
-  dept_level varchar(64),  
+  dept_level varchar(64),
+  STLST varchar(8),
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
@@ -276,6 +277,7 @@ comment on column sys_dept.del_flag is '是否删除  -1：已删除  0：正常
 comment on column sys_dept.dept_code is '部门机构编码';
 comment on column sys_dept.dept_type is '部门机构类型';
 comment on column sys_dept.dept_level is '部门机构等级';
+comment on column sys_dept.STLST is 'ST/LST/Both';
 comment on column sys_dept.create_by is '创建者ID';
 comment on column sys_dept.create_at is '创建时间';
 comment on column sys_dept.update_by is '更新者ID';
@@ -364,6 +366,7 @@ CREATE TABLE basic_member (
   remark varchar(256),
   employment_date date not null,
   email varchar(64),
+  job_number varchar(64),
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
@@ -384,6 +387,7 @@ comment on column basic_member.status is '在职状态';
 comment on column basic_member.remark is '备注';
 comment on column basic_member.employment_date is '入职日期';
 comment on column basic_member.email is '邮箱';
+comment on column basic_member.job_number is '工号';
 comment on column basic_member.create_by is '创建者ID';
 comment on column basic_member.create_at is '创建时间';
 comment on column basic_member.update_by is '更新者ID';

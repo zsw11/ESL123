@@ -135,6 +135,7 @@ CREATE TABLE workstation_type_node (
   name varchar(64),
   workstation_id integer,
   remark varchar(512),
+  parent_id integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -144,6 +145,7 @@ CREATE TABLE workstation_type_node (
 comment on table workstation_type_node is '工位类型节点';
 comment on column workstation_type_node.name is '名称';
 comment on column workstation_type_node.workstation_id is '工位ID';
+comment on column workstation_type_node.parent_id is '父节点ID';
 comment on column workstation_type_node.remark is '备注';
 comment on column workstation_type_node.create_by is '创建者ID';
 comment on column workstation_type_node.create_at is '创建时间';
@@ -376,3 +378,186 @@ comment on column report_group_report_rela.create_at is '创建时间';
 comment on column report_group_report_rela.update_by is '更新者ID';
 comment on column report_group_report_rela.update_at is '更新时间';
 comment on column report_group_report_rela.delete_at is '删除时间';
+
+-- 常用指标组合
+drop table if exists measure_group;
+CREATE TABLE measure_group (
+  id serial PRIMARY KEY,
+  code varchar(64),
+  a0 varchar(1),
+  b0 varchar(1),
+  g0 varchar(1),
+  a1 varchar(1),
+  b1 varchar(1),
+  p0 varchar(1),
+  m0 varchar(1),
+  x0 varchar(1),
+  i0 varchar(1),
+  a2 varchar(1),
+  b2 varchar(1),
+  p1 varchar(1),
+  a3 varchar(1),
+  deptId integer,
+  usedCount integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table measure_group is '常用指标组合';
+comment on column measure_group.code is '编码';
+comment on column measure_group.a0 is 'A0';
+comment on column measure_group.b0 is 'B0';
+comment on column measure_group.g0 is 'G0';
+comment on column measure_group.a1 is 'A1';
+comment on column measure_group.b1 is 'B1';
+comment on column measure_group.p0 is 'P0';
+comment on column measure_group.m0 is 'M0';
+comment on column measure_group.x0 is 'X0';
+comment on column measure_group.i0 is 'I0';
+comment on column measure_group.a2 is 'A2';
+comment on column measure_group.b2 is 'B2';
+comment on column measure_group.p1 is 'P1';
+comment on column measure_group.a3 is 'A3';
+comment on column measure_group.deptId is '组织机构ID';
+comment on column measure_group.usedCount is '使用次数统计';
+comment on column measure_group.create_by is '创建者ID';
+comment on column measure_group.create_at is '创建时间';
+comment on column measure_group.update_by is '更新者ID';
+comment on column measure_group.update_at is '更新时间';
+comment on column measure_group.delete_at is '删除时间';
+
+-- 手顺组合
+drop table if exists opertaion_group;
+CREATE TABLE opertaion_group (
+  id serial PRIMARY KEY,
+  code varchar(64),
+  deptId integer,
+  usedCount integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table opertaion_group is '手顺组合';
+comment on column opertaion_group.code is '编码';
+comment on column opertaion_group.deptId is '组织机构ID';
+comment on column opertaion_group.usedCount is '使用次数统计';
+comment on column opertaion_group.create_by is '创建者ID';
+comment on column opertaion_group.create_at is '创建时间';
+comment on column opertaion_group.update_by is '更新者ID';
+comment on column opertaion_group.update_at is '更新时间';
+comment on column opertaion_group.delete_at is '删除时间';
+
+-- 手顺
+drop table if exists operation_group_operation;
+CREATE TABLE operation_group_operation (
+  id serial PRIMARY KEY,
+  operation_group_id integer,
+  seq_number integer,
+  operation varchar(256),
+  measures varchar(17),
+  frequency integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table operation_group_operation is '手顺';
+comment on column operation_group_operation.operation_group_id is '手顺组合ID';
+comment on column operation_group_operation.seq_number is '序号';
+comment on column operation_group_operation.operation is '手顺';
+comment on column operation_group_operation.measures is '指标';
+comment on column operation_group_operation.frequency is '频度';
+comment on column operation_group_operation.create_by is '创建者ID';
+comment on column operation_group_operation.create_at is '创建时间';
+comment on column operation_group_operation.update_by is '更新者ID';
+comment on column operation_group_operation.update_at is '更新时间';
+comment on column operation_group_operation.delete_at is '删除时间';
+
+-- 分析表
+drop table if exists work_book;
+CREATE TABLE work_book (
+  id serial PRIMARY KEY,
+  dept_id integer,
+  STLST varchar(8),
+  model_id integer,
+  destinations varchar(128),
+  phase_id integer,
+  workstation_id integer,
+  work_name varchar(128),
+  version_number varchar(32),
+  maker_id integer,
+  maked_at timestamp,
+  continue_from_id integer,
+  time_value decimal(18, 5),
+  TMU decimal(18, 5),
+  second_convert decimal(18, 5),
+  remark text,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table work_book is '分析表';
+comment on column work_book.dept_id is '组织机构ID';
+comment on column work_book.STLST is 'ST/LST';
+comment on column work_book.model_id is '机种ID';
+comment on column work_book.destinations is '仕向';
+comment on column work_book.phase_id is '生产阶段ID';
+comment on column work_book.workstation_id is '工位ID';
+comment on column work_book.work_name is '作业名';
+comment on column work_book.version_number is '版本号';
+comment on column work_book.maker_id is '制表人ID';
+comment on column work_book.maked_at is '制表日期';
+comment on column work_book.continue_from_id is '沿用来源ID';
+comment on column work_book.time_value is '时间值';
+comment on column work_book.TMU is 'TMU';
+comment on column work_book.second_convert is '秒换算';
+comment on column work_book.remark is '备注';
+comment on column work_book.create_by is '创建者ID';
+comment on column work_book.create_at is '创建时间';
+comment on column work_book.update_by is '更新者ID';
+comment on column work_book.update_at is '更新时间';
+comment on column work_book.delete_at is '删除时间';
+
+-- 分析表明细
+drop table if exists work_operations;
+CREATE TABLE work_operations (
+  id serial PRIMARY KEY,
+  seq_number integer,
+  work_book_id integer,
+  version varchar(64),
+  operation varchar(256),
+  measures varchar(17),
+  frequency integer,
+  time_value decimal(18, 5),
+  TMU decimal(18, 5),
+  second_convert decimal(18, 5),
+  remark varchar(512),
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table work_operations is '分析表明细';
+comment on column work_operations.seq_number is '序号';
+comment on column work_operations.work_book_id is '分析表ID';
+comment on column work_operations.version is '版本信息';
+comment on column work_operations.operation is '手顺';
+comment on column work_operations.measures is '指标';
+comment on column work_operations.frequency is '频度';
+comment on column work_operations.time_value is '时间值';
+comment on column work_operations.TMU is 'TMU';
+comment on column work_operations.second_convert is '秒换算';
+comment on column work_operations.remark is '备注';
+comment on column work_operations.create_by is '创建者ID';
+comment on column work_operations.create_at is '创建时间';
+comment on column work_operations.update_by is '更新者ID';
+comment on column work_operations.update_at is '更新时间';
+comment on column work_operations.delete_at is '删除时间';
