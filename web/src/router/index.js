@@ -150,7 +150,23 @@ const mainRoutes = {
 
     // 组织机构工位关系
     { path: '/add-deptworkstationrela', component: _import('modules/masterData/deptworkstationrela-maintain'), name: 'add-deptworkstationrela', meta: { title: '新增组织机构工位关系', isTab: true } },
-    { path: '/edit-deptworkstationrela/:id(\\d+)', component: _import('modules/masterData/deptworkstationrela-maintain'), name: 'edit-deptworkstationrela', meta: { title: '编辑组织机构工位关系', isTab: true } }
+    { path: '/edit-deptworkstationrela/:id(\\d+)', component: _import('modules/masterData/deptworkstationrela-maintain'), name: 'edit-deptworkstationrela', meta: { title: '编辑组织机构工位关系', isTab: true } },
+
+    // 常用指标组合
+    { path: '/add-measuregroup', component: _import('modules/masterData/measuregroup-maintain'), name: 'add-measuregroup', meta: { title: '新增常用指标组合', isTab: true } },
+    { path: '/edit-measuregroup/:id(\\d+)', component: _import('modules/masterData/measuregroup-maintain'), name: 'edit-measuregroup', meta: { title: '编辑常用指标组合', isTab: true } },
+
+    // 手顺
+    { path: '/add-operationgroupoperation', component: _import('modules/masterData/operationgroupoperation-maintain'), name: 'add-operationgroupoperation', meta: { title: '新增手顺', isTab: true } },
+    { path: '/edit-operationgroupoperation/:id(\\d+)', component: _import('modules/masterData/operationgroupoperation-maintain'), name: 'edit-operationgroupoperation', meta: { title: '编辑手顺', isTab: true } },
+
+    // 手顺组合
+    { path: '/add-opertaiongroup', component: _import('modules/masterData/opertaiongroup-maintain'), name: 'add-opertaiongroup', meta: { title: '新增手顺组合', isTab: true } },
+    { path: '/edit-opertaiongroup/:id(\\d+)', component: _import('modules/masterData/opertaiongroup-maintain'), name: 'edit-opertaiongroup', meta: { title: '编辑手顺组合', isTab: true } },
+
+    // 分析表
+    { path: '/add-workbook', component: _import('modules/workBook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
+    { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workBook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } }
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token
