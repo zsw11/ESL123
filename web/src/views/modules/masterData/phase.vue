@@ -21,7 +21,7 @@
         <div class="buttons">
           <el-button>导出</el-button>
           <el-button  @click="addOrUpdateHandle()">新增</el-button>
-          <el-button v-if="isAuth('masterData:phase:delete')"  @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button  @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table

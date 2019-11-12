@@ -25,7 +25,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">报表信息</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:report:create')"  @click="addOrUpdateHandle()">新增</el-button>
+          <el-button  @click="addOrUpdateHandle()">新增</el-button>
         </div>
       </div>
       <el-table
@@ -62,8 +62,8 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:report:update')" type="text" size="small" @click="">详情</el-button>
-            <el-button v-if="isAuth('masterData:report:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  type="text" size="small" @click="">详情</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
           </template>
         </el-table-column>
 

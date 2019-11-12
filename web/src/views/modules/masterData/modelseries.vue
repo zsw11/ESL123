@@ -25,10 +25,10 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种系列信息</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:modelseries:create')" type="primary" @click="">导入</el-button>
-          <el-button v-if="isAuth('masterData:modelseries:create')" type="primary" @click="">导出</el-button>
-          <el-button v-if="isAuth('masterData:modelseries:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button v-if="isAuth('masterData:modelseries:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button type="primary" @click="">导入</el-button>
+          <el-button type="primary" @click="">导出</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -60,10 +60,10 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:modelseries:update')" type="text" size="small" @click="">详情</el-button>
-            <el-button v-if="isAuth('masterData:modelseries:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button v-if="isAuth('masterData:modelseries:update')" type="text" size="small" @click="">机种</el-button>
-            <el-button v-if="isAuth('masterData:modelseries:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="">详情</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="">机种</el-button>
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
