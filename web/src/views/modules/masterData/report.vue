@@ -132,7 +132,8 @@ export default {
         },
         this.listQuery
       )).then(({data, total}) => {
-        this.dataList = data
+        console.log(data, 88888)
+        this.dataList = data.data
         this.total = total
       }).catch(() => {
         this.dataList = []
