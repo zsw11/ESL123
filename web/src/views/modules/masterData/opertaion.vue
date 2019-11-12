@@ -164,7 +164,7 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       attributes: [{
-        code: 'operation',
+        code: 'opertaion',
         name: ' 关键词',
         children: [
           { code: 'id', name: 'ID', type: 'string', required: true },
