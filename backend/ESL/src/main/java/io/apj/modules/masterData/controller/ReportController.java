@@ -3,8 +3,10 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.common.utils.RD;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,20 +35,20 @@ public class ReportController {
 
     /**
      * 列表
+     * @return
      */
     @RequestMapping("/list")
     @RequiresPermissions("masterData:report:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = reportService.queryPage(params);
-
-        return R.ok().put("page", page);
+        return RD.ok(RD.build().put("data",page));
     }
 
 
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:report:info")
     public R info(@PathVariable("id") Integer id){
 		ReportEntity report = reportService.selectById(id);
@@ -57,7 +59,7 @@ public class ReportController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:report:save")
     public R save(@RequestBody ReportEntity report){
 		reportService.insert(report);
