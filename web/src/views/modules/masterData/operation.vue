@@ -36,7 +36,7 @@
       </el-date-picker>
         </el-form-item>
 
-  
+
         <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>

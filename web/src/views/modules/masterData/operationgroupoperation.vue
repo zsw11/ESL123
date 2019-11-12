@@ -5,54 +5,54 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'手顺组合ID'" prop="operationGroupId" >
-          <el-input-number v-model="listQuery.operationGroupId"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'序号'" prop="seqNumber" >
-          <el-input-number v-model="listQuery.seqNumber"  clearable></el-input-number>
+        <el-form-item :label="'手顺组合编码'" prop="operationGroupId" >
+          <el-input v-model="listQuery.operationGroupId"  clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'手顺'" prop="operation" >
           <el-input v-model="listQuery.operation" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'指标'" prop="measures" >
-          <el-input v-model="listQuery.measures" clearable></el-input>
+        <el-form-item :label="'所属组织机构'" prop="seqNumber" >
+          <el-input v-model="listQuery.seqNumber"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'频度'" prop="frequency" >
-          <el-input-number v-model="listQuery.frequency"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'指标'" prop="measures" >-->
+<!--          <el-input v-model="listQuery.measures" clearable></el-input>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
+<!--        <el-form-item :label="'频度'" prop="frequency" >-->
+<!--          <el-input-number v-model="listQuery.frequency"  clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'创建者ID'" prop="createBy" >-->
+<!--          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'创建时间'" prop="createAt" >-->
+<!--          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>-->
+<!--      </el-date-picker>-->
+<!--        </el-form-item>-->
 
-  
+<!--        <el-form-item :label="'更新者ID'" prop="updateBy" >-->
+<!--          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>-->
+<!--        </el-form-item>-->
+
+<!--        <el-form-item :label="'更新时间'" prop="updateAt" >-->
+<!--          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>-->
+<!--      </el-date-picker>-->
+<!--        </el-form-item>-->
+
+<!--        <el-form-item :label="'删除时间'" prop="deleteAt" >-->
+<!--          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>-->
+<!--      </el-date-picker>-->
+<!--        </el-form-item>-->
+
+
         <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -63,9 +63,10 @@
       <div slot="header" class="clearfix">
         <div class="card-title">手顺</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:operationgroupoperation:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button>导出</el-button>
+          <el-button @click="addOrUpdateHandle()">新增</el-button>
 
-          <el-button v-if="isAuth('masterData:operationgroupoperation:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -74,27 +75,18 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column
+          fixed="left"
           type="selection"
           header-align="left"
           align="left"
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
 
-        <el-table-column align="center" prop="operationGroupId" label="手顺组合ID" >
+
+        <el-table-column align="center" prop="operationGroupId" label="手顺组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.operationGroupId }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="seqNumber" label="序号" >
-          <template slot-scope="scope">
-            <span>{{scope.row.seqNumber }}</span>
           </template>
         </el-table-column>
 
@@ -104,64 +96,24 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="measures" label="指标" >
+        <el-table-column align="center" prop="seqNumber" label="所属组织机构" >
           <template slot-scope="scope">
-            <span>{{scope.row.measures }}</span>
+            <span>{{scope.row.seqNumber }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="frequency" label="频度" >
-          <template slot-scope="scope">
-            <span>{{scope.row.frequency }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="measures" label="指标" >-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.measures }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createAt" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
 
       <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:operationgroupoperation:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('masterData:operationgroupoperation:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button>详情</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -192,13 +144,7 @@ export default {
         operationGroupId: null,
         seqNumber: null,
         operation: null,
-        measures: null,
-        frequency: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        measures: null
       },
       dataList: [],
       pageNo: 1,
@@ -211,18 +157,9 @@ export default {
         name: '手顺',
         children: [
           { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'operationGroupId', name: '手顺组合ID', type: 'string', required: true },
-          { code: 'seqNumber', name: '序号', type: 'string', required: true },
+          { code: 'operationGroupId', name: '手顺组合编码', type: 'string', required: true },
           { code: 'operation', name: '手顺', type: 'string', required: true },
-          { code: 'measures', name: '指标', type: 'string', required: true },
-          { code: 'frequency', name: '频度', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'seqNumber', name: '所属组织机构', type: 'string', required: true }
         ]
       }],
       complexFilters: []
@@ -262,13 +199,7 @@ export default {
         operationGroupId: null,
         seqNumber: null,
         operation: null,
-        measures: null,
-        frequency: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        measures: null
       })
     },
     // 每页数

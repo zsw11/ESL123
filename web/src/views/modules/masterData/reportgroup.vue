@@ -24,9 +24,8 @@
       <div slot="header" class="clearfix">
         <div class="card-title">报表组</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:reportgroup:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
-          <el-button v-if="isAuth('masterData:reportgroup:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button  type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -62,10 +61,10 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="">详情</el-button>
-            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="">报表</el-button>
-            <el-button v-if="isAuth('masterData:reportgroup:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="">详情</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="">报表</el-button>
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 

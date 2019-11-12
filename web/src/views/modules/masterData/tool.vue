@@ -20,10 +20,10 @@
       <div slot="header" class="clearfix">
         <div class="card-title">治工具信息</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:tool:create')">导入</el-button>
-          <el-button v-if="isAuth('masterData:tool:create')">导出</el-button>
-          <el-button v-if="isAuth('masterData:tool:create')" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button v-if="isAuth('masterData:tool:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button >导入</el-button>
+          <el-button >导出</el-button>
+          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -58,10 +58,10 @@
         </el-table-column>
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="">详情</el-button>
-            <el-button v-if="isAuth('masterData:reportgroup:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button v-if="isAuth('masterData:tool:update')" type="text" size="small" @click="">机种</el-button>
-            <el-button v-if="isAuth('masterData:tool:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  type="text" size="small" @click="">详情</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  type="text" size="small" @click="">机种</el-button>
+            <el-button  size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 

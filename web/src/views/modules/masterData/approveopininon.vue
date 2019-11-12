@@ -10,11 +10,20 @@
           <el-input v-model="listQuery.opininon" clearable></el-input>
         </el-form-item>
 
+<!--        <el-form-item :label="'审批状态'" prop="approveOperation" >-->
+<!--        <el-select>-->
+<!--          <el-option v-for="(item,index) in state" :key="index" :value="item"></el-option>-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
         <el-form-item :label="'审批状态'" prop="approveOperation" >
-          <el-select>
-            <el-option>
-            </el-option>
-          </el-select>
+        <el-select v-model="value" :label="'审批状态'" placeholder="请选择">
+          <el-option
+            v-for="item in listQuery.approveOperation"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
         </el-form-item>
 
 
@@ -28,9 +37,8 @@
       <div slot="header" class="clearfix">
         <div class="card-title">常用审批意见</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:approveopininon:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
-          <el-button v-if="isAuth('masterData:approveopininon:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -59,9 +67,9 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:approveopininon:update')" type="text" size="small" @click="">详情</el-button>
-            <el-button v-if="isAuth('masterData:part:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button v-if="isAuth('masterData:approveopininon:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  type="text" size="small" @click="">详情</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -86,9 +94,16 @@ export default {
   name: 'approveOpininonList',
   data () {
     return {
+      value: '',
       dataButton: 'list',
       listQuery: {
-        approveOperation: null,
+        approveOperation: [{
+          value: '选项1',
+          label: 'through'
+        }, {
+          value: '选项2',
+          label: 'reject'
+        }],
         opininon: null
       },
       dataList: [],
@@ -138,8 +153,8 @@ export default {
     },
     // 清除查询条件
     clearQuery () {
+      this.value = ''
       this.listQuery = Object.assign(this.listQuery, {
-        approveOperation: null,
         opininon: null
       })
     },
