@@ -8,37 +8,24 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'审批操作'" prop="approveOperation">
-            <el-input v-model="dataForm.approveOperation"></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'审批状态'" prop="approveOperation">-->
+<!--            <el-input v-model="dataForm.approveOperation"></el-input>-->
+<!--          </el-form-item>-->
 
-          <el-form-item :label="'审批意见'" prop="opininon">
-            <el-input v-model="dataForm.opininon"></el-input>
-          </el-form-item>
+      <el-form-item :label="'审批状态'" prop="approveOperation" >
+        <el-select v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">
+          <el-option
+            v-for="item in dataForm.approveOperation"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
 
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
+          <el-form-item :label="'常用审批意见内容'" prop="opininon">
+            <textarea v-model="dataForm.opininon" style="width: 600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
-
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
 
     </el-form>
 
@@ -56,10 +43,17 @@ export default {
   name: 'editApproveOpininon',
   data () {
     return {
+      value: '',
       inited: false,
       dataForm: {
         id: 0,
-        approveOperation: null,
+        approveOperation: [{
+          value: '选项1',
+          label: 'through'
+        }, {
+          value: '选项2',
+          label: 'reject'
+        }],
         opininon: null,
         createBy: null,
         createAt: null,
