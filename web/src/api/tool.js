@@ -41,7 +41,7 @@ export function updateTool (id, data) {
 export function deleteTool (id) {
   return request({
     url: request.adornUrl('/api/v1/tool/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

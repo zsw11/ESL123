@@ -41,7 +41,7 @@ export function updateModelToolRela (id, data) {
 export function deleteModelToolRela (id) {
   return request({
     url: request.adornUrl('/api/v1/modeltoolrela/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

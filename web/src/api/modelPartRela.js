@@ -41,7 +41,7 @@ export function updateModelPartRela (id, data) {
 export function deleteModelPartRela (id) {
   return request({
     url: request.adornUrl('/api/v1/modelpartrela/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

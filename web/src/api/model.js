@@ -41,7 +41,7 @@ export function updateModel (id, data) {
 export function deleteModel (id) {
   return request({
     url: request.adornUrl('/api/v1/model/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

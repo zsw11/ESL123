@@ -41,7 +41,7 @@ export function createOperationConfig (data) {
 export function deleteOperationConfig (id) {
   return request({
     url: request.adornUrl('/api/v1/operationconfig/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

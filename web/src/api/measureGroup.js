@@ -41,7 +41,7 @@ export function updateMeasureGroup (id, data) {
 export function deleteMeasureGroup (id) {
   return request({
     url: request.adornUrl('/api/v1/measuregroup/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

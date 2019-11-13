@@ -41,7 +41,7 @@ export function updateModelSeries (id, data) {
 export function deleteModelSeries (id) {
   return request({
     url: request.adornUrl('/api/v1/modelseries/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

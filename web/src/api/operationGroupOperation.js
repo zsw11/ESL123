@@ -41,7 +41,7 @@ export function updateOperationGroupOperation (id, data) {
 export function deleteOperationGroupOperation (id) {
   return request({
     url: request.adornUrl('/api/v1/operationgroupoperation/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

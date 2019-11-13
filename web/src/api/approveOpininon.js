@@ -41,7 +41,7 @@ export function updateApproveOpininon (id, data) {
 export function deleteApproveOpininon (id) {
   return request({
     url: request.adornUrl('/api/v1/approveopininon/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

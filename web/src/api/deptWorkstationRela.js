@@ -41,7 +41,7 @@ export function updateDeptWorkstationRela (id, data) {
 export function deleteDeptWorkstationRela (id) {
   return request({
     url: request.adornUrl('/api/v1/deptworkstationrela/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

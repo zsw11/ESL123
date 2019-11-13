@@ -41,7 +41,7 @@ export function updatePart (id, data) {
 export function deletePart (id) {
   return request({
     url: request.adornUrl('/api/v1/part/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

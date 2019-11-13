@@ -41,7 +41,7 @@ export function updateWorkBook (id, data) {
 export function deleteWorkBook (id) {
   return request({
     url: request.adornUrl('/api/v1/workbook/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

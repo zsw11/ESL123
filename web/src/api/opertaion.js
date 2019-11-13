@@ -41,7 +41,7 @@ export function updateOpertaion (id, data) {
 export function deleteOpertaion (id) {
   return request({
     url: request.adornUrl('/api/v1/opertaion/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

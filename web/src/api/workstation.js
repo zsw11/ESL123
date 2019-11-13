@@ -41,7 +41,7 @@ export function updateWorkstation (id, data) {
 export function deleteWorkstation (id) {
   return request({
     url: request.adornUrl('/api/v1/workstation/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

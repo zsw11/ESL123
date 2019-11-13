@@ -41,7 +41,7 @@ export function updateRole (id, data) {
 export function deleteRole (id) {
   return request({
     url: request.adornUrl('/api/v1/role/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

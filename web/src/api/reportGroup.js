@@ -41,7 +41,7 @@ export function updateReportGroup (id, data) {
 export function deleteReportGroup (id) {
   return request({
     url: request.adornUrl('/api/v1/reportgroup/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

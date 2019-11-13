@@ -41,7 +41,7 @@ export function updatePhase (id, data) {
 export function deletePhase (id) {
   return request({
     url: request.adornUrl('/api/v1/phase/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }

@@ -41,8 +41,8 @@ export function updateStaff (id, data) {
 export function deleteStaff (id) {
   return request({
     url: request.adornUrl('/api/v1/staff/delete'),
-    method: 'delete',
-    params: { id }
+    method: 'post',
+    data: id
   })
 }
 // 员工高级查询
