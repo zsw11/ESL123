@@ -36,7 +36,7 @@
       </el-table>
 
       <div style="text-align: center">
-        <el-button type="primary" size="medium">保存</el-button>
+        <el-button type="primary" size="medium" @click="addOrUpdateHandle()">保存</el-button>
         <el-button size="medium">取消</el-button>
       </div>
     </el-card>
