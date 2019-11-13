@@ -48,7 +48,7 @@ public class DeptOperationRelaController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptoperationrela:info")
     public R info(@PathVariable("id") Integer id){
 		DeptOperationRelaEntity deptOperationRela = deptOperationRelaService.selectById(id);
@@ -59,7 +59,7 @@ public class DeptOperationRelaController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:deptoperationrela:save")
     public R save(@RequestBody DeptOperationRelaEntity deptOperationRela){
 		deptOperationRelaService.insert(deptOperationRela);
@@ -80,13 +80,14 @@ public class DeptOperationRelaController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:deptoperationrela:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		deptOperationRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

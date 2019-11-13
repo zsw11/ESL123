@@ -48,7 +48,7 @@ public class ModelToolRelaController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modeltoolrela:info")
     public R info(@PathVariable("id") Integer id){
 		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
@@ -59,7 +59,7 @@ public class ModelToolRelaController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:modeltoolrela:save")
     public R save(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.insert(modelToolRela);
@@ -80,13 +80,14 @@ public class ModelToolRelaController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:modeltoolrela:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

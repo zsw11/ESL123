@@ -48,7 +48,7 @@ public class PartController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:part:info")
     public R info(@PathVariable("id") Integer id){
 		PartEntity part = partService.selectById(id);
@@ -59,7 +59,7 @@ public class PartController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:part:save")
     public R save(@RequestBody PartEntity part){
 		partService.insert(part);
@@ -80,13 +80,14 @@ public class PartController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:part:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		partService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

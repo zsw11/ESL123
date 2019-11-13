@@ -48,7 +48,7 @@ public class ModelController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:model:info")
     public R info(@PathVariable("id") Integer id){
 		ModelEntity model = modelService.selectById(id);
@@ -59,7 +59,7 @@ public class ModelController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:model:save")
     public R save(@RequestBody ModelEntity model){
 		modelService.insert(model);
@@ -80,13 +80,14 @@ public class ModelController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:model:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

@@ -48,7 +48,7 @@ public class ModelPartRelaController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modelpartrela:info")
     public R info(@PathVariable("id") Integer id){
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
@@ -59,7 +59,7 @@ public class ModelPartRelaController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:modelpartrela:save")
     public R save(@RequestBody ModelPartRelaEntity modelPartRela){
 		modelPartRelaService.insert(modelPartRela);
@@ -80,13 +80,14 @@ public class ModelPartRelaController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:modelpartrela:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelPartRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

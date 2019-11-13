@@ -48,7 +48,7 @@ public class PhaseController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:phase:info")
     public R info(@PathVariable("id") Integer id){
 		PhaseEntity phase = phaseService.selectById(id);
@@ -80,13 +80,14 @@ public class PhaseController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:phase:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		phaseService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

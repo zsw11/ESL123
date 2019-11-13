@@ -48,7 +48,7 @@ public class ApproveOpininonController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:approveopininon:info")
     public R info(@PathVariable("id") Integer id){
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
@@ -59,7 +59,7 @@ public class ApproveOpininonController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:approveopininon:save")
     public R save(@RequestBody ApproveOpininonEntity approveOpininon){
 		approveOpininonService.insert(approveOpininon);
@@ -80,13 +80,14 @@ public class ApproveOpininonController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:approveopininon:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

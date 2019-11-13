@@ -48,7 +48,7 @@ public class ModelSeriesController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modelseries:info")
     public R info(@PathVariable("id") Integer id){
 		ModelSeriesEntity modelSeries = modelSeriesService.selectById(id);
@@ -59,7 +59,7 @@ public class ModelSeriesController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:modelseries:save")
     public R save(@RequestBody ModelSeriesEntity modelSeries){
 		modelSeriesService.insert(modelSeries);
@@ -80,13 +80,14 @@ public class ModelSeriesController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:modelseries:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelSeriesService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

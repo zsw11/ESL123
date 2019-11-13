@@ -48,7 +48,7 @@ public class WorkstationTypeNodeController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstationtypenode:info")
     public R info(@PathVariable("id") Integer id){
 		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
@@ -59,7 +59,7 @@ public class WorkstationTypeNodeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtypenode:save")
     public R save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
 		workstationTypeNodeService.insert(workstationTypeNode);
@@ -80,13 +80,14 @@ public class WorkstationTypeNodeController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:workstationtypenode:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

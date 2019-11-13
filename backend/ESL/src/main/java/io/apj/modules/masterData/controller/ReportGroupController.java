@@ -48,7 +48,7 @@ public class ReportGroupController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:reportgroup:info")
     public R info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
@@ -59,7 +59,7 @@ public class ReportGroupController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:reportgroup:save")
     public R save(@RequestBody ReportGroupEntity reportGroup){
 		reportGroupService.insert(reportGroup);
@@ -80,13 +80,14 @@ public class ReportGroupController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:reportgroup:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

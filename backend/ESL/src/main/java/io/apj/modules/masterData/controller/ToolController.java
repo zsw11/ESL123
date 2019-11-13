@@ -48,7 +48,7 @@ public class ToolController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:tool:info")
     public R info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
@@ -59,7 +59,7 @@ public class ToolController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:tool:save")
     public R save(@RequestBody ToolEntity tool){
 		toolService.insert(tool);
@@ -80,13 +80,14 @@ public class ToolController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:tool:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		toolService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }

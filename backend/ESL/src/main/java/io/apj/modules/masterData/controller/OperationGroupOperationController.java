@@ -48,7 +48,7 @@ public class OperationGroupOperationController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:operationgroupoperation:info")
     public R info(@PathVariable("id") Integer id){
 		OperationGroupOperationEntity operationGroupOperation = operationGroupOperationService.selectById(id);
@@ -59,7 +59,7 @@ public class OperationGroupOperationController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
     public R save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.insert(operationGroupOperation);
@@ -80,13 +80,14 @@ public class OperationGroupOperationController {
 
     /**
      * 删除
+     * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:operationgroupoperation:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		operationGroupOperationService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
+        return RD.build();
     }
 
 }
