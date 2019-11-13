@@ -8,20 +8,20 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-<!--          <el-form-item :label="'审批状态'" prop="approveOperation">-->
-<!--            <el-input v-model="dataForm.approveOperation"></el-input>-->
-<!--          </el-form-item>-->
+          <el-form-item :label="'审批状态'" prop="approveOperation">
+            <el-input v-model="dataForm.approveOperation"></el-input>
+          </el-form-item>
 
-      <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <el-select v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">
-          <el-option
-            v-for="item in dataForm.approveOperation"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
+<!--      <el-form-item :label="'审批状态'" prop="approveOperation" >-->
+<!--        <el-select v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">-->
+<!--          <el-option-->
+<!--            v-for="item in dataForm.approveOperation"-->
+<!--            :key="item.value"-->
+<!--            :label="item.label"-->
+<!--            :value="item.value">-->
+<!--          </el-option>-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
 
           <el-form-item :label="'常用审批意见内容'" prop="opininon">
             <textarea v-model="dataForm.opininon" style="width: 600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
@@ -43,17 +43,10 @@ export default {
   name: 'editApproveOpininon',
   data () {
     return {
-      value: '',
       inited: false,
       dataForm: {
         id: 0,
-        approveOperation: [{
-          value: '选项1',
-          label: 'through'
-        }, {
-          value: '选项2',
-          label: 'reject'
-        }],
+        approveOperation: null,
         opininon: null,
         createBy: null,
         createAt: null,
