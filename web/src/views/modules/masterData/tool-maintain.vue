@@ -8,39 +8,16 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'tools Name'" prop="name">
+          <el-form-item :label="'治工具名称'" prop="name">
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'If Commmon Use'" prop="ifCommmonUse">
-            <el-switch v-model="dataForm.ifCommmonUse"></el-switch>
+          <el-form-item :label="'是否通用'" prop="ifCommmonUse">
+            <el-input v-model="dataForm.ifCommmonUse"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'remark'" prop="remark">
-            <el-input v-model="dataForm.remark"></el-input>
-          </el-form-item>
-
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
+          <el-form-item :label="'备注'" prop="remark">
+            <textarea v-model="dataForm.remark"  style="width:100%  ;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
 

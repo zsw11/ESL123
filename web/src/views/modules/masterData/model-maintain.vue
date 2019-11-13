@@ -12,64 +12,43 @@
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'部门ID'" prop="deptId">
-            <el-input-number v-model="dataForm.deptId" ></el-input-number>
+          <el-form-item :label="'部门'" prop="deptId">
+            <el-input v-model="dataForm.deptId" ></el-input>
           </el-form-item>
 
-          <el-form-item :label="'机种系列ID'" prop="modelSeriesId">
-            <el-input-number v-model="dataForm.modelSeriesId" ></el-input-number>
+          <el-form-item :label="'机种系列'" prop="modelSeriesId">
+            <el-input v-model="dataForm.modelSeriesId" ></el-input>
           </el-form-item>
 
-          <el-form-item :label="'type'" prop="code">
+          <el-form-item :label="'型号'" prop="code">
             <el-input v-model="dataForm.code"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'WS Date'" prop="WSTime">
-            <el-date-picker v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
+          <el-form-item :label="'WS时间'" prop="WSTime">
+            <el-input v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+        </el-input>
           </el-form-item>
 
-          <el-form-item :label="'ES Date'" prop="ESTime">
-            <el-date-picker v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
+          <el-form-item :label="'ES时间'" prop="ESTime">
+            <el-input v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+        </el-input>
           </el-form-item>
 
-          <el-form-item :label="'AMP Date'" prop="AMPTime">
-            <el-date-picker v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
+          <el-form-item :label="'AMP时间'" prop="AMPTime">
+            <el-input v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+        </el-input>
           </el-form-item>
 
-          <el-form-item :label="'MP Date'" prop="MPTime">
-            <el-date-picker v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
+          <el-form-item :label="'MP时间'" prop="MPTime">
+            <el-input v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+        </el-input>
           </el-form-item>
 
-          <el-form-item :label="'remark'" prop="remark">
-            <el-input v-model="dataForm.remark"></el-input>
+          <el-form-item :label="'备注'" prop="remark">
+            <textarea v-model="dataForm.remark"  style="width:100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
 
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
 
 
     </el-form>

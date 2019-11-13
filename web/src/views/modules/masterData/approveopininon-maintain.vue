@@ -24,7 +24,7 @@
 <!--      </el-form-item>-->
 
           <el-form-item :label="'常用审批意见内容'" prop="opininon">
-            <textarea v-model="dataForm.opininon" style="width: 600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea v-model="dataForm.opininon" style="width:100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
     </el-form>

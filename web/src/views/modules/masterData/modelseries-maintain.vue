@@ -13,32 +13,8 @@
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
-            <el-input v-model="dataForm.remark"></el-input>
+            <textarea v-model="dataForm.remark"  style="width:100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
-
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
 
     </el-form>
 

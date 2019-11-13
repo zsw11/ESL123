@@ -13,7 +13,7 @@
           </el-form-item>
 
           <el-form-item :label="'是否通用'" prop="isCommon">
-            <el-switch v-model="dataForm.isCommon"></el-switch>
+            <el-input v-model="dataForm.isCommon"></el-input>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
