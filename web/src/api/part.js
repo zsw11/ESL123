@@ -19,11 +19,11 @@ export function createPart (data) {
 }
 
 // 获取部品详情
-export function fetchPart (params) {
+export function fetchPart (id) {
   return request({
-    url: request.adornUrl('/api/v1/part/detail'),
+    url: request.adornUrl(`/api/v1/part/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
