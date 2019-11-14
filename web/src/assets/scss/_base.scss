@@ -39,11 +39,20 @@ img {
 .bg-grey {
   background-color: #F1F2F6
 }
+.bg-dark-grey {
+  background-color: darkgray
+}
+.bg-light-orange {
+  background-color: rgba(orange, .5)
+}
 .bg-orange {
   background-color: orange
 }
 .bg-error {
   background-color: hotpink;
+}
+.bg-table-color1 {
+  background-color: #8D9EFB;
 }
 
 /* mixin

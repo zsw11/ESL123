@@ -26,7 +26,7 @@
                  @keyup.222="showMore(2)" >
         </template>
       </vxe-table-column>
-      <vxe-table-column field="key" title="Key" width="60" :edit-render="{name: 'input'}">
+      <vxe-table-column field="key" title="Key" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60" :edit-render="{name: 'input'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
         </template>
@@ -36,17 +36,17 @@
       <vxe-table-column field="a1" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="b2" title="B" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="p1" title="P" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="m" title="M" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="x" title="X" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="i" title="I" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="a2" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="b3" title="B" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="p2" title="P" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="a3" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="tool" title="Tool" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="a4" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="b4" title="B" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="p3" title="P" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="m" title="M" header-class-name="bg-light-orange" class-name="bg-light-orange" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="x" title="X" header-class-name="bg-light-orange" class-name="bg-light-orange" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="i" title="I" header-class-name="bg-light-orange" class-name="bg-light-orange" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="a2" title="A" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="b3" title="B" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="p2" title="P" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="a3" title="A" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="a4" title="A" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="b4" title="B" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="p3" title="P" header-class-name="bg-table-color1" class-name="bg-table-color1" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="a5" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -61,44 +61,25 @@
 <script>
   export default {
     name: 'WorkbookTable',
+    props: ['count'],
     data () {
       return {
         flag: false,                      // 候选栏
         // workM: false,                     // 手顺
         rowIndex: 0,
-        tableData: [{ a1: undefined }],
+        tableData: [],
         allTable: [],                     // 所有工位的分析表
         id: 0,                            // 当前工位分析表的索引
         len: 10,
         WMethod: '',
         add: true
-        // row: {
-        //   H: null,
-        //   a1: null,
-        //   a2: null,
-        //   a3: null,
-        //   a4: null,
-        //   a5: null,
-        //   b1: null,
-        //   b2: null,
-        //   b3: null,
-        //   b4: null,
-        //   fre: null,
-        //   g1: null,
-        //   i: null,
-        //   key: null,
-        //   m: null,
-        //   p1: null,
-        //   p2: null,
-        //   p3: null,
-        //   remark: null,
-        //   scv: null,
-        //   timeValue: null,
-        //   tmu: null,
-        //   tool: null,
-        //   workMethod: '',
-        //   x: null}
       }
+    },
+    created () {
+      for (let i = 0; i < 10; i++) {
+        this.tableData.push({})
+      }
+      console.log(this.tableData)
     },
     methods: {
       // 手顺候选模块
@@ -187,15 +168,7 @@
       selectChangeEvent ({ checked, row }) {
         console.log(checked ? '勾选事件' : '取消事件')
       }
-    },
-    created () {
-      this.len = this.count
-      for (let i = 0; i < this.len; i++) {
-        this.allTable.push([{}])
-      }
-      localStorage.setItem('table', window.JSON.stringify(this.allTable))
-    },
-    props: ['count']
+    }
   }
 </script>
 
