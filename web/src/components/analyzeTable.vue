@@ -1,6 +1,5 @@
 <template>
-  <div>
-  <div class="table"
+  <div class="analyzing-table"
        @keyup.enter="addRow"
        @keyup.115="copyEnd"
        @keyup.118="copy"
@@ -13,20 +12,22 @@
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :mouse-config="{selected: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="workMethod" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
         <template v-slot:edit="{ row }">
-          <input type="text" style="width: 90px" v-model="row.workMethod" ref="workInput" class="custom-input"
+          <input type="text" v-model="row.workMethod" ref="workInput" class="custom-input"
                  @keyup.219="showMore(1)"
                  @keyup.222="showMore(2)" >
         </template>
       </vxe-table-column>
       <vxe-table-column field="key" title="Key" width="60" :edit-render="{name: 'input'}">
         <template v-slot:edit="{ row }">
-          <input type="text"  style="width:40px" v-model="row.key" id="key" ref="keys" class="custom-input">
+          <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
         </template>
       </vxe-table-column>
       <vxe-table-column field="b1" title="B" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -54,21 +55,8 @@
     </vxe-table>
     <div v-show="flag" @click="flag = false" class="more"></div>
   </div>
-  </div>
 </template>
-<style>
-  .table{
-    margin-top: 5px;
-  }
-  .more{
-    margin-left: 160px;
-    width: 80px;
-    height: 100px;
-    background-color: #FAFAFA;
-    border-radius: 5px;
-    border: 1px solid #f2f2f2;
-  }
-</style>
+
 <script>
   export default {
     data () {
@@ -76,7 +64,7 @@
         flag: false,                      // 候选栏
         // workM: false,                     // 手顺
         rowIndex: 0,
-        tableData: [{}],
+        tableData: [{ a1: '' }],
         allTable: [],                     // 所有工位的分析表
         id: 0,                            // 当前工位分析表的索引
         len: 10,
@@ -208,3 +196,31 @@
     props: ['count']
   }
 </script>
+
+<style lang="scss">
+.more {
+  margin-left: 160px;
+  width: 80px;
+  height: 100px;
+  background-color: #FAFAFA;
+  border-radius: 5px;
+  border: 1px solid #f2f2f2;
+}
+.analyzing-table {
+  margin-top: 5px;
+  .vxe-header--column .vxe-edit-icon {
+    display: none;
+  }
+  .vxe-table .vxe-cell {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    .vxe-default-input,
+    .custom-input {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #dcdfe6
+    }
+  }
+}
+</style>

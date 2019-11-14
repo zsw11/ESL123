@@ -19,6 +19,36 @@
       </div>
     </div>
 </template>
+
+<script>
+  import analyzeTable from '../components/analyzeTable.vue'
+  export default {
+    data () {
+      return {
+        count: 10
+      }
+    },
+    methods: {
+      handleClick (tab) {
+        this.$refs.alyTable.toggle(tab.index)
+      },
+      cache () {
+        this.$refs.alyTable.cache()
+      },
+      addWorkNum () {
+        this.count ++
+        this.$refs.alyTable.addWorkNum()
+      }
+    },
+    components: {
+      analyzeTable
+    },
+    created () {
+      localStorage.clear()
+    }
+  }
+</script>
+
 <style scoped lang="scss">
   .bottom{
     background-color: #BFBFBD;
@@ -68,31 +98,3 @@
     }
   }
 </style>
-<script>
-  import analyzeTable from '../components/analyzeTable.vue'
-  export default {
-    data () {
-      return {
-        count: 10
-      }
-    },
-    methods: {
-      handleClick (tab) {
-        this.$refs.alyTable.toggle(tab.index)
-      },
-      cache () {
-        this.$refs.alyTable.cache()
-      },
-      addWorkNum () {
-        this.count ++
-        this.$refs.alyTable.addWorkNum()
-      }
-    },
-    components: {
-      analyzeTable
-    },
-    created () {
-      localStorage.clear()
-    }
-  }
-</script>
