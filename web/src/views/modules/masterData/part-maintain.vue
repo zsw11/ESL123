@@ -12,13 +12,11 @@
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 
-<<<<<<< HEAD
-          <el-form-item :label="'是否通用'" prop="isCommon">
-            <el-switch v-model="dataForm.isCommon"></el-switch>
-=======
           <el-form-item :label="'是否通用'" prop="common">
-            <el-input v-model="dataForm.common"></el-input>
->>>>>>> baa9da8afab537718e729099b73a0a1c5288fd2a
+            <el-switch
+              v-model="dataForm.common">
+            </el-switch>
+            <!-- <el-input v-model="dataForm.common"></el-input> -->
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
@@ -46,12 +44,7 @@ export default {
         id: 0,
         name: null,
         common: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        remark: null
       },
       dataRules: {
         name: [

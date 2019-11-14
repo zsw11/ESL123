@@ -69,7 +69,8 @@
 
         <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.common" :disabled="true"></el-switch>
+            <span v-if="scope.row.common">是</span>
+            <span v-if="!scope.row.common">否</span>
           </template>
         </el-table-column>
 
@@ -154,7 +155,7 @@ export default {
       )).then(({data}) => {
         console.log(data, 555555)
         this.dataList = data.data.data
-        // this.total = total
+        this.total = data.data.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0

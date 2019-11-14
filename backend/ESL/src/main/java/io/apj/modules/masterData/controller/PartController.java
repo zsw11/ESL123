@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.PartService;
+import io.apj.modules.sys.controller.AbstractController;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/part")
-public class PartController {
+public class PartController extends AbstractController {
     @Autowired
     private PartService partService;
 
@@ -62,6 +63,7 @@ public class PartController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:part:save")
     public R save(@RequestBody PartEntity part){
+    	part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
         return R.ok();
