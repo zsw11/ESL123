@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/phase")
-public class PhaseController {
+public class PhaseController extends AbstractController {
     @Autowired
     private PhaseService phaseService;
 
@@ -41,7 +42,7 @@ public class PhaseController {
     @RequiresPermissions("masterData:phase:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = phaseService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -53,7 +54,7 @@ public class PhaseController {
     public R info(@PathVariable("id") Integer id){
 		PhaseEntity phase = phaseService.selectById(id);
 
-        return R.ok().put("phase", phase);
+        return R.ok().put("data", phase);
     }
 
     /**
@@ -62,6 +63,7 @@ public class PhaseController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:phase:save")
     public R save(@RequestBody PhaseEntity phase){
+        phase.setCreateBy(getUserId().intValue());
 		phaseService.insert(phase);
 
         return R.ok();

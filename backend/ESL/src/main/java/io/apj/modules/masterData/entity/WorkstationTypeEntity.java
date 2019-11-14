@@ -53,4 +53,6 @@ public class WorkstationTypeEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+    public void setCreateBy(int intValue) {
+    }
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/tool")
-public class ToolController {
+public class ToolController extends AbstractController {
     @Autowired
     private ToolService toolService;
 
@@ -41,7 +42,7 @@ public class ToolController {
     @RequiresPermissions("masterData:tool:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = toolService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -62,6 +63,7 @@ public class ToolController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:tool:save")
     public R save(@RequestBody ToolEntity tool){
+        tool.setCreateBy(getUserId().intValue());
 		toolService.insert(tool);
 
         return R.ok();
