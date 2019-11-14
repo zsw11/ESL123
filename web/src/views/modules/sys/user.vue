@@ -22,11 +22,9 @@
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">工位信息</div>
+        <div class="card-title">用户信息</div>
         <div class="buttons">
-          <el-button v-if="isAuth('sys:user:create')" @click="">导入</el-button>
-          <el-button v-if="isAuth('sys:user:create')" @click="">导出</el-button>
-          <el-button v-if="isAuth('sys:user:create')" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button v-if="isAuth('sys:user:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -45,13 +43,39 @@
           prop="username"
           header-align="center"
           align="center"
-          label="工位名">
+          label="用户名">
         </el-table-column>
         <el-table-column
           prop="email"
           header-align="center"
           align="center"
-          label="备注">
+          label="邮箱">
+        </el-table-column>
+        <el-table-column
+          prop="mobile"
+          header-align="center"
+          align="center"
+          label="手机号">
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          header-align="center"
+          align="center"
+          label="状态">
+          <template slot-scope="scope">
+            <el-tag
+              size="small"
+              :type="statusMap[scope.row.status].tagType">
+              {{statusMap[scope.row.status].name}}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          header-align="center"
+          align="center"
+          width="180"
+          label="创建时间">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -60,7 +84,8 @@
           width="150"
           label="操作">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('sys:user:reset')" type="text" size="small" @click="resetHandle(scope.row.id)">详情</el-button>
+            <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+            <el-button v-if="isAuth('sys:user:reset')" type="text" size="small" @click="resetHandle(scope.row.id)">重置密码</el-button>
             <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -122,6 +147,7 @@ export default {
         },
         this.listQuery
       )).then(({data, total}) => {
+        console.log(data, 4444)
         this.dataList = data
         this.totalPage = total
       }).finally(() => {
