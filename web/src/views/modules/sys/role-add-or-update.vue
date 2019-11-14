@@ -56,7 +56,7 @@
             </el-tree>
           </el-form-item>
        </el-col> -->
-        <el-col :span="11">
+        <!-- <el-col :span="11">
           <el-form-item size="mini"
                         label="数据权限">
             <el-tree :data="isMenu?deptTree.data:[]"
@@ -68,7 +68,7 @@
                      show-checkbox>
             </el-tree>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
     <span class="dialog-footer">
@@ -81,7 +81,7 @@
 
 <script>
 import { pick, compact } from 'lodash'
-import { menuListByRole } from '@/api/menu'
+import { menuList } from '@/api/menu'
 import { listDept } from '@/api/dept'
 import { fetchRole, createRole, updateRole } from '@/api/role'
 import { treeDataTranslate } from '@/utils'
@@ -139,7 +139,7 @@ export default {
   },
   created () {
     this.getMenuList()
-    this.getDeptList()
+    // this.getDeptList()
     this.init()
   },
   methods: {
@@ -149,20 +149,20 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          fetchRole(this.dataForm.id).then(({ data }) => {
+          fetchRole(this.dataForm.id).then(({ page }) => {
             Object.assign(
               this.dataForm,
-              pick(data, ['name', 'remark'])
+              pick(page, ['name', 'remark'])
             )
-            this.$refs.menuTree.setCheckedKeys(data.menus.map(m => m.id))
-            console.log(data.menus.map(m => m.id))
-            this.menuTree.defaultExpandedKeys = compact(data.menus.map(m => m.parentId))
+            this.$refs.menuTree.setCheckedKeys(page.menus.map(m => m.id))
+            console.log(page.menus.map(m => m.id))
+            this.menuTree.defaultExpandedKeys = compact(page.menus.map(m => m.parentId))
           })
         }
       })
     },
     getMenuList () {
-      menuListByRole({roleId: this.$route.params.id || 0}).then(({ data }) => {
+      menuList().then(({ data }) => {
         this.menuTree.data = treeDataTranslate(data, 'id')
         console.log(this.menuTree.data)
         this.menuTree.defaultExpandedKeys.push(this.menuTree.data[0].id)
@@ -239,3 +239,4 @@ export default {
   }
 }
 </script>
+
