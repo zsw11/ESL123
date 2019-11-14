@@ -54,7 +54,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">分析表</div>
         <div class="buttons">
-          <el-button v-if="isAuth('workBook:workbook:create')" type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
+          <el-button  @click="addOrUpdateHandle()">新增分析表</el-button>
 
         </div>
       </div>
@@ -107,8 +107,6 @@
           </template>
         </el-table-column>
 
-
-
         <el-table-column align="center" prop="workstationId" label="工位" >
           <template slot-scope="scope">
             <span>{{scope.row.workstationId }}</span>
@@ -126,9 +124,9 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('workBook:workbook:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">版本修订</el-button>
-            <el-button v-if="isAuth('workBook:workbook:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">沿用</el-button>
-            <el-button v-if="isAuth('workBook:workbook:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">版本修订</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">沿用</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
 
           </template>
         </el-table-column>
@@ -220,7 +218,7 @@ export default {
         },
         this.listQuery
       )).then(({data, total}) => {
-        this.dataList = data
+        this.dataList = data.data.data
         this.total = total
       }).catch(() => {
         this.dataList = []
@@ -272,7 +270,7 @@ export default {
     },
     // 删除数据
     deleteHandle (row) {
-      var ids = row ? row.id : this.dataListSelections.map(item => {
+      var ids = row ? [row.id] : this.dataListSelections.map(item => {
         return item.id
       })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {

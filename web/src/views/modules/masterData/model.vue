@@ -106,7 +106,7 @@
           </template>
         </el-table-column>
 
-      <el-table-column align="center" fixed="right" :label="'操作'" >
+      <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template>
             <el-button type="text" size="small" @click="">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
@@ -204,9 +204,9 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data.data.data
-        this.total = total
+      )).then(({page}) => {
+        this.dataList = page.data
+        this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
