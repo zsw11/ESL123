@@ -24,10 +24,15 @@
   import WorkbookTable from './workbook-table.vue'
   export default {
     name: 'WorkbookDetail',
+    components: {
+      WorkbookTable
+    },
     data () {
       return {
         count: 10
       }
+    },
+    created () {
     },
     methods: {
       handleClick (tab) {
@@ -40,12 +45,6 @@
         this.count ++
         this.$refs.alyTable.addWorkNum()
       }
-    },
-    components: {
-      WorkbookTable
-    },
-    created () {
-      localStorage.clear()
     }
   }
 </script>
