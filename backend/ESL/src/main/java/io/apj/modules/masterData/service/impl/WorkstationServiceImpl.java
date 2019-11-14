@@ -1,5 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.PartEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,9 +18,12 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<WorkstationEntity> page = this.selectPage(
-                new Query<WorkstationEntity>(params).getPage()
-        );
+        EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("name") != null && params.get("name") != "", "name",
+                        (String) params.get("name"));
+        Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
+
 
         return new PageUtils(page);
     }

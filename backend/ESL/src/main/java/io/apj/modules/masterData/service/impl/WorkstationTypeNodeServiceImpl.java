@@ -1,5 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.WorkstationTypeEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,9 +18,12 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<WorkstationTypeNodeEntity> page = this.selectPage(
-                new Query<WorkstationTypeNodeEntity>(params).getPage()
-        );
+        EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"))
+                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
+        Page<WorkstationTypeNodeEntity> page = this.selectPage(new Query<WorkstationTypeNodeEntity>(params).getPage(), entityWrapper);
+
 
         return new PageUtils(page);
     }

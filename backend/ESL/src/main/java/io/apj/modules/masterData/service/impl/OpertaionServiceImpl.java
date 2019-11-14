@@ -1,5 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.ToolEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,9 +18,11 @@ public class OpertaionServiceImpl extends ServiceImpl<OpertaionDao, OpertaionEnt
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<OpertaionEntity> page = this.selectPage(
-                new Query<OpertaionEntity>(params).getPage()
-        );
+        EntityWrapper<OpertaionEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("name") != null && params.get("name") != "", "name",
+                        (String) params.get("name"));
+        Page<OpertaionEntity> page = this.selectPage(new Query<OpertaionEntity>(params).getPage(), ent
 
         return new PageUtils(page);
     }

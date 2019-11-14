@@ -22,8 +22,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 		EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at")
 				.like(params.get("name") != null && params.get("name") != "", "name",
-				(String) params.get("name"))
-				.or(String.valueOf(params.get("name") == "" && params.get("name") == null));
+				(String) params.get("name"));
 		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);
