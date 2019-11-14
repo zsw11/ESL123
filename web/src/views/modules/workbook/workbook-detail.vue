@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="bottom">
+    <div class="workbook-content">
       <div class="btn">
         <el-button style="width: 135px; height: 37px; font-size: 14px" type="primary">F2 手顺组合</el-button>
         <el-button style="width: 154px; height: 37px; font-size: 14px" type="primary">F4 复制到最后</el-button>
@@ -50,51 +50,56 @@
 </script>
 
 <style scoped lang="scss">
-  .bottom{
-    background-color: #BFBFBD;
-    padding: 10px;
-      .more{
-        margin-left: 160px;
-        width: 80px;
-        height: 100px;
-        background-color: #FAFAFA;
-        border-radius: 5px;
-        border: 1px solid #f2f2f2;
-      }
-    .btn{
-      width: 600px;
-    }
-    .operation{
-      background-color: #fff;
-      overflow: hidden;
-      position: relative;
-      .toggleWork{
-        float: left;
-        background-color: #F5F7FA;
-        padding-right: 5px;
-        box-shadow: none;
-        height: 40px;
-        width: 640px;
-        .workNum{
-          display: inline-block;
-          width: 80px;
-          text-align: center;
-        }
-      }
-      .cache{
-        position: absolute;
-        right: 0;
-        bottom: 0;
+.wrapper {
+  height: 100%;
+}
+.workbook-content{
+  position: absolute;
+  bottom: 0;
+  background-color: #BFBFBD;
+  padding: 10px;
+  .more{
+    margin-left: 160px;
+    width: 80px;
+    height: 100px;
+    background-color: #FAFAFA;
+    border-radius: 5px;
+    border: 1px solid #f2f2f2;
+  }
+  .btn{
+    width: 600px;
+  }
+  .operation{
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+    .toggleWork{
+      float: left;
+      background-color: #F5F7FA;
+      padding-right: 5px;
+      box-shadow: none;
+      height: 40px;
+      width: 640px;
+      .workNum{
         display: inline-block;
+        width: 80px;
         text-align: center;
-        font-size: 16px;
-        width: 77px;
-        line-height: 40px;
-        height: 40px;
-        border: 1px solid #E4E7ED;
-        box-sizing: border-box;
-        cursor: pointer;
       }
+    }
+    .cache{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: inline-block;
+      text-align: center;
+      font-size: 16px;
+      width: 77px;
+      line-height: 40px;
+      height: 40px;
+      border: 1px solid #E4E7ED;
+      box-sizing: border-box;
+      cursor: pointer;
     }
   }
+}
 </style>

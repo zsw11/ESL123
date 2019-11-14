@@ -166,7 +166,7 @@ const mainRoutes = {
     // 分析表
     { path: '/add-workbook', component: _import('modules/workbook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
     { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } },
-    { path: '/workbook-detail', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isTab: true } }
+    { path: '/workbook-detail', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isFull: true } }
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token

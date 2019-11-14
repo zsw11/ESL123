@@ -4,7 +4,12 @@
     :class="{ 'site-sidebar--fold': sidebarFold }"
     v-loading.fullscreen.lock="loading"
     element-loading-text="拼命加载中">
-    <template v-if="!loading">
+    <template v-if="!loading && $route.meta.isFull">
+      <div class="site-full-content__wrapper" :style="{ 'height': documentClientHeight + 'px' }">
+        <main-content />
+      </div>
+    </template>
+    <template v-else-if="!loading">
       <main-navbar />
       <main-sidebar />
       <div class="site-content__wrapper" :style="{ 'min-height': documentClientHeight + 'px' }">
@@ -64,3 +69,12 @@
     }
   }
 </script>
+
+<style lang="scss">
+.site-full-content__wrapper {
+  .site-content {
+    height: 100%;
+    padding: 0;
+  }
+}
+</style>
