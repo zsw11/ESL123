@@ -4,7 +4,7 @@ import Mock from 'mockjs'
 export function login () {
   return {
     // isOpen: false,
-    url: '/sys/login',
+    url: '/apj-security/api/v1/passport/login',
     type: 'post',
     data: {
       'msg': 'success',
