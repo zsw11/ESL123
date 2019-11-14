@@ -18,10 +18,9 @@ const _import = require('./import-' + process.env.NODE_ENV)
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
   { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
-  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } },
+  { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
   // 内页分析表
   // eslint-disable-next-line standard/object-curly-even-spacing
-  { path: '/analyzing', component: _import('analyzing'), name: 'analyzing', meta: { title: '分析表录入'}}
 
 ]
 
@@ -165,8 +164,9 @@ const mainRoutes = {
     { path: '/edit-opertaiongroup/:id(\\d+)', component: _import('modules/masterData/opertaiongroup-maintain'), name: 'edit-opertaiongroup', meta: { title: '编辑手顺组合', isTab: true } },
 
     // 分析表
-    { path: '/add-workbook', component: _import('modules/workBook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
-    { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workBook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } }
+    { path: '/add-workbook', component: _import('modules/workbook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
+    { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } },
+    { path: '/workbook-detail', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isTab: false } }
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token

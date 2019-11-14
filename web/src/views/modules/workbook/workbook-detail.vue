@@ -7,7 +7,7 @@
         <el-button style="width: 96px; height: 37px; font-size: 14px" type="primary">F7 复制</el-button>
         <el-button style="width: 96px; height: 37px; font-size: 14px" type="primary">F9 粘贴</el-button>
       </div>
-      <analyzeTable ref="alyTable" :count="this.count"></analyzeTable>
+      <workbook-table ref="alyTable" :count="this.count"></workbook-table>
       <div class="operation">
       <el-tabs  type="border-card" class="toggleWork" addable @tab-click="handleClick" @tab-add="addWorkNum">
         <el-tab-pane   v-for="item in count" :key="item">
@@ -21,8 +21,9 @@
 </template>
 
 <script>
-  import analyzeTable from '../components/analyzeTable.vue'
+  import WorkbookTable from './workbook-table.vue'
   export default {
+    name: 'WorkbookDetail',
     data () {
       return {
         count: 10
@@ -41,7 +42,7 @@
       }
     },
     components: {
-      analyzeTable
+      WorkbookTable
     },
     created () {
       localStorage.clear()

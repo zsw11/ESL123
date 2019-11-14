@@ -1,5 +1,5 @@
 <template>
-  <div class="analyzing-table"
+  <div class="workbook-table"
        @keyup.enter="addRow"
        @keyup.115="copyEnd"
        @keyup.118="copy"
@@ -60,6 +60,7 @@
 
 <script>
   export default {
+    name: 'WorkbookTable',
     data () {
       return {
         flag: false,                      // 候选栏
@@ -207,7 +208,7 @@
   border-radius: 5px;
   border: 1px solid #f2f2f2;
 }
-.analyzing-table {
+.workbook-table {
   margin-top: 5px;
   .vxe-header--column .vxe-edit-icon {
     display: none;
