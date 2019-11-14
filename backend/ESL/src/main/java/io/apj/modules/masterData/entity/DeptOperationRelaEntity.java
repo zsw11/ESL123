@@ -53,4 +53,6 @@ public class DeptOperationRelaEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+    public void setCreateBy(int intValue) {
+    }
 }

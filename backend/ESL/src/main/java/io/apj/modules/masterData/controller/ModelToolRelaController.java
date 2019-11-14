@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/modeltoolrela")
-public class ModelToolRelaController {
+public class ModelToolRelaController extends AbstractController {
     @Autowired
     private ModelToolRelaService modelToolRelaService;
 
@@ -41,7 +42,7 @@ public class ModelToolRelaController {
     @RequiresPermissions("masterData:modeltoolrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = modelToolRelaService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -62,6 +63,7 @@ public class ModelToolRelaController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:modeltoolrela:save")
     public R save(@RequestBody ModelToolRelaEntity modelToolRela){
+        modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
 
         return R.ok();

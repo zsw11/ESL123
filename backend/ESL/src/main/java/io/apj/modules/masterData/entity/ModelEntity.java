@@ -81,4 +81,6 @@ public class ModelEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+    public void setCreateBy(int intValue) {
+    }
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/deptoperationrela")
-public class DeptOperationRelaController {
+public class DeptOperationRelaController extends AbstractController {
     @Autowired
     private DeptOperationRelaService deptOperationRelaService;
 
@@ -41,7 +42,7 @@ public class DeptOperationRelaController {
     @RequiresPermissions("masterData:deptoperationrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = deptOperationRelaService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -62,6 +63,7 @@ public class DeptOperationRelaController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptoperationrela:save")
     public R save(@RequestBody DeptOperationRelaEntity deptOperationRela){
+        deptOperationRela.setCreateBy(getUserId().intValue());
 		deptOperationRelaService.insert(deptOperationRela);
 
         return R.ok();
