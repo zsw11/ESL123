@@ -45,9 +45,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="ifCommmonUse" label="是否通用" >
+        <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.ifCommmonUse" :disabled="true"></el-switch>
+            <el-switch v-model="scope.row.common" :disabled="true"></el-switch>
           </template>
         </el-table-column>
 
@@ -89,7 +89,7 @@ export default {
       dataButton: 'list',
       listQuery: {
         name: null,
-        ifCommmonUse: null,
+        common: null,
         remark: null
       },
 
@@ -104,7 +104,7 @@ export default {
         name: '治工具信息',
         children: [
           { code: 'name', name: '治工具名称', type: 'string', required: true },
-          { code: 'ifCommmonUse', name: '是否通用', type: 'string', required: true },
+          { code: 'common', name: '是否通用', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
@@ -143,7 +143,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
-        ifCommmonUse: null,
+        common: null,
         remark: null
       })
     },

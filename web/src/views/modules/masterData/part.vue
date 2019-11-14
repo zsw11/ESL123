@@ -67,9 +67,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="isCommon" label="是否通用" >
+        <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isCommon" :disabled="true"></el-switch>
+            <el-switch v-model="scope.row.common" :disabled="true"></el-switch>
           </template>
         </el-table-column>
 
@@ -112,7 +112,7 @@ export default {
       dataButton: 'list',
       listQuery: {
         name: null,
-        isCommon: null,
+        common: null,
         remark: null
       },
       dataList: [{}],
@@ -126,7 +126,7 @@ export default {
         name: '部品',
         children: [
           { code: 'name', name: '部品名称', type: 'string', required: true },
-          { code: 'isCommon', name: '是否通用', type: 'string', required: true },
+          { code: 'common', name: '是否通用', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
@@ -151,9 +151,10 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
+      )).then(({data}) => {
+        console.log(data, 555555)
         this.dataList = data.data.data
-        this.total = total
+        // this.total = total
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -165,7 +166,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
-        isCommon: null,
+        common: null,
         remark: null
       })
     },
