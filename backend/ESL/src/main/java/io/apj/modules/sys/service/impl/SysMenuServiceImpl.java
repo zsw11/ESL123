@@ -164,7 +164,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 					SysMenuEntityVo vo = SysMenuEntityVo.makeVo(menu);
 					List<SysMenuEntityVo> sons = new ArrayList<>();
 					EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>();
-					entityWrapper.eq("parent_id", menu.getId());
+					entityWrapper.eq("parent_id", menu.getId()).ne("type", 2);
 					for(SysMenuEntity m : sysMenuService.selectList(entityWrapper)) {
 						sons.add(SysMenuEntityVo.makeVo(m));
 					}
