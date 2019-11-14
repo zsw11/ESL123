@@ -4,10 +4,11 @@
        @keyup.115="copyEnd"
        @keyup.118="copy"
        @keyup.120="paste">
-    <vxe-table
+    <vxe-grid
       border
-      size="small"
+      size="mini"
       ref="xTable"
+      align="center"
       :data="tableData"
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
@@ -18,7 +19,7 @@
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="workMethod" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
+      <vxe-table-column field="workMethod" align="left" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.workMethod" ref="workInput" class="custom-input"
                  @keyup.219="showMore(1)"
@@ -48,11 +49,11 @@
       <vxe-table-column field="p3" title="P" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="a5" title="A" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="timeValue" title="TimeValue" width="55" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="tmu" title="TMU" width="50" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
-    </vxe-table>
+    </vxe-grid>
     <div v-show="flag" @click="flag = false" class="more"></div>
   </div>
 </template>
@@ -64,7 +65,7 @@
         flag: false,                      // 候选栏
         // workM: false,                     // 手顺
         rowIndex: 0,
-        tableData: [{ a1: '' }],
+        tableData: [{ a1: undefined }],
         allTable: [],                     // 所有工位的分析表
         id: 0,                            // 当前工位分析表的索引
         len: 10,
@@ -211,15 +212,28 @@
   .vxe-header--column .vxe-edit-icon {
     display: none;
   }
-  .vxe-table .vxe-cell {
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    .vxe-default-input,
-    .custom-input {
+  .vxe-table {
+    .vxe-cell {
+      padding: 0;
       width: 100%;
       height: 100%;
-      border: 1px solid #dcdfe6
+      .vxe-default-input,
+      .custom-input {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #dcdfe6;
+      }
+    }
+    &.vxe-editable .vxe-body--column {
+      .vxe-cell {
+        line-height: 23px;
+      }
+      &.col--center {
+        .vxe-default-input,
+        .custom-input {
+          text-align: center;
+        }
+      }
     }
   }
 }
