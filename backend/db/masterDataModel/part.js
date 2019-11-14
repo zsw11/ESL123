@@ -7,7 +7,7 @@ module.exports = app => {
   const part = app.model.define('part', {
     id: { type: INTEGER, autoIncrement: true, primaryKey: true, cnName: 'ID' },
     name: { type: STRING(64), allowNull: true, cnName: '名称' },
-    isCommon: { type: BOOLEAN, allowNull: true, cnName: '是否通用' },
+    common: { type: BOOLEAN, allowNull: true, cnName: '是否通用' },
     remark: { type: STRING(512), allowNull: true, cnName: '备注' },
     createBy: { type: INTEGER, allowNull: true, cnName: '创建者ID' },
     createAt: { type: DATE, allowNull: true, cnName: '创建时间' },

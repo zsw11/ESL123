@@ -1,2 +1,3 @@
 *.tmp
 ~$*.xlsx
+/backend/ESL/.project
