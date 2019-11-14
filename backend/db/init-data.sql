@@ -8,7 +8,7 @@ INSERT INTO basic_job VALUES (1, 'W001', '临时岗位', 'linshigangwei', '01', 
 -- ----------------------------
 -- Records of basic_member
 -- ----------------------------
-INSERT INTO "public"."basic_member"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 1, 1, 1, 'admin', 'admin', 'admin', '0', '1', '在职', '无', '2019-10-15', '1', 1, '2019-10-15 15:15:44', 1, '2019-10-15 15:15:47', NULL);
+INSERT INTO "public"."basic_member"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email","job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 1, 1, 1, 'admin', 'admin', 'admin', '0', '1', '在职', '无', '2019-10-15', '1', 1, '007', '2019-10-15 15:15:44', 1, '2019-10-15 15:15:47', NULL);
 
 
 -- ----------------------------
@@ -27,47 +27,10 @@ INSERT INTO sys_config VALUES (2, 'MessageExpire', '1440', 1, '待处理消息�
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO sys_dept VALUES (1, 0, '中海达集团', 0, 0, NULL, '', 'bloc', 1, '2018-12-23 09:37:41', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (2, 1, '总部', 0, 0, NULL, 'headquarters', 'company', 1, '2018-12-23 09:37:41', 1, '2019-02-27 11:08:13', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (3, 1, '广东（广州）', 0, 0, NULL, 'branch', 'company', 1, '2018-12-23 09:37:41', 1, '2019-02-25 20:47:01', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (4, 3, '技术部', 0, 0, NULL, '', 'dept', 1, '2018-12-23 09:37:41', 1, '2019-02-25 20:48:26', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (5, 3, '销售部', 1, 0, NULL, '', 'dept', 1, '2018-12-23 09:37:41', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (6, 1, '新疆（乌鲁木齐）', 0, 0, NULL, 'branch', 'company', 8, '2019-01-22 09:05:23', 1, '2019-02-25 20:24:23', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (9, 1, '重庆（重庆）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 14:09:42', 36, '2019-01-26 16:51:19', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (10, 1, '云南（昆明）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:50:54', NULL, '2019-01-26 16:50:54', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (11, 1, '内蒙（呼和浩特）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:51:51', NULL, '2019-01-26 16:51:51', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (12, 1, '山东（济南）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:52:09', NULL, '2019-01-26 16:52:09', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (13, 1, '吉林（长春）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:52:24', NULL, '2019-01-26 16:52:24', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (14, 1, '北京（北京）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:52:39', NULL, '2019-01-26 16:52:39', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (15, 1, '河北（石家庄）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:52:59', NULL, '2019-01-26 16:52:59', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (16, 1, '陕西（西安）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:53:17', NULL, '2019-01-26 16:53:17', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (17, 1, '湖北（武汉）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:53:33', NULL, '2019-01-26 16:53:33', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (18, 1, '沈阳（沈阳）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:53:48', NULL, '2019-01-26 16:53:48', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (19, 1, '四川（成都）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:54:11', NULL, '2019-01-26 16:54:11', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (20, 1, '安徽（合肥）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:55:02', NULL, '2019-01-26 16:55:02', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (21, 1, '贵州（贵阳）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:55:31', NULL, '2019-01-26 16:55:31', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (22, 1, '广西（南宁）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:55:48', NULL, '2019-01-26 16:55:48', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (23, 1, '海南（海口）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:56:04', NULL, '2019-01-26 16:56:04', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (24, 1, '山西（太原）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:56:21', NULL, '2019-01-26 16:56:21', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (25, 1, '福建（福州）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:56:54', NULL, '2019-01-26 16:56:54', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (26, 1, '甘肃（兰州）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:57:34', NULL, '2019-01-26 16:57:34', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (27, 1, '河南（郑州）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:57:51', NULL, '2019-01-26 16:57:51', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (28, 1, '黑龙江（哈尔滨）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:58:15', NULL, '2019-01-26 16:58:15', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (29, 1, '湖南（长沙）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:58:29', NULL, '2019-01-26 16:58:29', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (30, 1, '天津（天津）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:58:53', NULL, '2019-01-26 16:58:53', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (31, 1, '江苏（南京）', 0, 0, NULL, 'branch', 'company', 36, '2019-01-26 16:59:20', NULL, '2019-01-26 16:59:20', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (32, 1, '江西（南昌)', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:19:07', NULL, '2019-02-25 16:19:07', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (33, 1, '总部维修仓', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:20:08', NULL, '2019-02-25 16:20:08', '2019-02-25 16:21:13');
-INSERT INTO sys_dept VALUES (34, 1, '维修备选仓', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:20:27', NULL, '2019-02-25 16:20:27', '2019-02-25 16:21:17');
-INSERT INTO sys_dept VALUES (35, 1, '维修待返修仓', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:20:38', NULL, '2019-02-25 16:20:38', '2019-02-25 16:21:21');
-INSERT INTO sys_dept VALUES (36, 1, '番禺工厂', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:21:34', NULL, '2019-02-25 16:21:34', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (37, 1, '四川（成都）', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:51:45', NULL, '2019-02-25 16:51:45', '2019-02-25 16:52:33');
-INSERT INTO sys_dept VALUES (38, 1, '江西（南昌）', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:52:51', NULL, '2019-02-25 16:52:51', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (39, 1, '上海（上海）', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:54:14', NULL, '2019-02-25 16:54:14', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (40, 1, '辽宁（沈阳）', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:54:52', NULL, '2019-02-25 16:54:52', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (41, 1, '山西（太源）', 0, 0, NULL, 'branch', 'company', 1, '2019-02-25 16:55:34', NULL, '2019-02-25 16:55:34', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (42, 1, '测绘公司', 0, 0, NULL, 'branch', 'company', 1, '2019-02-26 06:17:07', NULL, '2019-02-26 06:17:07', '1970-01-01 00:00:00');
-INSERT INTO sys_dept VALUES (43, 1, 'test', 0, 0, NULL, 'headquarters', 'company', 1, '2019-02-27 11:08:27', NULL, '2019-02-27 11:08:27', '2019-02-27 11:08:36');
+INSERT INTO "public"."sys_dept"("id", "parent_id", "name", "order_num", "del_flag", "dept_code", "dept_type", "dept_level", "stlst", "create_by", "create_at", "update_by", "update_at", "delete_at") 
+VALUES (1, 1, '总部', 0, 0, '0', 'bloc', '1', 'lst', 1, '2019-11-12 13:57:01', NULL, NULL, NULL);
+-- INSERT INTO sys_dept VALUES (2, 1, '总部', 0, 0, NULL, 'headquarters', 'company', 1, 'LST', '2018-12-23 09:37:41', 1, '2019-02-27 11:08:13', '1970-01-01 00:00:00');
+-- INSERT INTO sys_dept VALUES (3, 1, '广东（广州）', 0, 0, NULL, 'branch', 'company', 1, 'LST', '2018-12-23 09:37:41', 1, '2019-02-25 20:47:01', '1970-01-01 00:00:00');
 
 
 -- ----------------------------

@@ -31,7 +31,7 @@ public class ToolEntity implements Serializable {
 	/**
 	 * 是否通用
 	 */
-	private Boolean isCommon;
+	private Boolean common;
 	/**
 	 * 备注
 	 */

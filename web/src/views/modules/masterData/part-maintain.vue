@@ -12,8 +12,13 @@
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 
+<<<<<<< HEAD
           <el-form-item :label="'是否通用'" prop="isCommon">
             <el-switch v-model="dataForm.isCommon"></el-switch>
+=======
+          <el-form-item :label="'是否通用'" prop="common">
+            <el-input v-model="dataForm.common"></el-input>
+>>>>>>> baa9da8afab537718e729099b73a0a1c5288fd2a
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
@@ -40,7 +45,7 @@ export default {
       dataForm: {
         id: 0,
         name: null,
-        isCommon: null,
+        common: null,
         remark: null,
         createBy: null,
         createAt: null,
@@ -105,7 +110,7 @@ export default {
         fetchPart(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'isCommon', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'name', 'common', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true
