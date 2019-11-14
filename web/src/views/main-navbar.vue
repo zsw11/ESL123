@@ -113,10 +113,10 @@ export default {
           page: this.pageIndex,
           limit: this.pageSize,
           type: 'unread'
-        }).then(({ data, total }) => {
-          if (data.length > 0) {
-            this.$store.dispatch('user/SetUnreadCount', total)
-            this.messageCount = total
+        }).then(({ page }) => {
+          if (page.data.length > 0) {
+            this.$store.dispatch('user/SetUnreadCount', page.totalCount)
+            this.messageCount = page.totalCount
             if (this.messageCount > 0) {
               this.bageValue = this.messageCount
               this.messageHandle()

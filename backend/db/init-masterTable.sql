@@ -43,7 +43,7 @@ drop table if exists tool;
 CREATE TABLE tool (
   id serial PRIMARY KEY,
   name varchar(64),
-  is_common boolean,
+  common boolean,
   remark varchar(512),
   create_by integer,
   create_at timestamp default now(),
@@ -53,7 +53,7 @@ CREATE TABLE tool (
 );
 comment on table tool is '治工具';
 comment on column tool.name is '名称';
-comment on column tool.is_common is '是否通用';
+comment on column tool.common is '是否通用';
 comment on column tool.remark is '备注';
 comment on column tool.create_by is '创建者ID';
 comment on column tool.create_at is '创建时间';
@@ -66,7 +66,7 @@ drop table if exists part;
 CREATE TABLE part (
   id serial PRIMARY KEY,
   name varchar(64),
-  is_common boolean,
+  common boolean,
   remark varchar(512),
   create_by integer,
   create_at timestamp default now(),
@@ -76,7 +76,7 @@ CREATE TABLE part (
 );
 comment on table part is '部品';
 comment on column part.name is '名称';
-comment on column part.is_common is '是否通用';
+comment on column part.common is '是否通用';
 comment on column part.remark is '备注';
 comment on column part.create_by is '创建者ID';
 comment on column part.create_at is '创建时间';
