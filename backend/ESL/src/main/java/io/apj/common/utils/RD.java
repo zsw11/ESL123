@@ -36,7 +36,7 @@ public class RD extends HashMap<String, Object>{
 	
 	// 正常返回、修改成功
 	public static ResponseEntity<Object> ok(Object data) {
-		return new ResponseEntity<Object>(build().put("status", 200).put("data", data), HttpStatus.OK);
+		return new ResponseEntity<Object>(build().put("status", 200).put("page", data), HttpStatus.OK);
 	}
 	
 	// 正常返回、修改成功

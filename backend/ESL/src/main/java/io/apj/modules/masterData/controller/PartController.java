@@ -42,7 +42,7 @@ public class PartController extends AbstractController {
     @RequiresPermissions("masterData:part:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = partService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -54,7 +54,7 @@ public class PartController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		PartEntity part = partService.selectById(id);
 
-        return R.ok().put("part", part);
+        return R.ok().put("data", part);
     }
 
     /**

@@ -152,10 +152,9 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data}) => {
-        console.log(data, 555555)
-        this.dataList = data.data.data
-        this.total = data.data.totalCount
+      )).then(({page}) => {
+        this.dataList = page.data
+        this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
