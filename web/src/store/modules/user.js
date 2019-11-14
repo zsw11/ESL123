@@ -44,7 +44,7 @@ export default {
           username: loginInfo.username.trim(),
           password: md5('security' + loginInfo.password.trim())
         }).then(response => {
-          const data = response.data
+          const data = response.page
           commit('SetId', data.id)
           commit('SetName', data.username)
           commit('SetToken', data.token)
@@ -58,7 +58,7 @@ export default {
     },
     updateUserInfo ({ commit }) {
       fetchUserDetail().then(res => {
-        const data = res.data
+        const data = res.page
         commit('SetId', data.id)
         commit('SetName', data.username)
       })
