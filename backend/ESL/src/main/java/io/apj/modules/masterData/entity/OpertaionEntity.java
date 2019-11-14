@@ -49,4 +49,6 @@ public class OpertaionEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+    public void setCreateBy(int intValue) {
+    }
 }

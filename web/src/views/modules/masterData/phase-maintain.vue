@@ -17,7 +17,7 @@
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.remark"  style="width: 600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea v-model="dataForm.remark"  style="width: 100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
     </el-form>
@@ -52,9 +52,9 @@ export default {
         name: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
-        continuePhaseId: [
-          { type: 'number', message: '沿用阶段需为数字值' }
-        ],
+        // continuePhaseId: [
+        //   { type: 'string', message: '沿用阶段需为数字值' }
+        // ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
         ],

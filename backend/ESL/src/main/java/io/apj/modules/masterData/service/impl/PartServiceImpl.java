@@ -12,14 +12,18 @@ import io.apj.modules.masterData.dao.PartDao;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.PartService;
 
+import javax.naming.Name;
+
 @Service("partService")
 public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements PartService {
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").like(params.get("name") != null && params.get("name") != "", "name",
-				(String) params.get("name"));
+		entityWrapper.isNull("delete_at")
+				.like(params.get("name") != null && params.get("name") != "", "name",
+				(String) params.get("name"))
+				.or(String.valueOf(params.get("name") == "" && params.get("name") == null));
 		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);

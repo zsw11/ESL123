@@ -41,7 +41,7 @@ public class MeasureGroupController {
     @RequiresPermissions("masterData:measuregroup:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = measureGroupService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 

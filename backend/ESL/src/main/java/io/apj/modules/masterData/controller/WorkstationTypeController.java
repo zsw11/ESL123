@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/workstationtype")
-public class WorkstationTypeController {
+public class WorkstationTypeController extends AbstractController {
     @Autowired
     private WorkstationTypeService workstationTypeService;
 
@@ -41,7 +42,7 @@ public class WorkstationTypeController {
     @RequiresPermissions("masterData:workstationtype:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = workstationTypeService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -62,6 +63,7 @@ public class WorkstationTypeController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtype:save")
     public R save(@RequestBody WorkstationTypeEntity workstationType){
+        workstationType.setCreateBy(getUserId().intValue());
 		workstationTypeService.insert(workstationType);
 
         return R.ok();

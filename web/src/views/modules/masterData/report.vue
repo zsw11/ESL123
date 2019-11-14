@@ -44,13 +44,13 @@
 
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+<!--            <span>{{scope.row.name }}</span>-->
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="formCode" label="空Form标准编号" >
           <template slot-scope="scope">
-            <span>{{scope.row.formCode }}</span>
+<!--            <span>{{scope.row.formCode }}</span>-->
           </template>
         </el-table-column>
 
@@ -117,6 +117,9 @@ export default {
     const self = this
     self.getDataList()
   },
+  created () {
+
+  },
   methods: {
     // 普通查询
     getDataList (pageNo) {
@@ -131,10 +134,9 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
-        console.log(data, 88888)
-        this.dataList = data.data.data
-        this.total = total
+      )).then(({page}) => {
+        this.dataList = page.data
+        this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0

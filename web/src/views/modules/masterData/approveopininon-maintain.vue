@@ -23,7 +23,7 @@
 <!--        </el-select>-->
 <!--      </el-form-item>-->
 
-          <el-form-item :label="'常用审批意见内容'" prop="opininon">
+          <el-form-item  :rules="dataRules" :label="'常用审批意见内容'" prop="opininon">
             <textarea v-model="dataForm.opininon" style="width:100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 

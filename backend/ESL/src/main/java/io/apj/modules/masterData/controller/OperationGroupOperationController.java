@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/operationgroupoperation")
-public class OperationGroupOperationController {
+public class OperationGroupOperationController extends AbstractController {
     @Autowired
     private OperationGroupOperationService operationGroupOperationService;
 
@@ -41,7 +42,7 @@ public class OperationGroupOperationController {
     @RequiresPermissions("masterData:operationgroupoperation:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = operationGroupOperationService.queryPage(params);
-        return RD.ok(RD.build().put("data",page));
+        return RD.ok(page);
     }
 
 
@@ -62,6 +63,7 @@ public class OperationGroupOperationController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
     public R save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+        operationGroupOperation.setCreateBy(getUserId().intValue());
 		operationGroupOperationService.insert(operationGroupOperation);
 
         return R.ok();
