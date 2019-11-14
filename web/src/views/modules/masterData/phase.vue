@@ -39,7 +39,7 @@
 
         <el-table-column align="center" prop="create" label="生产阶段" >
           <template slot-scope="scope">
-            <span>{{scope.row.create}}</span>
+            <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
 
