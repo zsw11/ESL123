@@ -57,8 +57,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
 			messageIds = this.getIdsBySql(sql);
 		}
 		// 根据数据权限过滤部门
-		wrapper.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
-				.orderBy("create_at", false);
+//		wrapper.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+//				.orderBy("create_at", false);
 
 		// 根据来源类型
 		Set<String> permissions = shiroService.getUserPermissions(user.getId());
