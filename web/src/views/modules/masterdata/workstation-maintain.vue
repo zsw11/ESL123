@@ -8,7 +8,7 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'工位名称'" prop="name">
+          <el-form-item style="width: 350px" :label="'工位名称'" prop="name">
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 

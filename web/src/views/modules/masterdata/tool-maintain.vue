@@ -9,15 +9,15 @@
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
           <el-form-item :label="'治工具名称'" prop="name">
-            <el-input v-model="dataForm.name"></el-input>
+            <el-input style="width: 350px" v-model="dataForm.name"></el-input>
           </el-form-item>
 
           <el-form-item :label="'是否通用'" prop="common">
-            <el-switch v-model="dataForm.common"></el-switch>
+            <el-switch style="width: 350px" v-model="dataForm.common"></el-switch>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.opininon" style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea v-model="dataForm.opininon" style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
 

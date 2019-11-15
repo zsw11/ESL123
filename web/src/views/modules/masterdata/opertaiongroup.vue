@@ -40,6 +40,7 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column
+          fixed="left"
           type="selection"
           header-align="left"
           align="left"
@@ -52,23 +53,25 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="code" label="编码" >
+        <el-table-column align="center" prop="code" label="手顺组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.code }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="组织机构ID" >
+        <el-table-column align="center" prop="usedCount" label="手顺数量" >
+          <template slot-scope="scope">
+            <span>{{scope.row.usedCount }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="deptId" label="所属组织机构" >
           <template slot-scope="scope">
             <span>{{scope.row.deptId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="usedCount" label="使用次数统计" >
-          <template slot-scope="scope">
-            <span>{{scope.row.usedCount }}</span>
-          </template>
-        </el-table-column>
+
 
         <el-table-column align="center" prop="createBy" label="创建者ID" >
           <template slot-scope="scope">
