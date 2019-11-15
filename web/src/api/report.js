@@ -19,11 +19,11 @@ export function createReport (data) {
 }
 
 // 获取报表详情
-export function fetchReport (params) {
+export function fetchReport (id) {
   return request({
-    url: request.adornUrl('/api/v1/report/detail'),
+    url: request.adornUrl(`/api/v1/report/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

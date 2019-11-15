@@ -19,11 +19,11 @@ export function createPhase (data) {
 }
 
 // 获取生产阶段详情
-export function fetchPhase (params) {
+export function fetchPhase (id) {
   return request({
-    url: request.adornUrl('/api/v1/phase/detail'),
+    url: request.adornUrl(`/api/v1/phase/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

@@ -19,11 +19,11 @@ export function createReportGroup (data) {
 }
 
 // 获取报表组详情
-export function fetchReportGroup (params) {
+export function fetchReportGroup (id) {
   return request({
-    url: request.adornUrl('/api/v1/reportgroup/detail'),
+    url: request.adornUrl(`/api/v1/reportgroup/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

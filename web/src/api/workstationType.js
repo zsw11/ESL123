@@ -19,11 +19,11 @@ export function createWorkstationType (data) {
 }
 
 // 获取工位类型详情
-export function fetchWorkstationType (params) {
+export function fetchWorkstationType (id) {
   return request({
-    url: request.adornUrl('/api/v1/workstationtype/detail'),
+    url: request.adornUrl(`/api/v1/workstationtype/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
