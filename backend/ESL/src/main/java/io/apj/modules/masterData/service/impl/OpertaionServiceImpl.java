@@ -22,7 +22,7 @@ public class OpertaionServiceImpl extends ServiceImpl<OpertaionDao, OpertaionEnt
         entityWrapper.isNull("delete_at")
                 .like(params.get("name") != null && params.get("name") != "", "name",
                         (String) params.get("name"));
-        Page<OpertaionEntity> page = this.selectPage(new Query<OpertaionEntity>(params).getPage(), ent
+        Page<OpertaionEntity> page = this.selectPage(new Query<OpertaionEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);
     }
