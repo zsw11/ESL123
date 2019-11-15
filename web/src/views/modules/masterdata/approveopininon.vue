@@ -16,14 +16,7 @@
 <!--        </el-select>-->
 <!--      </el-form-item>-->
         <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <el-select v-model="value" :label="'审批状态'" placeholder="请选择">
-          <el-option
-            v-for="item in state"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true"></dict-select>
         </el-form-item>
 
 
