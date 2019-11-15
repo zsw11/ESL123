@@ -118,10 +118,11 @@ export default {
         page: this.pageIndex,
         limit: this.pageSize,
         type: type
-      }).then(({ data, total }) => {
+      }).then(({ page }) => {
+        const data = page.data
         if (data.length > 0) {
           this.dataList = data
-          this.totalPage = total
+          this.totalPage = page.totalCount
         } else {
           this.dataList = []
           this.totalPage = 0
