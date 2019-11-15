@@ -19,11 +19,11 @@ export function createTool (data) {
 }
 
 // 获取治工具详情
-export function fetchTool (params) {
+export function fetchTool (id) {
   return request({
-    url: request.adornUrl('/api/v1/tool/detail'),
+    url: request.adornUrl(`/api/v1/tool/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
