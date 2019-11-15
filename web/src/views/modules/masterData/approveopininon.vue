@@ -18,7 +18,7 @@
         <el-form-item :label="'审批状态'" prop="approveOperation" >
         <el-select v-model="value" :label="'审批状态'" placeholder="请选择">
           <el-option
-            v-for="item in listQuery.approveOperation"
+            v-for="item in state"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -95,15 +95,16 @@ export default {
   data () {
     return {
       value: '',
-      dataButton: 'list',
-      listQuery: {
-        approveOperation: [{
-          value: '选项1',
+      state:  [{
+          value: '1',
           label: 'through'
         }, {
-          value: '选项2',
+          value: '2',
           label: 'reject'
         }],
+      dataButton: 'list',
+      listQuery: {
+        approveOperation:null,
         opininon: null
       },
       dataList: [],
