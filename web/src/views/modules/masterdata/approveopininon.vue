@@ -95,16 +95,16 @@ export default {
   data () {
     return {
       value: '',
-      state:  [{
-          value: '1',
-          label: 'through'
-        }, {
-          value: '2',
-          label: 'reject'
-        }],
+      state: [{
+        value: '1',
+        label: 'through'
+      }, {
+        value: '2',
+        label: 'reject'
+      }],
       dataButton: 'list',
       listQuery: {
-        approveOperation:null,
+        approveOperation: null,
         opininon: null
       },
       dataList: [],
@@ -212,3 +212,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .el-input__inner{
+    width: 200px;
+  }
+</style>

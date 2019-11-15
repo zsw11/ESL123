@@ -262,3 +262,14 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 18px;
+    display: inline-block;
+    width: 300px;
+    input{
+      width: 260px;
+    }
+  }
+</style>

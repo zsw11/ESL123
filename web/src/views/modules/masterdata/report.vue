@@ -10,7 +10,7 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'空Form标准编号'" prop="formCode" >
+        <el-form-item  :label="'空Form标准编号'" prop="formCode" >
           <el-input v-model="listQuery.formCode" clearable></el-input>
         </el-form-item>
 
@@ -205,3 +205,4 @@ export default {
   }
 }
 </script>
+

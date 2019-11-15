@@ -5,98 +5,19 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'编码'" prop="code" >
+
+        <el-form-item :label="'常用指标组合编码'" prop="code" >
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'A0'" prop="a0" >
-          <el-input v-model="listQuery.a0" clearable></el-input>
+
+        <el-form-item :label="'所属组织机构'" prop="deptId" >
+          <el-input v-model="listQuery.deptId"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'B0'" prop="b0" >
-          <el-input v-model="listQuery.b0" clearable></el-input>
-        </el-form-item>
 
-        <el-form-item :label="'G0'" prop="g0" >
-          <el-input v-model="listQuery.g0" clearable></el-input>
-        </el-form-item>
 
-        <el-form-item :label="'A1'" prop="a1" >
-          <el-input v-model="listQuery.a1" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'B1'" prop="b1" >
-          <el-input v-model="listQuery.b1" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'P0'" prop="p0" >
-          <el-input v-model="listQuery.p0" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'M0'" prop="m0" >
-          <el-input v-model="listQuery.m0" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'X0'" prop="x0" >
-          <el-input v-model="listQuery.x0" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'I0'" prop="i0" >
-          <el-input v-model="listQuery.i0" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'A2'" prop="a2" >
-          <el-input v-model="listQuery.a2" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'B2'" prop="b2" >
-          <el-input v-model="listQuery.b2" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'P1'" prop="p1" >
-          <el-input v-model="listQuery.p1" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'A3'" prop="a3" >
-          <el-input v-model="listQuery.a3" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'组织机构ID'" prop="deptId" >
-          <el-input-number v-model="listQuery.deptId"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'使用次数统计'" prop="usedCount" >
-          <el-input-number v-model="listQuery.usedCount"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
         <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -107,9 +28,10 @@
       <div slot="header" class="clearfix">
         <div class="card-title">常用指标组合</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:measuregroup:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button>导出</el-button>
 
-          <el-button v-if="isAuth('masterData:measuregroup:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -120,17 +42,13 @@
         <el-table-column
           type="selection"
           header-align="left"
+          fixed="left"
           align="left"
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
 
-        <el-table-column align="center" prop="code" label="编码" >
+        <el-table-column align="center" prop="code" width="200px" label="常用指标组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.code }}</span>
           </template>
@@ -214,61 +132,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="组织机构ID" >
+        <el-table-column align="center" prop="deptId"  width="200px" label="所属组织机构" >
           <template slot-scope="scope">
             <span>{{scope.row.deptId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="usedCount" label="使用次数统计" >
-          <template slot-scope="scope">
-            <span>{{scope.row.usedCount }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createAt" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+      <el-table-column align="center" :label="'操作'" fixed="right" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button v-if="isAuth('masterData:measuregroup:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
             <el-button v-if="isAuth('masterData:measuregroup:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>

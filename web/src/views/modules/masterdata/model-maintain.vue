@@ -44,8 +44,8 @@
         </el-input>
           </el-form-item>
 
-          <el-form-item :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.remark"  style="width:100%;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+          <el-form-item style="display: block" :label="'备注'" prop="remark">
+            <textarea v-model="dataForm.remark"  style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
 
@@ -185,3 +185,11 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .el-input__inner {
+    width: 200px;
+  }
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    display: inline-block;
+  }
+</style>

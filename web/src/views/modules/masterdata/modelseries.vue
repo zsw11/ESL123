@@ -25,9 +25,9 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种系列信息</div>
         <div class="buttons">
+          <el-button @click="addOrUpdateHandle()">新增</el-button>
           <el-button @click="">导入</el-button>
           <el-button @click="">导出</el-button>
-          <el-button @click="addOrUpdateHandle()">新增</el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -199,3 +199,4 @@ export default {
   }
 }
 </script>
+

@@ -16,7 +16,6 @@
             <el-switch
               v-model="dataForm.common">
             </el-switch>
-            <!-- <el-input v-model="dataForm.common"></el-input> -->
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
@@ -139,3 +138,12 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-input__inner{
+    width: 200px;
+  }
+   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+     display: inline-block;
+   }
+</style>

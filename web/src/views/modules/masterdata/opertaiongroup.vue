@@ -6,45 +6,19 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
         <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
+          <el-input v-model="listQuery.id"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'编码'" prop="code" >
+        <el-form-item :label="'手顺编码'" prop="code" >
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'组织机构ID'" prop="deptId" >
-          <el-input-number v-model="listQuery.deptId"  clearable></el-input-number>
+        <el-form-item :label="'所属组织机构'" prop="deptId" >
+          <el-input v-model="listQuery.deptId"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'使用次数统计'" prop="usedCount" >
-          <el-input-number v-model="listQuery.usedCount"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
         <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -55,9 +29,9 @@
       <div slot="header" class="clearfix">
         <div class="card-title">手顺组合</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:opertaiongroup:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button  @click="addOrUpdateHandle()">新增</el-button>
 
-          <el-button v-if="isAuth('masterData:opertaiongroup:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table

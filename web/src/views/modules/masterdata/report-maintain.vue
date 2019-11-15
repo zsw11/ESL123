@@ -12,7 +12,7 @@
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'空Form标准编号'" prop="formCode">
+          <el-form-item  :label="'空Form标准编号'" prop="formCode">
             <el-input v-model="dataForm.formCode"></el-input>
           </el-form-item>
 
@@ -140,3 +140,13 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .el-input__inner {
+    width: 200px;
+  }
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    display: inline-block;
+  }
+</style>
+
