@@ -44,13 +44,13 @@
 
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
-<!--            <span>{{scope.row.name }}</span>-->
+           <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="formCode" label="空Form标准编号" >
           <template slot-scope="scope">
-<!--            <span>{{scope.row.formCode }}</span>-->
+           <span>{{scope.row.formCode }}</span>
           </template>
         </el-table-column>
 
@@ -136,6 +136,7 @@ export default {
         this.listQuery
       )).then(({page}) => {
         this.dataList = page.data
+        console.log(this.dataList, 11111111)
         this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
