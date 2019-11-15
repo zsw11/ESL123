@@ -1,30 +1,32 @@
 <template>
   <div class="site-wrapper site-page--login">
-    <div class="site-content__wrapper">
-      <div class="site-content">
-        <div class="site-box">
-          <div class="brand_logo"></div>
-          <div class="brand-info">
-            <h2 class="brand-info__text">APJ <span>Security</span></h2>
-          </div>
-          <div class="login-main">
-            <h3 class="login-title">欢迎登陆</h3>
-            <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-              <el-form-item prop="username">
-                <el-input v-model="dataForm.username" placeholder="帐号" size="medium"></el-input>
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input v-model="dataForm.password" type="password" placeholder="密码" size="medium"></el-input>
-              </el-form-item>
-              <el-form-item prop="jigsawVerify">
-                <verify-slide @success="dataForm.jigsawVerify = true" @failure="dataForm.jigsawVerify = undefined"/>
-              </el-form-item>
-              <el-form-item>
-                <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()" size="large" :loading="logining">登录</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+    <div class="main clearfix">
+      <div class="login-main">
+        <div class="title">
+          <h1 class="login-title">APO登陆</h1>
+          <span class="title-eng">APO Login</span>
         </div>
+        <el-form class="from" :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
+          <el-form-item prop="username">
+            <el-input class="username" v-model="dataForm.username" placeholder="帐号" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input class="password" v-model="dataForm.password" type="password" placeholder="密码" size="medium"></el-input>
+          </el-form-item>
+          <span class="toggleLogin">本地用户登录</span>
+          <el-form-item  class="identify" prop="jigsawVerify">
+            <verify-slide @success="dataForm.jigsawVerify = true" @failure="dataForm.jigsawVerify = undefined"/>
+          </el-form-item>
+          <el-form-item>
+            <el-button  class="login-btn-submit"  @click="dataFormSubmit()" size="large" :loading="logining">立即登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="mainRight">
+        <span>标准时间分析系统
+          <p>MOST</p>
+        </span>
+
       </div>
     </div>
   </div>
@@ -67,11 +69,11 @@
           if (valid) {
             this.logining = true
             this.$store.dispatch('user/login', this.dataForm)
-            .then(() => {
-              this.$router.replace({ name: 'home' })
-            }).finally(() => {
-              this.logining = false
-            })
+              .then(() => {
+                this.$router.replace({ name: 'home' })
+              }).finally(() => {
+                this.logining = false
+              })
           }
         })
       }
@@ -87,100 +89,107 @@
     right: 0;
     bottom: 0;
     left: 0;
+    background-color: #2177C7;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     overflow: hidden;
-    &:before {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100vw;
-      height: 52vw;
-      content: "";
-      background-image: url(~@/assets/img/login_bg.jpg);
-      background-size: 100% 100%;
-    }
-    .site-content__wrapper {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      padding: 0;
-      margin: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      background-color: transparent;
-    }
-    .site-content {
-      position: relative;
-      min-height: 100%;
-    }
-    .site-box {
-      position: absolute;
-      left: 20px;
-      top: 20px;
-      right: 20px;
-      bottom: 20px;
-      background-color: rgba(255, 255, 255, 0.1);
-      background-image: url(~@/assets/img/login_earth.png);
-      background-repeat: no-repeat;
-      background-size: auto 70%;
-      background-position: 10% 70%;
-    }
-    .brand_logo {
-      margin-left: 20px;
-      margin-top: 20px;
-      width: 400px;
-      height: 40px;
-      background-size: cover;
-      background-image: url(~@/assets/img/login_logo.png);
-    }
-    .brand-info {
-      position: absolute;
-      right: 420px;
-      bottom: 20px;
-      color: #fff;
-    }
-    .brand-info__text {
-      margin:  0 0 22px 0;
-      font-size: 36px;
-      span {
-        font-weight: initial
-      }
-    }
-    .login-main {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      padding: 100px 60px;
-      width: 400px;
-      background-color: #fff;
-    }
-    .login-title {
-      font-size: 16px;
-      text-align: center;
-      margin: 20px auto;
+  }
+  .main {
+    width: 1080px;
+    margin:0 auto;
+    margin-top: 78px;
+  }
+  .clearfix {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .login-main {
+    font-family: SimHei;
+    float: left;
+    height: 521px;
+    width: 400px;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+  .title{
+    margin-top: 150px;
+    margin-left: 50px;
+  }
+  .login-title {
+    margin: 0;
+    font-size: 40px;
+    color: #1F297E;
+  }
+  .from{
+    margin-top: 25px;
+    margin-left: 50px;
+  }
 
-      &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 4em;
-        left: 50%;
-        margin-left: -2em;
-        border-bottom: #1989FA solid 3px;
+  .username > input,.password >input {
+    width: 250px;
+    border-radius: 0;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+  }
+  .title-eng{
+    margin-top: 5px;
+    color: #BDBDBD;
+    font-size: 18px;
+  }
+
+  .login-btn-submit {
+    width: 180px;
+    height: 40px;
+    border-radius: 90px;
+    background-color: #172379;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .login-btn-submit:hover{
+    background-color: #172379;
+  }
+  .mainRight{
+    padding: 0;
+    margin: 0;
+    float: left;
+    height: 521px;
+    width: 680px;
+    background-image: url("../../../static/img/mainR.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: white;
+    span{
+      padding: 0;
+      display: block;
+      font-size: 50px;
+      margin-top: 150px;
+      margin-left: 100px;
+      p{
+        margin: 0;
+        font-size:30px ;
+        font-weight: lighter;
       }
-    }
-    .login-captcha {
-      overflow: hidden;
-      > img {
-        width: 100%;
-        cursor: pointer;
-      }
-    }
-    .login-btn-submit {
-      width: 100%;
     }
   }
+
+  .mainRight>img{
+    width: 700px;
+    height: 521px;
+  }
+  .toggleLogin{
+    cursor: pointer;
+    color: #1F297E;
+  }
+  .identify{
+    margin-top: 10px;
+    width: 250px;
+  }
+
+
 </style>
