@@ -109,8 +109,8 @@ const mainRoutes = {
     { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种治工具关系', isTab: true } },
 
     // 关键词
-    { path: '/add-operation', component: _import('modules/masterdata/operation-maintain'), name: 'add-operation', meta: { title: '新增关键词', isTab: true } },
-    { path: '/edit-operation/:id(\\d+)', component: _import('modules/masterdata/operation-maintain'), name: 'edit-operation', meta: { title: '编辑关键词', isTab: true } },
+    { path: '/add-opertaion', component: _import('modules/masterdata/opertaion-maintain'), name: 'add-operation', meta: { title: '新增关键词', isTab: true } },
+    { path: '/edit-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'edit-operation', meta: { title: '编辑关键词', isTab: true } },
 
     // 部品
     { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '新增部品', isTab: true } },

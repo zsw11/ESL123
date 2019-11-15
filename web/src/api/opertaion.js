@@ -19,11 +19,11 @@ export function createOpertaion (data) {
 }
 
 // 获取关键词详情
-export function fetchOpertaion (params) {
+export function fetchOpertaion (id) {
   return request({
-    url: request.adornUrl('/api/v1/opertaion/detail'),
+    url: request.adornUrl(`/api/v1/opertaion/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
