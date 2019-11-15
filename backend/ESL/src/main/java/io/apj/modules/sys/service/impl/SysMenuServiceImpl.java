@@ -18,6 +18,7 @@ package io.apj.modules.sys.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -187,8 +188,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 				menusList.add(praentId);
 			}
 		}
-
+		List<SysMenuEntityVo> list = getAllMenuSList(0L,menusList);
+		Collections.sort(list);
 		// 递归构建菜单结构
-		return getAllMenuSList(0L,menusList);
+		return list;
 	}
 }

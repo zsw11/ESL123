@@ -9,43 +9,43 @@
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
           <el-form-item :label="'名称'" prop="name">
-            <el-input v-model="dataForm.name"></el-input>
+            <el-input style="width: 350px"  v-model="dataForm.name"></el-input>
           </el-form-item>
 
           <el-form-item :label="'部门'" prop="deptId">
-            <el-input v-model="dataForm.deptId" ></el-input>
+            <el-input style="width: 350px"  v-model="dataForm.deptId" ></el-input>
           </el-form-item>
 
           <el-form-item :label="'机种系列'" prop="modelSeriesId">
-            <el-input v-model="dataForm.modelSeriesId" ></el-input>
+            <el-input style="width: 350px" v-model="dataForm.modelSeriesId" ></el-input>
           </el-form-item>
 
           <el-form-item :label="'型号'" prop="code">
-            <el-input v-model="dataForm.code"></el-input>
+            <el-input style="width: 350px" v-model="dataForm.code"></el-input>
           </el-form-item>
 
           <el-form-item :label="'WS时间'" prop="WSTime">
-            <el-input v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input style="width: 350px" v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item :label="'ES时间'" prop="ESTime">
-            <el-input v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input style="width: 350px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item :label="'AMP时间'" prop="AMPTime">
-            <el-input v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input style="width: 350px" v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item :label="'MP时间'" prop="MPTime">
-            <el-input v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input style="width: 350px" v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.remark"  style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea v-model="dataForm.remark"  style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
 
@@ -187,7 +187,7 @@ export default {
 </script>
 <style scoped lang="scss">
   .el-input__inner {
-    width: 200px;
+    width: 300px;
   }
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     display: inline-block;

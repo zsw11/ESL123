@@ -9,7 +9,7 @@ import io.apj.modules.sys.entity.SysMenuEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
-public class SysMenuEntityVo implements BaseVo<SysMenuEntityVo, SysMenuEntity>{
+public class SysMenuEntityVo implements BaseVo<SysMenuEntityVo, SysMenuEntity>, Comparable<SysMenuEntityVo>{
 
 	// entity 转   vo
 	public static SysMenuEntityVo makeVo(SysMenuEntity menu) {
@@ -286,5 +286,13 @@ public class SysMenuEntityVo implements BaseVo<SysMenuEntityVo, SysMenuEntity>{
 
 	public void setDeleteAt(Date deleteAt) {
 		this.deleteAt = deleteAt;
+	}
+
+	@Override
+	public int compareTo(SysMenuEntityVo arg0) {
+		if(this.orderNumber >= arg0.getOrderNumber()){
+			return 1;
+        }
+      return -1;
 	}
 }
