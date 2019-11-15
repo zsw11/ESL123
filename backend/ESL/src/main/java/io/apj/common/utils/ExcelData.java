@@ -5,63 +5,59 @@ import java.util.List;
 
 public class ExcelData implements Serializable {
 
-	private static final long serialVersionUID = 4444017239100620999L;
+    private static final long serialVersionUID = 4444017239100620999L;
 
-	/**
-	 * 表头
-	 */
-	private List<String> titles;
+    // 表头
+    private List<String> titles;
 
-	/**
-	 * 数据
-	 */
-	private List<List<Object>> rows;
+    // 数据
+    private List<List<Object>> rows;
 
-	/**
-	 * 页签名称
-	 */
-	private String name;
+    // 页签名称
+    private String name;
+    
+    // 子表数据表头
+    private List<String> subTitles;
+    // 子表数据
+    private List<List<Object>> subRows;
 
-	/**
-	 * 获取表头
-	 */
-	public List<String> getTitles() {
-		return titles;
+    public List<String> getTitles() {
+        return titles;
+    }
+
+    public void setTitles(List<String> titles) {
+        this.titles = titles;
+    }
+
+    public List<List<Object>> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<List<Object>> rows) {
+        this.rows = rows;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+	public List<String> getSubTitles() {
+		return subTitles;
 	}
 
-	/**
-	 * 设置表头
-	 */
-	public void setTitles(List<String> titles) {
-		this.titles = titles;
+	public void setSubTitles(List<String> subTitles) {
+		this.subTitles = subTitles;
 	}
 
-	/**
-	 * 获取数据
-	 */
-	public List<List<Object>> getRows() {
-		return rows;
+	public List<List<Object>> getSubRows() {
+		return subRows;
 	}
 
-	/**
-	 * 设置数据
-	 */
-	public void setRows(List<List<Object>> rows) {
-		this.rows = rows;
+	public void setSubRows(List<List<Object>> subRows) {
+		this.subRows = subRows;
 	}
-
-	/**
-	 * 获取页签名称
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * 设置页签名称
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 }

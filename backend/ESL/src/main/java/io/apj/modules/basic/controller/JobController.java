@@ -362,7 +362,7 @@ public class JobController extends AbstractController {
 		JsonObject areaDataFilter = gson.fromJson(jsonStr, JsonObject.class);
 		for (JobEntity item : jobEntities) {
 			// 处理数据源
-			Map<String, Object> arr = DataUtils.dataChange("job", item, dictMap, areaDataFilter);
+			Map<String, Object> arr = DataUtils.dataChange("job", item, dictMap);
 			dataList.add(arr);
 		}
 		// 返回excel数据

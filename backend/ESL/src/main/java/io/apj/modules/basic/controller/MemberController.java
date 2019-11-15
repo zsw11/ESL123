@@ -298,7 +298,7 @@ public class MemberController extends AbstractController {
 		JsonObject areaDataFilter = gson.fromJson(jsonStr, JsonObject.class);
 		for (MemberEntity item : memberEntities) {
 			// 处理数据源
-			Map<String, Object> arr = DataUtils.dataChange("member", item, dictMap, areaDataFilter);
+			Map<String, Object> arr = DataUtils.dataChange("member", item, dictMap);
 			// 处理其他数据源
 			JobEntity jobEntity;
 			if (item.getJob() != null) {
@@ -306,14 +306,14 @@ public class MemberController extends AbstractController {
 			} else {
 				jobEntity = new JobEntity();
 			}
-			Map<String, Object> arr2 = DataUtils.dataChange("job", jobEntity, dictMap, areaDataFilter);
+			Map<String, Object> arr2 = DataUtils.dataChange("job", jobEntity, dictMap);
 			SysDeptEntity sysDeptEntity;
 			if (item.getDept() != null) {
 				sysDeptEntity = item.getDept();
 			} else {
 				sysDeptEntity = new SysDeptEntity();
 			}
-			Map<String, Object> arr3 = DataUtils.dataChange("dept", sysDeptEntity, dictMap, areaDataFilter);
+			Map<String, Object> arr3 = DataUtils.dataChange("dept", sysDeptEntity, dictMap);
 			arr2.putAll(arr3);
 			arr.putAll(arr2);
 			dataList.add(arr);
