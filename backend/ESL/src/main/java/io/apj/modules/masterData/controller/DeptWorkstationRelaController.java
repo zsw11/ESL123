@@ -54,7 +54,7 @@ public class DeptWorkstationRelaController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		DeptWorkstationRelaEntity deptWorkstationRela = deptWorkstationRelaService.selectById(id);
 
-        return R.ok().put("deptWorkstationRela", deptWorkstationRela);
+        return R.ok().put("data", deptWorkstationRela);
     }
 
     /**

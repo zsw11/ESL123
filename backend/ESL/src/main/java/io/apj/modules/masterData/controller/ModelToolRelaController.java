@@ -54,7 +54,7 @@ public class ModelToolRelaController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
 
-        return R.ok().put("modelToolRela", modelToolRela);
+        return R.ok().put("data", modelToolRela);
     }
 
     /**

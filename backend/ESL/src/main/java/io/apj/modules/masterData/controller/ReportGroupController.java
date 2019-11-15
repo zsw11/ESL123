@@ -54,7 +54,7 @@ public class ReportGroupController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
 
-        return R.ok().put("reportGroup", reportGroup);
+        return R.ok().put("data", reportGroup);
     }
 
     /**

@@ -54,7 +54,7 @@ public class WorkstationController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		WorkstationEntity workstation = workstationService.selectById(id);
 
-        return R.ok().put("workstation", workstation);
+        return R.ok().put("data", workstation);
     }
 
     /**

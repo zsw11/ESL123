@@ -54,7 +54,7 @@ public class ToolController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
 
-        return R.ok().put("tool", tool);
+        return R.ok().put("data", tool);
     }
 
     /**

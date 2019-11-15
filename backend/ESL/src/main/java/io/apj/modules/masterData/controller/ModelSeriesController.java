@@ -54,7 +54,7 @@ public class ModelSeriesController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ModelSeriesEntity modelSeries = modelSeriesService.selectById(id);
 
-        return R.ok().put("modelSeries", modelSeries);
+        return R.ok().put("data", modelSeries);
     }
 
     /**

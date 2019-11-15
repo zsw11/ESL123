@@ -54,7 +54,7 @@ public class ReportGroupReportRelaController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ReportGroupReportRelaEntity reportGroupReportRela = reportGroupReportRelaService.selectById(id);
 
-        return R.ok().put("reportGroupReportRela", reportGroupReportRela);
+        return R.ok().put("data", reportGroupReportRela);
     }
 
     /**

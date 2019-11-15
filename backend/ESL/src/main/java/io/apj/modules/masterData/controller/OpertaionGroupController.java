@@ -54,7 +54,7 @@ public class OpertaionGroupController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		OpertaionGroupEntity opertaionGroup = opertaionGroupService.selectById(id);
 
-        return R.ok().put("opertaionGroup", opertaionGroup);
+        return R.ok().put("data", opertaionGroup);
     }
 
     /**

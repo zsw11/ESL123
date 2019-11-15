@@ -54,7 +54,7 @@ public class OpertaionController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		OpertaionEntity opertaion = opertaionService.selectById(id);
 
-        return R.ok().put("opertaion", opertaion);
+        return R.ok().put("data", opertaion);
     }
 
     /**

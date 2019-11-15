@@ -53,7 +53,7 @@ public class MeasureGroupController {
     public R info(@PathVariable("id") Integer id){
 		MeasureGroupEntity measureGroup = measureGroupService.selectById(id);
 
-        return R.ok().put("measureGroup", measureGroup);
+        return R.ok().put("data", measureGroup);
     }
 
     /**

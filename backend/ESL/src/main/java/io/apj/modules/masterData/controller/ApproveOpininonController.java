@@ -54,7 +54,7 @@ public class ApproveOpininonController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
 
-        return R.ok().put("approveOpininon", approveOpininon);
+        return R.ok().put("data", approveOpininon);
     }
 
     /**

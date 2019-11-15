@@ -54,7 +54,7 @@ public class ReportController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ReportEntity report = reportService.selectById(id);
 
-        return R.ok().put("report", report);
+        return R.ok().put("data", report);
     }
 
     /**

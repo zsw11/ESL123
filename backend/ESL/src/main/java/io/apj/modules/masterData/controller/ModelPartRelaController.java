@@ -54,7 +54,7 @@ public class ModelPartRelaController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
 
-        return R.ok().put("modelPartRela", modelPartRela);
+        return R.ok().put("data", modelPartRela);
     }
 
     /**

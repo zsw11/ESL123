@@ -54,7 +54,7 @@ public class ModelController extends AbstractController {
     public R info(@PathVariable("id") Integer id){
 		ModelEntity model = modelService.selectById(id);
 
-        return R.ok().put("model", model);
+        return R.ok().put("data", model);
     }
 
     /**
