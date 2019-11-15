@@ -45,3 +45,21 @@ export function deletePart (id) {
     data: id
   })
 }
+// 导入
+export function partImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/part/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function partExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/part/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}

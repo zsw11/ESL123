@@ -12,7 +12,7 @@ public class DictUtils {
     /**
      * 根据传入字段判断字典项，返回字段项数据
      */
-    public String dictFilter(String tName, String name, String dictCode, HashMap<String, String> dictMap, JsonObject areaDataFilter) {
+    public String dictFilter(String tName, String name, String dictCode, HashMap<String, String> dictMap) {
 
         if(dictCode==null&&dictCode==""){
             return dictCode;
@@ -20,7 +20,7 @@ public class DictUtils {
 
         //过滤客户信息表
         if (tName.equals("CustomerEntity")) {
-            return customerFilter(name, dictCode, dictMap, areaDataFilter);
+            return customerFilter(name, dictCode, dictMap);
         }
 
         //过滤设备信息表
@@ -38,7 +38,7 @@ public class DictUtils {
 
         //过滤人员信息表
         if (tName.equals("MemberEntity")) {
-            return memberFilter(name, dictCode, dictMap, areaDataFilter);
+            return memberFilter(name, dictCode, dictMap);
         }
 
         //过滤物料信息表
@@ -63,7 +63,7 @@ public class DictUtils {
 
         //过滤仓库信息
         if (tName.equals("WarehouseEntity")) {
-            return warehouseFilter(name,dictCode,dictMap,areaDataFilter);
+            return warehouseFilter(name,dictCode,dictMap);
         }
 
         /**
@@ -107,16 +107,7 @@ public class DictUtils {
     }
 
     //过滤客户基本信息表
-    private String customerFilter(String name, String dictCode, HashMap<String, String> dictMap, JsonObject areaData) {
-        //省份过滤
-        if (name.equals("province")) {
-            return areaData.get("86").getAsJsonObject().get(dictCode).getAsString();
-
-        }
-        //城市编号
-        if (name.equals("city")) {
-            return areaData.get(dictCode.substring(0, 2) + "0000").getAsJsonObject().get(dictCode).getAsString();
-        }
+    private String customerFilter(String name, String dictCode, HashMap<String, String> dictMap) {
         //客户等级
         if (name.equals("grade")) {
             return getDictData("VIPLevel", dictCode, dictMap);
@@ -148,48 +139,19 @@ public class DictUtils {
 
 
     //过滤人员信息表
-    private String memberFilter(String name, String dictCode, HashMap<String, String> dictMap, JsonObject areaData) {
+    private String memberFilter(String name, String dictCode, HashMap<String, String> dictMap) {
         //性别
         if (name.equals("gender")) {
             return getDictData("Gender", dictCode, dictMap);
-        }
-        //家庭住址省份
-        if (name.equals("familyProvince")) {
-            return areaData.get("86").getAsJsonObject().get(dictCode).getAsString();
-        }
-        //家庭住址市
-        if (name.equals("familyCity")) {
-            return areaData.get(dictCode.substring(0, 2) + "0000").getAsJsonObject().get(dictCode).getAsString();
-        }
-        //在职状态
-        if (name.equals("status")) {
-            return getDictData("WorkingStatus", dictCode, dictMap);
-        }
-        //工作地址省份
-        if (name.equals("bussinessProvince")) {
-            return areaData.get("86").getAsJsonObject().get(dictCode).getAsString();
-        }
-        //工作住址市
-        if (name.equals("bussinessCity")) {
-            return areaData.get(dictCode.substring(0, 2) + "0000").getAsJsonObject().get(dictCode).getAsString();
         }
         return dictCode;
     }
 
     //过滤仓库
-    private String warehouseFilter(String name, String dictCode, HashMap<String, String> dictMap, JsonObject areaData) {
+    private String warehouseFilter(String name, String dictCode, HashMap<String, String> dictMap) {
         //仓位
         if (name.equals("stockPositionCode")) {
             return getDictData("StockPosition", dictCode, dictMap);
-        }
-        //省份过滤
-        if (name.equals("province")) {
-            return areaData.get("86").getAsJsonObject().get(dictCode).getAsString();
-
-        }
-        //城市编号
-        if (name.equals("city")) {
-            return areaData.get(dictCode.substring(0, 2) + "0000").getAsJsonObject().get(dictCode).getAsString();
         }
         //是否启用
         if (name.equals("ifUse")) {
