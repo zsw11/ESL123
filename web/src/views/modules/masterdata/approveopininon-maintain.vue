@@ -13,14 +13,15 @@
 <!--          </el-form-item>-->
 
       <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <el-select  v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">
-          <el-option
-            v-for="item in state"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+<!--        <el-select  v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">-->
+<!--          <el-option-->
+<!--            v-for="item in state"-->
+<!--            :key="item.value"-->
+<!--            :label="item.label"-->
+<!--            :value="item.value">-->
+<!--          </el-option>-->
+<!--        </el-select>-->
+        <dict-select dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
       </el-form-item>
 
           <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'常用审批意见内容'" prop="opininon">
