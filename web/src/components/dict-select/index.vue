@@ -23,7 +23,7 @@ export default {
     event: 'change'
   },
   props: {
-    dictCode: String,
+    dictType: String,
     value: {
       validator: () => true
     },
@@ -33,7 +33,8 @@ export default {
     }
   },
   created () {
-    listDictItem({ dictCode: this.dictCode }).then(({data}) => {
+    console.log(11111111, this.dictType)
+    listDictItem({ type: this.dictType }).then(({data}) => {
       this.options = orderBy(data, ['orderNumber', 'code'])
     })
   },

@@ -34,7 +34,7 @@ import io.apj.common.utils.RD;
  * @date 2018-12-05 14:16:20
  */
 @RestController
-@RequestMapping("/sys/dicttype")
+@RequestMapping("/api/v1/dicttype")
 public class SysDictTypeController extends AbstractController {
 	@Autowired
 	private SysDictTypeService sysDictTypeService;
@@ -47,9 +47,9 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 //	@RequiresPermissions("sys:dicttype:list")
-	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+	public RD list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysDictTypeService.queryPage(params);
-		return RD.ok(RD.build().put("page", page));
+		return RD.build().put("page", page);
 	}
 
 	/**

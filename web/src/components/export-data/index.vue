@@ -98,8 +98,7 @@ export default {
       )).then(response => {
         console.log(response, 555555)
         if (response.size > 0) {
-          console.log(response, 222)
-          const blob = response.data
+          const blob = response
           const reader = new FileReader()
           reader.readAsDataURL(blob)
           reader.onload = (e) => {

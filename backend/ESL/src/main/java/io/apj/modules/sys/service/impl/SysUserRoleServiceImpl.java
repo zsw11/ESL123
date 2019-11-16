@@ -25,7 +25,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 	@Override
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
 		//先删除用户与角色关系
-		this.deleteByMap(new MapUtils().put("user_id", userId));
+		this.deleteByMap(new MapUtils().put("id", userId));
 
 		if(roleIdList == null || roleIdList.size() == 0){
 			return ;

@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest.js'
 // 字典列表
 export function listDict (query) {
   return request({
-    url: request.adornUrl('/sys/dicttype/list'),
+    url: request.adornUrl('/api/v1/dicttype/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listDict (query) {
 // 获取字典
 export function fetchDict (id) {
   return request({
-    url: request.adornUrl(`/sys/dicttype/info/${id}`),
+    url: request.adornUrl(`/api/v1/dicttype/info/${id}`),
     method: 'get',
     params: request.adornParams()
   })
@@ -21,7 +21,7 @@ export function fetchDict (id) {
 // 创建字典
 export function createDict (data) {
   return request({
-    url: request.adornUrl(`/sys/dicttype/save`),
+    url: request.adornUrl(`/api/v1/dicttype/save`),
     method: 'post',
     data
   })
@@ -30,7 +30,7 @@ export function createDict (data) {
 // 修改字典
 export function updateDict (id, data) {
   return request({
-    url: request.adornUrl('/sys/dicttype/update'),
+    url: request.adornUrl('/api/v1/dicttype/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateDict (id, data) {
 // 删除字典
 export function deleteDict (id) {
   return request({
-    url: request.adornUrl('/sys/dicttype/delete'),
+    url: request.adornUrl('/api/v1/dicttype/delete'),
     method: 'post',
     data: id
   })
@@ -49,7 +49,7 @@ export function deleteDict (id) {
 // 获取字典项列表
 export function listDictItem (query) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/list'),
+    url: request.adornUrl('/api/v1/dicttype/getListByType'),
     method: 'get',
     params: query
   })

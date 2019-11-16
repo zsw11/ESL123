@@ -73,7 +73,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		if (StringUtils.isNotEmpty((String) params.get("keyword"))) {
 			String name = (String) params.get("keyword");
 			name = name.replace("'", "");
-			entityWrapper.like("username", name).notIn(userIds.size() > 0, "user_id", userIds);
+			entityWrapper.like("username", name).notIn(userIds.size() > 0, "id", userIds);
 		}
 		Page<SysUserEntity> page = this.selectPage(new Query<SysUserEntity>(params).getPage(), entityWrapper);
 		for (SysUserEntity sysUserEntity : page.getRecords()) {

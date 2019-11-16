@@ -164,7 +164,7 @@ public class DataFilterAspect {
 
 		// 获取人员信息
 		MemberEntity member = memberService.selectOne(
-				new EntityWrapper<MemberEntity>().eq("user_id", user.getId()));
+				new EntityWrapper<MemberEntity>().eq("id", user.getId()));
 
 		// 用户子部门ID列表
 		if (dataFilter.subDept() && member != null) {

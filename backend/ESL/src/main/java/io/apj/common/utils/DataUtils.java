@@ -471,21 +471,21 @@ public class DataUtils {
 						DictUtils dictUtils = new DictUtils();
 
 						String value = dictUtils.dictFilter(className, f.getName(), f.get(item).toString(), dictMap);
-						// 出入库流水
-						if (className.equals("StocksHistoryEntity")) {
-							if (f.getName().equals("type")) {
-								Field field = item.getClass().getDeclaredField("ifOutIn");
-								// 设置对象的访问权限，保证对private的属性的访问
-								field.setAccessible(true);
-								boolean outOrIn = (boolean) field.get(item);
-								// 出入库类型判断
-								if (outOrIn) {
-									value = dictUtils.getDictData("StockInType", value, dictMap);
-								} else {
-									value = dictUtils.getDictData("StockOutType", value, dictMap);
-								}
-							}
-						}
+//						// 出入库流水
+//						if (className.equals("StocksHistoryEntity")) {
+//							if (f.getName().equals("type")) {
+//								Field field = item.getClass().getDeclaredField("ifOutIn");
+//								// 设置对象的访问权限，保证对private的属性的访问
+//								field.setAccessible(true);
+//								boolean outOrIn = (boolean) field.get(item);
+//								// 出入库类型判断
+//								if (outOrIn) {
+//									value = dictUtils.getDictData("StockInType", value, dictMap);
+//								} else {
+//									value = dictUtils.getDictData("StockOutType", value, dictMap);
+//								}
+//							}
+//						}
 						arr.put(tName + "." + f.getName(), value);
 					} else {
 						arr.put(tName + "." + f.getName(), f.get(item));
@@ -494,9 +494,10 @@ public class DataUtils {
 			}
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
 		}
+//		catch (NoSuchFieldException e) {
+//			e.printStackTrace();
+//		}
 		return arr;
 	}
 
@@ -506,9 +507,9 @@ public class DataUtils {
 	public static String activitiCandidateSql(String perms) {
 		String sql = "SELECT member.name " + "FROM sys_user_role ur "
 				+ "LEFT JOIN sys_role_menu rm ON rm.role_id = ur.role_id "
-				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id "
-				+ "LEFT JOIN sys_menu m ON m.id = rm.menu_id " + "LEFT JOIN sys_user u on u.user_id = ur.user_id "
-				+ "LEFT JOIN basic_member member on member.user_id = u.user_id "
+				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id " + "LEFT JOIN sys_menu m ON m.id = rm.menu_id "
+				+ "LEFT JOIN sys_user u on u.id = ur.user_id "
+				+ "LEFT JOIN basic_member member on member.user_id = u.id "
 				+ "LEFT JOIN sys_dept dept ON dept.id = rd.dept_id " + " WHERE m.perms = '" + perms
 				+ "' and dept.dept_type = 'headquarters'";
 		return sql;
@@ -520,9 +521,9 @@ public class DataUtils {
 	public static String activitiCandidateIDSql(String perms) {
 		String sql = "SELECT member.id " + "FROM sys_user_role ur "
 				+ "LEFT JOIN sys_role_menu rm ON rm.role_id = ur.role_id "
-				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id "
-				+ "LEFT JOIN sys_menu m ON m.id = rm.menu_id " + "LEFT JOIN sys_user u on u.user_id = ur.user_id "
-				+ "LEFT JOIN basic_member member on member.user_id = u.user_id "
+				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id " + "LEFT JOIN sys_menu m ON m.id = rm.menu_id "
+				+ "LEFT JOIN sys_user u on u.id = ur.user_id "
+				+ "LEFT JOIN basic_member member on member.user_id = u.id "
 				+ "LEFT JOIN sys_dept dept ON dept.id = rd.dept_id " + " WHERE m.perms = '" + perms
 				+ "' and dept.dept_type = 'headquarters'";
 		return sql;

@@ -41,10 +41,10 @@ public @interface DataFilter {
     boolean createUser() default false;
 
     /**  部门ID */
-    String deptId() default "dept_id";
+    String deptId() default "id";
 
     /**  用户ID */
-    String userId() default "user_id";
+    String userId() default "id";
 
     /**
      * 创建人
