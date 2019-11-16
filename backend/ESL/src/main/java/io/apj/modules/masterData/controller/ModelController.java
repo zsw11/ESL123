@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:model:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelEntity model = modelService.selectById(id);
 
-        return R.ok().put("data", model);
+        return RD.build().put("data", model);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:model:save")
-    public R save(@RequestBody ModelEntity model){
+    public RD save(@RequestBody ModelEntity model){
         model.setCreateBy(getUserId().intValue());
 		modelService.insert(model);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:model:update")
-    public R update(@RequestBody ModelEntity model){
+    public RD update(@RequestBody ModelEntity model){
 		modelService.updateById(model);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

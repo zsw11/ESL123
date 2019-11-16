@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.DeptWorkstationRelaEntity;
 import io.apj.modules.masterData.service.DeptWorkstationRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptworkstationrela:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		DeptWorkstationRelaEntity deptWorkstationRela = deptWorkstationRelaService.selectById(id);
 
-        return R.ok().put("data", deptWorkstationRela);
+        return RD.build().put("data", deptWorkstationRela);
     }
 
     /**
@@ -62,11 +62,11 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptworkstationrela:save")
-    public R save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
+    public RD save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
         deptWorkstationRela.setCreateBy(getUserId().intValue());
 		deptWorkstationRelaService.insert(deptWorkstationRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:deptworkstationrela:update")
-    public R update(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
+    public RD update(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
 		deptWorkstationRelaService.updateById(deptWorkstationRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

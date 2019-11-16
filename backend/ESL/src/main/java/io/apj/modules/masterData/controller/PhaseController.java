@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:phase:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		PhaseEntity phase = phaseService.selectById(id);
 
-        return R.ok().put("data", phase);
+        return RD.build().put("data", phase);
     }
 
     /**
@@ -62,11 +62,11 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:phase:save")
-    public R save(@RequestBody PhaseEntity phase){
+    public RD save(@RequestBody PhaseEntity phase){
         phase.setCreateBy(getUserId().intValue());
 		phaseService.insert(phase);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:phase:update")
-    public R update(@RequestBody PhaseEntity phase){
+    public RD update(@RequestBody PhaseEntity phase){
 		phaseService.updateById(phase);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

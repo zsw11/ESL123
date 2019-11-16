@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstationtypenode:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
-        return R.ok().put("data", workstationTypeNode);
+        return RD.build().put("data", workstationTypeNode);
     }
 
     /**
@@ -62,11 +62,11 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtypenode:save")
-    public R save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
+    public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
         workstationTypeNode.setCreateBy(getUserId().intValue());
 		workstationTypeNodeService.insert(workstationTypeNode);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstationtypenode:update")
-    public R update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
+    public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
 		workstationTypeNodeService.updateById(workstationTypeNode);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

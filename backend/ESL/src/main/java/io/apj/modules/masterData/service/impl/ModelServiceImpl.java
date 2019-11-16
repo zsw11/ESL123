@@ -20,9 +20,11 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
-                .like(params.get("formCode") != null && params.get("formCode") != "", "form_code", (String) params.get("formCode"))
                 .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
-        .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));;
+                .eq(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"))
+        .eq(params.get("deptId") != null && params.get("deptId") != "", "dept_id", (String) params.get("deptId"))
+        .eq(params.get("modelSeriesId") != null && params.get("modelSeriesId") != "", "model_series_id", (String) params.get("modelSeriesId"));
+
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);

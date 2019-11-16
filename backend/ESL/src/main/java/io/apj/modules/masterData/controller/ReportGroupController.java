@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:reportgroup:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
 
-        return R.ok().put("data", reportGroup);
+        return RD.build().put("data", reportGroup);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:reportgroup:save")
-    public R save(@RequestBody ReportGroupEntity reportGroup){
+    public RD save(@RequestBody ReportGroupEntity reportGroup){
         reportGroup.setCreateBy(getUserId().intValue());
 		reportGroupService.insert(reportGroup);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:reportgroup:update")
-    public R update(@RequestBody ReportGroupEntity reportGroup){
+    public RD update(@RequestBody ReportGroupEntity reportGroup){
 		reportGroupService.updateById(reportGroup);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

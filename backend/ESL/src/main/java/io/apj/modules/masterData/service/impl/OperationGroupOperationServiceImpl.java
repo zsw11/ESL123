@@ -1,5 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.MeasureGroupEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,9 +18,13 @@ public class OperationGroupOperationServiceImpl extends ServiceImpl<OperationGro
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<OperationGroupOperationEntity> page = this.selectPage(
-                new Query<OperationGroupOperationEntity>(params).getPage()
-        );
+        EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("operationGroupId") != null && params.get("operationGroupId") != "", "operation_group_id", (String) params.get("operationGroupId"))
+                .like(params.get("operation") != null && params.get("operation") != "", "operation", (String) params.get("operation"))
+        .eq(params.get("seqNumber") != null && params.get("seqNumber") != "", "seq_number", (String) params.get("seqNumber"));
+
+        Page<OperationGroupOperationEntity> page = this.selectPage(new Query<OperationGroupOperationEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);
     }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:operationgroupoperation:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		OperationGroupOperationEntity operationGroupOperation = operationGroupOperationService.selectById(id);
 
-        return R.ok().put("data", operationGroupOperation);
+        return RD.build().put("data", operationGroupOperation);
     }
 
     /**
@@ -62,11 +62,11 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
-    public R save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
         operationGroupOperation.setCreateBy(getUserId().intValue());
 		operationGroupOperationService.insert(operationGroupOperation);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:operationgroupoperation:update")
-    public R update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.updateById(operationGroupOperation);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

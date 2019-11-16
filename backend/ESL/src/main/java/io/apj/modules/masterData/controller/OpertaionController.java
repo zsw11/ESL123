@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.OpertaionEntity;
 import io.apj.modules.masterData.service.OpertaionService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class OpertaionController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:opertaion:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		OpertaionEntity opertaion = opertaionService.selectById(id);
 
-        return R.ok().put("data", opertaion);
+        return RD.build().put("data", opertaion);
     }
 
     /**
@@ -62,11 +62,11 @@ public class OpertaionController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaion:save")
-    public R save(@RequestBody OpertaionEntity opertaion){
+    public RD save(@RequestBody OpertaionEntity opertaion){
         opertaion.setCreateBy(getUserId().intValue());
 		opertaionService.insert(opertaion);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class OpertaionController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaion:update")
-    public R update(@RequestBody OpertaionEntity opertaion){
+    public RD update(@RequestBody OpertaionEntity opertaion){
 		opertaionService.updateById(opertaion);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

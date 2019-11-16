@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modelpartrela:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
 
-        return R.ok().put("data", modelPartRela);
+        return RD.build().put("data", modelPartRela);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:modelpartrela:save")
-    public R save(@RequestBody ModelPartRelaEntity modelPartRela){
+    public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
         modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:modelpartrela:update")
-    public R update(@RequestBody ModelPartRelaEntity modelPartRela){
+    public RD update(@RequestBody ModelPartRelaEntity modelPartRela){
 		modelPartRelaService.updateById(modelPartRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
