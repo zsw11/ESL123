@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ToolEntity;
 import io.apj.modules.masterData.service.ToolService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:tool:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
 
-        return R.ok().put("data", tool);
+        return RD.build().put("data", tool);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:tool:save")
-    public R save(@RequestBody ToolEntity tool){
+    public RD save(@RequestBody ToolEntity tool){
         tool.setCreateBy(getUserId().intValue());
 		toolService.insert(tool);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:tool:update")
-    public R update(@RequestBody ToolEntity tool){
+    public RD update(@RequestBody ToolEntity tool){
 		toolService.updateById(tool);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

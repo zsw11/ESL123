@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.DeptOperationRelaEntity;
 import io.apj.modules.masterData.service.DeptOperationRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptoperationrela:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		DeptOperationRelaEntity deptOperationRela = deptOperationRelaService.selectById(id);
 
-        return R.ok().put("data", deptOperationRela);
+        return RD.build().put("data", deptOperationRela);
     }
 
     /**
@@ -62,11 +62,11 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptoperationrela:save")
-    public R save(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD save(@RequestBody DeptOperationRelaEntity deptOperationRela){
         deptOperationRela.setCreateBy(getUserId().intValue());
 		deptOperationRelaService.insert(deptOperationRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:deptoperationrela:update")
-    public R update(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD update(@RequestBody DeptOperationRelaEntity deptOperationRela){
 		deptOperationRelaService.updateById(deptOperationRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

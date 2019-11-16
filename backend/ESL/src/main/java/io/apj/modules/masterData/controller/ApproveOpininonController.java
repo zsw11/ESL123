@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ApproveOpininonEntity;
 import io.apj.modules.masterData.service.ApproveOpininonService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:approveopininon:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
 
-        return R.ok().put("data", approveOpininon);
+        return RD.build().put("data", approveOpininon);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:approveopininon:save")
-    public R save(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD save(@RequestBody ApproveOpininonEntity approveOpininon){
         approveOpininon.setCreateBy(getUserId().intValue());
 		approveOpininonService.insert(approveOpininon);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:approveopininon:update")
-    public R update(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD update(@RequestBody ApproveOpininonEntity approveOpininon){
 		approveOpininonService.updateById(approveOpininon);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.MeasureGroupEntity;
 import io.apj.modules.masterData.service.MeasureGroupService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -50,10 +50,10 @@ public class MeasureGroupController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:measuregroup:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		MeasureGroupEntity measureGroup = measureGroupService.selectById(id);
 
-        return R.ok().put("data", measureGroup);
+        return RD.build().put("data", measureGroup);
     }
 
     /**
@@ -61,10 +61,10 @@ public class MeasureGroupController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:measuregroup:save")
-    public R save(@RequestBody MeasureGroupEntity measureGroup){
+    public RD save(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.insert(measureGroup);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -72,10 +72,10 @@ public class MeasureGroupController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:measuregroup:update")
-    public R update(@RequestBody MeasureGroupEntity measureGroup){
+    public RD update(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.updateById(measureGroup);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelSeriesEntity;
 import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modelseries:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelSeriesEntity modelSeries = modelSeriesService.selectById(id);
 
-        return R.ok().put("data", modelSeries);
+        return RD.build().put("data", modelSeries);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:modelseries:save")
-    public R save(@RequestBody ModelSeriesEntity modelSeries){
+    public RD save(@RequestBody ModelSeriesEntity modelSeries){
         modelSeries.setCreateBy(getUserId().intValue());
 		modelSeriesService.insert(modelSeries);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:modelseries:update")
-    public R update(@RequestBody ModelSeriesEntity modelSeries){
+    public RD update(@RequestBody ModelSeriesEntity modelSeries){
 		modelSeriesService.updateById(modelSeries);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:reportgroupreportrela:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ReportGroupReportRelaEntity reportGroupReportRela = reportGroupReportRelaService.selectById(id);
 
-        return R.ok().put("data", reportGroupReportRela);
+        return RD.build().put("data", reportGroupReportRela);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:reportgroupreportrela:save")
-    public R save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:reportgroupreportrela:update")
-    public R update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

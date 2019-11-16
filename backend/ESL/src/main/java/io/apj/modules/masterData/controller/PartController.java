@@ -34,7 +34,7 @@ import io.apj.common.utils.DateUtils;
 import io.apj.common.utils.ExcelData;
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -70,10 +70,10 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:part:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		PartEntity part = partService.selectById(id);
 
-        return R.ok().put("data", part);
+        return RD.build().put("data", part);
     }
 
     /**
@@ -81,11 +81,11 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:part:save")
-    public R save(@RequestBody PartEntity part){
+    public RD save(@RequestBody PartEntity part){
     	part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -93,10 +93,10 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:part:update")
-    public R update(@RequestBody PartEntity part){
+    public RD update(@RequestBody PartEntity part){
 		partService.updateById(part);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -150,7 +150,7 @@ public class PartController extends AbstractController {
 		// 导出
 		String datetime = DateUtils.format(new Date(), "YYMMddHHmm");
 		ExportExcelUtils.exportExcel(response, datetime + "部品信息.xlsx", data);
-//		return R.ok();
+//		return RD.build();
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class PartController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public R importExcel(@RequestBody Map<String, Object> map) {
+	public RD importExcel(@RequestBody Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<PartEntity> partEntityList = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
@@ -195,7 +195,7 @@ public class PartController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException(e.getMessage(), 500);
 		}
-		return R.ok();
+		return RD.build();
 	}
 
 }

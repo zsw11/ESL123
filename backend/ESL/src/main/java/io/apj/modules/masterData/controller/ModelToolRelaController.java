@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 import io.apj.modules.masterData.service.ModelToolRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modeltoolrela:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
 
-        return R.ok().put("data", modelToolRela);
+        return RD.build().put("data", modelToolRela);
     }
 
     /**
@@ -62,11 +62,11 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:modeltoolrela:save")
-    public R save(@RequestBody ModelToolRelaEntity modelToolRela){
+    public RD save(@RequestBody ModelToolRelaEntity modelToolRela){
         modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:modeltoolrela:update")
-    public R update(@RequestBody ModelToolRelaEntity modelToolRela){
+    public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**

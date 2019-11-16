@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.WorkstationTypeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
 
 
 
@@ -51,10 +51,10 @@ public class WorkstationTypeController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstationtype:info")
-    public R info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		WorkstationTypeEntity workstationType = workstationTypeService.selectById(id);
 
-        return R.ok().put("data", workstationType);
+        return RD.build().put("data", workstationType);
     }
 
     /**
@@ -62,11 +62,11 @@ public class WorkstationTypeController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtype:save")
-    public R save(@RequestBody WorkstationTypeEntity workstationType){
+    public RD save(@RequestBody WorkstationTypeEntity workstationType){
         workstationType.setCreateBy(getUserId().intValue());
 		workstationTypeService.insert(workstationType);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
@@ -74,10 +74,10 @@ public class WorkstationTypeController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstationtype:update")
-    public R update(@RequestBody WorkstationTypeEntity workstationType){
+    public RD update(@RequestBody WorkstationTypeEntity workstationType){
 		workstationTypeService.updateById(workstationType);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
