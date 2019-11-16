@@ -13,10 +13,8 @@
 <!--          </el-form-item>-->
 
       <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <el-select  v-model="dataForm.approveOperation" :label="'审批状态'" placeholder="请选择">
         <dict-select dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
-        </el-select>
-        
+       
       </el-form-item>
 
           <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'常用审批意见内容'" prop="opininon">
@@ -49,7 +47,7 @@ export default {
       }],
       dataForm: {
         id: 0,
-        approveOperation: '',
+        approveOperation: null,
         opininon: null,
         createBy: null,
         createAt: null,
