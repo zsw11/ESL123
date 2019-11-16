@@ -10,20 +10,12 @@
           <el-input v-model="listQuery.opininon" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'审批状态'" prop="approveOperation" >
-<!--        <el-select v-model="value" :label="'审批状态'" placeholder="请选择">-->
-<!--          <el-option-->
-<!--            v-for="item in state"-->
-<!--            :key="item.value"-->
-<!--            :label="item.label"-->
-<!--            :value="item.value">-->
-<!--          </el-option>-->
-<!--        </el-select>-->
+        <el-form-item :label="'审批状态'" prop="approveOperation">
           <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true"></dict-select>
         </el-form-item>
 
 
-        <div style="float: right">
+        <div style="float: right;margin-right: 4px">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>

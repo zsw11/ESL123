@@ -4,9 +4,9 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" style="overflow: hidden">
 
-
+      <div style="width: 1080px">
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input v-model="listQuery.name" style="width: 130px" clearable></el-input>
         </el-form-item>
@@ -27,11 +27,12 @@
         <el-form-item class="title" :label="'阶段'" prop="WSTime" >
           <el-input v-model="listQuery.WSTime"  style="width: 130px" clearable></el-input>
         </el-form-item>
+      </div>
 
 
-        <div class='buttons with-complex'>
-          <el-button @click="clearQuery()">清   空</el-button>
+        <div style="float: right;margin-right: 4px;">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
         </div>
       </el-form>
     </el-card>

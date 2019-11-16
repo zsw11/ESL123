@@ -18,9 +18,9 @@
 
 
 
-        <div style="float: right">
-          <el-button @click="clearQuery()">清   空</el-button>
+        <div style="float: right;margin-right: 4px">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
         </div>
       </el-form>
     </el-card>
