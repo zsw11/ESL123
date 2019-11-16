@@ -19,13 +19,7 @@
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="workMethod" align="left" title="workMethod" width="120" :edit-render="{name: 'input',autoselect: true}" >
-        <template v-slot:edit="{ row }">
-          <input type="text" v-model="row.workMethod" ref="workInput" class="custom-input"
-                 @keyup.219="showMore(1)"
-                 @keyup.222="showMore(2)" >
-        </template>
-      </vxe-table-column>
+      <operation-column width="120"></operation-column>
       <vxe-table-column field="key" title="Key" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60" :edit-render="{name: 'input'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
@@ -40,12 +34,12 @@
       <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-grid>
-    <div v-show="flag" @click="flag = false" class="more"></div>
   </div>
 </template>
 
 <script>
 import MeasureColumn from './workbook-table-measure-column.vue'
+import OperationColumn from './workbook-table-operation-column.vue'
 
 const meaureColumns0 = [
   { field: 'a0', title: 'A' },
@@ -72,13 +66,12 @@ const fields = meaureColumns0.map(c => c.field).concat(meaureColumns1.map(c => c
 
 export default {
   name: 'WorkbookTable',
-  components: { MeasureColumn },
+  components: { MeasureColumn, OperationColumn },
   props: ['count'],
   data () {
     return {
       meaureColumns0,
       meaureColumns1,
-      flag: false,                      // 候选栏
       // workM: false,                     // 手顺
       rowIndex: 0,
       tableData: [],
@@ -91,14 +84,14 @@ export default {
   },
   created () {
     for (let i = 0; i < 10; i++) {
-      this.tableData.push({})
+      this.tableData.push({ operation: '' })
     }
     console.log(this.tableData)
   },
   methods: {
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
+      if (fields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
         this.jump(row, column.property, e.key)
         e.preventDefault()
         return false
@@ -116,12 +109,6 @@ export default {
         }
       }
     },
-    // 手顺候选模块
-    showMore (i) {
-      this.flag = true
-      i === 1 ? this.tableData[this.rowIndex].workMethod += ']'
-        : this.tableData[this.rowIndex].workMethod += '"'
-    },
     // 新增行模块
     addRow (event) {
       // 调用对应快捷键
@@ -137,7 +124,6 @@ export default {
         let index = this.$refs.workbookTable.getInsertRecords().length - 1
         this.tableData.push(this.$refs.workbookTable.getInsertRecords()[index])
         this.rowIndex ++
-        this.flag = false
       }
     },
     // 快捷键模块

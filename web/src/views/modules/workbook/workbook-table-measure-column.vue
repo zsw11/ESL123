@@ -30,7 +30,6 @@ export default {
     keydown (e, row) {
       if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
         e.preventDefault()
-        console.log('jump', row, this.config.field, e.key)
         this.$emit('jump', row, this.config.field, e.key)
       }
     }
