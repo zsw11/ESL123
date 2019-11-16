@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     // 选中单元格并输入时的处理
-    keyboardEdit({ row, column, cell }, e) {
+    keyboardEdit ({ row, column, cell }, e) {
       if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
         this.jump(row, column.property, e.key)
         e.preventDefault()
@@ -108,7 +108,7 @@ export default {
     // 调到指定位置
     jump (row, field, to) {
       const offset = fields.indexOf(field)
-      for (const i = 1; i <= fields.length; i++) {
+      for (let i = 1; i <= fields.length; i++) {
         const tmpField = fields[(offset + i) % fields.length]
         if (tmpField.includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)

@@ -2,22 +2,19 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">生产阶段</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取   消</el-button>
-      </div>
+      <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
           <el-form-item :label="'名称'" prop="name">
-            <el-input style="width: 350px" v-model="dataForm.name"></el-input>
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'沿用阶段'" prop="continuePhaseId">
-            <el-input style="width: 350px" v-model="dataForm.continuePhaseId" ></el-input>
+          <el-form-item style="margin-left: 150px" :label="'沿用阶段'" prop="continuePhaseId">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.continuePhaseId" ></el-input>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.remark"  style="width: 810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea :disabled="flag" v-model="dataForm.remark"  style="width: 910px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
     </el-form>
@@ -36,6 +33,8 @@ export default {
   name: 'editPhase',
   data () {
     return {
+      title: null,
+      flag: false,
       inited: false,
       dataForm: {
         id: 0,
@@ -97,6 +96,8 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
+      this.flag = this.$route.query.noShow
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -119,7 +120,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterData-phase' })
+      this.$router.push({ name: 'masterdata-phase' })
       this.$destroy()
     },
     // 表单提交

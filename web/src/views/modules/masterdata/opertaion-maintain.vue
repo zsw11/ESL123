@@ -2,38 +2,16 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">关键词</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取   消</el-button>
-      </div>
+      <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'keyword Name'" prop="name">
-            <el-input v-model="dataForm.name"></el-input>
+          <el-form-item :label="'关键词名称'" prop="name">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
+      <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'备注'" prop="remark">
+        <textarea  :disabled="flag" v-model="dataForm.remark" style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+      </el-form-item>
 
 
     </el-form>
@@ -52,6 +30,8 @@ export default {
   name: 'editOpertaion',
   data () {
     return {
+      title: null,
+      flag: null,
       inited: false,
       dataForm: {
         id: 0,
@@ -105,6 +85,8 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
+      this.flag = this.$route.query.noShow
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -127,7 +109,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterData-opertaion' })
+      this.$router.push({ name: 'masterdata-opertaion' })
       this.$destroy()
     },
     // 表单提交

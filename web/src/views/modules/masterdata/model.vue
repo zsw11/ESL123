@@ -11,20 +11,20 @@
           <el-input v-model="listQuery.name" style="width: 130px" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'型号'" prop="code" >
+        <el-form-item class="title":label="'型号'" prop="code" >
           <el-input v-model="listQuery.code" style="width: 130px" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'部门'" prop="deptId" >
+        <el-form-item class="title":label="'部门'" prop="deptId" >
           <el-input v-model="listQuery.deptId"  style="width: 130px" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'机种系列'" prop="modelSeriesId" >
+        <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <el-input v-model="listQuery.modelSeriesId"  style="width: 130px" clearable></el-input>
         </el-form-item>
 
 
-        <el-form-item :label="'阶段'" prop="WSTime" >
+        <el-form-item class="title" :label="'阶段'" prop="WSTime" >
           <el-input v-model="listQuery.WSTime"  style="width: 130px" clearable></el-input>
         </el-form-item>
 
@@ -39,7 +39,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种</div>
         <div class="buttons">
-          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <el-button @click="">导入</el-button>
           <el-button @click="">导出</el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -107,10 +107,10 @@
         </el-table-column>
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="200">
-          <template>
-            <el-button type="text" size="small" @click="">详情</el-button>
+        <template slot-scope="scope">
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -207,6 +207,7 @@ export default {
       )).then(({page}) => {
         this.dataList = page.data
         this.total = page.totalCount
+        // console.log(this.dataList)
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -256,9 +257,17 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-model/${id}`, query: {noShow: true}})
+      })
+    },
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
+        console.log(id)
         this.$router.push({ path: id ? `/edit-model/${id}` : '/add-model' })
       })
     },
@@ -288,8 +297,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .el-input__inner {
-    width: 130px;
+  .title {
+    margin-left: 20px;
   }
   .el-form-item--small.el-form-item{
     display: inline-block;

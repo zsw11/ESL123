@@ -11,7 +11,7 @@
           <el-input v-model="listQuery.name" style="width: 250px" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'机种'" prop="remark" >
+        <el-form-item style="margin-left: 100px" :label="'机种'" prop="remark" >
           <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>
         </el-form-item>
 
@@ -25,7 +25,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种系列信息</div>
         <div class="buttons">
-          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <el-button @click="">导入</el-button>
           <el-button @click="">导出</el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -60,10 +60,10 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="">详情</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small" @click="">机种</el-button>
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -168,6 +168,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-modelseries/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

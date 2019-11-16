@@ -20,7 +20,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">工位信息</div>
         <div class="buttons">
-          <el-button   @click="addOrUpdateHandle()">新增</el-button>
+          <el-button   type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <el-button   @click="addOrUpdateHandle()">导入</el-button>
           <el-button   @click="addOrUpdateHandle()">导出</el-button>
           <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -53,9 +53,9 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -85,7 +85,6 @@ export default {
         name: null,
         remark: null
       },
-
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -124,6 +123,7 @@ export default {
       )).then(({page}) => {
         this.dataList = page.data
         this.total = page.totalCount
+        console.log(this.dataList)
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -160,6 +160,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-workstation/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

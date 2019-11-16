@@ -93,55 +93,66 @@ const mainRoutes = {
     { path: '/add-deptoperationrela', component: _import('modules/masterdata/deptoperationrela-maintain'), name: 'add-deptoperationrela', meta: { title: '新增组织机构关键词关系', isTab: true } },
     { path: '/edit-deptoperationrela/:id(\\d+)', component: _import('modules/masterdata/deptoperationrela-maintain'), name: 'edit-deptoperationrela', meta: { title: '编辑组织机构关键词关系', isTab: true } },
     // 机种
-    { path: '/add-model', component: _import('modules/masterdata/model-maintain'), name: 'add-model', meta: { title: '新增机种', isTab: true } },
-    { path: '/edit-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'edit-model', meta: { title: '编辑机种', isTab: true } },
+    { path: '/add-model', component: _import('modules/masterdata/model-maintain'), name: 'add-model', meta: { title: '机种-新增', isTab: true } },
+    { path: '/edit-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'edit-model', meta: { title: '机种-编辑', isTab: true } },
+    { path: '/details-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'details-model', meta: { title: '机种-详情', isTab: true } },
 
     // 机种部品关系
     { path: '/add-modelpartrela', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'add-modelpartrela', meta: { title: '新增机种部品关系', isTab: true } },
     { path: '/edit-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'edit-modelpartrela', meta: { title: '编辑机种部品关系', isTab: true } },
 
     // 机种系列
-    { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '新增机种系列', isTab: true } },
-    { path: '/edit-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'edit-modelseries', meta: { title: '编辑机种系列', isTab: true } },
+    { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '机种系列-新增', isTab: true } },
+    { path: '/edit-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'edit-modelseries', meta: { title: '机种系列-编辑', isTab: true } },
+    { path: '/details-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'details-modelseries', meta: { title: '机种系列-详情', isTab: true } },
 
     // 机种治工具关系
     { path: '/add-modeltoolrela', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'add-modeltoolrela', meta: { title: '新增机种治工具关系', isTab: true } },
     { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种治工具关系', isTab: true } },
 
     // 关键词
-    { path: '/add-opertaion', component: _import('modules/masterdata/opertaion-maintain'), name: 'add-operation', meta: { title: '新增关键词', isTab: true } },
-    { path: '/edit-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'edit-operation', meta: { title: '编辑关键词', isTab: true } },
+    { path: '/add-opertaion', component: _import('modules/masterdata/opertaion-maintain'), name: 'add-operation', meta: { title: '关键词-新增', isTab: true } },
+    { path: '/edit-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'edit-operation', meta: { title: '关键词-编辑', isTab: true } },
+    { path: '/details-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'details-operation', meta: { title: '关键词-详情', isTab: true } },
 
     // 部品
-    { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '新增部品', isTab: true } },
-    { path: '/edit-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'edit-part', meta: { title: '编辑部品', isTab: true } },
+    { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '部品-新增', isTab: true } },
+    { path: '/edit-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'edit-part', meta: { title: '部品-编辑', isTab: true } },
+    { path: '/details-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'details-part', meta: { title: '部品-详情', isTab: true } },
 
     // 生产阶段
-    { path: '/add-phase', component: _import('modules/masterdata/phase-maintain'), name: 'add-phase', meta: { title: '新增生产阶段', isTab: true } },
-    { path: '/edit-phase/:id(\\d+)', component: _import('modules/masterdata/phase-maintain'), name: 'edit-phase', meta: { title: '编辑生产阶段', isTab: true } },
+    { path: '/add-phase', component: _import('modules/masterdata/phase-maintain'), name: 'add-phase', meta: { title: '生产阶段-新增', isTab: true } },
+    { path: '/edit-phase/:id(\\d+)', component: _import('modules/masterdata/phase-maintain'), name: 'edit-phase', meta: { title: '生产阶段-编辑', isTab: true } },
+    { path: '/details-phase/:id(\\d+)', component: _import('modules/masterdata/phase-maintain'), name: 'details-phase', meta: { title: '生产阶段-详情', isTab: true } },
 
     // 报表
-    { path: '/add-report', component: _import('modules/masterdata/report-maintain'), name: 'add-report', meta: { title: '新增报表', isTab: true } },
-    { path: '/edit-report/:id(\\d+)', component: _import('modules/masterdata/report-maintain'), name: 'edit-report', meta: { title: '编辑报表', isTab: true } },
+    { path: '/add-report', component: _import('modules/masterdata/report-maintain'), name: 'add-report', meta: { title: '报表-新增', isTab: true } },
+    { path: '/edit-report/:id(\\d+)', component: _import('modules/masterdata/report-maintain'), name: 'edit-report', meta: { title: '报表-编辑', isTab: true } },
+    { path: '/details-report/:id(\\d+)', component: _import('modules/masterdata/report-maintain'), name: 'details-report', meta: { title: '报表-详情', isTab: true } },
+
     // 报表组
-    { path: '/add-reportgroup', component: _import('modules/masterdata/reportgroup-maintain'), name: 'add-reportgroup', meta: { title: '新增报表组', isTab: true } },
-    { path: '/edit-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'edit-reportgroup', meta: { title: '编辑报表组', isTab: true } },
+    { path: '/add-reportgroup', component: _import('modules/masterdata/reportgroup-maintain'), name: 'add-reportgroup', meta: { title: '报表组-新增', isTab: true } },
+    { path: '/edit-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'edit-reportgroup', meta: { title: '报表组-编辑', isTab: true } },
+    { path: '/details-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'details-report', meta: { title: '报表组-详情', isTab: true } },
 
     // 报表组报表关系
     { path: '/add-reportgroupreportrela', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'add-reportgroupreportrela', meta: { title: '新增报表组报表关系', isTab: true } },
     { path: '/edit-reportgroupreportrela/:id(\\d+)', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'edit-reportgroupreportrela', meta: { title: '编辑报表组报表关系', isTab: true } },
 
     // 治工具
-    { path: '/add-tool', component: _import('modules/masterdata/tool-maintain'), name: 'add-tool', meta: { title: '新增治工具', isTab: true } },
-    { path: '/edit-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'edit-tool', meta: { title: '编辑治工具', isTab: true } },
+    { path: '/add-tool', component: _import('modules/masterdata/tool-maintain'), name: 'add-tool', meta: { title: '治工具-新增', isTab: true } },
+    { path: '/edit-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'edit-tool', meta: { title: '治工具-编辑', isTab: true } },
+    { path: '/details-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'details-tool', meta: { title: '治工具-详情', isTab: true } },
 
     // 工位
-    { path: '/add-workstation', component: _import('modules/masterdata/workstation-maintain'), name: 'add-workstation', meta: { title: '新增工位', isTab: true } },
-    { path: '/edit-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'edit-workstation', meta: { title: '编辑工位', isTab: true } },
+    { path: '/add-workstation', component: _import('modules/masterdata/workstation-maintain'), name: 'add-workstation', meta: { title: '工位-新增', isTab: true } },
+    { path: '/edit-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'edit-workstation', meta: { title: '工位-编辑', isTab: true } },
+    { path: '/details-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'details-workstation', meta: { title: '工位-详情', isTab: true } },
 
     // 工位类型
-    { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '新增工位类型', isTab: true } },
-    { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '编辑工位类型', isTab: true } },
+    { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '工位类型-新增', isTab: true } },
+    { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '工位类型-编辑', isTab: true } },
+    { path: '/details-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'details-workstationtype', meta: { title: '工位类型-详情', isTab: true } },
 
     // 工位类型节点
     { path: '/add-workstationtypenode', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'add-workstationtypenode', meta: { title: '新增工位类型节点', isTab: true } },
@@ -152,16 +163,18 @@ const mainRoutes = {
     { path: '/edit-deptworkstationrela/:id(\\d+)', component: _import('modules/masterdata/deptworkstationrela-maintain'), name: 'edit-deptworkstationrela', meta: { title: '编辑组织机构工位关系', isTab: true } },
 
     // 常用指标组合
-    { path: '/add-measuregroup', component: _import('modules/masterdata/measuregroup-maintain'), name: 'add-measuregroup', meta: { title: '新增常用指标组合', isTab: true } },
-    { path: '/edit-measuregroup/:id(\\d+)', component: _import('modules/masterdata/measuregroup-maintain'), name: 'edit-measuregroup', meta: { title: '编辑常用指标组合', isTab: true } },
+    { path: '/add-measuregroup', component: _import('modules/masterdata/measuregroup-maintain'), name: 'add-measuregroup', meta: { title: '常用指标组合-新增', isTab: true } },
+    { path: '/edit-measuregroup/:id(\\d+)', component: _import('modules/masterdata/measuregroup-maintain'), name: 'edit-measuregroup', meta: { title: '常用指标组合-编辑', isTab: true } },
+    { path: '/details-measuregroup/:id(\\d+)', component: _import('modules/masterdata/measuregroup-maintain'), name: 'details-measuregroup', meta: { title: '常用指标组合-详情', isTab: true } },
 
     // 手顺
     { path: '/add-operationgroupoperation', component: _import('modules/masterdata/operationgroupoperation-maintain'), name: 'add-operationgroupoperation', meta: { title: '新增手顺', isTab: true } },
     { path: '/edit-operationgroupoperation/:id(\\d+)', component: _import('modules/masterdata/operationgroupoperation-maintain'), name: 'edit-operationgroupoperation', meta: { title: '编辑手顺', isTab: true } },
 
     // 手顺组合
-    { path: '/add-opertaiongroup', component: _import('modules/masterdata/opertaiongroup-maintain'), name: 'add-opertaiongroup', meta: { title: '新增手顺组合', isTab: true } },
-    { path: '/edit-opertaiongroup/:id(\\d+)', component: _import('modules/masterdata/opertaiongroup-maintain'), name: 'edit-opertaiongroup', meta: { title: '编辑手顺组合', isTab: true } },
+    { path: '/add-opertaiongroup', component: _import('modules/masterdata/opertaiongroup-maintain'), name: 'add-opertaiongroup', meta: { title: '手顺组合-新增', isTab: true } },
+    { path: '/edit-opertaiongroup/:id(\\d+)', component: _import('modules/masterdata/opertaiongroup-maintain'), name: 'edit-opertaiongroup', meta: { title: '手顺组合-编辑', isTab: true } },
+    { path: '/details-opertaiongroup/:id(\\d+)', component: _import('modules/masterdata/opertaiongroup-maintain'), name: 'details-opertaiongroup', meta: { title: '手顺组合-详情', isTab: true } },
 
     // 分析表
     { path: '/add-workbook', component: _import('modules/workbook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
