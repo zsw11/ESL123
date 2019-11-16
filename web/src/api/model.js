@@ -19,11 +19,11 @@ export function createModel (data) {
 }
 
 // 获取机种详情
-export function fetchModel (params) {
+export function fetchModel (id) {
   return request({
-    url: request.adornUrl('/api/v1/model/detail'),
+    url: request.adornUrl(`/api/v1/model/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

@@ -21,7 +21,8 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
         EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
                 .like(params.get("name") != null && params.get("name") != "", "name",
-                        (String) params.get("name"));
+                        (String) params.get("name"))
+                .like(params.get("keyWord") != null && params.get("keyWord") != "", "name",(String) params.get("keyWord"));
         Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
 
 

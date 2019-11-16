@@ -21,7 +21,9 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
         EntityWrapper<ModelSeriesEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
                 .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
-                .eq(params.get("modelId") != null && params.get("modelId") != "", "modelId", (String) params.get("modelId"));
+                .eq(params.get("modelId") != null && params.get("modelId") != "", "modelId", (String) params.get("modelId"))
+                .like(params.get("keyWord") != null && params.get("keyWord") != "", "name", (String) params.get("keyWord"))
+        ;
         Page<ModelSeriesEntity> page = this.selectPage(new Query<ModelSeriesEntity>(params).getPage(), entityWrapper);
 
 
