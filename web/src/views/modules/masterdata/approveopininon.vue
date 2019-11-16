@@ -14,7 +14,6 @@
           <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true"></dict-select>
         </el-form-item>
 
-
         <div style="float: right;margin-right: 4px">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>

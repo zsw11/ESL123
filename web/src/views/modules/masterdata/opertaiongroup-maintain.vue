@@ -10,7 +10,7 @@
           </el-form-item>
 
       <el-form-item style="margin-left: 140px" :label="'所属组织机构'" prop="deptId">
-        <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
       </el-form-item>
 
       <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>
@@ -102,7 +102,9 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      this.flag = this.$route.query.noShow
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

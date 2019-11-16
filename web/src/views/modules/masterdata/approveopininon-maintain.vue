@@ -7,11 +7,11 @@
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
 
       <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <dict-select dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
+        <dict-select :disabled= flag dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
       </el-form-item>
 
           <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'常用审批意见内容'" prop="opininon">
-            <textarea :disabled="flag" v-model="dataForm.opininon" style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea :disabled=flag v-model="dataForm.opininon" style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
     </el-form>
@@ -97,7 +97,9 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      this.flag = this.$route.query.noShow
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

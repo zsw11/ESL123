@@ -6,18 +6,18 @@
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
           <el-form-item :label="'名称'" prop="name">
-            <el-input  :disabled="flag" class="input" v-model="dataForm.name"></el-input>
+            <el-input  :disabled=flag class="input" v-model="dataForm.name"></el-input>
           </el-form-item>
 
           <el-form-item :label="'是否通用'" prop="common">
             <el-switch
-              :disabled="flag"
+              :disabled=flag
               v-model="dataForm.common">
             </el-switch>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled="flag" v-model="dataForm.opininon" style="width:800px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea :disabled=flag v-model="dataForm.opininon" style="width:800px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
     </el-form>
@@ -93,7 +93,9 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      this.flag = this.$route.query.noShow
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

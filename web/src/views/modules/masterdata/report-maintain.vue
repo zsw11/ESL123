@@ -10,11 +10,11 @@
           </el-form-item>
 
           <el-form-item   prop="formCode">
-            空Form标准编号<keyword-search :disabled="flag" style="margin-left:10px;width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+            空Form标准编号<keyword-search :disabled=flag style="margin-left:10px;width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
-            <textarea :disabled="flag" v-model="dataForm.remark" style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea :disabled=flag v-model="dataForm.remark" style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
 
@@ -96,7 +96,9 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      this.flag = this.$route.query.noShow
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
