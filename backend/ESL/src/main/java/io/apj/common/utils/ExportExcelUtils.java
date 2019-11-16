@@ -26,12 +26,13 @@ import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
  *
  */
 public class ExportExcelUtils {
-	
+
 	/**
-	 *   导出excel
-	 * @param response 响应对象
-	 * @param fileName 文件名
-	 * @param data 导出数据
+	 * 导出excel
+	 * 
+	 * @param response
+	 * @param fileName
+	 * @param data
 	 * @throws Exception
 	 */
 	public static void exportExcel(HttpServletResponse response, String fileName, ExcelData data) throws Exception {
@@ -65,14 +66,18 @@ public class ExportExcelUtils {
 
 		int rowIndex = 0;
 
-		rowIndex = writeTitlesToExcel(wb, sheet, data.getTitles());
+		rowIndex = writeTitlesToExcel(wb, sheet, data.getTitles(),rowIndex);
 		writeRowsToExcel(wb, sheet, data.getRows(), rowIndex);
+		if (data.getSubTitles() != null) {
+			rowIndex += data.getRows().size()+1;
+			rowIndex = writeTitlesToExcel(wb, sheet, data.getSubTitles(),rowIndex);
+			writeRowsToExcel(wb, sheet, data.getSubRows(), rowIndex);
+		}
 		autoSizeColumns(sheet, data.getTitles().size() + 1);
 
 	}
 
-	private static int writeTitlesToExcel(XSSFWorkbook wb, Sheet sheet, List<String> titles) {
-		int rowIndex = 0;
+	private static int writeTitlesToExcel(XSSFWorkbook wb, Sheet sheet, List<String> titles, int rowIndex) {
 		int colIndex = 0;
 
 		Font titleFont = wb.createFont();
@@ -163,7 +168,5 @@ public class ExportExcelUtils {
 		style.setBorderColor(BorderSide.RIGHT, color);
 		style.setBorderColor(BorderSide.BOTTOM, color);
 	}
-
-
 
 }

@@ -96,7 +96,9 @@ export default {
           complexFilters: null
         } : undefined
       )).then(response => {
-        if (response.status === 200) {
+        console.log(response, 555555)
+        if (response.size > 0) {
+          console.log(response, 222)
           const blob = response.data
           const reader = new FileReader()
           reader.readAsDataURL(blob)

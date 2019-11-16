@@ -21,7 +21,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
         EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
                 .like(params.get("formCode") != null && params.get("formCode") != "", "form_code", (String) params.get("formCode"))
-                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
+                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
+        .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));;
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);

@@ -1,0 +1,29 @@
+[
+    {
+        "table": "part",
+        "tableName": "部品信息",
+        "tableAlias": "part",
+        "fieldList": [
+            {
+                "code": "name",
+                "name": "部品名称",
+                "type": "string"
+            },
+            {
+                "code": "common",
+                "name": "是否通用",
+                "type": "string"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "string"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]

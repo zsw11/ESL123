@@ -30,7 +30,7 @@ import io.apj.common.utils.RD;
  * @date 2018-12-05 14:16:20
  */
 @RestController
-@RequestMapping("/api/v1/dict")
+@RequestMapping("/api/v1")
 public class SysDictController extends AbstractController {
 	@Autowired
 	private SysDictService sysDictService;
@@ -38,7 +38,7 @@ public class SysDictController extends AbstractController {
 	/**
 	 * 列表
 	 */
-	@RequestMapping("/list")
+	@RequestMapping("/dictitem/list")
 	@RequiresPermissions("sys:dict:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysDictService.queryPage(params);
@@ -49,7 +49,7 @@ public class SysDictController extends AbstractController {
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{id}")
+	@RequestMapping("/dict/info/{id}")
 	@RequiresPermissions("sys:dict:info")
 	public R info(@PathVariable("id") Long id) {
 		SysDictEntity sysDict = sysDictService.selectById(id);
@@ -60,7 +60,7 @@ public class SysDictController extends AbstractController {
 	/**
 	 * 信息
 	 */
-	@GetMapping("/detail")
+	@GetMapping("/dict/detail")
 	@RequiresPermissions("sys:dict:info")
 	public ResponseEntity<Object> detail(@RequestParam Long id) {
 		SysDictEntity sysDict = sysDictService.selectById(id);

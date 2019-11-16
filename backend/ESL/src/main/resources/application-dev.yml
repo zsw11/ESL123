@@ -4,9 +4,9 @@ spring:
         driverClassName: org.postgresql.Driver
         druid:
             first:  #数据源1
-                url: jdbc:postgresql://10.240.131.45:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+                url: jdbc:postgresql://117.48.230.8:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: postgres
-                password: 123456
+                password: ly0713
             second:  #数据源2
                 url: jdbc:mysql://localhost:3306/apj-security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: root

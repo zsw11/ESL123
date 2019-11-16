@@ -42,8 +42,15 @@
         <div class="card-title">部品信息</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
+            <!-- v-if="isAuth('masterData:part:save')" -->
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -104,9 +111,20 @@
 </template>
 
 <script>
-import { listPart, deletePart } from '@/api/part'
+import { listPart, deletePart, partImport, partExport } from '@/api/part'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+
+const defaultExport = ['part.name', 'part.common', 'part.remark']
+
 export default {
   name: 'partList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -130,12 +148,52 @@ export default {
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: [ 'part.name', 'part.common', 'part.remark' ]
     }
   },
   activated () {
     const self = this
     self.getDataList()
+  },
+  computed: {
+    importConfig () {
+      return {
+        attributes: [{
+          code: this.attributes[0].code,
+          name: this.attributes[0].name,
+          children: filterAttributes(this.attributes, {
+            attributes: this.importAttributes,
+            plain: true
+          }),
+          sampleDatas: [[ '部品名', '是', '测试用' ]]
+        }],
+        importApi: partImport,
+        importSuccessCb: () => { this.getDataList() }
+      }
+    },
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: partExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'part', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'part', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
   },
   methods: {
     // 普通查询

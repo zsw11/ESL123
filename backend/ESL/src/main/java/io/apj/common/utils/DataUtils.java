@@ -451,8 +451,7 @@ public class DataUtils {
 	/**
 	 * 处理Excel的数据源
 	 */
-	public static Map<String, Object> dataChange(String tName, Object item, HashMap<String, String> dictMap,
-			JsonObject areaDataFilter) {
+	public static Map<String, Object> dataChange(String tName, Object item, HashMap<String, String> dictMap) {
 		Map<String, Object> arr = new HashMap<String, Object>();
 		try {
 			Field[] fields = item.getClass().getDeclaredFields();
@@ -471,8 +470,7 @@ public class DataUtils {
 						// 过滤字典项
 						DictUtils dictUtils = new DictUtils();
 
-						String value = dictUtils.dictFilter(className, f.getName(), f.get(item).toString(), dictMap,
-								areaDataFilter);
+						String value = dictUtils.dictFilter(className, f.getName(), f.get(item).toString(), dictMap);
 						// 出入库流水
 						if (className.equals("StocksHistoryEntity")) {
 							if (f.getName().equals("type")) {
