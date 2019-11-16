@@ -10,11 +10,6 @@
           <el-input v-model="listQuery.opininon" clearable></el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'审批状态'" prop="approveOperation" >-->
-<!--        <el-select>-->
-<!--          <el-option v-for="(item,index) in state" :key="index" :value="item"></el-option>-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
         <el-form-item :label="'审批状态'" prop="approveOperation" >
 
           <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true"></dict-select>
@@ -31,7 +26,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">常用审批意见</div>
         <div class="buttons">
-          <el-button @click="addOrUpdateHandle()">新增</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -61,7 +56,7 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
@@ -179,6 +174,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-approveopininon/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

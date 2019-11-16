@@ -87,8 +87,10 @@ const mainRoutes = {
     { path: '/edit-reference/:id(\\d+)', component: _import('modules/sys/reference-maintain'), name: 'edit-reference', meta: { title: '编辑引用表', isTab: true } },
 
     // 常用审批意见
-    { path: '/add-approveopininon', component: _import('modules/masterdata/approveopininon-maintain'), name: 'add-approveopininon', meta: { title: '新增常用审批意见', isTab: true } },
-    { path: '/edit-approveopininon/:id(\\d+)', component: _import('modules/masterdata/approveopininon-maintain'), name: 'edit-approveopininon', meta: { title: '编辑常用审批意见', isTab: true } },
+    { path: '/add-approveopininon', component: _import('modules/masterdata/approveopininon-maintain'), name: 'add-approveopininon', meta: { title: '常用审批意见-新增', isTab: true } },
+    { path: '/edit-approveopininon/:id(\\d+)', component: _import('modules/masterdata/approveopininon-maintain'), name: 'edit-approveopininon', meta: { title: '常用审批意见-编辑', isTab: true } },
+    { path: '/details-approveopininon/:id(\\d+)', component: _import('modules/masterdata/approveopininon-maintain'), name: 'details-approveopininon', meta: { title: '常用审批意见-编辑', isTab: true } },
+
     // 组织机构关键词关系
     { path: '/add-deptoperationrela', component: _import('modules/masterdata/deptoperationrela-maintain'), name: 'add-deptoperationrela', meta: { title: '新增组织机构关键词关系', isTab: true } },
     { path: '/edit-deptoperationrela/:id(\\d+)', component: _import('modules/masterdata/deptoperationrela-maintain'), name: 'edit-deptoperationrela', meta: { title: '编辑组织机构关键词关系', isTab: true } },
