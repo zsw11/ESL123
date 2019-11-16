@@ -5,12 +5,13 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input v-model="listQuery.id"  clearable></el-input>
+
+        <el-form-item :label="'手顺组合编码'" prop="code" >
+          <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'手顺编码'" prop="code" >
-          <el-input v-model="listQuery.code" clearable></el-input>
+        <el-form-item :label="'手顺数量'" prop="usedCount" >
+          <el-input v-model="listQuery.usedCount"  clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
@@ -19,9 +20,9 @@
 
 
 
-        <div class='buttons with-complex'>
-          <el-button @click="clearQuery()">清   空</el-button>
+        <div style="float: right">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
         </div>
       </el-form>
     </el-card>
@@ -29,7 +30,8 @@
       <div slot="header" class="clearfix">
         <div class="card-title">手顺组合</div>
         <div class="buttons">
-          <el-button  @click="addOrUpdateHandle()">新增</el-button>
+          <el-button  type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button>导出</el-button>
 
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
@@ -47,11 +49,6 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="code" label="手顺组合编码" >
           <template slot-scope="scope">
@@ -71,54 +68,18 @@
           </template>
         </el-table-column>
 
-
-
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
+        <el-table-column align="center" prop="deptId" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
+            <span>{{scope.row.deptId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createAt" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
 
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
+      <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:opertaiongroup:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('masterData:opertaiongroup:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -244,6 +205,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-opertaiongeoup/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

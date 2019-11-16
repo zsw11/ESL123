@@ -1,5 +1,6 @@
 <template>
   <div class="site-wrapper site-page--login">
+<!--    <div class="leftb"><img src="../../../static/img/rtop.png" alt=""></div>-->
     <div class="main clearfix">
       <div class="login-main">
         <div class="title">
@@ -89,15 +90,25 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: #2177C7;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    overflow: hidden;
+    background-color: #F6F5FB;
+  }
+  .leftb{
+    position: absolute;
+    width: 300px;
+    height: 350px;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+    img{
+      width: 100%;
+      height: 100%;
+    }
   }
   .main {
+    z-index: 999;
     width: 1080px;
     margin:0 auto;
-    margin-top: 78px;
+    margin-top: 58px;
   }
   .clearfix {
     display: block;
@@ -158,7 +169,7 @@
     float: left;
     height: 521px;
     width: 680px;
-    background-image: url("../../../static/img/mainR.jpg");
+    background-image: url("../../../static/img/main.jpg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     border-top-right-radius: 20px;
@@ -189,6 +200,11 @@
   .identify{
     margin-top: 10px;
     width: 250px;
+  }
+  @media only screen and (min-width: 0px) and (max-width: 640px){
+    .mainRight{
+      display: none;
+    }
   }
 
 

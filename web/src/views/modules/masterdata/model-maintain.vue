@@ -2,50 +2,47 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">机种</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取   消</el-button>
-      </div>
+      <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
           <el-form-item :label="'名称'" prop="name">
-            <el-input style="width: 350px"  v-model="dataForm.name"></el-input>
+            <el-input :disabled="flag" style="width: 325px"  v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item :label="'部门'" prop="deptId">
-            <el-input style="width: 350px"  v-model="dataForm.deptId" ></el-input>
+          <el-form-item style="margin-left: 150px" :label="'部门kws'" prop="deptId">
+            <el-input :disabled="flag" style="width: 325px"  v-model="dataForm.deptId" ></el-input>
           </el-form-item>
 
-          <el-form-item :label="'机种系列'" prop="modelSeriesId">
-            <el-input style="width: 350px" v-model="dataForm.modelSeriesId" ></el-input>
+          <el-form-item :label="'机种系列kws'" prop="modelSeriesId">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.modelSeriesId" ></el-input>
           </el-form-item>
 
-          <el-form-item :label="'型号'" prop="code">
-            <el-input style="width: 350px" v-model="dataForm.code"></el-input>
+          <el-form-item style="margin-left: 150px":label="'型号kws'" prop="code">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.code"></el-input>
           </el-form-item>
 
           <el-form-item :label="'WS时间'" prop="WSTime">
-            <el-input style="width: 350px" v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
-          <el-form-item :label="'ES时间'" prop="ESTime">
-            <el-input style="width: 350px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+          <el-form-item style="margin-left: 150px":label="'ES时间'" prop="ESTime">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item :label="'AMP时间'" prop="AMPTime">
-            <el-input style="width: 350px" v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
-          <el-form-item :label="'MP时间'" prop="MPTime">
-            <el-input style="width: 350px" v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+          <el-form-item style="margin-left: 150px" :label="'MP时间'" prop="MPTime">
+            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea v-model="dataForm.remark"  style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea :disabled="flag" v-model="dataForm.remark"  style="width:910px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
 
@@ -67,6 +64,8 @@ export default {
   name: 'editModel',
   data () {
     return {
+      title: null,
+      flag: false,
       inited: false,
       dataForm: {
         id: 0,
@@ -139,6 +138,8 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
+      this.flag = this.$route.query.noShow
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -161,7 +162,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterData-model' })
+      this.$router.push({ name: 'masterdata-model' })
       this.$destroy()
     },
     // 表单提交

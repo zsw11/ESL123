@@ -7,7 +7,7 @@
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
         <el-form-item :label="'报表名称'" prop="name" >
-          <el-input v-model="listQuery.name" clearable></el-input>
+          <el-input  v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
         <el-form-item  :label="'空Form标准编号'" prop="formCode" >
@@ -24,9 +24,6 @@
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">报表信息</div>
-        <div class="buttons">
-          <el-button  @click="addOrUpdateHandle()">新增</el-button>
-        </div>
       </div>
       <el-table
         :data="dataList"
@@ -62,7 +59,7 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
           </template>
         </el-table-column>
@@ -175,6 +172,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-report/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {
