@@ -46,9 +46,10 @@
         </el-table-column>
 
         <el-table-column align="center" prop="common" label="是否通用" >
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.common" :disabled="true"></el-switch>
-          </template>
+            <template slot-scope="scope">
+              <span v-if="scope.row.common">是</span>
+              <span v-if="!scope.row.common">否</span>
+            </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >

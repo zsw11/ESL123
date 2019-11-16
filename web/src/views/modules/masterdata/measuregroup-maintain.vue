@@ -5,20 +5,19 @@
       <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'常用指标组合编码'" prop="code">
-            <el-input :disabled="flag" style="width: 100px" v-model="dataForm.code"></el-input>
+          <el-form-item  :label="'指标组合编码'" prop="code">
+             <el-input :disabled="flag" style="width: 100px" v-model="dataForm.code"></el-input>
           </el-form-item>
 
 
-          <el-form-item style="margin-left: 400px" :label="'所属组织机构kws'" prop="deptId">
-            <el-input :disabled="flag" v-model="dataForm.deptId" ></el-input>
-          </el-form-item>
-
+      <el-form-item style="margin-left: 140px" :label="'所属组织机构'" prop="deptId">
+        <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+      </el-form-item>
           <div style="width: 700px;height: 200px;background-color: #e0e0e0;"></div>
 
     </el-form>
 
-    <span class="dialog-footer">
+    <span class="dialog-footer" style="margin-top: 10px">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
     </span>
@@ -28,6 +27,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchMeasureGroup, createMeasureGroup, updateMeasureGroup } from '@/api/measureGroup'
+import { listDept } from '@/api/dept'
 export default {
   name: 'editMeasureGroup',
   data () {
@@ -59,6 +59,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDept,
       dataRules: {
         code: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }

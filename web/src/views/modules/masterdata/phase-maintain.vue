@@ -9,12 +9,12 @@
             <el-input :disabled="flag" style="width: 325px" v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px" :label="'沿用阶段'" prop="continuePhaseId">
-            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.continuePhaseId" ></el-input>
+          <el-form-item style="margin-left: 140px" :label="'沿用阶段'" prop="continuePhaseId">
+            <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled="flag" v-model="dataForm.remark"  style="width: 910px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea :disabled="flag" v-model="dataForm.remark"  style="width: 900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
 
     </el-form>
@@ -28,7 +28,8 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchPhase, createPhase, updatePhase } from '@/api/phase'
+// eslint-disable-next-line no-unused-vars
+import { fetchPhase, createPhase, updatePhase, listPhase } from '@/api/phase'
 export default {
   name: 'editPhase',
   data () {
@@ -47,6 +48,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listPhase,
       dataRules: {
         name: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
@@ -64,7 +66,6 @@ export default {
         updateBy: [
           { type: 'number', message: '更新者ID需为数字值' }
         ]
-
       }
     }
   },

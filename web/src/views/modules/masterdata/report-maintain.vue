@@ -9,12 +9,12 @@
             <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item  style="margin-left: 150px" :label="'空Form标准编号'" prop="formCode">
-            <el-input class="input":disabled="flag" v-model="dataForm.formCode"></el-input>
+          <el-form-item   prop="formCode">
+            空Form标准编号<keyword-search :disabled="flag" style="margin-left:10px;width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
-            <textarea :disabled="flag" v-model="dataForm.remark" style="width:910px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea :disabled="flag" v-model="dataForm.remark" style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
 
@@ -29,7 +29,8 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchReport, createReport, updateReport } from '@/api/report'
+// eslint-disable-next-line no-unused-vars
+import { fetchReport, createReport, updateReport, listReport } from '@/api/report'
 export default {
   name: 'editReport',
   data () {
@@ -43,6 +44,7 @@ export default {
         formCode: null,
         remark: null
       },
+      listReport,
       dataRules: {
         name: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }

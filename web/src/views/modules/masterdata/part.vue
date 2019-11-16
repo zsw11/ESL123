@@ -11,10 +11,7 @@
         </el-form-item>
 
 <!--        <el-form-item :label="'机种系列'" prop="" >-->
-<!--          <el-select>-->
-<!--            <el-option>-->
-<!--            </el-option>-->
-<!--          </el-select>-->
+<!--          <keyword-search></keyword-search>-->
 <!--        </el-form-item>-->
 
 <!--        <el-form-item :label="'机种'" prop="" >-->
@@ -47,7 +44,6 @@
             type="primary"
             plain>导   出
           </export-data>
-            <!-- v-if="isAuth('masterData:part:save')" -->
           <import-data
             :config="importConfig">
           </import-data>

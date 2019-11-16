@@ -9,14 +9,14 @@
             <el-input :disabled="flag" style="width: 325px" v-model="dataForm.code"></el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px" :label="'所属组织机构kws'" prop="deptId">
-            <el-input v-model="dataForm.deptId" ></el-input>
-          </el-form-item>
+      <el-form-item style="margin-left: 140px" :label="'所属组织机构'" prop="deptId">
+        <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+      </el-form-item>
 
       <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>
 
       <el-form-item style="margin-top:30px;display: block" :label="'备注'" prop="remark">
-        <textarea :disabled="flag" v-model="dataForm.remark"  style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+        <textarea :disabled="flag" v-model="dataForm.remark"  style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
       </el-form-item>
 
 
@@ -32,6 +32,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchOpertaionGroup, createOpertaionGroup, updateOpertaionGroup } from '@/api/opertaionGroup'
+import { listDept } from '@/api/dept'
 export default {
   name: 'editOpertaionGroup',
   data () {
@@ -50,6 +51,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDept,
       dataRules: {
         code: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }

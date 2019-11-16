@@ -9,16 +9,16 @@
             <el-input :disabled="flag" style="width: 325px"  v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px" :label="'部门kws'" prop="deptId">
-            <el-input :disabled="flag" style="width: 325px"  v-model="dataForm.deptId" ></el-input>
+          <el-form-item style="margin-left: 140px" :label="'部门'" prop="deptId">
+            <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'机种系列kws'" prop="modelSeriesId">
-            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.modelSeriesId" ></el-input>
+          <el-form-item :label="'机种系列'" prop="modelSeriesId">
+            <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px":label="'型号kws'" prop="code">
-            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.code"></el-input>
+          <el-form-item style="margin-left: 140px":label="'型号'" prop="code">
+            <keyword-search :disabled="flag" style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'WS时间'" prop="WSTime">
@@ -26,7 +26,7 @@
         </el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px":label="'ES时间'" prop="ESTime">
+          <el-form-item style="margin-left: 140px":label="'ES时间'" prop="ESTime">
             <el-input :disabled="flag" style="width: 325px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
@@ -36,17 +36,14 @@
         </el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 150px" :label="'MP时间'" prop="MPTime">
+          <el-form-item style="margin-left: 140px" :label="'MP时间'" prop="MPTime">
             <el-input :disabled="flag" style="width: 325px" v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled="flag" v-model="dataForm.remark"  style="width:910px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+            <textarea :disabled="flag" v-model="dataForm.remark"  style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
           </el-form-item>
-
-
-
 
     </el-form>
 
@@ -59,7 +56,10 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchModel, createModel, updateModel } from '@/api/model'
+import { fetchModel, createModel, updateModel, listModel } from '@/api/model'
+import { listDept } from '@/api/dept'
+import { listModelSeries } from '@/api/modelSeries'
+
 export default {
   name: 'editModel',
   data () {
@@ -83,6 +83,9 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listModel,
+      listDept,
+      listModelSeries,
       dataRules: {
         name: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }

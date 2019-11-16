@@ -132,6 +132,7 @@
 
 <script>
 import { listModel, deleteModel } from '@/api/model'
+
 export default {
   name: 'modelList',
   data () {
