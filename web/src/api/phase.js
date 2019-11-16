@@ -45,3 +45,21 @@ export function deletePhase (id) {
     data: id
   })
 }
+// 导入
+export function phaseImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/phase/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function phaseExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/phase/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
