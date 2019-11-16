@@ -8,9 +8,6 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-<!--          <el-form-item :label="'审批状态'" prop="approveOperation">-->
-<!--            <el-input style="width: 150px" v-model="dataForm.approveOperation"></el-input>-->
-<!--          </el-form-item>-->
 
       <el-form-item :label="'审批状态'" prop="approveOperation" >
         <dict-select dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
