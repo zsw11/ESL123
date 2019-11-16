@@ -16,7 +16,6 @@
 <!--        </el-select>-->
 <!--      </el-form-item>-->
         <el-form-item :label="'审批状态'" prop="approveOperation" >
-<<<<<<< HEAD
 <!--        <el-select v-model="value" :label="'审批状态'" placeholder="请选择">-->
 <!--          <el-option-->
 <!--            v-for="item in state"-->
