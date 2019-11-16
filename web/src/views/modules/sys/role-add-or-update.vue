@@ -123,14 +123,15 @@ export default {
       isMenu: false,
       actionNode: {
         deptTree: []
-      }
+      },
+      tempKey: -666666 // 临时key, 用于解决tree半选中状态项不能传给后台接口问题. # 待优化
     }
   },
   computed: {
     realDataForm () {
       return Object.assign(
         {
-          menuIds: this.$refs.menuTree.getCheckedKeys(true),
+          menuIds: [].concat(this.$refs.menuTree.getCheckedKeys(), [this.tempKey], this.$refs.menuTree.getHalfCheckedKeys()),
           nodes: this.$refs.menuTree.getCheckedNodes(true)
         },
         this.dataForm
@@ -154,8 +155,13 @@ export default {
               this.dataForm,
               pick(page, ['name', 'remark'])
             )
-            this.$refs.menuTree.setCheckedKeys(page.menus.map(m => m.id))
-            console.log(page.menus.map(m => m.id))
+            var idx = page.menus.indexOf(this.tempKey)
+            if (idx !== -1) {
+              page.menus.splice(idx, page.menus.length - idx)
+            }
+            this.$refs.menuTree.setCheckedKeys(page.menus)
+            // this.$refs.menuTree.setCheckedKeys(page.menus.map(m => m.id))
+            // console.log(page.menus.map(m => m.id))
             this.menuTree.defaultExpandedKeys = compact(page.menus.map(m => m.parentId))
           })
         }

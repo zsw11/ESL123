@@ -183,6 +183,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		List<Long> menusList = new ArrayList<>();
 		menusList.addAll(menuIdList);
 		for (Long id : menuIdList) {
+			if(id == -666666) {
+				continue;
+			}
 			Long praentId = sysMenuService.selectById(id).getParentId();
 			if(!menusList.contains(praentId)) {
 				menusList.add(praentId);
