@@ -88,6 +88,7 @@ export default {
             if (!this.suggestions.length) return
             else if (this.activeSugguestionIndex === null) this.activeSugguestionIndex = 0
             else if (this.activeSugguestionIndex < this.suggestions.length - 1) ++this.activeSugguestionIndex
+            console.log(this.activeSugguestionIndex)
             e.preventDefault()
           }
           break
@@ -125,11 +126,11 @@ export default {
 <style lang="scss" scoped>
 .operation-input-box{
   height: 100%;
-  .suggestion{
-    &:hover,
-    &.active {
-      background-color: lightgray;
-    }
+}
+.suggestion{
+  &:hover,
+  &.active {
+    background-color: lightgray;
   }
 }
 </style>
