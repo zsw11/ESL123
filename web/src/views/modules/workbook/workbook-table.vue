@@ -1,6 +1,5 @@
 <template>
   <div class="workbook-table"
-       @keyup.enter="addRow"
        @keyup.115="copyEnd"
        @keyup.118="copy"
        @keyup.120="paste">
