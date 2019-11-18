@@ -1,6 +1,6 @@
 package io.apj.modules.masterData.dao;
 
-import io.apj.modules.masterData.entity.OpertaionEntity;
+import io.apj.modules.masterData.entity.ActionEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
@@ -12,6 +12,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @date 2019-11-07 10:39:25
  */
 @Mapper
-public interface OpertaionDao extends BaseMapper<OpertaionEntity> {
+public interface ActionDao extends BaseMapper<ActionEntity> {
 	
 }

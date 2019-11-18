@@ -1,36 +1,36 @@
 import request from '@/utils/httpRequest'
 
 // 获取关键词列表
-export function listOpertaion (query) {
+export function listAction (query) {
   return request({
-    url: request.adornUrl('/api/v1/opertaion/list'),
+    url: request.adornUrl('/api/v1/action/list'),
     method: 'get',
     params: request.adornParams(query)
   })
 }
 
 // 创建关键词
-export function createOpertaion (data) {
+export function createAction (data) {
   return request({
-    url: request.adornUrl('/api/v1/opertaion/create'),
+    url: request.adornUrl('/api/v1/action/create'),
     method: 'post',
     data
   })
 }
 
 // 获取关键词详情
-export function fetchOpertaion (id) {
+export function fetchAction (id) {
   return request({
-    url: request.adornUrl(`/api/v1/opertaion/detail/${id}`),
+    url: request.adornUrl(`/api/v1/action/detail/${id}`),
     method: 'get',
     params: request.adornParams()
   })
 }
 
 // 修改关键词
-export function updateOpertaion (id, data) {
+export function updateAction (id, data) {
   return request({
-    url: request.adornUrl('/api/v1/opertaion/update'),
+    url: request.adornUrl('/api/v1/action/update'),
     method: 'put',
     params: { id },
     data
@@ -38,9 +38,9 @@ export function updateOpertaion (id, data) {
 }
 
 // 删除关键词
-export function deleteOpertaion (id) {
+export function deleteAction (id) {
   return request({
-    url: request.adornUrl('/api/v1/opertaion/delete'),
+    url: request.adornUrl('/api/v1/action/delete'),
     method: 'post',
     data: id
   })

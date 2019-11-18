@@ -740,8 +740,8 @@ comment on column approve_opininon.update_at is '更新时间';
 comment on column approve_opininon.delete_at is '删除时间';
 
 -- 关键词
-drop table if exists opertaion;
-CREATE TABLE opertaion (
+drop table if exists action;
+CREATE TABLE action (
   id serial PRIMARY KEY,
   name varchar(64),
   create_by integer,
@@ -750,13 +750,13 @@ CREATE TABLE opertaion (
   update_at timestamp,
   delete_at timestamp
 );
-comment on table opertaion is '关键词';
-comment on column opertaion.name is '名称';
-comment on column opertaion.create_by is '创建者ID';
-comment on column opertaion.create_at is '创建时间';
-comment on column opertaion.update_by is '更新者ID';
-comment on column opertaion.update_at is '更新时间';
-comment on column opertaion.delete_at is '删除时间';
+comment on table action is '关键词';
+comment on column action.name is '名称';
+comment on column action.create_by is '创建者ID';
+comment on column action.create_at is '创建时间';
+comment on column action.update_by is '更新者ID';
+comment on column action.update_at is '更新时间';
+comment on column action.delete_at is '删除时间';
 
 -- 治工具
 drop table if exists tool;
@@ -1471,11 +1471,11 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (473, 471, '新增', NULL, 'masterData:modelseries:save', 2, NULL, 1, NULL, '2019-11-08 15:37:55.551621', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (474, 471, '修改', NULL, 'masterData:modelseries:update', 2, NULL, 1, NULL, '2019-11-08 15:37:55.562454', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (475, 471, '删除', NULL, 'masterData:modelseries:delete', 2, NULL, 1, NULL, '2019-11-08 15:37:55.570677', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (481, 307, '关键词', 'masterdata/opertaion', NULL, 1, 'config', 1, NULL, '2019-11-08 15:38:04.642688', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (482, 481, '查看', NULL, 'masterData:opertaion:list,masterData:opertaion:info', 2, NULL, 1, NULL, '2019-11-08 15:38:27.685012', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (483, 481, '新增', NULL, 'masterData:opertaion:save', 2, NULL, 1, NULL, '2019-11-08 15:38:27.698335', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (484, 481, '修改', NULL, 'masterData:opertaion:update', 2, NULL, 1, NULL, '2019-11-08 15:38:27.707977', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (485, 481, '删除', NULL, 'masterData:opertaion:delete', 2, NULL, 1, NULL, '2019-11-08 15:38:27.716807', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (481, 307, '关键词', 'masterdata/action', NULL, 1, 'config', 1, NULL, '2019-11-08 15:38:04.642688', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (482, 481, '查看', NULL, 'masterData:action:list,masterData:opertaion:info', 2, NULL, 1, NULL, '2019-11-08 15:38:27.685012', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (483, 481, '新增', NULL, 'masterData:action:save', 2, NULL, 1, NULL, '2019-11-08 15:38:27.698335', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (484, 481, '修改', NULL, 'masterData:action:update', 2, NULL, 1, NULL, '2019-11-08 15:38:27.707977', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (485, 481, '删除', NULL, 'masterData:action:delete', 2, NULL, 1, NULL, '2019-11-08 15:38:27.716807', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (486, 0, '分析表', 'workbook/workbook', NULL, 1, 'config', 1, NULL, '2019-11-11 13:22:59.903762', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (487, 486, '查看', NULL, 'workBook:workbook:list,workBook:workbook:info', 2, NULL, 1, NULL, '2019-11-11 13:23:32.709518', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (488, 486, '新增', NULL, 'workBook:workbook:save', 2, NULL, 1, NULL, '2019-11-11 13:23:41.509737', NULL, NULL, NULL);

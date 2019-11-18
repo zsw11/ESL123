@@ -86,9 +86,9 @@
 </template>
 
 <script>
-import { listOpertaion, deleteOpertaion } from '@/api/opertaion'
+import { listAction, deleteAction } from '@/api/action'
 export default {
-  name: 'opertaionList',
+  name: 'actionList',
   data () {
     return {
       dataButton: 'list',
@@ -110,7 +110,7 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       attributes: [{
-        code: 'opertaion',
+        code: 'action',
         name: ' 关键词',
         children: [
           { code: 'id', name: 'ID', type: 'string', required: true },
@@ -139,7 +139,7 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
-      listOpertaion(Object.assign(
+      listAction(Object.assign(
         {
           page: this.pageNo,
           limit: this.pageSize
@@ -193,13 +193,13 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-opertaion/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-action/${id}`, query: {noShow: true}})
       })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-opertaion/${id}` : '/add-opertaion' })
+        this.$router.push({ path: id ? `/edit-action/${id}` : '/add-action' })
       })
     },
     // 删除数据
@@ -212,7 +212,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteOpertaion(ids).then(() => {
+        deleteAction(ids).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',

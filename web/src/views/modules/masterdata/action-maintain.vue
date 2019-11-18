@@ -25,9 +25,9 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchOpertaion, createOpertaion, updateOpertaion } from '@/api/opertaion'
+import { fetchAction, createAction, updateAction } from '@/api/action'
 export default {
-  name: 'editOpertaion',
+  name: 'editAction',
   data () {
     return {
       title: null,
@@ -96,7 +96,7 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchOpertaion(this.dataForm.id).then(({data}) => {
+        fetchAction(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
             pick(data, [ 'name', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
@@ -111,7 +111,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterdata-opertaion' })
+      this.$router.push({ name: 'masterdata-action' })
       this.$destroy()
     },
     // 表单提交
@@ -119,8 +119,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
-            ? updateOpertaion(this.dataForm.id, this.dataForm)
-            : createOpertaion(this.dataForm)
+            ? updateAction(this.dataForm.id, this.dataForm)
+            : createAction(this.dataForm)
           ).then(({data}) => {
             this.$message({
               message: '操作成功',

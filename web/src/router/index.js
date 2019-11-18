@@ -113,9 +113,9 @@ const mainRoutes = {
     { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种治工具关系', isTab: true } },
 
     // 关键词
-    { path: '/add-opertaion', component: _import('modules/masterdata/opertaion-maintain'), name: 'add-operation', meta: { title: '关键词-新增', isTab: true } },
-    { path: '/edit-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'edit-operation', meta: { title: '关键词-编辑', isTab: true } },
-    { path: '/details-opertaion/:id(\\d+)', component: _import('modules/masterdata/opertaion-maintain'), name: 'details-operation', meta: { title: '关键词-详情', isTab: true } },
+    { path: '/add-action', component: _import('modules/masterdata/action-maintain'), name: 'add-operation', meta: { title: '关键词-新增', isTab: true } },
+    { path: '/edit-action/:id(\\d+)', component: _import('modules/masterdata/action-maintain'), name: 'edit-operation', meta: { title: '关键词-编辑', isTab: true } },
+    { path: '/details-action/:id(\\d+)', component: _import('modules/masterdata/action-maintain'), name: 'details-operation', meta: { title: '关键词-详情', isTab: true } },
 
     // 部品
     { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '部品-新增', isTab: true } },
