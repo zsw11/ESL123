@@ -1,0 +1,24 @@
+[
+    {
+        "table": "workstation",
+        "tableName": "工位",
+        "tableAlias": "workstation",
+        "fieldList": [
+            {
+                "code": "name",
+                "name": "工位名称",
+                "type": "string"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "string"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]
