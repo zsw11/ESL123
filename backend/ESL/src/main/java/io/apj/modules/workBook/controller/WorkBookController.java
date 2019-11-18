@@ -46,7 +46,7 @@ public class WorkBookController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/detail/{id}")
     @RequiresPermissions("workBook:workbook:info")
     public R info(@PathVariable("id") Integer id){
 		WorkBookEntity workBook = workBookService.selectById(id);
@@ -57,7 +57,7 @@ public class WorkBookController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/create")
     @RequiresPermissions("workBook:workbook:save")
     public R save(@RequestBody WorkBookEntity workBook){
 		workBookService.insert(workBook);

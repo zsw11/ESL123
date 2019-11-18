@@ -1,6 +1,6 @@
 [
     {
-        "table": "phse",
+        "table": "phase",
         "tableName": "生产阶段信息",
         "tableAlias": "phase",
         "fieldList": [
