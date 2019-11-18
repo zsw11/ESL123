@@ -6,28 +6,30 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" style="overflow: hidden">
 
-      <div style="width: 1080px">
         <el-form-item :label="'机种名称'" prop="name" >
-          <el-input v-model="listQuery.name" style="width: 130px" clearable></el-input>
+          <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
         <el-form-item class="title":label="'型号'" prop="code" >
-          <el-input v-model="listQuery.code" style="width: 130px" clearable></el-input>
+<!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
+          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title":label="'部门'" prop="deptId" >
-          <el-input v-model="listQuery.deptId"  style="width: 130px" clearable></el-input>
+<!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
+          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <el-input v-model="listQuery.modelSeriesId"  style="width: 130px" clearable></el-input>
+<!--          <el-input v-model="listQuery.modelSeriesId"   clearable></el-input>-->
+          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+
         </el-form-item>
 
 
         <el-form-item class="title" :label="'阶段'" prop="WSTime" >
-          <el-input v-model="listQuery.WSTime"  style="width: 130px" clearable></el-input>
+          <el-input style="width: 130px" v-model="listQuery.WSTime"  clearable></el-input>
         </el-form-item>
-      </div>
 
 
         <div style="float: right;margin-right: 4px;">
@@ -132,6 +134,8 @@
 
 <script>
 import { listModel, deleteModel } from '@/api/model'
+import { listDept } from '@/api/dept'
+import { listModelSeries } from '@/api/modelSeries'
 
 export default {
   name: 'modelList',
@@ -155,7 +159,9 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-
+      listDept,
+      listModelSeries,
+      listModel,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -301,6 +307,10 @@ export default {
 <style scoped lang="scss">
   .title {
     margin-left: 20px;
+  }
+  .el-input__inner {
+    padding-right:0;
+    width: 130px;
   }
   .el-form-item--small.el-form-item{
     display: inline-block;

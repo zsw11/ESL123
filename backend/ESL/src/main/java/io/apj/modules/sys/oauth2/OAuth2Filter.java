@@ -3,11 +3,14 @@ package io.apj.modules.sys.oauth2;
 import com.google.gson.Gson;
 import io.apj.common.utils.HttpContextUtils;
 import io.apj.common.utils.R;
+import io.apj.common.utils.RD;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -75,7 +78,8 @@ public class OAuth2Filter extends AuthenticatingFilter {
         try {
             //处理登录失败的异常
             Throwable throwable = e.getCause() == null ? e : e.getCause();
-            R r = R.error(HttpStatus.SC_UNAUTHORIZED, throwable.getMessage());
+            ResponseEntity<Object> r = RD.UNAUTHORIZED("401", throwable.getMessage());
+//            R r = R.error(HttpStatus.SC_UNAUTHORIZED, throwable.getMessage());
 
             String json = new Gson().toJson(r);
             httpResponse.getWriter().print(json);

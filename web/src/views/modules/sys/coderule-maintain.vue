@@ -121,7 +121,7 @@
 
 <script>
 import { pick, keyBy } from 'lodash'
-import { fetchCodeRule, createCodeRule, updateCodeRule } from '@/api/codeRule'
+import { fetchCodeRule, createCodeRule, updateCodeRule } from '@/api/coderule'
 
 let types = [
   { code: 'year', name: '年' },

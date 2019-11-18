@@ -1,7 +1,7 @@
 <template>
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
-      <div slot="header" class="clearfix">
+      <div slot="header">
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
@@ -20,7 +20,8 @@
 
 
 
-        <div style="float: right;margin-right: 4px">
+
+        <div style="float: right;">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>

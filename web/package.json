@@ -38,6 +38,7 @@
     "svg-sprite-loader": "3.7.3",
     "vue": "2.6.10",
     "vue-cookie": "1.1.4",
+    "vue-popperjs": "^2.2.0",
     "vue-router": "3.0.1",
     "vuedraggable": "^2.17.0",
     "vuex": "3.0.1",

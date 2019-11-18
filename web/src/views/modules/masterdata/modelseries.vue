@@ -11,7 +11,7 @@
           <el-input v-model="listQuery.name" style="width: 250px" clearable></el-input>
         </el-form-item>
 
-        <el-form-item style="margin-left: 100px" :label="'机种'" prop="remark" >
+        <el-form-item :label="'机种'" prop="remark" >
           <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>
         </el-form-item>
 

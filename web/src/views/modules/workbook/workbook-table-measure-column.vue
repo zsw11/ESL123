@@ -2,7 +2,7 @@
   <vxe-table-column
     :field="config.field"
     :title="config.title"
-    :edit-render="{name: 'input'}"
+    :edit-render="{name: 'default', event: { blur }}"
     :header-class-name="config.bgClassName"
     :class-name="config.bgClassName">
     <template v-slot:edit="{ row }">
@@ -32,7 +32,10 @@ export default {
         e.preventDefault()
         this.$emit('jump', row, this.config.field, e.key)
       }
-    }
+    },
+    blur () {
+      console.log('blur')
+    },
   }
 }
 </script>

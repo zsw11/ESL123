@@ -833,6 +833,7 @@ CREATE TABLE workstation (
   id serial PRIMARY KEY,
   name varchar(64),
   remark varchar(512),
+  workstation_type_id integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -842,6 +843,7 @@ CREATE TABLE workstation (
 comment on table workstation is '工位';
 comment on column workstation.name is '名称';
 comment on column workstation.remark is '备注';
+comment on column workstation.workstation_type_id is '工位類型';
 comment on column workstation.create_by is '创建者ID';
 comment on column workstation.create_at is '创建时间';
 comment on column workstation.update_by is '更新者ID';

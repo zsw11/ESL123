@@ -1,19 +1,24 @@
 <template>
   <div class="operation-input-box">
-    <el-popover
-      placement="bottom"
-      trigger="manual"
-      v-model="popoverVisible">
-      <el-scrollbar>
-        <div
-          v-for="(s, i) in suggestions"
-          :key="s.id"
-          class="suggestion"
-          :class="{ suggestion: true, active: activeSugguestionIndex === i }"
-          @click="selectSuggestion(s)">
-          {{s.name}}
-        </div>
-      </el-scrollbar>
+    <popper
+      trigger="clickToOpen"
+      ref="popper"
+      :options="{
+        placement: 'bottom'
+      }"
+      :force-show="popoverVisible">
+      <div class="popper">
+        <el-scrollbar>
+          <div
+            v-for="(s, i) in suggestions"
+            :key="s.id"
+            class="suggestion"
+            :class="{ suggestion: true, active: activeSugguestionIndex === i }"
+            @click="selectSuggestion(s)">
+            {{s.name}}
+          </div>
+        </el-scrollbar>
+      </div>
       <input
         slot="reference"
         id="operation-input"
@@ -23,13 +28,17 @@
         @keydown="keydown($event)"
         @input="$emit('input', $event.target.value)"
         class="custom-input">
-    </el-popover>
+    </popper>
   </div>
 </template>
 
 <script>
+import Popper from 'vue-popperjs';
+import 'vue-popperjs/dist/vue-popper.css'
+
 export default {
   name: 'OperationInput',
+  components: { Popper },
   data () {
     return {
       popoverVisible: false,
@@ -50,13 +59,14 @@ export default {
     endSuggest () {
       setTimeout(() => {
         this.popoverVisible = false
+        this.$refs.popper.doClose()
         this.activeSugguestionIndex = null
       }, 100)
     },
     selectSuggestion (s) {
       // 插入补品或治工具
-      console.log(111)
       this.addToSelection(s.name)
+      this.$refs.popper.doClose()
     },
     // 插入到光标位置
     addToSelection (str, moveEnd = true) {
