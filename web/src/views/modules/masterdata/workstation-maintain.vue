@@ -4,7 +4,7 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
           <el-form-item  :label="'工位名称'" prop="name">
             <el-input style="width: 325px":disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>

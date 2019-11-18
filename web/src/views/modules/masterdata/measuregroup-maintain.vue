@@ -4,13 +4,13 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item  :label="'指标组合编码'" prop="code">
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
+          <el-form-item  :label="'常用指标组合编码'" prop="code">
              <el-input :disabled=flag style="width: 100px" v-model="dataForm.code"></el-input>
           </el-form-item>
 
 
-      <el-form-item style="margin-left: 140px" :label="'所属组织机构'" prop="deptId">
+      <el-form-item style="margin-left: 300px" :label="'所属组织机构'" prop="deptId">
         <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
       </el-form-item>
           <div style="width: 700px;height: 200px;background-color: #e0e0e0;"></div>

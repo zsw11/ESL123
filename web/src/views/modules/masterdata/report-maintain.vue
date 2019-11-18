@@ -4,13 +4,12 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
           <el-form-item :label="'名称'" prop="name">
             <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
           </el-form-item>
-
-          <el-form-item   prop="formCode">
-            空Form标准编号<keyword-search :disabled=flag style="margin-left:10px;width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+          <el-form-item style="margin-left:110px" :label="'空Form标准编号'" prop="formCode">
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
@@ -51,7 +50,7 @@ export default {
         ],
         formCode: [
           { required: true, message: '请填写空Form标准编号', trigger: 'blur' },
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          // { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
