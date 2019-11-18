@@ -22,7 +22,7 @@
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
 <!--          <el-input v-model="listQuery.modelSeriesId"   clearable></el-input>-->
-          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
 
         </el-form-item>
 

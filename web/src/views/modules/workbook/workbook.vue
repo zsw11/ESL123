@@ -225,8 +225,8 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data.data.data
+      )).then(({page, total}) => {
+        this.dataList = page.data
         this.total = total
       }).catch(() => {
         this.dataList = []

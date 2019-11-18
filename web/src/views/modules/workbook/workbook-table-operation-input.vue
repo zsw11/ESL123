@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Popper from 'vue-popperjs';
+import Popper from 'vue-popperjs'
 import 'vue-popperjs/dist/vue-popper.css'
 
 export default {

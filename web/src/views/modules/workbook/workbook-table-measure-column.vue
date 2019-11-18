@@ -35,7 +35,7 @@ export default {
     },
     blur () {
       console.log('blur')
-    },
+    }
   }
 }
 </script>
