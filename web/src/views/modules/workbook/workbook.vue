@@ -4,18 +4,18 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="clearfix" style="width:1080px">
 
         <el-form-item :label="'部门'" prop="deptId" >
-          <el-select v-model="listQuery.deptId"  clearable></el-select>
+          <keyword-search class="keyword" v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'ST/LST'" prop="STLST" >
-          <el-select v-model="listQuery.STLST" clearable></el-select>
+        <el-form-item :label="'LST/ST'" prop="STLST" >
+          <dict-select dictType="Status" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId" >
-          <el-select v-model="listQuery.modelId"  clearable></el-select>
+          <keyword-search class="keyword" v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'仕向'" prop="destinations" >
@@ -23,39 +23,39 @@
         </el-form-item>
 
         <el-form-item :label="'生产阶段'" prop="phaseId" >
-          <el-select v-model="listQuery.phaseId"  clearable></el-select>
+            <keyword-search  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'工位'" prop="workstationId" >
-          <el-select v-model="listQuery.workstationId"  clearable></el-select>
+          <keyword-search class="keyword" v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'作业名'" prop="workName" >
           <el-input v-model="listQuery.workName" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'制表日期'" prop="makedAt" >
-          <el-date-picker v-model="listQuery.makedAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
+        <el-form-item :label="'制表人'" prop="makerId" >
+          <el-input v-model="listQuery.makerId"  clearable></el-input>
+        </el-form-item>
+
+        <el-form-item style="width: 300px;display: block" :label="'制表日期'" prop="makedAt" >
+          <el-date-picker v-model="listQuery.makedAt" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" clearable>
           </el-date-picker>
         </el-form-item>
 
-
-        <el-form-item :label="'制表人'" prop="makerId" >
-          <el-select v-model="listQuery.makerId"  clearable></el-select>
-        </el-form-item>
-
-        <div class='buttons with-complex'>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+      </el-form>
+      <div class="clearfix">
+        <div style="float: right;margin-right: 4px">
+          <el-button @click="getDataList(1)" type="primary" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>
-      </el-form>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">分析表</div>
         <div class="buttons">
-          <el-button  @click="addOrUpdateHandle()">新增分析表</el-button>
-
+          <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
         </div>
       </div>
       <el-table
@@ -148,6 +148,10 @@
 
 <script>
 import { listWorkBook, deleteWorkBook } from '@/api/workBook'
+import { listDept } from '@/api/dept'
+import { listPhase } from '@/api/phase'
+import { listModel } from '@/api/model'
+import { listWorkstation } from '@/api/workstation'
 export default {
   name: 'workBookList',
   data () {
@@ -176,6 +180,10 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDept,
+      listPhase,
+      listModel,
+      listWorkstation,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -292,3 +300,15 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .el-form {
+    .el-form-item {
+      margin-bottom: 18px;
+      width: 248px;
+      label {
+        display: inline-block;
+        width: 68px;
+      }
+    }
+  }
+</style>

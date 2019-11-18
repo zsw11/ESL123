@@ -198,3 +198,14 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  /*el-form ::before{*/
+  /*  el-form-item ::before {*/
+  /*    .el-form-item__label {*/
+  /*      width: 68px;*/
+  /*    }*/
+  /*  }*/
+  /*}*/
+
+</style>

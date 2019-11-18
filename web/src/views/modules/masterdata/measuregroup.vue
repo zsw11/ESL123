@@ -13,9 +13,9 @@
 
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
-          <el-input v-model="listQuery.deptId"  clearable></el-input>
+<!--          <el-input v-model="listQuery.deptId"  clearable></el-input>-->
+          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
         </el-form-item>
-
 
 
         <div style="float: right;margin-right: 4px">
@@ -163,6 +163,7 @@
 
 <script>
 import { listMeasureGroup, deleteMeasureGroup } from '@/api/measureGroup'
+import { listDept } from '@/api/dept'
 export default {
   name: 'measureGroupList',
   data () {
@@ -192,6 +193,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDept,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

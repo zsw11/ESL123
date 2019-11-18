@@ -11,7 +11,8 @@
         </el-form-item>
 
         <el-form-item :label="'报表'" prop="remark" >
-          <el-input v-model="listQuery.remark" clearable></el-input>
+<!--          <el-input v-model="listQuery.remark" clearable></el-input>-->
+          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">
@@ -85,6 +86,7 @@
 
 <script>
 import { listReportGroup, deleteReportGroup } from '@/api/reportGroup'
+import { listReport } from '@/api/report'
 export default {
   name: 'reportGroupList',
   data () {
@@ -95,7 +97,7 @@ export default {
         name: null,
         remark: null
       },
-
+      listReport,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

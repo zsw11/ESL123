@@ -19,9 +19,6 @@
             <el-input class="password" v-model="dataForm.password" type="password" placeholder="密码" size="medium"></el-input>
           </el-form-item>
           <span class="toggleLogin">本地用户登录</span>
-<!--          <el-form-item  class="identify" prop="jigsawVerify">-->
-<!--            <verify-slide @success="dataForm.jigsawVerify = true" @failure="dataForm.jigsawVerify = undefined"/>-->
-<!--          </el-form-item>-->
           <el-form-item>
             <el-button  class="login-btn-submit"  @click="dataFormSubmit()" size="large" :loading="logining">立即登录</el-button>
           </el-form-item>
@@ -31,10 +28,6 @@
           <span>MOST</span>
         </div>
       </div>
-<!--        <span>标准时间分析系统-->
-<!--          <p>MOST</p>-->
-<!--        </span>-->
-<!--      </div>-->
     </div>
   </div>
   </div>
@@ -142,7 +135,7 @@
     font-family: SimHei;
     padding-top: 20px;
     padding-left: 45px;
-    padding-right: 70px;
+    padding-right: 30px;
     width: 38%;
     height: 100%;
     background-color: #ffffff;
@@ -176,6 +169,7 @@
 
   .username > input,.password >input {
     border-radius: 0;
+    width: 250px;
     border-left: none;
     border-top: none;
     border-right: none;
@@ -183,8 +177,8 @@
 
 
   .login-btn-submit {
-    margin-top: 10%;
-    width: 70%;
+    margin-top: 7%;
+    width: 150px;
     height: 12%;
     border-radius: 90px;
     background-color: #172379;
@@ -226,6 +220,8 @@
   .toggleLogin{
     cursor: pointer;
     color: #1F297E;
+    height: 20px;
+    display: block;
   }
   .identify{
     margin-top: 10px;

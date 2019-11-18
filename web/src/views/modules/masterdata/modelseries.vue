@@ -12,7 +12,8 @@
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="remark" >
-          <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>
+<!--          <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>-->
+          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">
@@ -84,6 +85,7 @@
 
 <script>
 import { listModelSeries, deleteModelSeries } from '@/api/modelSeries'
+import { listModel } from '@/api/model'
 export default {
   name: 'modelSeriesList',
   data () {
@@ -93,7 +95,7 @@ export default {
         name: null,
         remark: null
       },
-
+      listModel,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

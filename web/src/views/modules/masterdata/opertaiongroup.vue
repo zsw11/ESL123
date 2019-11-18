@@ -4,7 +4,7 @@
       <div slot="header">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" style="min-width: 971px">
 
         <el-form-item :label="'手顺组合编码'" prop="code" >
           <el-input v-model="listQuery.code" clearable></el-input>

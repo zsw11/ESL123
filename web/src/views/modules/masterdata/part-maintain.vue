@@ -17,7 +17,7 @@
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled=flag v-model="dataForm.opininon" style="width:800px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <textarea :disabled=flag v-model="dataForm.remark" style="width:800px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
 
     </el-form>

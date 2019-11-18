@@ -28,7 +28,6 @@
 
 <script>
 import { pick } from 'lodash'
-// eslint-disable-next-line no-unused-vars
 import { fetchReport, createReport, updateReport, listReport } from '@/api/report'
 export default {
   name: 'editReport',

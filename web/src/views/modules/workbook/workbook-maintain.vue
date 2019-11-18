@@ -2,40 +2,38 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">分析表</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取   消</el-button>
-      </div>
+      <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
         <el-form-item :label="'作业名'" prop="workName">
           <el-input v-model="dataForm.workName"></el-input>
         </el-form-item>
 
-          <el-form-item :label="'部门'" prop="deptId">
-            <el-input v-model="dataForm.deptId" ></el-input>
+          <el-form-item style="margin-left: 150px;" :label="'部门'" prop="deptId">
+<!--            <el-input  v-model="dataForm.deptId" ></el-input>-->
+            <keyword-search class="keyword" v-model="dataForm.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'LST/ST'" prop="STLST">
             <el-input v-model="dataForm.STLST"></el-input>
           </el-form-item>
 
-        <el-form-item :label="'生产阶段'" prop="phaseId">
-          <el-input v-model="dataForm.phaseId" ></el-input>
+        <el-form-item  style="margin-left: 150px;" :label="'生产阶段'" prop="phaseId">
+          <keyword-search  class="keyword" v-model="dataForm.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
           <el-form-item :label="'机种'" prop="modelId">
-            <el-input v-model="dataForm.modelId" ></el-input>
+            <keyword-search  class="keyword" v-model="dataForm.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'仕向'" prop="destinations">
+          <el-form-item style="margin-left: 150px;"  :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
 
 
 
           <el-form-item :label="'工位'" prop="workstationId">
-            <el-input v-model="dataForm.workstationId" ></el-input>
+            <keyword-search  class="keyword" v-model="dataForm.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
 
@@ -108,10 +106,15 @@
 <script>
 import { pick } from 'lodash'
 import { fetchWorkBook, createWorkBook, updateWorkBook } from '@/api/workBook'
+import { listDept } from '@/api/dept'
+import { listPhase } from '@/api/phase'
+import { listModel } from '@/api/model'
+import { listWorkstation } from '@/api/workstation'
 export default {
   name: 'editWorkBook',
   data () {
     return {
+      title: null,
       inited: false,
       dataForm: {
         id: 0,
@@ -136,6 +139,10 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDept,
+      listPhase,
+      listModel,
+      listWorkstation,
       dataRules: {
         deptId: [
           { type: 'number', message: '组织机构ID需为数字值' }
@@ -216,6 +223,7 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -238,7 +246,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'workBook-workbook' })
+      this.$router.push({ name: 'workbook-workbook' })
       this.$destroy()
     },
     // 表单提交
@@ -267,9 +275,13 @@ export default {
   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
     margin-bottom: 18px;
     display: inline-block;
-    width: 300px;
+    width: 400px;
     input{
-      width: 260px;
+      width: 325px;
+    }
+    .keyword{
+      width: 300px;
     }
   }
+
 </style>

@@ -11,7 +11,7 @@
         </el-form-item>
 
 <!--        <el-form-item :label="'机种系列'" prop="" >-->
-<!--          <keyword-search></keyword-search>-->
+<!--          <keyword-search v-model="" ></keyword-search>-->
 <!--        </el-form-item>-->
 
 <!--        <el-form-item :label="'机种'" prop="" >-->

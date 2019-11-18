@@ -97,7 +97,7 @@ export default {
           { type: 'number', message: '机种系列ID需为数字值' }
         ],
         code: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          // { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }

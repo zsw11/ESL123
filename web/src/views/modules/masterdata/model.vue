@@ -1,10 +1,10 @@
 <template>
   <div class="gen-list-page">
-    <el-card class="filter-card with-title">
+    <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" style="overflow: hidden">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
 
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
@@ -30,13 +30,13 @@
         <el-form-item class="title" :label="'阶段'" prop="WSTime" >
           <el-input style="width: 130px" v-model="listQuery.WSTime"  clearable></el-input>
         </el-form-item>
-
-
-        <div style="float: right;margin-right: 4px;">
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-          <el-button @click="clearQuery()">清   空</el-button>
-        </div>
       </el-form>
+      <div class="clearfix">
+        <div style="float:right;">
+        <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+        <el-button @click="clearQuery()">清   空</el-button>
+        </div>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
@@ -127,7 +127,6 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
-
     </el-card>
   </div>
 </template>
@@ -314,5 +313,12 @@ export default {
   }
   .el-form-item--small.el-form-item{
     display: inline-block;
+  }
+.el-form-item {
+    display: inline-block;
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: 10px;
+    vertical-align: top;
   }
 </style>
