@@ -1,6 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.entity.ReportEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -23,9 +24,13 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
                 .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
                 .eq(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"))
         .eq(params.get("deptId") != null && params.get("deptId") != "", "dept_id", (String) params.get("deptId"))
-        .eq(params.get("modelSeriesId") != null && params.get("modelSeriesId") != "", "model_series_id", (String) params.get("modelSeriesId"))
-        .like(params.get("keyWord") != null && params.get("keyWord") != "", "name",(String) params.get("keyWord"));
+        .eq(params.get("modelSeriesId") != null && params.get("modelSeriesId") != "", "model_series_id", (String) params.get("modelSeriesId"));
 
+         if(StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))){
+             String name = (String) params.get("keyWord");
+             name = name.replace(",","");
+             entityWrapper.andNew("name  like '%" +name +"%'" + " or code  like '%" +name +"%'" );
+         }
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);
