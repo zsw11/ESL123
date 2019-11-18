@@ -49,7 +49,7 @@ export default {
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         formCode: [
-          { required: true, message: '请填写空Form标准编号', trigger: 'blur' },
+          { required: true, message: '请填写空Form标准编号', trigger: 'blur' }
           // { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         remark: [

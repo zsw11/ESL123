@@ -6,11 +6,11 @@
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
           <el-form-item  :label="'工位名称'" prop="name">
-            <el-input style="width: 325px":disabled=flag v-model="dataForm.name"></el-input>
+            <el-input style="width: 325px" :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 140px" :label="'工位类型'" prop="name">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.name" :allowMultiple="true" :searchApi="this.listWorkstationType"  :allowEmpty="true"></keyword-search>
+          <el-form-item style="margin-left: 140px" :label="'工位类型'" prop="workstationTypeId">
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.workstationTypeId" :allowMultiple="true" :searchApi="this.listWorkstationType"  :allowEmpty="true"></keyword-search>
           </el-form-item>
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <textarea :disabled=flag v-model="dataForm.remark"  style="width: 900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
@@ -41,11 +41,7 @@ export default {
         id: null,
         name: null,
         remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        workstationTypeId: null
       },
       listWorkstationType,
       dataRules: {
@@ -108,7 +104,7 @@ export default {
         fetchWorkstation(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'name', 'remark', 'workstationTypeId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true
