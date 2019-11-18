@@ -141,7 +141,7 @@
 
 <script>
 // import { cloneDeep } from 'lodash'
-import { listCodeRule, deleteCodeRule, importCodeRule } from '@/api/codeRule'
+import { listCodeRule, deleteCodeRule, importCodeRule } from '@/api/coderule'
 import ImportData from '@/components/import-data'
 
 export default {
