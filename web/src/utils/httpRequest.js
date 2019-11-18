@@ -33,29 +33,53 @@ http.interceptors.request.use(config => {
  * 响应拦截
  */
 http.interceptors.response.use(response => {
-  return response.data
-}, error => {
-  switch (error.response.status) {
-    case 401: {
+  switch (response.data.status) {
+    case 200: {
+      return response.data
+    }
+    case 'UNAUTHORIZED': {
       clearLoginInfo()
       router.push({ name: 'login' })
       Message({
-        message: '认证失败：' + error.response.data.message,
+        message: '认证失败：' + response.data.body.message,
         type: 'error',
         duration: 5 * 1000
       })
-      return Promise.reject(error.response)
+      return Promise.reject(response.data.body)
     }
     default: {
       Message({
-        message: '请求异常，请联系系统管理员，错误信息：' + error.response.data.message,
+        message: '请求异常，请联系系统管理员，错误信息：' + response.data.body.message,
         type: 'error',
         duration: 5 * 1000
       })
-      return Promise.reject(error.response)
+      return Promise.reject(response.data.body)
     }
   }
-})
+}
+// , error => {
+//   switch (error.response.status) {
+//     case 'UNAUTHORIZED': {
+//       clearLoginInfo()
+//       router.push({ name: 'login' })
+//       Message({
+//         message: '认证失败：' + error.response.data.message,
+//         type: 'error',
+//         duration: 5 * 1000
+//       })
+//       return Promise.reject(error.response)
+//     }
+//     default: {
+//       Message({
+//         message: '请求异常，请联系系统管理员，错误信息：' + error.response.data.message,
+//         type: 'error',
+//         duration: 5 * 1000
+//       })
+//       return Promise.reject(error.response)
+//     }
+//   }
+// }
+)
 
 /**
  * 请求地址处理
