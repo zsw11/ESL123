@@ -1,0 +1,89 @@
+[
+    {
+        "table": "measuregroup",
+        "tableName": "常用指标组合",
+        "tableAlias": "measuregroup",
+        "fieldList": [
+            {
+                "code": "code",
+                "name": "常用指标组合编码",
+                "type": "int"
+            },
+            {
+                "code": "A",
+                "name": "A",
+                "type": "int"
+            },
+            {
+                "code": "B",
+                "name": "B",
+                "type": "int"
+            },
+            {
+                "code": "G",
+                "name": "G",
+                "type": "int"
+            },
+            {
+                "code": "A",
+                "name": "A",
+                "type": "int"
+            },
+            {
+                "code": "B",
+                "name": "B",
+                "type": "int"
+            },
+            {
+                "code": "P",
+                "name": "P",
+                "type": "int"
+            },
+            {
+                "code": "M",
+                "name": "M",
+                "type": "int"
+            },
+            {
+                "code": "X",
+                "name": "X",
+                "type": "int"
+            },
+            {
+                "code": "L",
+                "name": "L",
+                "type": "int"
+            },
+            {
+                "code": "A",
+                "name": "A",
+                "type": "int"
+            },
+            {
+                "code": "B",
+                "name": "B",
+                "type": "int"
+            },
+            {
+                "code": "P",
+                "name": "P",
+                "type": "int"
+            },
+            {
+                "code": "A",
+                "name": "A",
+                "type": "int"
+            },
+            {
+                "code": "seqNumber",
+                "name": "所属组织机构",
+                "type": "string"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]

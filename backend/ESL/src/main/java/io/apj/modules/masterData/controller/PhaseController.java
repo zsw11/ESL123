@@ -137,49 +137,4 @@ public class PhaseController extends AbstractController {
         String datetime = DateUtils.format(new Date(), "YYMMddHHmm");
         ExportExcelUtils.exportExcel(response, datetime + "生产阶段.xlsx", data);
     }
-    /**
-     * 导入
-     *
-     * @param map
-     * @return
-     */
-    @Transactional(rollbackFor = Exception.class)
-    @RequestMapping("/import")
-    public RD importExcel(@RequestBody Map<String, Object> map) {
-        List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-        List<PhaseEntity> phaseEntityList = new ArrayList<>();
-        for (int i = 0; i < maps.size(); i++) {
-            PhaseEntity PhaseEntity = new PhaseEntity();
-            // deviceMap
-            Map<String, Object> deviceMap = new HashMap<>();
-            for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                String[] keyStrs = key.split("\\.");
-                // 设备
-//                if (keyStrs[0].equals("part")) {
-//                    if (keyStrs[1].equals("common")) {
-//                        if(value.equals("是")) {
-//                            deviceMap.put(keyStrs[1], true);
-//                        } else {
-//                            deviceMap.put(keyStrs[1], false);
-//                        }
-//                        continue;
-//                    }
-//                    deviceMap.put(keyStrs[1], value);
-//            }
-            }
-            DataUtils.transMap2Bean2(deviceMap, PhaseEntity);
-            ValidatorUtils.validateEntity(PhaseEntity, i);
-            PhaseEntity.setCreateBy(getUserId().intValue());
-            phaseEntityList.add(PhaseEntity);
-        }
-        try {
-            phaseService.insertBatch(phaseEntityList, Constant.importNum);
-        } catch (MybatisPlusException e) {
-            throw new RRException(e.getMessage(), 500);
-        }
-        return RD.build();
-    }
-
 }

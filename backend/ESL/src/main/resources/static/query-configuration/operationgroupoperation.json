@@ -1,0 +1,34 @@
+[
+    {
+        "table": "operationgroupoperation",
+        "tableName": "手顺",
+        "tableAlias": "operationgroupoperation",
+        "fieldList": [
+            {
+                "code": "operationGroupId",
+                "name": "手顺组合编码",
+                "type": "int"
+            },
+            {
+                "code": "operation",
+                "name": "手顺",
+                "type": "string"
+            },
+            {
+                "code": "seqNumber",
+                "name": "所属组织机构",
+                "type": "string"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "string"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]
