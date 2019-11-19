@@ -147,13 +147,7 @@
           WSTime: null,
           ESTime: null,
           AMPTime: null,
-          MPTime: null,
-          remark: null,
-          createBy: null,
-          createAt: null,
-          updateBy: null,
-          updateAt: null,
-          deleteAt: null
+          MPTime: null
         },
         listDept,
         listModelSeries,
@@ -176,15 +170,7 @@
             { code: 'WSTime', name: 'WS Date', type: 'string', required: true },
             { code: 'ESTime', name: 'ES Date', type: 'string', required: true },
             { code: 'AMPTime', name: 'AMP Date', type: 'string', required: true },
-            { code: 'MPTime', name: 'MP Date', type: 'string', required: true },
-            { code: 'remark', name: 'remark', type: 'string', required: true },
-            { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-            { code: 'createAt', name: '创建时间', type: 'string', required: true },
-            { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-            { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-            { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-            { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-            { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+            { code: 'MPTime', name: 'MP Date', type: 'string', required: true }
           ]
         }],
         complexFilters: []
@@ -265,7 +251,7 @@
       details (id) {
         // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-model/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-modelpartrela/${id}`, query: {noShow: true}})
         })
       },
       // 新增 / 修改
