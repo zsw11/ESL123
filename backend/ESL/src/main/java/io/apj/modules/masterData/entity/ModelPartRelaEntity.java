@@ -29,6 +29,14 @@ public class ModelPartRelaEntity implements Serializable {
 	 */
 	private Integer modelId;
 	/**
+	 * 机种名称
+	 */
+	private Integer name;
+	/**
+	 * 部门名称
+	 */
+	private Integer deptName;
+	/**
 	 * 部品ID
 	 */
 	private Integer partId;
