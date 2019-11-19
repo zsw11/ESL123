@@ -39,7 +39,7 @@ public class ModelPartRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:modelpartrela:list")
+//    @RequiresPermissions("masterData:modelpartrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = modelPartRelaService.queryPage(params);
         return RD.ok(page);
@@ -50,7 +50,7 @@ public class ModelPartRelaController extends AbstractController {
      * 信息
      */
     @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:modelpartrela:info")
+//    @RequiresPermissions("masterData:modelpartrela:info")
     public RD info(@PathVariable("id") Integer id){
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
 
@@ -61,7 +61,7 @@ public class ModelPartRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("masterData:modelpartrela:save")
+//    @RequiresPermissions("masterData:modelpartrela:save")
     public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
         modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
@@ -73,7 +73,7 @@ public class ModelPartRelaController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("masterData:modelpartrela:update")
+//    @RequiresPermissions("masterData:modelpartrela:update")
     public RD update(@RequestBody ModelPartRelaEntity modelPartRela){
 		modelPartRelaService.updateById(modelPartRela);
 
@@ -85,7 +85,7 @@ public class ModelPartRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("masterData:modelpartrela:delete")
+//    @RequiresPermissions("masterData:modelpartrela:delete")
     public RD delete(@RequestBody Integer[] ids){
 		modelPartRelaService.deleteBatchIds(Arrays.asList(ids));
 
