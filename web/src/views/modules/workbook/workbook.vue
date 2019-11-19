@@ -11,7 +11,7 @@
         </el-form-item>
 
         <el-form-item :label="'LST/ST'" prop="STLST" >
-          <dict-select dictType="Status" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
+          <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId" >
@@ -19,7 +19,7 @@
         </el-form-item>
 
         <el-form-item :label="'仕向'" prop="destinations" >
-          <el-select v-model="listQuery.destinations" clearable></el-select>
+           <el-select v-model="listQuery.destinations" clearable></el-select>
         </el-form-item>
 
         <el-form-item :label="'生产阶段'" prop="phaseId" >
