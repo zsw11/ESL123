@@ -147,6 +147,7 @@ const mainRoutes = {
     { path: '/add-tool', component: _import('modules/masterdata/tool-maintain'), name: 'add-tool', meta: { title: '治工具-新增', isTab: true } },
     { path: '/edit-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'edit-tool', meta: { title: '治工具-编辑', isTab: true } },
     { path: '/details-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'details-tool', meta: { title: '治工具-详情', isTab: true } },
+    { path: '/tool-model/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela'), name: 'tool-model', meta: { title: '治工具-机种', isTab: true } },
 
     // 工位
     { path: '/add-workstation', component: _import('modules/masterdata/workstation-maintain'), name: 'add-workstation', meta: { title: '工位-新增', isTab: true } },

@@ -14,11 +14,11 @@
           </el-form-item>
 
           <el-form-item :label="'机种系列'" prop="modelSeriesId">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" valueColunt="name":allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item style="margin-left: 140px" :label="'型号'" prop="code">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel" :labelColunt="'code'" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'WS时间'" prop="WSTime">

@@ -5,12 +5,12 @@
       <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
-          <el-form-item :label="'工位类型名称'" prop="name">
+          <el-form-item :label="'工位名称'" prop="name">
             <el-input style="width: 325px" :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
 
-      <el-form-item style="margin-left: 140px" :label="'工位类型'" prop="name">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.name" :allowMultiple="true" :searchApi="this.listWorkstationType"  :allowEmpty="true"></keyword-search>
+      <el-form-item style="margin-left: 140px" :label="'工位类型'" prop="createAt">
+        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.name" :allowMultiple="true" :searchApi="this.listWorkstationType" :allowEmpty="true"></keyword-search>
       </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
@@ -52,7 +52,7 @@ export default {
       listWorkstationType,
       dataRules: {
         name: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          // { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }

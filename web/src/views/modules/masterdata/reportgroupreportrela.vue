@@ -10,8 +10,8 @@
           <el-input v-model="listQuery.reportId"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'空from标准编号'" prop="reportGroupId" >
-          <el-input v-model="listQuery.reportGroupId"  clearable></el-input>
+        <el-form-item :label="'空form标准编号'" prop="formCode" >
+          <keyword-search style="width: 250px" v-model="listQuery.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">
@@ -69,8 +69,8 @@
 
       <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">详情</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
           </template>
         </el-table-column>
 
@@ -91,6 +91,7 @@
 
 <script>
 import { listReportGroupReportRela, deleteReportGroupReportRela } from '@/api/reportGroupReportRela'
+import { listReport } from '@/api/report'
 export default {
   name: 'reportGroupReportRelaList',
   data () {
@@ -108,6 +109,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listReport,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -196,6 +198,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-reportgroupreportrela/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

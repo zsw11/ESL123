@@ -77,7 +77,6 @@
 
 <script>
 import { listApproveOpininon, deleteApproveOpininon } from '@/api/approveOpininon'
-// eslint-disable-next-line no-unused-vars
 import { listDict } from '@/api/dict'
 
 export default {

@@ -9,7 +9,7 @@
             <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
           </el-form-item>
           <el-form-item style="margin-left:110px" :label="'空Form标准编号'" prop="formCode">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :labelColumn="'fromCode'" :valueColum="'fromCode'" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
