@@ -39,7 +39,7 @@ public class ModelToolRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:modeltoolrela:list")
+//    @RequiresPermissions("masterData:modeltoolrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = modelToolRelaService.queryPage(params);
         return RD.ok(page);
@@ -50,7 +50,7 @@ public class ModelToolRelaController extends AbstractController {
      * 信息
      */
     @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:modeltoolrela:info")
+//    @RequiresPermissions("masterData:modeltoolrela:info")
     public RD info(@PathVariable("id") Integer id){
 		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
 
@@ -61,7 +61,7 @@ public class ModelToolRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("masterData:modeltoolrela:save")
+//    @RequiresPermissions("masterData:modeltoolrela:save")
     public RD save(@RequestBody ModelToolRelaEntity modelToolRela){
         modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
@@ -73,7 +73,7 @@ public class ModelToolRelaController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("masterData:modeltoolrela:update")
+//    @RequiresPermissions("masterData:modeltoolrela:update")
     public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
 
@@ -85,7 +85,7 @@ public class ModelToolRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("masterData:modeltoolrela:delete")
+//    @RequiresPermissions("masterData:modeltoolrela:delete")
     public RD delete(@RequestBody Integer[] ids){
 		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
 
