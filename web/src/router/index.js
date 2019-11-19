@@ -135,7 +135,8 @@ const mainRoutes = {
     // 报表组
     { path: '/add-reportgroup', component: _import('modules/masterdata/reportgroup-maintain'), name: 'add-reportgroup', meta: { title: '报表组-新增', isTab: true } },
     { path: '/edit-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'edit-reportgroup', meta: { title: '报表组-编辑', isTab: true } },
-    { path: '/details-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'details-report', meta: { title: '报表组-详情', isTab: true } },
+    { path: '/details-reportgroup/:id(\\d+)', component: _import('modules/masterdata/reportgroup-maintain'), name: 'details-reportgroup', meta: { title: '报表组-详情', isTab: true } },
+    { path: '/reportgroup-report/:id(\\d+)', component: _import('modules/masterdata/reportgroupreportrela'), name: 'reportgroup-report', meta: { title: '报表组-报表', isTab: true } },
 
     // 报表组报表关系
     { path: '/add-reportgroupreportrela', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'add-reportgroupreportrela', meta: { title: '新增报表组报表关系', isTab: true } },
