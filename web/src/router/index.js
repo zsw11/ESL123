@@ -121,6 +121,7 @@ const mainRoutes = {
     { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '部品-新增', isTab: true } },
     { path: '/edit-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'edit-part', meta: { title: '部品-编辑', isTab: true } },
     { path: '/details-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'details-part', meta: { title: '部品-详情', isTab: true } },
+    { path: '/part-model/:id(\\d+)', component: _import('modules/masterdata/modelpartrela'), name: 'part-model', meta: { title: '部品-机种', isTab: true } },
 
     // 生产阶段
     { path: '/add-phase', component: _import('modules/masterdata/phase-maintain'), name: 'add-phase', meta: { title: '生产阶段-新增', isTab: true } },
@@ -139,7 +140,7 @@ const mainRoutes = {
     { path: '/reportgroup-report/:id(\\d+)', component: _import('modules/masterdata/reportgroupreportrela'), name: 'reportgroup-report', meta: { title: '报表组-报表', isTab: true } },
 
     // 报表组报表关系
-    { path: '/add-reportgroupreportrela', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'add-reportgroupreportrela', meta: { title: '新增报表组报表关系', isTab: true } },
+    { path: '/details-reportgroupreportrela/:id(\\d+)', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'details-reportgroupreportrela', meta: { title: '报表组报表关系详情', isTab: true } },
     { path: '/edit-reportgroupreportrela/:id(\\d+)', component: _import('modules/masterdata/reportgroupreportrela-maintain'), name: 'edit-reportgroupreportrela', meta: { title: '编辑报表组报表关系', isTab: true } },
 
     // 治工具
