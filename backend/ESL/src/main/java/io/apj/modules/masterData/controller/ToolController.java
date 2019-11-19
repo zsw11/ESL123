@@ -184,9 +184,9 @@ public class ToolController extends AbstractController {
         try {
             toolService.insertBatch(toolEntityList, Constant.importNum);
         } catch (MybatisPlusException e) {
-            throw new RRException(e.getMessage(), 500);
+            throw new RRException("批量导入失败", 500);
         }
-        return RD.build();
+        return RD.build().put("code", 0);
     }
 
 }

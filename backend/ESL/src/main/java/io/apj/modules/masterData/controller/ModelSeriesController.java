@@ -177,9 +177,9 @@ public class ModelSeriesController extends AbstractController {
         try {
             modelSeriesService.insertBatch(modelSeriesEntityList, Constant.importNum);
         } catch (MybatisPlusException e) {
-            throw new RRException(e.getMessage(), 500);
+            throw new RRException("批量导入失败", 500);
         }
-        return RD.build();
+        return RD.build().put("code", 0);
     }
 
 }
