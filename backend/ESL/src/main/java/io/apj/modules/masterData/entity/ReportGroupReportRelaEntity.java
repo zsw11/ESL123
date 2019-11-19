@@ -33,6 +33,14 @@ public class ReportGroupReportRelaEntity implements Serializable {
 	 */
 	private Integer reportId;
 	/**
+	 * 空from标准编码
+	 */
+	private String formCode;
+	/**
+	 * 备注
+	 */
+	private String remark;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

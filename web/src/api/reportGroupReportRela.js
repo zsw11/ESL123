@@ -18,12 +18,11 @@ export function createReportGroupReportRela (data) {
   })
 }
 
-// 获取报表组报表关系详情
-export function fetchReportGroupReportRela (params) {
+export function fetchReportGroupReportRela (id) {
   return request({
-    url: request.adornUrl('/api/v1/reportgroupreportrela/detail'),
+    url: request.adornUrl(`/api/v1/reportgroupreportrela/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
