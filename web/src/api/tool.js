@@ -45,3 +45,21 @@ export function deleteTool (id) {
     data: id
   })
 }
+// 导入
+export function toolImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/tool/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function toolExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/tool/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
