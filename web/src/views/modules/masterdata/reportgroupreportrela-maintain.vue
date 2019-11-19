@@ -9,7 +9,7 @@
             <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
           </el-form-item>
           <el-form-item style="margin-left:110px" :label="'空Form标准编号'" prop="formCode">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'备注'" prop="remark">
@@ -32,6 +32,8 @@ export default {
   name: 'editReportGroupReportRela',
   data () {
     return {
+      flag: false,
+      title: null,
       inited: false,
       dataForm: {
         id: 0,
@@ -90,6 +92,10 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
