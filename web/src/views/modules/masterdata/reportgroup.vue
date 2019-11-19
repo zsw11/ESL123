@@ -64,7 +64,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="">报表</el-button>
+            <el-button type="text" size="small" @click="report(scope.row.id)">报表</el-button>
             <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color:orangered;">删除</el-button>
           </template>
         </el-table-column>
@@ -173,6 +173,12 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 报表
+    report (id) {
+      this.$nextTick(() => {
+        this.$router.push({path: `/reportgroup-report/${id}`})
+      })
     },
     // 详情
     details (id) {
