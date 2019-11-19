@@ -117,8 +117,8 @@
           this.pageIndex = pageIndex
         }
         this.dataListLoading = true
-        listDept(this.listQuery).then(({data}) => {
-          this.dataList = treeDataTranslate(data, 'id', {
+        listDept(this.listQuery).then(({page}) => {
+          this.dataList = treeDataTranslate(page, 'id', {
             expandLevel: 2,
             lastData: this.dataList
           })

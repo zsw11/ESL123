@@ -80,8 +80,8 @@ public class DataFilterAspect {
 			// 如果不是超级管理员，则进行数据过滤
 			if (user == null || user.getId() != Constant.SUPER_ADMIN) {
 				Map map = (Map) params;
-				if (user == null || (user != null && map.get("userId") != null
-						&& user.getId() != (Long) map.get("userId"))) {
+				if (user == null
+						|| (user != null && map.get("userId") != null && user.getId() != (Long) map.get("userId"))) {
 					user = sysUserService.selectById((Long) map.get("userId"));
 				}
 				if (user.getId() != Constant.SUPER_ADMIN) {
@@ -163,8 +163,7 @@ public class DataFilterAspect {
 //		}
 
 		// 获取人员信息
-		MemberEntity member = memberService.selectOne(
-				new EntityWrapper<MemberEntity>().eq("id", user.getId()));
+		MemberEntity member = memberService.selectOne(new EntityWrapper<MemberEntity>().eq("id", user.getId()));
 
 		// 用户子部门ID列表
 		if (dataFilter.subDept() && member != null) {
@@ -201,7 +200,9 @@ public class DataFilterAspect {
 		}
 
 		sqlFilter.append(")");
-
+		if (sqlFilter.toString().equals(" ()")) {
+			sqlFilter = new StringBuilder();
+		}
 		return sqlFilter.toString();
 	}
 }
