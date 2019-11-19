@@ -50,7 +50,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * 信息
      */
     @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:reportgroupreportrela:info")
+//    @RequiresPermissions("masterData:reportgroupreportrela:info")
     public RD info(@PathVariable("id") Integer id){
 		ReportGroupReportRelaEntity reportGroupReportRela = reportGroupReportRelaService.selectById(id);
 
@@ -61,7 +61,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("masterData:reportgroupreportrela:save")
+//    @RequiresPermissions("masterData:reportgroupreportrela:save")
     public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);
@@ -73,7 +73,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("masterData:reportgroupreportrela:update")
+//    @RequiresPermissions("masterData:reportgroupreportrela:update")
     public RD update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
 
