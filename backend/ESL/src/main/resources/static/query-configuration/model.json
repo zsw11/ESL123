@@ -1,0 +1,54 @@
+[
+    {
+        "table": "model",
+        "tableName": "机种",
+        "tableAlias": "model",
+        "fieldList": [
+            {
+                "code": "name",
+                "name": "机种名称",
+                "type": "string"
+            },
+            {
+                "code": "code",
+                "name": "型号",
+                "type": "int"
+            },
+            {
+                "code": "deptId",
+                "name": "部门",
+                "type": "int"
+            },
+            {
+                "code": "modelSeriesId",
+                "name": "机种系列",
+                "type": "int"
+            },
+            {
+                "code": "WSTime",
+                "name": "WS时间",
+                "type": "data"
+            },
+            {
+                "code": "ESTime",
+                "name": "ES时间",
+                "type": "data"
+            },
+            {
+                "code": "AMPTime",
+                "name": "AMP时间",
+                "type": "data"
+            },
+            {
+                "code": "MPTime",
+                "name": "MP时间",
+                "type": "data"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]
