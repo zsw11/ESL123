@@ -20,7 +20,11 @@
         <div class="card-title">生产阶段信息</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button>导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
           <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -80,9 +84,18 @@
 </template>
 
 <script>
-import { listPhase, deletePhase } from '@/api/phase'
+import { listPhase, deletePhase, phaseExport } from '@/api/phase'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data's
+
+const defaultExport = ['phase.name', 'phase.continuePhaseId', 'phase.remark']
+
 export default {
   name: 'phaseList',
+  components: {
+    ExportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -106,13 +119,37 @@ export default {
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport)
     }
   },
   activated () {
     const self = this
     self.getDataList()
   },
+  computed: {
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: phaseExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'phase', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'phase', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
+  },
+
   methods: {
     // 普通查询
     getDataList (pageNo) {

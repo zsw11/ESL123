@@ -43,8 +43,14 @@
         <div class="card-title">机种</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -132,12 +138,22 @@
 </template>
 
 <script>
-import { listModel, deleteModel } from '@/api/model'
+import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
 import { listDept } from '@/api/dept'
 import { listModelSeries } from '@/api/modelSeries'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+
+const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime','model.ESTime','model.AMPTime','model.MPTime']
 
 export default {
   name: 'modelList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -190,7 +206,47 @@ export default {
           { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+    }
+  },
+    computed: {
+    importConfig () {
+      return {
+        attributes: [{
+          code: this.attributes[0].code,
+          name: this.attributes[0].name,
+          children: filterAttributes(this.attributes, {
+            attributes: this.importAttributes,
+            plain: true
+          }),
+          sampleDatas: [[ 'name', '03', '01', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime' ]]
+        }],
+        importApi: modelImport,
+        importSuccessCb: () => { this.getDataList() }
+      }
+    },
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: modelExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
     }
   },
   activated () {

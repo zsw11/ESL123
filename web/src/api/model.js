@@ -45,3 +45,21 @@ export function deleteModel (id) {
     data: id
   })
 }
+// 导入
+export function modelImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/model/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function modelExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/model/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
