@@ -87,7 +87,7 @@
 import { listPhase, deletePhase, phaseExport } from '@/api/phase'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
-import ExportData from '@/components/export-data's
+import ExportData from '@/components/export-data'
 
 const defaultExport = ['phase.name', 'phase.continuePhaseId', 'phase.remark']
 

@@ -27,7 +27,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchReportGroupReportRela, createReportGroupReportRela, updateReportGroupReportRela } from '@/api/reportGroupReportRela'
-import { fetchReport, createReport, updateReport, listReport } from '@/api/report'
+import { listReport } from '@/api/report'
 export default {
   name: 'editReportGroupReportRela',
   data () {

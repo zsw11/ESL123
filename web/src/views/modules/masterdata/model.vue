@@ -10,12 +10,12 @@
           <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item class="title":label="'型号'" prop="code" >
+        <el-form-item class="title" :label="'型号'" prop="code" >
 <!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item class="title":label="'部门'" prop="deptId" >
+        <el-form-item class="title" :label="'部门'" prop="deptId" >
 <!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
@@ -146,7 +146,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime','model.ESTime','model.AMPTime','model.MPTime']
+const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
 
 export default {
   name: 'modelList',
@@ -213,7 +213,7 @@ export default {
       importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
     }
   },
-    computed: {
+  computed: {
     importConfig () {
       return {
         attributes: [{

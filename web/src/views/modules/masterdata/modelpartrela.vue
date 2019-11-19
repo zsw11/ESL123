@@ -10,11 +10,11 @@
           <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item class="title":label="'型号'" prop="code" >
+        <el-form-item class="title" :label="'型号'" prop="code" >
           <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel" labelColunt="code" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item class="title":label="'部门'" prop="deptId" >
+        <el-form-item class="title" :label="'部门'" prop="deptId" >
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
@@ -40,8 +40,8 @@
         <div class="card-title">机种</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button>
+          <!-- <el-button @click="">导入</el-button>
+          <el-button @click="">导出</el-button> -->
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import { listModel, deleteModel } from '@/api/model'
+  import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
   import { listModelPartRela, deleteModelPartRela } from '@/api/modelPartRela'
@@ -272,7 +272,8 @@
       addOrUpdateHandle (id) {
         this.$nextTick(() => {
           console.log(id)
-          this.$router.push({ path: id ? `/edit-modelpartrela/${id}` : '/add-modelpartrela' })        })
+          this.$router.push({ path: id ? `/edit-modelpartrela/${id}` : '/add-modelpartrela' })
+        })
       },
       // 删除数据
       deleteHandle (row) {
