@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 public class OperationGroupOperationController extends AbstractController {
     @Autowired
     private OperationGroupOperationService operationGroupOperationService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
@@ -42,7 +43,7 @@ public class OperationGroupOperationController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:operationgroupoperation:list")
+//    @RequiresPermissions("masterData:operationgroupoperation:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = operationGroupOperationService.queryPage(params);
         return RD.ok(page);

@@ -39,7 +39,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:reportgroupreportrela:list")
+//    @RequiresPermissions("masterData:reportgroupreportrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = reportGroupReportRelaService.queryPage(params);
         return RD.ok(page);

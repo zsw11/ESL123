@@ -17,7 +17,7 @@
             <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
-          <el-form-item style="margin-left: 140px":label="'型号'" prop="code">
+          <el-form-item style="margin-left: 140px" :label="'型号'" prop="code">
             <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
           </el-form-item>
 
@@ -26,7 +26,7 @@
         </el-input>
           </el-form-item>
 
-          <el-form-item style="margin-left: 140px":label="'ES时间'" prop="ESTime">
+          <el-form-item style="margin-left: 140px" :label="'ES时间'" prop="ESTime">
             <el-input :disabled=flag style="width: 325px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
         </el-input>
           </el-form-item>

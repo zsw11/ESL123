@@ -19,11 +19,11 @@ export function createWorkBook (data) {
 }
 
 // 获取分析表详情
-export function fetchWorkBook (params) {
+export function fetchWorkBook (id) {
   return request({
-    url: request.adornUrl('/api/v1/workbook/detail'),
+    url: request.adornUrl(`/api/v1/workbook/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
