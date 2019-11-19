@@ -153,6 +153,7 @@ export default {
         this.listQuery
       )).then(({page}) => {
         this.dataList = page.data
+        console.log(page.data)
         this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
