@@ -14,8 +14,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="9" :offset="2">
-          <el-form-item label="编码" prop="code">
-            <el-input v-model="dataForm.code" placeholder="部门编码" style="width:300px"></el-input>
+          <el-form-item label="编码" prop="deptCode">
+            <el-input v-model="dataForm.deptCode" placeholder="部门编码" style="width:300px"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -64,8 +64,8 @@ import { listDept, fetchDept, createDept, updateDept } from '@/api/dept'
 import TreeSelect from '@/components/tree-select'
 
 const typeIds = [
-  { code: 'headquarters', name: '总部' },
-  { code: 'branch', name: '分公司' }
+  { deptCode: 'headquarters', name: '总部' },
+  { deptCode: 'branch', name: '分公司' }
 ]
 
 export default {
@@ -146,10 +146,11 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          fetchDept(this.dataForm.id).then(({data}) => {
+          fetchDept(this.dataForm.id).then(({page}) => {
+            const dept = page.dept
             Object.assign(
               this.dataForm,
-              pick(data.dept, [ 'name', 'orderNum', 'parentId', 'deptType', 'deptLevel' ])
+              pick(dept, [ 'name', 'orderNum', 'parentId', 'deptType', 'deptLevel' ])
             )
           }).finally(() => {
             this.inited = true

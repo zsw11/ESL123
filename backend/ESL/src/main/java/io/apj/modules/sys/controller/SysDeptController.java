@@ -121,8 +121,8 @@ public class SysDeptController extends AbstractController {
 	 * 保存
 	 */
 	@SysLog("保存部门")
-	@PostMapping("/save")
-	@RequiresPermissions("basic:dept:save")
+	@PostMapping("/create")
+	@RequiresPermissions("basic:dept:create")
 	public R save(@RequestBody SysDeptEntity dept) {
 		ValidatorUtils.validateEntity(dept, AddGroup.class);
 
@@ -145,7 +145,7 @@ public class SysDeptController extends AbstractController {
 
 		ValidatorUtils.validateEntity(dept, AddGroup.class);
 
-		SysDeptEntity d = sysDeptService.selectById(dept.getDeptId());
+		SysDeptEntity d = sysDeptService.selectById(dept.getId());
 		dept.setCreateAt(d.getCreateAt());
 		dept.setCreateBy(d.getCreateBy());
 		dept.setUpdateAt(new Date());

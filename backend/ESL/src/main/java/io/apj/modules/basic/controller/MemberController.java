@@ -231,7 +231,7 @@ public class MemberController extends AbstractController {
 		List<SysDeptEntity> headquartersDeptList = deptService.selectList(deptWrapper);
 		List<Long> headquartersIds = new ArrayList<Long>();
 		for (SysDeptEntity item : headquartersDeptList) {
-			headquartersIds.add(item.getDeptId());
+			headquartersIds.add(item.getId());
 		}
 		EntityWrapper<MemberEntity> memberWrapper = new EntityWrapper<>();
 		if (isHQ) {
@@ -357,7 +357,7 @@ public class MemberController extends AbstractController {
 					if (sysDeptEntity == null) {
 						return R.error(500, "第" + (i + 1) + "行，所属组织集团不存在！");
 					}
-					memberEntity.setDeptId(sysDeptEntity.getDeptId());
+					memberEntity.setDeptId(sysDeptEntity.getId());
 				}
 				// 工作岗位
 				if (keyStrs[0].equals("job")) {
