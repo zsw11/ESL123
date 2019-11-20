@@ -56,10 +56,10 @@
 
 <script>
 import { pick } from 'lodash'
-import { listModel } from '@/api/model'
 import { listDept } from '@/api/dept'
 import { listModelSeries } from '@/api/modelSeries'
-import { fetchModelToolRela, createModelToolRela, updateModelToolRela } from '@/api/modelToolRela'
+import { listModel, fetchModel, createModel, updateModel } from '@/api/model'
+
 export default {
   name: 'editModelToolRela',
   data () {
@@ -136,7 +136,7 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchModelToolRela(this.dataForm.id).then(({data}) => {
+        fetchModel(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
             pick(data, [ 'modelId', 'toolId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
@@ -159,8 +159,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
-            ? updateModelToolRela(this.dataForm.id, this.dataForm)
-            : createModelToolRela(this.dataForm)
+            ? updateModel(this.dataForm.id, this.dataForm)
+            : createModel(this.dataForm)
           ).then(({data}) => {
             this.$message({
               message: '操作成功',

@@ -56,10 +56,9 @@
 
 <script>
   import { pick } from 'lodash'
-  import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { fetchModelPartRela, createModelPartRela, updateModelPartRela } from '@/api/modelPartRela'
+  import { listModel, fetchModel, createModel, updateModel } from '@/api/model'
   export default {
     name: 'editModel',
     data () {
@@ -147,7 +146,7 @@
         this.inited = false
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
-          fetchModelPartRela(this.dataForm.id).then(({data}) => {
+          fetchModel(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
               pick(data, [ 'modelId', 'partId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
@@ -171,8 +170,8 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             (this.dataForm.id
-                ? updateModelPartRela(this.dataForm.id, this.dataForm)
-                : createModelPartRela(this.dataForm)
+                ? updateModel(this.dataForm.id, this.dataForm)
+                : createModel(this.dataForm)
             ).then(({data}) => {
               this.$message({
                 message: '操作成功',
