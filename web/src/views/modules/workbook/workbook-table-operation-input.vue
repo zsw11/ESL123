@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Popper from 'vue-popperjs'
-import 'vue-popperjs/dist/vue-popper.css'
+import Popper from '@/../static/plugins/vue-popperjs/vue-popper.js'
+import '@/../static/plugins/vue-popperjs/vue-popper.min.css'
 
 export default {
   name: 'OperationInput',
@@ -66,7 +66,9 @@ export default {
     selectSuggestion (s) {
       // 插入补品或治工具
       this.addToSelection(s.name)
-      this.$refs.popper.doClose()
+      this.$emit('input', this.$refs.operation.value)
+      this.$emit('select', s)
+      this.endSuggest()
     },
     // 插入到光标位置
     addToSelection (str, moveEnd = true) {
@@ -117,10 +119,7 @@ export default {
           if (this.popoverVisible && this.activeSugguestionIndex !== null) {
             e.preventDefault()
             e.stopPropagation()
-            this.addToSelection(this.suggestions[this.activeSugguestionIndex].name)
-            this.$emit('input', this.$refs.operation.value)
-            this.$emit('select', this.suggestions[this.activeSugguestionIndex])
-            this.endSuggest()
+            this.selectSuggestion(this.suggestions[this.activeSugguestionIndex])
           }
           break
         }
@@ -138,6 +137,10 @@ export default {
   height: 100%;
 }
 .suggestion{
+  min-width: 100px;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
   &:hover,
   &.active {
     background-color: lightgray;
