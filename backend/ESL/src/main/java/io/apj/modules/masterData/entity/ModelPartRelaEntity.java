@@ -29,45 +29,9 @@ public class ModelPartRelaEntity implements Serializable {
 	 */
 	private Integer modelId;
 	/**
-	 * 机种名称
-	 */
-	private Integer name;
-	/**
-	 * 部门名称
-	 */
-	private Integer deptName;
-	/**
 	 * 部品ID
 	 */
 	private Integer partId;
-	/**
-	 * 机种系列
-	 */
-	private Integer modelSeriesId;
-	/**
-	 * 型号
-	 */
-	private String code;
-	/**
-	 * WS时间
-	 */
-	private Date wsTime;
-	/**
-	 * ES时间
-	 */
-	private Date esTime;
-	/**
-	 * AMP时间
-	 */
-	private Date ampTime;
-	/**
-	 * MP时间
-	 */
-	private Date mpTime;
-	/**
-	 * 备注
-	 */
-	private String remark;
 	/**
 	 * 创建者ID
 	 */
