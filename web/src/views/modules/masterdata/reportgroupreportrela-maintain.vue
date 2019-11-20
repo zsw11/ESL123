@@ -2,43 +2,19 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">报表组报表关系</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取   消</el-button>
-      </div>
+      <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-          <el-form-item :label="'报表组ID'" prop="reportGroupId">
-            <el-input-number v-model="dataForm.reportGroupId" ></el-input-number>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
+          <el-form-item :label="'名称'" prop="name">
+            <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
+          </el-form-item>
+          <el-form-item style="margin-left:110px" :label="'空Form标准编号'" prop="formCode">
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'报表ID'" prop="reportId">
-            <el-input-number v-model="dataForm.reportId" ></el-input-number>
+          <el-form-item :label="'备注'" prop="remark">
+            <textarea :disabled=flag v-model="dataForm.remark" style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
           </el-form-item>
-
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
 
     </el-form>
 
@@ -48,14 +24,16 @@
     </span>
   </el-card>
 </template>
-
 <script>
 import { pick } from 'lodash'
 import { fetchReportGroupReportRela, createReportGroupReportRela, updateReportGroupReportRela } from '@/api/reportGroupReportRela'
+import { listReport } from '@/api/report'
 export default {
   name: 'editReportGroupReportRela',
   data () {
     return {
+      flag: false,
+      title: null,
       inited: false,
       dataForm: {
         id: 0,
@@ -67,6 +45,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listReport,
       dataRules: {
         reportGroupId: [
           { type: 'number', message: '报表组ID需为数字值' }
@@ -113,6 +92,10 @@ export default {
   },
   methods: {
     init () {
+      this.title = this.$route.meta.title
+      if (this.$route.query.noShow) {
+        this.flag = true
+      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -135,7 +118,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterData-reportgroupreportrela' })
+      this.$router.push({ name: 'reportgroup-report' })
       this.$destroy()
     },
     // 表单提交
@@ -159,3 +142,11 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .input{
+    width: 325px;
+  }
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    display: inline-block;
+  }
+</style>

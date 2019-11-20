@@ -10,7 +10,7 @@
           </el-form-item>
 
           <el-form-item style="margin-left: 140px" :label="'沿用阶段'" prop="continuePhaseId">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">

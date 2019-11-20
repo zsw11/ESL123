@@ -19,11 +19,11 @@ export function createOperationGroupOperation (data) {
 }
 
 // 获取手顺详情
-export function fetchOperationGroupOperation (params) {
+export function fetchOperationGroupOperation (id) {
   return request({
-    url: request.adornUrl('/api/v1/operationgroupoperation/detail'),
+    url: request.adornUrl(`/api/v1/operationgroupoperation/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
@@ -43,5 +43,15 @@ export function deleteOperationGroupOperation (id) {
     url: request.adornUrl('/api/v1/operationgroupoperation/delete'),
     method: 'post',
     data: id
+  })
+}
+
+// 导出
+export function operationGroupOperationExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/operationgroupoperation/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
   })
 }

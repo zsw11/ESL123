@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件查询</div>
+        <div class="card-title">{{title}}{{titleEnd}}</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
 
@@ -10,12 +10,12 @@
           <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item class="title":label="'型号'" prop="code" >
+        <el-form-item class="title" :label="'型号'" prop="code" >
 <!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item class="title":label="'部门'" prop="deptId" >
+        <el-form-item class="title" :label="'部门'" prop="deptId" >
 <!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
@@ -43,8 +43,14 @@
         <div class="card-title">机种</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -132,17 +138,34 @@
 </template>
 
 <script>
-import { listModel, deleteModel } from '@/api/model'
+import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
 import { listDept } from '@/api/dept'
 import { listModelSeries } from '@/api/modelSeries'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+// import { fetchPart } from '@/api/part'
+// import { fetchTool } from '@/api/tool'
+
+const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
 
 export default {
   name: 'modelList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
+      title: '条件查询',
+      titleEnd: null,
+      partId: null,
+      toolId: null,
+      modelSeriesId: null,
       dataButton: 'list',
       listQuery: {
-        id: null,
+        id: 0,
         name: null,
         deptId: null,
         modelSeriesId: null,
@@ -150,13 +173,7 @@ export default {
         WSTime: null,
         ESTime: null,
         AMPTime: null,
-        MPTime: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        MPTime: null
       },
       listDept,
       listModelSeries,
@@ -190,14 +207,72 @@ export default {
           { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+    }
+  },
+  computed: {
+    importConfig () {
+      return {
+        attributes: [{
+          code: this.attributes[0].code,
+          name: this.attributes[0].name,
+          children: filterAttributes(this.attributes, {
+            attributes: this.importAttributes,
+            plain: true
+          }),
+          sampleDatas: [[ 'name', '03', '01', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime' ]]
+        }],
+        importApi: modelImport,
+        importSuccessCb: () => { this.getDataList() }
+      }
+    },
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: modelExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
     }
   },
   activated () {
     const self = this
+    // self.init()
     self.getDataList()
   },
+  created () {
+  },
   methods: {
+    // 初始化
+    // init () {
+    //   if (this.$route.query.name) {
+    //     this.title = this.$route.query.name
+    //     this.titleEnd = '-机种'
+    //   }
+    //   if (this.$route.query.type === 'part') {
+    //     this.partId = this.$route.query.id
+    //   } else if (this.$route.query.type === 'tool') {
+    //     this.toolId = this.$route.query.id
+    //   } else if (this.$route.query.type === 'modelSeries') {
+    //     this.modelSeriesId = this.$route.query.id
+    //   }
+    //   console.log(this.$route.query)
+    // },
     // 普通查询
     getDataList (pageNo) {
       if (pageNo) {
@@ -205,22 +280,75 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
+      // if (this.partId) {
+      //   fetchPart(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.partId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else if (this.toolId) {
+      //   fetchTool(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.toolId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else if (this.modelSeriesId) {
+      //   fetchModelSeries(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.modelSeriesId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else {
       listModel(Object.assign(
         {
           page: this.pageNo,
           limit: this.pageSize
         },
-        this.listQuery
-      )).then(({page}) => {
-        this.dataList = page.data
-        this.total = page.totalCount
-        // console.log(this.dataList)
-      }).catch(() => {
-        this.dataList = []
-        this.total = 0
-      }).finally(() => {
-        this.dataListLoading = false
-      })
+          this.listQuery
+        )).then(({page}) => {
+          this.dataList = page.data
+          this.total = page.totalCount
+          // console.log(this.dataList)
+        }).catch(() => {
+          this.dataList = []
+          this.total = 0
+        }).finally(() => {
+          this.dataListLoading = false
+        })
+      // }
     },
     // 清除查询条件
     clearQuery () {

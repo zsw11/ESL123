@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.Constant;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
 import io.apj.common.validator.ValidatorUtils;
@@ -47,8 +48,10 @@ public class SysDeptController extends AbstractController {
 	@RequiresPermissions("basic:dept:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		List<SysDeptEntity> deptList = sysDeptService.queryListByName(params);
-
-		return RD.listReturn(deptList, deptList.size());
+		HashMap<Object, Object> page = new HashMap<>();
+		page.put("data", deptList);
+		page.put("totalPage", deptList.size());
+		return RD.ok(page);
 	}
 
 	/**
@@ -118,8 +121,8 @@ public class SysDeptController extends AbstractController {
 	 * 保存
 	 */
 	@SysLog("保存部门")
-	@PostMapping("/save")
-	@RequiresPermissions("basic:dept:save")
+	@PostMapping("/create")
+	@RequiresPermissions("basic:dept:create")
 	public R save(@RequestBody SysDeptEntity dept) {
 		ValidatorUtils.validateEntity(dept, AddGroup.class);
 
@@ -142,7 +145,7 @@ public class SysDeptController extends AbstractController {
 
 		ValidatorUtils.validateEntity(dept, AddGroup.class);
 
-		SysDeptEntity d = sysDeptService.selectById(dept.getDeptId());
+		SysDeptEntity d = sysDeptService.selectById(dept.getId());
 		dept.setCreateAt(d.getCreateAt());
 		dept.setCreateBy(d.getCreateBy());
 		dept.setUpdateAt(new Date());

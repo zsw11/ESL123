@@ -45,3 +45,13 @@ export function deleteAction (id) {
     data: id
   })
 }
+
+// 导出
+export function ActionExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/action/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}

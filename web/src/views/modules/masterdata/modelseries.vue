@@ -13,7 +13,7 @@
 
         <el-form-item :label="'机种'" prop="remark" >
 <!--          <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>-->
-          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+          <keyword-search style="width: 250px" v-model="listQuery.name" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">
@@ -27,8 +27,14 @@
         <div class="card-title">机种系列信息</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导 出
+          </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -44,8 +50,6 @@
           align="left"
           width="50">
         </el-table-column>
-
-
 
         <el-table-column align="center" prop="name" label="机种系列名称" >
           <template slot-scope="scope">
@@ -84,10 +88,19 @@
 </template>
 
 <script>
-import { listModelSeries, deleteModelSeries } from '@/api/modelSeries'
+import { listModelSeries, deleteModelSeries, modelSeriesImport, modelSeriesExport } from '@/api/modelSeries'
 import { listModel } from '@/api/model'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+const defaultExport = ['modelSeries.name', 'modelSeries.remark']
 export default {
   name: 'modelSeriesList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -110,12 +123,52 @@ export default {
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: [ 'modelSeries.name', 'modelSeries.remark' ]
     }
   },
   activated () {
     const self = this
     self.getDataList()
+  },
+  computed: {
+    importConfig () {
+      return {
+        attributes: [{
+          code: this.attributes[0].code,
+          name: this.attributes[0].name,
+          children: filterAttributes(this.attributes, {
+            attributes: this.importAttributes,
+            plain: true
+          }),
+          sampleDatas: [[ '机种系列名', '测试用' ]]
+        }],
+        importApi: modelSeriesImport,
+        importSuccessCb: () => { this.getDataList() }
+      }
+    },
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: modelSeriesExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'modelseries', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'modelseries', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
   },
   methods: {
     // 普通查询

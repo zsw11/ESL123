@@ -21,8 +21,14 @@
         <div class="card-title">治工具信息</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button >导入</el-button>
-          <el-button >导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -61,7 +67,7 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  type="text" size="small" @click="">机种</el-button>
+            <el-button  type="text" size="small" @click="toolModel(scope.row.id,scope.row.name)">机种</el-button>
             <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
@@ -82,9 +88,20 @@
 </template>
 
 <script>
-import { listTool, deleteTool } from '@/api/tool'
+import { listTool, deleteTool, toolImport, toolExport } from '@/api/tool'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+
+const defaultExport = ['tool.name', 'tool.common', 'tool.remark']
+
 export default {
   name: 'toolList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -109,12 +126,52 @@ export default {
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: [ 'tool.name', 'tool.common', 'tool.remark' ]
     }
   },
   activated () {
     const self = this
     self.getDataList()
+  },
+  computed: {
+    importConfig () {
+      return {
+        attributes: [{
+          code: this.attributes[0].code,
+          name: this.attributes[0].name,
+          children: filterAttributes(this.attributes, {
+            attributes: this.importAttributes,
+            plain: true
+          }),
+          sampleDatas: [[ '治工具', '是', '测试用' ]]
+        }],
+        importApi: toolImport,
+        importSuccessCb: () => { this.getDataList() }
+      }
+    },
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: toolExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'tool', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'tool', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
   },
   methods: {
     // 普通查询
@@ -170,6 +227,12 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 治工具机种关系
+    toolModel (id, name) {
+      this.$nextTick(() => {
+        this.$router.push({path: `/tool-model/${id}/${name}`})
+      })
     },
     // 详情
     details (id) {

@@ -19,11 +19,11 @@ export function createModelPartRela (data) {
 }
 
 // 获取机种部品关系详情
-export function fetchModelPartRela (params) {
+export function fetchModelPartRela (id) {
   return request({
-    url: request.adornUrl('/api/v1/modelpartrela/detail'),
+    url: request.adornUrl(`/api/v1/modelpartrela/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

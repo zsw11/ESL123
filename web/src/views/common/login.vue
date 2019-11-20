@@ -1,8 +1,8 @@
 <template>
   <div>
   <div class="site-wrapper site-page--login">
-    <div class="leftb"></div>
-    <div class="right"></div>
+    <div class="leftB"></div>
+    <div class="rightT"></div>
       <div class="main-wrapper">
         <div class="main">
       <div class="login-main">
@@ -45,8 +45,8 @@
       return {
         logining: false,
         dataForm: {
-          username: 'admin',
-          password: 'admin',
+          username: 'xc',
+          password: '123123',
           uuid: '',
           jigsawVerify: undefined
         },
@@ -109,7 +109,7 @@
     border-radius: 30px;
   }
 
-  .leftb{
+  .leftB{
     position: absolute;
     width: 23%;
     height: 58%;
@@ -118,7 +118,7 @@
     background-image: url("../../../static/img/rtop.png");
     background-size: 100% 100%;
   }
-  .right{
+  .rightT{
     position: absolute;
     width: 23%;
     height: 56.6%;

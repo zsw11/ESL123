@@ -3,6 +3,7 @@ package io.apj.modules.basic.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.apj.common.validator.group.AddGroup;
 import io.apj.common.validator.group.UpdateGroup;
@@ -22,8 +23,8 @@ import javax.validation.constraints.NotNull;
  *
  * @date 2018-12-10 17:12:16
  */
-@TableName("basic_member")
-public class MemberEntity implements Serializable {
+@TableName("basic_staff")
+public class StaffEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -34,7 +35,7 @@ public class MemberEntity implements Serializable {
 	/**
 	 * 工作岗位
 	 */
-	@NotNull(message = "工作岗位不能为空")
+//	@NotNull(message = "工作岗位不能为空")
 	private Long jobId;
 
 	@TableField(exist = false)
@@ -48,6 +49,10 @@ public class MemberEntity implements Serializable {
 	 * 用户id
 	 */
 	private Long userId;
+	/**
+	 * 工号
+	 */
+	private String jobNumber;
 	/**
 	 * 部门
 	 */
@@ -79,7 +84,6 @@ public class MemberEntity implements Serializable {
 	/**
 	 * 在职状态
 	 */
-	@NotEmpty(message = "在职状态不能为空")
 	private String status;
 	/**
 	 * 备注
@@ -88,7 +92,7 @@ public class MemberEntity implements Serializable {
 	/**
 	 * 入职日期
 	 */
-	@NotNull(message = "入职日期不能为空")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date employmentDate;
 	/**
 	 * 邮箱
@@ -401,5 +405,13 @@ public class MemberEntity implements Serializable {
 
 	public void setDept(SysDeptEntity dept) {
 		this.dept = dept;
+	}
+
+	public String getJobNumber() {
+		return jobNumber;
+	}
+
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
 	}
 }

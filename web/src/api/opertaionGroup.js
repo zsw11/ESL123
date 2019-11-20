@@ -19,11 +19,11 @@ export function createOpertaionGroup (data) {
 }
 
 // 获取手顺组合详情
-export function fetchOpertaionGroup (params) {
+export function fetchOpertaionGroup (id) {
   return request({
-    url: request.adornUrl('/api/v1/opertaiongroup/detail'),
+    url: request.adornUrl(`/api/v1/opertaiongroup/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
@@ -43,5 +43,15 @@ export function deleteOpertaionGroup (id) {
     url: request.adornUrl('/api/v1/opertaiongroup/delete'),
     method: 'post',
     data: id
+  })
+}
+
+// 导出
+export function OpertaionGroupExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/opertaiongroup/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
   })
 }

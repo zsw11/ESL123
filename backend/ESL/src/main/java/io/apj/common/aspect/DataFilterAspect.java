@@ -36,8 +36,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.annotation.DataFilter;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.Constant;
-import io.apj.modules.basic.entity.MemberEntity;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.entity.StaffEntity;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.entity.SysUserDataFilterEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
@@ -64,7 +64,7 @@ public class DataFilterAspect {
 //	private SysRoleDeptService sysRoleDeptService;
 
 	@Autowired
-	private MemberService memberService;
+	private StaffService staffService;
 
 	@Pointcut("@annotation(io.apj.common.annotation.DataFilter)")
 	public void dataFilterCut() {
@@ -80,8 +80,8 @@ public class DataFilterAspect {
 			// 如果不是超级管理员，则进行数据过滤
 			if (user == null || user.getId() != Constant.SUPER_ADMIN) {
 				Map map = (Map) params;
-				if (user == null || (user != null && map.get("userId") != null
-						&& user.getId() != (Long) map.get("userId"))) {
+				if (user == null
+						|| (user != null && map.get("userId") != null && user.getId() != (Long) map.get("userId"))) {
 					user = sysUserService.selectById((Long) map.get("userId"));
 				}
 				if (user.getId() != Constant.SUPER_ADMIN) {
@@ -163,21 +163,20 @@ public class DataFilterAspect {
 //		}
 
 		// 获取人员信息
-		MemberEntity member = memberService.selectOne(
-				new EntityWrapper<MemberEntity>().eq("id", user.getId()));
+		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("id", user.getId()));
 
 		// 用户子部门ID列表
-		if (dataFilter.subDept() && member != null) {
+		if (dataFilter.subDept() && staff != null) {
 
-			SysDeptEntity dept = sysDeptService.selectById(member.getDeptId());
+			SysDeptEntity dept = sysDeptService.selectById(staff.getDeptId());
 
 			if (dept != null && "headquarters".equals(dept.getDeptType())) { // 总部查询所有
 				List<Long> subDeptIdList = sysDeptService.getSubDeptIdList((long) 1);
 				subDeptIdList.add((long) 1);
 				deptIdList.addAll(subDeptIdList);
 			} else {
-				deptIdList.add(member.getDeptId());
-				List<Long> subDeptIdList = sysDeptService.getSubDeptIdList(member.getDeptId());
+				deptIdList.add(staff.getDeptId());
+				List<Long> subDeptIdList = sysDeptService.getSubDeptIdList(staff.getDeptId());
 				deptIdList.addAll(subDeptIdList);
 			}
 		}
@@ -201,7 +200,9 @@ public class DataFilterAspect {
 		}
 
 		sqlFilter.append(")");
-
+		if (sqlFilter.toString().equals(" ()")) {
+			sqlFilter = new StringBuilder();
+		}
 		return sqlFilter.toString();
 	}
 }

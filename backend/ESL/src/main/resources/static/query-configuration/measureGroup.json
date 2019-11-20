@@ -1,8 +1,8 @@
 [
     {
-        "table": "measuregroup",
+        "table": "measureGroup",
         "tableName": "常用指标组合",
-        "tableAlias": "measuregroup",
+        "tableAlias": "measureGroup",
         "fieldList": [
             {
                 "code": "code",

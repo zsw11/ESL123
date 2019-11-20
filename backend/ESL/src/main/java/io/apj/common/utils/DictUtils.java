@@ -37,8 +37,8 @@ public class DictUtils {
         }
 
         //过滤人员信息表
-        if (tName.equals("MemberEntity")) {
-            return memberFilter(name, dictCode, dictMap);
+        if (tName.equals("StaffEntity")) {
+            return staffFilter(name, dictCode, dictMap);
         }
 
         //过滤物料信息表
@@ -139,7 +139,7 @@ public class DictUtils {
 
 
     //过滤人员信息表
-    private String memberFilter(String name, String dictCode, HashMap<String, String> dictMap) {
+    private String staffFilter(String name, String dictCode, HashMap<String, String> dictMap) {
         //性别
         if (name.equals("gender")) {
             return getDictData("Gender", dictCode, dictMap);

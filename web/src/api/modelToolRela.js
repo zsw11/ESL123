@@ -19,11 +19,11 @@ export function createModelToolRela (data) {
 }
 
 // 获取机种治工具关系详情
-export function fetchModelToolRela (params) {
+export function fetchModelToolRela (id) {
   return request({
-    url: request.adornUrl('/api/v1/modeltoolrela/detail'),
+    url: request.adornUrl(`/api/v1/modeltoolrela/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

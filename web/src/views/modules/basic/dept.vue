@@ -22,7 +22,7 @@
         :data="dataList"
         style="width: 100%;">
         <el-table-column
-          prop="code"
+          prop="deptCode"
           header-align="center"
           align="center"
           width="80"
@@ -78,8 +78,8 @@
           width="150"
           label="操作">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('basic:dept:update') && scope.row.parentId" type="text" size="small" @click="addOrUpdateHandle(scope.row.deptId)">修改</el-button>
-            <el-button v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.deptId)">删除</el-button>
+            <el-button v-if="isAuth('basic:dept:update') && scope.row.parentId" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+            <el-button v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -117,8 +117,8 @@
           this.pageIndex = pageIndex
         }
         this.dataListLoading = true
-        listDept(this.listQuery).then(({data}) => {
-          this.dataList = treeDataTranslate(data, 'id', {
+        listDept(this.listQuery).then(({page}) => {
+          this.dataList = treeDataTranslate(page.data, 'id', {
             expandLevel: 2,
             lastData: this.dataList
           })

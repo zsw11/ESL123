@@ -53,7 +53,6 @@ export default {
       listQuery: {
         name: null
       },
-
       dataList: [],
       pageNo: 1,
       pageSize: 10,

@@ -100,11 +100,11 @@ public class SysDeptEntity implements Serializable {
 		this.perms = perms;
 	}
 
-	public void setDeptId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Long getDeptId() {
+	public Long getId() {
 		return id;
 	}
 

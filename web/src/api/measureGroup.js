@@ -45,3 +45,13 @@ export function deleteMeasureGroup (id) {
     data: id
   })
 }
+
+// 导出
+export function MeasureGroupExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/measuregroup/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}

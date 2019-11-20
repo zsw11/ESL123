@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 public class OperationGroupOperationController extends AbstractController {
     @Autowired
     private OperationGroupOperationService operationGroupOperationService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
@@ -42,7 +43,7 @@ public class OperationGroupOperationController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:operationgroupoperation:list")
+//    @RequiresPermissions("masterData:operationgroupoperation:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = operationGroupOperationService.queryPage(params);
         return RD.ok(page);
@@ -121,11 +122,11 @@ public class OperationGroupOperationController extends AbstractController {
         HashMap<String, String> dict = sysDictService.getDictDetail();
         for (OperationGroupOperationEntity item : operationGroupOperationEntityList) {
             // 处理数据源
-            Map<String, Object> arr = DataUtils.dataChange("operationgroupoperation", item, dict);
+            Map<String, Object> arr = DataUtils.dataChange("operationGroupOperation", item, dict);
             dataList.add(arr);
         }
         // 返回excel格式数据
-        Map<String, Object> param = DataUtils.rtlExcelData(list, "operationgroupoperation", dataList);
+        Map<String, Object> param = DataUtils.rtlExcelData(list, "operationGroupOperation", dataList);
         ExcelData data = new ExcelData();
         data.setTitles((List<String>) param.get("titles"));
         data.setRows((List<List<Object>>) param.get("rows"));

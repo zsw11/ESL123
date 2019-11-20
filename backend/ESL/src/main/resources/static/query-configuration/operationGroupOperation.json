@@ -1,8 +1,8 @@
 [
     {
-        "table": "operationgroupoperation",
+        "table": "operationGroupOperation",
         "tableName": "手顺",
-        "tableAlias": "operationgroupoperation",
+        "tableAlias": "operationGroupOperation",
         "fieldList": [
             {
                 "code": "operationGroupId",

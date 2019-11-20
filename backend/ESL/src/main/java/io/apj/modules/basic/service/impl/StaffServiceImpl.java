@@ -21,17 +21,17 @@ import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 
-import io.apj.modules.basic.dao.MemberDao;
+import io.apj.modules.basic.dao.StaffDao;
 import io.apj.modules.basic.entity.JobEntity;
-import io.apj.modules.basic.entity.MemberEntity;
+import io.apj.modules.basic.entity.StaffEntity;
 import io.apj.modules.basic.service.JobService;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.sys.service.SysUserService;
 
-@Service("memberService")
-public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> implements MemberService {
+@Service("staffService")
+public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> implements StaffService {
 
 	@Autowired
 	private SysDeptService sysDeptService;
@@ -46,7 +46,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params) {
 
-		Wrapper<MemberEntity> entityWrapper = new EntityWrapper<MemberEntity>()
+		Wrapper<StaffEntity> entityWrapper = new EntityWrapper<StaffEntity>()
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("code")), "code", (String) params.get("code"))
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("gender")), "gender", params.get("gender"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("mobilephone")), "mobilephone",
@@ -79,10 +79,10 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
 		}
 		entityWrapper.orderBy("create_at", false);
-		Page<MemberEntity> page = this.selectPage(new Query<MemberEntity>(params).getPage(), entityWrapper);
+		Page<StaffEntity> page = this.selectPage(new Query<StaffEntity>(params).getPage(), entityWrapper);
 
-		for (MemberEntity entity : page.getRecords()) {
-			entity.setPerms(sysUserService.getDeptAllPerms(entity.getDeptId(), "basic:member:"));
+		for (StaffEntity entity : page.getRecords()) {
+			entity.setPerms(sysUserService.getDeptAllPerms(entity.getDeptId(), "basic:staff:"));
 			SysDeptEntity dept = sysDeptService.selectById(entity.getDeptId());
 			entity.setDept(dept);
 			JobEntity job = jobService.selectById(entity.getJobId());
@@ -94,26 +94,26 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 	}
 
 	@Override
-	public void save(MemberEntity member) {
-		this.insert(member);
+	public void save(StaffEntity staff) {
+		this.insert(staff);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void update(MemberEntity member) {
-		MemberEntity entity = this.selectById(member.getId());
-		member.setCreateAt(entity.getCreateAt());
-		member.setCreateBy(entity.getCreateBy());
-		member.setDeleteAt(entity.getDeleteAt());
-		this.updateAllColumnById(member);
+	public void update(StaffEntity staff) {
+		StaffEntity entity = this.selectById(staff.getId());
+		staff.setCreateAt(entity.getCreateAt());
+		staff.setCreateBy(entity.getCreateBy());
+		staff.setDeleteAt(entity.getDeleteAt());
+		this.updateAllColumnById(staff);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] ids) {
 		// 逻辑删除
-		List<MemberEntity> list = this.selectBatchIds(Arrays.asList(ids));
-		for (MemberEntity item : list) {
+		List<StaffEntity> list = this.selectBatchIds(Arrays.asList(ids));
+		for (StaffEntity item : list) {
 			item.setDeleteAt(new Date());
 		}
 		this.updateBatchById(list, list.size());
@@ -129,7 +129,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 		String sql = "select * from (";
 		sql += sqlMap.get("sql") + ") as t where" + map.get("sqlFilter");
 		String sqlCount = sqlMap.get("sqlCount").replace("as result", "as result where " + map.get("sqlFilter"));
-		List<MemberEntity> list = baseMapper.executeSql(sql + " limit " + limit * page + "," + limit);
+		List<StaffEntity> list = baseMapper.executeSql(sql + " limit " + limit * page + "," + limit);
 		Integer count = baseMapper.executeSqlCount(sqlCount);
 		listMap.put("list", list);
 		listMap.put("count", count);

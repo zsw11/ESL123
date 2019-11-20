@@ -22,6 +22,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -32,8 +33,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import cn.hutool.core.util.PinyinUtil;
-import io.apj.modules.basic.entity.MemberEntity;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.entity.StaffEntity;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
@@ -49,10 +50,10 @@ import io.apj.common.validator.ValidatorUtils;
  * @date 2018-12-11 13:28:08
  */
 @RestController
-@RequestMapping("basic/member")
-public class MemberController extends AbstractController {
+@RequestMapping("api/v1/staff")
+public class StaffController extends AbstractController {
 	@Autowired
-	private MemberService memberService;
+	private StaffService staffService;
 	@Autowired
 	private SysDeptService deptService;
 	@Autowired
@@ -61,8 +62,8 @@ public class MemberController extends AbstractController {
 	private Resource filedFilter;
 	@Autowired
 	private SysUserService userService;
-	@Value("classpath:static/query-configuration/member.json")
-	private Resource memberData;
+	@Value("classpath:static/query-configuration/staff.json")
+	private Resource staffData;
 	@Autowired
 	private JobService jobService;
 	@Value("classpath:static/query-configuration/areaData.json")
@@ -72,40 +73,40 @@ public class MemberController extends AbstractController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("basic:member:list")
-	public R list(@RequestParam Map<String, Object> params) {
-		PageUtils page = memberService.queryPage(params);
+	@RequiresPermissions("basic:staff:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = staffService.queryPage(params);
 
-		return R.ok().put("page", page);
+		return RD.ok(page);
 	}
 
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{id}")
-	@RequiresPermissions("basic:member:info")
-	public R info(@PathVariable("id") Long id) {
-		MemberEntity member = memberService.selectById(id);
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("basic:staff:info")
+	public RD info(@PathVariable("id") Long id) {
+		StaffEntity staff = staffService.selectById(id);
 
-		return R.ok().put("member", member);
+		return RD.build().put("data", staff);
 	}
 
 	/**
 	 * 保存
 	 */
 	@SysLog("保存人员")
-	@RequestMapping("/save")
-	@RequiresPermissions("basic:member:save")
-	public R save(@RequestBody MemberEntity member) {
-		member.setCreateBy(getUserId());
-		member.setCreateAt(new Date());
-		member.setUpdateAt(new Date());
-		member.setPinyin(PinyinUtil.getPinYin(member.getName()));
-		ValidatorUtils.validateEntity(member);
-		memberService.save(member);
+	@RequestMapping("/create")
+//	@RequiresPermissions("basic:staff:create")
+	public R save(@RequestBody StaffEntity staff) {
+		staff.setCreateBy(getUserId());
+		staff.setCreateAt(new Date());
+		staff.setUpdateAt(new Date());
+		staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
+		ValidatorUtils.validateEntity(staff);
+		staffService.save(staff);
 		// 添加引用表
-		insertTableReference("basic_member", member.getId(), "basic_job", member.getJobId(), false);
-		insertTableReference("basic_member", member.getId(), "sys_dept", member.getDeptId(), false);
+		insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), false);
+		insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 
 		return R.ok();
 	}
@@ -115,16 +116,16 @@ public class MemberController extends AbstractController {
 	 */
 	@SysLog("修改人员")
 	@RequestMapping("/update")
-	@RequiresPermissions("basic:member:update")
-	public R update(@RequestBody MemberEntity member) {
-		member.setUpdateBy(getUserId());
-		member.setUpdateAt(new Date());
-		member.setPinyin(PinyinUtil.getPinYin(member.getName()));
-		ValidatorUtils.validateEntity(member);
-		memberService.update(member);
+	@RequiresPermissions("basic:staff:update")
+	public R update(@RequestBody StaffEntity staff) {
+		staff.setUpdateBy(getUserId());
+		staff.setUpdateAt(new Date());
+		staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
+		ValidatorUtils.validateEntity(staff);
+		staffService.update(staff);
 		// 更新引用表,ifUpdate仅需一次，否则最终只会存在最后一条
-		insertTableReference("basic_member", member.getId(), "basic_job", member.getJobId(), true);
-		insertTableReference("basic_member", member.getId(), "sys_dept", member.getDeptId(), false);
+		insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
+		insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 
 		return R.ok();
 	}
@@ -135,33 +136,33 @@ public class MemberController extends AbstractController {
 	@SysLog("保存人员")
 	@RequestMapping("/saveOrUpdate")
 	@Transactional(rollbackFor = Exception.class)
-	@RequiresPermissions("basic:member:save")
-	public R saveOrUpdate(@RequestBody MemberEntity member) {
-		SysUserEntity user = member.getUserEntity();
+	@RequiresPermissions("basic:staff:save")
+	public R saveOrUpdate(@RequestBody StaffEntity staff) {
+		SysUserEntity user = staff.getUserEntity();
 		if (user != null) {
 			user.setCreateAt(new Date());
 			user.setCreateBy(getUserId());
 			userService.save(user);
-			member.setUserId(user.getId());
+			staff.setUserId(user.getId());
 		}
-		if (member.getId() == 0) {
-			member.setCreateAt(new Date());
-			member.setUpdateAt(new Date());
-			member.setCreateBy(getUserId());
-			member.setPinyin(PinyinUtil.getPinYin(member.getName()));
-			ValidatorUtils.validateEntity(member);
-			memberService.save(member);
+		if (staff.getId() == 0) {
+			staff.setCreateAt(new Date());
+			staff.setUpdateAt(new Date());
+			staff.setCreateBy(getUserId());
+			staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
+			ValidatorUtils.validateEntity(staff);
+			staffService.save(staff);
 			// 添加引用表
-			insertTableReference("basic_member", member.getId(), "basic_job", member.getJobId(), false);
-			insertTableReference("basic_member", member.getId(), "sys_dept", member.getDeptId(), false);
+			insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), false);
+			insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 		} else {
-			member.setUpdateAt(new Date());
-			member.setUpdateBy(getUserId());
-			member.setPinyin(PinyinUtil.getPinYin(member.getName()));
-			memberService.update(member);
+			staff.setUpdateAt(new Date());
+			staff.setUpdateBy(getUserId());
+			staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
+			staffService.update(staff);
 			// 更新引用表,ifUpdate仅需一次，否则最终只会存在最后一条
-			insertTableReference("basic_member", member.getId(), "basic_job", member.getJobId(), true);
-			insertTableReference("basic_member", member.getId(), "sys_dept", member.getDeptId(), false);
+			insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
+			insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 		}
 		return R.ok();
 	}
@@ -172,11 +173,11 @@ public class MemberController extends AbstractController {
 	@SysLog("删除人员")
 	@RequestMapping("/delete")
 	@Transactional(rollbackFor = Exception.class)
-	@RequiresPermissions("basic:member:delete")
+	@RequiresPermissions("basic:staff:delete")
 	public R delete(@RequestBody Long[] ids) {
 		// 检查是否存在引用
 		for (int i = 0; i < ids.length; i++) {
-			List<ReferenceEntity> referenceEntities = deleteCheckReference("basic_member", ids[i]);
+			List<ReferenceEntity> referenceEntities = deleteCheckReference("basic_staff", ids[i]);
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
 					return R.error("表名：" + reference.getByEntity() + "，id=" + reference.getById() + " 在表："
@@ -184,10 +185,10 @@ public class MemberController extends AbstractController {
 				}
 			} else {
 				// 删除引用表关系
-				deleteTableReference("basic_member", ids[i]);
+				deleteTableReference("basic_staff", ids[i]);
 			}
 		}
-		memberService.deleteBatch(ids);
+		staffService.deleteBatch(ids);
 		return R.ok();
 	}
 
@@ -204,14 +205,14 @@ public class MemberController extends AbstractController {
 		int limit = (int) map.get("limit");
 		int currPage = (int) map.get("page");
 //        JsonArray fieldFilter = (JsonArray) parser.parse(
-//                new FileReader(ResourceUtils.getURL("classpath:static/query-configuration/member.json").getPath()));
-		String jsonStr = IOUtils.toString(memberData.getInputStream(), Charset.forName("UTF-8"));
+//                new FileReader(ResourceUtils.getURL("classpath:static/query-configuration/staff.json").getPath()));
+		String jsonStr = IOUtils.toString(staffData.getInputStream(), Charset.forName("UTF-8"));
 		Gson gson = new Gson();
 		JsonArray fieldFilter = gson.fromJson(jsonStr, JsonArray.class);
 		map.put("sqlFilter", getSqlFilter(getUser()));
-		Map<String, Object> listmap = memberService.advancedSearch(map, fieldFilter);
-		List<MemberEntity> list = (List<MemberEntity>) listmap.get("list");
-		for (MemberEntity item : list) {
+		Map<String, Object> listmap = staffService.advancedSearch(map, fieldFilter);
+		List<StaffEntity> list = (List<StaffEntity>) listmap.get("list");
+		for (StaffEntity item : list) {
 			EntityWrapper<SysDeptEntity> deptWrapper = new EntityWrapper<>();
 			deptWrapper.eq("dept_id", item.getDeptId());
 			SysDeptEntity deptEntity = deptService.selectOne(deptWrapper);
@@ -224,34 +225,34 @@ public class MemberController extends AbstractController {
 	/**
 	 * 根据名字或者拼音查询人员信息
 	 */
-	@RequestMapping("/selectMemberByName")
-	public R selectMemberByName(@RequestParam String name, @RequestParam Boolean isHQ) {
+	@RequestMapping("/selectStaffByName")
+	public R selectStaffByName(@RequestParam String name, @RequestParam Boolean isHQ) {
 		EntityWrapper<SysDeptEntity> deptWrapper = new EntityWrapper<>();
 		deptWrapper.eq("dept_type", "headquarters");
 		List<SysDeptEntity> headquartersDeptList = deptService.selectList(deptWrapper);
 		List<Long> headquartersIds = new ArrayList<Long>();
 		for (SysDeptEntity item : headquartersDeptList) {
-			headquartersIds.add(item.getDeptId());
+			headquartersIds.add(item.getId());
 		}
-		EntityWrapper<MemberEntity> memberWrapper = new EntityWrapper<>();
+		EntityWrapper<StaffEntity> staffWrapper = new EntityWrapper<>();
 		if (isHQ) {
-			memberWrapper.in("dept_id", headquartersIds);
+			staffWrapper.in("dept_id", headquartersIds);
 		} else {
-			memberWrapper.notIn("dept_id", headquartersIds);
+			staffWrapper.notIn("dept_id", headquartersIds);
 		}
-		memberWrapper.notIn("id", getMemberId()).andNew().like("name", name).or().like("pinyin", name);
-		List<MemberEntity> list = memberService.selectList(memberWrapper);
+		staffWrapper.notIn("id", getStaffId()).andNew().like("name", name).or().like("pinyin", name);
+		List<StaffEntity> list = staffService.selectList(staffWrapper);
 		return R.ok().put("list", list);
 	}
 
 	/**
 	 * 根据部门id查询属于该部门的人员
 	 */
-	@RequestMapping("/selectMemberListByDeptId")
-	public R selectMemberListByDeptId(@RequestParam String deptId) {
-		EntityWrapper<MemberEntity> memberWrapper = new EntityWrapper<>();
-		memberWrapper.eq("dept_id", deptId);
-		List<MemberEntity> list = memberService.selectList(memberWrapper);
+	@RequestMapping("/selectStaffListByDeptId")
+	public R selectStaffListByDeptId(@RequestParam String deptId) {
+		EntityWrapper<StaffEntity> staffWrapper = new EntityWrapper<>();
+		staffWrapper.eq("dept_id", deptId);
+		List<StaffEntity> list = staffService.selectList(staffWrapper);
 		return R.ok().put("list", list);
 	}
 
@@ -268,7 +269,7 @@ public class MemberController extends AbstractController {
 		List<String> list = (List<String>) map.get("exportAttributes");
 		// 查询类型
 		String type = map.get("filterType").toString();
-		List<MemberEntity> memberEntities;
+		List<StaffEntity> staffEntities;
 		// 判断查询类型为高级查询还是普通查询
 		if (type.equals("list") || type.equals("all")) {
 			// 普通查询
@@ -278,27 +279,27 @@ public class MemberController extends AbstractController {
 			}
 			params.put("page", "1");
 			params.put("limit", "9999999");
-			PageUtils pageUtils = memberService.queryPage(params);
-			memberEntities = (List<MemberEntity>) pageUtils.getData();
+			PageUtils pageUtils = staffService.queryPage(params);
+			staffEntities = (List<StaffEntity>) pageUtils.getData();
 		} else {
 			// 高级查询
 			map.put("limit", 999999);
 			map.put("page", 1);
-			String jsonStr = IOUtils.toString(memberData.getInputStream(), Charset.forName("UTF-8"));
+			String jsonStr = IOUtils.toString(staffData.getInputStream(), Charset.forName("UTF-8"));
 			Gson gson = new Gson();
 			JsonArray fieldFilter = gson.fromJson(jsonStr, JsonArray.class);
 			map.put("sqlFilter", getSqlFilter(getUser()));
-			Map<String, Object> listmap = memberService.advancedSearch(map, fieldFilter);
-			memberEntities = (List<MemberEntity>) listmap.get("list");
+			Map<String, Object> listmap = staffService.advancedSearch(map, fieldFilter);
+			staffEntities = (List<StaffEntity>) listmap.get("list");
 		}
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dictMap = sysDictService.getDictDetail();
 		String jsonStr = IOUtils.toString(areaData.getInputStream(), Charset.forName("UTF-8"));
 		Gson gson = new Gson();
 		JsonObject areaDataFilter = gson.fromJson(jsonStr, JsonObject.class);
-		for (MemberEntity item : memberEntities) {
+		for (StaffEntity item : staffEntities) {
 			// 处理数据源
-			Map<String, Object> arr = DataUtils.dataChange("member", item, dictMap);
+			Map<String, Object> arr = DataUtils.dataChange("staff", item, dictMap);
 			// 处理其他数据源
 			JobEntity jobEntity;
 			if (item.getJob() != null) {
@@ -319,7 +320,7 @@ public class MemberController extends AbstractController {
 			dataList.add(arr);
 		}
 		// 返回excel数据
-		Map<String, Object> param = DataUtils.rtlExcelData(list, "member", dataList);
+		Map<String, Object> param = DataUtils.rtlExcelData(list, "staff", dataList);
 		ExcelData data = new ExcelData();
 		data.setTitles((List<String>) param.get("titles"));
 		data.setRows((List<List<Object>>) param.get("rows"));
@@ -339,12 +340,12 @@ public class MemberController extends AbstractController {
 	@RequestMapping("/import")
 	public R importExcel(@RequestBody Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-		List<MemberEntity> memberEntityList = new ArrayList<>();
+		List<StaffEntity> staffEntityList = new ArrayList<>();
 		Set<String> codeCheck = new HashSet<>();
 		for (int i = 0; i < maps.size(); i++) {
-			MemberEntity memberEntity = new MemberEntity();
-			// memberMap
-			Map<String, Object> memberMap = new HashMap<>();
+			StaffEntity staffEntity = new StaffEntity();
+			// staffMap
+			Map<String, Object> staffMap = new HashMap<>();
 			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
@@ -357,7 +358,7 @@ public class MemberController extends AbstractController {
 					if (sysDeptEntity == null) {
 						return R.error(500, "第" + (i + 1) + "行，所属组织集团不存在！");
 					}
-					memberEntity.setDeptId(sysDeptEntity.getDeptId());
+					staffEntity.setDeptId(sysDeptEntity.getId());
 				}
 				// 工作岗位
 				if (keyStrs[0].equals("job")) {
@@ -367,58 +368,58 @@ public class MemberController extends AbstractController {
 						if (jobEntity == null) {
 							return R.error("第" + (i + 1) + "行，该工作岗位不存在！");
 						}
-						memberEntity.setJobId(jobEntity.getId());
+						staffEntity.setJobId(jobEntity.getId());
 					}
 				}
 				// 人员信息
-				if (keyStrs[0].equals("member")) {
+				if (keyStrs[0].equals("staff")) {
 					// 判断人员编码唯一
 					if (keyStrs[1].equals("code")) {
 						// 检查导入数据重复
 						if (!codeCheck.add(value.toString())) {
 							return R.error(500, "第" + (i + 1) + "行，导入数据人员编码【" + value.toString() + "】存在重复！");
 						}
-						Wrapper<MemberEntity> memberEntityWrapper = new EntityWrapper<MemberEntity>().eq(keyStrs[1],
+						Wrapper<StaffEntity> staffEntityWrapper = new EntityWrapper<StaffEntity>().eq(keyStrs[1],
 								value);
-						MemberEntity memberEntity1 = memberService.selectOne(memberEntityWrapper);
-						if (memberEntity1 != null) {
+						StaffEntity staffEntity1 = staffService.selectOne(staffEntityWrapper);
+						if (staffEntity1 != null) {
 							return R.error("第" + (i + 1) + "行，该人员编码已存在！");
 						}
 					}
-					memberMap.put(keyStrs[1], value);
+					staffMap.put(keyStrs[1], value);
 				}
 			}
 			// 先提取日期
-			String birthDate = (String) memberMap.get("birthDate");
-			String employmentDate = (String) memberMap.get("employmentDate");
-			memberMap.remove("birthDate");
-			memberMap.remove("employmentDate");
+			String birthDate = (String) staffMap.get("birthDate");
+			String employmentDate = (String) staffMap.get("employmentDate");
+			staffMap.remove("birthDate");
+			staffMap.remove("employmentDate");
 			// map转实体
-			DataUtils.transMap2Bean2(memberMap, memberEntity);
+			DataUtils.transMap2Bean2(staffMap, staffEntity);
 			// 设置回时间
 			if (birthDate != null)
 				if (birthDate.length() < 10 && birthDate != "") {
 					return R.error("第" + (i + 1) + "行，生日日期格式错误。正确格式为XXXX-XX-XX");
 				}
-			memberEntity.setEmploymentDate(DateUtils.stringToDate(employmentDate, "yyyy-mm-dd"));
-			memberEntity.setPinyin(PinyinUtil.getPinYin(memberEntity.getName()));
-			memberEntity.setCreateBy(getUserId());
-			memberEntity.setCreateAt(new Date());
-			memberEntity.setUpdateAt(new Date());
+			staffEntity.setEmploymentDate(DateUtils.stringToDate(employmentDate, "yyyy-mm-dd"));
+			staffEntity.setPinyin(PinyinUtil.getPinYin(staffEntity.getName()));
+			staffEntity.setCreateBy(getUserId());
+			staffEntity.setCreateAt(new Date());
+			staffEntity.setUpdateAt(new Date());
 			// 校验
-			ValidatorUtils.validateEntity(memberEntity, i);
-			memberEntityList.add(memberEntity);
+			ValidatorUtils.validateEntity(staffEntity, i);
+			staffEntityList.add(staffEntity);
 		}
 		try {
-			memberService.insertBatch(memberEntityList, Constant.importNum);
+			staffService.insertBatch(staffEntityList, Constant.importNum);
 		} catch (MybatisPlusException e) {
 			throw new RRException(e.getMessage(), 500);
 		}
 
 		// 添加引用表
-		for (MemberEntity member : memberEntityList) {
-			insertTableReference("basic_member", member.getId(), "basic_job", member.getJobId(), false);
-			insertTableReference("basic_member", member.getId(), "sys_dept", member.getDeptId(), false);
+		for (StaffEntity staff : staffEntityList) {
+			insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), false);
+			insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 		}
 		return R.ok();
 	}

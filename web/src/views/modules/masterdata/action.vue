@@ -23,7 +23,11 @@
         <div class="card-title"> 关键词信息</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button>导出</el-button>
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -40,11 +44,6 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="name" label="关键词名称" >
           <template slot-scope="scope">
@@ -57,8 +56,6 @@
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
-
-
 
 
       <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
@@ -86,9 +83,17 @@
 </template>
 
 <script>
-import { listAction, deleteAction } from '@/api/action'
+import { listAction, deleteAction, ActionExport } from '@/api/action'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+
+const defaultExport = ['action.name', 'action.remark']
 export default {
   name: 'actionList',
+  components: {
+    ExportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -102,7 +107,6 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -124,12 +128,35 @@ export default {
           { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport)
     }
   },
   activated () {
     const self = this
     self.getDataList()
+  },
+  computed: {
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: ActionExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'action', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'part', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
   },
   methods: {
     // 普通查询

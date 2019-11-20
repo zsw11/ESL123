@@ -2,48 +2,22 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
+
+        <el-form-item :label="'报表'" prop="reportId" >
+          <el-input v-model="listQuery.reportId"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'报表组ID'" prop="reportGroupId" >
-          <el-input-number v-model="listQuery.reportGroupId"  clearable></el-input-number>
+        <el-form-item :label="'空form标准编号'" prop="formCode" >
+          <keyword-search style="width: 250px" v-model="listQuery.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'报表ID'" prop="reportId" >
-          <el-input-number v-model="listQuery.reportId"  clearable></el-input-number>
-        </el-form-item>
+        <div style="float: right;margin-right: 4px">
+          <el-button @click="getDataList(1)" type="primary" >搜   索</el-button>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
-        <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
         </div>
       </el-form>
     </el-card>
@@ -74,64 +48,29 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="reportGroupId" label="报表组ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.reportGroupId }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="reportId" label="报表ID" >
+        <el-table-column align="center" prop="reportId" label="报表名称" >
           <template slot-scope="scope">
             <span>{{scope.row.reportId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
+        <el-table-column align="center" prop="formCode" label="空from标准编号" >
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
+            <span>{{scope.row.formcode }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createAt" label="创建时间" >
+        <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
 
       <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:reportgroupreportrela:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('masterData:reportgroupreportrela:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
           </template>
         </el-table-column>
 
@@ -152,6 +91,7 @@
 
 <script>
 import { listReportGroupReportRela, deleteReportGroupReportRela } from '@/api/reportGroupReportRela'
+import { listReport } from '@/api/report'
 export default {
   name: 'reportGroupReportRelaList',
   data () {
@@ -161,13 +101,15 @@ export default {
         id: null,
         reportGroupId: null,
         reportId: null,
+        remark: null,
+        fromCode: null,
         createBy: null,
         createAt: null,
         updateBy: null,
         updateAt: null,
         deleteAt: null
       },
-
+      listReport,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
@@ -211,9 +153,10 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data
-        this.total = total
+      )).then(({page}) => {
+        this.dataList = page.data
+        console.log(page.data)
+        this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -255,6 +198,13 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-reportgroupreportrela/${id}`, query: {noShow: true}})
+      })
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {

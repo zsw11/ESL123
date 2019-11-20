@@ -58,14 +58,14 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 		}
 		List<SysDeptEntity> deptList = this.selectList(entityWrapper);
 		for (SysDeptEntity sysDeptEntity : deptList) {
-			sysDeptEntity.setPerms(sysUserService.getDeptAllPerms(sysDeptEntity.getDeptId(), "sys:dept:"));
+			sysDeptEntity.setPerms(sysUserService.getDeptAllPerms(sysDeptEntity.getId(), "sys:dept:"));
 			SysDeptEntity parentDeptEntity = this.selectById(sysDeptEntity.getParentId());
 			if (parentDeptEntity != null) {
 				sysDeptEntity.setParentName(parentDeptEntity.getName());
 			}
 			if (params.get(Constant.SQL_FILTER) != null) {
-				sysDeptEntity.setPermission(
-						rtlStatus(params.get(Constant.SQL_FILTER).toString(), sysDeptEntity.getDeptId()));
+				sysDeptEntity
+						.setPermission(rtlStatus(params.get(Constant.SQL_FILTER).toString(), sysDeptEntity.getId()));
 			} else {
 				sysDeptEntity.setPermission(true);
 			}
@@ -109,9 +109,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 
 		if (dept != null) {
 
-			List<Long> list = this.getSubDeptIdList(dept.getDeptId());
+			List<Long> list = this.getSubDeptIdList(dept.getId());
 
-			list.add(dept.getDeptId());
+			list.add(dept.getId());
 
 			List<SysDeptEntity> deptList = this.selectList(new EntityWrapper<SysDeptEntity>().in("id", list));
 
@@ -138,7 +138,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 						(String) params.get("deptType"))
 				.in(StringUtils.isNotEmpty((String) params.get("deptLevel")), "dept_level",
 						(String) params.get("deptLevel"))
-				.like(StringUtils.isNotEmpty((CharSequence) params.get("name")), "name", (String) params.get("name")).isNull("delete_at");
+				.like(StringUtils.isNotEmpty((CharSequence) params.get("name")), "name", (String) params.get("name"))
+				.isNull("delete_at");
 
 		// 开启数据权限过滤
 		if (params.get("filter") == null || !"false".equals(params.get("filter"))) {
@@ -148,21 +149,22 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 		List<SysDeptEntity> deptList = this.selectList(entityWrapper);
 		if (deptList.size() > 0) {
 			for (SysDeptEntity item : deptList) {
-				List<Long> list = this.getSubDeptIdList(item.getDeptId());
-				list.add(item.getDeptId());
+				List<Long> list = this.getSubDeptIdList(item.getId());
+				list.add(item.getId());
 				for (Long id : list) {
 					if (!deptIds.contains(id)) {
 						deptIds.add(id);
 					}
 				}
 			}
-			List<SysDeptEntity> allDeptList = this.selectList(new EntityWrapper<SysDeptEntity>().in("id", deptIds));
+			List<SysDeptEntity> allDeptList = this
+					.selectList(new EntityWrapper<SysDeptEntity>().in("id", deptIds).isNull("delete_at"));
 
 			for (SysDeptEntity sysDeptEntity : allDeptList) {
 				SysDeptEntity parentDeptEntity = this.selectById(sysDeptEntity.getParentId());
 				if (params.get(Constant.SQL_FILTER) != null) {
 					sysDeptEntity.setPermission(
-							rtlStatus(params.get(Constant.SQL_FILTER).toString(), sysDeptEntity.getDeptId()));
+							rtlStatus(params.get(Constant.SQL_FILTER).toString(), sysDeptEntity.getId()));
 				} else {
 					sysDeptEntity.setPermission(true);
 				}

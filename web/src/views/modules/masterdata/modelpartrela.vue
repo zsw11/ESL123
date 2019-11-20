@@ -1,59 +1,48 @@
 <template>
   <div class="gen-list-page">
-    <el-card class="filter-card with-title">
+    <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id" >
-          <el-input-number v-model="listQuery.id"  clearable></el-input-number>
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
+
+        <el-form-item :label="'机种名称'" prop="name" >
+          <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'机种ID'" prop="modelId" >
-          <el-input-number v-model="listQuery.modelId"  clearable></el-input-number>
+        <el-form-item class="title" :label="'型号'" prop="code" >
+          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel" labelColunt="code" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'部品ID'" prop="partId" >
-          <el-input-number v-model="listQuery.partId"  clearable></el-input-number>
+        <el-form-item class="title" :label="'部门'" prop="deptId" >
+          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy" >
-          <el-input-number v-model="listQuery.createBy"  clearable></el-input-number>
+        <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
+          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true"></keyword-search>
+
         </el-form-item>
 
-        <el-form-item :label="'创建时间'" prop="createAt" >
-          <el-date-picker v-model="listQuery.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
 
-        <el-form-item :label="'更新者ID'" prop="updateBy" >
-          <el-input-number v-model="listQuery.updateBy"  clearable></el-input-number>
+        <el-form-item class="title" :label="'阶段'" prop="WSTime" >
+          <el-input style="width: 130px" v-model="listQuery.WSTime"  clearable></el-input>
         </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt" >
-          <el-date-picker v-model="listQuery.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt" >
-          <el-date-picker v-model="listQuery.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" clearable>
-      </el-date-picker>
-        </el-form-item>
-
-  
-        <div class='buttons with-complex'>
-          <el-button @click="clearQuery()">清   空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-        </div>
       </el-form>
+      <div class="clearfix">
+        <div style="float:right;">
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
+        </div>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">机种部品关系</div>
+        <div class="card-title">机种</div>
         <div class="buttons">
-          <el-button v-if="isAuth('masterData:modelpartrela:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
-          <el-button v-if="isAuth('masterData:modelpartrela:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <!-- <el-button @click="">导入</el-button>
+          <el-button @click="">导出</el-button> -->
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -62,76 +51,66 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column
+          fixed="left"
           type="selection"
           header-align="left"
           align="left"
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID" >
+        <el-table-column align="center" prop="name" label="机种名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
+            <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="modelId" label="机种ID" >
+        <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.deptId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="partId" label="部品ID" >
+        <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.partId }}</span>
+            <span>{{scope.row.modelSeriesId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createBy" label="创建者ID" >
+        <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
+            <span>{{scope.row.code }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createAt" label="创建时间" >
+        <el-table-column align="center" prop="WSTime" label="WS时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="updateBy" label="更新者ID" >
+        <el-table-column align="center" prop="ESTime" label="ES时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
+            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="updateAt" label="更新时间" >
+        <el-table-column align="center" prop="AMPTime" label="AMP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deleteAt" label="删除时间" >
+        <el-table-column align="center" prop="MPTime" label="MP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="创建时间" >
+        <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间" >
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-      <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button v-if="isAuth('masterData:modelpartrela:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('masterData:modelpartrela:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+<!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
+            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -145,144 +124,190 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
-
     </el-card>
   </div>
 </template>
 
 <script>
-import { listModelPartRela, deleteModelPartRela } from '@/api/modelPartRela'
-export default {
-  name: 'modelPartRelaList',
-  data () {
-    return {
-      dataButton: 'list',
-      listQuery: {
+  import { listModel } from '@/api/model'
+  import { listDept } from '@/api/dept'
+  import { listModelSeries } from '@/api/modelSeries'
+  import { deleteModelPartRela } from '@/api/modelPartRela'
+  import { fetchPart } from '@/api/part'
+  export default {
+    name: 'modelList',
+    data () {
+      return {
         id: null,
-        modelId: null,
-        partId: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
-      },
-
-      dataList: [],
-      pageNo: 1,
-      pageSize: 10,
-      total: 0,
-      dataListLoading: false,
-      dataListSelections: [],
-      attributes: [{
-        code: 'modelPartRela',
-        name: '机种部品关系',
-        children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'modelId', name: '机种ID', type: 'string', required: true },
-          { code: 'partId', name: '部品ID', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
-        ]
-      }],
-      complexFilters: []
-    }
-  },
-  activated () {
-    const self = this
-    self.getDataList()
-  },
-  methods: {
-    // 普通查询
-    getDataList (pageNo) {
-      if (pageNo) {
-        this.pageNo = pageNo
-      }
-      this.dataButton = 'list'
-      this.dataListLoading = true
-      listModelPartRela(Object.assign(
-        {
-          page: this.pageNo,
-          limit: this.pageSize
+        title: this.$route.params.name,
+        dataButton: 'list',
+        listQuery: {
+          id: null,
+          name: null,
+          deptId: null,
+          modelSeriesId: null,
+          code: null,
+          WSTime: null,
+          ESTime: null,
+          AMPTime: null,
+          MPTime: null
         },
-        this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data
-        this.total = total
-      }).catch(() => {
-        this.dataList = []
-        this.total = 0
-      }).finally(() => {
-        this.dataListLoading = false
-      })
-    },
-    // 清除查询条件
-    clearQuery () {
-      this.listQuery = Object.assign(this.listQuery, {
-        modelId: null,
-        partId: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
-      })
-    },
-    // 每页数
-    sizeChangeHandle (val) {
-      this.pageSize = val
-      this.pageNo = 1
-      this.doDataSearch()
-    },
-    // 当前页
-    currentChangeHandle (val) {
-      this.pageNo = val
-      this.doDataSearch()
-    },
-    // 查询数据
-    doDataSearch () {
-      if (this.dataButton === 'complex') {
-        this.doComplexSearch()
-      } else {
-        this.getDataList()
+        listDept,
+        listModelSeries,
+        listModel,
+        dataList: [],
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        attributes: [{
+          code: 'model',
+          name: '机种',
+          children: [
+            { code: 'id', name: 'ID', type: 'string', required: true },
+            { code: 'name', name: '名称', type: 'string', required: true },
+            { code: 'deptId', name: '部门ID', type: 'string', required: true },
+            { code: 'modelSeriesId', name: '机种系列ID', type: 'string', required: true },
+            { code: 'code', name: 'type', type: 'string', required: true },
+            { code: 'WSTime', name: 'WS Date', type: 'string', required: true },
+            { code: 'ESTime', name: 'ES Date', type: 'string', required: true },
+            { code: 'AMPTime', name: 'AMP Date', type: 'string', required: true },
+            { code: 'MPTime', name: 'MP Date', type: 'string', required: true }
+          ]
+        }],
+        complexFilters: []
       }
     },
-    // 多选
-    selectionChangeHandle (val) {
-      this.dataListSelections = val
+    activated () {
+      const self = this
+      self.title = this.$route.params.name
+      self.id = this.$route.params.id
+      console.log(self.id)
+      self.getDataList()
     },
-    // 新增 / 修改
-    addOrUpdateHandle (id) {
-      this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-modelpartrela/${id}` : '/add-modelpartrela' })
-      })
-    },
-    // 删除数据
-    deleteHandle (row) {
-      var ids = row ? row.id : this.dataListSelections.map(item => {
-        return item.id
-      })
-      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteModelPartRela(ids).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getDataList()
+    methods: {
+      // 普通查询
+      getDataList (pageNo) {
+        if (pageNo) {
+          this.pageNo = pageNo
+        }
+        this.dataButton = 'list'
+        this.dataListLoading = true
+        fetchPart(Object.assign(
+          {
+            page: this.pageNo,
+            limit: this.pageSize
+          },
+          this.id
+        )).then(({page}) => {
+          this.dataList = page.data
+          this.total = page.totalCount
+          // console.log(this.dataList)
+        }).catch(() => {
+          this.dataList = []
+          this.total = 0
+        }).finally(() => {
+          this.dataListLoading = false
         })
-      })
+      },
+      // 清除查询条件
+      clearQuery () {
+        this.listQuery = Object.assign(this.listQuery, {
+          name: null,
+          deptId: null,
+          modelSeriesId: null,
+          code: null,
+          WSTime: null,
+          ESTime: null,
+          AMPTime: null,
+          MPTime: null,
+          remark: null,
+          createBy: null,
+          createAt: null,
+          updateBy: null,
+          updateAt: null,
+          deleteAt: null
+        })
+      },
+      // 每页数
+      sizeChangeHandle (val) {
+        this.pageSize = val
+        this.pageNo = 1
+        this.doDataSearch()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+        this.pageNo = val
+        this.doDataSearch()
+      },
+      // 查询数据
+      doDataSearch () {
+        if (this.dataButton === 'complex') {
+          this.doComplexSearch()
+        } else {
+          this.getDataList()
+        }
+      },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
+      // 详情
+      details (id) {
+        // let noShow = true
+        this.$nextTick(() => {
+          this.$router.push({path: `/details-modelpartrela/${id}`, query: {noShow: true}})
+        })
+      },
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.$nextTick(() => {
+          console.log(id)
+          this.$router.push({ path: id ? `/edit-modelpartrela/${id}` : '/add-modelpartrela' })
+        })
+      },
+      // 删除数据
+      deleteHandle (row) {
+        var ids = row ? [row.id] : this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteModelPartRela(ids).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getDataList()
+          })
+        })
+      }
     }
   }
-}
 </script>
+
+<style scoped lang="scss">
+  .title {
+    margin-left: 20px;
+  }
+  .el-input__inner {
+    padding-right:0;
+    width: 130px;
+  }
+  .el-form-item--small.el-form-item{
+    display: inline-block;
+  }
+  .el-form-item {
+    display: inline-block;
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: 10px;
+    vertical-align: top;
+  }
+</style>

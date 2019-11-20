@@ -125,11 +125,11 @@ public class ModelSeriesController extends AbstractController {
         HashMap<String, String> dict = sysDictService.getDictDetail();
         for (ModelSeriesEntity item : modelSeriesEntityList) {
             // 处理数据源
-            Map<String, Object> arr = DataUtils.dataChange("modelseries", item, dict);
+            Map<String, Object> arr = DataUtils.dataChange("modelSeries", item, dict);
             dataList.add(arr);
         }
         // 返回excel格式数据
-        Map<String, Object> param = DataUtils.rtlExcelData(list, "modelseries", dataList);
+        Map<String, Object> param = DataUtils.rtlExcelData(list, "modelSeries", dataList);
         ExcelData data = new ExcelData();
         data.setTitles((List<String>) param.get("titles"));
         data.setRows((List<List<Object>>) param.get("rows"));
@@ -177,9 +177,9 @@ public class ModelSeriesController extends AbstractController {
         try {
             modelSeriesService.insertBatch(modelSeriesEntityList, Constant.importNum);
         } catch (MybatisPlusException e) {
-            throw new RRException(e.getMessage(), 500);
+            throw new RRException("批量导入失败", 500);
         }
-        return RD.build();
+        return RD.build().put("code", 0);
     }
 
 }

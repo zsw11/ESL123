@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ActionController extends AbstractController {
     @Autowired
     private ActionService actionService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
@@ -41,7 +42,7 @@ public class ActionController extends AbstractController {
      * @return
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:action:list")
+//    @RequiresPermissions("masterData:action:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = actionService.queryPage(params);
         return RD.ok(page);
