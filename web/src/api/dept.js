@@ -40,9 +40,9 @@ export function createDept (data) {
 export function updateDept (id, data) {
   return request({
     url: request.adornUrl('/api/v1/dept/update'),
-    method: 'put',
-    params: { id },
-    data
+    method: 'post',
+    // params: { id },
+    data: request.adornData(data)
   })
 }
 

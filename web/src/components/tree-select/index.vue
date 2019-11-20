@@ -115,7 +115,8 @@ export default {
   methods: {
     refreshTree () {
       const requestOrderNum = ++this.requestOrderNum
-      this.api(this.apiQuery).then(({data}) => {
+      this.api(this.apiQuery).then(({page}) => {
+        const data = page.data
         if (requestOrderNum === this.requestOrderNum) {
           this.listData = data
           this.treeData = treeDataTranslate(data, this.nodeKey)
