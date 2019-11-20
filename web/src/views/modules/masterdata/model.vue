@@ -158,7 +158,7 @@ export default {
     return {
       dataButton: 'list',
       listQuery: {
-        id: null,
+        id: 0,
         name: null,
         deptId: null,
         modelSeriesId: null,
@@ -166,13 +166,7 @@ export default {
         WSTime: null,
         ESTime: null,
         AMPTime: null,
-        MPTime: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        MPTime: null
       },
       listDept,
       listModelSeries,
