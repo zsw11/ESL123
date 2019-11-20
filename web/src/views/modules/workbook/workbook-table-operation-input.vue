@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Popper from '@/../static/plugins/vue-popperjs'
-import '@/../static/plugins/vue-popperjs/dist/vue-popper.css'
+import Popper from '@/../static/plugins/vue-popperjs/vue-popper.js'
+import '@/../static/plugins/vue-popperjs/vue-popper.min.css'
 
 export default {
   name: 'OperationInput',
