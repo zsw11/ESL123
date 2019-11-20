@@ -1,8 +1,8 @@
 [
     {
-        "table": "modelseries",
+        "table": "modelSeries",
         "tableName": "机种系列信息",
-        "tableAlias": "modelseries",
+        "tableAlias": "modelSeries",
         "fieldList": [
             {
                 "code": "name",

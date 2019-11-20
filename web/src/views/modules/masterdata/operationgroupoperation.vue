@@ -63,7 +63,11 @@
       <div slot="header" class="clearfix">
         <div class="card-title">手顺</div>
         <div class="buttons">
-          <el-button>导出</el-button>
+           <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
           <el-button @click="addOrUpdateHandle()">新增</el-button>
 
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -133,9 +137,18 @@
 </template>
 
 <script>
-import { listOperationGroupOperation, deleteOperationGroupOperation } from '@/api/operationGroupOperation'
+import { listOperationGroupOperation, deleteOperationGroupOperation, operationGroupOperationExport } from '@/api/operationGroupOperation'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+
+const defaultExport = ['operationGroupOperation.operationGroupId', 'operationGroupOperation.operation', 'operationGroupOperation.seqNumber']
+
 export default {
   name: 'operationGroupOperationList',
+  components: {
+    ExportData
+  },
   data () {
     return {
       dataButton: 'list',
@@ -162,12 +175,35 @@ export default {
           { code: 'seqNumber', name: '所属组织机构', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport)
     }
   },
   activated () {
     const self = this
     self.getDataList()
+  },
+  computed: {
+    exportConfig () {
+      return {
+        attributes: filterAttributes(this.attributes, 'isExport'),
+        exportApi: operationGroupOperationExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch('user/SetAExport', { page: 'operationGroupOperation', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport)
+          this.$store.dispatch('user/SetAExport', { page: 'operationGroupOperation', display: this.exportAttributes })
+          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        }
+      }
+    }
   },
   methods: {
     // 普通查询

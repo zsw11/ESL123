@@ -45,3 +45,13 @@ export function deleteOperationGroupOperation (id) {
     data: id
   })
 }
+
+// 导出
+export function operationGroupOperationExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/operationgroupoperation/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}

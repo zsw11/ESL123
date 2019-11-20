@@ -122,11 +122,11 @@ public class OperationGroupOperationController extends AbstractController {
         HashMap<String, String> dict = sysDictService.getDictDetail();
         for (OperationGroupOperationEntity item : operationGroupOperationEntityList) {
             // 处理数据源
-            Map<String, Object> arr = DataUtils.dataChange("operationgroupoperation", item, dict);
+            Map<String, Object> arr = DataUtils.dataChange("operationGroupOperation", item, dict);
             dataList.add(arr);
         }
         // 返回excel格式数据
-        Map<String, Object> param = DataUtils.rtlExcelData(list, "operationgroupoperation", dataList);
+        Map<String, Object> param = DataUtils.rtlExcelData(list, "operationGroupOperation", dataList);
         ExcelData data = new ExcelData();
         data.setTitles((List<String>) param.get("titles"));
         data.setRows((List<List<Object>>) param.get("rows"));
