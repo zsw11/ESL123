@@ -67,7 +67,7 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  type="text" size="small" @click="toolModel(scope.row.id)">机种</el-button>
+            <el-button  type="text" size="small" @click="toolModel(scope.row.id,scope.row.name)">机种</el-button>
             <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
@@ -229,9 +229,9 @@ export default {
       this.dataListSelections = val
     },
     // 治工具机种关系
-    toolModel (id) {
+    toolModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/tool-model/${id}`})
+        this.$router.push({path: `/tool-model/${id}/${name}`})
       })
     },
     // 详情

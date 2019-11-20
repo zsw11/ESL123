@@ -223,11 +223,14 @@ export default {
       this.dataButton = 'list'
       this.dataListLoading = true
       fetchReportGroup(Object.assign(
-        this.dataForm.id,
-        this.listQuery
+        {
+          page: this.pageNo,
+          limit: this.pageSize
+        },
+        this.dataForm.id
       )).then(({page}) => {
         this.dataList = page.data
-        console.log(page.data)
+        console.log(page.data, 11111111111111111111)
         this.total = page.totalCount
       }).catch(() => {
         this.dataList = []

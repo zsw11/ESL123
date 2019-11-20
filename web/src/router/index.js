@@ -122,7 +122,7 @@ const mainRoutes = {
     { path: '/add-part', component: _import('modules/masterdata/part-maintain'), name: 'add-part', meta: { title: '部品-新增', isTab: true } },
     { path: '/edit-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'edit-part', meta: { title: '部品-编辑', isTab: true } },
     { path: '/details-part/:id(\\d+)', component: _import('modules/masterdata/part-maintain'), name: 'details-part', meta: { title: '部品-详情', isTab: true } },
-    { path: '/part-model/:id(\\d+)', component: _import('modules/masterdata/modelpartrela'), name: 'part-model', meta: { title: '部品-机种', isTab: true } },
+    { path: '/part-model/:id(\\d+)/:name', component: _import('modules/masterdata/modelpartrela'), name: 'part-model', meta: { title: '部品-机种', isTab: true } },
 
     // 生产阶段
     { path: '/add-phase', component: _import('modules/masterdata/phase-maintain'), name: 'add-phase', meta: { title: '生产阶段-新增', isTab: true } },
@@ -148,7 +148,7 @@ const mainRoutes = {
     { path: '/add-tool', component: _import('modules/masterdata/tool-maintain'), name: 'add-tool', meta: { title: '治工具-新增', isTab: true } },
     { path: '/edit-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'edit-tool', meta: { title: '治工具-编辑', isTab: true } },
     { path: '/details-tool/:id(\\d+)', component: _import('modules/masterdata/tool-maintain'), name: 'details-tool', meta: { title: '治工具-详情', isTab: true } },
-    { path: '/tool-model/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela'), name: 'tool-model', meta: { title: '治工具-机种', isTab: true } },
+    { path: '/tool-model/:id(\\d+)/:name', component: _import('modules/masterdata/modeltoolrela'), name: 'tool-model', meta: { title: '治工具-机种', isTab: true } },
 
     // 工位
     { path: '/add-workstation', component: _import('modules/masterdata/workstation-maintain'), name: 'add-workstation', meta: { title: '工位-新增', isTab: true } },

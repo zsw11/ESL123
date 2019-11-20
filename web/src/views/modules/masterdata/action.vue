@@ -58,8 +58,6 @@
         </el-table-column>
 
 
-
-
       <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>

@@ -162,7 +162,8 @@
       // 取消信息
       cancleFormSubmit () {
         this.$store.dispatch('common/closeActiveTab')
-        this.$router.push({ name: 'part-model' })
+        // this.$router.push({ name: 'part-model' })
+        this.$router.back()
         this.$destroy()
       },
       // 表单提交

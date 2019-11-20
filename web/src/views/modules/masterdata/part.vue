@@ -86,7 +86,7 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  type="text" size="small" @click="partModel(scope.row.id)">机种</el-button>
+            <el-button  type="text" size="small" @click="partModel(scope.row.id,scope.row.name)">机种</el-button>
             <el-button style="color: orangered" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -247,9 +247,9 @@ export default {
       this.dataListSelections = val
     },
     // 部品机种关系
-    partModel (id) {
+    partModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/part-model/${id}`})
+        this.$router.push({path: `/part-model/${id}/${name}`})
       })
     },
     // 详情

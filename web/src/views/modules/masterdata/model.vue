@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件查询</div>
+        <div class="card-title">{{title}}{{titleEnd}}</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
 
@@ -145,6 +145,8 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
+// import { fetchPart } from '@/api/part'
+// import { fetchTool } from '@/api/tool'
 
 const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
 
@@ -156,6 +158,11 @@ export default {
   },
   data () {
     return {
+      title: '条件查询',
+      titleEnd: null,
+      partId: null,
+      toolId: null,
+      modelSeriesId: null,
       dataButton: 'list',
       listQuery: {
         id: 0,
@@ -245,9 +252,27 @@ export default {
   },
   activated () {
     const self = this
+    // self.init()
     self.getDataList()
   },
+  created () {
+  },
   methods: {
+    // 初始化
+    // init () {
+    //   if (this.$route.query.name) {
+    //     this.title = this.$route.query.name
+    //     this.titleEnd = '-机种'
+    //   }
+    //   if (this.$route.query.type === 'part') {
+    //     this.partId = this.$route.query.id
+    //   } else if (this.$route.query.type === 'tool') {
+    //     this.toolId = this.$route.query.id
+    //   } else if (this.$route.query.type === 'modelSeries') {
+    //     this.modelSeriesId = this.$route.query.id
+    //   }
+    //   console.log(this.$route.query)
+    // },
     // 普通查询
     getDataList (pageNo) {
       if (pageNo) {
@@ -255,22 +280,75 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
+      // if (this.partId) {
+      //   fetchPart(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.partId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else if (this.toolId) {
+      //   fetchTool(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.toolId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else if (this.modelSeriesId) {
+      //   fetchModelSeries(Object.assign(
+      //     {
+      //       page: this.pageNo,
+      //       limit: this.pageSize
+      //     },
+      //     this.modelSeriesId
+      //   )).then(({page}) => {
+      //     this.dataList = page.data
+      //     this.total = page.totalCount
+      //     // console.log(this.dataList)
+      //   }).catch(() => {
+      //     this.dataList = []
+      //     this.total = 0
+      //   }).finally(() => {
+      //     this.dataListLoading = false
+      //   })
+      // } else {
       listModel(Object.assign(
         {
           page: this.pageNo,
           limit: this.pageSize
         },
-        this.listQuery
-      )).then(({page}) => {
-        this.dataList = page.data
-        this.total = page.totalCount
-        // console.log(this.dataList)
-      }).catch(() => {
-        this.dataList = []
-        this.total = 0
-      }).finally(() => {
-        this.dataListLoading = false
-      })
+          this.listQuery
+        )).then(({page}) => {
+          this.dataList = page.data
+          this.total = page.totalCount
+          // console.log(this.dataList)
+        }).catch(() => {
+          this.dataList = []
+          this.total = 0
+        }).finally(() => {
+          this.dataListLoading = false
+        })
+      // }
     },
     // 清除查询条件
     clearQuery () {

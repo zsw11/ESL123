@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件查询</div>
+        <div class="card-title">{{title}}-机种</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
 
@@ -132,11 +132,14 @@
   import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { listModelToolRela, deleteModelToolRela } from '@/api/modelToolRela'
+  import { deleteModelToolRela } from '@/api/modelToolRela'
+  import { fetchTool } from '@/api/tool'
   export default {
     name: 'modelList',
     data () {
       return {
+        id: null,
+        title: null,
         dataButton: 'list',
         listQuery: {
           id: null,
@@ -186,6 +189,8 @@
     },
     activated () {
       const self = this
+      self.title = self.$route.params.name
+      self.id = self.$route.params.id
       self.getDataList()
     },
     methods: {
@@ -196,12 +201,12 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        listModelToolRela(Object.assign(
+        fetchTool(Object.assign(
           {
             page: this.pageNo,
             limit: this.pageSize
           },
-          this.listQuery
+          this.id
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
