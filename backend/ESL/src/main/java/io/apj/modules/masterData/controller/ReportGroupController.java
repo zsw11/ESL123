@@ -1,10 +1,17 @@
 package io.apj.modules.masterData.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.ReportGroupReportRelaService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.sys.controller.AbstractController;
+import org.apache.ibatis.javassist.expr.NewArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +40,8 @@ import io.apj.common.utils.RD;
 public class ReportGroupController extends AbstractController {
     @Autowired
     private ReportGroupService reportGroupService;
+    @Autowired
+    private ReportGroupReportRelaService reportGroupReportRelaService ;
 
     /**
      * 列表
@@ -42,6 +51,7 @@ public class ReportGroupController extends AbstractController {
     @RequiresPermissions("masterData:reportgroup:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = reportGroupService.queryPage(params);
+//        PageUtils pageReport = reportService.queryPage(params);
         return RD.ok(page);
     }
 
@@ -53,8 +63,12 @@ public class ReportGroupController extends AbstractController {
     @RequiresPermissions("masterData:reportgroup:info")
     public RD info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
+        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
 
-        return RD.build().put("data", reportGroup);
+        ArrayList<Object> data = new ArrayList<>();
+        data.add(reportEntities);
+        data.add(reportGroup);
+        return RD.build().put("data", data);
     }
 
     /**
