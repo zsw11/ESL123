@@ -45,3 +45,21 @@ export function deleteModelSeries (id) {
     data: id
   })
 }
+// 导入
+export function modelSeriesImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/modelseries/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function modelSeriesExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/modelseries/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
