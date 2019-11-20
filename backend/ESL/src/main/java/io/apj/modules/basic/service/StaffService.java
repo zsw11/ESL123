@@ -3,7 +3,7 @@ package io.apj.modules.basic.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.google.gson.JsonArray;
 import io.apj.common.utils.PageUtils;
-import io.apj.modules.basic.entity.MemberEntity;
+import io.apj.modules.basic.entity.StaffEntity;
 
 import java.util.Map;
 
@@ -14,19 +14,19 @@ import java.util.Map;
  *
  * @date 2018-12-11 13:22:28
  */
-public interface MemberService extends IService<MemberEntity> {
+public interface StaffService extends IService<StaffEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params);
 
-    /**
+	/**
 	 * 保存配置信息
 	 */
-    public void save(MemberEntity member);
+	public void save(StaffEntity staff);
 
-    /**
+	/**
 	 * 更新配置信息
 	 */
-	public void update(MemberEntity member);
+	public void update(StaffEntity staff);
 
 	/**
 	 * 删除配置信息
@@ -36,6 +36,5 @@ public interface MemberService extends IService<MemberEntity> {
 	/**
 	 * 高级查询
 	 */
-	public Map<String,Object> advancedSearch(Map<String, Object> map,JsonArray fieldFilter);
+	public Map<String, Object> advancedSearch(Map<String, Object> map, JsonArray fieldFilter);
 }
-

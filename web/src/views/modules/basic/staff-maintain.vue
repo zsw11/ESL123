@@ -54,19 +54,16 @@
 
       <el-row>
         <el-col :span="9">
-          <el-form-item label="生日"
-                        prop="birthDate">
-            <el-date-picker v-model="dataForm.birthDate"
-                            value-format="yyyy-MM-dd"
-                            type="date"
-                            placeholder="选择出生日期"></el-date-picker>
+          <el-form-item :label="'工号'"
+                        prop="jobNumber">
+            <el-input v-model="dataForm.jobNumber"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="9"
                 :offset="2">
           <el-form-item label="性别"
                         prop="gender">
-            <dict-select dictCode="gender"
+            <dict-select dictType="Gender"
                          v-model="dataForm.gender"></dict-select>
           </el-form-item>
         </el-col>
@@ -84,23 +81,6 @@
                         prop="email">
             <el-input v-model="dataForm.email"></el-input>
           </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="9">
-          <el-form-item label="家庭住址"
-                        prop="familyProvince">
-            <area-select v-model="dataForm"
-                         provinceColumn="familyProvince"
-                         cityColumn="familyCity"
-                         style="width:100%"></area-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10"
-                :offset="1">
-          <el-input v-model="dataForm.familyAddress"
-                    placeholder="详细地址"></el-input>
         </el-col>
       </el-row>
 
@@ -168,15 +148,12 @@ export default {
         code: null,
         name: null,
         gender: null,
-        birthDate: null,
         mobilephone: null,
         email: null,
-        familyProvince: null,
-        familyCity: null,
-        familyAddress: null,
         employmentDate: null,
         remark: null,
-        userId: null
+        userId: null,
+        jobNumber: null
       },
       dataRules: {
         deptId: [{ required: true, type: 'number', message: '部门是必选项' }],
@@ -251,21 +228,18 @@ export default {
       if (this.dataForm.id) {
         fetchStaff(this.dataForm.id)
           .then(({ data }) => {
-            const {users} = data
-            this.dataForm.userId = users[0].id
+            console.log(data, 55555)
+            this.dataForm.userId = data.id
             Object.assign(
               this.dataForm,
               pick(data, [
+                'jobNumber',
                 'deptId',
                 'code',
                 'name',
                 'gender',
-                'birthDate',
                 'mobilephone',
                 'email',
-                'familyProvince',
-                'familyCity',
-                'familyAddress',
                 'employmentDate',
                 'remark'
               ])

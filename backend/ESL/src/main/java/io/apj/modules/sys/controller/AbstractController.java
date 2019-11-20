@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 
-import io.apj.modules.basic.entity.MemberEntity;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.entity.StaffEntity;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.entity.SysUserDataFilterEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
@@ -29,7 +29,7 @@ public abstract class AbstractController {
 	@Autowired
 	ReferenceService referenceService;
 	@Autowired
-	MemberService memberService;
+	StaffService staffService;
 //	@Autowired
 //	private SysDeptService sysDeptService;
 //	@Autowired
@@ -53,19 +53,19 @@ public abstract class AbstractController {
 		return getUser().getDeptId();
 	}
 
-	protected MemberEntity getMember() {
-		MemberEntity member = memberService.selectOne(
-				new EntityWrapper<MemberEntity>().eq("user_id", getUser().getId()));
+	protected StaffEntity getStaff() {
+		StaffEntity staff = staffService.selectOne(
+				new EntityWrapper<StaffEntity>().eq("user_id", getUser().getId()));
 
-		return member;
+		return staff;
 	}
 
-	protected Long getMemberId() {
-		return getMember().getId();
+	protected Long getStaffId() {
+		return getStaff().getId();
 	}
 
-	protected Long getMemberDeptId() {
-		return getMember().getDeptId();
+	protected Long getStaffDeptId() {
+		return getStaff().getDeptId();
 	}
 
 	/**

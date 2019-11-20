@@ -8,7 +8,7 @@
       <el-form :inline='true'
                :model='listQuery'
                @keyup.enter.native='getDataList()'>
-        <el-row>
+        <!-- <el-row>
           <el-col :span='6'>
             <el-form-item label='部门'
                           prop='deptId'>
@@ -91,7 +91,7 @@
                               placeholder='选择出生日期'></el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <div class='buttons with-complex'>
           <complex-filter :config="complexFilterConfig"
                           @confirm="doComplexSearch(1)"
@@ -108,14 +108,16 @@
            class='clearfix'>
         <div class='card-title'>员工信息</div>
         <div class='buttons'>
-          <el-button v-if="isAuth('basic:staff:create')"
-                     type='primary'
+          <!-- <el-button v-if="isAuth('basic:staff:create')" -->
+          <el-button
+                    type='primary'
                      @click='addOrUpdateHandle()'>新增</el-button>
           <display-attributes :config='displayConfig'
                               type='primary'
                               plain
                               @confirm="doDataSearch()">显示字段</display-attributes>
-          <el-button v-if="isAuth('basic:staff:delete')"
+          <!-- <el-button v-if="isAuth('basic:staff:delete')" -->
+            <el-button
                      type='danger'
                      @click='deleteHandle()'
                      :disabled='dataListSelections.length <= 0'>批量删除</el-button>
@@ -134,7 +136,14 @@
         <el-table-column align="center"
                          label="部门">
           <template slot-scope="scope">
-            <span>{{scope.row.depts.name }}</span>
+            <span>{{scope.row.dept.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="jobNumber"
+                         label="工号">
+          <template slot-scope="scope">
+            <span>{{scope.row.jobNumber }}</span>
           </template>
         </el-table-column>
 
@@ -148,7 +157,6 @@
         <el-table-column prop='name' 
                          align='center'
                          label='姓名'
-                         sortable='custom'
                          v-if="displayAttributesMap['staff.name'].display"
                          >
           <template slot-scope='scope'>
@@ -160,14 +168,6 @@
                          label="性别">
           <template slot-scope="scope">
             <span>{{genderMap[scope.row.gender]}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align='center'
-                         label='生日'
-                         v-if="displayAttributesMap['staff.birthDate'].display">
-          <template slot-scope='scope'>
-            <span>{{scope.row.birthDate }}</span>
           </template>
         </el-table-column>
 
@@ -184,14 +184,6 @@
                          v-if="displayAttributesMap['staff.email'].display">
           <template slot-scope='scope'>
             <span>{{scope.row.email }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align='center'
-                         label='家庭地址'
-                         v-if="displayAttributesMap['staff.familyAddress'].display">
-          <template slot-scope='scope'>
-            <span>{{scope.row.familyAddress }}</span>
           </template>
         </el-table-column>
 
@@ -255,10 +247,8 @@ const defaultDisplay = [
   'staff.code',
   'staff.name',
   'staff.gender',
-  'staff.birthDate',
   'staff.mobilephone',
   'staff.email',
-  'staff.familyAddress',
   'staff.status',
   'staff.employmentDate'
 ].map(a => {
@@ -296,8 +286,8 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       genderMap: {
-        male: '男',
-        female: '女'
+        '01': '男',
+        '02': '女'
       },
       statusMap: {
         inservice: '在职',
@@ -409,9 +399,10 @@ export default {
           this.listQuery
         )
       )
-        .then(({ data, total }) => {
-          this.dataList = data
-          this.total = total
+        .then(({ page }) => {
+          this.dataList = page.data
+          console.log(this.dataList, 444444)
+          this.total = page.totalCount
         })
         .catch(() => {
           this.dataList = []

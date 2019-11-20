@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.apj.modules.basic.dao.MemberDao">
+<mapper namespace="io.apj.modules.basic.dao.StaffDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-	<resultMap type="io.apj.modules.basic.entity.MemberEntity"
-		id="memberMap">
+	<resultMap type="io.apj.modules.basic.entity.StaffEntity"
+		id="staffMap">
 		<result property="id" column="id" />
 		<result property="jobId" column="job_id" />
 		<result property="deptId" column="dept_id" />
@@ -19,6 +19,7 @@
 		<result property="remark" column="remark" />
 		<result property="employmentDate" column="employment_date" />
 		<result property="email" column="email" />
+		<result property="jobNumber" column="job_number" />
 		<result property="createBy" column="create_by" />
 		<result property="createAt" column="create_at" />
 		<result property="updateBy" column="update_by" />
@@ -27,7 +28,7 @@
 	</resultMap>
 
 	<select id="executeSql" parameterType="String"
-		resultMap="memberDeptMap">
+		resultMap="staffDeptMap">
 		${value}
 	</select>
 
@@ -36,8 +37,8 @@
 		${value}
 	</select>
 
-	<resultMap type="io.apj.modules.basic.entity.MemberEntity"
-		id="memberDeptMap">
+	<resultMap type="io.apj.modules.basic.entity.StaffEntity"
+		id="staffDeptMap">
 		<result property="id" column="id" />
 		<result property="jobId" column="job_id" />
 		<result property="deptId" column="dept_id" />

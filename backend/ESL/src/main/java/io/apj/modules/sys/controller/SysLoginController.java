@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+
 import io.apj.common.utils.RD;
+import io.apj.modules.basic.entity.StaffEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
 import io.apj.modules.sys.form.SysLoginForm;
 import io.apj.modules.sys.service.SysCaptchaService;
@@ -41,8 +44,6 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
-//	@Autowired
-//	private MemberService memebrService;
 
 	/**
 	 * 验证码
@@ -92,7 +93,11 @@ public class SysLoginController extends AbstractController {
 //			sysUserService.initUserDataFilter(map);
 		// 用户信息
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
-
+//		获取人员信息
+		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
+		if (staff == null) {
+			return RD.build().NOT_FOUND();
+		}
 		// 判断用户是否存在
 		if (user == null)
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");

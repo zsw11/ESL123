@@ -1,10 +1,8 @@
 package io.apj.modules.basic.dao;
 
-import io.apj.modules.basic.entity.MemberEntity;
+import io.apj.modules.basic.entity.StaffEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,9 +13,9 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2018-12-10 17:12:16
  */
 @Mapper
-public interface MemberDao extends BaseMapper<MemberEntity> {
+public interface StaffDao extends BaseMapper<StaffEntity> {
 
-	List<MemberEntity> executeSql(String sql);
+	List<StaffEntity> executeSql(String sql);
 
 	Integer executeSqlCount(String sql);
 }
