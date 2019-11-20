@@ -351,10 +351,10 @@ comment on column sys_dict_type.update_at is '更新时间';
 comment on column sys_dict_type.delete_at is '删除时间';
 
 -- 人员信息
-drop table if exists basic_member;
-CREATE TABLE basic_member (
+drop table if exists basic_staff;
+CREATE TABLE basic_staff (
   id serial NOT NULL PRIMARY KEY,
-  job_id BIGINT NOT NULL,
+  job_id BIGINT,
   dept_id BIGINT NOT NULL,
   user_id bigint,
   code varchar(64)  NOT NULL,
@@ -362,9 +362,9 @@ CREATE TABLE basic_member (
   pinyin varchar(128) not null,
   gender varchar(20),
   mobilephone varchar(16),
-  status varchar(20) not null,
+  status varchar(20),
   remark varchar(256),
-  employment_date date not null,
+  employment_date date,
   email varchar(64),
   job_number varchar(64),
   create_by bigint  NOT NULL,
@@ -373,26 +373,26 @@ CREATE TABLE basic_member (
   update_at timestamp,
   delete_at timestamp
 );
-comment on table basic_member is '人员信息';
-Create Unique Index index_codeAndUserId_UNQ On basic_member(code,user_id);
-comment on column basic_member.job_id is '工作岗位';
-comment on column basic_member.dept_id is '所属组织集团';
-comment on column basic_member.user_id is '用户id';
-comment on column basic_member.code is '人员编码';
-comment on column basic_member.name is '人员姓名';
-comment on column basic_member.pinyin is '姓名拼音';
-comment on column basic_member.gender is '性别 0:男  1：女';
-comment on column basic_member.mobilephone is '手机号码';
-comment on column basic_member.status is '在职状态';
-comment on column basic_member.remark is '备注';
-comment on column basic_member.employment_date is '入职日期';
-comment on column basic_member.email is '邮箱';
-comment on column basic_member.job_number is '工号';
-comment on column basic_member.create_by is '创建者ID';
-comment on column basic_member.create_at is '创建时间';
-comment on column basic_member.update_by is '更新者ID';
-comment on column basic_member.update_at is '更新时间';
-comment on column basic_member.delete_at is '删除时间';
+comment on table basic_staff is '人员信息';
+Create Unique Index index_codeAndUserId_UNQ On basic_staff(code,user_id);
+comment on column basic_staff.job_id is '工作岗位';
+comment on column basic_staff.dept_id is '所属组织集团';
+comment on column basic_staff.user_id is '用户id';
+comment on column basic_staff.code is '人员编码';
+comment on column basic_staff.name is '人员姓名';
+comment on column basic_staff.pinyin is '姓名拼音';
+comment on column basic_staff.gender is '性别 0:男  1：女';
+comment on column basic_staff.mobilephone is '手机号码';
+comment on column basic_staff.status is '在职状态';
+comment on column basic_staff.remark is '备注';
+comment on column basic_staff.employment_date is '入职日期';
+comment on column basic_staff.email is '邮箱';
+comment on column basic_staff.job_number is '工号';
+comment on column basic_staff.create_by is '创建者ID';
+comment on column basic_staff.create_at is '创建时间';
+comment on column basic_staff.update_by is '更新者ID';
+comment on column basic_staff.update_at is '更新时间';
+comment on column basic_staff.delete_at is '删除时间';
 
 -- 岗位信息
 drop table if exists basic_job;
@@ -503,7 +503,7 @@ CREATE TABLE sys_message (
   type varchar(16) NOT NULL,
   source_type varchar(16) NOT NULL,
   source_id bigint NOT NULL,
-  to_member_id bigint,
+  to_staff_id bigint,
   title varchar(64) NOT NULL,
   content varchar(128) NOT NULL,
   status varchar(16) NOT NULL,
@@ -515,7 +515,7 @@ comment on column sys_message.process_id is '流程图实例ID';
 comment on column sys_message.type is '消息类型(info,warn,error)';
 comment on column sys_message.source_type is '来源类型';
 comment on column sys_message.source_id is '来源ID';
-comment on column sys_message.to_member_id is '指定用户ID';
+comment on column sys_message.to_staff_id is '指定用户ID';
 comment on column sys_message.title is '标题';
 comment on column sys_message.content is '内容';
 comment on column sys_message.status is '状态';
@@ -525,13 +525,13 @@ comment on column sys_message.create_at is '创建时间';
 drop table if exists sys_message_read;
 CREATE TABLE sys_message_read (
   id serial NOT NULL PRIMARY KEY,
-  member_id bigint NOT NULL,
+  staff_id bigint NOT NULL,
   message_id bigint NOT NULL,
   create_at timestamp default now() NOT NULL
 );
 comment on table sys_message_read is '已读消息用户';
-Create Unique Index index_sysMessageRead_memberIdAndMessageId_UNQ On sys_message_read(member_id,message_id);
-comment on column sys_message_read.member_id is '用户ID';
+Create Unique Index index_sysMessageRead_staffIdAndMessageId_UNQ On sys_message_read(staff_id,message_id);
+comment on column sys_message_read.staff_id is '用户ID';
 comment on column sys_message_read.message_id is '消息通知ID';
 comment on column sys_message_read.create_at is '创建时间';
 
@@ -1306,9 +1306,9 @@ INSERT INTO basic_job VALUES (1, 'W001', '临时岗位', 'linshigangwei', '01', 
 
 
 -- ----------------------------
--- Records of basic_member
+-- Records of basic_staff
 -- ----------------------------
-INSERT INTO "public"."basic_member"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email","job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 1, 1, 1, 'admin', 'admin', 'admin', '0', '1', '在职', '无', '2019-10-15', '1', 1, '007', '2019-10-15 15:15:44', 1, '2019-10-15 15:15:47', NULL);
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email","job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 1, 1, 1, 'admin', 'admin', 'admin', '0', '1', '在职', '无', '2019-10-15', '1', 1, '007', '2019-10-15 15:15:44', 1, '2019-10-15 15:15:47', NULL);
 
 
 -- ----------------------------
@@ -1328,7 +1328,7 @@ INSERT INTO sys_config VALUES (2, 'MessageExpire', '1440', 1, '待处理消息�
 -- Records of sys_dept
 -- ----------------------------
 INSERT INTO "public"."sys_dept"("id", "parent_id", "name", "order_num", "del_flag", "dept_code", "dept_type", "dept_level", "stlst", "create_by", "create_at", "update_by", "update_at", "delete_at") 
-VALUES (1, 1, '总部', 0, 0, '0', 'bloc', '1', 'lst', 1, '2019-11-12 13:57:01', NULL, NULL, NULL);
+VALUES (1, 0, '总部', 0, 0, '0', 'bloc', '1', 'lst', 1, '2019-11-12 13:57:01', NULL, NULL, NULL);
 -- INSERT INTO sys_dept VALUES (2, 1, '总部', 0, 0, NULL, 'headquarters', 'company', 1, 'LST', '2018-12-23 09:37:41', 1, '2019-02-27 11:08:13', '1970-01-01 00:00:00');
 -- INSERT INTO sys_dept VALUES (3, 1, '广东（广州）', 0, 0, NULL, 'branch', 'company', 1, 'LST', '2018-12-23 09:37:41', 1, '2019-02-25 20:47:01', '1970-01-01 00:00:00');
 
@@ -1387,11 +1387,11 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (44, 42, '新增', NULL, 'basic:job:save', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (45, 42, '修改', NULL, 'basic:job:update', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (46, 42, '删除', NULL, 'basic:job:delete', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (47, 31, '人员信息', 'basic/member', NULL, 1, NULL, 4, 1, '2017-03-23 22:37:41', 2, '2019-01-04 13:36:19', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (48, 47, '查看', NULL, 'basic:member:list,basic:member:info', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (49, 47, '新增', NULL, 'basic:member:save', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (50, 47, '修改', NULL, 'basic:member:update', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (51, 47, '删除', NULL, 'basic:member:delete', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (47, 31, '人员信息', 'basic/staff', NULL, 1, NULL, 4, 1, '2017-03-23 22:37:41', 2, '2019-01-04 13:36:19', NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (48, 47, '查看', NULL, 'basic:staff:list,basic:staff:info', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (49, 47, '新增', NULL, 'basic:staff:save', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (50, 47, '修改', NULL, 'basic:staff:update', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (51, 47, '删除', NULL, 'basic:staff:delete', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (72, 31, '部门管理', 'basic/dept', NULL, 1, NULL, 5, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:50:28', NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (73, 72, '列表', NULL, 'basic:dept:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:47:22', NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (74, 72, '新增', NULL, 'basic:dept:create,basic:dept:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:47:51', NULL);

@@ -10,11 +10,11 @@ export function listStaff (query) {
 }
 
 // 获取员工信息详情
-export function fetchStaff (params) {
+export function fetchStaff (id) {
   return request({
-    url: request.adornUrl('/api/v1/staff/detail'),
+    url: request.adornUrl(`/api/v1/staff/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

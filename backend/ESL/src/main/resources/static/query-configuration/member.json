@@ -1,9 +1,9 @@
 [
 	{
-		"table": "basic_member",
+		"table": "basic_staff",
 		"tableName": "人员信息",
-		"tableAlias": "member",
-		"join": " left Join sys_dept dept on dept.dept_id = member.dept_id left Join basic_job job on job.id = member.job_id ",
+		"tableAlias": "staff",
+		"join": " left Join sys_dept dept on dept.dept_id = staff.dept_id left Join basic_job job on job.id = staff.job_id ",
 		"fieldList": [
 			{
 				"code": "jobId",

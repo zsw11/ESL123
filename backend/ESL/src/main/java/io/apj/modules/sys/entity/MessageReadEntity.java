@@ -31,7 +31,7 @@ public class MessageReadEntity implements Serializable {
 	 * 用户ID
 	 */
 	@NotBlank(message = "用户ID不能为空", groups = { AddGroup.class, UpdateGroup.class })
-	private Long memberId;
+	private Long staffId;
 	/**
 	 * 消息通知ID
 	 */
@@ -56,18 +56,12 @@ public class MessageReadEntity implements Serializable {
 		return id;
 	}
 
-	/**
-	 * 设置：用户ID
-	 */
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
+	public Long getStaffId() {
+		return staffId;
 	}
 
-	/**
-	 * 获取：用户ID
-	 */
-	public Long getMemberId() {
-		return memberId;
+	public void setStaffId(Long staffId) {
+		this.staffId = staffId;
 	}
 
 	/**

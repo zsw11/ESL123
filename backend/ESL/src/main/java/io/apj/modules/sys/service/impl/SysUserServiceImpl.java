@@ -22,8 +22,8 @@ import io.apj.common.exception.RRException;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
-import io.apj.modules.basic.entity.MemberEntity;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.entity.StaffEntity;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.dao.SysUserDao;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.entity.SysUserDataFilterEntity;
@@ -50,7 +50,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Autowired
 	private SysDeptService sysDeptService;
 	@Autowired
-	private MemberService memberService;
+	private StaffService staffService;
 
 	@Override
 	@DataFilter(subDept = false, user = true)
@@ -62,10 +62,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				.like(StringUtils.isNotEmpty((String) params.get("email")), "email", (String) params.get("email"))
 				.like(StringUtils.isNotEmpty((String) params.get("mobile")), "mobile", (String) params.get("mobile"))
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
-		EntityWrapper<MemberEntity> memberWrapper = new EntityWrapper<>();
-		List<MemberEntity> memberList = memberService.selectList(memberWrapper);
+		EntityWrapper<StaffEntity> staffrWrapper = new EntityWrapper<>();
+		List<StaffEntity> staffList = staffService.selectList(staffrWrapper);
 		List<Long> userIds = new ArrayList<Long>();
-		for (MemberEntity item : memberList) {
+		for (StaffEntity item : staffList) {
 			if (item.getUserId() != null) {
 				userIds.add(item.getUserId());
 			}
@@ -94,7 +94,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	@DataFilter(tableAlias = "init", subDept = true, user = false)
 	public void initUserDataFilter(Map<String, Object> params) {
-		memberService.selectOne(new EntityWrapper<MemberEntity>().eq("user_id", params.get("userId"))
+		staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", params.get("userId"))
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER)));
 	}
 
@@ -156,8 +156,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public boolean updatePassword(Long userId, String password, String newPassword) {
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setPassword(newPassword);
-		return this.update(userEntity,
-				new EntityWrapper<SysUserEntity>().eq("id", userId).eq("password", password));
+		return this.update(userEntity, new EntityWrapper<SysUserEntity>().eq("id", userId).eq("password", password));
 	}
 
 	/**

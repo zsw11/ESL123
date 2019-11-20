@@ -3,7 +3,7 @@
 
 <mapper namespace="io.apj.modules.sys.dao.SysDeptDao">
 
-	<resultMap type="io.apj.modules.basic.entity.MemberEntity"
+	<resultMap type="io.apj.modules.basic.entity.StaffEntity"
 		id="sysDeptMap">
 		<result property="id" column="id" />
 		<result property="parentId" column="parent_id" />

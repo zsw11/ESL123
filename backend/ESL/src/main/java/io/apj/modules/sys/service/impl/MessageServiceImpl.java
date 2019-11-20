@@ -22,8 +22,8 @@ import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.common.validator.ValidatorUtils;
-import io.apj.modules.basic.entity.MemberEntity;
-import io.apj.modules.basic.service.MemberService;
+import io.apj.modules.basic.entity.StaffEntity;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.dao.MessageDao;
 import io.apj.modules.sys.entity.MessageEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
@@ -34,7 +34,7 @@ import io.apj.modules.sys.service.ShiroService;
 public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> implements MessageService {
 
 	@Autowired
-	private MemberService memberService;
+	private StaffService staffService;
 
 	@Autowired
 	private ShiroService shiroService;
@@ -48,11 +48,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
 
 		// 获取当前账号用户信息
 		SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-		MemberEntity member = memberService.selectOne(new EntityWrapper<MemberEntity>().eq("user_id", user.getId()));
+		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
 
 		// 区分未读
-		if (member != null) {
-			String sql = "SELECT message_id FROM sys_message_read WHERE member_id = " + member.getId()
+		if (staff != null) {
+			String sql = "SELECT message_id FROM sys_message_read WHERE staff_id = " + staff.getId()
 					+ " group by message_id";
 			messageIds = this.getIdsBySql(sql);
 		}
@@ -75,14 +75,14 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
 
 		switch ((String) params.get("type")) {
 		case "all": { // 所有
-			wrapper.isNull("to_member_id");
+			wrapper.isNull("to_staff_id");
 			break;
 		}
 		case "unread": { // 未读（不包括待审批，待处理，超期）
 			if (messageIds.size() > 0) {
 				wrapper.notIn("id", messageIds);
 			}
-			wrapper.isNull("to_member_id");
+			wrapper.isNull("to_staff_id");
 			wrapper.notLike("type", ":approve");
 			wrapper.notLike("type", ":process");
 			wrapper.notLike("type", ":expire");
@@ -93,25 +93,25 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
 			if (messageIds.size() > 0) {
 				wrapper.notIn("id", messageIds);
 			}
-			wrapper.isNull("to_member_id");
+			wrapper.isNull("to_staff_id");
 			wrapper.eq("status", "release");
 			break;
 		}
 		case "approve": { // 待审批，状态status为release，之后会处理为fixed
 			wrapper.like("type", ":approve");
-			wrapper.eq("to_member_id", member.getId());
+			wrapper.eq("to_staff_id", staff.getId());
 			wrapper.eq("status", "release");
 			break;
 		}
 		case "process": { // 待处理，状态status为release，之后会处理为fixed
 			wrapper.like("type", ":process");
-			wrapper.isNull("to_member_id");
+			wrapper.isNull("to_staff_id");
 			wrapper.eq("status", "release");
 			break;
 		}
 		case "expire": { // 超期，状态status为release，之后会处理为fixed
 			wrapper.like("type", ":expire");
-			wrapper.isNull("to_member_id");
+			wrapper.isNull("to_staff_id");
 			wrapper.eq("status", "release");
 			break;
 		}
@@ -120,8 +120,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
 		}
 
 		// 查询指定用户
-		if (member != null) {
-			wrapper.or().eq("to_member_id", member.getId());
+		if (staff != null) {
+			wrapper.or().eq("to_staff_id", staff.getId());
 			switch ((String) params.get("type")) {
 			case "all": {
 				break;

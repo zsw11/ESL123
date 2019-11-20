@@ -505,11 +505,11 @@ public class DataUtils {
 	 * 拼接审批流程sql语句
 	 */
 	public static String activitiCandidateSql(String perms) {
-		String sql = "SELECT member.name " + "FROM sys_user_role ur "
+		String sql = "SELECT staff.name " + "FROM sys_user_role ur "
 				+ "LEFT JOIN sys_role_menu rm ON rm.role_id = ur.role_id "
 				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id " + "LEFT JOIN sys_menu m ON m.id = rm.menu_id "
 				+ "LEFT JOIN sys_user u on u.id = ur.user_id "
-				+ "LEFT JOIN basic_member member on member.user_id = u.id "
+				+ "LEFT JOIN basic_staff staff on staff.user_id = u.id "
 				+ "LEFT JOIN sys_dept dept ON dept.id = rd.dept_id " + " WHERE m.perms = '" + perms
 				+ "' and dept.dept_type = 'headquarters'";
 		return sql;
@@ -519,11 +519,11 @@ public class DataUtils {
 	 * 拼接审批流程sql语句
 	 */
 	public static String activitiCandidateIDSql(String perms) {
-		String sql = "SELECT member.id " + "FROM sys_user_role ur "
+		String sql = "SELECT staff.id " + "FROM sys_user_role ur "
 				+ "LEFT JOIN sys_role_menu rm ON rm.role_id = ur.role_id "
 				+ "LEFT JOIN sys_role_dept rd ON rd.role_id =ur.role_id " + "LEFT JOIN sys_menu m ON m.id = rm.menu_id "
 				+ "LEFT JOIN sys_user u on u.id = ur.user_id "
-				+ "LEFT JOIN basic_member member on member.user_id = u.id "
+				+ "LEFT JOIN basic_staff staff on staff.user_id = u.id "
 				+ "LEFT JOIN sys_dept dept ON dept.id = rd.dept_id " + " WHERE m.perms = '" + perms
 				+ "' and dept.dept_type = 'headquarters'";
 		return sql;

@@ -79,7 +79,7 @@ public class ReferenceServiceImpl extends ServiceImpl<ReferenceDao, ReferenceEnt
 					mainId = (Long) f.get(model);
 				}
 				// 判断是人员表
-				if (entityName.equals("MemberEntity")) {
+				if (entityName.equals("StaffEntity")) {
 					// 跳过创建Id和更新Id
 					if (f.getName().equals("createBy") || f.getName().equals("updateBy")) {
 						continue;

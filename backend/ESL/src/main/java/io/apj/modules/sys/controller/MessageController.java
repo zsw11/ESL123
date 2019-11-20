@@ -102,11 +102,11 @@ public class MessageController extends AbstractController {
 					&& !entity.getType().contains(":expire")) {
 
 				MessageReadEntity message = messageReadService.selectOne(
-						new EntityWrapper<MessageReadEntity>().eq("message_id", id).eq("member_id", getMemberId()));
+						new EntityWrapper<MessageReadEntity>().eq("message_id", id).eq("staff_id", getStaffId()));
 				if (message == null) {
 					MessageReadEntity read = new MessageReadEntity();
 					read.setCreateAt(new Date());
-					read.setMemberId(getMemberId());
+					read.setStaffId(getStaffId());
 					read.setMessageId(id);
 					readList.add(read);
 				}

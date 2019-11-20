@@ -51,7 +51,7 @@ public class MessageEntity implements Serializable {
 	/**
 	 * 指定用户ID
 	 */
-	private Long toMemberId;
+	private Long toStaffId;
 	/**
 	 * 标题
 	 */
@@ -152,18 +152,13 @@ public class MessageEntity implements Serializable {
 		return sourceId;
 	}
 
-	/**
-	 * 设置：指定用户ID
-	 */
-	public void setToMemberId(Long toMemberId) {
-		this.toMemberId = toMemberId;
+
+	public Long getToStaffId() {
+		return toStaffId;
 	}
 
-	/**
-	 * 获取：指定用户ID
-	 */
-	public Long getToMemberId() {
-		return toMemberId;
+	public void setToStaffId(Long toStaffId) {
+		this.toStaffId = toStaffId;
 	}
 
 	/**
