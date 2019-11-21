@@ -194,15 +194,9 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchPart(Object.assign(
-          {
-            page: this.pageNo,
-            limit: this.pageSize
-          },
-          this.id
-        )).then(({page}) => {
-          this.dataList = page.data
-          this.total = page.totalCount
+        fetchPart(this.id).then(({data}) => {
+          this.dataList = data.model
+          // this.total = data.totalCount
           // console.log(this.dataList)
         }).catch(() => {
           this.dataList = []

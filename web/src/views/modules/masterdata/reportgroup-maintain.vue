@@ -58,15 +58,7 @@
         </el-table-column>
 
       </el-table>
-      <el-pagination
-        @size-change="sizeChangeHandle"
-        @current-change="currentChangeHandle"
-        :current-page="pageNo"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper">
-      </el-pagination>
+
 
     </el-card>
     <span class="dialog-footer">
@@ -180,9 +172,10 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportGroup(this.dataForm.id).then(({data}) => {
+          console.log(data, 1111111111111111111111111)
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true
@@ -222,16 +215,8 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
-      fetchReportGroup(Object.assign(
-        {
-          page: this.pageNo,
-          limit: this.pageSize
-        },
-        this.dataForm.id
-      )).then(({page}) => {
-        this.dataList = page.data
-        console.log(page.data, 11111111111111111111)
-        this.total = page.totalCount
+      fetchReportGroup(this.dataForm.id).then(({data}) => {
+        this.dataList = data.reportEntities
       }).catch(() => {
         this.dataList = []
         this.total = 0
