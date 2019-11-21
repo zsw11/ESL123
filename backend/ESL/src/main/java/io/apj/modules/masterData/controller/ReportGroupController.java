@@ -1,9 +1,6 @@
 package io.apj.modules.masterData.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
@@ -51,7 +48,6 @@ public class ReportGroupController extends AbstractController {
     @RequiresPermissions("masterData:reportgroup:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = reportGroupService.queryPage(params);
-//        PageUtils pageReport = reportService.queryPage(params);
         return RD.ok(page);
     }
 
@@ -63,11 +59,12 @@ public class ReportGroupController extends AbstractController {
     @RequiresPermissions("masterData:reportgroup:info")
     public RD info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
+//        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
 
-        ArrayList<Object> data = new ArrayList<>();
-        data.add(reportEntities);
-        data.add(reportGroup);
+        ReportGroupReportRelaEntity reportEntities = reportGroupReportRelaService.selectById(id);
+        HashMap<Object, Object> data = new HashMap<>();
+        data.put("reportEntities",reportEntities);
+        data.put("reportGroup",reportGroup);
         return RD.build().put("data", data);
     }
 

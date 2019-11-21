@@ -18,7 +18,7 @@ export function createApproveOpininon (data) {
   })
 }
 
-// 获取部品详情
+// 获取常用审批意见详情
 export function fetchApproveOpininon (id) {
   return request({
     url: request.adornUrl(`/api/v1/approveopininon/detail/${id}`),
