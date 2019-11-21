@@ -100,18 +100,23 @@ const mainRoutes = {
     { path: '/details-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'details-model', meta: { title: '机种-详情', isTab: true } },
 
     // 机种部品关系
-    { path: '/add-modelpartrela', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'add-modelpartrela', meta: { title: '新增机种部品关系', isTab: true } },
-    { path: '/edit-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'edit-modelpartrela', meta: { title: '编辑机种部品关系', isTab: true } },
-    { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种部品关系详情', isTab: true } },
+    { path: '/add-modelpartrela', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'add-modelpartrela', meta: { title: '新增机种-部品关系', isTab: true } },
+    { path: '/edit-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'edit-modelpartrela', meta: { title: '编辑机种-部品关系', isTab: true } },
+    { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
 
     // 机种系列
     { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '机种系列-新增', isTab: true } },
     { path: '/edit-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'edit-modelseries', meta: { title: '机种系列-编辑', isTab: true } },
     { path: '/details-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'details-modelseries', meta: { title: '机种系列-详情', isTab: true } },
+    { path: '/modelseries-model/:id(\\d+)/:name', component: _import('modules/masterdata/modelmodelseriesrela'), name: 'edit-modelseries', meta: { title: '机种系列-机种', isTab: true } },
+
+    // 机种机种系列关系
+    { path: '/add-modelmodelseriesrela', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'add-modelmodelseriesrela', meta: { title: '新增机种-机种系列关系', isTab: true } },
+    { path: '/details-modelmodelseriesrela/:id(\\d+)', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'edit-modelmodelseriesrela', meta: { title: '机种-机种系列关系详情', isTab: true } },
 
     // 机种治工具关系
-    { path: '/add-modeltoolrela', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'add-modeltoolrela', meta: { title: '新增机种治工具关系', isTab: true } },
-    { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种治工具关系', isTab: true } },
+    { path: '/add-modeltoolrela', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'add-modeltoolrela', meta: { title: '新增机种-治工具关系', isTab: true } },
+    { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种-治工具关系', isTab: true } },
 
     // 关键词
     { path: '/add-action', component: _import('modules/masterdata/action-maintain'), name: 'add-operation', meta: { title: '关键词-新增', isTab: true } },

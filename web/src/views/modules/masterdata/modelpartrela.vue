@@ -129,17 +129,16 @@
 </template>
 
 <script>
-  import { listModel } from '@/api/model'
+  import { listModel, deleteModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { deleteModelPartRela } from '@/api/modelPartRela'
-  import { fetchPart } from '@/api/part'
+  import { fetchModelByPart } from '@/api/part'
   export default {
     name: 'modelList',
     data () {
       return {
         id: null,
-        title: this.$route.params.name,
+        title: null,
         dataButton: 'list',
         listQuery: {
           id: null,
@@ -183,7 +182,6 @@
       const self = this
       self.title = this.$route.params.name
       self.id = this.$route.params.id
-      console.log(self.id)
       self.getDataList()
     },
     methods: {
@@ -194,16 +192,22 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchPart(this.id).then(({data}) => {
-          this.dataList = data.model
-          // this.total = data.totalCount
+        fetchModelByPart(Object.assign(
+          {
+            page: this.pageNo,
+            limit: this.pageSize,
+            id: this.id
+          }
+          )).then(({page}) => {
+            this.dataList = page.data
+            this.total = page.totalCount
           // console.log(this.dataList)
-        }).catch(() => {
-          this.dataList = []
-          this.total = 0
-        }).finally(() => {
-          this.dataListLoading = false
-        })
+          }).catch(() => {
+            this.dataList = []
+            this.total = 0
+          }).finally(() => {
+            this.dataListLoading = false
+          })
       },
       // 清除查询条件
       clearQuery () {
@@ -271,7 +275,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteModelPartRela(ids).then(() => {
+          deleteModel(ids).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',

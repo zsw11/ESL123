@@ -147,7 +147,7 @@
     }
   }
   .title{
-    margin-top: 30%;
+    margin-top: 25%;
     padding-left: 14px;
   }
   .login-title {
@@ -157,7 +157,7 @@
 
   }
   .title-eng{
-    margin-top: -15px;
+    margin-top: -20px;
     color: #BDBDBD;
     font-size: 18px;
   }

@@ -11,15 +11,18 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel" labelColunt="code" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
+          <!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
+          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
+          <!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true"></keyword-search>
+          <!--          <el-input v-model="listQuery.modelSeriesId"   clearable></el-input>-->
+          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
 
         </el-form-item>
 
@@ -40,8 +43,14 @@
         <div class="card-title">机种</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <!-- <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button> -->
+          <export-data
+            :config="exportConfig"
+            type="primary"
+            plain>导   出
+          </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -58,7 +67,7 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="ame" label="机种名称" >
+        <el-table-column align="center" prop="name" label="机种名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
@@ -129,21 +138,31 @@
 </template>
 
 <script>
-  import { listModel, deleteModel } from '@/api/model'
+  import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { fetchTool } from '@/api/tool'
+  import { filterAttributes } from '@/utils'
+  import { cloneDeep } from 'lodash'
+  import ExportData from '@/components/export-data'
+  import ImportData from '@/components/import-data'
+
+  const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+
   export default {
     name: 'modelList',
+    components: {
+      ExportData,
+      ImportData
+    },
     data () {
       return {
-        id: null,
         title: null,
+        id: null,
         dataButton: 'list',
         listQuery: {
-          id: null,
-          deptId: null,
+          id: 0,
           name: null,
+          deptId: null,
           modelSeriesId: null,
           code: null,
           WSTime: null,
@@ -183,13 +202,53 @@
             { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
           ]
         }],
-        complexFilters: []
+        complexFilters: [],
+        // 导出字段
+        exportAttributes: cloneDeep(defaultExport),
+        // 导入字段，固定不可变
+        importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+      }
+    },
+    computed: {
+      importConfig () {
+        return {
+          attributes: [{
+            code: this.attributes[0].code,
+            name: this.attributes[0].name,
+            children: filterAttributes(this.attributes, {
+              attributes: this.importAttributes,
+              plain: true
+            }),
+            sampleDatas: [[ 'name', '03', '01', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime' ]]
+          }],
+          importApi: modelImport,
+          importSuccessCb: () => { this.getDataList() }
+        }
+      },
+      exportConfig () {
+        return {
+          attributes: filterAttributes(this.attributes, 'isExport'),
+          exportApi: modelExport,
+          filterType: this.dataButton,
+          filters: this.listQuery,
+          complexFilters: this.complexFilters,
+          exportAttributes: this.exportAttributes,
+          saveSetting: () => {
+            this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+            this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+          },
+          reset: () => {
+            this.exportAttributes = cloneDeep(defaultExport)
+            this.$store.dispatch('user/SetAExport', { page: 'model', display: this.exportAttributes })
+            this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+          }
+        }
       }
     },
     activated () {
       const self = this
-      self.title = self.$route.params.name
-      self.id = self.$route.params.id
+      self.title = this.$route.params.name
+      self.id = this.$route.params.id
       self.getDataList()
     },
     methods: {
@@ -200,9 +259,15 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchTool(this.id).then(({data}) => {
-          this.dataList = data.model
-          // this.total = data.totalCount
+        listModel(Object.assign(
+          {
+            page: this.pageNo,
+            limit: this.pageSize
+          },
+          this.listQuery
+        )).then(({page}) => {
+          this.dataList = page.data
+          this.total = page.totalCount
           // console.log(this.dataList)
         }).catch(() => {
           this.dataList = []
@@ -210,6 +275,7 @@
         }).finally(() => {
           this.dataListLoading = false
         })
+        // }
       },
       // 清除查询条件
       clearQuery () {
@@ -217,8 +283,6 @@
           name: null,
           deptId: null,
           modelSeriesId: null,
-          modelId: null,
-          toolId: null,
           code: null,
           WSTime: null,
           ESTime: null,
@@ -259,14 +323,14 @@
       details (id) {
         // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-modeltoolrela/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-modelmodelseriesrela/${id}`, query: {noShow: true}})
         })
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
         this.$nextTick(() => {
           console.log(id)
-          this.$router.push({ path: id ? `/edit-modeltoolrela/${id}` : '/add-modelpartrela' })
+          this.$router.push({ path: id ? `/edit-modelmodelseriesrela/${id}` : '/add-modelmodelseriesrela' })
         })
       },
       // 删除数据
