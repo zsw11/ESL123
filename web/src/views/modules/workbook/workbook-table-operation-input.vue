@@ -41,6 +41,7 @@ export default {
   components: { Popper },
   data () {
     return {
+      suggestMode: null,
       popoverVisible: false,
       suggestions: [
         { id: 1, name: 'A' },
@@ -50,7 +51,11 @@ export default {
     }
   },
   methods: {
-    suggest () {
+    getInputBegin () {
+      return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
+    },
+    suggest (mode, keyword) {
+      this.suggestMode = mode
       setTimeout(() => {
         this.activeSugguestionIndex = null
         this.popoverVisible = true
@@ -86,6 +91,15 @@ export default {
           this.addToSelection(']', false)
           e.stopPropagation()
           this.suggest()
+          break
+        }
+        case ']': {
+          // 后面是]，只移动光标
+          if (this.$refs.operation.value.substr(this.$refs.operation.selectionEnd, 1) === ']') {
+            this.endSuggest()
+            this.$refs.operation.selectionStart = ++this.$refs.operation.selectionEnd
+            e.preventDefault()
+          }
           break
         }
         // 匹配治工具
@@ -125,6 +139,19 @@ export default {
           break
         }
         default: {
+          if (e.key === 'Backspace') {
+            this.endSuggest()
+            return true
+          } else if (!/[`~!@#$%^&*()\-_=+\[\]{}\\|;':",./<>?]|\s/.test(this.getInputBegin() + e.key)) {
+            this.suggest()
+          } else if (/\[[^\[\]"]*$/.test(this.getInputBegin())) {
+            this.suggest()
+          } else if ((this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
+            this.suggest()
+          } else {
+            this.endSuggest()
+            console.log(e.key)
+          }
           return true
         }
       }
