@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
+import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
@@ -85,7 +86,7 @@ public class ToolController extends AbstractController {
     @RequiresPermissions("masterData:part:info")
     public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
 //		PartEntity part = partService.selectById(id);
-        HashMap<Object, Object> page = modelToolRelaService.selectModelByToolId(id, params);
+        Page<ModelEntity> page = modelToolRelaService.selectModelByToolId(id, params);
 
         return RD.ok( page);
     }

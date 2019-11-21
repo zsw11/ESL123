@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 
@@ -81,7 +82,7 @@ public class PartController extends AbstractController {
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
 //		PartEntity part = partService.selectById(id);
-		HashMap<Object, Object> page = modelPartRelaService.selectModelByPartId(id, params);
+		Page<ModelEntity> page = modelPartRelaService.selectModelByPartId(id, params);
 
 		return RD.ok( page);
 	}
