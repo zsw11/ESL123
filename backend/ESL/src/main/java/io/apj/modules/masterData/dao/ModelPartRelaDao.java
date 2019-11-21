@@ -1,8 +1,11 @@
 package io.apj.modules.masterData.dao;
 
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * 机种部品关系
@@ -13,5 +16,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface ModelPartRelaDao extends BaseMapper<ModelPartRelaEntity> {
+    List<ModelEntity> selectModelByPartId(int id);
 	
 }

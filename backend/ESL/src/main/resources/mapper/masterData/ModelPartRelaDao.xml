@@ -3,7 +3,7 @@
 
 <mapper namespace="io.apj.modules.masterData.dao.ModelPartRelaDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.apj.modules.masterData.entity.ModelPartRelaEntity" id="modelPartRelaMap">
         <result property="id" column="id"/>
         <result property="modelId" column="model_id"/>
@@ -14,6 +14,9 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
+    <select id="selectModelByPartId" parameterType="int" resultType="io.apj.modules.masterData.entity.ModelEntity">
+     SELECT * FROM model JOIN ( SELECT model_id FROM model_part_rela WHERE part_id = #{id}) T ON T.model_id = model."id";
+    </select>
 
 
 </mapper>

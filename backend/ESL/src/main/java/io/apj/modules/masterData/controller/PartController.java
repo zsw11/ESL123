@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
-import io.apj.common.utils.RD;
+import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 
+import io.apj.modules.masterData.service.ModelPartRelaService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,6 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.DataUtils;
-import io.apj.common.utils.DateUtils;
-import io.apj.common.utils.ExcelData;
-import io.apj.common.utils.ExportExcelUtils;
-import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
 
 
@@ -52,6 +47,8 @@ public class PartController extends AbstractController {
     private PartService partService;
 	@Autowired
 	private SysDictService sysDictService;
+	@Autowired
+	private ModelPartRelaService modelPartRelaService;
 
     /**
      * 列表
@@ -75,6 +72,18 @@ public class PartController extends AbstractController {
 
         return RD.build().put("data", part);
     }
+	/**
+	 * 当前部品下的机种信息
+	 * @return
+	 */
+	@RequestMapping("/modeldetail/{id}")
+	@RequiresPermissions("masterData:part:info")
+	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+//		PartEntity part = partService.selectById(id);
+		PageUtils page = modelPartRelaService.selectModelByPartId(id, params);
+
+		return RD.ok( page);
+	}
 
     /**
      * 保存

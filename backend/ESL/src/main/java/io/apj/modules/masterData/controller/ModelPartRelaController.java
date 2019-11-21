@@ -5,7 +5,6 @@ import java.util.Map;
 
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -56,6 +53,18 @@ public class ModelPartRelaController extends AbstractController {
 
         return RD.build().put("data", modelPartRela);
     }
+
+//    /**
+//     * 部品下的机种信息
+//     * @return
+//     */
+//    @RequestMapping("/modeldetail/{id}")
+////    @RequiresPermissions("masterData:modelpartrela:info")
+//    public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+//        PageUtils page = modelPartRelaService.selectModelByPartId(id,params);
+//
+//        return RD.ok(page);
+//    }
 
     /**
      * 保存
