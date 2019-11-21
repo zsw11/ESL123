@@ -2,10 +2,9 @@ package io.apj.modules.masterData.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
-import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,6 +18,6 @@ public interface ModelPartRelaService extends IService<ModelPartRelaEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<ModelEntity> selectModelByPartId(Integer id, Map<String, Object> params);
+    HashMap<Object, Object> selectModelByPartId(Integer id, Map<String, Object> params);
 }
 

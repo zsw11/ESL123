@@ -16,5 +16,7 @@ import java.util.Map;
 public interface ModelService extends IService<ModelEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PageUtils selectBySeriesId(int id, Map<String, Object> params);
 }
 

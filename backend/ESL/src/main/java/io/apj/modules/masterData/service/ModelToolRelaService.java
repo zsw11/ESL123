@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface ModelToolRelaService extends IService<ModelToolRelaEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    HashMap<Object, Object> selectModelByToolId(Integer id, Map<String, Object> params);
 }
 

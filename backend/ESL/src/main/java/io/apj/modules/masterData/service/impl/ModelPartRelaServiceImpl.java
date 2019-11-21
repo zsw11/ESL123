@@ -12,6 +12,7 @@ import io.apj.modules.masterData.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +34,21 @@ public class ModelPartRelaServiceImpl extends ServiceImpl<ModelPartRelaDao, Mode
     }
 
     @Override
-    public List<ModelEntity> selectModelByPartId(Integer id, Map<String, Object> params) {
+    public HashMap<Object, Object> selectModelByPartId(Integer id, Map<String, Object> params) {
         //部品的机种数据
         List<ModelEntity> modelEntities = modelPartRelaDao.selectModelByPartId(id);
         if(modelEntities!=null){
             int limit = Integer.parseInt((String) params.get("limit"));
             int page = Integer.parseInt((String) params.get("page"));
             int total = modelEntities.size();
-            List<ModelEntity> modelEntityList =  modelEntities.subList(limit*(page-1), ((limit*page)>total?total:(limit*page)));
+            List<ModelEntity> modelEntityList = modelEntities.subList(limit * (page - 1), ((limit * page) > total ? total : (limit * page)));
+            HashMap<Object, Object> data = new HashMap<>();
+            data.put("modelEntityList", modelEntityList);
+            data.put("limit",limit);
+            data.put("page", page);
+            data.put("total", total);
 
-            return  modelEntityList;
+            return data;
         }else {
             return null;
         }

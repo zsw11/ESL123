@@ -27,6 +27,16 @@ export function fetchModelSeries (id) {
   })
 }
 
+// 获取机种系列里机种的详情
+export function fetchModelByModelSeriesId (params) {
+  console.log(params)
+  return request({
+    url: request.adornUrl(`/api/v1/modelseries/modeldetail/${params.id}`),
+    method: 'get',
+    params: request.adornParams(params)
+  })
+}
+
 // 修改机种系列
 export function updateModelSeries (id, data) {
   return request({

@@ -14,6 +14,13 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
+    <select id="selectModelByToolId" parameterType="int" resultType="io.apj.modules.masterData.entity.ModelEntity">
+SELECT
+	*
+FROM
+	model
+	JOIN ( SELECT model_id FROM model_tool_rela WHERE tool_id = #{id} ) T ON T.model_id = model."id";
+    </select>
 
 
 </mapper>

@@ -2,7 +2,6 @@ package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.modules.masterData.entity.ReportEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,6 +15,7 @@ import io.apj.modules.masterData.service.ModelService;
 
 @Service("modelService")
 public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> implements ModelService {
+
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -31,6 +31,16 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
              name = name.replace(",","");
              entityWrapper.andNew("name  like '%" +name +"%'" + " or code  like '%" +name +"%'" );
          }
+        Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectBySeriesId(int id, Map<String, Object> params) {
+        EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .eq("model_series_id",id);
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 
         return new PageUtils(page);

@@ -8,6 +8,7 @@ import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -39,7 +40,10 @@ import javax.servlet.http.HttpServletResponse;
 public class ModelSeriesController extends AbstractController {
     @Autowired
     private ModelSeriesService modelSeriesService;
+    @Autowired
     private SysDictService sysDictService;
+    @Autowired
+    private ModelService modelService;
 
     /**
      * 列表
@@ -62,6 +66,17 @@ public class ModelSeriesController extends AbstractController {
 		ModelSeriesEntity modelSeries = modelSeriesService.selectById(id);
 
         return RD.build().put("data", modelSeries);
+    }
+
+    /**
+     * 机种系列下的机种
+     */
+    @RequestMapping("/modeldetail/{id}")
+    @RequiresPermissions("masterData:modelseries:info")
+    public RD modelinfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+        PageUtils models = modelService.selectBySeriesId(id, params);
+
+        return RD.build().put("page", models);
     }
 
     /**

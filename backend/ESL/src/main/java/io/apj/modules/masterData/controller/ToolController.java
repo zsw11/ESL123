@@ -7,7 +7,10 @@ import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.PartEntity;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.ModelToolRelaService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,6 +45,10 @@ public class ToolController extends AbstractController {
     private ToolService toolService;
     @Autowired
     private SysDictService sysDictService;
+    @Autowired
+    private ModelService modelService;
+    @Autowired
+    private ModelToolRelaService modelToolRelaService;
 
     /**
      * 列表
@@ -62,8 +69,25 @@ public class ToolController extends AbstractController {
     @RequiresPermissions("masterData:tool:info")
     public RD info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
+        ModelEntity modelEntity = modelService.selectById(id);
+        HashMap<Object, Object> data = new HashMap<>();
+        data.put("tool", tool);
+        data.put("modelEntity", modelEntity);
 
         return RD.build().put("data", tool);
+    }
+
+    /**
+     * 当前治工具下的机种信息
+     * @return
+     */
+    @RequestMapping("/modeldetail/{id}")
+    @RequiresPermissions("masterData:part:info")
+    public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+//		PartEntity part = partService.selectById(id);
+        HashMap<Object, Object> page = modelToolRelaService.selectModelByToolId(id, params);
+
+        return RD.ok( page);
     }
 
     /**

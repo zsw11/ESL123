@@ -27,6 +27,16 @@ export function fetchTool (id) {
   })
 }
 
+// 获取治工具里机种的详情
+export function fetchModelByTool (params) {
+  console.log(params)
+  return request({
+    url: request.adornUrl(`/api/v1/tool/modeldetail/${params.id}`),
+    method: 'get',
+    params: request.adornParams(params)
+  })
+}
+
 // 修改治工具
 export function updateTool (id, data) {
   return request({
