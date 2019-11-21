@@ -18,6 +18,15 @@ export function createPart (data) {
   })
 }
 
+// 获取部品里机种的详情
+export function fetchModelByPart (params) {
+  return request({
+    url: request.adornUrl(`/api/v1/part/modeldetail/${params.id}`),
+    method: 'get',
+    params: request.adornParams(params)
+  })
+}
+
 // 获取部品详情
 export function fetchPart (id) {
   return request({
