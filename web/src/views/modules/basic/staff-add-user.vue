@@ -81,9 +81,9 @@
 
 <script>
 import KeywordSearch from '@/components/keyword-search'
-import { listUserExceptRela } from '@/api/user'
+import { listUser } from '@/api/user'
 import { orderBy } from 'lodash'
-import { createStaffAndUser, updateStaffAndUser } from '@/api/staffAndUser'
+import { createStaff, updateStaff } from '@/api/staff'
 
 export default {
   components: {
@@ -141,7 +141,7 @@ export default {
           { validator: validateComfirmPassword, trigger: 'blur' }
         ]
       },
-      listUserExceptRela,
+      listUser,
       idList: {
         userId: null,
         staffId: null
@@ -172,7 +172,7 @@ export default {
     },
     remoteMethod (query) {
       this.loading = true
-      listUserExceptRela({ staffId: this.staffModel.userId, keyword: query, limit: 99 }).then(({ data }) => {
+      listUser({ staffId: this.staffModel.userId, keyword: query, limit: 99 }).then(({ data }) => {
         if (data.length > 0) {
           this.userOptions = orderBy(data, ['ifUsed'], ['desc'])
         } else {
@@ -203,8 +203,8 @@ export default {
     },
     addApi (data) {
       (data.id
-            ? updateStaffAndUser(data.id, data)
-            : createStaffAndUser(data)
+            ? updateStaff(data.id, data)
+            : createStaff(data)
           ).then(({data, status}) => {
             if (status === 200) {
               this.$message({

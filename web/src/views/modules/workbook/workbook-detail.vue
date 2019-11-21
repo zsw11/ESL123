@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper">
+  <div
+    class="wrapper">
     <div class="workbook-content">
       <div class="btn">
         <el-button style="width: 135px; height: 37px; font-size: 14px" type="primary">F2 手顺组合</el-button>
@@ -29,12 +30,17 @@
     },
     data () {
       return {
+        size: 0,
         count: 10
       }
     },
     created () {
     },
     methods: {
+      switchSize (e) {
+        console.log(1111, e)
+        this.size = (this.size + 1) % 3
+      },
       handleClick (tab) {
         this.$refs.alyTable.toggle(tab.index)
       },
@@ -56,6 +62,9 @@
 .workbook-content{
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
+  height: 33%;
   background-color: #BFBFBD;
   padding: 10px;
   .more{

@@ -1,13 +1,14 @@
 <template>
   <div class="workbook-table"
-       @keyup.115="copyEnd"
-       @keyup.118="copy"
-       @keyup.120="paste">
+    @keyup.115="copyEnd"
+    @keyup.118="copy"
+    @keyup.120="paste">
     <vxe-grid
       border
       size="mini"
       ref="workbookTable"
       align="center"
+      height="100%"
       :data="tableData"
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
@@ -18,7 +19,7 @@
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <operation-column width="120"></operation-column>
+      <operation-column min-width="120"></operation-column>
       <vxe-table-column field="key" title="Key" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60" :edit-render="{name: 'input'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
@@ -201,6 +202,7 @@ export default {
   border: 1px solid #f2f2f2;
 }
 .workbook-table {
+  height: calc(100% - 90px);
   margin-top: 5px;
   .vxe-header--column .vxe-edit-icon {
     display: none;

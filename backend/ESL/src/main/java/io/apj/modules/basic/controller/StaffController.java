@@ -97,7 +97,7 @@ public class StaffController extends AbstractController {
 	@SysLog("保存人员")
 	@RequestMapping("/create")
 //	@RequiresPermissions("basic:staff:create")
-	public R save(@RequestBody StaffEntity staff) {
+	public RD save(@RequestBody StaffEntity staff) {
 		staff.setCreateBy(getUserId());
 		staff.setCreateAt(new Date());
 		staff.setUpdateAt(new Date());
@@ -108,7 +108,7 @@ public class StaffController extends AbstractController {
 		insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), false);
 		insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 
-		return R.ok();
+		return RD.build();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class StaffController extends AbstractController {
 	@SysLog("修改人员")
 	@RequestMapping("/update")
 	@RequiresPermissions("basic:staff:update")
-	public R update(@RequestBody StaffEntity staff) {
+	public ResponseEntity<Object> update(@RequestBody StaffEntity staff) {
 		staff.setUpdateBy(getUserId());
 		staff.setUpdateAt(new Date());
 		staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
@@ -127,7 +127,7 @@ public class StaffController extends AbstractController {
 		insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
 		insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 
-		return R.ok();
+		return RD.ok(staff);
 	}
 
 	/**
