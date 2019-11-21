@@ -172,7 +172,6 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportGroup(this.dataForm.id).then(({data}) => {
-          console.log(data, 1111111111111111111111111)
           Object.assign(
             this.dataForm,
             pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
