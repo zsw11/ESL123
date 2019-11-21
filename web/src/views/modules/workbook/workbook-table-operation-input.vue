@@ -79,18 +79,18 @@ export default {
           const endStr = value.slice(selectionEnd, value.length)
           this.$refs.operation.value = s.name + endStr
           this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = s.name.length
-          break;
+          break
         }
         case 'part': {
           this.addToSelection(s.name, true, 1)
-          break;
+          break
         }
         case 'tool': {
           this.addToSelection(s.name, true, 1)
-          break;
+          break
         }
         default: {
-          break;
+          break
         }
       }
       this.$emit('input', this.$refs.operation.value)
@@ -134,7 +134,7 @@ export default {
         case 'ArrowLeft':
         case 'ArrowRight': {
           if (this.popoverVisible) this.endSuggest()
-          break;
+          break
         }
         // 向下选择
         case 'ArrowDown': {
@@ -169,9 +169,9 @@ export default {
           if (e.key === 'Backspace') {
             this.endSuggest()
             return true
-          } else if (!/[`~!@#$%^&*()\-_=+\[\]{}\\|;':",./<>?]|\s/.test(this.getInputBegin() + e.key)) {
+          } else if (!/[`~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(this.getInputBegin() + e.key)) {
             this.suggest('action')
-          } else if (/\[[^\[\]"]*$/.test(this.getInputBegin())) {
+          } else if (/\[[^[\]"]*$/.test(this.getInputBegin())) {
             this.suggest('part')
           } else if ((this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
             this.suggest('tool')
