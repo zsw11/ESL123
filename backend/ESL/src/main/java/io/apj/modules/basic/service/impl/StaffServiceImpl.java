@@ -46,22 +46,12 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params) {
 
-		Wrapper<StaffEntity> entityWrapper = new EntityWrapper<StaffEntity>()
+		Wrapper<StaffEntity> entityWrapper = new EntityWrapper<StaffEntity>().isNull("delete_at")
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("code")), "code", (String) params.get("code"))
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("gender")), "gender", params.get("gender"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("mobilephone")), "mobilephone",
 						(String) params.get("mobilephone"))
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("deptId")), "dept_id", params.get("deptId"))
-				.between(
-						StringUtils.isNotEmpty((CharSequence) params.get("birthDateStart"))
-								&& StringUtils.isNotEmpty((CharSequence) params.get("birthDateEnd")),
-						"birth_date", params.get("birthDateStart"), params.get("birthDateEnd"))
-				.ge(StringUtils.isNotEmpty((CharSequence) params.get("birthDateStart"))
-						&& StringUtils.isEmpty((CharSequence) params.get("birthDateEnd")), "birth_date",
-						params.get("birthDateStart"))
-				.le(StringUtils.isEmpty((CharSequence) params.get("birthDateStart"))
-						&& StringUtils.isNotEmpty((CharSequence) params.get("birthDateEnd")), "birth_date",
-						params.get("birthDateEnd"))
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("status")), "status", params.get("status"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("email")), "email", (String) params.get("email"))
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));

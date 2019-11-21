@@ -103,7 +103,8 @@
 
     <span class="dialog-footer">
       <el-button type="primary"
-                 @click="StaffAddUserHandle()">保存并关联用户</el-button>
+                 @click="StaffAddUserHandle()"
+                 v-show="!this.dataForm.userId">保存并关联用户</el-button>
       <el-button type="primary"
                  @click="dataFormSubmit()">保 存</el-button>
       <el-button @click="cancleFormSubmit">取 消</el-button>
@@ -241,7 +242,8 @@ export default {
                 'mobilephone',
                 'email',
                 'employmentDate',
-                'remark'
+                'remark',
+                'userId'
               ])
             )
           })

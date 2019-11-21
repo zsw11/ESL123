@@ -137,7 +137,7 @@ public class StaffController extends AbstractController {
 	@RequestMapping("/saveOrUpdate")
 	@Transactional(rollbackFor = Exception.class)
 	@RequiresPermissions("basic:staff:save")
-	public R saveOrUpdate(@RequestBody StaffEntity staff) {
+	public RD saveOrUpdate(@RequestBody StaffEntity staff) {
 		SysUserEntity user = staff.getUserEntity();
 		if (user != null) {
 			user.setCreateAt(new Date());
@@ -164,7 +164,7 @@ public class StaffController extends AbstractController {
 			insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
 			insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 		}
-		return R.ok();
+		return RD.build().put("code", 200);
 	}
 
 	/**
