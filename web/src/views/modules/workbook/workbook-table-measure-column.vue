@@ -2,7 +2,7 @@
   <vxe-table-column
     :field="config.field"
     :title="config.title"
-    :edit-render="{name: 'default', event: { blur }}"
+    :edit-render="{name: 'input', event: { blur }}"
     :header-class-name="config.bgClassName"
     :class-name="config.bgClassName">
     <template v-slot:edit="{ row }">
