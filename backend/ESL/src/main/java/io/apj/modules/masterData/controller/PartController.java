@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class PartController extends AbstractController {
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
 //		PartEntity part = partService.selectById(id);
-		PageUtils page = modelPartRelaService.selectModelByPartId(id, params);
+		List<ModelEntity> page = modelPartRelaService.selectModelByPartId(id, params);
 
 		return RD.ok( page);
 	}
