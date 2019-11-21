@@ -39,6 +39,8 @@ public class ReportGroupController extends AbstractController {
     private ReportGroupService reportGroupService;
     @Autowired
     private ReportGroupReportRelaService reportGroupReportRelaService ;
+    @Autowired
+    private ReportService reportService;
 
     /**
      * 列表
@@ -50,8 +52,6 @@ public class ReportGroupController extends AbstractController {
         PageUtils page = reportGroupService.queryPage(params);
         return RD.ok(page);
     }
-
-
     /**
      * 信息
      */
@@ -59,12 +59,11 @@ public class ReportGroupController extends AbstractController {
     @RequiresPermissions("masterData:reportgroup:info")
     public RD info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-//        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
+        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
 
-        ReportGroupReportRelaEntity reportEntities = reportGroupReportRelaService.selectById(id);
         HashMap<Object, Object> data = new HashMap<>();
-        data.put("reportEntities",reportEntities);
         data.put("reportGroup",reportGroup);
+        data.put("reportEntities",reportEntities);
         return RD.build().put("data", data);
     }
 
