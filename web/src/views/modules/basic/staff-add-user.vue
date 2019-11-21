@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item label="角色"
                       size="mini">
-          <el-checkbox-group v-model="dataForm.roleIds">
+          <el-checkbox-group v-model="dataForm.roleIdList">
             <el-checkbox v-for="role in roleList"
                          :key="role.id"
                          :label="role.id">{{ role.name }}</el-checkbox>
@@ -83,7 +83,9 @@
 import KeywordSearch from '@/components/keyword-search'
 import { listUser } from '@/api/user'
 import { orderBy } from 'lodash'
-import { createStaff, updateStaff } from '@/api/staff'
+import { updateStaff } from '@/api/staff'
+import { createStaffAndUser } from '@/api/staffAndUser'
+import md5 from 'blueimp-md5'
 
 export default {
   components: {
@@ -126,7 +128,7 @@ export default {
         salt: null,
         email: null,
         mobile: null,
-        roleIds: [],
+        roleIdList: [],
         status: 1,
         radio: '1'
       },
@@ -185,9 +187,13 @@ export default {
     dataFormSubmit () {
       if (this.dataForm.radio === '1') {
         this.$refs['dataForm'].validate((valid) => {
+          console.log(this.dataForm, 555555)
+          // md5('security' + this.dataForm.password.trim())
           if (valid) {
             const staffAndUser = this.staffModel
-            staffAndUser.userModel = this.dataForm
+            this.dataForm.password = md5('security' + this.dataForm.password.trim())
+            this.dataForm.comfirmPassword = md5('security' + this.dataForm.comfirmPassword.trim())
+            staffAndUser.userEntity = this.dataForm
             this.addApi(staffAndUser)
           }
         })
@@ -204,9 +210,9 @@ export default {
     addApi (data) {
       (data.id
             ? updateStaff(data.id, data)
-            : createStaff(data)
-          ).then(({data, status}) => {
-            if (status === 200) {
+            : createStaffAndUser(data)
+          ).then(({ code }) => {
+            if (code === 200) {
               this.$message({
                 message: '操作成功',
                 type: 'success',

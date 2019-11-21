@@ -393,8 +393,8 @@ export default {
             page: this.pageNo,
             limit: this.pageSize,
             prop: this.prop,
-            order: this.order,
-            display: this.displayAttributes.filter(d => d.display).map(d => d.code).join(',')
+            order: this.order
+            // display: this.displayAttributes.filter(d => d.display).map(d => d.code).join(',')
           },
           this.listQuery
         )
@@ -484,7 +484,7 @@ export default {
     // 删除数据
     deleteHandle (row) {
       var ids = row
-        ? row.id
+        ? [row.id]
         : this.dataListSelections.map(item => {
           return item.id
         })
