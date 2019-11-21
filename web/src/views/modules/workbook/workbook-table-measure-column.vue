@@ -31,6 +31,9 @@ export default {
       if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
         e.preventDefault()
         this.$emit('jump', row, this.config.field, e.key)
+      } else if (/^[a-z`~!@#$%^&*()\-_=+\[\]{}\\|;':",./<>?]$/.test(e.key)) {
+        this.$message.error('无效字符')
+        e.preventDefault()
       }
     },
     blur () {
