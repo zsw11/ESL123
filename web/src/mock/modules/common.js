@@ -1,10 +1,11 @@
 import Mock from 'mockjs'
+import request from '@/utils/httpRequest'
 
 // 登录
 export function login () {
   return {
     // isOpen: false,
-    url: 'http://localhost:8002/esl/api/v1/passport/login',
+    url: request.adornUrl('/api/v1/passport/login'),
     type: 'put',
     data: {
       page: {

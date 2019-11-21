@@ -65,18 +65,19 @@ export default {
     },
     selectSuggestion (s) {
       // 插入补品或治工具
-      this.addToSelection(s.name)
+      this.addToSelection(s.name, true, 1)
       this.$emit('input', this.$refs.operation.value)
       this.$emit('select', s)
       this.endSuggest()
+      this.$refs.operation.focus()
     },
     // 插入到光标位置
-    addToSelection (str, moveEnd = true) {
+    addToSelection (str, moveEnd = true, moveExtra = 0) {
       const { selectionStart, selectionEnd, value } = this.$refs.operation
       const beginStr = value.slice(0, selectionStart)
       const endStr = value.slice(selectionEnd, value.length)
       this.$refs.operation.value = beginStr + str + endStr
-      this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0)
+      this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e, scope) {
       switch (e.key) {
