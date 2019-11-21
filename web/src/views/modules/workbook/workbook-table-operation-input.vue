@@ -54,6 +54,9 @@ export default {
     getInputBegin () {
       return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
     },
+    getInputEnd () {
+      return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
+    },
     suggest (mode, keyword) {
       this.suggestMode = mode
       setTimeout(() => {
@@ -70,7 +73,26 @@ export default {
     },
     selectSuggestion (s) {
       // 插入补品或治工具
-      this.addToSelection(s.name, true, 1)
+      switch (this.suggestMode) {
+        case 'action': {
+          const { selectionEnd, value } = this.$refs.operation
+          const endStr = value.slice(selectionEnd, value.length)
+          this.$refs.operation.value = s.name + endStr
+          this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = s.name.length
+          break;
+        }
+        case 'part': {
+          this.addToSelection(s.name, true, 1)
+          break;
+        }
+        case 'tool': {
+          this.addToSelection(s.name, true, 1)
+          break;
+        }
+        default: {
+          break;
+        }
+      }
       this.$emit('input', this.$refs.operation.value)
       this.$emit('select', s)
       this.endSuggest()
@@ -90,7 +112,7 @@ export default {
         case '[': {
           this.addToSelection(']', false)
           e.stopPropagation()
-          this.suggest()
+          this.suggest('part')
           break
         }
         case ']': {
@@ -106,8 +128,13 @@ export default {
         case '"': {
           this.addToSelection('"', false)
           e.stopPropagation()
-          this.suggest()
+          this.suggest('tool')
           break
+        }
+        case 'ArrowLeft':
+        case 'ArrowRight': {
+          if (this.popoverVisible) this.endSuggest()
+          break;
         }
         // 向下选择
         case 'ArrowDown': {
@@ -143,11 +170,11 @@ export default {
             this.endSuggest()
             return true
           } else if (!/[`~!@#$%^&*()\-_=+\[\]{}\\|;':",./<>?]|\s/.test(this.getInputBegin() + e.key)) {
-            this.suggest()
+            this.suggest('action')
           } else if (/\[[^\[\]"]*$/.test(this.getInputBegin())) {
-            this.suggest()
+            this.suggest('part')
           } else if ((this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
-            this.suggest()
+            this.suggest('tool')
           } else {
             this.endSuggest()
             console.log(e.key)
