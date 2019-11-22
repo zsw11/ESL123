@@ -21,7 +21,7 @@
         <result property="p1" column="p1"/>
         <result property="a3" column="a3"/>
         <result property="deptId" column="dept_id"/>
-        <result property="usedcount" column="usedcount"/>
+        <result property="usedcount" column="used_count"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

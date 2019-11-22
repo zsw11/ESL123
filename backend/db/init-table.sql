@@ -1133,8 +1133,8 @@ CREATE TABLE measure_group (
   b2 varchar(1),
   p1 varchar(1),
   a3 varchar(1),
-  deptId integer,
-  usedCount integer,
+  dept_id integer,
+  used_count integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -1156,8 +1156,8 @@ comment on column measure_group.a2 is 'A2';
 comment on column measure_group.b2 is 'B2';
 comment on column measure_group.p1 is 'P1';
 comment on column measure_group.a3 is 'A3';
-comment on column measure_group.deptId is '组织机构ID';
-comment on column measure_group.usedCount is '使用次数统计';
+comment on column measure_group.dept_id is '组织机构ID';
+comment on column measure_group.used_count is '使用次数统计';
 comment on column measure_group.create_by is '创建者ID';
 comment on column measure_group.create_at is '创建时间';
 comment on column measure_group.update_by is '更新者ID';
@@ -1169,8 +1169,8 @@ drop table if exists opertaion_group;
 CREATE TABLE opertaion_group (
   id serial PRIMARY KEY,
   code varchar(64),
-  deptId integer,
-  usedCount integer,
+  dept_cd integer,
+  used_count integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -1179,8 +1179,8 @@ CREATE TABLE opertaion_group (
 );
 comment on table opertaion_group is '手顺组合';
 comment on column opertaion_group.code is '编码';
-comment on column opertaion_group.deptId is '组织机构ID';
-comment on column opertaion_group.usedCount is '使用次数统计';
+comment on column opertaion_group.dept_id is '组织机构ID';
+comment on column opertaion_group.used_count is '使用次数统计';
 comment on column opertaion_group.create_by is '创建者ID';
 comment on column opertaion_group.create_at is '创建时间';
 comment on column opertaion_group.update_by is '更新者ID';
