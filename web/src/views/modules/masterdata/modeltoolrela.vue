@@ -206,10 +206,9 @@
             limit: this.pageSize,
             id: this.id
           }
-        )).then(({data}) => {
-          this.dataList = data.model
-          // this.total = data.totalCount
-          // console.log(this.dataList)
+        )).then(({page}) => {
+          this.dataList = page.records
+          this.total = page.total
         }).catch(() => {
           this.dataList = []
           this.total = 0

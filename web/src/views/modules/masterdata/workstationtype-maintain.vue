@@ -22,7 +22,27 @@
     </el-form>
     <el-card class="with-title">
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
-      <div class="tableHeader">工位类型结构</div>
+      <span class="tableHeader">工位类型结构</span>
+        <el-button  @click="dialogFormVisible = true" type="primary" style="float: right" v-if=!flag>新增</el-button>
+
+        <el-dialog custom-class="show" width="600" title="新增" :visible.sync="dialogFormVisible">
+          <el-form :mdoel="addForm">
+
+            <el-form-item :label="'父工位'" prop="parent">
+              <el-input  style="width: 200px" v-model="addForm.parent"></el-input>
+            </el-form-item>
+            <el-form-item  style="margin-left: 20px;" :label="'名称'" prop="name">
+              <el-input  style="width: 200px" v-model="addForm.name"></el-input>
+            </el-form-item>
+            <el-form-item class="showItem" :label="'备注'" prop="remark">
+              <el-input  type="textarea" :rows="6" placeholder="请输入内容" v-model="addForm.remark" style="width:470px;margin-left: 13px"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="">确 定</el-button>
+          </div>
+        </el-dialog>
       </div>
       <el-tree :data="data" :props="defaultProps" style="width: 600px;" ></el-tree>
     </el-card>
@@ -41,6 +61,13 @@ export default {
   name: 'editWorkstationType',
   data () {
     return {
+      addForm: {
+        name: null,
+        remark: null,
+        parent: null
+      },
+      parentNode: null,
+      dialogFormVisible: false,
       data: [{
         label: '一级 1',
         children: [{
@@ -193,14 +220,12 @@ export default {
   .el-input__inner {
     width: 200px;
   }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
   .is-always-shadow{
     box-shadow: none;
     border: none;
   }
   .tableHeader{
+    display: inline-block;
     width: 90px;
     height: 30px;
     border-top-left-radius: 10px;
@@ -213,5 +238,11 @@ export default {
   }
   .table{
     width: 600px;
+  }
+  .show > .el-dialog__body > .el-form > .el-form-item {
+    display: inline-flex;
+  }
+  .show > .el-dialog__body > .el-form > .el-form-item > .el-form-item__content{
+    display: inline-block;
   }
 </style>
