@@ -75,7 +75,7 @@ public class ModelPartRelaController extends AbstractController {
 //        modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
 		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), false);
-        return RD.build();
+        return RD.build().put("code", 200);
     }
     /**
      * 部品下新增机种保存
