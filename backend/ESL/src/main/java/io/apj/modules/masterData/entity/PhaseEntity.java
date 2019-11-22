@@ -56,7 +56,4 @@ public class PhaseEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-    public void setCreateBy(int intValue) {
-    }
 }

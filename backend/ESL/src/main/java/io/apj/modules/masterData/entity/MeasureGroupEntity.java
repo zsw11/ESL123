@@ -87,7 +87,7 @@ public class MeasureGroupEntity implements Serializable {
 	/**
 	 * 使用次数统计
 	 */
-	private Integer usedcount;
+	private Integer usedCount;
 	/**
 	 * 创建者ID
 	 */

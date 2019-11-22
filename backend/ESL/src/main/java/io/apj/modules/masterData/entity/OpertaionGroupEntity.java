@@ -31,11 +31,11 @@ public class OpertaionGroupEntity implements Serializable {
 	/**
 	 * 组织机构ID
 	 */
-	private Integer deptid;
+	private Integer deptId;
 	/**
 	 * 使用次数统计
 	 */
-	private Integer usedcount;
+	private Integer usedCount;
 	/**
 	 * 创建者ID
 	 */
@@ -56,7 +56,4 @@ public class OpertaionGroupEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-    public void setCreateBy(int intValue) {
-    }
 }
