@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MeasureGroupController {
     @Autowired
     private MeasureGroupService measureGroupService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
