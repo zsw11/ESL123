@@ -146,7 +146,8 @@ export default {
     clearQuery () {
       this.value = ''
       this.listQuery = Object.assign(this.listQuery, {
-        opininon: null
+        opininon: null,
+        approveOperation: null
       })
     },
     // 每页数
