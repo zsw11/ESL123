@@ -20,7 +20,6 @@
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true"></keyword-search>
-
         </el-form-item>
 
 
@@ -39,9 +38,16 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种</div>
         <div class="buttons">
-          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <!-- <el-button @click="">导入</el-button>
-          <el-button @click="">导出</el-button> -->
+<!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
+          <el-button  @click="addReal=true" type="primary" >新增</el-button>
+          <el-dialog title="新增部品机种关系" :visible.sync="addReal">
+            机种<keyword-search  style="margin-left: 20px" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="addReal = false">取 消</el-button>
+              <el-button type="primary" @click="partModel">确 定</el-button>
+            </div>
+          </el-dialog>
+
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -133,10 +139,13 @@
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
   import { fetchModelByPart } from '@/api/part'
+  import { createModelPartRela } from '@/api/modelPartRela'
   export default {
     name: 'modelList',
     data () {
       return {
+        addPartModelId: null,
+        addReal: false,
         id: null,
         title: null,
         dataButton: 'list',
@@ -154,6 +163,7 @@
         listDept,
         listModelSeries,
         listModel,
+        createModelPartRela,
         dataList: [],
         pageNo: 1,
         pageSize: 10,
@@ -199,10 +209,8 @@
             id: this.id
           }
           )).then(({page}) => {
-            // console.log(page, 1111111111111111111)
-            this.dataList = page
-            this.total = page.length
-          // console.log(this.dataList)
+            this.dataList = page.records
+            this.total = page.total
           }).catch(() => {
             this.dataList = []
             this.total = 0
@@ -286,6 +294,11 @@
             this.getDataList()
           })
         })
+      },
+      // 新增部品机种关系
+      partModel () {
+        let data = [Number(this.addPartModelId), Number(this.id)]
+        createModelPartRela(data)
       }
     }
   }
