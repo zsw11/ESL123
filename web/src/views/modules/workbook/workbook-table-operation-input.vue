@@ -120,6 +120,10 @@ export default {
       switch (e.key) {
         // 匹配部品
         case '[': {
+          const { selectionStart, value } = this.$refs.operation
+          if (/[^"]*$/.test(value.slice(0, selectionStart))) {
+            return e.preventDefault()
+          }
           this.addToSelection(']', false)
           e.stopPropagation()
           this.suggest('part')
