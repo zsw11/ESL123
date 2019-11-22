@@ -15,7 +15,7 @@
           </el-form-item>
 
           <el-form-item :label="'LST/ST'" prop="STLST">
-            <el-input v-model="dataForm.STLST"></el-input>
+            <dict-select class="keyword" dictType="ST" v-model="dataForm.STLST" :allowEmpty="true"></dict-select>
           </el-form-item>
 
         <el-form-item  style="margin-left: 150px;" :label="'生产阶段'" prop="phaseId">
