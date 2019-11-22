@@ -56,50 +56,50 @@ public class RD<J extends JsonElement> extends HashMap<String, Object>{
 	public static ResponseEntity<Object> listReturn(List<?> list,int total) {
 		if(list.size() > 0) {
 			// 正常返回
-			return new ResponseEntity<Object>(new RD<JsonElement>(200, list, total), HttpStatus.OK);
+			return new ResponseEntity<Object>(new RD(200, list, total), HttpStatus.OK); 
 		} else {
 			// 空列表
-			return new ResponseEntity<Object>(new RD<JsonElement>(404, list, total), HttpStatus.OK);
+			return new ResponseEntity<Object>(new RD(404, list, total), HttpStatus.OK); 
 		}
 	}
 	
 	// 删除成功(204)
 	public static ResponseEntity<Object> NO_CONTENT(Object data) {
-		return new ResponseEntity<Object>(new RD<JsonElement>(204,data), HttpStatus.NO_CONTENT);
+		return new ResponseEntity<Object>(new RD(204,data), HttpStatus.NO_CONTENT);
 	}
 	
 	// 找不到数据(404)
 	public static ResponseEntity<Object> NOT_FOUND() {
-		return new ResponseEntity<Object>(new RD<JsonElement>(404), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Object>(new RD(404), HttpStatus.NOT_FOUND);
 	}
 	
 	// 对象不存在(400)
 	public static ResponseEntity<Object> BAD_REQUEST() {
-		return new ResponseEntity<Object>(new RD<JsonElement>(400), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Object>(new RD(400), HttpStatus.BAD_REQUEST);
 	}
 	
 	// 权限，认证(401)
 	public static ResponseEntity<Object> UNAUTHORIZED(String code, String message) {
-		return new ResponseEntity<Object>(new RD<JsonElement>(401, code, message),HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Object>(new RD(401, code, message),HttpStatus.UNAUTHORIZED);
 	}
 	
 	// 数据不可用(403)
 	public static ResponseEntity<Object> FORBIDDEN(String code, String message) {
-		return new ResponseEntity<Object>(new RD<JsonElement>(403, code, message),HttpStatus.FORBIDDEN);
+		return new ResponseEntity<Object>(new RD(403, code, message),HttpStatus.FORBIDDEN);
 	}	
 	
 	// 服务器未知错误(500)
 	public static ResponseEntity<Object> error() {
-		return new ResponseEntity<Object>(new RD<JsonElement>(500), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Object>(new RD(500), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// 服务器未知错误(500)
 	public static ResponseEntity<Object> INTERNAL_SERVER_ERROR(String message) {
-		return new ResponseEntity<Object>(new RD<JsonElement>(500).put("message",message), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Object>(new RD(500).put("message",message), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// 重写    put() 方法
-	public RD<JsonElement> put(String key, Object value) {
+	public RD put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}
