@@ -5,16 +5,23 @@
       <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
-          <el-form-item  :label="'常用指标组合编码'" prop="code">
-             <el-input :disabled=flag style="width: 100px" v-model="dataForm.code"></el-input>
-          </el-form-item>
-
-
-      <el-form-item style="margin-left: 300px" :label="'所属组织机构'" prop="deptId">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+      <el-form-item  :label="'常用指标组合编码'" prop="code">
+          <el-input :disabled=flag style="width: 100px" v-model="dataForm.code"></el-input>
       </el-form-item>
-          <div style="width: 700px;height: 200px;background-color: #e0e0e0;"></div>
 
+      <vxe-grid
+        border
+        size="mini"
+        ref="workbookTable"
+        align="center"
+        height="100%"
+        :data="[dataForm]"
+        :mouse-config="{selected: true}"
+        :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
+        :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+        <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
+        <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
+      </vxe-grid>
     </el-form>
 
     <span class="dialog-footer" style="margin-top: 10px">
@@ -26,12 +33,18 @@
 
 <script>
 import { pick } from 'lodash'
+import { measureColumns0, measureColumns1, measureFields } from '@/utils/global'
+import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import { fetchMeasureGroup, createMeasureGroup, updateMeasureGroup } from '@/api/measureGroup'
 import { listDept } from '@/api/dept'
+
 export default {
   name: 'editMeasureGroup',
+  components: { MeasureColumn },
   data () {
     return {
+      measureColumns0,
+      measureColumns1,
       title: null,
       flag: null,
       inited: false,
@@ -168,6 +181,26 @@ export default {
         })
       } else {
         this.inited = true
+      }
+    },
+    // 选中单元格并输入时的处理
+    keyboardEdit ({ row, column, cell }, e) {
+      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
+        this.jump(row, column.property, e.key)
+        e.preventDefault()
+        return false
+      }
+      return true
+    },
+    // 调到指定位置
+    jump (row, field, to) {
+      const offset = measureFields.indexOf(field)
+      for (let i = 1; i <= measureFields.length; i++) {
+        const tmpField = measureFields[(offset + i) % measureFields.length]
+        if (tmpField.includes(to)) {
+          this.$refs.workbookTable.setActiveCell(row, tmpField)
+          return
+        }
       }
     },
     // 取消信息

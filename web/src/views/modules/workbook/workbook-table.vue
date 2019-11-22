@@ -25,9 +25,9 @@
           <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
         </template>
       </vxe-table-column>
-      <measure-column v-for="c in meaureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
+      <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
-      <measure-column v-for="c in meaureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
+      <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="tmu" title="TMU" width="50" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -38,31 +38,9 @@
 </template>
 
 <script>
-import MeasureColumn from './workbook-table-measure-column.vue'
-import OperationColumn from './workbook-table-operation-column.vue'
-
-const meaureColumns0 = [
-  { field: 'a0', title: 'A' },
-  { field: 'b0', title: 'B' },
-  { field: 'g0', title: 'G' },
-  { field: 'a1', title: 'A' },
-  { field: 'b1', title: 'B' },
-  { field: 'p0', title: 'P' },
-  { field: 'm0', title: 'M', bgClassName: 'bg-light-orange' },
-  { field: 'x0', title: 'X', bgClassName: 'bg-light-orange' },
-  { field: 'i0', title: 'I', bgClassName: 'bg-light-orange' },
-  { field: 'a2', title: 'A', bgClassName: 'bg-table-color1' },
-  { field: 'b2', title: 'B', bgClassName: 'bg-table-color1' },
-  { field: 'p1', title: 'P', bgClassName: 'bg-table-color1' },
-  { field: 'a3', title: 'A', bgClassName: 'bg-table-color1' }
-]
-const meaureColumns1 = [
-  { field: 'a4', title: 'A', bgClassName: 'bg-table-color1' },
-  { field: 'b3', title: 'B', bgClassName: 'bg-table-color1' },
-  { field: 'p2', title: 'P', bgClassName: 'bg-table-color1' },
-  { field: 'a5', title: 'A' }
-]
-const fields = meaureColumns0.map(c => c.field).concat(meaureColumns1.map(c => c.field))
+import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
+import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
+import { measureColumns0, measureColumns1, measureFields } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
@@ -70,8 +48,8 @@ export default {
   props: ['count'],
   data () {
     return {
-      meaureColumns0,
-      meaureColumns1,
+      measureColumns0,
+      measureColumns1,
       // workM: false,                     // 手顺
       rowIndex: 0,
       tableData: [],
@@ -91,7 +69,7 @@ export default {
   methods: {
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      if (fields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
+      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
         this.jump(row, column.property, e.key)
         e.preventDefault()
         return false
@@ -100,9 +78,9 @@ export default {
     },
     // 调到指定位置
     jump (row, field, to) {
-      const offset = fields.indexOf(field)
-      for (let i = 1; i <= fields.length; i++) {
-        const tmpField = fields[(offset + i) % fields.length]
+      const offset = measureFields.indexOf(field)
+      for (let i = 1; i <= measureFields.length; i++) {
+        const tmpField = measureFields[(offset + i) % measureFields.length]
         if (tmpField.includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
           return
