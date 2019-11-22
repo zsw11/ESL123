@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ModelController extends AbstractController {
     @Autowired
     private ModelService modelService;
+    @Autowired
     private SysDictServiceImpl sysDictService;
 
     /**
