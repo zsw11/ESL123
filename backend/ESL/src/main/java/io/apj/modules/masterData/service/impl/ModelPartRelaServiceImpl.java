@@ -9,6 +9,7 @@ import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.modules.masterData.service.ModelService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,29 +34,35 @@ public class ModelPartRelaServiceImpl extends ServiceImpl<ModelPartRelaDao, Mode
     }
 
     @Override
-    public Page<ModelEntity> selectModelByPartId(Integer id, Map<String, Object> params) {
-        //部品的机种数据
-        List<ModelEntity> modelEntities = modelPartRelaDao.selectModelByPartId(id);
-        if(modelEntities!=null){
-            int total = modelEntities.size();
-            int limit = Integer.parseInt((String) params.get("limit"));
-            int pagecurrent = Integer.parseInt((String) params.get("page"));
-            Page<ModelEntity> page =new Page<ModelEntity>();
-            page.setRecords(modelEntities);
-            page.setCurrent(pagecurrent);
-            page.setTotal(total);
-            page.setSize(limit);
-//            List<ModelEntity> modelEntityList = modelEntities.subList(limit * (page - 1), ((limit * page) > total ? total : (limit * page)));
-//            HashMap<Object, Object> data = new HashMap<>();
-//            data.put("modelEntityList", modelEntityList);
-//            data.put("limit",limit);
-//            data.put("page", page);
-//            data.put("total", total);
+    public Page<Map<String, Object>> selectModelByPartId(Integer id, Map<String, Object> params) {
+        //新建分页
+        Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+                return page.setRecords(this.baseMapper.selectModelByPartId(id, page));
 
-            return page;
-        }else {
-            return null;
-        }
+
+//
+//        //部品的机种数据
+//        List<ModelEntity> modelEntities = modelPartRelaDao.selectModelByPartId(id, params);
+//        if(modelEntities!=null){
+//            int total = modelEntities.size();
+//            int limit = Integer.parseInt((String) params.get("limit"));
+//            int currentpage = Integer.parseInt((String) params.get("page"));
+//            Page<ModelEntity> page =new Page<ModelEntity>();
+//            page.setRecords(modelEntities);
+//            page.setCurrent(currentpage);
+//            page.setTotal(total);
+//            page.setSize(limit);
+////            List<ModelEntity> modelEntityList = modelEntities.subList(limit * (page - 1), ((limit * page) > total ? total : (limit * page)));
+////            HashMap<Object, Object> data = new HashMap<>();
+////            data.put("modelEntityList", modelEntityList);
+////            data.put("limit",limit);
+////            data.put("page", page);
+////            data.put("total", total);
+//
+//            return page;
+//        }else {
+//            return null;
+//        }
 
     }
 

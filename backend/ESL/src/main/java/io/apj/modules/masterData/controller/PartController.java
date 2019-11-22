@@ -82,7 +82,7 @@ public class PartController extends AbstractController {
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
 //		PartEntity part = partService.selectById(id);
-		Page<ModelEntity> page = modelPartRelaService.selectModelByPartId(id, params);
+		Page<Map<String,Object>> page = modelPartRelaService.selectModelByPartId(id, params);
 
 		return RD.ok( page);
 	}
