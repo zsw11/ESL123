@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.DeptWorkstationRelaEntity;
 import io.apj.modules.masterData.service.DeptWorkstationRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptworkstationrela:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		DeptWorkstationRelaEntity deptWorkstationRela = deptWorkstationRelaService.selectById(id);
 
         return RD.build().put("data", deptWorkstationRela);
@@ -62,7 +61,7 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptworkstationrela:save")
-    public RD save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
+    public RD<JsonElement> save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
         deptWorkstationRela.setCreateBy(getUserId().intValue());
 		deptWorkstationRelaService.insert(deptWorkstationRela);
 
@@ -74,7 +73,7 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:deptworkstationrela:update")
-    public RD update(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
+    public RD<JsonElement> update(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
 		deptWorkstationRelaService.updateById(deptWorkstationRela);
 
         return RD.build();
@@ -86,7 +85,7 @@ public class DeptWorkstationRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:deptworkstationrela:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		deptWorkstationRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

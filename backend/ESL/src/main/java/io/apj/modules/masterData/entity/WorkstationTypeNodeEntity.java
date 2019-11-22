@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -28,6 +30,15 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 名称
 	 */
 	private String name;
+
+	public Integer getWorkstationId() {
+		return workstationId;
+	}
+
+	public void setWorkstationId(Integer workstationId) {
+		this.workstationId = workstationId;
+	}
+
 	/**
 	 * 工位ID
 	 */
@@ -36,6 +47,19 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 备注
 	 */
 	private String remark;
+
+	public Integer getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
+	/*
+	* 父id
+	* */
+	private Integer parentId;
 	/**
 	 * 创建者ID
 	 */
@@ -56,4 +80,15 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	public List<WorkstationTypeNodeEntity> getChild() {
+		return child;
+	}
+
+	public void setChild(List<WorkstationTypeNodeEntity> child) {
+		this.child = child;
+	}
+
+	private List<WorkstationTypeNodeEntity> child;
+
 }

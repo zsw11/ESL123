@@ -6,9 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +46,7 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 //	@RequiresPermissions("sys:dicttype:list")
-	public RD list(@RequestParam Map<String, Object> params) {
+	public RD<JsonElement> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysDictTypeService.queryPage(params);
 		return RD.build().put("page", page);
 	}

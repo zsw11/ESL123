@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ApproveOpininonEntity;
 import io.apj.modules.masterData.service.ApproveOpininonService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:approveopininon:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
 
         return RD.build().put("data", approveOpininon);
@@ -62,7 +61,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:approveopininon:save")
-    public RD save(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD<JsonElement> save(@RequestBody ApproveOpininonEntity approveOpininon){
         approveOpininon.setCreateBy(getUserId().intValue());
 		approveOpininonService.insert(approveOpininon);
 
@@ -74,7 +73,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:approveopininon:update")
-    public RD update(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD<JsonElement> update(@RequestBody ApproveOpininonEntity approveOpininon){
 		approveOpininonService.updateById(approveOpininon);
 
         return RD.build();
@@ -86,7 +85,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:approveopininon:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

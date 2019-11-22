@@ -3,9 +3,9 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 import io.apj.modules.masterData.service.ModelToolRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +49,7 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
 //    @RequiresPermissions("masterData:modeltoolrela:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
 
         return RD.build().put("data", modelToolRela);
@@ -62,7 +60,7 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/create")
 //    @RequiresPermissions("masterData:modeltoolrela:save")
-    public RD save(@RequestBody ModelToolRelaEntity modelToolRela){
+    public RD<JsonElement> save(@RequestBody ModelToolRelaEntity modelToolRela){
         modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
 
@@ -74,7 +72,7 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/update")
 //    @RequiresPermissions("masterData:modeltoolrela:update")
-    public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
+    public RD<JsonElement> update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
 
         return RD.build();
@@ -86,7 +84,7 @@ public class ModelToolRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
 //    @RequiresPermissions("masterData:modeltoolrela:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

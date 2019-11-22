@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.google.gson.*;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.modules.basic.entity.JobEntity;
@@ -26,12 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.modules.basic.entity.StaffEntity;
 import io.apj.modules.basic.service.StaffService;
@@ -85,7 +80,7 @@ public class StaffController extends AbstractController {
 	 */
 	@RequestMapping("/detail/{id}")
 	@RequiresPermissions("basic:staff:info")
-	public RD info(@PathVariable("id") Long id) {
+	public RD<JsonElement> info(@PathVariable("id") Long id) {
 		StaffEntity staff = staffService.selectById(id);
 
 		return RD.build().put("data", staff);
@@ -97,7 +92,7 @@ public class StaffController extends AbstractController {
 	@SysLog("保存人员")
 	@RequestMapping("/create")
 //	@RequiresPermissions("basic:staff:create")
-	public RD save(@RequestBody StaffEntity staff) {
+	public RD<JsonElement> save(@RequestBody StaffEntity staff) {
 		staff.setCreateBy(getUserId());
 		staff.setCreateAt(new Date());
 		staff.setUpdateAt(new Date());
@@ -137,7 +132,7 @@ public class StaffController extends AbstractController {
 	@RequestMapping("/saveOrUpdate")
 	@Transactional(rollbackFor = Exception.class)
 	@RequiresPermissions("basic:staff:save")
-	public RD saveOrUpdate(@RequestBody StaffEntity staff) {
+	public RD<JsonElement> saveOrUpdate(@RequestBody StaffEntity staff) {
 		SysUserEntity user = staff.getUserEntity();
 		if (user != null) {
 			user.setCreateAt(new Date());

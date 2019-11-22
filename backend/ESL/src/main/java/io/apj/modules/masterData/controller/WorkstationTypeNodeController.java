@@ -3,6 +3,8 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -36,13 +36,24 @@ public class WorkstationTypeNodeController extends AbstractController {
 
     /**
      * 列表
+     *
      * @return
      */
     @RequestMapping("/list")
     @RequiresPermissions("masterData:workstationtypenode:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
+    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
         PageUtils page = workstationTypeNodeService.queryPage(params);
         return RD.ok(page);
+    }
+
+    /**
+     * nodeType列表
+     * @return
+     */
+    @RequestMapping("/listNodeType")
+    public ResponseEntity<JSONArray> listNodeType() {
+        return workstationTypeNodeService.listAllNodeType();
+
     }
 
 
@@ -51,8 +62,8 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstationtypenode:info")
-    public RD info(@PathVariable("id") Integer id){
-		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
+    public RD<JsonElement> info(@PathVariable("id") Integer id) {
+        WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
         return RD.build().put("data", workstationTypeNode);
     }
@@ -62,9 +73,9 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtypenode:save")
-    public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
+    public RD<JsonElement> save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
         workstationTypeNode.setCreateBy(getUserId().intValue());
-		workstationTypeNodeService.insert(workstationTypeNode);
+        workstationTypeNodeService.insert(workstationTypeNode);
 
         return RD.build();
     }
@@ -74,20 +85,21 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstationtypenode:update")
-    public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode){
-		workstationTypeNodeService.updateById(workstationTypeNode);
+    public RD<JsonElement> update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
+        workstationTypeNodeService.updateById(workstationTypeNode);
 
         return RD.build();
     }
 
     /**
      * 删除
+     *
      * @return
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:workstationtypenode:delete")
-    public RD delete(@RequestBody Integer[] ids){
-		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
+    public RD<JsonElement> delete(@RequestBody Integer[] ids) {
+        workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
     }

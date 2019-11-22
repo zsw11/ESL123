@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.JsonElement;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -432,14 +433,14 @@ public class JobController extends AbstractController {
 	 * 测试导入
 	 */
 	@PostMapping("testImport")
-	public RD testImport(MultipartFile file) {
+	public RD<JsonElement> testImport(MultipartFile file) {
 		List<JobEntity> jobList = new ArrayList<JobEntity>();
 		try {
 			Map map = ImportExcelUtils.readExcelData(file);
 			List<Map<Integer, String>> valueList = (List<Map<Integer, String>>) map.get("list");
 			for (Map<Integer, String> item : valueList) {
 				if (item.get(0) == null || "".equals(item.get(0))) {
-					return new RD((Integer) 403, "403", "某列不能为空");
+					return new RD<JsonElement>((Integer) 403, "403", "某列不能为空");
 				} else {
 					int num = 0;
 					JobEntity job = new JobEntity();

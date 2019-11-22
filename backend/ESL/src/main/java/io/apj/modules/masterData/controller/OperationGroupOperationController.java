@@ -2,9 +2,9 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
-import io.apj.modules.masterData.entity.ModelSeriesEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -55,7 +55,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:operationgroupoperation:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		OperationGroupOperationEntity operationGroupOperation = operationGroupOperationService.selectById(id);
 
         return RD.build().put("data", operationGroupOperation);
@@ -66,7 +66,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
-    public RD save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD<JsonElement> save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.insert(operationGroupOperation);
 
         return RD.build();
@@ -77,7 +77,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:operationgroupoperation:update")
-    public RD update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD<JsonElement> update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.updateById(operationGroupOperation);
 
         return RD.build();
@@ -89,7 +89,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:operationgroupoperation:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		operationGroupOperationService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

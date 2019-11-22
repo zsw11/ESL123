@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.DeptOperationRelaEntity;
 import io.apj.modules.masterData.service.DeptOperationRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptoperationrela:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		DeptOperationRelaEntity deptOperationRela = deptOperationRelaService.selectById(id);
 
         return RD.build().put("data", deptOperationRela);
@@ -62,7 +61,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptoperationrela:save")
-    public RD save(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD<JsonElement> save(@RequestBody DeptOperationRelaEntity deptOperationRela){
         deptOperationRela.setCreateBy(getUserId().intValue());
 		deptOperationRelaService.insert(deptOperationRela);
 
@@ -74,7 +73,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:deptoperationrela:update")
-    public RD update(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD<JsonElement> update(@RequestBody DeptOperationRelaEntity deptOperationRela){
 		deptOperationRelaService.updateById(deptOperationRela);
 
         return RD.build();
@@ -86,7 +85,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:deptoperationrela:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		deptOperationRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

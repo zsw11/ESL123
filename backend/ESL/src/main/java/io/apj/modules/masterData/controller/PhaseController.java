@@ -2,18 +2,14 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
-import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
-import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
-import io.apj.common.validator.ValidatorUtils;
-import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +55,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:phase:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		PhaseEntity phase = phaseService.selectById(id);
 
         return RD.build().put("data", phase);
@@ -70,7 +66,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:phase:save")
-    public RD save(@RequestBody PhaseEntity phase){
+    public RD<JsonElement> save(@RequestBody PhaseEntity phase){
 		phaseService.insert(phase);
 
         return RD.build();
@@ -81,7 +77,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:phase:update")
-    public RD update(@RequestBody PhaseEntity phase){
+    public RD<JsonElement> update(@RequestBody PhaseEntity phase){
 		phaseService.updateById(phase);
 
         return RD.build();
@@ -93,7 +89,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:phase:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		phaseService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

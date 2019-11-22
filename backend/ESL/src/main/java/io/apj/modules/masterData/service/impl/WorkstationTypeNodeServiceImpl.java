@@ -1,8 +1,14 @@
 package io.apj.modules.masterData.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.TreeUtils;
 import io.apj.modules.masterData.entity.WorkstationTypeEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -15,6 +21,8 @@ import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 
 @Service("workstationTypeNodeService")
 public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeNodeDao, WorkstationTypeNodeEntity> implements WorkstationTypeNodeService {
+    @Autowired
+    private WorkstationTypeNodeDao workstationTypeNodeDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -26,6 +34,14 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
 
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public ResponseEntity<JSONArray> listAllNodeType() {
+        List data = workstationTypeNodeDao.findAll();
+        JSONArray array = new JSONArray();
+        TreeUtils.setNodeTypeTree(0, data, array);
+        return ResponseEntity.ok(array);
     }
 
 }

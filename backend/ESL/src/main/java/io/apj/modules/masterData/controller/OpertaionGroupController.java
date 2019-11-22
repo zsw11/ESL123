@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.OpertaionGroupEntity;
 import io.apj.modules.masterData.service.OpertaionGroupService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:opertaiongroup:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		OpertaionGroupEntity opertaionGroup = opertaionGroupService.selectById(id);
 
         return RD.build().put("data", opertaionGroup);
@@ -62,7 +61,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:save")
-    public RD save(@RequestBody OpertaionGroupEntity opertaionGroup){
+    public RD<JsonElement> save(@RequestBody OpertaionGroupEntity opertaionGroup){
 		opertaionGroupService.insert(opertaionGroup);
 
         return RD.build();
@@ -73,7 +72,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
-    public RD update(@RequestBody OpertaionGroupEntity opertaionGroup){
+    public RD<JsonElement> update(@RequestBody OpertaionGroupEntity opertaionGroup){
 		opertaionGroupService.updateById(opertaionGroup);
 
         return RD.build();
@@ -85,7 +84,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:opertaiongroup:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		opertaionGroupService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

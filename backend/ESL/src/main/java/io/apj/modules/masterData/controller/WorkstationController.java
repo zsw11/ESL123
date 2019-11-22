@@ -3,11 +3,11 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
-import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -59,7 +59,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstation:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		WorkstationEntity workstation = workstationService.selectById(id);
 
         return RD.build().put("data", workstation);
@@ -70,7 +70,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstation:save")
-    public RD save(@RequestBody WorkstationEntity workstation){
+    public RD<JsonElement> save(@RequestBody WorkstationEntity workstation){
         workstation.setCreateBy(getUserId().intValue());
 		workstationService.insert(workstation);
 
@@ -82,7 +82,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstation:update")
-    public RD update(@RequestBody WorkstationEntity workstation){
+    public RD<JsonElement> update(@RequestBody WorkstationEntity workstation){
 		workstationService.updateById(workstation);
 
         return RD.build();
@@ -94,7 +94,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:workstation:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		workstationService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -147,7 +147,7 @@ public class WorkstationController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD importExcel(@RequestBody Map<String, Object> map) {
+    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<WorkstationEntity> workstationEntityList = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
 //    @RequiresPermissions("masterData:reportgroupreportrela:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ReportGroupReportRelaEntity reportGroupReportRela = reportGroupReportRelaService.selectById(id);
 
         return RD.build().put("data", reportGroupReportRela);
@@ -62,7 +61,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/create")
 //    @RequiresPermissions("masterData:reportgroupreportrela:save")
-    public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD<JsonElement> save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);
 
@@ -74,7 +73,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/update")
 //    @RequiresPermissions("masterData:reportgroupreportrela:update")
-    public RD update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD<JsonElement> update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
 
         return RD.build();
@@ -86,7 +85,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:reportgroupreportrela:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		reportGroupReportRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

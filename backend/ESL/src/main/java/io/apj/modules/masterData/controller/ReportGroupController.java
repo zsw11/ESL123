@@ -2,13 +2,12 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.sys.controller.AbstractController;
-import org.apache.ibatis.javassist.expr.NewArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -57,7 +54,7 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:reportgroup:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
         List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
 
@@ -72,7 +69,7 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:reportgroup:save")
-    public RD save(@RequestBody ReportGroupEntity reportGroup){
+    public RD<JsonElement> save(@RequestBody ReportGroupEntity reportGroup){
         reportGroup.setCreateBy(getUserId().intValue());
 		reportGroupService.insert(reportGroup);
 
@@ -84,7 +81,7 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:reportgroup:update")
-    public RD update(@RequestBody ReportGroupEntity reportGroup){
+    public RD<JsonElement> update(@RequestBody ReportGroupEntity reportGroup){
 		reportGroupService.updateById(reportGroup);
 
         return RD.build();
@@ -96,7 +93,7 @@ public class ReportGroupController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:reportgroup:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

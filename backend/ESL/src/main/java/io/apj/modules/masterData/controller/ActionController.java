@@ -2,6 +2,7 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
 import io.apj.modules.sys.controller.AbstractController;
@@ -54,7 +55,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:action:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
     	ActionEntity action = actionService.selectById(id);
 
         return RD.build().put("data", action);
@@ -65,7 +66,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:action:save")
-    public RD save(@RequestBody ActionEntity action){
+    public RD<JsonElement> save(@RequestBody ActionEntity action){
     	action.setCreateBy(getUserId().intValue());
         actionService.insert(action);
 
@@ -77,7 +78,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:action:update")
-    public RD update(@RequestBody ActionEntity action){
+    public RD<JsonElement> update(@RequestBody ActionEntity action){
     	actionService.updateById(action);
 
         return RD.build();
@@ -89,7 +90,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:action:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
     	actionService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

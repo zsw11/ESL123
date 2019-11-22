@@ -4,12 +4,12 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.ModelToolRelaService;
 import io.apj.modules.sys.controller.AbstractController;
@@ -29,7 +29,6 @@ import io.apj.modules.masterData.service.ToolService;
 import io.apj.common.utils.RD;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.tools.Tool;
 
 
 /**
@@ -68,7 +67,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:tool:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
         ModelEntity modelEntity = modelService.selectById(id);
         HashMap<Object, Object> data = new HashMap<>();
@@ -95,7 +94,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:tool:save")
-    public RD save(@RequestBody ToolEntity tool){
+    public RD<JsonElement> save(@RequestBody ToolEntity tool){
         tool.setCreateBy(getUserId().intValue());
 		toolService.insert(tool);
 
@@ -107,7 +106,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:tool:update")
-    public RD update(@RequestBody ToolEntity tool){
+    public RD<JsonElement> update(@RequestBody ToolEntity tool){
 		toolService.updateById(tool);
 
         return RD.build();
@@ -119,7 +118,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:tool:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		toolService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -175,7 +174,7 @@ public class ToolController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD importExcel(@RequestBody Map<String, Object> map) {
+    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<ToolEntity> toolEntityList = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

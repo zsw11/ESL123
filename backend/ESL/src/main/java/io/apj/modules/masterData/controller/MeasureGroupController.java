@@ -2,9 +2,9 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
+import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
-import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:measuregroup:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		MeasureGroupEntity measureGroup = measureGroupService.selectById(id);
 
         return RD.build().put("data", measureGroup);
@@ -64,7 +64,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:measuregroup:save")
-    public RD save(@RequestBody MeasureGroupEntity measureGroup){
+    public RD<JsonElement> save(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.insert(measureGroup);
 
         return RD.build();
@@ -75,7 +75,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:measuregroup:update")
-    public RD update(@RequestBody MeasureGroupEntity measureGroup){
+    public RD<JsonElement> update(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.updateById(measureGroup);
 
         return RD.build();
@@ -87,7 +87,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:measuregroup:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		measureGroupService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

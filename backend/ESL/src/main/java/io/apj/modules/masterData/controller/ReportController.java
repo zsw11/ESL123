@@ -3,6 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
 
 
 /**
@@ -51,7 +50,7 @@ public class ReportController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:report:info")
-    public RD info(@PathVariable("id") Integer id){
+    public RD<JsonElement> info(@PathVariable("id") Integer id){
 		ReportEntity report = reportService.selectById(id);
 
         return RD.build().put("data", report);
@@ -62,7 +61,7 @@ public class ReportController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:report:save")
-    public RD save(@RequestBody ReportEntity report){
+    public RD<JsonElement> save(@RequestBody ReportEntity report){
         report.setCreateBy(getUserId().intValue());
 		reportService.insert(report);
 
@@ -74,7 +73,7 @@ public class ReportController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:report:update")
-    public RD update(@RequestBody ReportEntity report){
+    public RD<JsonElement> update(@RequestBody ReportEntity report){
 		reportService.updateById(report);
 
         return RD.build();
@@ -86,7 +85,7 @@ public class ReportController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:report:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public RD<JsonElement> delete(@RequestBody Integer[] ids){
 		reportService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
