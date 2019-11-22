@@ -35,6 +35,7 @@
 <script>
 import Popper from '@/../static/plugins/vue-popperjs/vue-popper.js'
 import '@/../static/plugins/vue-popperjs/vue-popper.min.css'
+import { listAction } from '@/api/action'
 
 export default {
   name: 'OperationInput',
@@ -85,7 +86,6 @@ export default {
           const { selectionStart, selectionEnd, value } = this.$refs.operation
           const beginStr = value.slice(0, selectionStart).replace(/[^[]*$/, '')
           const endStr = value.slice(selectionEnd, value.length).replace(/^[^\]]*/, '')
-          console.log(beginStr + s.name + endStr)
           this.$refs.operation.value = beginStr + s.name + endStr
           this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = (beginStr + s.name).length + 2
           break
@@ -94,7 +94,6 @@ export default {
           const { selectionStart, selectionEnd, value } = this.$refs.operation
           const beginStr = value.slice(0, selectionStart).replace(/[^"]*$/, '')
           const endStr = value.slice(selectionEnd, value.length).replace(/^[^"]*/, '')
-          console.log(beginStr + s.name + endStr)
           this.$refs.operation.value = beginStr + s.name + endStr
           this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = (beginStr + s.name).length + 2
           break
@@ -121,7 +120,7 @@ export default {
         // 匹配部品
         case '[': {
           const { selectionStart, value } = this.$refs.operation
-          if (/[^"]*$/.test(value.slice(0, selectionStart))) {
+          if (/\[[^[\]]*$/.test(value.slice(0, selectionStart)) || (this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
             return e.preventDefault()
           }
           this.addToSelection(']', false)
@@ -140,6 +139,10 @@ export default {
         }
         // 匹配治工具
         case '"': {
+          const { selectionStart, value } = this.$refs.operation
+          if (/\[[^[\]]*$/.test(value.slice(0, selectionStart)) || (this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
+            return e.preventDefault()
+          }
           this.addToSelection('"', false)
           e.stopPropagation()
           this.suggest('tool')
