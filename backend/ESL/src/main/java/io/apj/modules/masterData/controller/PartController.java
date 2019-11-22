@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.PartService;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.service.SysDictService;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
@@ -117,6 +118,18 @@ public class PartController extends AbstractController {
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:part:delete")
     public RD delete(@RequestBody Integer[] ids){
+    	for (int i = 0; i < ids.length; i++) {
+			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
+			if (!referenceEntities.isEmpty()) {
+				for (ReferenceEntity reference : referenceEntities) {
+					return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+				}
+			} else {
+				// 删除引用表关系
+				deleteTableReference("part", ids[i].longValue());
+			}
+		}
 		partService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
