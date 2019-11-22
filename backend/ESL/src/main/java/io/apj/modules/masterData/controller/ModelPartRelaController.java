@@ -74,7 +74,7 @@ public class ModelPartRelaController extends AbstractController {
     public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
         modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
-
+		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), false);
         return RD.build();
     }
 
@@ -85,7 +85,7 @@ public class ModelPartRelaController extends AbstractController {
 //    @RequiresPermissions("masterData:modelpartrela:update")
     public RD update(@RequestBody ModelPartRelaEntity modelPartRela){
 		modelPartRelaService.updateById(modelPartRela);
-
+		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), true);
         return RD.build();
     }
 
