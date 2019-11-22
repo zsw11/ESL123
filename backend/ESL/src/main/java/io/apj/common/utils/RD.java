@@ -108,7 +108,7 @@ public class RD<J extends JsonElement> extends HashMap<String, Object>{
 	 *  获取    RD 实体
 	 * @return RD object
 	 */
-	public static RD<JsonElement> build() {
-		return new RD<JsonElement>();
+	public static RD build() {
+		return new RD();
 	}
 }
