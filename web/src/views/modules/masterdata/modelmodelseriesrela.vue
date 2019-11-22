@@ -266,9 +266,8 @@
           },
           this.listQuery
         )).then(({page}) => {
-          this.dataList = page.data
-          this.total = page.totalCount
-          // console.log(this.dataList)
+          this.dataList = page.records
+          this.total = page.total
         }).catch(() => {
           this.dataList = []
           this.total = 0

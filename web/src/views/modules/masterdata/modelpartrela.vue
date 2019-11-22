@@ -40,8 +40,8 @@
         <div class="buttons">
 <!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
-          <el-dialog title="新增部品机种关系" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left: 20px" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+          <el-dialog title="新增部品机种关系" width="400px" :visible.sync="addReal">
+            机种<keyword-search  style="margin-left:10px;width: 300px" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="partModel">确 定</el-button>
@@ -144,6 +144,7 @@
     name: 'modelList',
     data () {
       return {
+        success: null,
         addPartModelId: null,
         addReal: false,
         id: null,
@@ -301,7 +302,20 @@
           partId: this.id,
           modelId: this.addPartModelId
         }
-        createModelPartRela(data)
+        createModelPartRela(data).then(({code}) => {
+          this.success = code
+        })
+        // console.log(this.success, createModelPartRela(data), 111111111111111)
+        if (this.success === 200) {
+          this.addReal = false
+          this.getDataList()
+          this.$notify({
+            title: '成功',
+            message: '添加关系成功',
+            type: 'success',
+            duration: 2000
+          })
+        }
       }
     }
   }
@@ -316,7 +330,7 @@
     width: 130px;
   }
   .el-form-item--small.el-form-item{
-    display: inline-block;
+    /*display: inline-block;*/
   }
   .el-form-item {
     display: inline-block;
