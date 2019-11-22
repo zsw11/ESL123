@@ -6,7 +6,7 @@
       :options="{
         placement: 'bottom'
       }"
-      :force-show="popoverVisible">
+      :force-show="popoverVisible && !!suggestions.length">
       <div class="popper">
         <el-scrollbar>
           <div
@@ -36,6 +36,14 @@
 import Popper from '@/../static/plugins/vue-popperjs/vue-popper.js'
 import '@/../static/plugins/vue-popperjs/vue-popper.min.css'
 import { listAction } from '@/api/action'
+import { listPart } from '@/api/part'
+import { listTool } from '@/api/tool'
+
+const listFuncs = {
+  action: listAction,
+  part: listPart,
+  tool: listTool
+}
 
 export default {
   name: 'OperationInput',
@@ -44,27 +52,32 @@ export default {
     return {
       suggestMode: null,
       popoverVisible: false,
-      suggestions: [
-        { id: 1, name: 'A' },
-        { id: 2, name: 'B' }
-      ],
+      suggestions: [],
       activeSugguestionIndex: null
     }
   },
   methods: {
+    // 获取光标前文字
     getInputBegin () {
       return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
     },
+    // 获取光标后文字
     getInputEnd () {
       return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
     },
+    // 查询并提示
     suggest (mode, keyword) {
       this.suggestMode = mode
+      this.suggestions = []
+      listFuncs[mode]({ name: keyword }).then(({ page }) => {
+        this.suggestions = page.data
+      })
       setTimeout(() => {
         this.activeSugguestionIndex = null
         this.popoverVisible = true
       }, 100)
     },
+    // j结束提示
     endSuggest () {
       setTimeout(() => {
         this.popoverVisible = false
@@ -113,16 +126,26 @@ export default {
       const beginStr = value.slice(0, selectionStart)
       const endStr = value.slice(selectionEnd, value.length)
       this.$refs.operation.value = beginStr + str + endStr
+      this.$emit('input', this.$refs.operation.value)
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e, scope) {
       switch (e.key) {
         // 匹配部品
         case '[': {
-          const { selectionStart, value } = this.$refs.operation
-          if (/\[[^[\]]*$/.test(value.slice(0, selectionStart)) || (this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
+          const { value } = this.$refs.operation
+          const beginStr = this.getInputBegin()
+          // 在""间不允许输入
+          if ((beginStr.match(/"/g) || []).length % 2 === 1) {
+            this.endSuggest()
             return e.preventDefault()
           }
+          // 在[]间会再次提示
+          if (/\[[^[\]]*$/.test(beginStr)) {
+            this.suggest('part', /\[([^[\]]*)$/.exec(beginStr)[1])
+            return e.preventDefault()
+          }
+          // 补]并开始提示
           this.addToSelection(']', false)
           e.stopPropagation()
           this.suggest('part')
@@ -139,10 +162,19 @@ export default {
         }
         // 匹配治工具
         case '"': {
-          const { selectionStart, value } = this.$refs.operation
-          if (/\[[^[\]]*$/.test(value.slice(0, selectionStart)) || (this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
+          const { value } = this.$refs.operation
+          const beginStr = this.getInputBegin()
+          // 在[]间不允许输入
+          if (/\[[^[\]]*$/.test(beginStr)) {
+            this.endSuggest()
             return e.preventDefault()
           }
+          // 在""间会再次提示
+          if ((beginStr.match(/"/g) || []).length % 2 === 1) {
+            this.suggest('tool', /"([^"]*)$/.exec(beginStr)[1])
+            return e.preventDefault()
+          }
+          // 补"并开始提示
           this.addToSelection('"', false)
           e.stopPropagation()
           this.suggest('tool')
@@ -159,7 +191,6 @@ export default {
             if (!this.suggestions.length) return
             else if (this.activeSugguestionIndex === null) this.activeSugguestionIndex = 0
             else if (this.activeSugguestionIndex < this.suggestions.length - 1) ++this.activeSugguestionIndex
-            console.log(this.activeSugguestionIndex)
             e.preventDefault()
           }
           break
@@ -186,15 +217,21 @@ export default {
           if (e.key === 'Backspace') {
             this.endSuggest()
             return true
-          } else if (!/[`~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(this.getInputBegin() + e.key)) {
-            this.suggest('action')
-          } else if (/\[[^[\]"]*$/.test(this.getInputBegin())) {
-            this.suggest('part')
-          } else if ((this.getInputBegin().match(/"/g) || []).length % 2 === 1) {
-            this.suggest('tool')
           } else {
-            this.endSuggest()
-            console.log(e.key)
+            const beginStr = this.getInputBegin()
+            if (!/[`~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
+              // 操作关键字
+              this.suggest('action', beginStr + e.key)
+            } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
+              // 部品
+              this.suggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
+            } else if (((beginStr + e.key).match(/"/g) || []).length % 2 === 1) {
+              // 治工具
+              this.suggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
+            } else {
+              this.endSuggest()
+              console.log(e.key)
+            }
           }
           return true
         }
