@@ -297,7 +297,10 @@
       },
       // 新增部品机种关系
       partModel () {
-        let data = [Number(this.addPartModelId), Number(this.id)]
+        let data = {
+          partId: this.id,
+          modelId: this.addPartModelId
+        }
         createModelPartRela(data)
       }
     }
