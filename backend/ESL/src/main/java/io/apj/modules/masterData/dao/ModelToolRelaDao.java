@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,6 @@ import java.util.Map;
  */
 @Mapper
 public interface ModelToolRelaDao extends BaseMapper<ModelToolRelaEntity> {
-    List<Map<String,Object>> selectModelByToolId(Integer id, Map<String, Object> params);
+    List<Map<String,Object>> selectModelByToolId(Integer id, Page<Map<String,Object>> page);
 	
 }

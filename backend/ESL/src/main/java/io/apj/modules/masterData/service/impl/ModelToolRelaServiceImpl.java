@@ -32,7 +32,7 @@ public class ModelToolRelaServiceImpl extends ServiceImpl<ModelToolRelaDao, Mode
         //治工具的机种数据
         //新建分页
         Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
-               return page.setRecords(this.baseMapper.selectModelByToolId(id, (Map<String, Object>) page));
+               return page.setRecords(this.baseMapper.selectModelByToolId(id, page));
 
     }
 
