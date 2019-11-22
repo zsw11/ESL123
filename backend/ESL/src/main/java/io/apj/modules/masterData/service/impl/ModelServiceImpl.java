@@ -2,6 +2,8 @@ package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.modules.masterData.service.ModelSeriesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -15,7 +17,8 @@ import io.apj.modules.masterData.service.ModelService;
 
 @Service("modelService")
 public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> implements ModelService {
-
+    @Autowired
+    private ModelSeriesService modelSeriesService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -32,7 +35,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
              entityWrapper.andNew("name  like '%" +name +"%'" + " or code  like '%" +name +"%'" );
          }
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
-
+         for(ModelEntity entity :page.getRecords()){
+             entity.setModelSeriesEntity(modelSeriesService.selectById(entity.getModelSeriesId()));
+         }
         return new PageUtils(page);
     }
 

@@ -19,7 +19,7 @@ SELECT
 	*
 FROM
 	model
-	JOIN ( SELECT model_id FROM model_tool_rela WHERE tool_id = #{id} ) T ON T.model_id = model."id";
+	JOIN ( SELECT model_id FROM model_tool_rela WHERE tool_id = #{id} ) T ON T.model_id = model."id" ORDER BY model.create_at DESC
     </select>
 
 

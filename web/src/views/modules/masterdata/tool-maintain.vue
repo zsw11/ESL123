@@ -10,11 +10,25 @@
           </el-form-item>
 
           <el-form-item :label="'是否通用'" prop="common">
-            <el-switch :disabled=flag style="width: 350px" v-model="dataForm.common"></el-switch>
+            <el-select :disabled=flag v-model="value">
+              <el-option
+                v-for="item in option"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled=flag v-model="dataForm.opininon" style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <el-input
+              style="width:900px;"
+              :disabled=flag
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="dataForm.remark">
+            </el-input>
           </el-form-item>
 
 
@@ -37,6 +51,19 @@ export default {
       flag: false,
       title: null,
       inited: false,
+      value: '',
+      option: [
+        {
+          id: 1,
+          value: true,
+          label: '是'
+        },
+        {
+          id: 0,
+          value: false,
+          label: '否'
+        }
+      ],
       dataForm: {
         id: 0,
         name: null,

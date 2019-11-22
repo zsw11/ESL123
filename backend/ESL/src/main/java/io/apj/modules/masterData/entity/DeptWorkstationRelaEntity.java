@@ -53,6 +53,4 @@ public class DeptWorkstationRelaEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
-    public void setCreateBy(int intValue) {
-    }
 }

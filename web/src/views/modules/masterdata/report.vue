@@ -11,8 +11,8 @@
         </el-form-item>
 
         <el-form-item  :label="'空Form标准编号'" prop="formCode" >
-<!--          <el-input v-model="listQuery.formCode" clearable></el-input>-->
-          <keyword-search style="width: 250px" v-model="listQuery.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :valueColumn="'fromCode'" :allowEmpty="true"></keyword-search>
+          <el-input v-model="listQuery.formCode" clearable></el-input>
+<!--          <keyword-search style="width: 250px" v-model="listQuery.formCode" :allowMultiple="true" :searchApi="this.listReport" :labelColumn="'fromCode'" :valueColumn="'fromCode'" :allowEmpty="true"></keyword-search>-->
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">

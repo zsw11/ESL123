@@ -112,6 +112,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
+import { Message } from 'element-ui'
 
 const defaultExport = ['part.name', 'part.common', 'part.remark']
 
@@ -275,13 +276,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deletePart(ids).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
+        deletePart(ids).then(({msg}) => {
+          if (msg) {
+            Message({
+              message: msg,
+              type: 'error',
+              duration: 5 * 1000
+            })
+          } else {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+          }
           this.getDataList()
         })
       })

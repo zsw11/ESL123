@@ -33,6 +33,17 @@ http.interceptors.request.use(config => {
  * 响应拦截
  */
 http.interceptors.response.use(response => {
+  if (response.data.code) {
+    if (response.data.code === 401) {
+      clearLoginInfo()
+      router.push({ name: 'login' })
+      Message({
+        message: response.data.msg,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
+  }
   return response.data
 }, error => {
   switch (error.response.status) {

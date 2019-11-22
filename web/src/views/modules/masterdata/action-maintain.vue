@@ -10,7 +10,14 @@
           </el-form-item>
 
       <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'备注'" prop="remark">
-        <textarea  :disabled=flag v-model="dataForm.remark" style="width:810px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+        <el-input
+          style="width:900px;"
+          :disabled=flag
+          type="textarea"
+          :rows="6"
+          placeholder="请输入内容"
+          v-model="dataForm.opininon">
+        </el-input>
       </el-form-item>
 
 

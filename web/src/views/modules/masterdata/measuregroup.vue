@@ -57,79 +57,79 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="a0" label="A" >
+        <el-table-column align="center" prop="a0" label="A" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.a0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="b0" label="B" >
+        <el-table-column align="center" prop="b0" label="B" width="40"  >
           <template slot-scope="scope">
             <span>{{scope.row.b0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="g0" label="G" >
+        <el-table-column align="center" prop="g0" label="G" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.g0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="a1" label="A" >
+        <el-table-column align="center" prop="a1" label="A" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.a1 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="b1" label="B" >
+        <el-table-column align="center" prop="b1" label="B" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.b1 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="p0" label="P" >
+        <el-table-column align="center" prop="p0" label="P" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.p0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="m0" label="M" >
+        <el-table-column align="center" prop="m0" label="M" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.m0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="x0" label="X" >
+        <el-table-column align="center" prop="x0" label="X" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.x0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="i0" label="I" >
+        <el-table-column align="center" prop="i0" label="I" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.i0 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="a2" label="A" >
+        <el-table-column align="center" prop="a2" label="A" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.a2 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="b2" label="B" >
+        <el-table-column align="center" prop="b2" label="B" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.b2 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="p1" label="P" >
+        <el-table-column align="center" prop="p1" label="P" width="40" >
           <template slot-scope="scope">
             <span>{{scope.row.p1 }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="a3" label="A" >
+        <el-table-column align="center" prop="a3" label="A" width="40">
           <template slot-scope="scope">
             <span>{{scope.row.a3 }}</span>
           </template>
@@ -143,7 +143,7 @@
 
       <el-table-column align="center" :label="'操作'" fixed="right" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="detalis(scope.row.id)">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>

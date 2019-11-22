@@ -22,27 +22,46 @@
       </el-form-item>
 
       <el-form-item :label="'WS时间'" prop="WSTime">
-        <el-input :disabled=flag style="width: 325px" v-model="dataForm.WSTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-input>
+        <el-date-picker
+          :disabled=flag
+          style="width: 325px"
+          v-model="dataForm.WSTime">
+        </el-date-picker>
       </el-form-item>
 
       <el-form-item style="margin-left: 140px" :label="'ES时间'" prop="ESTime">
-        <el-input :disabled=flag style="width: 325px" v-model="dataForm.ESTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-input>
+        <el-date-picker
+          :disabled=flag
+          style="width: 325px"
+          v-model="dataForm.ESTime">
+        </el-date-picker>
       </el-form-item>
 
       <el-form-item :label="'AMP时间'" prop="AMPTime">
-        <el-input :disabled=flag style="width: 325px" v-model="dataForm.AMPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-input>
+        <el-date-picker
+          :disabled=flag
+          style="width: 325px"
+          v-model="dataForm.AMPTime">
+        </el-date-picker>
       </el-form-item>
 
       <el-form-item style="margin-left: 140px" :label="'MP时间'" prop="MPTime">
-        <el-input :disabled=flag style="width: 325px" v-model="dataForm.MPTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-input>
+        <el-date-picker
+          :disabled=flag
+          style="width: 325px"
+          v-model="dataForm.MPTime">
+        </el-date-picker>
       </el-form-item>
 
       <el-form-item style="display: block" :label="'备注'" prop="remark">
-        <textarea :disabled=flag v-model="dataForm.remark"  style="width:900px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6"></textarea>
+        <el-input
+          style="width:900px;"
+          :disabled=flag
+          type="textarea"
+          :rows="6"
+          placeholder="请输入内容"
+          v-model="dataForm.remark">
+        </el-input>
       </el-form-item>
 
     </el-form>

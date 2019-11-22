@@ -12,19 +12,20 @@ import io.apj.modules.masterData.dao.ActionDao;
 import io.apj.modules.masterData.entity.ActionEntity;
 import io.apj.modules.masterData.service.ActionService;
 
-
 @Service("actionService")
 public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> implements ActionService {
 
-    @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
-                .like(params.get("name") != null && params.get("name") != "", "name",
-                        (String) params.get("name"));
-        Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
+	@Override
+	public PageUtils queryPage(Map<String, Object> params) {
+		EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
+		if (params.get("name") != null && params.get("name") != "") {
+			params.put("name", ((String) params.get("name")).replace('*', '%'));
+		}
+		entityWrapper.isNull("delete_at").like(params.get("name") != null && params.get("name") != "", "name",
+				(String) params.get("name"));
+		Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
 
-        return new PageUtils(page);
-    }
+		return new PageUtils(page);
+	}
 
 }

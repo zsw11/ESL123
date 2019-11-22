@@ -132,7 +132,7 @@
   import { listModel, deleteModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { fetchTool } from '@/api/tool'
+  import { fetchModelByTool } from '@/api/tool'
   export default {
     name: 'modelList',
     data () {
@@ -200,7 +200,13 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchTool(this.id).then(({data}) => {
+        fetchModelByTool(Object.assign(
+          {
+            page: this.pageNo,
+            limit: this.pageSize,
+            id: this.id
+          }
+        )).then(({data}) => {
           this.dataList = data.model
           // this.total = data.totalCount
           // console.log(this.dataList)

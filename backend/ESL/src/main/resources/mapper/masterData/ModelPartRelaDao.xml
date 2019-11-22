@@ -15,7 +15,7 @@
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
     <select id="selectModelByPartId" parameterType="int" resultType="io.apj.modules.masterData.entity.ModelEntity">
-     SELECT * FROM model JOIN ( SELECT model_id FROM model_part_rela WHERE part_id = #{id}) T ON T.model_id = model."id";
+     SELECT * FROM model JOIN ( SELECT model_id FROM model_part_rela WHERE part_id = #{id}) T ON T.model_id = model."id" ORDER BY model.create_at DESC
     </select>
 
 

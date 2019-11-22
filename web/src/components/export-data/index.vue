@@ -96,7 +96,7 @@ export default {
           complexFilters: null
         } : undefined
       )).then(response => {
-        if (response.size > 0) {
+        if (response) {
           const blob = response
           const reader = new FileReader()
           reader.readAsDataURL(blob)

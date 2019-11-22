@@ -30,29 +30,11 @@ public class ModelToolRelaServiceImpl extends ServiceImpl<ModelToolRelaDao, Mode
     }
 
     @Override
-    public Page<ModelEntity> selectModelByToolId(Integer id, Map<String, Object> params) {
+    public Page<Map<String, Object>> selectModelByToolId(Integer id, Map<String, Object> params) {
         //治工具的机种数据
-        List<ModelEntity> modelEntities = modelToolRelaDao.selectModelByToolId(id);
-        if (modelEntities != null) {
-            int total = modelEntities.size();
-            int limit = Integer.parseInt((String) params.get("limit"));
-            int pagecurrent = Integer.parseInt((String) params.get("page"));
-            Page<ModelEntity> page =new Page<ModelEntity>();
-            page.setRecords(modelEntities);
-            page.setCurrent(pagecurrent);
-            page.setTotal(total);
-            page.setSize(limit);
-//            List<ModelEntity> modelEntityList = modelEntities.subList(limit * (page - 1), ((limit * page) > total ? total : (limit * page)));
-//            HashMap<Object, Object> data = new HashMap<>();
-//            data.put("modelEntityList", modelEntityList);
-//            data.put("limit", limit);
-//            data.put("page", page);
-//            data.put("total", total);
-
-            return page;
-        } else {
-            return null;
-        }
+        //新建分页
+        Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+        return page.setRecords(this.baseMapper.selectModelByToolId(id, (Map<String, Object>) page));
 
     }
 

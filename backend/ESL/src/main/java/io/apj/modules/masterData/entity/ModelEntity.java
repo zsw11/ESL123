@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -24,10 +25,33 @@ public class ModelEntity implements Serializable {
 	 */
 	@TableId
 	private Integer id;
+
+	public Integer getModelSeriesId() {
+		return modelSeriesId;
+	}
+
+	public void setModelSeriesId(Integer modelSeriesId) {
+		this.modelSeriesId = modelSeriesId;
+	}
+
 	/**
 	 * 机种系列ID
 	 */
 	private Integer modelSeriesId;
+
+	public ModelSeriesEntity getModelSeriesEntity(ModelSeriesEntity modelSeriesEntity) {
+		return this.modelSeriesEntity;
+	}
+
+	public void setModelSeriesEntity(ModelSeriesEntity modelSeriesEntity) {
+		this.modelSeriesEntity = modelSeriesEntity;
+	}
+
+	/**
+	 * 机种系列对象
+	 */
+	@TableField(exist = false)
+	private ModelSeriesEntity modelSeriesEntity;
 	/**
 	 * 名称
 	 */
@@ -80,7 +104,4 @@ public class ModelEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-    public void setCreateBy(int intValue) {
-    }
 }

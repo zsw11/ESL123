@@ -27,11 +27,28 @@ public class ModelToolRelaEntity implements Serializable {
 	/**
 	 * 机种ID
 	 */
-	private Integer modelid;
+	private Integer modelId;
+
+	public Integer getModelId(int modelId) {
+		return this.modelId;
+	}
+
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
+	}
+
+	public Integer getToolId() {
+		return toolId;
+	}
+
+	public void setToolId(Integer toolId) {
+		this.toolId = toolId;
+	}
+
 	/**
 	 * 治工具ID
 	 */
-	private Integer toolid;
+	private Integer toolId;
 	/**
 	 * 创建者ID
 	 */
@@ -52,7 +69,4 @@ public class ModelToolRelaEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-    public void setCreateBy(int intValue) {
-    }
 }

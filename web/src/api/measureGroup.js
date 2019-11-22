@@ -18,12 +18,12 @@ export function createMeasureGroup (data) {
   })
 }
 
-// 获取常用指标组合详情
-export function fetchMeasureGroup (params) {
+// 获取机种详情
+export function fetchMeasureGroup (id) {
   return request({
-    url: request.adornUrl('/api/v1/measuregroup/detail'),
+    url: request.adornUrl(`/api/v1/measuregroup/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

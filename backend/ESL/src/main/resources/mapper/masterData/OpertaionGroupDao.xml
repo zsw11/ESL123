@@ -7,7 +7,7 @@
     <resultMap type="io.apj.modules.masterData.entity.OpertaionGroupEntity" id="opertaionGroupMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
-        <result property="deptid" column="deptid"/>
+        <result property="deptId" column="dept_id"/>
         <result property="usedcount" column="usedcount"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>

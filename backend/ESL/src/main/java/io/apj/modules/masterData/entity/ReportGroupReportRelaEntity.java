@@ -32,6 +32,23 @@ public class ReportGroupReportRelaEntity implements Serializable {
 	 * 报表ID
 	 */
 	private Integer reportId;
+
+	public Integer getReportGroupId() {
+		return reportGroupId;
+	}
+
+	public void setReportGroupId(Integer reportGroupId) {
+		this.reportGroupId = reportGroupId;
+	}
+
+	public Integer getReportId() {
+		return reportId;
+	}
+
+	public void setReportId(Integer reportId) {
+		this.reportId = reportId;
+	}
+
 	/**
 	 * 创建者ID
 	 */
@@ -52,7 +69,4 @@ public class ReportGroupReportRelaEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-    public void setCreateBy(int intValue) {
-    }
 }
