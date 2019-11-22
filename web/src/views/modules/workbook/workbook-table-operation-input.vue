@@ -82,11 +82,21 @@ export default {
           break
         }
         case 'part': {
-          this.addToSelection(s.name, true, 1)
+          const { selectionStart, selectionEnd, value } = this.$refs.operation
+          const beginStr = value.slice(0, selectionStart).replace(/[^[]*$/, '')
+          const endStr = value.slice(selectionEnd, value.length).replace(/^[^\]]*/, '')
+          console.log(beginStr + s.name + endStr)
+          this.$refs.operation.value = beginStr + s.name + endStr
+          this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = (beginStr + s.name).length + 2
           break
         }
         case 'tool': {
-          this.addToSelection(s.name, true, 1)
+          const { selectionStart, selectionEnd, value } = this.$refs.operation
+          const beginStr = value.slice(0, selectionStart).replace(/[^"]*$/, '')
+          const endStr = value.slice(selectionEnd, value.length).replace(/^[^"]*/, '')
+          console.log(beginStr + s.name + endStr)
+          this.$refs.operation.value = beginStr + s.name + endStr
+          this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = (beginStr + s.name).length + 2
           break
         }
         default: {
