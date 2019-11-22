@@ -39,31 +39,6 @@ public class ModelPartRelaServiceImpl extends ServiceImpl<ModelPartRelaDao, Mode
         Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
                 return page.setRecords(this.baseMapper.selectModelByPartId(id, page));
 
-
-//
-//        //部品的机种数据
-//        List<ModelEntity> modelEntities = modelPartRelaDao.selectModelByPartId(id, params);
-//        if(modelEntities!=null){
-//            int total = modelEntities.size();
-//            int limit = Integer.parseInt((String) params.get("limit"));
-//            int currentpage = Integer.parseInt((String) params.get("page"));
-//            Page<ModelEntity> page =new Page<ModelEntity>();
-//            page.setRecords(modelEntities);
-//            page.setCurrent(currentpage);
-//            page.setTotal(total);
-//            page.setSize(limit);
-////            List<ModelEntity> modelEntityList = modelEntities.subList(limit * (page - 1), ((limit * page) > total ? total : (limit * page)));
-////            HashMap<Object, Object> data = new HashMap<>();
-////            data.put("modelEntityList", modelEntityList);
-////            data.put("limit",limit);
-////            data.put("page", page);
-////            data.put("total", total);
-//
-//            return page;
-//        }else {
-//            return null;
-//        }
-
     }
 
 }
