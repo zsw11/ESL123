@@ -72,8 +72,21 @@ public class ModelPartRelaController extends AbstractController {
     @RequestMapping("/create")
 //    @RequiresPermissions("masterData:modelpartrela:save")
     public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
-        modelPartRela.setCreateBy(getUserId().intValue());
+//        modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
+
+        return RD.build();
+    }
+    /**
+     * 部品下新增机种保存
+     */
+    @RequestMapping("/createmodelpartrela")
+    public RD saveRela(@RequestParam int modelId, @RequestParam int partId){
+        ModelPartRelaEntity modelPartRelaEntity = new ModelPartRelaEntity();
+        modelPartRelaEntity.setModelId(modelId);
+        modelPartRelaEntity.setModelId(partId);
+
+        modelPartRelaService.insertAllColumn(modelPartRelaEntity);
 
         return RD.build();
     }
