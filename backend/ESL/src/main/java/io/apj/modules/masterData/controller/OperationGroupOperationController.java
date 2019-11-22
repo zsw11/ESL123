@@ -67,7 +67,6 @@ public class OperationGroupOperationController extends AbstractController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
     public RD save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
-        operationGroupOperation.setCreateBy(getUserId().intValue());
 		operationGroupOperationService.insert(operationGroupOperation);
 
         return RD.build();

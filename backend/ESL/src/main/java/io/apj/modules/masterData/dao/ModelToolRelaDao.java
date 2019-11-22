@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 机种治工具关系
@@ -16,6 +17,6 @@ import java.util.List;
  */
 @Mapper
 public interface ModelToolRelaDao extends BaseMapper<ModelToolRelaEntity> {
-    List<ModelEntity> selectModelByToolId(int id);
+    List<Map<String,Object>> selectModelByToolId(Integer id, Map<String, Object> params);
 	
 }

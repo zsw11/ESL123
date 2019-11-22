@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PhaseController extends AbstractController {
     @Autowired
     private PhaseService phaseService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
@@ -70,7 +71,6 @@ public class PhaseController extends AbstractController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:phase:save")
     public RD save(@RequestBody PhaseEntity phase){
-        phase.setCreateBy(getUserId().intValue());
 		phaseService.insert(phase);
 
         return RD.build();
