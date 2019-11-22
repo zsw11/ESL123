@@ -55,7 +55,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:phase:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		PhaseEntity phase = phaseService.selectById(id);
 
         return RD.build().put("data", phase);
@@ -66,7 +66,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:phase:save")
-    public RD<JsonElement> save(@RequestBody PhaseEntity phase){
+    public RD save(@RequestBody PhaseEntity phase){
 		phaseService.insert(phase);
 
         return RD.build();
@@ -77,7 +77,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:phase:update")
-    public RD<JsonElement> update(@RequestBody PhaseEntity phase){
+    public RD update(@RequestBody PhaseEntity phase){
 		phaseService.updateById(phase);
 
         return RD.build();
@@ -89,7 +89,7 @@ public class PhaseController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:phase:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		phaseService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

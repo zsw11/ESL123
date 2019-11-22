@@ -49,7 +49,7 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
 //    @RequiresPermissions("masterData:modelpartrela:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
 
         return RD.build().put("data", modelPartRela);
@@ -72,7 +72,7 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/create")
 //    @RequiresPermissions("masterData:modelpartrela:save")
-    public RD<JsonElement> save(@RequestBody ModelPartRelaEntity modelPartRela){
+    public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
 //        modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
 		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), false);
@@ -82,7 +82,7 @@ public class ModelPartRelaController extends AbstractController {
      * 部品下新增机种保存
      */
     @RequestMapping("/createmodelpartrela")
-    public RD<JsonElement> saveRela(@RequestParam int modelId, @RequestParam int partId){
+    public RD saveRela(@RequestParam int modelId, @RequestParam int partId){
         ModelPartRelaEntity modelPartRelaEntity = new ModelPartRelaEntity();
         modelPartRelaEntity.setModelId(modelId);
         modelPartRelaEntity.setModelId(partId);
@@ -97,7 +97,7 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/update")
 //    @RequiresPermissions("masterData:modelpartrela:update")
-    public RD<JsonElement> update(@RequestBody ModelPartRelaEntity modelPartRela){
+    public RD update(@RequestBody ModelPartRelaEntity modelPartRela){
 		modelPartRelaService.updateById(modelPartRela);
 		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), true);
         return RD.build();
@@ -109,7 +109,7 @@ public class ModelPartRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
 //    @RequiresPermissions("masterData:modelpartrela:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelPartRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

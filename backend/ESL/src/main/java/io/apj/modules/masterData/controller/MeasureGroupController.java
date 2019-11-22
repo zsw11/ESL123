@@ -54,7 +54,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:measuregroup:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		MeasureGroupEntity measureGroup = measureGroupService.selectById(id);
 
         return RD.build().put("data", measureGroup);
@@ -65,7 +65,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:measuregroup:save")
-    public RD<JsonElement> save(@RequestBody MeasureGroupEntity measureGroup){
+    public RD save(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.insert(measureGroup);
 
         return RD.build();
@@ -76,7 +76,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:measuregroup:update")
-    public RD<JsonElement> update(@RequestBody MeasureGroupEntity measureGroup){
+    public RD update(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.updateById(measureGroup);
 
         return RD.build();
@@ -88,7 +88,7 @@ public class MeasureGroupController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:measuregroup:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		measureGroupService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

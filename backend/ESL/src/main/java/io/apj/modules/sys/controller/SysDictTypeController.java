@@ -46,7 +46,7 @@ public class SysDictTypeController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 //	@RequiresPermissions("sys:dicttype:list")
-	public RD<JsonElement> list(@RequestParam Map<String, Object> params) {
+	public RD list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysDictTypeService.queryPage(params);
 		return RD.build().put("page", page);
 	}

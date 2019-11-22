@@ -433,14 +433,14 @@ public class JobController extends AbstractController {
 	 * 测试导入
 	 */
 	@PostMapping("testImport")
-	public RD<JsonElement> testImport(MultipartFile file) {
+	public RD testImport(MultipartFile file) {
 		List<JobEntity> jobList = new ArrayList<JobEntity>();
 		try {
 			Map map = ImportExcelUtils.readExcelData(file);
 			List<Map<Integer, String>> valueList = (List<Map<Integer, String>>) map.get("list");
 			for (Map<Integer, String> item : valueList) {
 				if (item.get(0) == null || "".equals(item.get(0))) {
-					return new RD<JsonElement>((Integer) 403, "403", "某列不能为空");
+					return new RD((Integer) 403, "403", "某列不能为空");
 				} else {
 					int num = 0;
 					JobEntity job = new JobEntity();

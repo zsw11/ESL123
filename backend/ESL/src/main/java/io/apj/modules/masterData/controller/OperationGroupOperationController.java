@@ -55,7 +55,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:operationgroupoperation:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		OperationGroupOperationEntity operationGroupOperation = operationGroupOperationService.selectById(id);
 
         return RD.build().put("data", operationGroupOperation);
@@ -66,7 +66,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:operationgroupoperation:save")
-    public RD<JsonElement> save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD save(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.insert(operationGroupOperation);
 
         return RD.build();
@@ -77,7 +77,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:operationgroupoperation:update")
-    public RD<JsonElement> update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
+    public RD update(@RequestBody OperationGroupOperationEntity operationGroupOperation){
 		operationGroupOperationService.updateById(operationGroupOperation);
 
         return RD.build();
@@ -89,7 +89,7 @@ public class OperationGroupOperationController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:operationgroupoperation:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		operationGroupOperationService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

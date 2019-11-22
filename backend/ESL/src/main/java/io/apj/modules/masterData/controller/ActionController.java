@@ -55,7 +55,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:action:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
     	ActionEntity action = actionService.selectById(id);
 
         return RD.build().put("data", action);
@@ -66,7 +66,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:action:save")
-    public RD<JsonElement> save(@RequestBody ActionEntity action){
+    public RD save(@RequestBody ActionEntity action){
     	action.setCreateBy(getUserId().intValue());
         actionService.insert(action);
 
@@ -78,7 +78,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:action:update")
-    public RD<JsonElement> update(@RequestBody ActionEntity action){
+    public RD update(@RequestBody ActionEntity action){
     	actionService.updateById(action);
 
         return RD.build();
@@ -90,7 +90,7 @@ public class ActionController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:action:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
     	actionService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

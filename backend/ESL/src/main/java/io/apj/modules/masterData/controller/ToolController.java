@@ -67,7 +67,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:tool:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ToolEntity tool = toolService.selectById(id);
         ModelEntity modelEntity = modelService.selectById(id);
         HashMap<Object, Object> data = new HashMap<>();
@@ -94,7 +94,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:tool:save")
-    public RD<JsonElement> save(@RequestBody ToolEntity tool){
+    public RD save(@RequestBody ToolEntity tool){
         tool.setCreateBy(getUserId().intValue());
 		toolService.insert(tool);
 
@@ -106,7 +106,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:tool:update")
-    public RD<JsonElement> update(@RequestBody ToolEntity tool){
+    public RD update(@RequestBody ToolEntity tool){
 		toolService.updateById(tool);
 
         return RD.build();
@@ -118,7 +118,7 @@ public class ToolController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:tool:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		toolService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -174,7 +174,7 @@ public class ToolController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
+    public RD importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<ToolEntity> toolEntityList = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

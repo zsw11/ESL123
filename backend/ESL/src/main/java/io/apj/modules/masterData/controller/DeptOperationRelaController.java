@@ -50,7 +50,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:deptoperationrela:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		DeptOperationRelaEntity deptOperationRela = deptOperationRelaService.selectById(id);
 
         return RD.build().put("data", deptOperationRela);
@@ -61,7 +61,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:deptoperationrela:save")
-    public RD<JsonElement> save(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD save(@RequestBody DeptOperationRelaEntity deptOperationRela){
         deptOperationRela.setCreateBy(getUserId().intValue());
 		deptOperationRelaService.insert(deptOperationRela);
 
@@ -73,7 +73,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:deptoperationrela:update")
-    public RD<JsonElement> update(@RequestBody DeptOperationRelaEntity deptOperationRela){
+    public RD update(@RequestBody DeptOperationRelaEntity deptOperationRela){
 		deptOperationRelaService.updateById(deptOperationRela);
 
         return RD.build();
@@ -85,7 +85,7 @@ public class DeptOperationRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:deptoperationrela:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		deptOperationRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

@@ -62,7 +62,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:modelseries:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelSeriesEntity modelSeries = modelSeriesService.selectById(id);
 
         return RD.build().put("data", modelSeries);
@@ -73,7 +73,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/modeldetail/{id}")
     @RequiresPermissions("masterData:modelseries:info")
-    public RD<JsonElement> modelinfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+    public RD modelinfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
         PageUtils models = modelService.selectBySeriesId(id, params);
 
         return RD.build().put("page", models);
@@ -84,7 +84,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:modelseries:save")
-    public RD<JsonElement> save(@RequestBody ModelSeriesEntity modelSeries){
+    public RD save(@RequestBody ModelSeriesEntity modelSeries){
         modelSeries.setCreateBy(getUserId().intValue());
 		modelSeriesService.insert(modelSeries);
 
@@ -96,7 +96,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:modelseries:update")
-    public RD<JsonElement> update(@RequestBody ModelSeriesEntity modelSeries){
+    public RD update(@RequestBody ModelSeriesEntity modelSeries){
 		modelSeriesService.updateById(modelSeries);
 
         return RD.build();
@@ -108,7 +108,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:modelseries:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelSeriesService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -160,7 +160,7 @@ public class ModelSeriesController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
+    public RD importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<ModelSeriesEntity> modelSeriesEntityList = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

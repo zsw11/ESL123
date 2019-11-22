@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
  * @author lixinan
  *
  */
-public class RD<J extends JsonElement> extends HashMap<String, Object>{
+public class RD extends HashMap<String, Object>{
 	private static final long serialVersionUID = 1L;
 	
 	public RD() {};

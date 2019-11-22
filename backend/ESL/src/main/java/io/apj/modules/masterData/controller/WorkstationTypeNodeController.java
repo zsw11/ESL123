@@ -62,7 +62,7 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstationtypenode:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id) {
+    public RD info(@PathVariable("id") Integer id) {
         WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
         return RD.build().put("data", workstationTypeNode);
@@ -73,7 +73,7 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstationtypenode:save")
-    public RD<JsonElement> save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
+    public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
         workstationTypeNode.setCreateBy(getUserId().intValue());
         workstationTypeNodeService.insert(workstationTypeNode);
 
@@ -85,7 +85,7 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstationtypenode:update")
-    public RD<JsonElement> update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
+    public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
         workstationTypeNodeService.updateById(workstationTypeNode);
 
         return RD.build();
@@ -98,7 +98,7 @@ public class WorkstationTypeNodeController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:workstationtypenode:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids) {
+    public RD delete(@RequestBody Integer[] ids) {
         workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

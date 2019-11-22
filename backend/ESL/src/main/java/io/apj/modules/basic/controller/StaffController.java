@@ -80,7 +80,7 @@ public class StaffController extends AbstractController {
 	 */
 	@RequestMapping("/detail/{id}")
 	@RequiresPermissions("basic:staff:info")
-	public RD<JsonElement> info(@PathVariable("id") Long id) {
+	public RD info(@PathVariable("id") Long id) {
 		StaffEntity staff = staffService.selectById(id);
 
 		return RD.build().put("data", staff);
@@ -92,7 +92,7 @@ public class StaffController extends AbstractController {
 	@SysLog("保存人员")
 	@RequestMapping("/create")
 //	@RequiresPermissions("basic:staff:create")
-	public RD<JsonElement> save(@RequestBody StaffEntity staff) {
+	public RD save(@RequestBody StaffEntity staff) {
 		staff.setCreateBy(getUserId());
 		staff.setCreateAt(new Date());
 		staff.setUpdateAt(new Date());
@@ -132,7 +132,7 @@ public class StaffController extends AbstractController {
 	@RequestMapping("/saveOrUpdate")
 	@Transactional(rollbackFor = Exception.class)
 	@RequiresPermissions("basic:staff:save")
-	public RD<JsonElement> saveOrUpdate(@RequestBody StaffEntity staff) {
+	public RD saveOrUpdate(@RequestBody StaffEntity staff) {
 		SysUserEntity user = staff.getUserEntity();
 		if (user != null) {
 			user.setCreateAt(new Date());

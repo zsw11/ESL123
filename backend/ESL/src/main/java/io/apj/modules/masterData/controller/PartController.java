@@ -70,7 +70,7 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:part:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		PartEntity part = partService.selectById(id);
 
         return RD.build().put("data", part);
@@ -93,7 +93,7 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:part:save")
-    public RD<JsonElement> save(@RequestBody PartEntity part){
+    public RD save(@RequestBody PartEntity part){
     	part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
@@ -105,7 +105,7 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:part:update")
-    public RD<JsonElement> update(@RequestBody PartEntity part){
+    public RD update(@RequestBody PartEntity part){
 		partService.updateById(part);
 
         return RD.build();
@@ -117,7 +117,7 @@ public class PartController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:part:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
     	for (int i = 0; i < ids.length; i++) {
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
@@ -185,7 +185,7 @@ public class PartController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
+	public RD importExcel(@RequestBody Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<PartEntity> partEntityList = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {

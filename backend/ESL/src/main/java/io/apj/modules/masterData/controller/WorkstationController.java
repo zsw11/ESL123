@@ -59,7 +59,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:workstation:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		WorkstationEntity workstation = workstationService.selectById(id);
 
         return RD.build().put("data", workstation);
@@ -70,7 +70,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:workstation:save")
-    public RD<JsonElement> save(@RequestBody WorkstationEntity workstation){
+    public RD save(@RequestBody WorkstationEntity workstation){
         workstation.setCreateBy(getUserId().intValue());
 		workstationService.insert(workstation);
 
@@ -82,7 +82,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:workstation:update")
-    public RD<JsonElement> update(@RequestBody WorkstationEntity workstation){
+    public RD update(@RequestBody WorkstationEntity workstation){
 		workstationService.updateById(workstation);
 
         return RD.build();
@@ -94,7 +94,7 @@ public class WorkstationController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:workstation:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		workstationService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -147,7 +147,7 @@ public class WorkstationController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
+    public RD importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<WorkstationEntity> workstationEntityList = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

@@ -50,7 +50,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
 //    @RequiresPermissions("masterData:reportgroupreportrela:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ReportGroupReportRelaEntity reportGroupReportRela = reportGroupReportRelaService.selectById(id);
 
         return RD.build().put("data", reportGroupReportRela);
@@ -61,7 +61,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/create")
 //    @RequiresPermissions("masterData:reportgroupreportrela:save")
-    public RD<JsonElement> save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);
 
@@ -73,7 +73,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/update")
 //    @RequiresPermissions("masterData:reportgroupreportrela:update")
-    public RD<JsonElement> update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
+    public RD update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
 
         return RD.build();
@@ -85,7 +85,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:reportgroupreportrela:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		reportGroupReportRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

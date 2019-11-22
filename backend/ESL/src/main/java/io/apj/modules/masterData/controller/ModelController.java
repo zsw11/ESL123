@@ -59,7 +59,7 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:model:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ModelEntity model = modelService.selectById(id);
 
         return RD.build().put("data", model);
@@ -70,7 +70,7 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:model:save")
-    public RD<JsonElement> save(@RequestBody ModelEntity model){
+    public RD save(@RequestBody ModelEntity model){
         model.setCreateBy(getUserId().intValue());
 		modelService.insert(model);
 
@@ -82,7 +82,7 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:model:update")
-    public RD<JsonElement> update(@RequestBody ModelEntity model){
+    public RD update(@RequestBody ModelEntity model){
 		modelService.updateById(model);
 
         return RD.build();
@@ -94,7 +94,7 @@ public class ModelController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:model:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		modelService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
@@ -146,7 +146,7 @@ public class ModelController extends AbstractController {
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD<JsonElement> importExcel(@RequestBody Map<String, Object> map) {
+    public RD importExcel(@RequestBody Map<String, Object> map) {
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
         List<ModelEntity> modelEntities = new ArrayList<>();
         for (int i = 0; i < maps.size(); i++) {

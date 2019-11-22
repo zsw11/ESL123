@@ -50,7 +50,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/detail/{id}")
     @RequiresPermissions("masterData:approveopininon:info")
-    public RD<JsonElement> info(@PathVariable("id") Integer id){
+    public RD info(@PathVariable("id") Integer id){
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
 
         return RD.build().put("data", approveOpininon);
@@ -61,7 +61,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:approveopininon:save")
-    public RD<JsonElement> save(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD save(@RequestBody ApproveOpininonEntity approveOpininon){
         approveOpininon.setCreateBy(getUserId().intValue());
 		approveOpininonService.insert(approveOpininon);
 
@@ -73,7 +73,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:approveopininon:update")
-    public RD<JsonElement> update(@RequestBody ApproveOpininonEntity approveOpininon){
+    public RD update(@RequestBody ApproveOpininonEntity approveOpininon){
 		approveOpininonService.updateById(approveOpininon);
 
         return RD.build();
@@ -85,7 +85,7 @@ public class ApproveOpininonController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:approveopininon:delete")
-    public RD<JsonElement> delete(@RequestBody Integer[] ids){
+    public RD delete(@RequestBody Integer[] ids){
 		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
