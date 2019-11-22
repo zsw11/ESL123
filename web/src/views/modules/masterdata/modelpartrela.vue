@@ -199,8 +199,9 @@
             id: this.id
           }
           )).then(({page}) => {
-            this.dataList = page.data
-            this.total = page.totalCount
+            // console.log(page, 1111111111111111111)
+            this.dataList = page
+            this.total = page.length
           // console.log(this.dataList)
           }).catch(() => {
             this.dataList = []

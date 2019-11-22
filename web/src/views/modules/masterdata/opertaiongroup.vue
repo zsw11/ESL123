@@ -244,7 +244,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-opertaiongeoup/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-opertaiongroup/${id}`, query: {noShow: true}})
       })
     },
     // 新增 / 修改

@@ -10,29 +10,27 @@
           </el-form-item>
 
           <el-form-item style="display: block" :label="'备注'" prop="remark">
-            <textarea :disabled=flag v-model="dataForm.opininon" style="width:600px;height: 120px;border-radius: 5px;border: 2px solid #DFE2E6" ></textarea>
+            <el-input
+              style="width:700px;"
+              :disabled=flag
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="dataForm.remark">
+            </el-input>
           </el-form-item>
     </el-form>
 
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="tableHeader" >报表信息</div>
+        <span class="tableHeader" >报表信息</span>
+        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>
       </div>
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
         style="width: 100%;">
-        <el-table-column
-          v-if=!flag
-          fixed="left"
-          type="selection"
-          header-align="left"
-          align="left"
-          width="50">
-        </el-table-column>
-
-
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
@@ -304,6 +302,7 @@ export default {
     border: none;
   }
   .tableHeader{
+    display: inline-block;
     width: 90px;
     height: 30px;
     border-top-left-radius: 10px;
