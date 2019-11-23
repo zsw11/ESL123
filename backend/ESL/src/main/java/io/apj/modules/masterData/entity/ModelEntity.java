@@ -26,32 +26,21 @@ public class ModelEntity implements Serializable {
 	@TableId
 	private Integer id;
 
-	public Integer getModelSeriesId() {
-		return modelSeriesId;
-	}
-
-	public void setModelSeriesId(Integer modelSeriesId) {
-		this.modelSeriesId = modelSeriesId;
-	}
-
 	/**
 	 * 机种系列ID
 	 */
 	private Integer modelSeriesId;
-
-	public ModelSeriesEntity getModelSeriesEntity(ModelSeriesEntity modelSeriesEntity) {
-		return this.modelSeriesEntity;
-	}
-
-	public void setModelSeriesEntity(ModelSeriesEntity modelSeriesEntity) {
-		this.modelSeriesEntity = modelSeriesEntity;
-	}
 
 	/**
 	 * 机种系列对象
 	 */
 	@TableField(exist = false)
 	private ModelSeriesEntity modelSeriesEntity;
+	/**
+	 * 部门名称
+	 */
+	@TableField(exist = false)
+	private String deptName;
 	/**
 	 * 名称
 	 */

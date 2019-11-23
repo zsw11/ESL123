@@ -20,7 +20,6 @@ import lombok.Data;
 public class PhaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
 	 * $column.comments
 	 */
@@ -31,30 +30,14 @@ public class PhaseEntity implements Serializable {
 	 */
 	private String name;
 
-	public Integer getContinuePhaseId() {
-		return continuePhaseId;
-	}
-
-	public void setContinuePhaseId(Integer continuePhaseId) {
-		this.continuePhaseId = continuePhaseId;
-	}
-
 	/**
 	 * 沿用阶段
 	 */
 	private Integer continuePhaseId;
 
-	public PhaseEntity getPhaseEntity() {
-		return phaseEntity;
-	}
-
-	public void setPhaseEntity(PhaseEntity phaseEntity) {
-		this.phaseEntity = phaseEntity;
-	}
-
 	/**
-	* 生产阶段
-	* */
+	 * 生产阶段
+	 */
 	@TableField(exist = false)
 	private PhaseEntity phaseEntity;
 	/**

@@ -4,9 +4,9 @@ spring:
         driverClassName: com.mysql.cj.jdbc.Driver
         druid:
             first:
-                url: jdbc:mysql://localhost:3306/yu_fast?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-                username: yu
-                password: 123456
+                url: jdbc:postgresql://117.48.230.8:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+                username: postgres
+                password: ly0713
             second:
                 url: jdbc:mysql://localhost:3306/yu_fast?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
                 username: yu

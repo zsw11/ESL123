@@ -11,8 +11,12 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-<!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
-          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+         <el-input v-model="listQuery.code"  clearable></el-input>
+          <!-- <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search> -->
+          <!-- <dict-select 
+            dictType="ModelCode"
+            v-model="listQuery.code">
+          </dict-select> -->
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
@@ -73,21 +77,21 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="部门" >
+        <el-table-column align="center" prop="deptName" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
+        <el-table-column align="center" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesId }}</span>
+            <span>{{scope.row.modelSeriesEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
-            <span>{{scope.row.code }}</span>
+            <span>{{scope.row.code}}</span>
           </template>
         </el-table-column>
 
@@ -142,6 +146,8 @@ import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
 import { listDept } from '@/api/dept'
 import { listModelSeries } from '@/api/modelSeries'
 import { filterAttributes } from '@/utils'
+import { listDictItem } from '@/api/dict'
+import { keyBy } from 'lodash'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
@@ -176,6 +182,7 @@ export default {
       pageSize: 10,
       total: 0,
       dataListLoading: false,
+      // ModelCode: [],
       dataListSelections: [],
       attributes: [{
         code: 'model',
@@ -245,6 +252,7 @@ export default {
   },
   activated () {
     const self = this
+    // self.getDicByType()
     self.getDataList()
   },
   methods: {
@@ -273,6 +281,12 @@ export default {
         })
       // }
     },
+    // getDicByType () {
+    //   listDictItem({ type: 'ModelCode' }).then(({data}) => {
+    //     console.log(data, 6666)
+    //     this.ModelCode = keyBy(data, 'code')
+    //   })
+    // },
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
