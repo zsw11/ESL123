@@ -29,22 +29,6 @@ public class ModelToolRelaEntity implements Serializable {
 	 */
 	private Integer modelId;
 
-	public Integer getModelId(int modelId) {
-		return this.modelId;
-	}
-
-	public void setModelId(Integer modelId) {
-		this.modelId = modelId;
-	}
-
-	public Integer getToolId() {
-		return toolId;
-	}
-
-	public void setToolId(Integer toolId) {
-		this.toolId = toolId;
-	}
-
 	/**
 	 * 治工具ID
 	 */

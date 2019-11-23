@@ -106,10 +106,10 @@ export default {
       this.dataForm.dictTypeId = parseInt(this.$route.params.dictId) || 0
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchDictItem(this.dataForm.id).then(({data}) => {
+        fetchDictItem(this.dataForm.id).then(({page}) => {
           Object.assign(
             this.dataForm,
-            pick(data, ['dictTypeId', 'code', 'name', 'remark', 'sort'])
+            pick(page, ['dictTypeId', 'code', 'name', 'remark', 'sort'])
           )
         }).finally(() => {
           this.inited = true
@@ -121,7 +121,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ path: `/sys-dict-item/${this.dataForm.dictId}` })
+      this.$router.push({ path: `/sys-dict-item/${this.dataForm.dictTypeId}` })
       this.$destroy()
     },
     // 表单提交
@@ -132,6 +132,7 @@ export default {
             ? updateDictItem(this.dataForm.id, this.dataForm)
             : createDictItem(this.dataForm)
           ).then(({data}) => {
+            console.log(this.dataForm.dictTypeId, 4444444)
             this.$message({
               message: '操作成功',
               type: 'success',

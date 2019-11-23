@@ -29,22 +29,6 @@ public class ModelPartRelaEntity implements Serializable {
 	 */
 	private Integer modelId;
 
-	public Integer getModelId() {
-		return modelId;
-	}
-
-	public void setModelId(Integer modelId) {
-		this.modelId = modelId;
-	}
-
-	public Integer getPartId() {
-		return partId;
-	}
-
-	public void setPartId(Integer partId) {
-		this.partId = partId;
-	}
-
 	/**
 	 * 部品ID
 	 */

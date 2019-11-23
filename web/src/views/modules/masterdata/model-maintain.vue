@@ -17,7 +17,11 @@
           </el-form-item>
 
           <el-form-item style="margin-left: 140px" :label="'型号'" prop="code">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel" :labelColunt="'code'" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
+            <el-input :disabled=flag style="width: 325px"  v-model="dataForm.code"></el-input>
+            <!-- <dict-select 
+              dictType="ModelCode"
+              v-model="dataForm.code">
+            </dict-select> -->
           </el-form-item>
 
           <el-form-item :label="'WS时间'" prop="WSTime">

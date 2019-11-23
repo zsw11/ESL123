@@ -31,14 +31,6 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private String name;
 
-	public Integer getWorkstationId() {
-		return workstationId;
-	}
-
-	public void setWorkstationId(Integer workstationId) {
-		this.workstationId = workstationId;
-	}
-
 	/**
 	 * 工位ID
 	 */
@@ -48,17 +40,9 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private String remark;
 
-	public Integer getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
-	}
-
 	/*
-	* 父id
-	* */
+	 * 父id
+	 */
 	private Integer parentId;
 	/**
 	 * 创建者ID
