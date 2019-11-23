@@ -4,17 +4,22 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
-      <el-form-item  :label="'常用指标组合编码'" prop="code">
-          <el-input :disabled=flag style="width: 100px" v-model="dataForm.code"></el-input>
-      </el-form-item>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px">
+      <el-row>
+        <el-col :span="9">
+          <el-form-item  :label="'组合编码'" prop="code">
+              <el-input :disabled="flag" v-model="dataForm.code"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <vxe-grid
         border
         size="mini"
         ref="workbookTable"
         align="center"
-        height="100%"
+        height="100px"
+        class="workbook-table"
         :data="[dataForm]"
         :mouse-config="{selected: true}"
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
@@ -63,71 +68,13 @@ export default {
         a2: null,
         b2: null,
         p1: null,
-        a3: null,
-        deptId: null,
-        usedCount: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        a3: null
       },
       listDept,
       dataRules: {
         code: [
+          { required: true, message: '请输入指标组合编码', trigger: 'blur' },
           { max: 64, message: '长度超过了64', trigger: 'blur' }
-        ],
-        a0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        b0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        g0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        a1: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        b1: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        p0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        m0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        x0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        i0: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        a2: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        b2: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        p1: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        a3: [
-          { max: 1, message: '长度超过了1', trigger: 'blur' }
-        ],
-        deptId: [
-          { type: 'number', message: '组织机构ID需为数字值' }
-        ],
-        usedCount: [
-          { type: 'number', message: '使用次数统计需为数字值' }
-        ],
-        createBy: [
-          { type: 'number', message: '创建者ID需为数字值' }
-        ],
-
-        updateBy: [
-          { type: 'number', message: '更新者ID需为数字值' }
         ]
       }
     }
@@ -174,7 +121,7 @@ export default {
         fetchMeasureGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'code', 'a0', 'b0', 'g0', 'a1', 'b1', 'p0', 'm0', 'x0', 'i0', 'a2', 'b2', 'p1', 'a3', 'deptId', 'usedCount', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'code', 'a0', 'b0', 'g0', 'a1', 'b1', 'p0', 'm0', 'x0', 'i0', 'a2', 'b2', 'p1', 'a3' ])
           )
         }).finally(() => {
           this.inited = true
@@ -232,10 +179,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
+.workbook-table {
+  .vxe-header--column .vxe-edit-icon {
+    display: none;
   }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
+}
 </style>

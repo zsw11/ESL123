@@ -8,7 +8,7 @@
     <template v-slot:edit="{ row }">
       <input
         type="text"
-        v-model="row[config.field]"
+        v-model.number="row[config.field]"
         :id="config.field"
         :ref="config.field"
         @keydown="keydown($event, row)"

@@ -1,0 +1,32 @@
+
+.workbook-table {
+  height: calc(100% - 90px);
+  margin-top: 5px;
+  .vxe-header--column .vxe-edit-icon {
+    display: none;
+  }
+  .vxe-table {
+    .vxe-cell {
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      .vxe-default-input,
+      .custom-input {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #dcdfe6;
+      }
+    }
+    &.vxe-editable .vxe-body--column {
+      .vxe-cell {
+        line-height: 23px;
+      }
+      &.col--center {
+        .vxe-default-input,
+        .custom-input {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
