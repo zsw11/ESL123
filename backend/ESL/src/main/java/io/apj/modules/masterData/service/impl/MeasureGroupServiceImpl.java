@@ -21,7 +21,7 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         EntityWrapper<MeasureGroupEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
                 .like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"))
-                .eq(params.get("deptid") != null && params.get("deptid") != "", "dept_Id", (String) params.get("deptid"));
+                .eq(params.get("deptId") != null && params.get("deptId") != "", "dept_id", (String) params.get("deptId"));
 
         Page<MeasureGroupEntity> page = this.selectPage(new Query<MeasureGroupEntity>(params).getPage(), entityWrapper);
 
