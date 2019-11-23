@@ -1,5 +1,5 @@
 <template>
-  <div class="operation-input-box">
+  <span class="operation-input-box" key="operationInputBox">
     <popper
       trigger="clickToOpen"
       ref="popper"
@@ -23,13 +23,14 @@
         slot="reference"
         id="operation-input"
         ref="operation"
+        key="operation"
         type="text"
         v-bind="$attrs"
         @keydown="keydown($event)"
         @input="$emit('input', $event.target.value)"
         class="custom-input">
     </popper>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -59,10 +60,6 @@ export default {
   methods: {
     // 获取光标前文字
     getInputBegin () {
-      return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
-    },
-    // 获取光标后文字
-    getInputEnd () {
       return this.$refs.operation.value.substr(0, this.$refs.operation.selectionStart)
     },
     // 查询并提示
@@ -133,7 +130,6 @@ export default {
       switch (e.key) {
         // 匹配部品
         case '[': {
-          const { value } = this.$refs.operation
           const beginStr = this.getInputBegin()
           // 在""间不允许输入
           if ((beginStr.match(/"/g) || []).length % 2 === 1) {
@@ -162,7 +158,6 @@ export default {
         }
         // 匹配治工具
         case '"': {
-          const { value } = this.$refs.operation
           const beginStr = this.getInputBegin()
           // 在[]间不允许输入
           if (/\[[^[\]]*$/.test(beginStr)) {

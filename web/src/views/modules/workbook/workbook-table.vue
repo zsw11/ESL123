@@ -19,12 +19,8 @@
       <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <operation-column min-width="120"></operation-column>
-      <vxe-table-column field="key" title="Key" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60" :edit-render="{name: 'input'}">
-        <template v-slot:edit="{ row }">
-          <input type="text" v-model="row.key" id="key" ref="keys" class="custom-input">
-        </template>
-      </vxe-table-column>
+      <operation-column key="operationColumn" min-width="120"></operation-column>
+      <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
@@ -38,13 +34,15 @@
 </template>
 
 <script>
+import { pick } from 'lodash'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
+import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
 import { measureColumns0, measureColumns1, measureFields } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
-  components: { MeasureColumn, OperationColumn },
+  components: { MeasureColumn, KeyColumn, OperationColumn },
   props: ['count'],
   data () {
     return {
@@ -86,6 +84,13 @@ export default {
           return
         }
       }
+    },
+    selctMeasureGroup (mg, row) {
+      Object.assign(
+        row,
+        pick(mg, measureFields)
+      )
+      this.$refs.workbookTable.setActiveCell(row, 'tool')
     },
     // 新增行模块
     addRow (event) {

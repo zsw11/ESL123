@@ -29,11 +29,11 @@
         <div class="card-title">常用指标组合</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <export-data
+          <!-- <export-data
             :config="exportConfig"
             type="primary"
             plain>导   出
-          </export-data>
+          </export-data> -->
           <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
