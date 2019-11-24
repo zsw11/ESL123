@@ -64,6 +64,7 @@ public class DeptActionRelaController extends AbstractController {
     public RD save(@RequestBody DeptActionRelaEntity deptActionRela){
         deptActionRela.setCreateBy(getUserId().intValue());
 		deptActionRelaService.insert(deptActionRela);
+        insertTableReference("dept", deptActionRela.getDeptId().longValue(), "action", deptActionRela.getActionId().longValue(), false);
 
         return RD.build();
     }
@@ -75,6 +76,7 @@ public class DeptActionRelaController extends AbstractController {
     @RequiresPermissions("masterData:deptoperationrela:update")
     public RD update(@RequestBody DeptActionRelaEntity deptActionRela){
 		deptActionRelaService.updateById(deptActionRela);
+        insertTableReference("dept", deptActionRela.getDeptId().longValue(), "action", deptActionRela.getActionId().longValue(), true);
 
         return RD.build();
     }

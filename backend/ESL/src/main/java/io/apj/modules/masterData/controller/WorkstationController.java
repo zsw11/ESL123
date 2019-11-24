@@ -9,6 +9,7 @@ import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,18 @@ public class WorkstationController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:workstation:delete")
 	public RD delete(@RequestBody Integer[] ids) {
+		for (int i = 0; i < ids.length; i++) {
+			List<ReferenceEntity> referenceEntities = deleteCheckReference("workstation", ids[i].longValue());
+			if (!referenceEntities.isEmpty()) {
+				for (ReferenceEntity reference : referenceEntities) {
+					return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+				}
+			} else {
+				// 删除引用表关系
+				deleteTableReference("workstation", ids[i].longValue());
+			}
+		}
 		workstationService.deleteBatchIds(Arrays.asList(ids));
 
 		return RD.build();

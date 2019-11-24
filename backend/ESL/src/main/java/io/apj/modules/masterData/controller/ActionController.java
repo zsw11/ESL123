@@ -9,6 +9,7 @@ import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,18 @@ public class ActionController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:action:delete")
 	public RD delete(@RequestBody Integer[] ids) {
+		for (int i = 0; i < ids.length; i++) {
+			List<ReferenceEntity> referenceEntities = deleteCheckReference("action", ids[i].longValue());
+			if (!referenceEntities.isEmpty()) {
+				for (ReferenceEntity reference : referenceEntities) {
+					return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+				}
+			} else {
+				// 删除引用表关系
+				deleteTableReference("action", ids[i].longValue());
+			}
+		}
 		actionService.deleteBatchIds(Arrays.asList(ids));
 
 		return RD.build();

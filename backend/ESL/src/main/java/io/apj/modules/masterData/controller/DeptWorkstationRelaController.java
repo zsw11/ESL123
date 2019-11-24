@@ -64,6 +64,7 @@ public class DeptWorkstationRelaController extends AbstractController {
     public RD save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
         deptWorkstationRela.setCreateBy(getUserId().intValue());
 		deptWorkstationRelaService.insert(deptWorkstationRela);
+        insertTableReference("dept", deptWorkstationRela.getDeptId().longValue(), "workstation", deptWorkstationRela.getWorkstationId().longValue(), false);
 
         return RD.build();
     }
@@ -75,6 +76,8 @@ public class DeptWorkstationRelaController extends AbstractController {
     @RequiresPermissions("masterData:deptworkstationrela:update")
     public RD update(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
 		deptWorkstationRelaService.updateById(deptWorkstationRela);
+        insertTableReference("dept", deptWorkstationRela.getDeptId().longValue(), "workstation", deptWorkstationRela.getWorkstationId().longValue(), true);
+
 
         return RD.build();
     }
