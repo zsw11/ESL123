@@ -4,14 +4,18 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
-          <el-form-item :label="'工位名称'" prop="name">
-            <el-input style="width: 325px" :disabled=flag v-model="dataForm.name"></el-input>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
+        <el-form-item :label="'工位名称'" prop="name">
+            <el-input  :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -19,24 +23,35 @@
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <el-card class="with-title">
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
         <el-button  @click="dialogFormVisible = true" type="primary" style="float: right" v-if=!flag>新增</el-button>
 
-        <el-dialog custom-class="show" width="600" title="新增" :visible.sync="dialogFormVisible">
+        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="dialogFormVisible">
           <el-form :mdoel="addForm">
-
-            <el-form-item :label="'父工位'" prop="parent">
-              <el-input  style="width: 200px" v-model="addForm.parent"></el-input>
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <el-form-item :label="'父工位'" prop="parent">
+                <el-input  v-model="addForm.parent"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="2">
+            <el-form-item :label="'名称'" prop="name">
+              <el-input  v-model="addForm.name"></el-input>
             </el-form-item>
-            <el-form-item  style="margin-left: 20px;" :label="'名称'" prop="name">
-              <el-input  style="width: 200px" v-model="addForm.name"></el-input>
-            </el-form-item>
-            <el-form-item class="showItem" :label="'备注'" prop="remark">
-              <el-input  type="textarea" :rows="6" placeholder="请输入内容" v-model="addForm.remark" style="width:470px;margin-left: 13px"></el-input>
-            </el-form-item>
+            </el-col>
+          </el-row>
+            <el-row>
+              <el-col :span="22">
+                <el-form-item :label="'备注'" prop="remark">
+                  <el-input  type="textarea" style="width: 455px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -217,9 +232,6 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
-  }
   .is-always-shadow{
     box-shadow: none;
     border: none;
@@ -239,10 +251,8 @@ export default {
   .table{
     width: 600px;
   }
-  .show > .el-dialog__body > .el-form > .el-form-item {
+  .show > .el-dialog__body > .el-form > .el-row>.el-col>.el-form-item {
     display: inline-flex;
   }
-  .show > .el-dialog__body > .el-form > .el-form-item > .el-form-item__content{
-    display: inline-block;
-  }
+
 </style>

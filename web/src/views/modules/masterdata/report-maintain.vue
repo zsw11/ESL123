@@ -4,17 +4,23 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px" style='width: 1080px'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px">
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'名称'" prop="name">
-            <el-input class="input" :disabled="true" v-model="dataForm.name"></el-input>
+            <el-input :disabled="true" v-model="dataForm.name"></el-input>
           </el-form-item>
-          <el-form-item style="margin-left:110px" :label="'空Form标准编号'" prop="formCode">
-            <el-input class="input" :disabled=flag v-model="dataForm.formCode"></el-input>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'空Form标准编号'" prop="formCode">
+            <el-input :disabled=flag v-model="dataForm.formCode"></el-input>
           </el-form-item>
-
-          <el-form-item :label="'备注'" prop="remark">
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="22">
+          <el-form-item style="display: block":label="'备注'" prop="remark">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -22,7 +28,8 @@
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
-
+        </el-col>
+      </el-row>
 
     </el-form>
 
@@ -152,11 +159,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .input{
-    width: 325px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
+
 </style>
 

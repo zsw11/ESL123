@@ -4,11 +4,14 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'治工具名称'" prop="name">
-            <el-input :disabled=flag style="width: 350px" v-model="dataForm.name"></el-input>
+            <el-input :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
+        </el-col>
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'是否通用'" prop="common">
             <el-select :disabled=flag v-model="value">
               <el-option
@@ -19,10 +22,11 @@
               </el-option>
             </el-select>
           </el-form-item>
-
-          <el-form-item style="display: block" :label="'备注'" prop="remark">
+        </el-col>
+      </el-row>
+    <el-row :gutter="10"> <el-col :span="22">
+      <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -30,8 +34,8 @@
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
-
-
+      </el-col>
+    </el-row>
     </el-form>
 
     <span class="dialog-footer">
@@ -173,12 +177,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
-</style>
 

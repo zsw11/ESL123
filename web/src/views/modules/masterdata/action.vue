@@ -62,7 +62,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small">组织机构</el-button>
+<!--            <el-button type="text" size="small">组织机构</el-button>-->
             <el-button  size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>

@@ -4,28 +4,34 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'手顺组合编码'" prop="code">
-            <el-input :disabled="flag" style="width: 325px" v-model="dataForm.code"></el-input>
+            <el-input :disabled="flag" v-model="dataForm.code"></el-input>
           </el-form-item>
-
-      <el-form-item style="margin-left: 140px" :label="'所属组织机构'" prop="deptId">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
-      </el-form-item>
+        </el-col>
+       <el-col :span="10" :offset="2">
+        <el-form-item :label="'所属组织机构'" prop="deptId">
+          <keyword-search :disabled=flag style="width: 100%" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+        </el-form-item>
+       </el-col>
+      </el-row>
 
       <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>
-
-      <el-form-item style="margin-top:30px;display: block" :label="'备注'" prop="remark">
-        <el-input
-          style="width:900px;"
-          :disabled=flag
-          type="textarea"
-          :rows="6"
-          placeholder="请输入内容"
-          v-model="dataForm.remark">
-        </el-input>
-      </el-form-item>
-
+      <el-row :gutter="10">
+        <el-col :span="22">
+          <el-form-item style="display: block" :label="'备注'" prop="remark">
+            <el-input
+              :disabled=flag
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="dataForm.remark">
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
     </el-form>
 
@@ -158,11 +164,4 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
-</style>
+

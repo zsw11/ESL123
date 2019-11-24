@@ -4,37 +4,52 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
-        <el-form-item :label="'作业名'" prop="workName">
-          <el-input v-model="dataForm.workName"></el-input>
-        </el-form-item>
-
-          <el-form-item style="margin-left: 150px;" :label="'部门'" prop="deptId">
-<!--            <el-input  v-model="dataForm.deptId" ></el-input>-->
-            <keyword-search class="keyword" v-model="dataForm.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'作业名'" prop="workName">
+            <el-input v-model="dataForm.workName"></el-input>
           </el-form-item>
-
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item  :label="'部门'" prop="deptId">
+            <keyword-search style="width: 100%" v-model="dataForm.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="STLST">
-            <dict-select class="keyword" dictType="ST" v-model="dataForm.STLST" :allowEmpty="true"></dict-select>
+            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.STLST" :allowEmpty="true"></dict-select>
           </el-form-item>
-
-        <el-form-item  style="margin-left: 150px;" :label="'生产阶段'" prop="phaseId">
-          <keyword-search  class="keyword" v-model="dataForm.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
-        </el-form-item>
-
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+            <keyword-search style="width: 100%"  v-model="dataForm.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
-            <keyword-search  class="keyword" v-model="dataForm.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            <keyword-search style="width: 100%" v-model="dataForm.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
           </el-form-item>
-
-          <el-form-item style="margin-left: 150px;"  :label="'仕向'" prop="destinations">
+        </el-col>
+        <el-col :span="10" :offset="2">
+        <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
+        </el-col>
+      </el-row>
 
 
-
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
-            <keyword-search  class="keyword" v-model="dataForm.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation"  :allowEmpty="true"></keyword-search>
+            <keyword-search style="width: 100%" v-model="dataForm.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation"  :allowEmpty="true"></keyword-search>
           </el-form-item>
+        </el-col>
+      </el-row>
 
 
 
@@ -272,16 +287,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 18px;
-    display: inline-block;
-    width: 400px;
-    input{
-      width: 325px;
-    }
-    .keyword{
-      width: 300px;
-    }
-  }
+  /*.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {*/
+  /*  margin-bottom: 18px;*/
+  /*  display: inline-block;*/
+  /*  width: 400px;*/
+  /*  input{*/
+  /*    width: 325px;*/
+  /*  }*/
+  /*  .keyword{*/
+  /*    width: 300px;*/
+  /*  }*/
+  /*}*/
 
 </style>
