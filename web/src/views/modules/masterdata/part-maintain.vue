@@ -5,24 +5,29 @@
       <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'名称'" prop="name">
-            <el-input  :disabled=flag class="input" v-model="dataForm.name"></el-input>
+            <el-input :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
-          <el-form-item :label="'是否通用'" prop="common" :disable=flag v-model="dataForm.common">
-            <el-select :disabled=flag v-model="value">
-              <el-option
-              v-for="item in option"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item style="display: block" :label="'备注'" prop="remark">
+        </el-col>
+        <el-col :span="6" :offset="4">
+            <el-form-item :label="'是否通用'" prop="common" :disable=flag v-model="dataForm.common">
+              <el-select :disabled=flag v-model="value">
+                <el-option
+                v-for="item in option"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="22" >
+         <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -30,7 +35,8 @@
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
-
+        </el-col>
+      </el-row>
     </el-form>
 
     <span class="dialog-footer">
@@ -167,11 +173,3 @@ export default {
 }
 </script>
 
-<style>
-  .input{
-    width: 250px;
-  }
-   .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-     display: inline-block;
-   }
-</style>

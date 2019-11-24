@@ -4,17 +4,21 @@
 <mapper namespace="io.apj.modules.masterData.dao.WorkstationDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.apj.modules.masterData.entity.WorkstationEntity" id="workstationMap">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="remark" column="remark"/>
-        <result property="workstationTypeId" column="workstation_type_id"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createAt" column="create_at"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateAt" column="update_at"/>
-        <result property="deleteAt" column="delete_at"/>
-    </resultMap>
+	<resultMap
+		type="io.apj.modules.masterData.entity.WorkstationEntity"
+		id="workstationMap">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="pinyin" column="pinyin" />
+		<result property="remark" column="remark" />
+		<result property="workstationTypeId"
+			column="workstation_type_id" />
+		<result property="createBy" column="create_by" />
+		<result property="createAt" column="create_at" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateAt" column="update_at" />
+		<result property="deleteAt" column="delete_at" />
+	</resultMap>
 
 
 </mapper>

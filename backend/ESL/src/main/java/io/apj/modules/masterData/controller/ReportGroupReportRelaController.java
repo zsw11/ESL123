@@ -60,7 +60,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-//    @RequiresPermissions("masterData:reportgroupreportrela:save")
+//    @RequiresPermissions("masterData:reportgroupreportrela:create")
     public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);

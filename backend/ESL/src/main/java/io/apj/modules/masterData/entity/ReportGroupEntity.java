@@ -32,6 +32,10 @@ public class ReportGroupEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 报表
 	 */
 	@TableField(exist = false)

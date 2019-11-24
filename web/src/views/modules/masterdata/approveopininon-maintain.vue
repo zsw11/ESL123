@@ -5,14 +5,17 @@
       <div class="card-title">{{title}}</div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
-
-      <el-form-item :label="'审批状态'" prop="approveOperation" >
-        <dict-select :disabled= flag dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
-      </el-form-item>
-
-          <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'常用审批意见内容'" prop="opininon">
+    <el-row :gutter="10">
+      <el-col :span="10">
+        <el-form-item :label="'审批状态'" prop="approveOperation" >
+          <dict-select style="width: 100%" :disabled= flag dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
+        </el-form-item>
+      </el-col>
+    </el-row>
+      <el-row :gutter="10">
+        <el-col :span="22">
+          <el-form-item style="display: block" :rules="dataRules" :label="'常用审批意见'" prop="opininon">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -20,7 +23,8 @@
               v-model="dataForm.opininon">
             </el-input>
           </el-form-item>
-
+          </el-col>
+      </el-row>
     </el-form>
 
     <span class="dialog-footer">
@@ -154,6 +158,3 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>

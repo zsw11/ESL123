@@ -8,15 +8,15 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 手顺
+ * 组织机构关键词关系
  * 
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
- * @date 2019-11-11 11:18:15
+ * @date 2019-11-07 10:39:25
  */
 @Data
-@TableName("operation_group_operation")
-public class OperationGroupOperationEntity implements Serializable {
+@TableName("dept_operation_rela")
+public class DeptActionRelaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -25,29 +25,13 @@ public class OperationGroupOperationEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 手顺组合ID
+	 * 组织机构ID
 	 */
-	private Integer operationGroupId;
+	private Integer deptId;
 	/**
-	 * 序号
+	 * 关键词ID
 	 */
-	private Integer seqNumber;
-	/**
-	 * 手顺
-	 */
-	private String operation;
-	/**
-	 * 拼音
-	 */
-	private String pinyin;
-	/**
-	 * 指标
-	 */
-	private String measures;
-	/**
-	 * 频度
-	 */
-	private Integer frequency;
+	private Integer actionId;
 	/**
 	 * 创建者ID
 	 */
@@ -68,4 +52,5 @@ public class OperationGroupOperationEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
 }

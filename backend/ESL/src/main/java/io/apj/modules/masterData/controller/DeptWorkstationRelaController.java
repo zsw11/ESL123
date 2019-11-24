@@ -60,7 +60,7 @@ public class DeptWorkstationRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("masterData:deptworkstationrela:save")
+    @RequiresPermissions("masterData:deptworkstationrela:create")
     public RD save(@RequestBody DeptWorkstationRelaEntity deptWorkstationRela){
         deptWorkstationRela.setCreateBy(getUserId().intValue());
 		deptWorkstationRelaService.insert(deptWorkstationRela);

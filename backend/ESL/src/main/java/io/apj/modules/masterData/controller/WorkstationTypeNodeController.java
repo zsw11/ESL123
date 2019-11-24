@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.JsonElement;
+import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,7 +20,6 @@ import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.common.utils.PageUtils;
 
-
 /**
  * 工位类型节点
  *
@@ -31,77 +30,79 @@ import io.apj.common.utils.PageUtils;
 @RestController
 @RequestMapping("/api/v1/workstationtypenode")
 public class WorkstationTypeNodeController extends AbstractController {
-    @Autowired
-    private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
 
-    /**
-     * 列表
-     *
-     * @return
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("masterData:workstationtypenode:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-        PageUtils page = workstationTypeNodeService.queryPage(params);
-        return RD.ok(page);
-    }
+	/**
+	 * 列表
+	 *
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("masterData:workstationtypenode:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = workstationTypeNodeService.queryPage(params);
+		return RD.ok(page);
+	}
 
-    /**
-     * nodeType列表
-     * @return
-     */
-    @RequestMapping("/listNodeType")
-    public ResponseEntity<JSONArray> listNodeType() {
-        return workstationTypeNodeService.listAllNodeType();
+	/**
+	 * nodeType列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/listNodeType")
+	public ResponseEntity<JSONArray> listNodeType() {
+		return workstationTypeNodeService.listAllNodeType();
 
-    }
+	}
 
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:workstationtypenode:info")
+	public RD info(@PathVariable("id") Integer id) {
+		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:workstationtypenode:info")
-    public RD info(@PathVariable("id") Integer id) {
-        WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
+		return RD.build().put("data", workstationTypeNode);
+	}
 
-        return RD.build().put("data", workstationTypeNode);
-    }
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("masterData:workstationtypenode:create")
+	public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
+		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
+		workstationTypeNode.setCreateBy(getUserId().intValue());
+		workstationTypeNodeService.insert(workstationTypeNode);
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("masterData:workstationtypenode:save")
-    public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
-        workstationTypeNode.setCreateBy(getUserId().intValue());
-        workstationTypeNodeService.insert(workstationTypeNode);
+		return RD.build();
+	}
 
-        return RD.build();
-    }
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("masterData:workstationtypenode:update")
+	public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
+		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
+		workstationTypeNodeService.updateById(workstationTypeNode);
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("masterData:workstationtypenode:update")
-    public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
-        workstationTypeNodeService.updateById(workstationTypeNode);
+		return RD.build();
+	}
 
-        return RD.build();
-    }
+	/**
+	 * 删除
+	 *
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("masterData:workstationtypenode:delete")
+	public RD delete(@RequestBody Integer[] ids) {
+		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
-    /**
-     * 删除
-     *
-     * @return
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("masterData:workstationtypenode:delete")
-    public RD delete(@RequestBody Integer[] ids) {
-        workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
-
-        return RD.build();
-    }
+		return RD.build();
+	}
 
 }

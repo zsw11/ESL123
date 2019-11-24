@@ -4,23 +4,27 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" >
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'关键词名称'" prop="name">
-            <el-input :disabled=flag style="width: 325px" v-model="dataForm.name"></el-input>
+            <el-input :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
-      <el-form-item style="width: 200px;display: block" :rules="dataRules" :label="'备注'" prop="remark">
-        <el-input
-          style="width:900px;"
-          :disabled=flag
-          type="textarea"
-          :rows="6"
-          placeholder="请输入内容"
-          v-model="dataForm.opininon">
-        </el-input>
-      </el-form-item>
-
-
+        </el-col>
+      </el-row>
+     <el-row>
+       <el-col :span="22">
+        <el-form-item style="display: block" :rules="dataRules" :label="'备注'" prop="remark">
+          <el-input
+            :disabled=flag
+            type="textarea"
+            :rows="6"
+            placeholder="请输入内容"
+            v-model="dataForm.opininon">
+          </el-input>
+        </el-form-item>
+       </el-col>
+     </el-row>
     </el-form>
 
     <span class="dialog-footer">

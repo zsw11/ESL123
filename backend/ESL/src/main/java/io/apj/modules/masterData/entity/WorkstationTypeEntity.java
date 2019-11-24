@@ -29,6 +29,10 @@ public class WorkstationTypeEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 备注
 	 */
 	private String remark;

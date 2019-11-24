@@ -4,25 +4,33 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'名称'" prop="name">
-            <el-input :disabled=flag style="width: 325px" v-model="dataForm.name"></el-input>
+            <el-input :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
-          <el-form-item style="margin-left: 140px" :label="'沿用阶段'" prop="continuePhaseId">
-            <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+        </el-col>
+        <el-col :span="10" :offset="2" >
+          <el-form-item :label="'沿用阶段'" prop="continuePhaseId">
+            <keyword-search style="width: 100%" :disabled=flag v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
           </el-form-item>
-
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              style="width:900px;"
               :disabled=flag
               type="textarea"
               :rows="6"
+              style="margin-left: 0;"
               placeholder="请输入内容"
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
+         </el-col>
+       </el-row>
 
     </el-form>
 
@@ -155,11 +163,3 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
-</style>

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.google.gson.JsonElement;
+
+import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 
@@ -34,8 +36,6 @@ import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.RD;
 
-
-
 /**
  * 部品
  *
@@ -46,68 +46,73 @@ import io.apj.common.utils.RD;
 @RestController
 @RequestMapping("/api/v1/part")
 public class PartController extends AbstractController {
-    @Autowired
-    private PartService partService;
+	@Autowired
+	private PartService partService;
 	@Autowired
 	private SysDictService sysDictService;
 	@Autowired
 	private ModelPartRelaService modelPartRelaService;
 
-    /**
-     * 列表
-     * @return
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("masterData:part:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = partService.queryPage(params);
-        return RD.ok(page);
-    }
+	/**
+	 * 列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("masterData:part:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = partService.queryPage(params);
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:part:info")
-    public RD info(@PathVariable("id") Integer id){
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:part:info")
+	public RD info(@PathVariable("id") Integer id) {
 		PartEntity part = partService.selectById(id);
 
-        return RD.build().put("data", part);
-    }
+		return RD.build().put("data", part);
+	}
+
 	/**
 	 * 当前部品下的机种信息
+	 * 
 	 * @return
 	 */
 	@RequestMapping("/modeldetail/{id}")
 	@RequiresPermissions("masterData:part:info")
-	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
+	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
 
-		Page<Map<String,Object>> page = modelPartRelaService.selectModelByPartId(id, params);
+		Page<Map<String, Object>> page = modelPartRelaService.selectModelByPartId(id, params);
 
-		return RD.ok( page);
+		return RD.ok(page);
 	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("masterData:part:save")
-    public RD save(@RequestBody PartEntity part){
-    	part.setCreateBy(getUserId().intValue());
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("masterData:part:create")
+	public RD save(@RequestBody PartEntity part) {
+		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
+		part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("masterData:part:update")
-    public RD update(@RequestBody PartEntity part){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("masterData:part:update")
+	public RD update(@RequestBody PartEntity part) {
+		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
 		partService.updateById(part);
 
+<<<<<<< HEAD
         return RD.build();
     }
 
@@ -120,6 +125,20 @@ public class PartController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
     	for (int i = 0; i < ids.length; i++) {
     		//检查部品下面是否有机种
+=======
+		return RD.build();
+	}
+
+	/**
+	 * 删除
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("masterData:part:delete")
+	public RD delete(@RequestBody Integer[] ids) {
+		for (int i = 0; i < ids.length; i++) {
+>>>>>>> 9b12b6caedfb7000f7cbcef05d9fe0e16e2689e3
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
@@ -133,17 +152,17 @@ public class PartController extends AbstractController {
 		}
 		partService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
-    }
-    
-    /**
+		return RD.build();
+	}
+
+	/**
 	 * 导出excel
 	 *
 	 * @return
 	 * @throws Exception
 	 */
 	@SysLog("导出设备信息")
-	@RequestMapping(value = "/exportExcel",produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "/exportExcel", produces = "application/json;charset=UTF-8")
 	public void exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传
 		List<String> list = (List<String>) map.get("exportAttributes");
@@ -177,7 +196,7 @@ public class PartController extends AbstractController {
 		ExportExcelUtils.exportExcel(response, datetime + "部品信息.xlsx", data);
 //		return RD.build();
 	}
-	
+
 	/**
 	 * 导入
 	 * 
@@ -200,7 +219,7 @@ public class PartController extends AbstractController {
 				// 设备
 				if (keyStrs[0].equals("part")) {
 					if (keyStrs[1].equals("common")) {
-						if(value.equals("是")) {
+						if (value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);
 						} else {
 							deviceMap.put(keyStrs[1], false);

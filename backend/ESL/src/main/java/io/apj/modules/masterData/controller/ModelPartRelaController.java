@@ -59,7 +59,7 @@ public class ModelPartRelaController extends AbstractController {
      * 保存
      */
     @RequestMapping("/create")
-//    @RequiresPermissions("masterData:modelpartrela:save")
+//    @RequiresPermissions("masterData:modelpartrela:create")
     public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
         modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);

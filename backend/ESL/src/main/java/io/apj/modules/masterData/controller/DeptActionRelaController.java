@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,32 +15,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.apj.modules.masterData.entity.ModelToolRelaEntity;
-import io.apj.modules.masterData.service.ModelToolRelaService;
+import io.apj.modules.masterData.entity.DeptActionRelaEntity;
+import io.apj.modules.masterData.service.DeptActionRelaService;
 import io.apj.common.utils.PageUtils;
 
 
 /**
- * 机种治工具关系
+ * 组织机构关键词关系
  *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-07 10:48:29
  */
 @RestController
-@RequestMapping("/api/v1/modeltoolrela")
-public class ModelToolRelaController extends AbstractController {
+@RequestMapping("/api/v1/deptoperationrela")
+public class DeptActionRelaController extends AbstractController {
     @Autowired
-    private ModelToolRelaService modelToolRelaService;
+    private DeptActionRelaService deptActionRelaService;
 
     /**
      * 列表
      * @return
      */
     @RequestMapping("/list")
-//    @RequiresPermissions("masterData:modeltoolrela:list")
+    @RequiresPermissions("masterData:deptoperationrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = modelToolRelaService.queryPage(params);
+        PageUtils page = deptActionRelaService.queryPage(params);
         return RD.ok(page);
     }
 
@@ -48,22 +49,21 @@ public class ModelToolRelaController extends AbstractController {
      * 信息
      */
     @RequestMapping("/detail/{id}")
-//    @RequiresPermissions("masterData:modeltoolrela:info")
+    @RequiresPermissions("masterData:deptoperationrela:info")
     public RD info(@PathVariable("id") Integer id){
-		ModelToolRelaEntity modelToolRela = modelToolRelaService.selectById(id);
+		DeptActionRelaEntity deptActionRela = deptActionRelaService.selectById(id);
 
-        return RD.build().put("data", modelToolRela);
+        return RD.build().put("data", deptActionRela);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/create")
-//    @RequiresPermissions("masterData:modeltoolrela:create")
-    public RD save(@RequestBody ModelToolRelaEntity modelToolRela){
-        modelToolRela.setCreateBy(getUserId().intValue());
-		modelToolRelaService.insert(modelToolRela);
-        insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), false);
+    @RequiresPermissions("masterData:deptoperationrela:create")
+    public RD save(@RequestBody DeptActionRelaEntity deptActionRela){
+        deptActionRela.setCreateBy(getUserId().intValue());
+		deptActionRelaService.insert(deptActionRela);
 
         return RD.build();
     }
@@ -72,10 +72,9 @@ public class ModelToolRelaController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-//    @RequiresPermissions("masterData:modeltoolrela:update")
-    public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
-		modelToolRelaService.updateById(modelToolRela);
-        insertTableReference("model", modelToolRela.getModelId().longValue(), "part", modelToolRela.getToolId().longValue(), true);
+    @RequiresPermissions("masterData:deptoperationrela:update")
+    public RD update(@RequestBody DeptActionRelaEntity deptActionRela){
+		deptActionRelaService.updateById(deptActionRela);
 
         return RD.build();
     }
@@ -85,9 +84,9 @@ public class ModelToolRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/delete")
-//    @RequiresPermissions("masterData:modeltoolrela:delete")
+    @RequiresPermissions("masterData:deptoperationrela:delete")
     public RD delete(@RequestBody Integer[] ids){
-		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
+		deptActionRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();
     }

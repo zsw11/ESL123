@@ -4,14 +4,18 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
           <el-form-item :label="'报表组名称'" prop="name">
             <el-input :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
-
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              style="width:700px;"
               :disabled=flag
               type="textarea"
               :rows="6"
@@ -19,6 +23,8 @@
               v-model="dataForm.remark">
             </el-input>
           </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
     <el-card class="with-title">
@@ -291,12 +297,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .el-input__inner {
-    width: 200px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
   .is-always-shadow{
     box-shadow: none;
     border: none;

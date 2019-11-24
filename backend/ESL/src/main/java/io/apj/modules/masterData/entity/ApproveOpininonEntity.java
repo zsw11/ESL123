@@ -33,6 +33,10 @@ public class ApproveOpininonEntity implements Serializable {
 	 */
 	private String opininon;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

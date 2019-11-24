@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.google.gson.JsonElement;
+
+import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -19,7 +21,6 @@ import io.apj.modules.masterData.entity.ApproveOpininonEntity;
 import io.apj.modules.masterData.service.ApproveOpininonService;
 import io.apj.common.utils.PageUtils;
 
-
 /**
  * 常用审批意见
  *
@@ -30,65 +31,68 @@ import io.apj.common.utils.PageUtils;
 @RestController
 @RequestMapping("/api/v1/approveopininon")
 public class ApproveOpininonController extends AbstractController {
-    @Autowired
-    private ApproveOpininonService approveOpininonService;
+	@Autowired
+	private ApproveOpininonService approveOpininonService;
 
-    /**
-     * 列表
-     * @return
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("masterData:approveopininon:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = approveOpininonService.queryPage(params);
-        return RD.ok(page);
-    }
+	/**
+	 * 列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("masterData:approveopininon:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = approveOpininonService.queryPage(params);
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:approveopininon:info")
-    public RD info(@PathVariable("id") Integer id){
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:approveopininon:info")
+	public RD info(@PathVariable("id") Integer id) {
 		ApproveOpininonEntity approveOpininon = approveOpininonService.selectById(id);
 
-        return RD.build().put("data", approveOpininon);
-    }
+		return RD.build().put("data", approveOpininon);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("masterData:approveopininon:save")
-    public RD save(@RequestBody ApproveOpininonEntity approveOpininon){
-        approveOpininon.setCreateBy(getUserId().intValue());
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("masterData:approveopininon:create")
+	public RD save(@RequestBody ApproveOpininonEntity approveOpininon) {
+		approveOpininon.setCreateBy(getUserId().intValue());
+		approveOpininon.setPinyin(PinyinUtil.getPinYin(approveOpininon.getApproveOperation()));
 		approveOpininonService.insert(approveOpininon);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("masterData:approveopininon:update")
-    public RD update(@RequestBody ApproveOpininonEntity approveOpininon){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("masterData:approveopininon:update")
+	public RD update(@RequestBody ApproveOpininonEntity approveOpininon) {
+		approveOpininon.setPinyin(PinyinUtil.getPinYin(approveOpininon.getApproveOperation()));
 		approveOpininonService.updateById(approveOpininon);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("masterData:approveopininon:delete")
-    public RD delete(@RequestBody Integer[] ids){
+	/**
+	 * 删除
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("masterData:approveopininon:delete")
+	public RD delete(@RequestBody Integer[] ids) {
 		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
 }

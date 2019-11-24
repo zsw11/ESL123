@@ -4,67 +4,86 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 1080px'>
-      <el-form-item :label="'名称'" prop="name">
-        <el-input :disabled=flag style="width: 325px"  v-model="dataForm.name"></el-input>
-      </el-form-item>
-
-      <el-form-item style="margin-left: 140px" :label="'部门'" prop="deptId">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
-      </el-form-item>
-
-      <el-form-item :label="'机种系列'" prop="modelSeriesId">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" valueColunt="name":allowEmpty="true"></keyword-search>
-      </el-form-item>
-
-      <el-form-item style="margin-left: 140px" :label="'型号'" prop="code">
-        <keyword-search :disabled=flag style="width: 325px" v-model="dataForm.code" :allowMultiple="true" :searchApi="this.listModel" :labelColunt="'code'" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
-      </el-form-item>
-
-      <el-form-item :label="'WS时间'" prop="WSTime">
-        <el-date-picker
-          :disabled=flag
-          style="width: 325px"
-          v-model="dataForm.WSTime">
-        </el-date-picker>
-      </el-form-item>
-
-      <el-form-item style="margin-left: 140px" :label="'ES时间'" prop="ESTime">
-        <el-date-picker
-          :disabled=flag
-          style="width: 325px"
-          v-model="dataForm.ESTime">
-        </el-date-picker>
-      </el-form-item>
-
-      <el-form-item :label="'AMP时间'" prop="AMPTime">
-        <el-date-picker
-          :disabled=flag
-          style="width: 325px"
-          v-model="dataForm.AMPTime">
-        </el-date-picker>
-      </el-form-item>
-
-      <el-form-item style="margin-left: 140px" :label="'MP时间'" prop="MPTime">
-        <el-date-picker
-          :disabled=flag
-          style="width: 325px"
-          v-model="dataForm.MPTime">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item style="display: block" :label="'备注'" prop="remark">
-        <el-input
-          style="width:900px;"
-          :disabled=flag
-          type="textarea"
-          :rows="6"
-          placeholder="请输入内容"
-          v-model="dataForm.remark">
-        </el-input>
-      </el-form-item>
+    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'名称'" prop="name">
+            <el-input :disabled=flag   v-model="dataForm.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item  :label="'部门'" prop="deptId">
+            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'机种系列'" prop="modelSeriesId">
+            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" :valueColunt="'name'" :allowEmpty="true"></keyword-search>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'型号'" prop="code">
+            <el-input :disabled=flag   v-model="dataForm.code"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'WS时间'" prop="WSTime">
+            <el-date-picker
+              style="width: 100%"
+              :disabled=flag
+              v-model="dataForm.WSTime">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item  :label="'ES时间'" prop="ESTime">
+            <el-date-picker
+              style="width: 100%"
+              :disabled=flag
+              v-model="dataForm.ESTime">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'AMP时间'" prop="AMPTime">
+            <el-date-picker
+              style="width: 100%"
+              :disabled=flag
+              v-model="dataForm.AMPTime">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'MP时间'" prop="MPTime">
+            <el-date-picker
+              style="width: 100%"
+              :disabled=flag
+              v-model="dataForm.MPTime">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="22">
+          <el-form-item style="display: block" :label="'备注'" prop="remark">
+            <el-input
+              :disabled=flag
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="dataForm.remark">
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
     </el-form>
-
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
@@ -204,11 +223,3 @@
     }
   }
 </script>
-<style scoped lang="scss">
-  .el-input__inner {
-    width: 300px;
-  }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-    display: inline-block;
-  }
-</style>

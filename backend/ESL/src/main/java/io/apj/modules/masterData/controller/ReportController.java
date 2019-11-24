@@ -3,7 +3,7 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.google.gson.JsonElement;
+import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -19,7 +19,6 @@ import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.common.utils.PageUtils;
 
-
 /**
  * 报表
  *
@@ -30,65 +29,68 @@ import io.apj.common.utils.PageUtils;
 @RestController
 @RequestMapping("/api/v1/report")
 public class ReportController extends AbstractController {
-    @Autowired
-    private ReportService reportService;
+	@Autowired
+	private ReportService reportService;
 
-    /**
-     * 列表
-     * @return
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("masterData:report:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = reportService.queryPage(params);
-        return RD.ok(page);
-    }
+	/**
+	 * 列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("masterData:report:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = reportService.queryPage(params);
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:report:info")
-    public RD info(@PathVariable("id") Integer id){
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:report:info")
+	public RD info(@PathVariable("id") Integer id) {
 		ReportEntity report = reportService.selectById(id);
 
-        return RD.build().put("data", report);
-    }
+		return RD.build().put("data", report);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("masterData:report:save")
-    public RD save(@RequestBody ReportEntity report){
-        report.setCreateBy(getUserId().intValue());
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("masterData:report:create")
+	public RD save(@RequestBody ReportEntity report) {
+		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
+		report.setCreateBy(getUserId().intValue());
 		reportService.insert(report);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("masterData:report:update")
-    public RD update(@RequestBody ReportEntity report){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("masterData:report:update")
+	public RD update(@RequestBody ReportEntity report) {
+		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
 		reportService.updateById(report);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("masterData:report:delete")
-    public RD delete(@RequestBody Integer[] ids){
+	/**
+	 * 删除
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("masterData:report:delete")
+	public RD delete(@RequestBody Integer[] ids) {
 		reportService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
 }

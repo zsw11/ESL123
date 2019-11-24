@@ -29,6 +29,10 @@ public class ReportEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 空Form标准编号
 	 */
 	private String formCode;

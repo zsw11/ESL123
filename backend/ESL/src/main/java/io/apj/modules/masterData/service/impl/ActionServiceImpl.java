@@ -18,11 +18,13 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.isNull("delete_at");
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
+			entityWrapper.andNew(
+					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
 		}
-		entityWrapper.isNull("delete_at").like(params.get("name") != null && params.get("name") != "", "name",
-				(String) params.get("name"));
+
 		Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);
