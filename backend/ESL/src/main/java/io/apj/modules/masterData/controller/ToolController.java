@@ -85,7 +85,7 @@ public class ToolController extends AbstractController {
 	@RequestMapping("/modeldetail/{id}")
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
-		Page<Map<String, Object>> page = modelToolRelaService.selectModelByToolId(id, params);
+		PageUtils page = toolService.toolModeRelaList(id,params);
 
 		return RD.ok(page);
 	}

@@ -33,7 +33,7 @@ import io.apj.modules.sys.vo.BaseVo;
 public class PageUtils implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//总记录数
-	private int total;
+	private int totalCount;
 	//每页记录数
 	private int pageSize;
 	//总页数
@@ -55,7 +55,7 @@ public class PageUtils implements Serializable {
 	public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
 //		this.list = list;
 		this.data = list;
-		this.total = totalCount;
+		this.totalCount = totalCount;
 		this.pageSize = pageSize;
 		this.currPage = currPage;
 		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
@@ -67,7 +67,7 @@ public class PageUtils implements Serializable {
 	public PageUtils(Page<?> page) {
 //		this.list = page.getRecords();
 		this.data = page.getRecords();
-		this.total = (int)page.getTotal();
+		this.totalCount = (int)page.getTotal();
 		this.pageSize = page.getSize();
 		this.currPage = page.getCurrent();
 		this.totalPage = (int)page.getPages();
@@ -79,18 +79,18 @@ public class PageUtils implements Serializable {
 	public PageUtils(Page<?> page, BaseVo<?, ?> vo) {
 //		this.list = page.getRecords();
 		this.data = vo.makeVoList(page.getRecords());
-		this.total = (int)page.getTotal();
+		this.totalCount = (int)page.getTotal();
 		this.pageSize = page.getSize();
 		this.currPage = page.getCurrent();
 		this.totalPage = (int)page.getPages();
 	}
 
 	public int getTotalCount() {
-		return total;
+		return totalCount;
 	}
 
 	public void setTotalCount(int totalCount) {
-		this.total = totalCount;
+		this.totalCount = totalCount;
 	}
 
 	public int getPageSize() {

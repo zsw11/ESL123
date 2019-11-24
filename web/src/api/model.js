@@ -27,6 +27,24 @@ export function fetchModel (id) {
   })
 }
 
+// 获取机种部品关系
+export function fetchModelPart (id) {
+  return request({
+    url: request.adornUrl(`/api/v1/model/partdetail/${id}`),
+    method: 'get',
+    params: request.adornParams()
+  })
+}
+
+// 获取机种治工具关系
+export function fetchModelTool (id) {
+  return request({
+    url: request.adornUrl(`/api/v1/model/tooldetail/${id}`),
+    method: 'get',
+    params: request.adornParams()
+  })
+}
+
 // 修改机种
 export function updateModel (id, data) {
   return request({

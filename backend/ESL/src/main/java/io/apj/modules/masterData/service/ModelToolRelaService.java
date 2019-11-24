@@ -1,6 +1,5 @@
 package io.apj.modules.masterData.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
@@ -18,6 +17,6 @@ public interface ModelToolRelaService extends IService<ModelToolRelaEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    Page<Map<String, Object>> selectModelByToolId(Integer id, Map<String, Object> params);
+    PageUtils selectModelByToolId(Integer id, Map<String, Object> params);
 }
 
