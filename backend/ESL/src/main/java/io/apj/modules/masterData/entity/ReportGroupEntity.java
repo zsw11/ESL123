@@ -1,10 +1,13 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -25,13 +28,18 @@ public class ReportGroupEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 名称
+	 * 报表组名称
 	 */
 	private String name;
 	/**
 	 * 拼音
 	 */
 	private String pinyin;
+	/**
+	 * 报表
+	 */
+	@TableField(exist = false)
+	private List<ReportEntity> reportEntity;
 	/**
 	 * 备注
 	 */

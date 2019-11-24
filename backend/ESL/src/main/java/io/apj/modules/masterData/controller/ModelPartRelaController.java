@@ -55,18 +55,6 @@ public class ModelPartRelaController extends AbstractController {
         return RD.build().put("data", modelPartRela);
     }
 
-//    /**
-//     * 部品下的机种信息
-//     * @return
-//     */
-//    @RequestMapping("/modeldetail/{id}")
-////    @RequiresPermissions("masterData:modelpartrela:info")
-//    public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params){
-//        PageUtils page = modelPartRelaService.selectModelByPartId(id,params);
-//
-//        return RD.ok(page);
-//    }
-
     /**
      * 保存
      */
