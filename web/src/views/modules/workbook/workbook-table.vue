@@ -60,7 +60,7 @@ export default {
   },
   created () {
     for (let i = 0; i < 10; i++) {
-      this.tableData.push({ operation: '' })
+      this.tableData.push({ operation: null, key: null, a0: null, b0: null })
     }
     console.log(this.tableData)
   },
