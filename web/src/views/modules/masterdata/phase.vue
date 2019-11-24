@@ -216,6 +216,12 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/edit-phase/${id}` : '/add-phase' })
+        // 排除本身作为沿用阶段
+        if (id) {
+          listPhase(Object.assign(
+            {exclude: id}
+          ))
+        }
       })
     },
     // 删除数据
