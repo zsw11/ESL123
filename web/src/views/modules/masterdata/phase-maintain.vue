@@ -13,7 +13,23 @@
         </el-col>
         <el-col :span="10" :offset="2" >
           <el-form-item :label="'沿用阶段'" prop="continuePhaseId">
-            <keyword-search style="width: 100%" :disabled=flag v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+            <el-select
+              v-model="dataForm.continuePhaseId"
+              filterable
+              remote
+              reserve-keyword
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in listPhaseData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+                :disabled="item.id === dataForm.id">
+                <span style="float: left">{{ item.name }}</span>
+              </el-option>
+            </el-select>
+            <!-- <keyword-search style="width: 100%" :disabled=flag v-model="dataForm.continuePhaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search> -->
           </el-form-item>
         </el-col>
       </el-row>
@@ -52,6 +68,7 @@ export default {
       title: null,
       flag: false,
       inited: false,
+      loading: false,
       dataForm: {
         id: 0,
         name: null,
@@ -64,6 +81,7 @@ export default {
         deleteAt: null
       },
       listPhase,
+      listPhaseData: [],
       dataRules: {
         name: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
@@ -91,6 +109,7 @@ export default {
   },
   created () {
     this.init()
+    this.remoteMethod()
   },
   activated () {
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
@@ -134,6 +153,18 @@ export default {
       } else {
         this.inited = true
       }
+    },
+    remoteMethod (query) {
+      this.loading = true
+      listPhase({keyword: query, limit: 99}).then(({page}) => {
+        if (page.data.length > 0) {
+          console.log(page.data, 44444444)
+          this.listPhaseData = page.data
+        } else {
+          this.listPhaseData = []
+        }
+        this.loading = false
+      })
     },
     // 取消信息
     cancleFormSubmit () {
