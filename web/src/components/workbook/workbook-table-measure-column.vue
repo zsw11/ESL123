@@ -1,25 +1,30 @@
 <template>
   <vxe-table-column
+    ref="measure"
     :field="config.field"
     :title="config.title"
-    :edit-render="{name: 'input', event: { blur }}"
+    :edit-render="{name: 'input'}"
     :header-class-name="config.bgClassName"
     :class-name="config.bgClassName">
-    <template v-slot:edit="{ row }">
-      <input
+    <template v-slot:edit="scope">
+      <measure-input
         type="text"
-        v-model.number="row[config.field]"
-        :id="config.field"
-        :ref="config.field"
-        @keydown="keydown($event, row)"
+        v-model.number="scope.row[config.field]"
+        :config="config"
+        @keydown="$emit('keydown', $event)"
+        @jump="$emit('jump', scope.row, config.field, $event)"
+        @input="input(scope, $event)"
         class="custom-input" />
     </template>
   </vxe-table-column>
 </template>
 
 <script>
+import MeasureInput from './workbook-table-measure-input'
+
 export default {
   name: 'WorkbookTableColumn',
+  components: { MeasureInput },
   props: {
     config: {
       type: Object,
@@ -28,16 +33,10 @@ export default {
   },
   methods: {
     keydown (e, row) {
-      if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
-        e.preventDefault()
-        this.$emit('jump', row, this.config.field, e.key)
-      } else if (/^[a-z`~!@#$%^&*()\-_=+[\]{}\\|;':",/<>?]$/.test(e.key)) {
-        this.$message.error('无效字符')
-        e.preventDefault()
-      }
+      this.$emit('keydown', e, row)
     },
-    blur () {
-      console.log('blur')
+    input (scope, e) {
+      this.$refs.measure.$table.updateStatus(scope)
     }
   }
 }
