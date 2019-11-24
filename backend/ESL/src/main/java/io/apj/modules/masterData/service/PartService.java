@@ -16,5 +16,7 @@ import java.util.Map;
 public interface PartService extends IService<PartEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+	PageUtils partModeRelaList(Integer id, Map<String, Object> params);
 }
 

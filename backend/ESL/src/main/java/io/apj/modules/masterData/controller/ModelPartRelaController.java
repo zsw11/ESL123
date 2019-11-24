@@ -18,7 +18,6 @@ import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.common.utils.PageUtils;
 
-
 /**
  * 机种部品关系
  *
@@ -29,43 +28,44 @@ import io.apj.common.utils.PageUtils;
 @RestController
 @RequestMapping("/api/v1/modelpartrela")
 public class ModelPartRelaController extends AbstractController {
-    @Autowired
-    private ModelPartRelaService modelPartRelaService;
+	@Autowired
+	private ModelPartRelaService modelPartRelaService;
 
-    /**
-     * 列表
-     * @return
-     */
-    @RequestMapping("/list")
+	/**
+	 * 列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/list")
 //    @RequiresPermissions("masterData:modelpartrela:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = modelPartRelaService.queryPage(params);
-        return RD.ok(page);
-    }
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = modelPartRelaService.queryPage(params);
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
 //    @RequiresPermissions("masterData:modelpartrela:info")
-    public RD info(@PathVariable("id") Integer id){
+	public RD info(@PathVariable("id") Integer id) {
 		ModelPartRelaEntity modelPartRela = modelPartRelaService.selectById(id);
 
-        return RD.build().put("data", modelPartRela);
-    }
+		return RD.build().put("data", modelPartRela);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
 //    @RequiresPermissions("masterData:modelpartrela:create")
-    public RD save(@RequestBody ModelPartRelaEntity modelPartRela){
-        modelPartRela.setCreateBy(getUserId().intValue());
+	public RD save(@RequestBody ModelPartRelaEntity modelPartRela) {
+		modelPartRela.setCreateBy(getUserId().intValue());
 		modelPartRelaService.insert(modelPartRela);
-		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), false);
-        return RD.build().put("code", 200);
-    }
+		insertTableReference("model", modelPartRela.getModelId().longValue(), "part",
+				modelPartRela.getPartId().longValue(), false);
+		return RD.build().put("code", 200);
+	}
 //    /**
 //     * 部品下新增机种保存
 //     */
@@ -80,27 +80,29 @@ public class ModelPartRelaController extends AbstractController {
 //        return RD.build();
 //    }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
 //    @RequiresPermissions("masterData:modelpartrela:update")
-    public RD update(@RequestBody ModelPartRelaEntity modelPartRela){
+	public RD update(@RequestBody ModelPartRelaEntity modelPartRela) {
 		modelPartRelaService.updateById(modelPartRela);
-		insertTableReference("model", modelPartRela.getModelId().longValue(), "part", modelPartRela.getPartId().longValue(), true);
-        return RD.build();
-    }
+		insertTableReference("model", modelPartRela.getModelId().longValue(), "part",
+				modelPartRela.getPartId().longValue(), true);
+		return RD.build();
+	}
 
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping("/delete")
+	/**
+	 * 删除
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/delete")
 //    @RequiresPermissions("masterData:modelpartrela:delete")
-    public RD delete(@RequestBody Integer[] ids){
+	public RD delete(@RequestBody Integer[] ids) {
 		modelPartRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
-    }
+		return RD.build().put("code", 200);
+	}
 
 }
