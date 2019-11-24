@@ -1313,7 +1313,21 @@ CREATE TABLE work_operations (
   work_book_id integer,
   version varchar(64),
   operation varchar(256),
-  measures varchar(17),
+  type varchar(16),
+  a0 integer,
+  b0 integer,
+  g0 integer,
+  a1 integer,
+  b1 integer,
+  p0 integer,
+  m0 integer,
+  x0 integer,
+  i0 integer,
+  tool varchar(64),
+  a2 integer,
+  b2 integer,
+  p1 integer,
+  a3 integer,
   frequency integer,
   time_value decimal(18, 5),
   TMU decimal(18, 5),
@@ -1330,7 +1344,20 @@ comment on column work_operations.seq_number is '序号';
 comment on column work_operations.work_book_id is '分析表ID';
 comment on column work_operations.version is '版本信息';
 comment on column work_operations.operation is '手顺';
-comment on column work_operations.measures is '指标';
+comment on column work_operations.type is '类型';
+comment on column work_operations.a0 is 'A0';
+comment on column work_operations.b0 is 'B0';
+comment on column work_operations.g0 is 'G0';
+comment on column work_operations.a1 is 'A1';
+comment on column work_operations.b1 is 'B1';
+comment on column work_operations.p0 is 'P0';
+comment on column work_operations.m0 is 'M0';
+comment on column work_operations.x0 is 'X0';
+comment on column work_operations.i0 is 'I0';
+comment on column work_operations.a2 is 'A2';
+comment on column work_operations.b2 is 'B2';
+comment on column work_operations.p1 is 'P1';
+comment on column work_operations.a3 is 'A3';
 comment on column work_operations.frequency is '频度';
 comment on column work_operations.time_value is '时间值';
 comment on column work_operations.TMU is 'TMU';

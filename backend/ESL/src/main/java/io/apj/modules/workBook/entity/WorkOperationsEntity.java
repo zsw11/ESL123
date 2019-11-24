@@ -42,10 +42,6 @@ public class WorkOperationsEntity implements Serializable {
 	 */
 	private String operation;
 	/**
-	 * 指标
-	 */
-	private String measures;
-	/**
 	 * 频度
 	 */
 	private Integer frequency;
@@ -85,5 +81,20 @@ public class WorkOperationsEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
+	/**
+	 * 类型
+	 */
+	private String type;
+	private Integer a0;
+	private Integer b0;
+	private Integer g0;
+	private Integer a1;
+	private Integer b1;
+	private Integer p0;
+	private Integer x0;
+	private Integer i0;
+	private Integer a2;
+	private Integer b2;
+	private Integer p1;
+	private Integer a3;
 }
