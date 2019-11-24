@@ -223,7 +223,7 @@ export default {
             attributes: this.importAttributes,
             plain: true
           }),
-          sampleDatas: [[ '机种x', '总部', 'BC', 'code008', '', '', '', '' ]]
+          sampleDatas: [[ '机种x', '1', '1', 'code008', '', '', '', '' ]]
         }],
         importApi: modelImport,
         importSuccessCb: () => { this.getDataList() }
