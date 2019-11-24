@@ -45,8 +45,8 @@
       return {
         logining: false,
         dataForm: {
-          username: 'xc',
-          password: 'admin',
+          username: null,
+          password: null,
           uuid: '',
           jigsawVerify: undefined
         },
