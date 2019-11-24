@@ -39,7 +39,7 @@ public class ReportGroupEntity implements Serializable {
 	 * 报表
 	 */
 	@TableField(exist = false)
-	private List<ReportEntity> reportEntity;
+	private String allReportName;
 	/**
 	 * 备注
 	 */

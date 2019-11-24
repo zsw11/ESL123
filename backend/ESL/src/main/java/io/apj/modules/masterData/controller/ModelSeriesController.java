@@ -177,17 +177,17 @@ public class ModelSeriesController extends AbstractController {
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-//                if (keyStrs[0].equals("part")) {
-//                    if (keyStrs[1].equals("common")) {
-//                        if(value.equals("是")) {
-//                            deviceMap.put(keyStrs[1], true);
-//                        } else {
-//                            deviceMap.put(keyStrs[1], false);
-//                        }
-//                        continue;
-//                    }
-//                    deviceMap.put(keyStrs[1], value);
-//            }
+                if (keyStrs[0].equals("model")) {
+                    if (keyStrs[1].equals("common")) {
+                        if(value.equals("是")) {
+                            deviceMap.put(keyStrs[1], true);
+                        } else {
+                            deviceMap.put(keyStrs[1], false);
+                        }
+                        continue;
+                    }
+                    deviceMap.put(keyStrs[1], value);
+            }
 			}
 			DataUtils.transMap2Bean2(deviceMap, ModelSeriesEntity);
 			ValidatorUtils.validateEntity(ModelSeriesEntity, i);
