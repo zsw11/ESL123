@@ -18,5 +18,9 @@ public interface ModelService extends IService<ModelEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils selectBySeriesId(int id, Map<String, Object> params);
+
+    PageUtils modelPartRelaList(int id, Map<String, Object> params);
+
+    PageUtils modelToolRelaList(int id, Map<String, Object> params);
 }
 

@@ -3,7 +3,6 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
-import com.google.gson.JsonElement;
 
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
@@ -64,6 +63,26 @@ public class ModelController extends AbstractController {
 		ModelEntity model = modelService.selectById(id);
 
 		return RD.build().put("data", model);
+	}
+	/**
+	 *modelpartRela
+	 * @return
+	 */
+	@RequestMapping("/partdetail/{id}")
+	public ResponseEntity<Object> partInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
+		PageUtils page = modelService.modelPartRelaList(id,params);
+
+		return RD.ok(page);
+	}
+	/**
+	 *modeltoolRela
+	 * @return
+	 */
+	@RequestMapping("/tooldetail/{id}")
+	public ResponseEntity<Object> toolInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
+		PageUtils page = modelService.modelToolRelaList(id,params);
+
+		return RD.ok(page);
 	}
 
 	/**

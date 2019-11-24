@@ -1,11 +1,5 @@
 package io.apj.modules.masterData.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -17,6 +11,10 @@ import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PartService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service("partService")
 public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements PartService {

@@ -16,5 +16,7 @@ import java.util.Map;
 public interface ToolService extends IService<ToolEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PageUtils toolModeRelaList(Integer id, Map<String, Object> params);
 }
 

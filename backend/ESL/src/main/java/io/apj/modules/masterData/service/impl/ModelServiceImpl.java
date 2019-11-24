@@ -2,7 +2,9 @@ package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.modules.masterData.service.ModelSeriesService;
+import io.apj.modules.masterData.entity.ModelPartRelaEntity;
+import io.apj.modules.masterData.entity.ModelToolRelaEntity;
+import io.apj.modules.masterData.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -12,7 +14,6 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ModelDao;
 import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.sys.service.SysDeptService;
 
 @Service("modelService")
@@ -21,6 +22,15 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	private ModelSeriesService modelSeriesService;
 	@Autowired
 	private SysDeptService deptService;
+	@Autowired
+	private PartService partService;
+	@Autowired
+	private ToolService toolService;
+	@Autowired
+	private ModelPartRelaService modelPartRelaService;
+	@Autowired
+	private ModelToolRelaService modelToolRelaService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -59,4 +69,27 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		return new PageUtils(page);
 	}
 
+	@Override
+	public PageUtils modelPartRelaList(int id, Map<String, Object> params) {
+		EntityWrapper<ModelPartRelaEntity> relaEntityWrapper = new EntityWrapper<ModelPartRelaEntity>();
+		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
+		Page<ModelPartRelaEntity> page = modelPartRelaService
+				.selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
+		for (ModelPartRelaEntity item : page.getRecords()) {
+			item.setPartEntity(partService.selectById(item.getPartId()));
+		}
+		return new PageUtils(page);
+	}
+
+	@Override
+	public PageUtils modelToolRelaList(int id, Map<String, Object> params) {
+		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<ModelToolRelaEntity>();
+		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
+		Page<ModelToolRelaEntity> page = modelToolRelaService
+				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
+		for (ModelToolRelaEntity item : page.getRecords()) {
+			item.setToolEntity(toolService.selectById(item.getToolId()));
+		}
+		return new PageUtils(page);
+	}
 }

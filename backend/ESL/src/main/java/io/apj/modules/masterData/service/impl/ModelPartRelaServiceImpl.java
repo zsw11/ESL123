@@ -5,15 +5,12 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ModelPartRelaDao;
-import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.modules.masterData.service.ModelService;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 
