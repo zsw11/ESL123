@@ -31,55 +31,55 @@ public class MeasureGroupEntity implements Serializable {
 	/**
 	 * A0
 	 */
-	private String a0;
+	private Integer a0;
 	/**
 	 * B0
 	 */
-	private String b0;
+	private Integer b0;
 	/**
 	 * G0
 	 */
-	private String g0;
+	private Integer g0;
 	/**
 	 * A1
 	 */
-	private String a1;
+	private Integer a1;
 	/**
 	 * B1
 	 */
-	private String b1;
+	private Integer b1;
 	/**
 	 * P0
 	 */
-	private String p0;
+	private Integer p0;
 	/**
 	 * M0
 	 */
-	private String m0;
+	private Integer m0;
 	/**
 	 * X0
 	 */
-	private String x0;
+	private Integer x0;
 	/**
 	 * I0
 	 */
-	private String i0;
+	private Integer i0;
 	/**
 	 * A2
 	 */
-	private String a2;
+	private Integer a2;
 	/**
 	 * B2
 	 */
-	private String b2;
+	private Integer b2;
 	/**
 	 * P1
 	 */
-	private String p1;
+	private Integer p1;
 	/**
 	 * A3
 	 */
-	private String a3;
+	private Integer a3;
 	/**
 	 * 组织机构ID
 	 */
