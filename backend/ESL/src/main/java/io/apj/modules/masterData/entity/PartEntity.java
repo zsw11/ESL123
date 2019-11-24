@@ -29,6 +29,10 @@ public class PartEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 是否通用
 	 */
 	private Boolean common;

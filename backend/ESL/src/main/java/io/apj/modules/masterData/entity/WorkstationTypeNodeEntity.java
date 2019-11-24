@@ -30,7 +30,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 名称
 	 */
 	private String name;
-
+	/**
+	 * 拼音
+	 */
+	private String pinyin;
 	/**
 	 * 工位ID
 	 */

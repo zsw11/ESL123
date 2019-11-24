@@ -8,6 +8,7 @@
         <result property="id" column="id"/>
         <result property="modelSeriesId" column="model_series_id"/>
         <result property="name" column="name"/>
+        <result property="pinyin" column="pinyin"/>
         <result property="deptId" column="dept_id"/>
         <result property="code" column="code"/>
         <result property="wsTime" column="ws_time"/>

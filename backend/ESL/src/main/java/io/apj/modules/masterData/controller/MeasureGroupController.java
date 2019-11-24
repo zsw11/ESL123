@@ -64,7 +64,7 @@ public class MeasureGroupController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("masterData:measuregroup:save")
+    @RequiresPermissions("masterData:measuregroup:create")
     public RD save(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.insert(measureGroup);
 

@@ -7,6 +7,7 @@
     <resultMap type="io.apj.modules.masterData.entity.ApproveOpininonEntity" id="approveOpininonMap">
         <result property="id" column="id"/>
         <result property="approveOperation" column="approve_operation"/>
+        <result property="pinyin" column="pinyin"/>
         <result property="opininon" column="opininon"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>

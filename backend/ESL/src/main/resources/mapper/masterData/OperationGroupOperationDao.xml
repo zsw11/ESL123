@@ -9,6 +9,7 @@
         <result property="operationGroupId" column="operation_group_id"/>
         <result property="seqNumber" column="seq_number"/>
         <result property="operation" column="operation"/>
+        <result property="pinyin" column="pinyin"/>
         <result property="measures" column="measures"/>
         <result property="frequency" column="frequency"/>
         <result property="createBy" column="create_by"/>
@@ -17,6 +18,5 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
-
 
 </mapper>

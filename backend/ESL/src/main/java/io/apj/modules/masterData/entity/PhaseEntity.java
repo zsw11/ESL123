@@ -29,7 +29,10 @@ public class PhaseEntity implements Serializable {
 	 * 名称
 	 */
 	private String name;
-
+	/**
+	 * 拼音
+	 */
+	private String pinyin;
 	/**
 	 * 沿用阶段
 	 */

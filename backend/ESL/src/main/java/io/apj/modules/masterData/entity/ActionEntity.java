@@ -29,6 +29,10 @@ public class ActionEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

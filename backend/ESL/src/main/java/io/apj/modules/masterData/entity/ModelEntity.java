@@ -46,6 +46,10 @@ public class ModelEntity implements Serializable {
 	 */
 	private String name;
 	/**
+	 * 拼音
+	 */
+	private String pinyin;
+	/**
 	 * 部门ID
 	 */
 	private Integer deptId;

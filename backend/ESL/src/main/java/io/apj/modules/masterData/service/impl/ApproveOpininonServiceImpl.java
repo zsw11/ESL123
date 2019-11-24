@@ -12,21 +12,23 @@ import io.apj.modules.masterData.dao.ApproveOpininonDao;
 import io.apj.modules.masterData.entity.ApproveOpininonEntity;
 import io.apj.modules.masterData.service.ApproveOpininonService;
 
-
 @Service("approveOpininonService")
-public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, ApproveOpininonEntity> implements ApproveOpininonService {
+public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, ApproveOpininonEntity>
+		implements ApproveOpininonService {
 
-    @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        EntityWrapper<ApproveOpininonEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
-                .like(params.get("opininon") != null && params.get("opininon") != "", "opininon",
-                        (String) params.get("opininon"))
-        .eq(params.get("approveOperation") != null && params.get("approveOperation") != "","approve_operation", (String) params.get("approveOperation"));
-        Page<ApproveOpininonEntity> page = this.selectPage(new Query<ApproveOpininonEntity>(params).getPage(), entityWrapper);
+	@Override
+	public PageUtils queryPage(Map<String, Object> params) {
+		EntityWrapper<ApproveOpininonEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.isNull("delete_at").like(params.get("opininon") != null && params.get("opininon") != "",
+				"opininon", (String) params.get("opininon"));
+		if (params.get("approveOperation") != null && params.get("approveOperation") != "") {
+			entityWrapper.andNew("pinyin like '%" + params.get("approveOperation") + "%' "
+					+ "or approve_operation like '%" + params.get("approveOperation") + "%'");
+		}
+		Page<ApproveOpininonEntity> page = this.selectPage(new Query<ApproveOpininonEntity>(params).getPage(),
+				entityWrapper);
 
-
-        return new PageUtils(page);
-    }
+		return new PageUtils(page);
+	}
 
 }

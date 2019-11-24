@@ -2,11 +2,10 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
-import com.google.gson.JsonElement;
+import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
-import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.common.utils.PageUtils;
 
-
 /**
  * 报表组
  *
@@ -32,71 +30,74 @@ import io.apj.common.utils.PageUtils;
 @RestController
 @RequestMapping("/api/v1/reportgroup")
 public class ReportGroupController extends AbstractController {
-    @Autowired
-    private ReportGroupService reportGroupService;
-    @Autowired
-    private ReportGroupReportRelaService reportGroupReportRelaService ;
-    @Autowired
-    private ReportService reportService;
+	@Autowired
+	private ReportGroupService reportGroupService;
+	@Autowired
+	private ReportGroupReportRelaService reportGroupReportRelaService;
 
-    /**
-     * 列表
-     * @return
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("masterData:reportgroup:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
-        PageUtils page = reportGroupService.queryPage(params);
-        return RD.ok(page);
-    }
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("masterData:reportgroup:info")
-    public RD info(@PathVariable("id") Integer id){
+	/**
+	 * 列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("masterData:reportgroup:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = reportGroupService.queryPage(params);
+		return RD.ok(page);
+	}
+
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:reportgroup:info")
+	public RD info(@PathVariable("id") Integer id) {
 		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-        List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
+		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
 
-        HashMap<Object, Object> data = new HashMap<>();
-        data.put("reportGroup",reportGroup);
-        data.put("reportEntities",reportEntities);
-        return RD.build().put("data", data);
-    }
+		HashMap<Object, Object> data = new HashMap<>();
+		data.put("reportGroup", reportGroup);
+		data.put("reportEntities", reportEntities);
+		return RD.build().put("data", data);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("masterData:reportgroup:save")
-    public RD save(@RequestBody ReportGroupEntity reportGroup){
-        reportGroup.setCreateBy(getUserId().intValue());
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("masterData:reportgroup:create")
+	public RD save(@RequestBody ReportGroupEntity reportGroup) {
+		reportGroup.setPinyin(PinyinUtil.getPinYin(reportGroup.getName()));
+		reportGroup.setCreateBy(getUserId().intValue());
 		reportGroupService.insert(reportGroup);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("masterData:reportgroup:update")
-    public RD update(@RequestBody ReportGroupEntity reportGroup){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("masterData:reportgroup:update")
+	public RD update(@RequestBody ReportGroupEntity reportGroup) {
+		reportGroup.setPinyin(PinyinUtil.getPinYin(reportGroup.getName()));
 		reportGroupService.updateById(reportGroup);
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("masterData:reportgroup:delete")
-    public RD delete(@RequestBody Integer[] ids){
+	/**
+	 * 删除
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("masterData:reportgroup:delete")
+	public RD delete(@RequestBody Integer[] ids) {
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
-    }
+		return RD.build();
+	}
 
 }
