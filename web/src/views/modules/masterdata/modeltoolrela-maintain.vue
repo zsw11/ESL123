@@ -1,4 +1,3 @@
-
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
@@ -13,14 +12,14 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+            <keyword-search  placeholder="必填" style="width: 100%" :disabled=flag  v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'机种系列'" prop="modelSeriesId">
-            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" :valueColunt="'name'" :allowEmpty="true"></keyword-search>
+            <keyword-search placeholder="必填" style="width: 100%" :disabled=flag  v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -84,6 +83,7 @@
       </el-row>
 
     </el-form>
+
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
@@ -92,123 +92,140 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
-import { listDept } from '@/api/dept'
-import { listModelSeries } from '@/api/modelSeries'
-import { listModel, fetchModel, createModel, updateModel } from '@/api/model'
+  import { pick } from 'lodash'
+  import { fetchModel, createModel, updateModel, listModel } from '@/api/model'
+  import { listDept } from '@/api/dept'
+  import { listModelSeries } from '@/api/modelSeries'
 
-export default {
-  name: 'editModelToolRela',
-  data () {
-    return {
-      inited: false,
-      dataForm: {
-        id: 0,
-        name: null,
-        deptId: null,
-        modelSeriesId: null,
-        code: null,
-        WSTime: null,
-        ESTime: null,
-        AMPTime: null,
-        MPTime: null
-      },
-      listModel,
-      listDept,
-      listModelSeries,
-      dataRules: {
-        modelId: [
-          { type: 'number', message: '机种ID需为数字值' }
-        ],
-        toolId: [
-          { type: 'number', message: '治工具ID需为数字值' }
-        ],
-        createBy: [
-          { type: 'number', message: '创建者ID需为数字值' }
-        ],
+  export default {
+    name: 'editModel',
+    data () {
+      return {
+        title: null,
+        flag: false,
+        inited: false,
+        dataForm: {
+          id: 0,
+          deptId: null,
+          modelSeriesId: null,
+          code: null,
+          WSTime: null,
+          ESTime: null,
+          AMPTime: null,
+          MPTime: null,
+          remark: null,
+          createBy: null,
+          createAt: null,
+          updateBy: null,
+          updateAt: null,
+          deleteAt: null
+        },
+        listModel,
+        listDept,
+        listModelSeries,
+        dataRules: {
+          name: [
+            // { max: 64, message: '长度超过了64', trigger: 'blur' }
+          ],
+          deptId: [
+            { required: true, message: '部门不能为空', trigger: 'blur' }
+          ],
+          modelSeriesId: [
+            { required: true, message: '机种系列不能为空', trigger: 'blur' }
+          ],
+          code: [
+            // { max: 64, message: '长度超过了64', trigger: 'blur' }
+          ],
+          remark: [
+            { max: 512, message: '长度超过了512', trigger: 'blur' }
+          ],
+          createBy: [
+            { type: 'number', message: '创建者ID需为数字值' }
+          ],
 
-        updateBy: [
-          { type: 'number', message: '更新者ID需为数字值' }
-        ]
+          updateBy: [
+            { type: 'number', message: '更新者ID需为数字值' }
+          ]
 
+        }
       }
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.fromFullPath = from.fullPath
-    })
-  },
-  created () {
-    this.init()
-  },
-  activated () {
-    if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        vm.fromFullPath = from.fullPath
+      })
+    },
+    created () {
       this.init()
-    }
-  },
-  watch: {
-    dataForm: {
-      handler: function (val) {
-        if (this.inited) {
-          this.$store.dispatch('common/updateTabAttrs', {
-            name: this.$route.name,
-            changed: true
+    },
+    activated () {
+      if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
+        this.init()
+      }
+    },
+    watch: {
+      dataForm: {
+        handler: function (val) {
+          if (this.inited) {
+            this.$store.dispatch('common/updateTabAttrs', {
+              name: this.$route.name,
+              changed: true
+            })
+          }
+        },
+        deep: true
+      }
+    },
+    methods: {
+      init () {
+        this.title = this.$route.meta.title
+        if (this.$route.query.noShow) {
+          this.flag = true
+        }
+        this.$store.dispatch('common/updateTabAttrs', {
+          name: this.$route.name,
+          changed: false
+        })
+        this.inited = false
+        this.dataForm.id = parseInt(this.$route.params.id) || 0
+        if (this.dataForm.id) {
+          fetchModel(this.dataForm.id).then(({data}) => {
+            Object.assign(
+              this.dataForm,
+              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            )
+          }).finally(() => {
+            this.inited = true
           })
+        } else {
+          this.inited = true
         }
       },
-      deep: true
-    }
-  },
-  methods: {
-    init () {
-      this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
-      this.$store.dispatch('common/updateTabAttrs', {
-        name: this.$route.name,
-        changed: false
-      })
-      this.inited = false
-      this.dataForm.id = parseInt(this.$route.params.id) || 0
-      if (this.dataForm.id) {
-        fetchModel(this.dataForm.id).then(({data}) => {
-          Object.assign(
-            this.dataForm,
-            pick(data, [ 'modelId', 'toolId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
-          )
-        }).finally(() => {
-          this.inited = true
-        })
-      } else {
-        this.inited = true
-      }
-    },
-    // 取消信息
-    cancleFormSubmit () {
-      this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'masterData-modeltoolrela' })
-      this.$destroy()
-    },
-    // 表单提交
-    dataFormSubmit () {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          (this.dataForm.id
-            ? updateModel(this.dataForm.id, this.dataForm)
-            : createModel(this.dataForm)
-          ).then(({data}) => {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: this.cancleFormSubmit
+      // 取消信息
+      cancleFormSubmit () {
+        this.$store.dispatch('common/closeActiveTab')
+        // this.$router.push({ name: 'masterdata-model' })
+        this.$router.back()
+        this.$destroy()
+      },
+      // 表单提交
+      dataFormSubmit () {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            (this.dataForm.id
+                ? updateModel(this.dataForm.id, this.dataForm)
+                : createModel(this.dataForm)
+            ).then(({data}) => {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: this.cancleFormSubmit
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     }
   }
-}
 </script>

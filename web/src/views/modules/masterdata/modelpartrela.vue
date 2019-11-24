@@ -135,19 +135,18 @@
 </template>
 
 <script>
-  import { listModel, deleteModel } from '@/api/model'
+  import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
   import { fetchModelByPart } from '@/api/part'
-  import { createModelPartRela } from '@/api/modelPartRela'
+  import { createModelPartRela, deleteModelPartRela } from '@/api/modelPartRela'
   export default {
     name: 'modelList',
     data () {
       return {
-        success: null,
-        addPartModelId: null,
-        addReal: false,
-        id: null,
+        addPartModelId: null, // 机种id
+        addReal: false, // 新增页面显示
+        id: null, // 部品id
         title: null,
         dataButton: 'list',
         listQuery: {
@@ -280,12 +279,16 @@
         var ids = row ? [row.id] : this.dataListSelections.map(item => {
           return item.id
         })
+        let data = {
+          partId: this.id,
+          modelId: ids
+        }
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteModel(ids).then(() => {
+          deleteModelPartRela(data).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -298,24 +301,26 @@
       },
       // 新增部品机种关系
       partModel () {
-        let data = {
-          partId: this.id,
-          modelId: this.addPartModelId
-        }
-        createModelPartRela(data).then(({code}) => {
-          this.success = code
+        this.$nextTick(() => {
+          if (this.addReal) {
+            let data = {
+              partId: this.id,
+              modelId: this.addPartModelId
+            }
+            createModelPartRela(data).then(({code}) => {
+              if (code === 200) {
+                this.addReal = false
+                this.getDataList()
+                this.$notify({
+                  title: '成功',
+                  message: '添加关系成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
         })
-        // console.log(this.success, createModelPartRela(data), 111111111111111)
-        if (this.success === 200) {
-          this.addReal = false
-          this.getDataList()
-          this.$notify({
-            title: '成功',
-            message: '添加关系成功',
-            type: 'success',
-            duration: 2000
-          })
-        }
       }
     }
   }

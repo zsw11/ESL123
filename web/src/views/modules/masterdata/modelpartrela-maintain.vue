@@ -1,4 +1,3 @@
-
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
@@ -13,14 +12,14 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+            <keyword-search  placeholder="必填" style="width: 100%" :disabled=flag  v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'机种系列'" prop="modelSeriesId">
-            <keyword-search style="width: 100%" :disabled=flag  v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" :valueColunt="'name'" :allowEmpty="true"></keyword-search>
+            <keyword-search placeholder="必填" style="width: 100%" :disabled=flag  v-model="dataForm.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -84,6 +83,7 @@
       </el-row>
 
     </el-form>
+
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
@@ -93,9 +93,10 @@
 
 <script>
   import { pick } from 'lodash'
+  import { fetchModel, createModel, updateModel, listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { listModel, fetchModel, createModel, updateModel } from '@/api/model'
+
   export default {
     name: 'editModel',
     data () {
@@ -105,27 +106,32 @@
         inited: false,
         dataForm: {
           id: 0,
-          name: null,
           deptId: null,
           modelSeriesId: null,
           code: null,
           WSTime: null,
           ESTime: null,
           AMPTime: null,
-          MPTime: null
+          MPTime: null,
+          remark: null,
+          createBy: null,
+          createAt: null,
+          updateBy: null,
+          updateAt: null,
+          deleteAt: null
         },
         listModel,
         listDept,
         listModelSeries,
         dataRules: {
           name: [
-            { max: 64, message: '长度超过了64', trigger: 'blur' }
+            // { max: 64, message: '长度超过了64', trigger: 'blur' }
           ],
           deptId: [
-            { type: 'number', message: '部门ID需为数字值' }
+            { required: true, message: '部门不能为空', trigger: 'blur' }
           ],
           modelSeriesId: [
-            { type: 'number', message: '机种系列ID需为数字值' }
+            { required: true, message: '机种系列不能为空', trigger: 'blur' }
           ],
           code: [
             // { max: 64, message: '长度超过了64', trigger: 'blur' }
@@ -186,7 +192,7 @@
           fetchModel(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
-              pick(data, [ 'modelId', 'partId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
             )
           }).finally(() => {
             this.inited = true
@@ -198,7 +204,7 @@
       // 取消信息
       cancleFormSubmit () {
         this.$store.dispatch('common/closeActiveTab')
-        // this.$router.push({ name: 'part-model' })
+        // this.$router.push({ name: 'masterdata-model' })
         this.$router.back()
         this.$destroy()
       },

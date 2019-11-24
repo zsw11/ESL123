@@ -211,8 +211,3 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-  .el-input__inner{
-    width: 200px;
-  }
-</style>

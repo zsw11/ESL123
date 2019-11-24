@@ -98,25 +98,29 @@ const mainRoutes = {
     { path: '/add-model', component: _import('modules/masterdata/model-maintain'), name: 'add-model', meta: { title: '机种-新增', isTab: true } },
     { path: '/edit-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'edit-model', meta: { title: '机种-编辑', isTab: true } },
     { path: '/details-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'details-model', meta: { title: '机种-详情', isTab: true } },
+    { path: '/model-part/:id(\\d+)/:name', component: _import('modules/masterdata/partmodelrela'), name: 'model-part', meta: { title: '机种-部品', isTab: true } },
+    { path: '/model-tool/:id(\\d+)/:name', component: _import('modules/masterdata/toolmodelrela'), name: 'model-part', meta: { title: '机种-治工具', isTab: true } },
 
-    // 机种部品关系
-    { path: '/add-modelpartrela', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'add-modelpartrela', meta: { title: '新增机种-部品关系', isTab: true } },
-    { path: '/edit-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'edit-modelpartrela', meta: { title: '编辑机种-部品关系', isTab: true } },
-    { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
+    // 机种里的部品关系
+    { path: '/details-partmodelrela/:id(\\d+)', component: _import('modules/masterdata/partmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
+
+    // 机种里的部品关系
+    { path: '/details-toolmodelrela/:id(\\d+)', component: _import('modules/masterdata/toolmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-治工具关系详情', isTab: true } },
+
+    // 部品里的机种关系
+    { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '部品-机种关系详情', isTab: true } },
+
+    // 机种系列里的机种关系
+    { path: '/details-modelmodelseriesrela/:id(\\d+)', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'edit-modelmodelseriesrela', meta: { title: '机种系列-机种关系详情', isTab: true } },
+
+    // 治工具里的机种关系
+    { path: '/details-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '治工具-机种关系详情', isTab: true } },
 
     // 机种系列
     { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '机种系列-新增', isTab: true } },
     { path: '/edit-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'edit-modelseries', meta: { title: '机种系列-编辑', isTab: true } },
     { path: '/details-modelseries/:id(\\d+)', component: _import('modules/masterdata/modelseries-maintain'), name: 'details-modelseries', meta: { title: '机种系列-详情', isTab: true } },
     { path: '/modelseries-model/:id(\\d+)/:name', component: _import('modules/masterdata/modelmodelseriesrela'), name: 'edit-modelseries', meta: { title: '机种系列-机种', isTab: true } },
-
-    // 机种机种系列关系
-    { path: '/add-modelmodelseriesrela', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'add-modelmodelseriesrela', meta: { title: '新增机种-机种系列关系', isTab: true } },
-    { path: '/details-modelmodelseriesrela/:id(\\d+)', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'edit-modelmodelseriesrela', meta: { title: '机种-机种系列关系详情', isTab: true } },
-
-    // 机种治工具关系
-    { path: '/add-modeltoolrela', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'add-modeltoolrela', meta: { title: '新增机种-治工具关系', isTab: true } },
-    { path: '/edit-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '编辑机种-治工具关系', isTab: true } },
 
     // 关键词
     { path: '/add-action', component: _import('modules/masterdata/action-maintain'), name: 'add-operation', meta: { title: '关键词-新增', isTab: true } },

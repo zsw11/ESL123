@@ -46,7 +46,7 @@
         logining: false,
         dataForm: {
           username: 'xc',
-          password: '123123',
+          password: 'admin',
           uuid: '',
           jigsawVerify: undefined
         },

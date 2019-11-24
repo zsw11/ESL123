@@ -12,20 +12,13 @@
 
         <el-form-item class="title" :label="'型号'" prop="code" >
          <el-input v-model="listQuery.code"  clearable></el-input>
-          <!-- <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search> -->
-          <!-- <dict-select 
-            dictType="ModelCode"
-            v-model="listQuery.code">
-          </dict-select> -->
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-<!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-<!--          <el-input v-model="listQuery.modelSeriesId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
 
         </el-form-item>
@@ -119,11 +112,13 @@
           </template>
         </el-table-column>
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="200">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="220">
         <template slot-scope="scope">
-            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
-            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
+          <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+          <el-button type="text" size="small" @click="modelPart(scope.row.id, scope.row.name)">部品</el-button>
+          <el-button type="text" size="small" @click="modelTool(scope.row.id, scope.row.name)">治工具</el-button>
+          <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
 
@@ -340,6 +335,18 @@ export default {
       this.$nextTick(() => {
         console.log(id)
         this.$router.push({ path: id ? `/edit-model/${id}` : '/add-model' })
+      })
+    },
+    // 机种关联部品
+    modelPart (id, name) {
+      this.$nextTick(() => {
+        this.$router.push({path: `/model-part/${id}/${name}`})
+      })
+    },
+    // 机种关联治工具
+    modelTool (id, name) {
+      this.$nextTick(() => {
+        this.$router.push({path: `/model-tool/${id}/${name}`})
       })
     },
     // 删除数据
