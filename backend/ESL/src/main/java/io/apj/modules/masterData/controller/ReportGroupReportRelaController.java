@@ -64,6 +64,7 @@ public class ReportGroupReportRelaController extends AbstractController {
     public RD save(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
         reportGroupReportRela.setCreateBy(getUserId().intValue());
 		reportGroupReportRelaService.insert(reportGroupReportRela);
+        insertTableReference("report", reportGroupReportRela.getReportId().longValue(), "reportGroup", reportGroupReportRela.getReportGroupId().longValue(), false);
 
         return RD.build();
     }
@@ -75,6 +76,7 @@ public class ReportGroupReportRelaController extends AbstractController {
 //    @RequiresPermissions("masterData:reportgroupreportrela:update")
     public RD update(@RequestBody ReportGroupReportRelaEntity reportGroupReportRela){
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
+        insertTableReference("report", reportGroupReportRela.getReportId().longValue(), "reportGroup", reportGroupReportRela.getReportGroupId().longValue(), true);
 
         return RD.build();
     }

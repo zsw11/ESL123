@@ -63,6 +63,7 @@ public class ModelToolRelaController extends AbstractController {
     public RD save(@RequestBody ModelToolRelaEntity modelToolRela){
         modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
+        insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), false);
 
         return RD.build();
     }
@@ -74,6 +75,7 @@ public class ModelToolRelaController extends AbstractController {
 //    @RequiresPermissions("masterData:modeltoolrela:update")
     public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
+        insertTableReference("model", modelToolRela.getModelId().longValue(), "part", modelToolRela.getToolId().longValue(), true);
 
         return RD.build();
     }

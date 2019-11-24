@@ -8,6 +8,7 @@ import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.ReferenceEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -94,6 +95,19 @@ public class ReportGroupController extends AbstractController {
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:reportgroup:delete")
     public RD delete(@RequestBody Integer[] ids){
+        //判断报表组下是否有报表
+        for (int i = 0; i < ids.length; i++) {
+            List<ReferenceEntity> referenceEntities = deleteCheckReference("reportGroup", ids[i].longValue());
+            if (!referenceEntities.isEmpty()) {
+                for (ReferenceEntity reference : referenceEntities) {
+                    return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+                            + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+                }
+            } else {
+                // 删除引用表关系
+                deleteTableReference("reportGroup", ids[i].longValue());
+            }
+        }
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build();

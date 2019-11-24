@@ -119,6 +119,7 @@ public class PartController extends AbstractController {
     @RequiresPermissions("masterData:part:delete")
     public RD delete(@RequestBody Integer[] ids){
     	for (int i = 0; i < ids.length; i++) {
+    		//检查部品下面是否有机种
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
