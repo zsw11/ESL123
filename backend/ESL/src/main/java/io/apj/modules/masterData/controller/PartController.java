@@ -112,20 +112,6 @@ public class PartController extends AbstractController {
 		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
 		partService.updateById(part);
 
-<<<<<<< HEAD
-        return RD.build();
-    }
-
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("masterData:part:delete")
-    public RD delete(@RequestBody Integer[] ids){
-    	for (int i = 0; i < ids.length; i++) {
-    		//检查部品下面是否有机种
-=======
 		return RD.build();
 	}
 
@@ -138,7 +124,6 @@ public class PartController extends AbstractController {
 	@RequiresPermissions("masterData:part:delete")
 	public RD delete(@RequestBody Integer[] ids) {
 		for (int i = 0; i < ids.length; i++) {
->>>>>>> 9b12b6caedfb7000f7cbcef05d9fe0e16e2689e3
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
