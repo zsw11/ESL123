@@ -19,11 +19,19 @@ export function createWorkstationTypeNode (data) {
 }
 
 // 获取工位类型节点详情
-export function fetchWorkstationTypeNode (params) {
+export function fetchWorkstationTypeNode (id) {
   return request({
-    url: request.adornUrl('/api/v1/workstationtypenode/detail'),
+    url: request.adornUrl(`/api/v1/workstationtypenode/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
+  })
+}
+// 获取工位类型节点树
+export function fetchTypeNode () {
+  return request({
+    url: request.adornUrl(`/api/v1/workstationtypenode/listNodeType`),
+    method: 'get',
+    params: request.adornParams()
   })
 }
 
