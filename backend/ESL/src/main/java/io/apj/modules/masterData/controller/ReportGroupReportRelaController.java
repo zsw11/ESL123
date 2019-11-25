@@ -86,7 +86,7 @@ public class ReportGroupReportRelaController extends AbstractController {
      * @return
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("masterData:reportgroupreportrela:delete")
+//    @RequiresPermissions("masterData:reportgroupreportrela:delete")
     public RD delete(@RequestBody Integer[] ids){
 		reportGroupReportRelaService.deleteBatchIds(Arrays.asList(ids));
 
