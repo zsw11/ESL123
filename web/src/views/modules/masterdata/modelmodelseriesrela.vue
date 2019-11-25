@@ -11,17 +11,14 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <!--          <el-input v-model="listQuery.code"  clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <!--          <el-input v-model="listQuery.deptId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <!--          <el-input v-model="listQuery.modelSeriesId"   clearable></el-input>-->
           <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
 
         </el-form-item>
@@ -41,18 +38,25 @@
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">机种</div>
-        <div class="buttons">
-          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <export-data
-            :config="exportConfig"
-            type="primary"
-            plain>导   出
-          </export-data>
-          <import-data
-            :config="importConfig">
-          </import-data>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-        </div>
+<!--        <div class="buttons">-->
+<!--          <el-button  @click="addReal=true" type="primary" >新增</el-button>-->
+<!--          <el-dialog title="新增机种系列机种关系" width="400px" :visible.sync="addReal">-->
+<!--            机种<keyword-search  style="margin-left:10px;" v-model="addModelseriesModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>-->
+<!--            <div slot="footer" class="dialog-footer">-->
+<!--              <el-button @click="addReal = false">取 消</el-button>-->
+<!--              <el-button type="primary" @click="modelseriesModel">确 定</el-button>-->
+<!--            </div>-->
+<!--          </el-dialog>-->
+<!--          <export-data-->
+<!--            :config="exportConfig"-->
+<!--            type="primary"-->
+<!--            plain>导   出-->
+<!--          </export-data>-->
+<!--          <import-data-->
+<!--            :config="importConfig">-->
+<!--          </import-data>-->
+<!--          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
+<!--        </div>-->
       </div>
       <el-table
         :data="dataList"
@@ -69,57 +73,57 @@
 
         <el-table-column align="center" prop="name" label="机种名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.modelEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.modelEntity.deptName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesId }}</span>
+            <span>{{scope.row.modelEntity.modelSeriesEntity }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
-            <span>{{scope.row.code }}</span>
+            <span>{{scope.row.modelEntity.code }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="WSTime" label="WS时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.WSTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="ESTime" label="ES时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.ESTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="AMPTime" label="AMP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.AMPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="MPTime" label="MP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.MPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.modelEntity.id)">详情</el-button>
 <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
+<!--            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>-->
           </template>
         </el-table-column>
 
@@ -140,7 +144,7 @@
 <script>
   import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
   import { listDept } from '@/api/dept'
-  import { listModelSeries } from '@/api/modelSeries'
+  import { listModelSeries, fetchModelByModelSeriesId } from '@/api/modelSeries'
   import { filterAttributes } from '@/utils'
   import { cloneDeep } from 'lodash'
   import ExportData from '@/components/export-data'
@@ -156,8 +160,10 @@
     },
     data () {
       return {
+        addModelseriesModelId: null, // 机种id
+        addReal: false, // 新增页面显示
+        id: null, // 机种系列id
         title: null,
-        id: null,
         dataButton: 'list',
         listQuery: {
           id: 0,
@@ -259,15 +265,16 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        listModel(Object.assign(
+        fetchModelByModelSeriesId(Object.assign(
           {
             page: this.pageNo,
-            limit: this.pageSize
+            limit: this.pageSize,
+            id: this.id
           },
           this.listQuery
         )).then(({page}) => {
-          this.dataList = page.records
-          this.total = page.total
+          this.dataList = page.data
+          this.total = page.totalCount
         }).catch(() => {
           this.dataList = []
           this.total = 0
@@ -353,6 +360,29 @@
           })
         })
       }
+      // 新增机种系列机种的关系
+      // modelseriesModel () {
+      //   this.$nextTick(() => {
+      //     if (this.addReal) {
+      //       let data = {
+      //         partId: this.id,
+      //         modelId: this.addToolModelId
+      //       }
+      //       createModelToolRela(data).then(({code}) => {
+      //         if (code === 200) {
+      //           this.addReal = false
+      //           this.getDataList()
+      //           this.$notify({
+      //             title: '成功',
+      //             message: '添加关系成功',
+      //             type: 'success',
+      //             duration: 2000
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     }
   }
 </script>

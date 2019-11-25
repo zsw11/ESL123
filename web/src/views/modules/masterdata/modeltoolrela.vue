@@ -39,7 +39,15 @@
       <div slot="header" class="clearfix">
         <div class="card-title">机种</div>
         <div class="buttons">
-          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+<!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+          <el-button  @click="addReal=true" type="primary" >新增</el-button>
+          <el-dialog title="新增治工具机种关系" width="400px" :visible.sync="addReal">
+            机种<keyword-search  style="margin-left:10px;" v-model="addToolModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="addReal = false">取 消</el-button>
+              <el-button type="primary" @click="toolModel">确 定</el-button>
+            </div>
+          </el-dialog>
           <!-- <el-button @click="">导入</el-button>
           <el-button @click="">导出</el-button> -->
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -58,57 +66,57 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="ame" label="机种名称" >
+        <el-table-column align="center" prop="name" label="机种名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.modelEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.modelEntity.deptName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesId }}</span>
+            <span>{{scope.row.modelEntity.modelSeriesEntity }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
-            <span>{{scope.row.code }}</span>
+            <span>{{scope.row.modelEntity.code }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="WSTime" label="WS时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.WSTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="ESTime" label="ES时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.ESTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="AMPTime" label="AMP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.AMPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="MPTime" label="MP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.modelEntity.MPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.modelEntity.id)">详情</el-button>
 <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
             <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
@@ -129,15 +137,18 @@
 </template>
 
 <script>
-  import { listModel, deleteModel } from '@/api/model'
+  import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
   import { fetchModelByTool } from '@/api/tool'
+  import { createModelToolRela, deleteModelToolRela } from '@/api/modelToolRela'
   export default {
     name: 'modelList',
     data () {
       return {
-        id: null,
+        addToolModelId: null, // 机种id
+        addReal: false, // 新增页面显示
+        id: null, // 治工具id
         title: null,
         dataButton: 'list',
         listQuery: {
@@ -207,8 +218,9 @@
             id: this.id
           }
         )).then(({page}) => {
-          this.dataList = page.records
-          this.total = page.total
+          console.log(page, 11111111111111111)
+          this.dataList = page.data
+          this.total = page.totalCount
         }).catch(() => {
           this.dataList = []
           this.total = 0
@@ -270,7 +282,6 @@
       // 新增 / 修改
       addOrUpdateHandle (id) {
         this.$nextTick(() => {
-          console.log(id)
           this.$router.push({ path: id ? `/edit-modeltoolrela/${id}` : '/add-modelpartrela' })
         })
       },
@@ -284,7 +295,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteModel(ids).then(() => {
+          deleteModelToolRela(ids).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -293,6 +304,29 @@
             })
             this.getDataList()
           })
+        })
+      },
+      // 新增治工具机种关系
+      toolModel () {
+        this.$nextTick(() => {
+          if (this.addReal) {
+            let data = {
+              partId: this.id,
+              modelId: this.addToolModelId
+            }
+            createModelToolRela(data).then(({code}) => {
+              if (code === 200) {
+                this.addReal = false
+                this.getDataList()
+                this.$notify({
+                  title: '成功',
+                  message: '添加关系成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
         })
       }
     }
