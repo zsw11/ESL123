@@ -231,8 +231,8 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
-      fetchReportGroup(this.dataForm.id).then(({data}) => {
-        this.dataList = data.reportEntities
+      fetchReportGroup(this.id).then(({data}) => {
+        this.dataList = data.data
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -305,7 +305,7 @@ export default {
         })
       })
     },
-    // 新增机种治工具关系
+    // 新增报表组报表关系
     reportgroupReport () {
       this.$nextTick(() => {
         if (this.addReal) {
