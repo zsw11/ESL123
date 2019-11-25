@@ -41,10 +41,10 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
 	}
 
 	@Override
-	public ResponseEntity<JSONArray> listAllNodeType() {
+	public ResponseEntity<JSONArray> listAllNodeType(Integer id) {
 		List data = workstationTypeNodeDao.findAll();
 		JSONArray array = new JSONArray();
-		TreeUtils.setNodeTypeTree(0, data, array);
+		TreeUtils.setNodeTypeTree(id, data, array);
 		return ResponseEntity.ok(array);
 	}
 

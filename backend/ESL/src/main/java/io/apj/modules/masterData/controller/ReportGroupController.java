@@ -73,7 +73,7 @@ public class ReportGroupController extends AbstractController {
 		reportGroup.setCreateBy(getUserId().intValue());
 		reportGroupService.insert(reportGroup);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ReportGroupController extends AbstractController {
 		reportGroup.setPinyin(PinyinUtil.getPinYin(reportGroup.getName()));
 		reportGroupService.updateById(reportGroup);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class ReportGroupController extends AbstractController {
 
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }

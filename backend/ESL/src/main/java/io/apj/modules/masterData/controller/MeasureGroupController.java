@@ -68,7 +68,7 @@ public class MeasureGroupController {
     public RD save(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.insert(measureGroup);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -79,7 +79,7 @@ public class MeasureGroupController {
     public RD update(@RequestBody MeasureGroupEntity measureGroup){
 		measureGroupService.updateById(measureGroup);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -91,7 +91,7 @@ public class MeasureGroupController {
     public RD delete(@RequestBody Integer[] ids){
 		measureGroupService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
     /**
      * 导出excel

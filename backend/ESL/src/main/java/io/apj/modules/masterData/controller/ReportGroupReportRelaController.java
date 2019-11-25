@@ -66,7 +66,7 @@ public class ReportGroupReportRelaController extends AbstractController {
 		reportGroupReportRelaService.insert(reportGroupReportRela);
         insertTableReference("report", reportGroupReportRela.getReportId().longValue(), "reportGroup", reportGroupReportRela.getReportGroupId().longValue(), false);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ReportGroupReportRelaController extends AbstractController {
 		reportGroupReportRelaService.updateById(reportGroupReportRela);
         insertTableReference("report", reportGroupReportRela.getReportId().longValue(), "reportGroup", reportGroupReportRela.getReportGroupId().longValue(), true);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -90,7 +90,7 @@ public class ReportGroupReportRelaController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
 		reportGroupReportRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
 }

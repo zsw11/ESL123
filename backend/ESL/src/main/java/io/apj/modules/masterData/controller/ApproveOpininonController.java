@@ -67,7 +67,7 @@ public class ApproveOpininonController extends AbstractController {
 		approveOpininon.setPinyin(PinyinUtil.getPinYin(approveOpininon.getApproveOperation()));
 		approveOpininonService.insert(approveOpininon);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class ApproveOpininonController extends AbstractController {
 		approveOpininon.setPinyin(PinyinUtil.getPinYin(approveOpininon.getApproveOperation()));
 		approveOpininonService.updateById(approveOpininon);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class ApproveOpininonController extends AbstractController {
 	public RD delete(@RequestBody Integer[] ids) {
 		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }

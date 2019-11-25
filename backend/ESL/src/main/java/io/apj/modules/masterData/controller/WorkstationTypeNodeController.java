@@ -50,9 +50,9 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/listNodeType")
-	public ResponseEntity<JSONArray> listNodeType() {
-		return workstationTypeNodeService.listAllNodeType();
+	@RequestMapping("/listnodetype")
+	public ResponseEntity<JSONArray> listNodeType(Integer id) {
+		return workstationTypeNodeService.listAllNodeType(id);
 
 	}
 

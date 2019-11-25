@@ -65,7 +65,7 @@ public class ReportController extends AbstractController {
 		report.setCreateBy(getUserId().intValue());
 		reportService.insert(report);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class ReportController extends AbstractController {
 		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
 		reportService.updateById(report);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class ReportController extends AbstractController {
 	public RD delete(@RequestBody Integer[] ids) {
 		reportService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }

@@ -71,7 +71,7 @@ public class PhaseController extends AbstractController {
 		phase.setPinyin(PinyinUtil.getPinYin(phase.getName()));
 		phaseService.insert(phase);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class PhaseController extends AbstractController {
 		phase.setPinyin(PinyinUtil.getPinYin(phase.getName()));
 		phaseService.updateById(phase);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class PhaseController extends AbstractController {
 	public RD delete(@RequestBody Integer[] ids) {
 		phaseService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**

@@ -197,7 +197,7 @@ public class WorkstationController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException("批量导入失败", 500);
 		}
-		return RD.build().put("code", 0);
+		return RD.build().put("code", 200);
 	}
 
 }

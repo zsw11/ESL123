@@ -74,7 +74,7 @@ public class ActionController extends AbstractController {
 		action.setPinyin(PinyinUtil.getPinYin(action.getName()));
 		actionService.insert(action);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ActionController extends AbstractController {
 		action.setPinyin(PinyinUtil.getPinYin(action.getName()));
 		actionService.updateById(action);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class ActionController extends AbstractController {
 		}
 		actionService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**

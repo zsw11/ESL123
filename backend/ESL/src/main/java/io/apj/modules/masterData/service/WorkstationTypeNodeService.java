@@ -21,6 +21,6 @@ public interface WorkstationTypeNodeService extends IService<WorkstationTypeNode
 
     PageUtils queryPage(Map<String, Object> params);
 
-    ResponseEntity<JSONArray> listAllNodeType();
+    ResponseEntity<JSONArray> listAllNodeType(Integer id);
 }
 

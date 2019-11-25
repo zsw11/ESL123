@@ -26,10 +26,11 @@ export function fetchWorkstationTypeNode (id) {
     params: request.adornParams()
   })
 }
+
 // 获取工位类型节点树
-export function fetchTypeNode () {
+export function fetchTypeNode (id) {
   return request({
-    url: request.adornUrl(`/api/v1/workstationtypenode/listNodeType`),
+    url: request.adornUrl(`/api/v1/workstationtypenode/listnodetype${id}`),
     method: 'get',
     params: request.adornParams()
   })
