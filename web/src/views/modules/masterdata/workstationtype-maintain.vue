@@ -215,8 +215,8 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchTypeNode().then(() => {
-          console.log('没有数据')
+        fetchTypeNode(this.dataForm.id).then((data) => {
+          console.log(data)
         })
         fetchWorkstationType(this.dataForm.id).then(({data}) => {
           Object.assign(
