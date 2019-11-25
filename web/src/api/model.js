@@ -28,20 +28,20 @@ export function fetchModel (id) {
 }
 
 // 获取机种部品关系
-export function fetchModelPart (id) {
+export function fetchModelPart (params) {
   return request({
-    url: request.adornUrl(`/api/v1/model/partdetail/${id}`),
+    url: request.adornUrl(`/api/v1/model/partdetail/${params.id}`),
     method: 'get',
-    params: request.adornParams()
+    params: request.adornParams(params)
   })
 }
 
 // 获取机种治工具关系
-export function fetchModelTool (id) {
+export function fetchModelTool (params) {
   return request({
-    url: request.adornUrl(`/api/v1/model/tooldetail/${id}`),
+    url: request.adornUrl(`/api/v1/model/tooldetail/${params.id}`),
     method: 'get',
-    params: request.adornParams()
+    params: request.adornParams(params)
   })
 }
 

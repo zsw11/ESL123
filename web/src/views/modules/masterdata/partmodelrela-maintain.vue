@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="6" :offset="4">
           <el-form-item :label="'是否通用'" prop="common" :disable=flag v-model="dataForm.common">
-            <el-select :disabled=flag v-model="value">
+            <el-select :disabled=flag v-model="dataForm.common">
               <el-option
                 v-for="item in option"
                 :key="item.id"

@@ -50,7 +50,7 @@
 
         <el-table-column align="center" prop="id" label="报表" >
           <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
+            <span>{{scope.row.allReportName }}</span>
           </template>
         </el-table-column>
 

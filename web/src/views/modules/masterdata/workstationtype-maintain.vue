@@ -1,4 +1,3 @@
-
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
@@ -34,21 +33,21 @@
         <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="dialogFormVisible">
           <el-form :mdoel="addForm">
           <el-row :gutter="10">
-            <el-col :span="10">
+            <el-col :span="11">
               <el-form-item :label="'父工位'" prop="parent">
                 <el-input  v-model="addForm.parent"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10" :offset="2">
+            <el-col :span="11" :offset="2">
             <el-form-item :label="'名称'" prop="name">
               <el-input  v-model="addForm.name"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
             <el-row>
-              <el-col :span="22">
+              <el-col :span="24">
                 <el-form-item :label="'备注'" prop="remark">
-                  <el-input  type="textarea" style="width: 455px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
+                  <el-input  type="textarea" style="width: 490px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -59,7 +58,30 @@
           </div>
         </el-dialog>
       </div>
-      <el-tree :data="data" :props="defaultProps" style="width: 600px;" ></el-tree>
+      <el-tree
+        style="width: 600px"
+        :data="data"
+        node-key="id"
+        default-expand-all
+        :expand-on-click-node="false">
+      <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span>{{ node.label }}</span>
+        <span>
+<!--          <el-button-->
+<!--            type="text"-->
+<!--            size="mini"-->
+<!--            @click="() => append(data)">-->
+<!--          添加-->
+<!--          </el-button>-->
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => remove(node, data)">
+            删除
+          </el-button>
+        </span>
+      </span>
+      </el-tree>
     </el-card>
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
@@ -71,7 +93,8 @@
 <script>
 import { pick } from 'lodash'
 import { fetchWorkstationType, createWorkstationType, updateWorkstationType, listWorkstationType } from '@/api/workstationType'
-
+import { fetchTypeNode } from '@/api/workstationTypeNode'
+// let id = 1000
 export default {
   name: 'editWorkstationType',
   data () {
@@ -192,6 +215,9 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
+        fetchTypeNode().then(() => {
+          console.log('没有数据')
+        })
         fetchWorkstationType(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
@@ -227,7 +253,32 @@ export default {
           })
         }
       })
+    },
+    // 树的操作
+    append (data) {
+      // eslint-disable-next-line no-undef
+      const newChild = { id: id++, label: 'testtest', children: [] }
+      if (!data.children) {
+        this.$set(data, 'children', [])
+      }
+      data.children.push(newChild)
+    },
+    remove (node, data) {
+      const parent = node.parent
+      const children = parent.data.children || parent.data
+      const index = children.findIndex(d => d.id === data.id)
+      children.splice(index, 1)
     }
+    // renderContent (h, { node, data, store }) {
+    //   return (
+    //     `<span class="custom-tree-node">
+    //     <span>{node.label}</span>
+    //     <span>
+    //     <el-button size="mini" type="text" on-click={ () => this.append(data) }>Append</el-button>
+    //   <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
+    //   </span>
+    //   </span>`)
+    // }
   }
 }
 </script>
@@ -254,5 +305,12 @@ export default {
   .show > .el-dialog__body > .el-form > .el-row>.el-col>.el-form-item {
     display: inline-flex;
   }
-
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
 </style>

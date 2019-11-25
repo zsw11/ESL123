@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">{{tittle}}-部品</div>
+        <div class="card-title">{{title}}-部品</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
@@ -38,15 +38,23 @@
       <div slot="header" class="clearfix">
         <div class="card-title">部品信息</div>
         <div class="buttons">
-          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <export-data
-            :config="exportConfig"
-            type="primary"
-            plain>导   出
-          </export-data>
-          <import-data
-            :config="importConfig">
-          </import-data>
+<!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+          <el-button  @click="addReal=true" type="primary" >新增</el-button>
+          <el-dialog title="新增机种部品关系" width="400px" :visible.sync="addReal">
+            部品<keyword-search  style="margin-left:10px;" v-model="addModelPartId" :allowMultiple="true" :searchApi="this.listPart"  :allowEmpty="true"></keyword-search>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="addReal = false">取 消</el-button>
+              <el-button type="primary" @click="modelPart">确 定</el-button>
+            </div>
+          </el-dialog>
+<!--          <export-data-->
+<!--            :config="exportConfig"-->
+<!--            type="primary"-->
+<!--            plain>导   出-->
+<!--          </export-data>-->
+<!--          <import-data-->
+<!--            :config="importConfig">-->
+<!--          </import-data>-->
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -65,7 +73,7 @@
 
         <el-table-column align="center" prop="name" label="部品名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.partEntity.name }}</span>
           </template>
         </el-table-column>
 
@@ -78,13 +86,13 @@
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
+            <span>{{scope.row.partEntity.remark }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.partEntity.id)">详情</el-button>
 <!--            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
 <!--            <el-button  type="text" size="small" @click="partModel(scope.row.id,scope.row.name)">机种</el-button>-->
             <el-button style="color: orangered" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
@@ -107,12 +115,14 @@
 </template>
 
 <script>
-  import { listPart, deletePart, partImport, partExport } from '@/api/part'
+  import { partImport, partExport, listPart } from '@/api/part'
   import { filterAttributes } from '@/utils'
   import { cloneDeep } from 'lodash'
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
   import { Message } from 'element-ui'
+  import { fetchModelPart } from '@/api/model'
+  import { createModelPartRela, deleteModelPartRela } from '@/api/modelPartRela'
 
   const defaultExport = ['part.name', 'part.common', 'part.remark']
 
@@ -124,15 +134,18 @@
     },
     data () {
       return {
-        tittle: null,
-        id: null,
+        addModelPartId: null, // 部品id
+        addReal: false, // 新增页面显示
+        id: null, // 机种id
+        title: null,
         dataButton: 'list',
         listQuery: {
           name: null,
           common: null,
           remark: null
         },
-        dataList: [{}],
+        listPart,
+        dataList: [],
         pageNo: 1,
         pageSize: 10,
         total: 0,
@@ -204,10 +217,11 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        listPart(Object.assign(
+        fetchModelPart(Object.assign(
           {
             page: this.pageNo,
-            limit: this.pageSize
+            limit: this.pageSize,
+            id: this.id
           },
           this.listQuery
         )).then(({page}) => {
@@ -280,7 +294,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deletePart(ids).then(({msg}) => {
+          deleteModelPartRela(ids).then(({msg}) => {
             if (msg) {
               Message({
                 message: msg,
@@ -297,6 +311,29 @@
             }
             this.getDataList()
           })
+        })
+      },
+      // 新增机种部品关系
+      modelPart () {
+        this.$nextTick(() => {
+          if (this.addReal) {
+            let data = {
+              partId: this.addModelPartId,
+              modelId: this.id
+            }
+            createModelPartRela(data).then(({code}) => {
+              if (code === 200) {
+                this.addReal = false
+                this.getDataList()
+                this.$notify({
+                  title: '成功',
+                  message: '添加关系成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
         })
       }
     }
