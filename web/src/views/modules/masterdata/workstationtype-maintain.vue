@@ -61,18 +61,18 @@
       <el-tree
         style="width: 600px"
         :data="data"
-        node-key="id"
+        node-key="dataForm.id"
         default-expand-all
         :expand-on-click-node="false">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <span>
-<!--          <el-button-->
-<!--            type="text"-->
-<!--            size="mini"-->
-<!--            @click="() => append(data)">-->
-<!--          添加-->
-<!--          </el-button>-->
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => append(data)">
+          添加
+          </el-button>
           <el-button
             type="text"
             size="mini"
@@ -94,7 +94,7 @@
 import { pick } from 'lodash'
 import { fetchWorkstationType, createWorkstationType, updateWorkstationType, listWorkstationType } from '@/api/workstationType'
 import { fetchTypeNode } from '@/api/workstationTypeNode'
-// let id = 1000
+let id = 1000
 export default {
   name: 'editWorkstationType',
   data () {
@@ -107,38 +107,38 @@ export default {
       parentNode: null,
       dialogFormVisible: false,
       data: [{
+        id: 1,
         label: '一级 1',
         children: [{
+          id: 4,
           label: '二级 1-1',
           children: [{
+            id: 9,
             label: '三级 1-1-1'
+          }, {
+            id: 10,
+            label: '三级 1-1-2'
           }]
         }]
       }, {
+        id: 2,
         label: '一级 2',
         children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
+          id: 5,
+          label: '二级 2-1'
         }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
+          id: 6,
+          label: '二级 2-2'
         }]
       }, {
+        id: 3,
         label: '一级 3',
         children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
+          id: 7,
+          label: '二级 3-1'
         }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
+          id: 8,
+          label: '二级 3-2'
         }]
       }],
       defaultProps: {
@@ -216,7 +216,7 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchTypeNode(this.dataForm.id).then((data) => {
-          console.log(data)
+          console.log(data, 11111111111111111)
         })
         fetchWorkstationType(this.dataForm.id).then(({data}) => {
           Object.assign(
@@ -256,7 +256,6 @@ export default {
     },
     // 树的操作
     append (data) {
-      // eslint-disable-next-line no-undef
       const newChild = { id: id++, label: 'testtest', children: [] }
       if (!data.children) {
         this.$set(data, 'children', [])
