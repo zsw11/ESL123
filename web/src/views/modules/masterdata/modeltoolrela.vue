@@ -218,7 +218,6 @@
             id: this.id
           }
         )).then(({page}) => {
-          console.log(page, 11111111111111111)
           this.dataList = page.data
           this.total = page.totalCount
         }).catch(() => {
@@ -311,7 +310,7 @@
         this.$nextTick(() => {
           if (this.addReal) {
             let data = {
-              partId: this.id,
+              toolId: this.id,
               modelId: this.addToolModelId
             }
             createModelToolRela(data).then(({code}) => {

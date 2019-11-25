@@ -99,12 +99,12 @@ const mainRoutes = {
     { path: '/edit-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'edit-model', meta: { title: '机种-编辑', isTab: true } },
     { path: '/details-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'details-model', meta: { title: '机种-详情', isTab: true } },
     { path: '/model-part/:id(\\d+)/:name', component: _import('modules/masterdata/partmodelrela'), name: 'model-part', meta: { title: '机种-部品', isTab: true } },
-    { path: '/model-tool/:id(\\d+)/:name', component: _import('modules/masterdata/toolmodelrela'), name: 'model-part', meta: { title: '机种-治工具', isTab: true } },
+    { path: '/model-tool/:id(\\d+)/:name', component: _import('modules/masterdata/toolmodelrela'), name: 'model-tool', meta: { title: '机种-治工具', isTab: true } },
 
     // 机种里的部品关系
     { path: '/details-partmodelrela/:id(\\d+)', component: _import('modules/masterdata/partmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
 
-    // 机种里的部品关系
+    // 机种里的治工具关系
     { path: '/details-toolmodelrela/:id(\\d+)', component: _import('modules/masterdata/toolmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-治工具关系详情', isTab: true } },
 
     // 部品里的机种关系
