@@ -79,8 +79,8 @@
 
         <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <span v-if="scope.row.common">是</span>
-            <span v-if="!scope.row.common">否</span>
+            <span v-if="scope.row.partEntity.common">是</span>
+            <span v-if="!scope.row.partEntity.common">否</span>
           </template>
         </el-table-column>
 
@@ -145,7 +145,7 @@
           remark: null
         },
         listPart,
-        dataList: [],
+        dataList: [{}],
         pageNo: 1,
         pageSize: 10,
         total: 0,

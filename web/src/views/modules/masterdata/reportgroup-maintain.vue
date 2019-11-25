@@ -30,7 +30,15 @@
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <span class="tableHeader" >报表信息</span>
-        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>
+<!--        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>-->
+        <el-button v-if=!flag style="float: right" @click="addReal=true" type="primary" >新增</el-button>
+        <el-dialog title="新增报表组报表关系" width="400px" :visible.sync="addReal">
+          报表 <keyword-search  style="margin-left:10px;" v-model="addreportgroupReportId" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="addReal = false">取 消</el-button>
+            <el-button type="primary" @click="reportgroupReport">确 定</el-button>
+          </div>
+        </el-dialog>
       </div>
       <el-table
         :data="dataList"
@@ -39,19 +47,19 @@
         style="width: 100%;">
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.reportEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="formCode" label="空Form标准编号" >
           <template slot-scope="scope">
-            <span>{{scope.row.formCode }}</span>
+            <span>{{scope.row.reportEntity.formCode }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
+            <span>{{scope.row.reportEntity.remark }}</span>
           </template>
         </el-table-column>
 
@@ -75,11 +83,15 @@
 <script>
 import { pick } from 'lodash'
 import { fetchReportGroup, createReportGroup, updateReportGroup } from '@/api/reportGroup'
-import { listReport, deleteReport } from '@/api/report'
+import { listReport } from '@/api/report'
+import { createReportGroupReportRela, deleteReportGroupReportRela } from '@/api/reportGroupReportRela'
 export default {
   name: 'editReportGroup',
   data () {
     return {
+      addreportgroupReportId: null, // 报表id
+      addReal: false, // 新增页面显示
+      id: null, // 报表组id
       title: null,
       flag: false,
       inited: false,
@@ -147,6 +159,7 @@ export default {
       this.init()
     }
     const self = this
+    self.id = this.$route.params.id
     self.getDataList()
   },
   watch: {
@@ -281,7 +294,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteReport(ids).then(() => {
+        deleteReportGroupReportRela(ids).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',
@@ -290,6 +303,29 @@ export default {
           })
           this.getDataList()
         })
+      })
+    },
+    // 新增机种治工具关系
+    reportgroupReport () {
+      this.$nextTick(() => {
+        if (this.addReal) {
+          let data = {
+            toolId: this.addreportgroupReportId,
+            modelId: this.id
+          }
+          createReportGroupReportRela(data).then(({code}) => {
+            if (code === 200) {
+              this.addReal = false
+              this.getDataList()
+              this.$notify({
+                title: '成功',
+                message: '添加关系成功',
+                type: 'success',
+                duration: 2000
+              })
+            }
+          })
+        }
       })
     }
   }

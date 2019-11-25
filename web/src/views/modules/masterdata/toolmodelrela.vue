@@ -22,7 +22,7 @@
         <div class="buttons">
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog title="新增机种治工具关系" width="400px" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left:10px;" v-model="addModelToolId" :allowMultiple="true" :searchApi="this.listTool"  :allowEmpty="true"></keyword-search>
+            治工具<keyword-search  style="margin-left:10px;" v-model="addModelToolId" :allowMultiple="true" :searchApi="this.listTool"  :allowEmpty="true"></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="modelTool">确 定</el-button>
@@ -54,20 +54,20 @@
 
         <el-table-column align="center" prop="name" label="治工具名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.toolEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <span v-if="scope.row.common">是</span>
-            <span v-if="!scope.row.common">否</span>
+            <span v-if="scope.row.toolEntity.common">是</span>
+            <span v-if="!scope.row.toolEntity.common">否</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
+            <span>{{scope.row.toolEntity.remark }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
@@ -101,6 +101,7 @@
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
   import { createModelToolRela, deleteModelToolRela } from '@/api/modelToolRela'
+  import { fetchModelTool } from '@/api/model'
 
   const defaultExport = ['tool.name', 'tool.common', 'tool.remark']
 
@@ -195,10 +196,11 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        listTool(Object.assign(
+        fetchModelTool(Object.assign(
           {
             page: this.pageNo,
-            limit: this.pageSize
+            limit: this.pageSize,
+            id: this.id
           },
           this.listQuery
         )).then(({page}) => {
