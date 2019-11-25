@@ -5,27 +5,32 @@
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
-
+      <el-row :gutter="10">
+        <el-col span="6">
         <el-form-item :label="'机种名称'" prop="name" >
-          <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
+          <el-input  v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
-
-        <el-form-item class="title" :label="'型号'" prop="code" >
+        </el-col>
+        <el-col span="6" >
+        <el-form-item  :label="'型号'" prop="code" >
          <el-input v-model="listQuery.code"  clearable></el-input>
         </el-form-item>
-
-        <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+        </el-col>
+        <el-col span="6" >
+        <el-form-item  :label="'部门'" prop="deptId" >
+          <keyword-search  v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
         </el-form-item>
-
-        <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
-
+        </el-col>
+        <el-col span="6" >
+        <el-form-item  :label="'机种系列'" prop="modelSeriesId" >
+          <keyword-search  v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
         </el-form-item>
+        </el-col>
+      </el-row>
 
 
-        <el-form-item class="title" :label="'阶段'" prop="WSTime" >
-          <el-input style="width: 130px" v-model="listQuery.WSTime"  clearable></el-input>
+        <el-form-item  :label="'阶段'" prop="WSTime" >
+          <el-input v-model="listQuery.WSTime"  clearable></el-input>
         </el-form-item>
       </el-form>
       <div class="clearfix">
@@ -375,21 +380,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .title {
-    margin-left: 20px;
-  }
+
   .el-input__inner {
     padding-right:0;
-    width: 130px;
-  }
-  .el-form-item--small.el-form-item{
-    display: inline-block;
   }
 .el-form-item {
-    display: inline-block;
     margin-top: 0;
     margin-right: 0;
-    margin-left: 10px;
     vertical-align: top;
   }
 </style>
