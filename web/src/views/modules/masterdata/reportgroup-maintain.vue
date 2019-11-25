@@ -82,7 +82,7 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchReportGroup, createReportGroup, updateReportGroup } from '@/api/reportGroup'
+import { fetchReportGroup, createReportGroup, updateReportGroup, fetchReportDetail } from '@/api/reportGroup'
 import { listReport } from '@/api/report'
 import { createReportGroupReportRela, deleteReportGroupReportRela } from '@/api/reportGroupReportRela'
 export default {
@@ -231,7 +231,7 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
-      fetchReportGroup(this.id).then(({data}) => {
+      fetchReportDetail(this.id).then(({data}) => {
         this.dataList = data.data
       }).catch(() => {
         this.dataList = []
