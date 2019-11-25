@@ -58,7 +58,7 @@ public class WorkBookController {
      * 保存
      */
     @RequestMapping("/create")
-    @RequiresPermissions("workBook:workbook:save")
+    @RequiresPermissions("workBook:workbook:create")
     public R save(@RequestBody WorkBookEntity workBook){
 		workBookService.insert(workBook);
 

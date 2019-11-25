@@ -39,6 +39,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private Integer workstationId;
 	/**
+	 * 工位类型ID
+	 */
+	private Integer workstationTypeId;
+	/**
 	 * 备注
 	 */
 	private String remark;
