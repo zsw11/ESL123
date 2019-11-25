@@ -41,7 +41,7 @@
 <!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog title="新增部品机种关系" width="400px" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left:10px;width: 300px" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            机种<keyword-search  style="margin-left:10px;" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="partModel">确 定</el-button>
@@ -72,13 +72,13 @@
 
         <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.deptId }}</span>
+            <span>{{scope.row.modelEntity.deptName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.modelSeriesId }}</span>
+            <span>{{scope.row.modelEntity.modelSeriesEntity }}</span>
           </template>
         </el-table-column>
 
@@ -115,7 +115,7 @@
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.modelEntity.id)">详情</el-button>
-<!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.modelEntity.id)">编辑</el-button>-->
+<!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
             <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
           </template>
         </el-table-column>
@@ -144,10 +144,9 @@
     name: 'modelList',
     data () {
       return {
-        success: null,
-        addPartModelId: null,
-        addReal: false,
-        id: null,
+        addPartModelId: null, // 机种id
+        addReal: false, // 新增页面显示
+        id: null, // 部品id
         title: null,
         dataButton: 'list',
         listQuery: {
@@ -298,24 +297,26 @@
       },
       // 新增部品机种关系
       partModel () {
-        let data = {
-          partId: this.id,
-          modelId: this.addPartModelId
-        }
-        createModelPartRela(data).then(({code}) => {
-          this.success = code
+        this.$nextTick(() => {
+          if (this.addReal) {
+            let data = {
+              partId: this.id,
+              modelId: this.addPartModelId
+            }
+            createModelPartRela(data).then(({code}) => {
+              if (code === 200) {
+                this.addReal = false
+                this.getDataList()
+                this.$notify({
+                  title: '成功',
+                  message: '添加关系成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
         })
-        // console.log(this.success, createModelPartRela(data), 111111111111111)
-        if (this.success === 200) {
-          this.addReal = false
-          this.getDataList()
-          this.$notify({
-            title: '成功',
-            message: '添加关系成功',
-            type: 'success',
-            duration: 2000
-          })
-        }
       }
     }
   }
