@@ -51,17 +51,9 @@ public class WorkstationTypeNodeController extends AbstractController {
 		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
 		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
 		for(WorkstationTypeNodeEntity item :workstationTypeEntityList ){
-//			      List ids = Collections.singletonList(item.getId());
-			WorkstationTypeNodeEntity workstationTypeNodeEntity   = workstationTypeNodeService.selectById(item.getId());
-			ResponseEntity<JSONArray> child = workstationTypeNodeService.listAllNodeType(item.getId());
-			List<Object> data = new ArrayList<>();
-			data.add(workstationTypeNodeEntity);
-			data.add(child);
+			ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(item.getParentId());
 			return RD.ok(data);
 		}
-//		WorkstationTypeNodeEntity workstationTypeNodeEntityList= workstationTypeNodeService.selectOne(entityWrapper);
-//		int idP = workstationTypeNodeEntityList.getId();
-//		ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(idP);
 		return null ;
 
 	}
