@@ -3,8 +3,8 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONArray;
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -51,8 +51,12 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/listnodetype")
-	public ResponseEntity<JSONArray> listNodeType(Integer id) {
-		return workstationTypeNodeService.listAllNodeType(id);
+	public ResponseEntity<Object> listNodeType(Integer id) {
+		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
+		WorkstationTypeNodeEntity workstationTypeNodeEntityList= (WorkstationTypeNodeEntity) workstationTypeNodeService.selectList(entityWrapper);
+		int idP = workstationTypeNodeEntityList.getId();
+		return RD.ok(workstationTypeNodeService.listAllNodeType(idP)) ;
 
 	}
 

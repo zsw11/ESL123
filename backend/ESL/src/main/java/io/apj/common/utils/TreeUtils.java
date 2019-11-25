@@ -21,10 +21,10 @@ public class TreeUtils {
                 String string = JSONObject.toJSONString(nodeEntity);
                 JSONObject parent = (JSONObject) JSONObject.parse(string);
                 array.add(parent);
-                if (workstationTypeNodeEntityList.stream().filter(p -> p.getParentId().equals(nodeEntity.getWorkstationId())).findAny() != null) {
+                if (workstationTypeNodeEntityList.stream().filter(p -> p.getParentId().equals(nodeEntity.getId())).findAny() != null) {
                     JSONArray child = new JSONArray();
                     parent.put("child", child);
-                    setNodeTypeTree(nodeEntity.getWorkstationId(), workstationTypeNodeEntityList, child);
+                    setNodeTypeTree(nodeEntity.getId(), workstationTypeNodeEntityList, child);
                 }
             }
         }
