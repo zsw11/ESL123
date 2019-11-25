@@ -1,24 +1,21 @@
 package io.apj.modules.masterData.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import cn.hutool.core.util.PinyinUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
+import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
-import io.apj.modules.masterData.service.WorkstationTypeNodeService;
-import io.apj.common.utils.PageUtils;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 工位类型节点
@@ -50,11 +47,12 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/listnodetype")
-	public ResponseEntity<Object> listNodeType(Integer id) {
+	@RequestMapping("/listnodetype/{id}")
+	public ResponseEntity<Object> listNodeType(@PathVariable Integer id) {
 		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
-		WorkstationTypeNodeEntity workstationTypeNodeEntityList= (WorkstationTypeNodeEntity) workstationTypeNodeService.selectList(entityWrapper);
+		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
+		WorkstationTypeNodeEntity workstationTypeNodeEntityList= workstationTypeNodeService.selectOne(entityWrapper);
 		int idP = workstationTypeNodeEntityList.getId();
 		return RD.ok(workstationTypeNodeService.listAllNodeType(idP)) ;
 
