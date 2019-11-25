@@ -54,13 +54,18 @@ public class ReportGroupController extends AbstractController {
 	@RequestMapping("/detail/{id}")
 	@RequiresPermissions("masterData:reportgroup:info")
 	public RD info(@PathVariable("id") Integer id) {
-		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
-
 		HashMap<Object, Object> data = new HashMap<>();
-		data.put("reportGroup", reportGroup);
-		data.put("reportEntities", reportEntities);
+		data.put("data",reportGroupService.reportGroupRelaList(id));
+
 		return RD.build().put("data", data);
+
+//		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
+//		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
+//
+//		HashMap<Object, Object> data = new HashMap<>();
+//		data.put("reportGroup", reportGroup);
+//		data.put("reportEntities", reportEntities);
+//		return RD.build().put("data", data);
 	}
 
 	/**
