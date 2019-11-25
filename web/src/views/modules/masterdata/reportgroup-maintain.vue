@@ -191,7 +191,7 @@ export default {
         fetchReportGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true
@@ -310,8 +310,8 @@ export default {
       this.$nextTick(() => {
         if (this.addReal) {
           let data = {
-            toolId: this.addreportgroupReportId,
-            modelId: this.id
+            reportId: this.addreportgroupReportId,
+            reportGroupId: this.id
           }
           createReportGroupReportRela(data).then(({code}) => {
             if (code === 200) {
