@@ -49,9 +49,9 @@ public class ReportGroupController extends AbstractController {
 	}
 
 	/**
-	 * 信息
+	 * 报表组详情下的报表
 	 */
-	@RequestMapping("/detail/{id}")
+	@RequestMapping("/detailreport/{id}")
 	@RequiresPermissions("masterData:reportgroup:info")
 	public RD info(@PathVariable("id") Integer id) {
 		HashMap<Object, Object> data = new HashMap<>();
@@ -66,6 +66,15 @@ public class ReportGroupController extends AbstractController {
 //		data.put("reportGroup", reportGroup);
 //		data.put("reportEntities", reportEntities);
 //		return RD.build().put("data", data);
+	}
+	/**
+	 * 报表组详情
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("masterData:reportgroup:info")
+	public RD infoReport(@PathVariable("id") Integer id) {
+		ReportGroupEntity reportGroupEntity= reportGroupService.selectById(id);
+		return RD.build().put("data", reportGroupEntity);
 	}
 
 	/**

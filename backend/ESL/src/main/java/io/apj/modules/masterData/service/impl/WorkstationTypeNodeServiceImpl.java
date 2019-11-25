@@ -44,7 +44,8 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
 	public ResponseEntity<JSONArray> listAllNodeType(Integer id) {
 		List data = workstationTypeNodeDao.findAll();
 		JSONArray array = new JSONArray();
-		TreeUtils.setNodeTypeTree(id, data, array);
+		TreeUtils.setNodeTypeTree(0, data, array);
+		System.out.println(array);
 		return ResponseEntity.ok(array);
 	}
 
