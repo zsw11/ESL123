@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.TotalDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.TotalEntity" id="totalMap">
+        <result property="id" column="id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="title" column="title"/>
+        <result property="sheetName" column="sheet_name"/>
+        <result property="modelId" column="model_id"/>
+        <result property="monthResult" column="month_result"/>
+        <result property="destinations" column="destinations"/>
+        <result property="cotegory" column="cotegory"/>
+        <result property="mecha" column="mecha"/>
+        <result property="rCode" column="r_code"/>
+        <result property="stRev" column="st_rev"/>
+        <result property="lstRev" column="lst_rev"/>
+        <result property="allowanceRate" column="allowance_rate"/>
+        <result property="comfirmBy" column="comfirm_by"/>
+        <result property="inChargeBy" column="in_charge_by"/>
+        <result property="type" column="type"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

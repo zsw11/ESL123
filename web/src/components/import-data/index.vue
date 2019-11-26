@@ -281,7 +281,7 @@ export default {
           })
         }
         p.then(response => {
-          if (response && response.code === 0) {
+          if (response && response.code === 200) {
             if (this.config.importSuccessCb) {
               this.config.importSuccessCb(response.data)
             }

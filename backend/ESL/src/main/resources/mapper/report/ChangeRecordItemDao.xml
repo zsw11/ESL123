@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.ChangeRecordItemDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.ChangeRecordItemEntity" id="changeRecordItemMap">
+        <result property="id" column="id"/>
+        <result property="reportChangeRecordId" column="report_change_record_id"/>
+        <result property="makedAt" column="maked_at"/>
+        <result property="revNo" column="rev_no"/>
+        <result property="processName" column="process_name"/>
+        <result property="content" column="content"/>
+        <result property="currentValue" column="current_value"/>
+        <result property="lastValue" column="last_value"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

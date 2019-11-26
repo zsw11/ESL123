@@ -67,12 +67,8 @@
         <span>{{ node.label }}</span>
         <span>
           <el-button
-            type="text"
-            size="mini"
-            @click="() => append(data)">
-          添加
-          </el-button>
-          <el-button
+            v-if=!flag
+            class="delete"
             type="text"
             size="mini"
             @click="() => remove(node, data)">
@@ -92,8 +88,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchWorkstationType, createWorkstationType, updateWorkstationType, listWorkstationType } from '@/api/workstationType'
-import { fetchTypeNode, createWorkstationTypeNode, listWorkstationTypeNode } from '@/api/workstationTypeNode'
-let id = 1000
+import { fetchTypeNode, createWorkstationTypeNode, listWorkstationTypeNode, deleteWorkstationTypeNode } from '@/api/workstationTypeNode'
 export default {
   name: 'editWorkstationType',
   data () {
@@ -106,48 +101,7 @@ export default {
       listWorkstationTypeNode,
       parentNode: null,
       addReal: false, // 新增页面显示
-      list: [
-        {id: 1, name: '节点1', parentId: null},
-        {id: 4, name: '节点2', parentId: 1},
-        {id: 7, name: '工位类型ddd', parentId: 1},
-        {id: 7, name: '工位类型ddd', parentId: 4}
-      ],
-      data: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        },
-        {
-          id: 8,
-          label: '二级 3-3'
-        }]
-      }],
+      data: [],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -190,7 +144,6 @@ export default {
   },
   created () {
     this.init()
-    // this.tree(this.list)
   },
   activated () {
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
@@ -263,18 +216,19 @@ export default {
       })
     },
     // 树的操作
-    append (data) {
-      const newChild = { id: id++, label: 'testtest', children: [] }
-      if (!data.children) {
-        this.$set(data, 'children', [])
-      }
-      data.children.push(newChild)
-    },
     remove (node, data) {
-      const parent = node.parent
-      const children = parent.data.children || parent.data
-      const index = children.findIndex(d => d.id === data.id)
-      children.splice(index, 1)
+      let arr = [data.id]
+      deleteWorkstationTypeNode(arr).then((code) => {
+        if (code) {
+          this.init()
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
     },
     // renderContent (h, { node, data, store }) {
     //   return (
@@ -289,8 +243,8 @@ export default {
     // 新增节点
     addNode () {
       let data = {
-        workstation_type_id: this.dataForm.id,
-        parent_id: this.addForm.parent,
+        workstationTypeId: this.dataForm.id,
+        parentId: this.addForm.parent,
         name: this.addForm.name,
         remark: this.addForm.remark
       }
@@ -369,5 +323,8 @@ export default {
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+  }
+  .delete{
+    color: orangered;
   }
 </style>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.StandardWorkItemDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.StandardWorkItemEntity" id="standardWorkItemMap">
+        <result property="id" column="id"/>
+        <result property="reportStandardWorkId" column="report_standard_work_id"/>
+        <result property="processNo" column="process_no"/>
+        <result property="processName" column="process_name"/>
+        <result property="firstTime" column="first_time"/>
+        <result property="secondTime" column="second_time"/>
+        <result property="thirdTime" column="third_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

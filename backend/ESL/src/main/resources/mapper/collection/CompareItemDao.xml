@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.collection.dao.CompareItemDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.collection.entity.CompareItemEntity" id="compareItemMap">
+        <result property="id" column="id"/>
+        <result property="collectionCompareId" column="collection_compare_id"/>
+        <result property="sub" column="sub"/>
+        <result property="workName" column="work_name"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="lastValue" column="last_value"/>
+        <result property="currentValue" column="current_value"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>
