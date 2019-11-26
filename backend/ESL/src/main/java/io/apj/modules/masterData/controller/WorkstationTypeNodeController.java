@@ -73,7 +73,7 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 信息
 	 */
 	@RequestMapping("/detail/{id}")
-	@RequiresPermissions("masterData:workstationtypenode:info")
+//	@RequiresPermissions("masterData:workstationtypenode:info")
 	public RD info(@PathVariable("id") Integer id) {
 		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
@@ -97,12 +97,12 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("masterData:workstationtypenode:update")
+//	@RequiresPermissions("masterData:workstationtypenode:update")
 	public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNodeService.updateById(workstationTypeNode);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -111,11 +111,11 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("masterData:workstationtypenode:delete")
+//	@RequiresPermissions("masterData:workstationtypenode:delete")
 	public RD delete(@RequestBody Integer[] ids) {
 		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }
