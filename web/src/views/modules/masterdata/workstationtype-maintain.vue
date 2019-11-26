@@ -217,7 +217,8 @@ export default {
     },
     // 树的操作
     remove (node, data) {
-      deleteWorkstationTypeNode(data.id).then((code) => {
+      let arr = [data.id]
+      deleteWorkstationTypeNode(arr).then((code) => {
         if (code) {
           this.init()
           this.$notify({
