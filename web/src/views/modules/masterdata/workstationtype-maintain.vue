@@ -28,14 +28,13 @@
     <el-card class="with-title">
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
-        <el-button  @click="dialogFormVisible = true" type="primary" style="float: right" v-if=!flag>新增</el-button>
-
-        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="dialogFormVisible">
+        <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
+        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="addReal">
           <el-form :mdoel="addForm">
           <el-row :gutter="10">
             <el-col :span="11">
               <el-form-item :label="'父工位'" prop="parent">
-                <el-input  v-model="addForm.parent"></el-input>
+                <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"  :allowEmpty="true"></keyword-search>
               </el-form-item>
             </el-col>
             <el-col :span="11" :offset="2">
@@ -53,8 +52,8 @@
             </el-row>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="">确 定</el-button>
+            <el-button @click="addReal = false">取 消</el-button>
+            <el-button type="primary" @click="addNode">确 定</el-button>
           </div>
         </el-dialog>
       </div>
@@ -93,7 +92,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchWorkstationType, createWorkstationType, updateWorkstationType, listWorkstationType } from '@/api/workstationType'
-import { fetchTypeNode } from '@/api/workstationTypeNode'
+import { fetchTypeNode, createWorkstationTypeNode, listWorkstationTypeNode } from '@/api/workstationTypeNode'
 let id = 1000
 export default {
   name: 'editWorkstationType',
@@ -104,8 +103,15 @@ export default {
         remark: null,
         parent: null
       },
+      listWorkstationTypeNode,
       parentNode: null,
-      dialogFormVisible: false,
+      addReal: false, // 新增页面显示
+      list: [
+        {id: 1, name: '节点1', parentId: null},
+        {id: 4, name: '节点2', parentId: 1},
+        {id: 7, name: '工位类型ddd', parentId: 1},
+        {id: 7, name: '工位类型ddd', parentId: 4}
+      ],
       data: [{
         id: 1,
         label: '一级 1',
@@ -136,9 +142,10 @@ export default {
         children: [{
           id: 7,
           label: '二级 3-1'
-        }, {
+        },
+        {
           id: 8,
-          label: '二级 3-2'
+          label: '二级 3-3'
         }]
       }],
       defaultProps: {
@@ -183,6 +190,7 @@ export default {
   },
   created () {
     this.init()
+    // this.tree(this.list)
   },
   activated () {
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
@@ -215,8 +223,8 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchTypeNode(this.dataForm.id).then((data) => {
-          console.log(data, 11111111111111111)
+        fetchTypeNode(this.dataForm.id).then((page) => {
+          this.tree(page.data)
         })
         fetchWorkstationType(this.dataForm.id).then(({data}) => {
           Object.assign(
@@ -267,7 +275,7 @@ export default {
       const children = parent.data.children || parent.data
       const index = children.findIndex(d => d.id === data.id)
       children.splice(index, 1)
-    }
+    },
     // renderContent (h, { node, data, store }) {
     //   return (
     //     `<span class="custom-tree-node">
@@ -278,6 +286,56 @@ export default {
     //   </span>
     //   </span>`)
     // }
+    // 新增节点
+    addNode () {
+      let data = {
+        workstation_type_id: this.dataForm.id,
+        parent_id: this.addForm.parent,
+        name: this.addForm.name,
+        remark: this.addForm.remark
+      }
+      createWorkstationTypeNode(data).then((code) => {
+        if (code) {
+          this.addReal = false
+          this.init()
+          this.$notify({
+            title: '成功',
+            message: '添加关系成功',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
+    // 处理树的数据
+    tree (list) {
+      let data = JSON.parse(JSON.stringify(list).replace(/name/g, 'label'))
+      let id = []
+      let parents = []
+      data.forEach((item) => {
+        id.push(item.id)
+      })
+      data.forEach((item) => {
+        if (!(id.includes(item.parentId))) {
+          parents.push(item)
+        }
+      })
+      let children = data.filter(value => value.parentId !== 'undefined' && value.parentId != null)
+      let translator = (parents, children) => {
+        parents.forEach((parent) => {
+          children.forEach((child, index) => {
+            if (child.parentId === parent.id) {
+              let temp = JSON.parse(JSON.stringify(children))
+              temp.splice(index, 1)
+              translator([child], temp)
+              typeof parent.children !== 'undefined' ? parent.children.push(child) : parent.children = [child]
+            }
+          })
+        })
+      }
+      translator(parents, children)
+      this.data = parents
+    }
   }
 }
 </script>
