@@ -11,15 +11,15 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel" labelColunt="code" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
+          <el-input  v-model="listQuery.code"></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true"></keyword-search>
+          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true" clearable></keyword-search>
 
         </el-form-item>
 
@@ -42,7 +42,7 @@
 <!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog title="新增治工具机种关系" width="400px" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left:10px;" v-model="addToolModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            机种<keyword-search  style="margin-left:10px;" v-model="addToolModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="toolModel">确 定</el-button>

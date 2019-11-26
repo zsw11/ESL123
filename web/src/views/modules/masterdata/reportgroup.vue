@@ -12,7 +12,7 @@
 
         <el-form-item :label="'报表'" prop="remark" >
 <!--          <el-input v-model="listQuery.remark" clearable></el-input>-->
-          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">

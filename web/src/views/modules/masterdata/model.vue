@@ -11,11 +11,11 @@
         </el-form-item>
 
         <el-form-item  :label="'部门'" prop="deptId" >
-          <keyword-search style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+          <keyword-search style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item  :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true"></keyword-search>
+          <keyword-search style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item  :label="'型号'" prop="code" >

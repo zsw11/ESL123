@@ -8,12 +8,12 @@
 
 
         <el-form-item :label="'机种系列名称'" prop="name" >
-          <el-input v-model="listQuery.name" style="width: 250px" clearable></el-input>
+          <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="remark" >
 <!--          <el-input v-model="listQuery.remark" style="width: 250px" clearable></el-input>-->
-          <keyword-search style="width: 250px" v-model="listQuery.name" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+          <keyword-search v-model="listQuery.name" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">

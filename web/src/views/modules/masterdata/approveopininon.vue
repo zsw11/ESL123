@@ -11,7 +11,7 @@
         </el-form-item>
 
         <el-form-item :label="'审批状态'" prop="approveOperation">
-          <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true"></dict-select>
+          <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true" clearable></dict-select>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">

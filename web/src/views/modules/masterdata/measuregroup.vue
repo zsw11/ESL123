@@ -14,7 +14,7 @@
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
 <!--          <el-input v-model="listQuery.deptId"  clearable></el-input>-->
-          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
 
