@@ -38,9 +38,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		entityWrapper.isNull("delete_at")
 				.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"))
 				.eq(params.get("deptId") != null && params.get("deptId") != "", "dept_id",
-						(String) params.get("deptId"))
+						params.get("deptId"))
 				.eq(params.get("modelSeriesId") != null && params.get("modelSeriesId") != "", "model_series_id",
-						(String) params.get("modelSeriesId"));
+						params.get("modelSeriesId"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
 			String name = (String) params.get("keyWord");
 			name = name.replace(",", "");

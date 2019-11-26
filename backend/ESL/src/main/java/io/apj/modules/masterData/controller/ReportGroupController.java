@@ -49,18 +49,32 @@ public class ReportGroupController extends AbstractController {
 	}
 
 	/**
-	 * 信息
+	 * 报表组详情下的报表
+	 */
+	@RequestMapping("/detailreport/{id}")
+	@RequiresPermissions("masterData:reportgroup:info")
+	public RD info(@PathVariable("id") Integer id) {
+		HashMap<Object, Object> data = new HashMap<>();
+		data.put("data",reportGroupService.reportGroupRelaList(id));
+
+		return RD.build().put("data", data);
+
+//		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
+//		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
+//
+//		HashMap<Object, Object> data = new HashMap<>();
+//		data.put("reportGroup", reportGroup);
+//		data.put("reportEntities", reportEntities);
+//		return RD.build().put("data", data);
+	}
+	/**
+	 * 报表组详情
 	 */
 	@RequestMapping("/detail/{id}")
 	@RequiresPermissions("masterData:reportgroup:info")
-	public RD info(@PathVariable("id") Integer id) {
-		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
-
-		HashMap<Object, Object> data = new HashMap<>();
-		data.put("reportGroup", reportGroup);
-		data.put("reportEntities", reportEntities);
-		return RD.build().put("data", data);
+	public RD infoReport(@PathVariable("id") Integer id) {
+		ReportGroupEntity reportGroupEntity= reportGroupService.selectById(id);
+		return RD.build().put("data", reportGroupEntity);
 	}
 
 	/**
@@ -73,7 +87,7 @@ public class ReportGroupController extends AbstractController {
 		reportGroup.setCreateBy(getUserId().intValue());
 		reportGroupService.insert(reportGroup);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -85,7 +99,7 @@ public class ReportGroupController extends AbstractController {
 		reportGroup.setPinyin(PinyinUtil.getPinYin(reportGroup.getName()));
 		reportGroupService.updateById(reportGroup);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -112,7 +126,7 @@ public class ReportGroupController extends AbstractController {
 
 		reportGroupService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }

@@ -90,7 +90,7 @@ public class ModelSeriesController extends AbstractController {
 		modelSeries.setPinyin(PinyinUtil.getPinYin(modelSeries.getName()));
 		modelSeriesService.insert(modelSeries);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class ModelSeriesController extends AbstractController {
 	public RD update(@RequestBody ModelSeriesEntity modelSeries) {
 		modelSeriesService.updateById(modelSeries);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class ModelSeriesController extends AbstractController {
 	public RD delete(@RequestBody Integer[] ids) {
 		modelSeriesService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class ModelSeriesController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException("批量导入失败", 500);
 		}
-		return RD.build().put("code", 0);
+		return RD.build().put("code", 200);
 	}
 
 }

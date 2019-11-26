@@ -76,7 +76,7 @@ public class ModelPartRelaController extends AbstractController {
 		modelPartRelaService.updateById(modelPartRela);
 		insertTableReference("model", modelPartRela.getModelId().longValue(), "part",
 				modelPartRela.getPartId().longValue(), true);
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class OpertaionGroupController extends AbstractController {
     public RD save(@RequestBody OpertaionGroupEntity opertaionGroup){
 		opertaionGroupService.insert(opertaionGroup);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -75,7 +75,7 @@ public class OpertaionGroupController extends AbstractController {
     public RD update(@RequestBody OpertaionGroupEntity opertaionGroup){
 		opertaionGroupService.updateById(opertaionGroup);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -87,7 +87,7 @@ public class OpertaionGroupController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
 		opertaionGroupService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
 }

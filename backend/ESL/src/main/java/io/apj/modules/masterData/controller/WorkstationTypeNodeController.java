@@ -1,24 +1,19 @@
 package io.apj.modules.masterData.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSONArray;
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
-import io.apj.modules.sys.controller.AbstractController;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
-import io.apj.common.utils.PageUtils;
+import io.apj.modules.sys.controller.AbstractController;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 /**
  * 工位类型节点
@@ -39,28 +34,46 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("masterData:workstationtypenode:list")
+//	@RequiresPermissions("masterData:workstationtypenode:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = workstationTypeNodeService.queryPage(params);
 		return RD.ok(page);
 	}
 
+//	/**
+//	 * nodeType列表
+//	 * @return
+//	 */
+//	@RequestMapping("/listnodetype/{id}")
+//	public ResponseEntity<Object> listNodeType(@PathVariable Integer id) {
+//		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+//		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
+//		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
+//		for(WorkstationTypeNodeEntity item :workstationTypeEntityList ){
+//			ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(item.getParentId());
+//			return RD.ok(data);
+//		}
+//		return null ;
+//
+//	}
+
 	/**
 	 * nodeType列表
-	 * 
 	 * @return
 	 */
-	@RequestMapping("/listNodeType")
-	public ResponseEntity<JSONArray> listNodeType() {
-		return workstationTypeNodeService.listAllNodeType();
-
+	@RequestMapping("/listnodetype/{id}")
+	public RD listNodeType(@PathVariable Integer id) {
+		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = workstationTypeNodeService.selectList(entityWrapper);
+		return RD.build().put("data",workstationTypeNodeEntities);
 	}
 
 	/**
 	 * 信息
 	 */
 	@RequestMapping("/detail/{id}")
-	@RequiresPermissions("masterData:workstationtypenode:info")
+//	@RequiresPermissions("masterData:workstationtypenode:info")
 	public RD info(@PathVariable("id") Integer id) {
 		WorkstationTypeNodeEntity workstationTypeNode = workstationTypeNodeService.selectById(id);
 
@@ -71,25 +84,25 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 保存
 	 */
 	@RequestMapping("/create")
-	@RequiresPermissions("masterData:workstationtypenode:create")
+//	@RequiresPermissions("masterData:workstationtypenode:create")
 	public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNode.setCreateBy(getUserId().intValue());
 		workstationTypeNodeService.insert(workstationTypeNode);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("masterData:workstationtypenode:update")
+//	@RequiresPermissions("masterData:workstationtypenode:update")
 	public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNodeService.updateById(workstationTypeNode);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -98,11 +111,11 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("masterData:workstationtypenode:delete")
+//	@RequiresPermissions("masterData:workstationtypenode:delete")
 	public RD delete(@RequestBody Integer[] ids) {
 		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 }

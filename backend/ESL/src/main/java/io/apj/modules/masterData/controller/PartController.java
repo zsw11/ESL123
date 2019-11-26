@@ -99,7 +99,7 @@ public class PartController extends AbstractController {
 		part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class PartController extends AbstractController {
 		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
 		partService.updateById(part);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class PartController extends AbstractController {
 		}
 		partService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class PartController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException("批量导入失败", 500);
 		}
-		return RD.build().put("code", 0);
+		return RD.build().put("code", 200);
 	}
 
 }

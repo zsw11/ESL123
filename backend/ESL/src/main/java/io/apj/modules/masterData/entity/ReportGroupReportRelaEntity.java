@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -32,7 +33,11 @@ public class ReportGroupReportRelaEntity implements Serializable {
 	 * 报表ID
 	 */
 	private Integer reportId;
-
+	/**
+	 * 报表
+	 */
+	@TableField(exist = false)
+	private ReportEntity reportEntity;
 	/**
 	 * 创建者ID
 	 */

@@ -20,7 +20,14 @@
       <div slot="header" class="clearfix">
         <div class="card-title">治工具信息</div>
         <div class="buttons">
-          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button  @click="addReal=true" type="primary" >新增</el-button>
+          <el-dialog title="新增机种治工具关系" width="400px" :visible.sync="addReal">
+            治工具<keyword-search  style="margin-left:10px;" v-model="addModelToolId" :allowMultiple="true" :searchApi="this.listTool"  :allowEmpty="true"></keyword-search>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="addReal = false">取 消</el-button>
+              <el-button type="primary" @click="modelTool">确 定</el-button>
+            </div>
+          </el-dialog>
           <export-data
             :config="exportConfig"
             type="primary"
@@ -47,20 +54,20 @@
 
         <el-table-column align="center" prop="name" label="治工具名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.toolEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <span v-if="scope.row.common">是</span>
-            <span v-if="!scope.row.common">否</span>
+            <span v-if="scope.row.toolEntity.common">是</span>
+            <span v-if="!scope.row.toolEntity.common">否</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
+            <span>{{scope.row.toolEntity.remark }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
@@ -88,11 +95,13 @@
 </template>
 
 <script>
-  import { listTool, deleteTool, toolImport, toolExport } from '@/api/tool'
+  import { listTool, toolImport, toolExport } from '@/api/tool'
   import { filterAttributes } from '@/utils'
   import { cloneDeep } from 'lodash'
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
+  import { createModelToolRela, deleteModelToolRela } from '@/api/modelToolRela'
+  import { fetchModelTool } from '@/api/model'
 
   const defaultExport = ['tool.name', 'tool.common', 'tool.remark']
 
@@ -104,15 +113,17 @@
     },
     data () {
       return {
+        addModelToolId: null, // 治工具id
+        addReal: false, // 新增页面显示
+        id: null, // 机种id
         title: null,
-        id: null,
         dataButton: 'list',
         listQuery: {
           name: null,
           common: null,
           remark: null
         },
-
+        listTool,
         dataList: [],
         pageNo: 1,
         pageSize: 10,
@@ -185,10 +196,11 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        listTool(Object.assign(
+        fetchModelTool(Object.assign(
           {
             page: this.pageNo,
-            limit: this.pageSize
+            limit: this.pageSize,
+            id: this.id
           },
           this.listQuery
         )).then(({page}) => {
@@ -261,7 +273,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteTool(ids).then(() => {
+          deleteModelToolRela(ids).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -270,6 +282,29 @@
             })
             this.getDataList()
           })
+        })
+      },
+      // 新增机种治工具关系
+      modelTool () {
+        this.$nextTick(() => {
+          if (this.addReal) {
+            let data = {
+              toolId: this.addModelToolId,
+              modelId: this.id
+            }
+            createModelToolRela(data).then(({code}) => {
+              if (code === 200) {
+                this.addReal = false
+                this.getDataList()
+                this.$notify({
+                  title: '成功',
+                  message: '添加关系成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
+            })
+          }
         })
       }
     }

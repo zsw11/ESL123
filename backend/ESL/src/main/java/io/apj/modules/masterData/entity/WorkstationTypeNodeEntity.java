@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -39,6 +40,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private Integer workstationId;
 	/**
+	 * 工位类型ID
+	 */
+	private Integer workstationTypeId;
+	/**
 	 * 备注
 	 */
 	private String remark;
@@ -68,14 +73,7 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
-	public List<WorkstationTypeNodeEntity> getChild() {
-		return child;
-	}
-
-	public void setChild(List<WorkstationTypeNodeEntity> child) {
-		this.child = child;
-	}
-
+	@TableField(exist = false)
 	private List<WorkstationTypeNodeEntity> child;
 
 }

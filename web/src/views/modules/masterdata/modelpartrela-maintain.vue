@@ -190,6 +190,7 @@
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
           fetchModel(this.dataForm.id).then(({data}) => {
+            console.log(data, 111111111111111)
             Object.assign(
               this.dataForm,
               pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])

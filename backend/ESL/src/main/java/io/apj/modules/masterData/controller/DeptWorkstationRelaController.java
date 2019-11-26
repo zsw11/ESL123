@@ -66,7 +66,7 @@ public class DeptWorkstationRelaController extends AbstractController {
 		deptWorkstationRelaService.insert(deptWorkstationRela);
         insertTableReference("dept", deptWorkstationRela.getDeptId().longValue(), "workstation", deptWorkstationRela.getWorkstationId().longValue(), false);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -79,7 +79,7 @@ public class DeptWorkstationRelaController extends AbstractController {
         insertTableReference("dept", deptWorkstationRela.getDeptId().longValue(), "workstation", deptWorkstationRela.getWorkstationId().longValue(), true);
 
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -91,7 +91,7 @@ public class DeptWorkstationRelaController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
 		deptWorkstationRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
 }

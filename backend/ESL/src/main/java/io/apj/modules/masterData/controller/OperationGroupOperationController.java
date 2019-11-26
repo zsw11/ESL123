@@ -71,7 +71,7 @@ public class OperationGroupOperationController extends AbstractController {
 		operationGroupOperation.setPinyin(PinyinUtil.getPinYin(operationGroupOperation.getOperation()));
 		operationGroupOperationService.insert(operationGroupOperation);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class OperationGroupOperationController extends AbstractController {
 		operationGroupOperation.setPinyin(PinyinUtil.getPinYin(operationGroupOperation.getOperation()));
 		operationGroupOperationService.updateById(operationGroupOperation);
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class OperationGroupOperationController extends AbstractController {
 	public RD delete(@RequestBody Integer[] ids) {
 		operationGroupOperationService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build();
+		return RD.build().put("code", 200);
 	}
 
 	/**

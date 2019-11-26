@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -21,31 +22,34 @@ import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 
 @Service("workstationTypeNodeService")
 public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeNodeDao, WorkstationTypeNodeEntity>
-		implements WorkstationTypeNodeService {
-	@Autowired
-	private WorkstationTypeNodeDao workstationTypeNodeDao;
+        implements WorkstationTypeNodeService {
+    @Autowired
+    private WorkstationTypeNodeDao workstationTypeNodeDao;
 
-	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").like(params.get("remark") != null && params.get("remark") != "", "remark",
-				(String) params.get("remark"));
-		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
-			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
-		}
-		Page<WorkstationTypeNodeEntity> page = this.selectPage(new Query<WorkstationTypeNodeEntity>(params).getPage(),
-				entityWrapper);
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("remark") != null && params.get("remark") != "", "remark",
+                        (String) params.get("remark"))
+                .like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
+                        (String) params.get("keyWord"));
+        if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
+            entityWrapper.andNew(
+                    "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+        }
+        Page<WorkstationTypeNodeEntity> page = this.selectPage(new Query<WorkstationTypeNodeEntity>(params).getPage(),
+                entityWrapper);
 
-		return new PageUtils(page);
-	}
+        return new PageUtils(page);
+    }
 
-	@Override
-	public ResponseEntity<JSONArray> listAllNodeType() {
-		List data = workstationTypeNodeDao.findAll();
-		JSONArray array = new JSONArray();
-		TreeUtils.setNodeTypeTree(0, data, array);
-		return ResponseEntity.ok(array);
-	}
+    @Override
+    public ResponseEntity<JSONArray> listAllNodeType(Integer id) {
+        List data = workstationTypeNodeDao.findAll();
+        JSONArray array = new JSONArray();
+        TreeUtils.setNodeTypeTree(id, data, array);
+        return ResponseEntity.ok(array);
+    }
 
 }

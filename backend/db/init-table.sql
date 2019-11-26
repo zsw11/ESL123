@@ -880,6 +880,7 @@ CREATE TABLE workstation_type_node (
   name varchar(64),
   pinyin varchar(128),
   workstation_id integer,
+  workstation_type_id integer,
   remark varchar(512),
   parent_id integer,
   create_by integer,
@@ -893,6 +894,7 @@ Create Unique Index index_workstation_type_node_name_UNQ On workstation_type_nod
 comment on column workstation_type_node.name is '名称';
 comment on column workstation_type_node.pinyin is '拼音';
 comment on column workstation_type_node.workstation_id is '工位ID';
+comment on column workstation_type_node.workstation_type_id is '工位类型ID';
 comment on column workstation_type_node.parent_id is '父节点ID';
 comment on column workstation_type_node.remark is '备注';
 comment on column workstation_type_node.create_by is '创建者ID';

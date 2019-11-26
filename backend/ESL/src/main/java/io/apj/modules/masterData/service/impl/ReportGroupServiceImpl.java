@@ -1,8 +1,11 @@
 package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
+import io.apj.modules.masterData.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
         implements ReportGroupService {
     @Autowired
     private ReportGroupReportRelaService reportGroupReportRelaService;
+    @Autowired
+    private  ReportService reportService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -47,5 +52,16 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
 		}
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<ReportGroupReportRelaEntity> reportGroupRelaList(Integer id) {
+        EntityWrapper<ReportGroupReportRelaEntity> reportRelaEntityEntityWrapper = new EntityWrapper<ReportGroupReportRelaEntity>();
+        reportRelaEntityEntityWrapper.eq("report_group_id", id).isNull("delete_at");
+        List<ReportGroupReportRelaEntity>  data = reportGroupReportRelaService.selectList(reportRelaEntityEntityWrapper);
+        for(ReportGroupReportRelaEntity item : data){
+            item.setReportEntity(reportService.selectById(item.getReportId()));
+        }
+        return data;
     }
 }

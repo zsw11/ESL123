@@ -66,7 +66,7 @@ public class DeptActionRelaController extends AbstractController {
 		deptActionRelaService.insert(deptActionRela);
         insertTableReference("dept", deptActionRela.getDeptId().longValue(), "action", deptActionRela.getActionId().longValue(), false);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -78,7 +78,7 @@ public class DeptActionRelaController extends AbstractController {
 		deptActionRelaService.updateById(deptActionRela);
         insertTableReference("dept", deptActionRela.getDeptId().longValue(), "action", deptActionRela.getActionId().longValue(), true);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -90,7 +90,7 @@ public class DeptActionRelaController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
 		deptActionRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
 }

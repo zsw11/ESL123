@@ -65,7 +65,7 @@ public class ModelToolRelaController extends AbstractController {
 		modelToolRelaService.insert(modelToolRela);
         insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), false);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ModelToolRelaController extends AbstractController {
 		modelToolRelaService.updateById(modelToolRela);
         insertTableReference("model", modelToolRela.getModelId().longValue(), "part", modelToolRela.getToolId().longValue(), true);
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
     /**
@@ -89,7 +89,7 @@ public class ModelToolRelaController extends AbstractController {
     public RD delete(@RequestBody Integer[] ids){
 		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build();
+        return RD.build().put("code", 200);
     }
 
 }
