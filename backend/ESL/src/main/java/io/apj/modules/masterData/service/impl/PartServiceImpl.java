@@ -6,14 +6,19 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.PartDao;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.ModelPartRelaService;
+import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PartService;
+import io.apj.modules.sys.service.SysDeptService;
+import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("partService")
@@ -22,6 +27,10 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 	private ModelPartRelaService modelPartRelaService;
 	@Autowired
 	private ModelService modelService;
+	@Autowired
+	private ModelSeriesService modelSeriesService;
+	@Autowired
+	private SysDeptService deptService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -45,6 +54,10 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 				.selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
 		for (ModelPartRelaEntity item : page.getRecords()) {
 			item.setModelEntity(modelService.selectById(item.getModelId()));
+			int modelSeriesId =  modelService.selectById(item.getModelId()).getModelSeriesId();
+			item.setModelSeriesEntity(modelSeriesService.selectById(modelSeriesId));
+			item.setDeptName(deptService.selectById(modelService.selectById(item.getModelId()).getDeptId()).getName());
+
 		}
 		return new PageUtils(page);
 	}

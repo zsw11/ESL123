@@ -40,6 +40,16 @@ public class ModelPartRelaEntity implements Serializable {
 	@TableField(exist = false)
 	private PartEntity partEntity;
 	/**
+	 * 机种系列对象
+	 */
+	@TableField(exist = false)
+	private ModelSeriesEntity modelSeriesEntity;
+	/**
+	 * 部门名称
+	 */
+	@TableField(exist = false)
+	private String deptName;
+	/**
 	 * 部品ID
 	 */
 	private Integer partId;
