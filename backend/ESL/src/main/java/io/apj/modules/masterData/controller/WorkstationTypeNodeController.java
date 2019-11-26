@@ -1,7 +1,6 @@
 package io.apj.modules.masterData.controller;
 
 import cn.hutool.core.util.PinyinUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
@@ -34,27 +33,38 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("masterData:workstationtypenode:list")
+//	@RequiresPermissions("masterData:workstationtypenode:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = workstationTypeNodeService.queryPage(params);
 		return RD.ok(page);
 	}
+
+//	/**
+//	 * nodeType列表
+//	 * @return
+//	 */
+//	@RequestMapping("/listnodetype/{id}")
+//	public ResponseEntity<Object> listNodeType(@PathVariable Integer id) {
+//		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+//		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
+//		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
+//		for(WorkstationTypeNodeEntity item :workstationTypeEntityList ){
+//			ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(item.getParentId());
+//			return RD.ok(data);
+//		}
+//		return null ;
+//
+//	}
 
 	/**
 	 * nodeType列表
 	 * @return
 	 */
 	@RequestMapping("/listnodetype/{id}")
-	public ResponseEntity<Object> listNodeType(@PathVariable Integer id) {
+	public RD listNodeType(@PathVariable Integer id) {
 		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
-		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
-		for(WorkstationTypeNodeEntity item :workstationTypeEntityList ){
-			ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(item.getParentId());
-			return RD.ok(data);
-		}
-		return null ;
-
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = workstationTypeNodeService.selectList(entityWrapper.isNull("delete_at"));
+		return RD.build().put("data",workstationTypeNodeEntities);
 	}
 
 	/**

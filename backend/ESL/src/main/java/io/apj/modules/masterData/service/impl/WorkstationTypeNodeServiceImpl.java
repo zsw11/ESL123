@@ -28,8 +28,11 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").like(params.get("remark") != null && params.get("remark") != "", "remark",
-				(String) params.get("remark"));
+		entityWrapper.isNull("delete_at")
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+				(String) params.get("remark"))
+		.like(params.get("keyWord") != null && params.get("keyWord") != "", "parent_id",
+				(String) params.get("keyWord"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
