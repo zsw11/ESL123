@@ -9,6 +9,7 @@
       ref="workbookTable"
       align="center"
       height="100%"
+      :auto-resize="true"
       :data="tableData"
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
