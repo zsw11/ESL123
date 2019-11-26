@@ -12,12 +12,13 @@
         </el-select>
       </div>
       <div class="workbook-buttons">
-        <el-button type="primary" size="mini">F2 手顺组合</el-button>
+        <el-button type="primary" size="mini" @click="addStandardBook">增加标准书</el-button>
+        <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
         <el-button type="primary">F4 复制到最后</el-button>
         <el-button type="primary">F7 复制</el-button>
-        <el-button type="primary">F9 粘贴</el-button>
+        <el-button type="primary">F9 粘贴</el-button> -->
       </div>
-      <workbook-table ref="alyTable" :count="this.count"></workbook-table>
+      <workbook-table ref="workbookTable" :count="this.count"></workbook-table>
       <div class="workbook-switch">
         <el-tabs
           type="border-card"
@@ -63,10 +64,15 @@
         this.size = (this.size + 1) % 3
       },
       handleClick (tab) {
-        this.$refs.alyTable.toggle(tab.index)
+        this.$refs.workbookTable.toggle(tab.index)
       },
       cache () {
-        this.$refs.alyTable.cache()
+        this.$refs.workbookTable.cache()
+      },
+      addStandardBook () {
+        if (this.$refs.workbookTable) {
+          this.$refs.workbookTable.addStandardBook()
+        }
       }
     }
   }

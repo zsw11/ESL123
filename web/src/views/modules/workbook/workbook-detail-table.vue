@@ -17,9 +17,9 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-      <vxe-table-column type="checkbox" width="60" ></vxe-table-column>
+      <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
-      <vxe-table-column field="H" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" min-width="120"></operation-column>
       <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
@@ -31,6 +31,24 @@
       <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-grid>
+
+    <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible">
+      <el-form
+        ref="standardBookForm"
+        :model="standardBookDialog.formData"
+        :rules="standardBookDialog.rules">
+        <el-form-item label="标准书名称" prop="name" :label-width="'100px'">
+          <el-input v-model="standardBookDialog.formData.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="标准书编号" prop="code" :label-width="'100px'">
+          <el-input v-model="standardBookDialog.formData.code" autocomplete="off"></el-input>
+        </el-form-item>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="doAddStandardBook()">确定</el-button>
+          <el-button @click="standardBookDialog.visible=false">取消</el-button>
+        </span>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -56,7 +74,19 @@ export default {
       id: 0,                            // 当前工位分析表的索引
       len: 10,
       WMethod: '',
-      add: true
+      add: true,
+      standardBookDialog: {
+        visible: false,
+        formData: {
+          name: null,
+          code: null
+        },
+        rules: {
+          name: [
+            { required: true, message: '请填写标准书名称', trigger: 'blur' }
+          ]
+        }
+      }
     }
   },
   created () {
@@ -85,6 +115,34 @@ export default {
           return
         }
       }
+    },
+    // 添加标准书
+    async addStandardBook () {
+      this.standardBookDialog.visible = true
+      await this.$refs.workbookTable.clearActived()
+      await this.$refs.workbookTable.clearSelected()
+      Object.assign(this.standardBookDialog.formData, {
+        name: null,
+        code: null
+      })
+    },
+    async doAddStandardBook () {
+      this.$refs.standardBookForm.validate(async (valid) => {
+        if (!valid) return
+        const row = this.tableData[this.tableData.length - 1]
+        let newRow = await this.$refs.workbookTable.insertAt({
+          operation: this.standardBookDialog.formData.name
+        }, row)
+        newRow.row.type = 'n' // standardName
+        if (this.standardBookDialog.formData.code) {
+          newRow = await this.$refs.workbookTable.insertAt({
+            operation: this.standardBookDialog.formData.code
+          }, row)
+          newRow.row.type = 'c' // standaradCode
+        }
+        await this.$refs.workbookTable.setActiveCell(row, 'version')
+        this.standardBookDialog.visible = false
+      })
     },
     selctMeasureGroup (mg, row) {
       Object.assign(
