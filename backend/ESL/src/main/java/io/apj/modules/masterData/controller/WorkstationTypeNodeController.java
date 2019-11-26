@@ -8,6 +8,7 @@ import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,8 @@ public class WorkstationTypeNodeController extends AbstractController {
 	@RequestMapping("/listnodetype/{id}")
 	public RD listNodeType(@PathVariable Integer id) {
 		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
-		List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = workstationTypeNodeService.selectList(entityWrapper.isNull("delete_at"));
+		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = workstationTypeNodeService.selectList(entityWrapper);
 		return RD.build().put("data",workstationTypeNodeEntities);
 	}
 
