@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 工位类型节点
@@ -51,9 +49,11 @@ public class WorkstationTypeNodeController extends AbstractController {
 		EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("workstation_type_id", id).isNull("delete_at");
 		List<WorkstationTypeNodeEntity> workstationTypeEntityList= workstationTypeNodeService.selectList(entityWrapper);
-		WorkstationTypeNodeEntity workstationTypeNodeEntityList= workstationTypeNodeService.selectOne(entityWrapper);
-		int idP = workstationTypeNodeEntityList.getId();
-		return RD.ok(workstationTypeNodeService.listAllNodeType(idP)) ;
+		for(WorkstationTypeNodeEntity item :workstationTypeEntityList ){
+			ResponseEntity<JSONArray> data = workstationTypeNodeService.listAllNodeType(item.getParentId());
+			return RD.ok(data);
+		}
+		return null ;
 
 	}
 
