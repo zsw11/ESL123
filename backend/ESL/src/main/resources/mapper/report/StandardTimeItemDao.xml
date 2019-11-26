@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.StandardTimeItemDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.StandardTimeItemEntity" id="standardTimeItemMap">
+        <result property="id" column="id"/>
+        <result property="reportStandardTimeId" column="report_standard_time_id"/>
+        <result property="processNo" column="process_no"/>
+        <result property="processName" column="process_name"/>
+        <result property="mostHt" column="most_ht"/>
+        <result property="mostMt" column="most_mt"/>
+        <result property="mostMh" column="most_mh"/>
+        <result property="timeTotal" column="time_total"/>
+        <result property="timeSample1" column="time_sample1"/>
+        <result property="timeSampleSize" column="time_sample_size"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

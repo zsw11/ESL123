@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.TotalItemDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.TotalItemEntity" id="totalItemMap">
+        <result property="id" column="id"/>
+        <result property="reportTotalId" column="report_total_id"/>
+        <result property="workName" column="work_name"/>
+        <result property="process" column="process"/>
+        <result property="assemblyLayoutRev" column="assembly_layout_rev"/>
+        <result property="assemblyWorkExecutionFirm" column="assembly_work_execution_firm"/>
+        <result property="mostStHt" column="most_st_ht"/>
+        <result property="mostStMt" column="most_st_mt"/>
+        <result property="mostLstHt" column="most_lst_ht"/>
+        <result property="mostLstMt" column="most_lst_mt"/>
+        <result property="stComplement" column="st_complement"/>
+        <result property="stSampling" column="st_sampling"/>
+        <result property="stSamplingSize" column="st_sampling_size"/>
+        <result property="stSec" column="st_sec"/>
+        <result property="lstComplement" column="lst_complement"/>
+        <result property="lstSampling" column="lst_sampling"/>
+        <result property="lstSamplingSize" column="lst_sampling_size"/>
+        <result property="lstMostValueUse" column="lst_most_value_use"/>
+        <result property="lstSec" column="lst_sec"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

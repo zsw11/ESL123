@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.collection.dao.CompareDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.collection.entity.CompareEntity" id="compareMap">
+        <result property="id" column="id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="title" column="title"/>
+        <result property="sheetName" column="sheet_name"/>
+        <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="destinations" column="destinations"/>
+        <result property="comfirmBy" column="comfirm_by"/>
+        <result property="inChargeBy" column="in_charge_by"/>
+        <result property="firstColumnName" column="first_column_name"/>
+        <result property="lastVersionName" column="last_version_name"/>
+        <result property="currentVersionName" column="current_version_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>

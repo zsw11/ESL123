@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.TimeContactDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.TimeContactEntity" id="timeContactMap">
+        <result property="id" column="id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="title" column="title"/>
+        <result property="sheetName" column="sheet_name"/>
+        <result property="comfirmBy" column="comfirm_by"/>
+        <result property="inChargeBy" column="in_charge_by"/>
+        <result property="modelId" column="model_id"/>
+        <result property="stage" column="stage"/>
+        <result property="publishType" column="publish_type"/>
+        <result property="reviseReason" column="revise_reason"/>
+        <result property="stType" column="st_type"/>
+        <result property="revNo" column="rev_no"/>
+        <result property="allCountSub" column="all_count_sub"/>
+        <result property="allCountMain" column="all_count_main"/>
+        <result property="allCountPrinting" column="all_count_printing"/>
+        <result property="allCountExternalInspection" column="all_count_external_inspection"/>
+        <result property="allCountPacking" column="all_count_packing"/>
+        <result property="towingLastVersionSub" column="towing_last_version_sub"/>
+        <result property="towingLastVersionMain" column="towing_last_version_main"/>
+        <result property="towingLastVersionPrinting" column="towing_last_version_printing"/>
+        <result property="towingLastVersionExternalInspection" column="towing_last_version_external_inspection"/>
+        <result property="towingLastVersionPacking" column="towing_last_version_packing"/>
+        <result property="operationStandardNo" column="operation_standard_no"/>
+        <result property="operationInstruction" column="operation_instruction"/>
+        <result property="exceptionOperation" column="exception_operation"/>
+        <result property="remarkVersionCopmare" column="remark_version_copmare"/>
+        <result property="remarkSub" column="remark_sub"/>
+        <result property="remarkMain" column="remark_main"/>
+        <result property="remarkPrinting" column="remark_printing"/>
+        <result property="remarkExternalInspection" column="remark_external_inspection"/>
+        <result property="remarkPacking" column="remark_packing"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>
