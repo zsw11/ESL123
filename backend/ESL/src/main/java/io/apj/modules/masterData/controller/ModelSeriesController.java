@@ -177,7 +177,7 @@ public class ModelSeriesController extends AbstractController {
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-                if (keyStrs[0].equals("model")) {
+                if (keyStrs[0].equals("modelSeries")) {
                     if (keyStrs[1].equals("common")) {
                         if(value.equals("是")) {
                             deviceMap.put(keyStrs[1], true);
