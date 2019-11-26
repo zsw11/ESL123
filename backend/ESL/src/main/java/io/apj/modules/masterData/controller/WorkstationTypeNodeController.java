@@ -44,7 +44,6 @@ public class WorkstationTypeNodeController extends AbstractController {
 
 	/**
 	 * nodeType列表
-	 * 
 	 * @return
 	 */
 	@RequestMapping("/listnodetype/{id}")
@@ -73,7 +72,7 @@ public class WorkstationTypeNodeController extends AbstractController {
 	 * 保存
 	 */
 	@RequestMapping("/create")
-	@RequiresPermissions("masterData:workstationtypenode:create")
+//	@RequiresPermissions("masterData:workstationtypenode:create")
 	public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNode.setCreateBy(getUserId().intValue());
