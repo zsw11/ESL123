@@ -48,7 +48,7 @@
 
         <el-table-column align="center" prop="approveOperation" label="审批状态" >
           <template slot-scope="scope">
-            <span>{{scope.row.approveOperation }}</span>
+            <span>{{ dictItemApproveOpininon[scope.row.approveOperation].name }}</span>
           </template>
         </el-table-column>
 
@@ -77,7 +77,8 @@
 
 <script>
 import { listApproveOpininon, deleteApproveOpininon } from '@/api/approveOpininon'
-import { listDict } from '@/api/dict'
+import { listDict, listDictItem } from '@/api/dict'
+import { keyBy } from 'lodash'
 
 export default {
   name: 'approveOpininonList',
@@ -111,11 +112,13 @@ export default {
           { code: 'opininon', name: '常用审批意见内容', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      dictItemApproveOpininon: []
     }
   },
   activated () {
     const self = this
+    self.getDicByType()
     self.getDataList()
   },
   methods: {
@@ -205,6 +208,13 @@ export default {
           })
           this.getDataList()
         })
+      })
+    },
+    // 字典表
+    getDicByType () {
+      listDictItem({ type: 'Status' }).then(({data}) => {
+        console.log(data, 6666)
+        this.dictItemApproveOpininon = keyBy(data, 'code')
       })
     }
   }
