@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ModelEntity;
@@ -69,17 +70,9 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
-    @Transactional
-    public RD save(@RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity){
-        opertaionGroupService.insert(opertaionGroup);
-        EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("code",opertaionGroup.getCode());
-        OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
-        // 主表id
-        int id = opertaionGroupEntity.getId();
-        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id",id));
-        operationGroupOperationEntity.setOperationGroupId(id);
-        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
+//    @RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity
+    public RD save(@RequestBody Map<String, Object> map){
+        opertaionGroupService.insertOpGroup(map);
         return RD.build().put("code", 200);
     }
 
@@ -88,20 +81,9 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
-    @Transactional
-    public RD update(@RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity){
-        //更新主表
-		opertaionGroupService.updateById(opertaionGroup);
-		//刪除子表
-        EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("operationGroupId", opertaionGroup.getId());
-        operationGroupOperationService.delete(entityWrapper);
-        //主id
-        int id = opertaionGroup.getId();
-        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id",id));
-        operationGroupOperationEntity.setOperationGroupId(id);
-        //插入子表
-        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
+    public RD update(@RequestBody Map<String, Object> map){
+        opertaionGroupService.UpdataOpertaionGroup(map);
+
         return RD.build().put("code", 200);
     }
 
