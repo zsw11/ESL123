@@ -7,15 +7,15 @@
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="clearfix" style="min-width: 1000px">
 
         <el-form-item :label="'部门'" prop="deptId" >
-          <keyword-search v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+          <keyword-search clearable v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'LST/ST'" prop="STLST" >
-          <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
+          <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true" clearable></dict-select>
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId" >
-          <keyword-search  v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
+          <keyword-search clearable  v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'仕向'" prop="destinations" >
@@ -23,11 +23,11 @@
         </el-form-item>
 
         <el-form-item :label="'生产阶段'" prop="phaseId" >
-            <keyword-search  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+            <keyword-search clearable  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'工位'" prop="workstationId" >
-          <keyword-search  v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
+          <keyword-search clearable  v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'作业名'" prop="workName" >
@@ -45,7 +45,7 @@
 
       </el-form>
       <div class="clearfix">
-        <div style="float: right;margin-right: 4px">
+        <div class="search-box">
           <el-button @click="getDataList(1)" type="primary" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>

@@ -194,7 +194,51 @@ const mainRoutes = {
     // 分析表
     { path: '/add-workbook', component: _import('modules/workbook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
     { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } },
-    { path: '/workbook-detail', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isFull: true } }
+    { path: '/workbook-detail', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isFull: true } },
+
+    // Collection - Compare表
+    { path: '/add-compare', component: _import('modules/report/compare-maintain'), name: 'add-compare', meta: { title: '新增Collection - Compare表', isTab: true } },
+    { path: '/edit-compare/:id(\\d+)', component: _import('modules/report/compare-maintain'), name: 'edit-compare', meta: { title: '编辑Collection - Compare表', isTab: true } },
+
+    // Revision History 表
+    { path: '/add-revisionhistory', component: _import('modules/report/revisionhistory-maintain'), name: 'add-revisionhistory', meta: { title: '新增Revision History 表', isTab: true } },
+    { path: '/edit-revisionhistory/:id(\\d+)', component: _import('modules/report/revisionhistory-maintain'), name: 'edit-revisionhistory', meta: { title: '编辑Revision History 表', isTab: true } },
+
+    // 报表审批表
+    { path: '/add-approve', component: _import('modules/report/approve-maintain'), name: 'add-approve', meta: { title: '新增报表审批表', isTab: true } },
+    { path: '/edit-approve/:id(\\d+)', component: _import('modules/report/approve-maintain'), name: 'edit-approve', meta: { title: '编辑报表审批表', isTab: true } },
+
+    // 报表审批历史表
+    { path: '/add-approvehistory', component: _import('modules/report/approvehistory-maintain'), name: 'add-approvehistory', meta: { title: '新增报表审批历史表', isTab: true } },
+    { path: '/edit-approvehistory/:id(\\d+)', component: _import('modules/report/approvehistory-maintain'), name: 'edit-approvehistory', meta: { title: '编辑报表审批历史表', isTab: true } },
+
+    // 履历表
+    { path: '/add-changerecord', component: _import('modules/report/changerecord-maintain'), name: 'add-changerecord', meta: { title: '新增履历表', isTab: true } },
+    { path: '/edit-changerecord/:id(\\d+)', component: _import('modules/report/changerecord-maintain'), name: 'edit-changerecord', meta: { title: '编辑履历表', isTab: true } },
+
+    // 标准时间表
+    { path: '/add-standardtime', component: _import('modules/report/standardtime-maintain'), name: 'add-standardtime', meta: { title: '新增标准时间表', isTab: true } },
+    { path: '/edit-standardtime/:id(\\d+)', component: _import('modules/report/standardtime-maintain'), name: 'edit-standardtime', meta: { title: '编辑标准时间表', isTab: true } },
+
+    // 标准工数表
+    { path: '/add-standardwork', component: _import('modules/report/standardwork-maintain'), name: 'add-standardwork', meta: { title: '新增标准工数表', isTab: true } },
+    { path: '/edit-standardwork/:id(\\d+)', component: _import('modules/report/standardwork-maintain'), name: 'edit-standardwork', meta: { title: '编辑标准工数表', isTab: true } },
+
+    // Report - 时间联络表
+    { path: '/add-timecontact', component: _import('modules/report/timecontact-maintain'), name: 'add-timecontact', meta: { title: '新增Report - 时间联络表', isTab: true } },
+    { path: '/edit-timecontact/:id(\\d+)', component: _import('modules/report/timecontact-maintain'), name: 'edit-timecontact', meta: { title: '编辑Report - 时间联络表', isTab: true } },
+    // Report - Total表
+    { path: '/add-total', component: _import('modules/report/total-maintain'), name: 'add-total', meta: { title: '新增Report - Total表', isTab: true } },
+    { path: '/edit-total/:id(\\d+)', component: _import('modules/report/total-maintain'), name: 'edit-total', meta: { title: '编辑Report - Total表', isTab: true } },
+
+    // Collection - MOST Value 表
+    { path: '/add-mostvalue', component: _import('modules/report/mostvalue-maintain'), name: 'add-mostvalue', meta: { title: '新增Collection - MOST Value 表', isTab: true } },
+    { path: '/edit-mostvalue/:id(\\d+)', component: _import('modules/report/mostvalue-maintain'), name: 'edit-mostvalue', meta: { title: '编辑Collection - MOST Value 表', isTab: true } },
+
+    // 工位时间表
+    { path: '/add-stationtime', component: _import('modules/report/stationtime-maintain'), name: 'add-stationtime', meta: { title: '新增工位时间表', isTab: true } },
+    { path: '/edit-stationtime/:id(\\d+)', component: _import('modules/report/stationtime-maintain'), name: 'edit-stationtime', meta: { title: '编辑工位时间表', isTab: true } }
+
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token

@@ -230,16 +230,6 @@ export default {
         }
       })
     },
-    // renderContent (h, { node, data, store }) {
-    //   return (
-    //     `<span class="custom-tree-node">
-    //     <span>{node.label}</span>
-    //     <span>
-    //     <el-button size="mini" type="text" on-click={ () => this.append(data) }>Append</el-button>
-    //   <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-    //   </span>
-    //   </span>`)
-    // }
     // 新增节点
     addNode () {
       let data = {
