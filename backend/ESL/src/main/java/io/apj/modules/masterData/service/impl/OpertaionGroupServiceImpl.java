@@ -41,9 +41,10 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
     @Override
     @Transactional
     public RD insertOpGroup(Map<String, Object> map) {
-        opertaionGroupService.insert((OpertaionGroupEntity) map.get("OpertaionGroupEntity"));
+        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
+        opertaionGroupService.insert(opertaionGroup);
         EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("code", ((OpertaionGroupEntity) map.get("OpertaionGroupEntity")).getCode());
+        entityWrapper.eq("code", (opertaionGroup.getCode()));
         OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
         // 主表id,更新到子表中
         int id = opertaionGroupEntity.getId();
@@ -58,8 +59,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
     @Override
     @Transactional
     public RD UpdataOpertaionGroup(Map<String, Object> map) {
+        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
         //更新主表
-        opertaionGroupService.updateById((OpertaionGroupEntity) map.get("OpertaionGroupEntity"));
+        opertaionGroupService.updateById(opertaionGroup);
         //获取主表id
         OpertaionGroupEntity opertaionGroupEntity = opertaionGroupService.selectOne((Wrapper<OpertaionGroupEntity>) map.get("OpertaionGroupEntity"));
         int id = opertaionGroupEntity.getId();

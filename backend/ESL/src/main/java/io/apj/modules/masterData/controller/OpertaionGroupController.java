@@ -70,7 +70,6 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
-//    @RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity
     public RD save(@RequestBody Map<String, Object> map){
         opertaionGroupService.insertOpGroup(map);
         return RD.build().put("code", 200);
