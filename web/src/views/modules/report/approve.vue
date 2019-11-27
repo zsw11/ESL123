@@ -5,60 +5,24 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id">
-          <el-input-number v-model="listQuery.id" clearable></el-input-number>
-        </el-form-item>
+
 
         <el-form-item :label="'所属部门'" prop="deptId">
-          <el-input-number v-model="listQuery.deptId" clearable></el-input-number>
+          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'报表组ID'" prop="report_group_id">
-          <el-input-number v-model="listQuery.report_group_id" clearable></el-input-number>
+        <el-form-item :label="'报表组'" prop="report_group_id">
+          <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'下一审批者ID'" prop="nextApproverId">
-          <el-input-number v-model="listQuery.nextApproverId" clearable></el-input-number>
+          <el-input v-model="listQuery.nextApproverId" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'状态'" prop="status">
           <el-input v-model="listQuery.status" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'创建者ID'" prop="createBy">
-          <el-input-number v-model="listQuery.createBy" clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'创建时间'" prop="createAt">
-          <el-date-picker
-            v-model="listQuery.createAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'更新者ID'" prop="updateBy">
-          <el-input-number v-model="listQuery.updateBy" clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'更新时间'" prop="updateAt">
-          <el-date-picker
-            v-model="listQuery.updateAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item :label="'删除时间'" prop="deleteAt">
-          <el-date-picker
-            v-model="listQuery.deleteAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>
@@ -77,11 +41,8 @@
           >新增</el-button>
 
           <el-button
-            v-if="isAuth('report:reportapprove:delete')"
-            type="danger"
-            @click="deleteHandle()"
             :disabled="dataListSelections.length <= 0"
-          >批量删除</el-button>
+          >批量下载</el-button>
         </div>
       </div>
       <el-table
@@ -92,11 +53,6 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="deptId" label="所属部门">
           <template slot-scope="scope">
@@ -104,13 +60,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="report_group_id" label="报表组ID">
+        <el-table-column align="center" prop="report_group_id" label="报表组">
           <template slot-scope="scope">
             <span>{{scope.row.report_group_id }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="nextApproverId" label="下一审批者ID">
+        <el-table-column align="center" prop="nextApproverId" label="下一审批者">
           <template slot-scope="scope">
             <span>{{scope.row.nextApproverId }}</span>
           </template>
@@ -122,67 +78,17 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="createBy" label="创建者ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="createAt" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateBy" label="更新者ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="updateAt" label="更新时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deleteAt" label="删除时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" label="修改时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column
           align="center"
           :label="'操作'"
-          width="230"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
             <el-button
-              v-if="isAuth('report:reportapprove:update')"
-              type="text"
-              size="small"
-              @click="addOrUpdateHandle(scope.row.id)"
-            >修改</el-button>
-            <el-button
-              v-if="isAuth('report:reportapprove:delete')"
               size="mini"
               type="text"
-              @click="deleteHandle(scope.row)"
-            >删除</el-button>
+            >下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -201,6 +107,9 @@
 
 <script>
 import { listReportApprove, deleteReportApprove } from '@/api/reportApprove'
+import { listDept } from '@/api/dept'
+import { listReportGroup } from '@/api/reportGroup'
+
 export default {
   name: 'reportApproveList',
   data () {
@@ -218,7 +127,8 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-
+      listDept,
+      listReportGroup,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

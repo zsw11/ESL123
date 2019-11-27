@@ -5,80 +5,65 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <el-form-item :label="'ID'" prop="id">
-          <el-input-number v-model="listQuery.id" clearable></el-input-number>
-        </el-form-item>
 
-        <el-form-item :label="'组织机构ID'" prop="deptId">
-          <el-input-number v-model="listQuery.deptId" clearable></el-input-number>
-        </el-form-item>
-
-        <el-form-item :label="'标题'" prop="title">
-          <el-input v-model="listQuery.title" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'Sheet名称'" prop="sheetName">
-          <el-input v-model="listQuery.sheetName" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'机种ID'" prop="modelId">
-          <el-input-number v-model="listQuery.modelId" clearable></el-input-number>
+        <el-form-item :label="'机种'" prop="modelId">
+          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'备注'" prop="remark">
           <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'生产阶段ID'" prop="phaseId">
-          <el-input-number v-model="listQuery.phaseId" clearable></el-input-number>
+        <el-form-item :label="'生产阶段'" prop="phaseId">
+          <keyword-search v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'仕向'" prop="destinations">
           <el-input v-model="listQuery.destinations" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'确认ID'" prop="comfirmBy">
-          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>
-        </el-form-item>
+<!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
+<!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'承认ID'" prop="inChargeBy">
-          <el-input-number v-model="listQuery.inChargeBy" clearable></el-input-number>
-        </el-form-item>
+<!--        <el-form-item :label="'承认ID'" prop="inChargeBy">-->
+<!--          <el-input-number v-model="listQuery.inChargeBy" clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'创建者ID'" prop="createBy">
-          <el-input-number v-model="listQuery.createBy" clearable></el-input-number>
-        </el-form-item>
+<!--        <el-form-item :label="'创建者ID'" prop="createBy">-->
+<!--          <el-input-number v-model="listQuery.createBy" clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'创建时间'" prop="createAt">
-          <el-date-picker
-            v-model="listQuery.createAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'创建时间'" prop="createAt">-->
+<!--          <el-date-picker-->
+<!--            v-model="listQuery.createAt"-->
+<!--            type="datetime"-->
+<!--            value-format="yyyy-MM-dd HH:mm:ss"-->
+<!--            clearable-->
+<!--          ></el-date-picker>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'更新者ID'" prop="updateBy">
-          <el-input-number v-model="listQuery.updateBy" clearable></el-input-number>
-        </el-form-item>
+<!--        <el-form-item :label="'更新者ID'" prop="updateBy">-->
+<!--          <el-input-number v-model="listQuery.updateBy" clearable></el-input-number>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'更新时间'" prop="updateAt">
-          <el-date-picker
-            v-model="listQuery.updateAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'更新时间'" prop="updateAt">-->
+<!--          <el-date-picker-->
+<!--            v-model="listQuery.updateAt"-->
+<!--            type="datetime"-->
+<!--            value-format="yyyy-MM-dd HH:mm:ss"-->
+<!--            clearable-->
+<!--          ></el-date-picker>-->
+<!--        </el-form-item>-->
 
-        <el-form-item :label="'删除时间'" prop="deleteAt">
-          <el-date-picker
-            v-model="listQuery.deleteAt"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
+<!--        <el-form-item :label="'删除时间'" prop="deleteAt">-->
+<!--          <el-date-picker-->
+<!--            v-model="listQuery.deleteAt"-->
+<!--            type="datetime"-->
+<!--            value-format="yyyy-MM-dd HH:mm:ss"-->
+<!--            clearable-->
+<!--          ></el-date-picker>-->
+<!--        </el-form-item>-->
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>
@@ -97,11 +82,8 @@
           >新增</el-button>
 
           <el-button
-            v-if="isAuth('report:collectionstationtime:delete')"
-            type="danger"
-            @click="deleteHandle()"
             :disabled="dataListSelections.length <= 0"
-          >批量删除</el-button>
+          >批量下载</el-button>
         </div>
       </div>
       <el-table
@@ -112,31 +94,31 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-        <el-table-column align="center" prop="id" label="ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="id" label="ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.id }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="deptId" label="组织机构ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="deptId" label="组织机构ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.deptId }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="title" label="标题">
-          <template slot-scope="scope">
-            <span>{{scope.row.title }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="title" label="标题">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.title }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="sheetName" label="Sheet名称">
-          <template slot-scope="scope">
-            <span>{{scope.row.sheetName }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="sheetName" label="Sheet名称">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.sheetName }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="modelId" label="机种ID">
+        <el-table-column align="center" prop="modelId" label="机种">
           <template slot-scope="scope">
             <span>{{scope.row.modelId }}</span>
           </template>
@@ -148,7 +130,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="phaseId" label="生产阶段ID">
+        <el-table-column align="center" prop="phaseId" label="生产阶段">
           <template slot-scope="scope">
             <span>{{scope.row.phaseId }}</span>
           </template>
@@ -160,79 +142,70 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="comfirmBy" label="确认ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.comfirmBy }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="comfirmBy" label="确认ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.comfirmBy }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="inChargeBy" label="承认ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.inChargeBy }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="inChargeBy" label="承认ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.inChargeBy }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="createBy" label="创建者ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="createBy" label="创建者ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.createBy }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="createAt" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="createAt" label="创建时间">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="updateBy" label="更新者ID">
-          <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="updateBy" label="更新者ID">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.updateBy }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="updateAt" label="更新时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="updateAt" label="更新时间">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.updateAt | format('YYYY-MM-DD')}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="deleteAt" label="删除时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="deleteAt" label="删除时间">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.deleteAt | format('YYYY-MM-DD')}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" label="创建时间">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.createdAt | format('YYYY-MM-DD')}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" label="修改时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" label="修改时间">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.updatedAt | format('YYYY-MM-DD')}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column
           align="center"
           :label="'操作'"
-          width="230"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
             <el-button
-              v-if="isAuth('report:collectionstationtime:update')"
-              type="text"
-              size="small"
-              @click="addOrUpdateHandle(scope.row.id)"
-            >修改</el-button>
-            <el-button
-              v-if="isAuth('report:collectionstationtime:delete')"
               size="mini"
               type="text"
-              @click="deleteHandle(scope.row)"
-            >删除</el-button>
+            >下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -254,6 +227,9 @@ import {
   listCollectionStationTime,
   deleteCollectionStationTime
 } from '@/api/collectionStationTime'
+import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
+
 export default {
   name: 'collectionStationTimeList',
   data () {
@@ -276,7 +252,8 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-
+      listModel,
+      listPhase,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
