@@ -12,10 +12,10 @@
 
         <el-form-item :label="'报表'" prop="remark" >
 <!--          <el-input v-model="listQuery.remark" clearable></el-input>-->
-          <keyword-search style="width: 250px" v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
-        <div style="float: right;margin-right: 4px">
+        <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>
@@ -64,7 +64,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color:orangered;">删除</el-button>
+            <el-button size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
