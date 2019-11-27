@@ -10,7 +10,6 @@
       align="center"
       height="100%"
       :auto-resize="true"
-      :data="tableData"
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent"
@@ -62,15 +61,12 @@ import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/u
 export default {
   name: 'WorkbookTable',
   components: { MeasureColumn, KeyColumn, OperationColumn },
-  props: ['count'],
   data () {
     return {
       measureColumns0,
       measureColumns1,
       // workM: false,                     // 手顺
       rowIndex: 0,
-      tableData: [],
-      allTable: [],                     // 所有工位的分析表
       id: 0,                            // 当前工位分析表的索引
       len: 10,
       WMethod: '',
@@ -90,9 +86,9 @@ export default {
     }
   },
   created () {
-    for (let i = 0; i < 10; i++) {
-      this.tableData.push(this.createNewRow())
-    }
+    // for (let i = 0; i < 10; i++) {
+    //   this.workbookData.push(this.createNewRow())
+    // }
   },
   methods: {
     // 创建新行数据
@@ -100,6 +96,10 @@ export default {
       const newRow = clone(defaultRow)
       if (type) newRow.type = type
       return newRow
+    },
+    // 加载数据
+    loadData (data) {
+      this.$refs.workbookTable.loadData(data)
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
@@ -135,7 +135,7 @@ export default {
     async doAddStandardBook () {
       this.$refs.standardBookForm.validate(async (valid) => {
         if (!valid) return
-        const row = this.tableData[this.tableData.length - 1]
+        const row = this.workbookData[this.workbookData.length - 1]
         await this.$refs.workbookTable.insertAt(Object.assign(
           this.createNewRow('n'),
           { operation: this.standardBookDialog.formData.name }
@@ -171,35 +171,35 @@ export default {
         this.$refs.workbookTable.insertAt(record, -1)
           .then(({ row }) => this.$refs.workbookTable.setActiveCell(row, 'workMethod'))
         let index = this.$refs.workbookTable.getInsertRecords().length - 1
-        this.tableData.push(this.$refs.workbookTable.getInsertRecords()[index])
+        this.workbookData.push(this.$refs.workbookTable.getInsertRecords()[index])
         this.rowIndex ++
       }
     },
     // 快捷键模块
     workKey (key) {
       if (key === '1') {
-        this.tableData[this.rowIndex].a2 = 1
-        this.tableData[this.rowIndex].a3 = 0
-        this.tableData[this.rowIndex].b1 = 1
-        this.tableData[this.rowIndex].b3 = 1
-        this.tableData[this.rowIndex].m = 1
+        this.workbookData[this.rowIndex].a2 = 1
+        this.workbookData[this.rowIndex].a3 = 0
+        this.workbookData[this.rowIndex].b1 = 1
+        this.workbookData[this.rowIndex].b3 = 1
+        this.workbookData[this.rowIndex].m = 1
       }
       if (key === '2') {
-        this.tableData[this.rowIndex].a2 = 0
-        this.tableData[this.rowIndex].a3 = 0
-        this.tableData[this.rowIndex].b1 = 0
-        this.tableData[this.rowIndex].b3 = 0
-        this.tableData[this.rowIndex].m = 0
+        this.workbookData[this.rowIndex].a2 = 0
+        this.workbookData[this.rowIndex].a3 = 0
+        this.workbookData[this.rowIndex].b1 = 0
+        this.workbookData[this.rowIndex].b3 = 0
+        this.workbookData[this.rowIndex].m = 0
       }
     },
     // 切换工位
     toggle (index) {
       this.id = index
-      this.tableData = this.allTable[index]
+      this.workbookData = this.allTable[index]
     },
     // 缓存
     cache () {
-      this.allTable[this.id] = this.tableData
+      this.allTable[this.id] = this.workbookData
       localStorage.setItem('table', window.JSON.stringify(this.allTable))
     },
     // 添加工位
@@ -214,16 +214,16 @@ export default {
       console.log('复制到最后')
     },
     copy () {
-      this.WMethod = this.tableData[this.rowIndex].workMethod
+      this.WMethod = this.workbookData[this.rowIndex].workMethod
     },
     paste (event) {
       event.target.value = this.WMethod
-      this.tableData[this.rowIndex].workMethod = this.WMethod
+      this.workbookData[this.rowIndex].workMethod = this.WMethod
     },
     // 单元格点击
     cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
       this.rowIndex = rowIndex
-      if (this.rowIndex < this.tableData.length - 1) {
+      if (this.rowIndex < this.workbookData.length - 1) {
         this.add = false
       } else {
         this.add = true

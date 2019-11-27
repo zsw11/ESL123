@@ -18,15 +18,22 @@
         <el-button type="primary">F7 复制</el-button>
         <el-button type="primary">F9 粘贴</el-button> -->
       </div>
-      <workbook-table ref="workbookTable" :count="this.count"></workbook-table>
+      <workbook-table ref="workbookTable"></workbook-table>
       <div class="workbook-switch">
         <el-tabs
           type="border-card"
           class="work-tabs"
           size="mini"
-          @tab-click="handleClick">
-          <el-tab-pane v-for="item in count" :key="item">
-            <span slot="label" class="work-name" > 工位{{item}}</span>
+          v-model="currentWorkbook">
+          <el-tab-pane
+            v-for="wb in workbooks"
+            :key="wb.id"
+            :name="wb.workName">
+            <span
+              slot="label"
+              class="work-name" >
+              {{wb.workName}}
+            </span>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -52,19 +59,59 @@
       return {
         workbookPercents,
         workbookPercent: 'mini',
-        size: 0,
-        count: 10
+        workbook: {},
+        workbookData: {},
+        workbooks: [],
+        currentWorkbook: null
+      }
+    },
+    computed: {
+      currentWorkbookData () {
+        if (this.currentWorkbook && this.workbookData[this.currentWorkbook]) return this.workbookData[this.currentWorkbook]
+        return []
+      }
+    },
+    watch: {
+      currentWorkbook (workName) {
+        const workbook = this.workbooks.find(wb => wb.workName === workName)
+        if (workbook) {
+          this.$nextTick(() => {
+            this.refreshWorkbookData(workName)
+          })
+        }
+      },
+      currentWorkbookData (v) {
+        console.log(v)
       }
     },
     created () {
+      this.init()
     },
     methods: {
-      switchSize (e) {
-        console.log(1111, e)
-        this.size = (this.size + 1) % 3
+      init () {
+        const self = this
+        // Todo，对接API，获取分析表
+        setTimeout(() => {
+          self.workbook = { id: 0, workName: 'A' }
+          self.workbooks = [self.workbook]
+          self.currentWorkbook = 'A'
+        }, 500)
+        // Todo，对接API，获取其他工位
+        setTimeout(() => {
+          self.workbooks = [
+            { id: 0, workName: 'A' },
+            { id: 1, workName: 'B' },
+            { id: 2, workName: 'C' },
+            { id: 3, workName: 'D' }
+          ]
+        }, 500)
       },
-      handleClick (tab) {
-        this.$refs.workbookTable.toggle(tab.index)
+      // 更新workbook数据
+      refreshWorkbookData (workName) {
+        const newRow = this.$refs.workbookTable.createNewRow()
+        newRow.operation = workName
+        this.workbookData[workName] = [newRow]
+        this.$refs.workbookTable.loadData(this.workbookData[workName])
       },
       cache () {
         this.$refs.workbookTable.cache()
