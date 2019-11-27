@@ -7,24 +7,24 @@
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
 
         <el-form-item :label="'机种名称'" prop="name" >
-          <el-input  style="width: 130px" v-model="listQuery.name"  clearable></el-input>
+          <el-input  class="input" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <keyword-search  style="width: 130px" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel" labelColunt="code" :valueColunt="'code'" :allowEmpty="true"></keyword-search>
+          <el-input v-model="listQuery.code"></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true"></keyword-search>
+          <keyword-search  class="input" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  style="width: 130px" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true"></keyword-search>
+          <keyword-search  class="input" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
 
         <el-form-item class="title" :label="'阶段'" prop="WSTime" >
-          <el-input style="width: 130px" v-model="listQuery.WSTime"  clearable></el-input>
+          <el-input class="input" v-model="listQuery.WSTime"  clearable></el-input>
         </el-form-item>
       </el-form>
       <div class="clearfix">
@@ -41,7 +41,7 @@
 <!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog title="新增部品机种关系" width="400px" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left:10px;" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            机种<keyword-search  style="margin-left:10px;" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="partModel">确 定</el-button>
@@ -116,7 +116,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.modelEntity.id)">详情</el-button>
 <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-            <el-button size="mini" type="text" @click="deleteHandle(scope.row)" style="color: orangered">删除</el-button>
+            <el-button size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -323,21 +323,13 @@
 </script>
 
 <style scoped lang="scss">
-  .title {
-    margin-left: 20px;
+  .input{
+    width: 130px;
   }
   .el-input__inner {
     padding-right:0;
-    width: 130px;
-  }
-  .el-form-item--small.el-form-item{
-    /*display: inline-block;*/
   }
   .el-form-item {
-    display: inline-block;
     margin-top: 0;
-    margin-right: 0;
-    margin-left: 10px;
-    vertical-align: top;
   }
 </style>

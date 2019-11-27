@@ -1,9 +1,11 @@
 <template>
   <vxe-table-column
+    ref="operation"
     field="operation"
     align="left"
     title="Work Method"
     :edit-render="{ name: 'input', immediate: true }"
+    :class-name="getCellClass"
     v-bind="$attrs">
     <template v-slot:edit="{ row }">
       <operation-input
@@ -16,6 +18,11 @@
 <script>
 import OperationInput from './workbook-table-operation-input'
 
+const typeClasses = {
+  n: 'sdn',
+  c: 'sdc'
+}
+
 export default {
   name: 'WorkbookOperationColumn',
   components: { OperationInput },
@@ -26,6 +33,11 @@ export default {
     }
   },
   methods: {
+    getCellClass (scope) {
+      this.$refs.operation.$table.updateStatus(scope)
+      if (scope.row.operation) console.log(scope.row)
+      return typeClasses[scope.row.type]
+    }
   }
 }
 </script>

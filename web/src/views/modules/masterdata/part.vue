@@ -28,7 +28,7 @@
 <!--          </el-select>-->
 <!--        </el-form-item>-->
 
-        <div style="float: right;margin-right: 4px">
+        <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>
@@ -87,7 +87,7 @@
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="partModel(scope.row.id,scope.row.name)">机种</el-button>
-            <el-button style="color: orangered" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 

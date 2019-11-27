@@ -35,10 +35,20 @@ public class ModelToolRelaEntity implements Serializable {
 	@TableField(exist = false)
 	private ModelEntity modelEntity;
 	/**
-	 * 机种
+	 * 治工具
 	 */
 	@TableField(exist = false)
 	private ToolEntity toolEntity;
+	/**
+	 * 机种系列对象
+	 */
+	@TableField(exist = false)
+	private ModelSeriesEntity modelSeriesEntity;
+	/**
+	 * 部门名称
+	 */
+	@TableField(exist = false)
+	private String deptName;
 
 	/**
 	 * 治工具ID
