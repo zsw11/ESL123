@@ -20,10 +20,32 @@ export const measureColumns1 = [
   { field: 'p2', title: 'P', bgClassName: 'bg-table-color1' },
   { field: 'a5', title: 'A' }
 ]
+export const defaultRow = {
+  type: 'o',
+  version: '',
+  operation: '',
+  key: null,
+  a0: null,
+  b0: null,
+  g0: null,
+  a1: null,
+  b1: null,
+  p0: null,
+  m0: null,
+  x0: null,
+  i0: null,
+  tool: '',
+  a2: null,
+  b2: null,
+  p1: null,
+  a3: null,
+  frequency: null
+}
 export const measureFields = measureColumns0.map(c => c.field).concat(measureColumns1.map(c => c.field))
 
 export default {
   measureColumns0,
   measureColumns1,
-  measureFields
+  measureFields,
+  defaultRow
 }

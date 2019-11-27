@@ -53,11 +53,11 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
+import { pick, clone } from 'lodash'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
-import { measureColumns0, measureColumns1, measureFields } from '@/utils/global'
+import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
@@ -91,11 +91,16 @@ export default {
   },
   created () {
     for (let i = 0; i < 10; i++) {
-      this.tableData.push({ operation: null, key: null, a0: null, b0: null })
+      this.tableData.push(this.createNewRow())
     }
-    console.log(this.tableData)
   },
   methods: {
+    // 创建新行数据
+    createNewRow (type) {
+      const newRow = clone(defaultRow)
+      if (type) newRow.type = type
+      return newRow
+    },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
       if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
@@ -116,7 +121,7 @@ export default {
         }
       }
     },
-    // 添加标准书
+    // 添加标准书对话框
     async addStandardBook () {
       this.standardBookDialog.visible = true
       await this.$refs.workbookTable.clearActived()
@@ -126,24 +131,26 @@ export default {
         code: null
       })
     },
+    // 增加标准书
     async doAddStandardBook () {
       this.$refs.standardBookForm.validate(async (valid) => {
         if (!valid) return
         const row = this.tableData[this.tableData.length - 1]
-        let newRow = await this.$refs.workbookTable.insertAt({
-          operation: this.standardBookDialog.formData.name
-        }, row)
-        newRow.row.type = 'n' // standardName
+        await this.$refs.workbookTable.insertAt(Object.assign(
+          this.createNewRow('n'),
+          { operation: this.standardBookDialog.formData.name }
+        ), row)
         if (this.standardBookDialog.formData.code) {
-          newRow = await this.$refs.workbookTable.insertAt({
-            operation: this.standardBookDialog.formData.code
-          }, row)
-          newRow.row.type = 'c' // standaradCode
+          await this.$refs.workbookTable.insertAt(Object.assign(
+            this.createNewRow('c'),
+            { operation: this.standardBookDialog.formData.code }
+          ), row)
         }
         await this.$refs.workbookTable.setActiveCell(row, 'version')
         this.standardBookDialog.visible = false
       })
     },
+    // 选择指标组合
     selctMeasureGroup (mg, row) {
       Object.assign(
         row,
