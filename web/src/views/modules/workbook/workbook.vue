@@ -45,7 +45,7 @@
 
       </el-form>
       <div class="clearfix">
-        <div style="float: right;margin-right: 4px">
+        <div class="search-box">
           <el-button @click="getDataList(1)" type="primary" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>

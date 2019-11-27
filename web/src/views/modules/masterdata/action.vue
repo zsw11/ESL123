@@ -6,15 +6,14 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
-        <el-form-item :label="'关键词名称'" prop="name" >
+        <el-form-item :label="'关键词名称'" prop="name">
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
 
-
         <div class="search-box">
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-          <el-button @click="clearQuery()">清   空</el-button>
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click="clearQuery()">清 空</el-button>
         </div>
       </el-form>
     </el-card>
@@ -26,7 +25,7 @@
           <export-data
             :config="exportConfig"
             type="primary"
-            plain>导   出
+            plain>导 出
           </export-data>
           <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
@@ -45,25 +44,25 @@
         </el-table-column>
 
 
-        <el-table-column align="center" prop="name" label="关键词名称" >
+        <el-table-column align="center" prop="name" label="关键词名称">
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注">
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
 
 
-      <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-<!--            <el-button type="text" size="small">组织机构</el-button>-->
-            <el-button  size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
+            <!--            <el-button type="text" size="small">组织机构</el-button>-->
+            <el-button size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -83,173 +82,173 @@
 </template>
 
 <script>
-import { listAction, deleteAction, ActionExport } from '@/api/action'
-import { filterAttributes } from '@/utils'
-import { cloneDeep } from 'lodash'
-import ExportData from '@/components/export-data'
+  import {listAction, deleteAction, ActionExport} from '@/api/action'
+  import {filterAttributes} from '@/utils'
+  import {cloneDeep} from 'lodash'
+  import ExportData from '@/components/export-data'
 
-const defaultExport = ['action.name', 'action.remark']
-export default {
-  name: 'actionList',
-  components: {
-    ExportData
-  },
-  data () {
-    return {
-      dataButton: 'list',
-      listQuery: {
-        id: null,
-        name: null,
-        remark: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
-      },
-      dataList: [],
-      pageNo: 1,
-      pageSize: 10,
-      total: 0,
-      dataListLoading: false,
-      dataListSelections: [],
-      attributes: [{
-        code: 'action',
-        name: ' 关键词',
-        children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'name', name: 'keyword Name', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
-        ]
-      }],
-      complexFilters: [],
-      // 导出字段
-      exportAttributes: cloneDeep(defaultExport)
-    }
-  },
-  activated () {
-    const self = this
-    self.getDataList()
-  },
-  computed: {
-    exportConfig () {
+  const defaultExport = ['action.name', 'action.remark']
+  export default {
+    name: 'actionList',
+    components: {
+      ExportData
+    },
+    data () {
       return {
-        attributes: filterAttributes(this.attributes, 'isExport'),
-        exportApi: ActionExport,
-        filterType: this.dataButton,
-        filters: this.listQuery,
-        complexFilters: this.complexFilters,
-        exportAttributes: this.exportAttributes,
-        saveSetting: () => {
-          this.$store.dispatch('user/SetAExport', { page: 'action', display: this.exportAttributes })
-          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        dataButton: 'list',
+        listQuery: {
+          id: null,
+          name: null,
+          remark: null,
+          createBy: null,
+          createAt: null,
+          updateBy: null,
+          updateAt: null,
+          deleteAt: null
         },
-        reset: () => {
-          this.exportAttributes = cloneDeep(defaultExport)
-          this.$store.dispatch('user/SetAExport', { page: 'part', display: this.exportAttributes })
-          this.$message({ message: '设置成功', type: 'success', duration: 1000 })
+        dataList: [],
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        attributes: [{
+          code: 'action',
+          name: ' 关键词',
+          children: [
+            {code: 'id', name: 'ID', type: 'string', required: true},
+            {code: 'name', name: 'keyword Name', type: 'string', required: true},
+            {code: 'createBy', name: '创建者ID', type: 'string', required: true},
+            {code: 'createAt', name: '创建时间', type: 'string', required: true},
+            {code: 'updateBy', name: '更新者ID', type: 'string', required: true},
+            {code: 'updateAt', name: '更新时间', type: 'string', required: true},
+            {code: 'deleteAt', name: '删除时间', type: 'string', required: true},
+            {code: 'createdAt', name: '创建时间', type: 'string', required: true},
+            {code: 'updatedAt', name: '修改时间', type: 'string', required: true}
+          ]
+        }],
+        complexFilters: [],
+        // 导出字段
+        exportAttributes: cloneDeep(defaultExport)
+      }
+    },
+    activated () {
+      const self = this
+      self.getDataList()
+    },
+    computed: {
+      exportConfig () {
+        return {
+          attributes: filterAttributes(this.attributes, 'isExport'),
+          exportApi: ActionExport,
+          filterType: this.dataButton,
+          filters: this.listQuery,
+          complexFilters: this.complexFilters,
+          exportAttributes: this.exportAttributes,
+          saveSetting: () => {
+            this.$store.dispatch('user/SetAExport', {page: 'action', display: this.exportAttributes})
+            this.$message({message: '设置成功', type: 'success', duration: 1000})
+          },
+          reset: () => {
+            this.exportAttributes = cloneDeep(defaultExport)
+            this.$store.dispatch('user/SetAExport', {page: 'part', display: this.exportAttributes})
+            this.$message({message: '设置成功', type: 'success', duration: 1000})
+          }
         }
       }
-    }
-  },
-  methods: {
-    // 普通查询
-    getDataList (pageNo) {
-      if (pageNo) {
-        this.pageNo = pageNo
-      }
-      this.dataButton = 'list'
-      this.dataListLoading = true
-      listAction(Object.assign(
-        {
-          page: this.pageNo,
-          limit: this.pageSize
-        },
-        this.listQuery
-      )).then(({page}) => {
-        this.dataList = page.data
-        this.total = page.totalCount
-      }).catch(() => {
-        this.dataList = []
-        this.total = 0
-      }).finally(() => {
-        this.dataListLoading = false
-      })
     },
-    // 清除查询条件
-    clearQuery () {
-      this.listQuery = Object.assign(this.listQuery, {
-        name: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
-      })
-    },
-    // 每页数
-    sizeChangeHandle (val) {
-      this.pageSize = val
-      this.pageNo = 1
-      this.doDataSearch()
-    },
-    // 当前页
-    currentChangeHandle (val) {
-      this.pageNo = val
-      this.doDataSearch()
-    },
-    // 查询数据
-    doDataSearch () {
-      if (this.dataButton === 'complex') {
-        this.doComplexSearch()
-      } else {
-        this.getDataList()
-      }
-    },
-    // 多选
-    selectionChangeHandle (val) {
-      this.dataListSelections = val
-    },
-    // 详情
-    details (id) {
-      // let noShow = true
-      this.$nextTick(() => {
-        this.$router.push({path: `/details-action/${id}`, query: {noShow: true}})
-      })
-    },
-    // 新增 / 修改
-    addOrUpdateHandle (id) {
-      this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-action/${id}` : '/add-action' })
-      })
-    },
-    // 删除数据
-    deleteHandle (row) {
-      var ids = row ? [row.id] : this.dataListSelections.map(item => {
-        return item.id
-      })
-      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteAction(ids).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getDataList()
+    methods: {
+      // 普通查询
+      getDataList (pageNo) {
+        if (pageNo) {
+          this.pageNo = pageNo
+        }
+        this.dataButton = 'list'
+        this.dataListLoading = true
+        listAction(Object.assign(
+          {
+            page: this.pageNo,
+            limit: this.pageSize
+          },
+          this.listQuery
+        )).then(({page}) => {
+          this.dataList = page.data
+          this.total = page.totalCount
+        }).catch(() => {
+          this.dataList = []
+          this.total = 0
+        }).finally(() => {
+          this.dataListLoading = false
         })
-      })
+      },
+      // 清除查询条件
+      clearQuery () {
+        this.listQuery = Object.assign(this.listQuery, {
+          name: null,
+          createBy: null,
+          createAt: null,
+          updateBy: null,
+          updateAt: null,
+          deleteAt: null
+        })
+      },
+      // 每页数
+      sizeChangeHandle (val) {
+        this.pageSize = val
+        this.pageNo = 1
+        this.doDataSearch()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+        this.pageNo = val
+        this.doDataSearch()
+      },
+      // 查询数据
+      doDataSearch () {
+        if (this.dataButton === 'complex') {
+          this.doComplexSearch()
+        } else {
+          this.getDataList()
+        }
+      },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
+      // 详情
+      details (id) {
+        // let noShow = true
+        this.$nextTick(() => {
+          this.$router.push({path: `/details-action/${id}`, query: {noShow: true}})
+        })
+      },
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.$nextTick(() => {
+          this.$router.push({path: id ? `/edit-action/${id}` : '/add-action'})
+        })
+      },
+      // 删除数据
+      deleteHandle (row) {
+        var ids = row ? [row.id] : this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteAction(ids).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getDataList()
+          })
+        })
+      }
     }
   }
-}
 </script>

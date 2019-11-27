@@ -74,13 +74,13 @@
 
         <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.deptName }}</span>
+            <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.modelSeriesEntity }}</span>
+            <span>{{scope.row.modelSeriesEntity.name }}</span>
           </template>
         </el-table-column>
 
