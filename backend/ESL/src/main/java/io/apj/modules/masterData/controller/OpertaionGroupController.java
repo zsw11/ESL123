@@ -1,14 +1,20 @@
 package io.apj.modules.masterData.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
+import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +38,8 @@ import io.apj.common.utils.PageUtils;
 public class OpertaionGroupController extends AbstractController {
     @Autowired
     private OpertaionGroupService opertaionGroupService;
+    @Autowired
+    private OperationGroupOperationService operationGroupOperationService;
 
     /**
      * 列表
@@ -61,9 +69,17 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
-    public RD save(@RequestBody OpertaionGroupEntity opertaionGroup){
-		opertaionGroupService.insert(opertaionGroup);
-
+    @Transactional
+    public RD save(@RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity){
+        opertaionGroupService.insert(opertaionGroup);
+        EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("code",opertaionGroup.getCode());
+        OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
+        // 主表id
+        int id = opertaionGroupEntity.getId();
+        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id",id));
+        operationGroupOperationEntity.setOperationGroupId(id);
+        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
         return RD.build().put("code", 200);
     }
 
@@ -72,9 +88,20 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
-    public RD update(@RequestBody OpertaionGroupEntity opertaionGroup){
+    @Transactional
+    public RD update(@RequestBody OpertaionGroupEntity opertaionGroup, @RequestBody OperationGroupOperationEntity operationGroupOperationEntity){
+        //更新主表
 		opertaionGroupService.updateById(opertaionGroup);
-
+		//刪除子表
+        EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("operationGroupId", opertaionGroup.getId());
+        operationGroupOperationService.delete(entityWrapper);
+        //主id
+        int id = opertaionGroup.getId();
+        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id",id));
+        operationGroupOperationEntity.setOperationGroupId(id);
+        //插入子表
+        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
         return RD.build().put("code", 200);
     }
 
