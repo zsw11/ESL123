@@ -45,6 +45,3 @@ export function deleteReportTimeContact (id) {
     params: { id }
   })
 }
-
-
-

@@ -467,12 +467,12 @@
 import {
   listReportTimeContact,
   deleteReportTimeContact
-} from "@/api/reportTimeContact"
+} from '@/api/reportTimeContact'
 export default {
-  name: "reportTimeContactList",
+  name: 'reportTimeContactList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -520,8 +520,8 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "reportTimeContact",
-          name: "reportTimeContact",
+          code: 'reportTimeContact',
+          name: 'reportTimeContact',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -550,34 +550,34 @@ export default {
             },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
-              code: "stage",
-              name: "ES/AMP/MP",
+              code: 'stage',
+              name: 'ES/AMP/MP',
               type: 'string',
               required: true
             },
             {
-              code: "publishType",
-              name: "发行类别：新规制定/修订",
+              code: 'publishType',
+              name: '发行类别：新规制定/修订',
               type: 'string',
               required: true
             },
             {
-              code: "reviseReason",
-              name: "修订理由",
+              code: 'reviseReason',
+              name: '修订理由',
               type: 'string',
               required: true
             },
-            { code: "STType", name: "ST/LST", type: 'string', required: true },
-            { code: "RevNo", name: "版本号", type: 'string', required: true },
+            { code: 'STType', name: 'ST/LST', type: 'string', required: true },
+            { code: 'RevNo', name: '版本号', type: 'string', required: true },
             {
-              code: "allCountSub",
-              name: "全数sub工序用时",
+              code: 'allCountSub',
+              name: '全数sub工序用时',
               type: 'string',
               required: true
             },
             {
-              code: "allCountMain",
-              name: "全数main工序用时",
+              code: 'allCountMain',
+              name: '全数main工序用时',
               type: 'string',
               required: true
             },
@@ -588,38 +588,38 @@ export default {
               required: true
             },
             {
-              code: "allCountExternalInspection",
-              name: "全数外装工序用时",
+              code: 'allCountExternalInspection',
+              name: '全数外装工序用时',
               type: 'string',
               required: true
             },
             {
-              code: "allCountPacking",
-              name: "全数捆包工序用时",
+              code: 'allCountPacking',
+              name: '全数捆包工序用时',
               type: 'string',
               required: true
             },
             {
-              code: "towingLastVersionSub",
-              name: "拖机上一版本sub工序用时",
+              code: 'towingLastVersionSub',
+              name: '拖机上一版本sub工序用时',
               type: 'string',
               required: true
             },
             {
-              code: "towingLastVersionMain",
-              name: "拖机上一版本main工序用时",
+              code: 'towingLastVersionMain',
+              name: '拖机上一版本main工序用时',
               type: 'string',
               required: true
             },
             {
-              code: "towingLastVersionPrinting",
-              name: "拖机上一版本印字",
+              code: 'towingLastVersionPrinting',
+              name: '拖机上一版本印字',
               type: 'string',
               required: true
             },
             {
-              code: "towingLastVersionExternalInspection",
-              name: "拖机上一版本外装工序用时",
+              code: 'towingLastVersionExternalInspection',
+              name: '拖机上一版本外装工序用时',
               type: 'string',
               required: true
             },
@@ -661,7 +661,6 @@ export default {
             },
             {
               code: 'remarkMain',
-              code: 'remarkPrinting',
               name: '印字/检查/调整差异备注',
               type: 'string',
               required: true
@@ -826,7 +825,7 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({
-          path: id ? `/edit-reporttimecontact/${id}` : "/add-reporttimecontact"
+          path: id ? `/edit-reporttimecontact/${id}` : '/add-reporttimecontact'
         })
       })
     },
@@ -835,8 +834,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

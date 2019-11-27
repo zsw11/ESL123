@@ -121,14 +121,14 @@
 </template>
 
 <script>
-import { pick } from "lodash";
+import { pick } from 'lodash'
 import {
   fetchReportTotal,
   createReportTotal,
   updateReportTotal
-} from "@/api/reportTotal";
+} from '@/api/reportTotal'
 export default {
-  name: "editReportTotal",
+  name: 'editReportTotal',
   data () {
     return {
       inited: false,
@@ -156,119 +156,119 @@ export default {
         deleteAt: null
       },
       dataRules: {
-        deptId: [{ type: "number", message: "组织机构ID需为数字值" }],
-        title: [{ max: 128, message: "长度超过了128", trigger: "blur" }],
-        sheetName: [{ max: 128, message: "长度超过了128", trigger: "blur" }],
-        modelId: [{ type: "number", message: "机种ID需为数字值" }],
+        deptId: [{ type: 'number', message: '组织机构ID需为数字值' }],
+        title: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        sheetName: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        modelId: [{ type: 'number', message: '机种ID需为数字值' }],
 
-        destinations: [{ max: 128, message: "长度超过了128", trigger: "blur" }],
-        cotegory: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
-        mecha: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
-        RCode: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
-        STRev: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
-        LSTRev: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
+        destinations: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        cotegory: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        mecha: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        RCode: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        STRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        LSTRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         allowanceRate: [
-          { type: "number", max: 100000000, message: "津贴需为8位数字值" }
+          { type: 'number', max: 100000000, message: '津贴需为8位数字值' }
         ],
-        comfirmBy: [{ type: "number", message: "确认ID需为数字值" }],
-        inChargeBy: [{ type: "number", message: "承认ID需为数字值" }],
-        type: [{ max: 32, message: "长度超过了32", trigger: "blur" }],
-        createBy: [{ type: "number", message: "创建者ID需为数字值" }],
+        comfirmBy: [{ type: 'number', message: '确认ID需为数字值' }],
+        inChargeBy: [{ type: 'number', message: '承认ID需为数字值' }],
+        type: [{ max: 32, message: '长度超过了32', trigger: 'blur' }],
+        createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
 
-        updateBy: [{ type: "number", message: "更新者ID需为数字值" }]
+        updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
       }
-    };
+    }
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.fromFullPath = from.fullPath;
-    });
+      vm.fromFullPath = from.fullPath
+    })
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  activated() {
+  activated () {
     if (
       this.dataForm.id &&
       parseInt(this.$route.params.id) !== this.dataForm.id
     ) {
-      this.init();
+      this.init()
     }
   },
   watch: {
     dataForm: {
-      handler: function(val) {
+      handler: function (val) {
         if (this.inited) {
-          this.$store.dispatch("common/updateTabAttrs", {
+          this.$store.dispatch('common/updateTabAttrs', {
             name: this.$route.name,
             changed: true
-          });
+          })
         }
       },
       deep: true
     }
   },
   methods: {
-    init() {
-      this.$store.dispatch("common/updateTabAttrs", {
+    init () {
+      this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
-      });
-      this.inited = false;
-      this.dataForm.id = parseInt(this.$route.params.id) || 0;
+      })
+      this.inited = false
+      this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportTotal(this.dataForm.id)
           .then(({ data }) => {
             Object.assign(
               this.dataForm,
               pick(data, [
-                "deptId",
-                "title",
-                "sheetName",
-                "modelId",
-                "monthResult",
-                "destinations",
-                "cotegory",
-                "mecha",
-                "RCode",
-                "STRev",
-                "LSTRev",
-                "allowanceRate",
-                "comfirmBy",
-                "inChargeBy",
-                "type",
-                "createBy",
-                "createAt",
-                "updateBy",
-                "updateAt",
-                "deleteAt"
+                'deptId',
+                'title',
+                'sheetName',
+                'modelId',
+                'monthResult',
+                'destinations',
+                'cotegory',
+                'mecha',
+                'RCode',
+                'STRev',
+                'LSTRev',
+                'allowanceRate',
+                'comfirmBy',
+                'inChargeBy',
+                'type',
+                'createBy',
+                'createAt',
+                'updateBy',
+                'updateAt',
+                'deleteAt'
               ])
-            );
+            )
           })
           .finally(() => {
-            this.inited = true;
-          });
+            this.inited = true
+          })
       } else {
-        this.inited = true;
+        this.inited = true
       }
     },
     // 取消信息
-    cancleFormSubmit() {
-      this.$store.dispatch("common/closeActiveTab")
-      this.$router.push({ name: "report-reporttotal" })
+    cancleFormSubmit () {
+      this.$store.dispatch('common/closeActiveTab')
+      this.$router.push({ name: 'report-reporttotal' })
       this.$destroy()
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs["dataForm"].validate(valid => {
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           (this.dataForm.id
             ? updateReportTotal(this.dataForm.id, this.dataForm)
             : createReportTotal(this.dataForm)
           ).then(({ data }) => {
             this.$message({
-              message: "操作成功",
-              type: "success",
+              message: '操作成功',
+              type: 'success',
               duration: 1500,
               onClose: this.cancleFormSubmit
             })

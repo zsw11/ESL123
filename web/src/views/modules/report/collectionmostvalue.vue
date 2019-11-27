@@ -213,12 +213,12 @@
 import {
   listCollectionMostValue,
   deleteCollectionMostValue
-} from "@/api/collectionMostValue";
+} from '@/api/collectionMostValue'
 export default {
-  name: "collectionMostValueList",
+  name: 'collectionMostValueList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -241,8 +241,8 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "collectionMostValue",
-          name: "Collection - MOST Value 表",
+          code: 'collectionMostValue',
+          name: 'Collection - MOST Value 表',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -253,8 +253,8 @@ export default {
             },
              { code: 'title', name: '标题', type: 'string', required: true },
             {
-              code: "firstColumnName",
-              name: "组立职场名称",
+              code: 'firstColumnName',
+              name: '组立职场名称',
               type: 'string',
               required: true
             },
@@ -263,7 +263,7 @@ export default {
               name: 'Sheet名称',
               required: true
             },
-            { code: "remark", name: "备注", type: 'string', required: true },
+            { code: 'remark', name: '备注', type: 'string', required: true },
             {
               code: 'createBy',
               name: '创建者ID',
@@ -322,7 +322,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listCollectionMostValue(
         Object.assign(
@@ -389,7 +389,7 @@ export default {
         this.$router.push({
           path: id
             ? `/edit-collectionmostvalue/${id}`
-            : "/add-collectionmostvalue"
+            : '/add-collectionmostvalue'
         })
       })
     },
@@ -398,8 +398,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

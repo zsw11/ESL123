@@ -45,6 +45,3 @@ export function deleteReportStandardTime (id) {
     params: { id }
   })
 }
-
-
-

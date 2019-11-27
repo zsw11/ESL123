@@ -228,7 +228,7 @@ export default {
   name: 'reportStandardTimeList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -334,7 +334,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listReportStandardTime(
         Object.assign(
@@ -411,8 +411,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

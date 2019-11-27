@@ -45,6 +45,3 @@ export function deleteCollectionCompare (id) {
     params: { id }
   })
 }
-
-
-

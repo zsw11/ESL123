@@ -273,12 +273,12 @@
 import {
   listCollectionCompare,
   deleteCollectionCompare
-} from "@/api/collectionCompare";
+} from '@/api/collectionCompare'
 export default {
-  name: "collectionCompareList",
+  name: 'collectionCompareList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -307,8 +307,9 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "collectionCompare",
-          name: "collectionCompare",
+          code: 'collectionCompare',
+          name: 'collectionCompare',
+          // eslint-disable-next-line no-sparse-arrays
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -326,8 +327,8 @@ export default {
             },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },,
             {
-              code: "phaseId",
-              name: "生产阶段ID",
+              code: 'phaseId',
+              name: '生产阶段ID',
               type: 'string',
               required: true
             },
@@ -350,20 +351,20 @@ export default {
               required: true
             },
             {
-              code: "firstColumnName",
-              name: "组立职场名称",
+              code: 'firstColumnName',
+              name: '组立职场名称',
               type: 'string',
               required: true
             },
             {
-              code: "lastVersionName",
-              name: "上一版本名称",
+              code: 'lastVersionName',
+              name: '上一版本名称',
               type: 'string',
               required: true
             },
             {
-              code: "current_version_name",
-              name: "当前版本名称",
+              code: 'current_version_name',
+              name: '当前版本名称',
               type: 'string',
               required: true
             },
@@ -425,7 +426,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listCollectionCompare(
         Object.assign(
@@ -496,7 +497,7 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({
-          path: id ? `/edit-collectioncompare/${id}` :  '/add-collectioncompare'
+          path: id ? `/edit-collectioncompare/${id}` : '/add-collectioncompare'
         })
       })
     },
@@ -505,8 +506,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

@@ -45,6 +45,3 @@ export function deleteReportApprove (id) {
     params: { id }
   })
 }
-
-
-

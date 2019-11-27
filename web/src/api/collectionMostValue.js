@@ -45,6 +45,3 @@ export function deleteCollectionMostValue (id) {
     params: { id }
   })
 }
-
-
-

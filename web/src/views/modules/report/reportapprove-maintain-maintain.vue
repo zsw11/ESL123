@@ -69,14 +69,14 @@
 </template>
 
 <script>
-import { pick } from "lodash";
+import { pick } from 'lodash'
 import {
   fetchReportApprove,
   createReportApprove,
   updateReportApprove
-} from "@/api/reportApprove";
+} from '@/api/reportApprove'
 export default {
-  name: "editReportApprove",
+  name: 'editReportApprove',
   data () {
     return {
       inited: false,
@@ -92,93 +92,93 @@ export default {
         deleteAt: null
       },
       dataRules: {
-        deptId: [{ type: "number", message: "所属部门需为数字值" }],
-        report_group_id: [{ type: "number", message: "报表组ID需为数字值" }],
-        nextApproverId: [{ type: "number", message: "下一审批者ID需为数字值" }],
-        createBy: [{ type: "number", message: "创建者ID需为数字值" }],
+        deptId: [{ type: 'number', message: '所属部门需为数字值' }],
+        report_group_id: [{ type: 'number', message: '报表组ID需为数字值' }],
+        nextApproverId: [{ type: 'number', message: '下一审批者ID需为数字值' }],
+        createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
 
-        updateBy: [{ type: "number", message: "更新者ID需为数字值" }]
+        updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
       }
-    };
+    }
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.fromFullPath = from.fullPath;
-    });
+      vm.fromFullPath = from.fullPath
+    })
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  activated() {
+  activated () {
     if (
       this.dataForm.id &&
       parseInt(this.$route.params.id) !== this.dataForm.id
     ) {
-      this.init();
+      this.init()
     }
   },
   watch: {
     dataForm: {
-      handler: function(val) {
+      handler: function (val) {
         if (this.inited) {
-          this.$store.dispatch("common/updateTabAttrs", {
+          this.$store.dispatch('common/updateTabAttrs', {
             name: this.$route.name,
             changed: true
-          });
+          })
         }
       },
       deep: true
     }
   },
   methods: {
-    init() {
-      this.$store.dispatch("common/updateTabAttrs", {
+    init () {
+      this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
-      });
-      this.inited = false;
-      this.dataForm.id = parseInt(this.$route.params.id) || 0;
+      })
+      this.inited = false
+      this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportApprove(this.dataForm.id)
           .then(({ data }) => {
             Object.assign(
               this.dataForm,
               pick(data, [
-                "deptId",
-                "report_group_id",
-                "nextApproverId",
-                "createBy",
-                "createAt",
-                "updateBy",
-                "updateAt",
-                "deleteAt"
+                'deptId',
+                'report_group_id',
+                'nextApproverId',
+                'createBy',
+                'createAt',
+                'updateBy',
+                'updateAt',
+                'deleteAt'
               ])
-            );
+            )
           })
           .finally(() => {
-            this.inited = true;
-          });
+            this.inited = true
+          })
       } else {
-        this.inited = true;
+        this.inited = true
       }
     },
     // 取消信息
-    cancleFormSubmit() {
-      this.$store.dispatch("common/closeActiveTab");
-      this.$router.push({ name: "report-reportapprove" });
+    cancleFormSubmit () {
+      this.$store.dispatch('common/closeActiveTab')
+      this.$router.push({ name: 'report-reportapprove' })
       this.$destroy()
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs["dataForm"].validate(valid => {
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           (this.dataForm.id
             ? updateReportApprove(this.dataForm.id, this.dataForm)
             : createReportApprove(this.dataForm)
           ).then(({ data }) => {
             this.$message({
-              message: "操作成功",
-              type: "success",
+              message: '操作成功',
+              type: 'success',
               duration: 1500,
               onClose: this.cancleFormSubmit
             })

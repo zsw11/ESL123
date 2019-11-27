@@ -253,12 +253,12 @@
 import {
   listCollectionStationTime,
   deleteCollectionStationTime
-} from "@/api/collectionStationTime";
+} from '@/api/collectionStationTime'
 export default {
-  name: "collectionStationTimeList",
+  name: 'collectionStationTimeList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -285,8 +285,8 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "collectionStationTime",
-          name: "工位时间表",
+          code: 'collectionStationTime',
+          name: '工位时间表',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -302,10 +302,10 @@ export default {
               required: true
             },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
-            { code: "remark", name: "备注", type: 'string', required: true },
+            { code: 'remark', name: '备注', type: 'string', required: true },
             {
-              code: "phaseId",
-              name: "生产阶段ID",
+              code: 'phaseId',
+              name: '生产阶段ID',
               type: 'string',
               required: true
             },
@@ -385,7 +385,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listCollectionStationTime(
         Object.assign(
@@ -456,7 +456,7 @@ export default {
         this.$router.push({
           path: id
             ? `/edit-collectionstationtime/${id}`
-            : "/add-collectionstationtime"
+            : '/add-collectionstationtime'
         })
       })
     },
@@ -465,8 +465,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

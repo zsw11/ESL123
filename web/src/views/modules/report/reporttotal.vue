@@ -315,12 +315,12 @@
 </template>
 
 <script>
-import { listReportTotal, deleteReportTotal } from "@/api/reportTotal";
+import { listReportTotal, deleteReportTotal } from '@/api/reportTotal'
 export default {
-  name: "reportTotalList",
+  name: 'reportTotalList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -353,8 +353,9 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "reportTotal",
-          name: "reportTotal",
+          code: 'reportTotal',
+          name: 'reportTotal',
+          // eslint-disable-next-line no-sparse-arrays
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -558,8 +559,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

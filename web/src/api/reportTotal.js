@@ -45,6 +45,3 @@ export function deleteReportTotal (id) {
     params: { id }
   })
 }
-
-
-

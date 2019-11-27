@@ -45,6 +45,3 @@ export function deleteReportStandardWork (id) {
     params: { id }
   })
 }
-
-
-

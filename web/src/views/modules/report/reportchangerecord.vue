@@ -233,12 +233,12 @@
 import {
   listReportChangeRecord,
   deleteReportChangeRecord
-} from "@/api/reportChangeRecord";
+} from '@/api/reportChangeRecord'
 export default {
-  name: "reportChangeRecordList",
+  name: 'reportChangeRecordList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -263,8 +263,8 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "reportChangeRecord",
-          name: "reportChangeRecord",
+          code: 'reportChangeRecord',
+          name: 'reportChangeRecord',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -279,7 +279,7 @@ export default {
               name: 'Sheet名称',
               required: true
             },
-            { code: "factory", name: "工场", type: 'string', required: true },
+            { code: 'factory', name: '工场', type: 'string', required: true },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
               code: 'model_type',
@@ -351,7 +351,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listReportChangeRecord(
         Object.assign(
@@ -429,8 +429,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

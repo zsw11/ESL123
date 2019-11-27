@@ -308,12 +308,12 @@
 import {
   listCollectionRevisionHistory,
   deleteCollectionRevisionHistory
-} from "@/api/collectionRevisionHistory";
+} from '@/api/collectionRevisionHistory'
 export default {
-  name: "collectionRevisionHistoryList",
+  name: 'collectionRevisionHistoryList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -345,8 +345,8 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "collectionRevisionHistory",
-          name: "Collection - Revision History 表",
+          code: 'collectionRevisionHistory',
+          name: 'Collection - Revision History 表',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
@@ -381,8 +381,8 @@ export default {
               required: true
             },
             {
-              code: "factory",
-              name: "制造工厂",
+              code: 'factory',
+              name: '制造工厂',
               type: 'string',
               required: true
             },
@@ -392,28 +392,28 @@ export default {
               type: 'string',
               required: true
             },
-            { code: "revNo", name: "版本号", type: 'string', required: true },
+            { code: 'revNo', name: '版本号', type: 'string', required: true },
             {
-              code: "lastSTname",
-              name: "上一版本ST名称",
+              code: 'lastSTname',
+              name: '上一版本ST名称',
               type: 'string',
               required: true
             },
             {
-              code: "currentSTname",
-              name: "当前版本ST名称",
+              code: 'currentSTname',
+              name: '当前版本ST名称',
               type: 'string',
               required: true
             },
             {
-              code: "lastLSTname",
-              name: "上一版本LST名称",
+              code: 'lastLSTname',
+              name: '上一版本LST名称',
               type: 'string',
               required: true
             },
             {
-              code: "currentLSTname",
-              name: "当前版本LST名称",
+              code: 'currentLSTname',
+              name: '当前版本LST名称',
               type: 'string',
               required: true
             },
@@ -475,7 +475,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listCollectionRevisionHistory(
         Object.assign(
@@ -551,7 +551,7 @@ export default {
         this.$router.push({
           path: id
             ? `/edit-collectionrevisionhistory/${id}`
-            : "/add-collectionrevisionhistory"
+            : '/add-collectionrevisionhistory'
         })
       })
     },
@@ -560,8 +560,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

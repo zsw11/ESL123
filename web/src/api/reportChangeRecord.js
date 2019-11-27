@@ -45,6 +45,3 @@ export function deleteReportChangeRecord (id) {
     params: { id }
   })
 }
-
-
-

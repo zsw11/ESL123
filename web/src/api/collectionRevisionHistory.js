@@ -45,6 +45,3 @@ export function deleteCollectionRevisionHistory (id) {
     params: { id }
   })
 }
-
-
-

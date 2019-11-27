@@ -200,12 +200,12 @@
 </template>
 
 <script>
-import { listReportApprove, deleteReportApprove } from "@/api/reportApprove";
+import { listReportApprove, deleteReportApprove } from '@/api/reportApprove'
 export default {
-  name: "reportApproveList",
+  name: 'reportApproveList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -227,29 +227,29 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "reportApprove",
-          name: "reportApprove",
+          code: 'reportApprove',
+          name: 'reportApprove',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
-              code: "deptId",
-              name: "所属部门",
+              code: 'deptId',
+              name: '所属部门',
               type: 'string',
               required: true
             },
             {
-              code: "report_group_id",
-              name: "报表组ID",
+              code: 'report_group_id',
+              name: '报表组ID',
               type: 'string',
               required: true
             },
             {
-              code: "nextApproverId",
-              name: "下一审批者ID",
+              code: 'nextApproverId',
+              name: '下一审批者ID',
               type: 'string',
               required: true
             },
-            { code: "status", name: "状态", type: 'string', required: true },
+            { code: 'status', name: '状态', type: 'string', required: true },
             {
               code: 'createBy',
               name: '创建者ID',
@@ -308,7 +308,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listReportApprove(
         Object.assign(
@@ -372,7 +372,7 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({
-          path: id ? `/edit-reportapprove/${id}` : "/add-reportapprove"
+          path: id ? `/edit-reportapprove/${id}` : '/add-reportapprove'
         })
       })
     },
@@ -381,8 +381,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

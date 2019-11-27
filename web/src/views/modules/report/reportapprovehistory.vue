@@ -213,12 +213,12 @@
 import {
   listReportApproveHistory,
   deleteReportApproveHistory
-} from "@/api/reportApproveHistory";
+} from '@/api/reportApproveHistory'
 export default {
-  name: "reportApproveHistoryList",
+  name: 'reportApproveHistoryList',
   data () {
     return {
-       dataButton: 'list',
+      dataButton: 'list',
       listQuery: {
         id: null,
         deptId: null,
@@ -241,32 +241,32 @@ export default {
       dataListSelections: [],
       attributes: [
         {
-          code: "reportApproveHistory",
-          name: "reportApproveHistory",
+          code: 'reportApproveHistory',
+          name: 'reportApproveHistory',
           children: [
             { code: 'id', name: 'ID', type: 'string', required: true },
             {
-              code: "deptId",
-              name: "所属部门",
+              code: 'deptId',
+              name: '所属部门',
               type: 'string',
               required: true
             },
             {
-              code: "reportApproveId",
-              name: "报表意见ID",
+              code: 'reportApproveId',
+              name: '报表意见ID',
               type: 'string',
               required: true
             },
-            { code: "result", name: "结果", type: 'string', required: true },
+            { code: 'result', name: '结果', type: 'string', required: true },
             {
-              code: "reportGroupId",
-              name: "报表组ID",
+              code: 'reportGroupId',
+              name: '报表组ID',
               type: 'string',
               required: true
             },
             {
-              code: "nextApproverId",
-              name: "下一审批者ID",
+              code: 'nextApproverId',
+              name: '下一审批者ID',
               type: 'string',
               required: true
             },
@@ -328,7 +328,7 @@ export default {
       if (pageNo) {
         this.pageNo = pageNo
       }
-            this.dataButton = 'list'
+      this.dataButton = 'list'
       this.dataListLoading = true
       listReportApproveHistory(
         Object.assign(
@@ -395,7 +395,7 @@ export default {
         this.$router.push({
           path: id
             ? `/edit-reportapprovehistory/${id}`
-            : "/add-reportapprovehistory"
+            : '/add-reportapprovehistory'
         })
       })
     },
@@ -404,8 +404,8 @@ export default {
       var ids = row
         ? row.id
         : this.dataListSelections.map(item => {
-            return item.id
-          })
+          return item.id
+        })
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

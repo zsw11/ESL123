@@ -113,14 +113,14 @@
 </template>
 
 <script>
-import { pick } from "lodash";
+import { pick } from 'lodash'
 import {
   fetchReportStandardWork,
   createReportStandardWork,
   updateReportStandardWork
-} from "@/api/reportStandardWork";
+} from '@/api/reportStandardWork'
 export default {
-  name: "editReportStandardWork",
+  name: 'editReportStandardWork',
   data () {
     return {
       inited: false,
@@ -146,119 +146,119 @@ export default {
         deleteAt: null
       },
       dataRules: {
-        deptId: [{ type: "number", message: "组织机构ID需为数字值" }],
-        title: [{ max: 128, message: "长度超过了128", trigger: "blur" }],
-        sheetName: [{ max: 128, message: "长度超过了128", trigger: "blur" }],
-        modelId: [{ type: "number", message: "机种ID需为数字值" }],
-        model_type: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
+        deptId: [{ type: 'number', message: '组织机构ID需为数字值' }],
+        title: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        sheetName: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        modelId: [{ type: 'number', message: '机种ID需为数字值' }],
+        model_type: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         coefficient: [
-          { type: "number", max: 100000000, message: "系数需为8位数字值" }
+          { type: 'number', max: 100000000, message: '系数需为8位数字值' }
         ],
-        phaseId: [{ type: "number", message: "生产阶段ID需为数字值" }],
-        RevNo: [{ max: 64, message: "长度超过了64", trigger: "blur" }],
+        phaseId: [{ type: 'number', message: '生产阶段ID需为数字值' }],
+        RevNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
 
         firstStandardWorkTitle: [
-          { max: 32, message: "长度超过了32", trigger: "blur" }
+          { max: 32, message: '长度超过了32', trigger: 'blur' }
         ],
         secondStandardWorkTitle: [
-          { max: 32, message: "长度超过了32", trigger: "blur" }
+          { max: 32, message: '长度超过了32', trigger: 'blur' }
         ],
-        comfirmBy: [{ type: "number", message: "确认ID需为数字值" }],
-        inChargeBy: [{ type: "number", message: "承认ID需为数字值" }],
-        createBy: [{ type: "number", message: "创建者ID需为数字值" }],
+        comfirmBy: [{ type: 'number', message: '确认ID需为数字值' }],
+        inChargeBy: [{ type: 'number', message: '承认ID需为数字值' }],
+        createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
 
-        updateBy: [{ type: "number", message: "更新者ID需为数字值" }]
+        updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
       }
-    };
+    }
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.fromFullPath = from.fullPath;
-    });
+      vm.fromFullPath = from.fullPath
+    })
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  activated() {
+  activated () {
     if (
       this.dataForm.id &&
       parseInt(this.$route.params.id) !== this.dataForm.id
     ) {
-      this.init();
+      this.init()
     }
   },
   watch: {
     dataForm: {
-      handler: function(val) {
+      handler: function (val) {
         if (this.inited) {
-          this.$store.dispatch("common/updateTabAttrs", {
+          this.$store.dispatch('common/updateTabAttrs', {
             name: this.$route.name,
             changed: true
-          });
+          })
         }
       },
       deep: true
     }
   },
   methods: {
-    init() {
-      this.$store.dispatch("common/updateTabAttrs", {
+    init () {
+      this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
-      });
-      this.inited = false;
-      this.dataForm.id = parseInt(this.$route.params.id) || 0;
+      })
+      this.inited = false
+      this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportStandardWork(this.dataForm.id)
           .then(({ data }) => {
             Object.assign(
               this.dataForm,
               pick(data, [
-                "deptId",
-                "title",
-                "sheetName",
-                "modelId",
-                "model_type",
-                "coefficient",
-                "phaseId",
-                "RevNo",
-                "monthResult",
-                "firstStandardWorkTitle",
-                "secondStandardWorkTitle",
-                "comfirmBy",
-                "inChargeBy",
-                "createBy",
-                "createAt",
-                "updateBy",
-                "updateAt",
-                "deleteAt"
+                'deptId',
+                'title',
+                'sheetName',
+                'modelId',
+                'model_type',
+                'coefficient',
+                'phaseId',
+                'RevNo',
+                'monthResult',
+                'firstStandardWorkTitle',
+                'secondStandardWorkTitle',
+                'comfirmBy',
+                'inChargeBy',
+                'createBy',
+                'createAt',
+                'updateBy',
+                'updateAt',
+                'deleteAt'
               ])
-            );
+            )
           })
           .finally(() => {
-            this.inited = true;
-          });
+            this.inited = true
+          })
       } else {
-        this.inited = true;
+        this.inited = true
       }
     },
     // 取消信息
-    cancleFormSubmit() {
-      this.$store.dispatch("common/closeActiveTab");
-      this.$router.push({ name: "report-reportstandardwork" });
+    cancleFormSubmit () {
+      this.$store.dispatch('common/closeActiveTab')
+      this.$router.push({ name: 'report-reportstandardwork' })
       this.$destroy()
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs["dataForm"].validate(valid => {
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           (this.dataForm.id
             ? updateReportStandardWork(this.dataForm.id, this.dataForm)
             : createReportStandardWork(this.dataForm)
           ).then(({ data }) => {
             this.$message({
-              message: "操作成功",
-              type: "success",
+              message: '操作成功',
+              type: 'success',
               duration: 1500,
               onClose: this.cancleFormSubmit
             })

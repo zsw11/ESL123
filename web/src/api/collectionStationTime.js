@@ -45,6 +45,3 @@ export function deleteCollectionStationTime (id) {
     params: { id }
   })
 }
-
-
-
