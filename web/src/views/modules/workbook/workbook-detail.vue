@@ -65,12 +65,6 @@
         currentWorkbook: null
       }
     },
-    computed: {
-      currentWorkbookData () {
-        if (this.currentWorkbook && this.workbookData[this.currentWorkbook]) return this.workbookData[this.currentWorkbook]
-        return []
-      }
-    },
     watch: {
       currentWorkbook (workName) {
         const workbook = this.workbooks.find(wb => wb.workName === workName)
@@ -79,9 +73,6 @@
             this.refreshWorkbookData(workName)
           })
         }
-      },
-      currentWorkbookData (v) {
-        console.log(v)
       }
     },
     created () {

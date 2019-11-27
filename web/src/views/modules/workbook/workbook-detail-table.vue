@@ -10,9 +10,6 @@
       align="center"
       height="100%"
       :auto-resize="true"
-      @cell-click="cellClickEvent"
-      @select-all="selectAllEvent"
-      @select-change="selectChangeEvent"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -99,6 +96,7 @@ export default {
     },
     // 加载数据
     loadData (data) {
+      console.log(Object.keys(this.$refs.workbookTable))
       this.$refs.workbookTable.loadData(data)
     },
     // 选中单元格并输入时的处理
@@ -124,6 +122,7 @@ export default {
     // 添加标准书对话框
     async addStandardBook () {
       this.standardBookDialog.visible = true
+      console.log(1111, this.$refs.workbookTable.getMouseSelecteds())
       await this.$refs.workbookTable.clearActived()
       await this.$refs.workbookTable.clearSelected()
       Object.assign(this.standardBookDialog.formData, {
@@ -219,23 +218,6 @@ export default {
     paste (event) {
       event.target.value = this.WMethod
       this.workbookData[this.rowIndex].workMethod = this.WMethod
-    },
-    // 单元格点击
-    cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-      this.rowIndex = rowIndex
-      if (this.rowIndex < this.workbookData.length - 1) {
-        this.add = false
-      } else {
-        this.add = true
-      }
-    },
-    // 多选框全选点击
-    selectAllEvent ({ checked }) {
-      console.log(checked ? '所有勾选事件' : '所有取消事件')
-    },
-    // 单选点击
-    selectChangeEvent ({ checked, row }) {
-      console.log(checked ? '勾选事件' : '取消事件')
     }
   }
 }
