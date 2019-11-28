@@ -60,7 +60,7 @@ export default {
     // 查询并提示
     suggest (keyword) {
       this.suggestions = []
-      listMeasureGroup({ code: keyword }).then(({ page }) => {
+      listMeasureGroup({ code: keyword }).then((page) => {
         this.suggestions = page.data
       })
       setTimeout(() => {

@@ -150,7 +150,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
-          fetchRole(this.dataForm.id).then(({ page }) => {
+          fetchRole(this.dataForm.id).then((page) => {
             Object.assign(
               this.dataForm,
               pick(page, ['name', 'remark'])

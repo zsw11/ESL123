@@ -26,7 +26,7 @@
           </el-form-item>
 
           <el-form-item :label="'生产阶段'" prop="phaseId">
-             <keyword-search style="width: 100%" :disabled=flag v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+             <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
           <el-form-item :label="'仕向'" prop="destinations">
@@ -424,7 +424,7 @@ export default {
           this.listQuery
         )
       )
-        .then(({ page }) => {
+        .then((page) => {
           this.dataList = page.data
           this.total = page.totalCount
         })

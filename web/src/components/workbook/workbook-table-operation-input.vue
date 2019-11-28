@@ -66,7 +66,7 @@ export default {
     suggest (mode, keyword) {
       this.suggestMode = mode
       this.suggestions = []
-      listFuncs[mode]({ name: keyword }).then(({ page }) => {
+      listFuncs[mode]({ name: keyword }).then((page) => {
         this.suggestions = page.data
       })
       setTimeout(() => {
