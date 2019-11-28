@@ -2,19 +2,27 @@
   <div class="workbook-detail-page">
     <div class="workbook-content" :class="workbookPercent">
       <div class="video-buttons">
-        <el-select v-model="workbookPercent" class="workbook-percent">
-          <el-option
-            v-for="item in workbookPercents"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
+        <el-tooltip content="Ctrl + Q" placement="top">
+          <el-select v-model="workbookPercent" class="workbook-percent">
+            <el-option
+              v-for="item in workbookPercents"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-tooltip>
       </div>
       <div class="workbook-buttons">
-        <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
-        <el-button type="primary" @click="copy">复制</el-button>
-        <el-button type="primary" @click="paste">粘贴</el-button>
+        <el-tooltip content="Ctrl + I" placement="top">
+          <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
+        </el-tooltip>
+        <el-tooltip content="Ctrl + C" placement="top">
+          <el-button type="primary" @click="copy">复制</el-button>
+        </el-tooltip>
+        <el-tooltip content="Ctrl + V" placement="top">
+          <el-button type="primary" @click="paste">粘贴</el-button>
+        </el-tooltip>
         <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
         <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
@@ -62,7 +70,8 @@
         workbook: {},
         workbookData: {},
         workbooks: [],
-        currentWorkbook: null
+        currentWorkbook: null,
+        listener: null
       }
     },
     watch: {
@@ -77,6 +86,10 @@
     },
     created () {
       this.init()
+      this.handleShortcut()
+    },
+    destroyed () {
+      this.handleShortcut()
     },
     methods: {
       init () {
@@ -96,6 +109,43 @@
             { id: 3, workName: 'D' }
           ]
         }, 500)
+      },
+      // 快捷键
+      handleShortcut () {
+        const self = this
+        if (this.listener) {
+          document.removeEventListener("keydown", this.listener)
+          console.log('Remove Listener')
+        } else {
+          this.listener = function(e){
+            // console.log('keydown', e)
+            if (e.ctrlKey) {
+              switch (e.key) {
+                case 'c': {
+                  self.copy()
+                  break
+                }
+                case 'v': {
+                  self.paste()
+                  break
+                }
+                case 'i': {
+                  self.addStandardBook()
+                  break
+                }
+                case 'q': {
+                  self.workbookPercent = {
+                    mini: 'half',
+                    half: 'full',
+                    full: 'mini'
+                  }[self.workbookPercent]
+                }
+              }
+            }
+          }
+          document.addEventListener("keydown", this.listener)
+          console.log('Add Listener')
+        }
       },
       // 更新workbook数据
       refreshWorkbookData (workName) {

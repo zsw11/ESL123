@@ -189,45 +189,6 @@ export default {
       )
       this.$refs.workbookTable.setActiveCell(row, 'tool')
     },
-    // 新增行模块
-    addRow (event) {
-      // 调用对应快捷键
-      let keyValue = this.$refs.keys.value
-      this.workKey(keyValue)
-      // 新增行 唤醒手顺单元
-      if (event.target.style.width !== '90px' && this.add) {
-        let record = {
-          workMethod: ''
-        }
-        this.$refs.workbookTable.insertAt(record, -1)
-          .then(({ row }) => this.$refs.workbookTable.setActiveCell(row, 'workMethod'))
-        let index = this.$refs.workbookTable.getInsertRecords().length - 1
-        this.workbookData.push(this.$refs.workbookTable.getInsertRecords()[index])
-        this.rowIndex ++
-      }
-    },
-    // 快捷键模块
-    workKey (key) {
-      if (key === '1') {
-        this.workbookData[this.rowIndex].a2 = 1
-        this.workbookData[this.rowIndex].a3 = 0
-        this.workbookData[this.rowIndex].b1 = 1
-        this.workbookData[this.rowIndex].b3 = 1
-        this.workbookData[this.rowIndex].m = 1
-      }
-      if (key === '2') {
-        this.workbookData[this.rowIndex].a2 = 0
-        this.workbookData[this.rowIndex].a3 = 0
-        this.workbookData[this.rowIndex].b1 = 0
-        this.workbookData[this.rowIndex].b3 = 0
-        this.workbookData[this.rowIndex].m = 0
-      }
-    },
-    // 切换工位
-    toggle (index) {
-      this.id = index
-      this.workbookData = this.allTable[index]
-    },
     // 清理行，只保留有效属性
     cleanRow (row) {
       return pick(row, defaultFields)
