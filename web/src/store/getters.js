@@ -5,7 +5,6 @@ const getters = {
   member: state => state.user.member,
   displaySetting: state => state.user.displaySetting,
   unreadCount: state => state.user.unreadCount,
-  mainTabs: state => state.common.mainTabs,
-  copyContent: state => state.workbook.copyContent
+  mainTabs: state => state.common.mainTabs
 }
 export default getters

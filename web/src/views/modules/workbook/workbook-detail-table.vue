@@ -195,11 +195,11 @@ export default {
     },
     // 缓存
     copy () {
-      this.$store.dispatch('workbook/copy', this.cleanRow((this.getCurrentCell() || {}).row))
+      localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
     },
     // 粘贴
     async paste (event) {
-      const copyContent = this.$store.getters.copyContent
+      const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
       if (!copyContent) return
       const currentRow = (this.getCurrentCell() || {}).row
       if (!currentRow || currentRow.$rowIndex === -1) return
