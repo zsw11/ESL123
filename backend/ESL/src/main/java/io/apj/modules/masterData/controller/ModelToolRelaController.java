@@ -75,7 +75,7 @@ public class ModelToolRelaController extends AbstractController {
 //    @RequiresPermissions("masterData:modeltoolrela:update")
     public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
-        insertTableReference("model", modelToolRela.getModelId().longValue(), "part", modelToolRela.getToolId().longValue(), true);
+        insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), true);
 
         return RD.build().put("status", 200);
     }

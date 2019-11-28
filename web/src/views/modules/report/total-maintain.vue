@@ -2,7 +2,7 @@
 <template>
   <el-card class="with-title">
     <div slot="header" class="clearfix">
-      <div class="card-title">reportTotal</div>
+      <div class="card-title">ReportTotal</div>
       <div class="buttons">
         <el-button @click="cancleFormSubmit">取 消</el-button>
       </div>
