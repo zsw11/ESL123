@@ -36,11 +36,13 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at")
-				.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"))
-				.eq(params.get("deptId") != null && params.get("deptId") != "", "dept_id",
-						(Integer)params.get("deptId"))
-				.eq(params.get("modelSeriesId") != null && params.get("modelSeriesId") != "", "model_series_id",
-						(Integer) params.get("modelSeriesId"));
+				.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
+		if(StringUtils.isNotEmpty((CharSequence) params.get("deptId"))){
+			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
+		}
+		if(StringUtils.isNotEmpty((CharSequence) params.get("modelSeriesId"))){
+			entityWrapper.eq("model_series_id", Integer.parseInt((String) params.get("modelSeriesId")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
 			String name = (String) params.get("keyWord");
 			name = name.replace(",", "");
