@@ -41,15 +41,6 @@
           <el-input v-model="listQuery.RevNo" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'发行日'" prop="monthResult">
-          <el-date-picker
-            v-model="listQuery.monthResult"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
-
         <el-form-item :label="'首个标准工数title'" prop="firstStandardWorkTitle">
           <el-input v-model="listQuery.firstStandardWorkTitle" clearable></el-input>
         </el-form-item>
@@ -58,6 +49,14 @@
           <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'发行日'" prop="monthResult">
+          <el-date-picker
+            v-model="listQuery.monthResult"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            clearable
+          ></el-date-picker>
+        </el-form-item>
 <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
 <!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
 <!--        </el-form-item>-->

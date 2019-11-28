@@ -38,7 +38,7 @@ public class StandardWorkItemController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = standardWorkItemService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class StandardWorkItemController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StandardWorkItemEntity standardWorkItem = standardWorkItemService.selectById(id);
 
-		return RD.ok(standardWorkItem);
+		return RD.success(standardWorkItem);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class StandardWorkItemController {
 	public ResponseEntity<Object> save(@RequestBody StandardWorkItemEntity standardWorkItem) {
 		standardWorkItemService.insert(standardWorkItem);
 
-		return RD.ok(standardWorkItem);
+		return RD.success(standardWorkItem);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class StandardWorkItemController {
 	public ResponseEntity<Object> update(@RequestBody StandardWorkItemEntity standardWorkItem) {
 		standardWorkItemService.updateById(standardWorkItem);
 
-		return RD.ok(standardWorkItem);
+		return RD.success(standardWorkItem);
 	}
 
 	/**

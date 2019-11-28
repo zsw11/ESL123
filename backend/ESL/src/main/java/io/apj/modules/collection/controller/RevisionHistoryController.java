@@ -38,7 +38,7 @@ public class RevisionHistoryController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = revisionHistoryService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class RevisionHistoryController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		RevisionHistoryEntity revisionHistory = revisionHistoryService.selectById(id);
 
-		return RD.ok(revisionHistory);
+		return RD.success(revisionHistory);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class RevisionHistoryController {
 	public ResponseEntity<Object> save(@RequestBody RevisionHistoryEntity revisionHistory) {
 		revisionHistoryService.insert(revisionHistory);
 
-		return RD.ok(revisionHistory);
+		return RD.success(revisionHistory);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class RevisionHistoryController {
 	public ResponseEntity<Object> update(@RequestBody RevisionHistoryEntity revisionHistory) {
 		revisionHistoryService.updateById(revisionHistory);
 
-		return RD.ok(revisionHistory);
+		return RD.success(revisionHistory);
 	}
 
 	/**

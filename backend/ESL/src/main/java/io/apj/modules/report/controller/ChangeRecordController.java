@@ -38,7 +38,7 @@ public class ChangeRecordController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = changeRecordService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ChangeRecordController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ChangeRecordEntity changeRecord = changeRecordService.selectById(id);
 
-		return RD.ok(changeRecord);
+		return RD.success(changeRecord);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ChangeRecordController {
 	public ResponseEntity<Object> save(@RequestBody ChangeRecordEntity changeRecord) {
 		changeRecordService.insert(changeRecord);
 
-		return RD.ok(changeRecord);
+		return RD.success(changeRecord);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ChangeRecordController {
 	public ResponseEntity<Object> update(@RequestBody ChangeRecordEntity changeRecord) {
 		changeRecordService.updateById(changeRecord);
 
-		return RD.ok(changeRecord);
+		return RD.success(changeRecord);
 	}
 
 	/**

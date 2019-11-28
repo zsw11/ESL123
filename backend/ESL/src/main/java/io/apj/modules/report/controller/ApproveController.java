@@ -38,7 +38,7 @@ public class ApproveController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = approveService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ApproveController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ApproveEntity approve = approveService.selectById(id);
 
-		return RD.ok(approve);
+		return RD.success(approve);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ApproveController {
 	public ResponseEntity<Object> save(@RequestBody ApproveEntity approve) {
 		approveService.insert(approve);
 
-		return RD.ok(approve);
+		return RD.success(approve);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ApproveController {
 	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve) {
 		approveService.updateById(approve);
 
-		return RD.ok(approve);
+		return RD.success(approve);
 	}
 
 	/**

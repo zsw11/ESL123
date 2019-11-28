@@ -38,7 +38,7 @@ public class MostValueController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = mostValueService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class MostValueController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		MostValueEntity mostValue = mostValueService.selectById(id);
 
-		return RD.ok(mostValue);
+		return RD.success(mostValue);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class MostValueController {
 	public ResponseEntity<Object> save(@RequestBody MostValueEntity mostValue) {
 		mostValueService.insert(mostValue);
 
-		return RD.ok(mostValue);
+		return RD.success(mostValue);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class MostValueController {
 	public ResponseEntity<Object> update(@RequestBody MostValueEntity mostValue) {
 		mostValueService.updateById(mostValue);
 
-		return RD.ok(mostValue);
+		return RD.success(mostValue);
 	}
 
 	/**

@@ -20,38 +20,39 @@
 <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->
+        <div class="min-width">
+          <el-form-item :label="'机种'" prop="modelId">
+            <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'机种'" prop="modelId">
-          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+             <keyword-search style="width: 100%" :disabled=flag v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'生产阶段'" prop="phaseId">
-           <keyword-search style="width: 100%" :disabled=flag v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'仕向'" prop="destinations">
+            <el-input v-model="listQuery.destinations" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'仕向'" prop="destinations">
-          <el-input v-model="listQuery.destinations" clearable></el-input>
-        </el-form-item>
+  <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
+  <!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
+  <!--        </el-form-item>-->
 
-<!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
-<!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
-<!--        </el-form-item>-->
+  <!--        <el-form-item :label="'承认ID'" prop="inChargeBy">-->
+  <!--          <el-input-number v-model="listQuery.inChargeBy" clearable></el-input-number>-->
+  <!--        </el-form-item>-->
 
-<!--        <el-form-item :label="'承认ID'" prop="inChargeBy">-->
-<!--          <el-input-number v-model="listQuery.inChargeBy" clearable></el-input-number>-->
-<!--        </el-form-item>-->
+          <el-form-item :label="'组立职场名称'" prop="firstColumnName">
+            <el-input v-model="listQuery.firstColumnName" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'组立职场名称'" prop="firstColumnName">
-          <el-input v-model="listQuery.firstColumnName" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'上版名称'" prop="lastVersionName">
+            <el-input v-model="listQuery.lastVersionName" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'上版名称'" prop="lastVersionName">
-          <el-input v-model="listQuery.lastVersionName" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'此版名称'" prop="current_version_name">
-          <el-input v-model="listQuery.current_version_name" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'此版名称'" prop="current_version_name">
+            <el-input v-model="listQuery.current_version_name" clearable></el-input>
+          </el-form-item>
+        </div>
 
 <!--        <el-form-item :label="'创建者ID'" prop="createBy">-->
 <!--          <el-input-number v-model="listQuery.createBy" clearable></el-input-number>-->
@@ -513,3 +514,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .min-width{
+    min-width: 1024px;
+  }
+</style>

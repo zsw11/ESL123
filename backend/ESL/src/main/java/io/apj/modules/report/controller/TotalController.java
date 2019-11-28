@@ -38,7 +38,7 @@ public class TotalController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = totalService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class TotalController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		TotalEntity total = totalService.selectById(id);
 
-		return RD.ok(total);
+		return RD.success(total);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class TotalController {
 	public ResponseEntity<Object> save(@RequestBody TotalEntity total) {
 		totalService.insert(total);
 
-		return RD.ok(total);
+		return RD.success(total);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class TotalController {
 	public ResponseEntity<Object> update(@RequestBody TotalEntity total) {
 		totalService.updateById(total);
 
-		return RD.ok(total);
+		return RD.success(total);
 	}
 
 	/**
