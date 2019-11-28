@@ -70,10 +70,10 @@ public class PartController extends AbstractController {
 	 */
 	@RequestMapping("/detail/{id}")
 	@RequiresPermissions("masterData:part:info")
-	public RD info(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		PartEntity part = partService.selectById(id);
 
-		return RD.build().put("data", part);
+		return RD.ok(part);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class PartController extends AbstractController {
 	@RequestMapping("/modeldetail/{id}")
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
-		PageUtils page = partService.partModeRelaList(id,params);
+		PageUtils page = partService.partModeRelaList(id, params);
 
 		return RD.ok(page);
 	}
@@ -94,12 +94,12 @@ public class PartController extends AbstractController {
 	 */
 	@RequestMapping("/create")
 	@RequiresPermissions("masterData:part:create")
-	public RD save(@RequestBody PartEntity part) {
+	public ResponseEntity<Object> save(@RequestBody PartEntity part) {
 		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
 		part.setCreateBy(getUserId().intValue());
 		partService.insert(part);
 
-		return RD.build().put("code", 200);
+		return RD.ok(part);
 	}
 
 	/**
@@ -107,11 +107,11 @@ public class PartController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:part:update")
-	public RD update(@RequestBody PartEntity part) {
+	public ResponseEntity<Object> update(@RequestBody PartEntity part) {
 		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
 		partService.updateById(part);
 
-		return RD.build().put("code", 200);
+		return RD.ok(part);
 	}
 
 	/**
@@ -121,13 +121,13 @@ public class PartController extends AbstractController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:part:delete")
-	public RD delete(@RequestBody Integer[] ids) {
+	public ResponseEntity<Object> delete(@RequestBody Integer[] ids) {
 		for (int i = 0; i < ids.length; i++) {
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
-					return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
-							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById()
+							+ " 在表：" + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
 				}
 			} else {
 				// 删除引用表关系
@@ -136,7 +136,7 @@ public class PartController extends AbstractController {
 		}
 		partService.deleteBatchIds(Arrays.asList(ids));
 
-		return RD.build().put("code", 200);
+		return RD.NO_CONTENT(RD.build());
 	}
 
 	/**

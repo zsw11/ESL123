@@ -133,11 +133,14 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchPart(this.dataForm.id).then(({data}) => {
-          Object.assign(
+        fetchPart(this.dataForm.id).then(({page, status}) => {
+          console.log(page, status, 6666)
+          if (status === 200) {
+            Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'common', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(page, [ 'name', 'common', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
+          }
         }).finally(() => {
           this.inited = true
         })
@@ -158,7 +161,7 @@ export default {
           (this.dataForm.id
             ? updatePart(this.dataForm.id, this.dataForm)
             : createPart(this.dataForm)
-          ).then(({data}) => {
+          ).then(({page, status}) => {
             this.$message({
               message: '操作成功',
               type: 'success',

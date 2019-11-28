@@ -276,10 +276,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deletePart(ids).then(({msg}) => {
-          if (msg) {
+        deletePart(ids).then(({message, status}) => {
+          console.log(message, 11111)
+          if (message) {
             Message({
-              message: msg,
+              message: message,
               type: 'error',
               duration: 5 * 1000
             })
