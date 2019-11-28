@@ -38,7 +38,7 @@ public class StationTimeItemController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = stationTimeItemService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class StationTimeItemController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StationTimeItemEntity stationTimeItem = stationTimeItemService.selectById(id);
 
-		return RD.ok(stationTimeItem);
+		return RD.success(stationTimeItem);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class StationTimeItemController {
 	public ResponseEntity<Object> save(@RequestBody StationTimeItemEntity stationTimeItem) {
 		stationTimeItemService.insert(stationTimeItem);
 
-		return RD.ok(stationTimeItem);
+		return RD.success(stationTimeItem);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class StationTimeItemController {
 	public ResponseEntity<Object> update(@RequestBody StationTimeItemEntity stationTimeItem) {
 		stationTimeItemService.updateById(stationTimeItem);
 
-		return RD.ok(stationTimeItem);
+		return RD.success(stationTimeItem);
 	}
 
 	/**

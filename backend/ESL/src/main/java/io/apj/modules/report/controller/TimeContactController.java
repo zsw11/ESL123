@@ -37,7 +37,7 @@ public class TimeContactController {
 	@RequiresPermissions("report:timecontact:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = timeContactService.queryPage(params);
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class TimeContactController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		TimeContactEntity timeContact = timeContactService.selectById(id);
 
-		return RD.ok(timeContact);
+		return RD.success(timeContact);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class TimeContactController {
 	public ResponseEntity<Object> save(@RequestBody TimeContactEntity timeContact) {
 		timeContactService.insert(timeContact);
 
-		return RD.ok(timeContact);
+		return RD.success(timeContact);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class TimeContactController {
 	public ResponseEntity<Object> update(@RequestBody TimeContactEntity timeContact) {
 		timeContactService.updateById(timeContact);
 
-		return RD.ok(timeContact);
+		return RD.success(timeContact);
 	}
 
 	/**

@@ -38,7 +38,7 @@ public class CompareItemController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = compareItemService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class CompareItemController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		CompareItemEntity compareItem = compareItemService.selectById(id);
 
-		return RD.ok(compareItem);
+		return RD.success(compareItem);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class CompareItemController {
 	public ResponseEntity<Object> save(@RequestBody CompareItemEntity compareItem) {
 		compareItemService.insert(compareItem);
 
-		return RD.ok(compareItem);
+		return RD.success(compareItem);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class CompareItemController {
 	public ResponseEntity<Object> update(@RequestBody CompareItemEntity compareItem) {
 		compareItemService.updateById(compareItem);
 
-		return RD.ok(compareItem);
+		return RD.success(compareItem);
 	}
 
 	/**

@@ -38,7 +38,7 @@ public class ApproveHistoryController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = approveHistoryService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ApproveHistoryController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ApproveHistoryEntity approveHistory = approveHistoryService.selectById(id);
 
-		return RD.ok(approveHistory);
+		return RD.success(approveHistory);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ApproveHistoryController {
 	public ResponseEntity<Object> save(@RequestBody ApproveHistoryEntity approveHistory) {
 		approveHistoryService.insert(approveHistory);
 
-		return RD.ok(approveHistory);
+		return RD.success(approveHistory);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ApproveHistoryController {
 	public ResponseEntity<Object> update(@RequestBody ApproveHistoryEntity approveHistory) {
 		approveHistoryService.updateById(approveHistory);
 
-		return RD.ok(approveHistory);
+		return RD.success(approveHistory);
 	}
 
 	/**

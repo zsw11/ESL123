@@ -38,7 +38,7 @@ public class StandardTimeController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = standardTimeService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class StandardTimeController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StandardTimeEntity standardTime = standardTimeService.selectById(id);
 
-		return RD.ok(standardTime);
+		return RD.success(standardTime);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class StandardTimeController {
 	public ResponseEntity<Object> save(@RequestBody StandardTimeEntity standardTime) {
 		standardTimeService.insert(standardTime);
 
-		return RD.ok(standardTime);
+		return RD.success(standardTime);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class StandardTimeController {
 	public ResponseEntity<Object> update(@RequestBody StandardTimeEntity standardTime) {
 		standardTimeService.updateById(standardTime);
 
-		return RD.ok(standardTime);
+		return RD.success(standardTime);
 	}
 
 	/**

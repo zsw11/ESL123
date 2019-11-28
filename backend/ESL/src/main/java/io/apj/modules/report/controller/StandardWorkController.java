@@ -38,7 +38,7 @@ public class StandardWorkController {
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = standardWorkService.queryPage(params);
 
-		return RD.ok(page);
+		return RD.success(page);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class StandardWorkController {
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StandardWorkEntity standardWork = standardWorkService.selectById(id);
 
-		return RD.ok(standardWork);
+		return RD.success(standardWork);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class StandardWorkController {
 	public ResponseEntity<Object> save(@RequestBody StandardWorkEntity standardWork) {
 		standardWorkService.insert(standardWork);
 
-		return RD.ok(standardWork);
+		return RD.success(standardWork);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class StandardWorkController {
 	public ResponseEntity<Object> update(@RequestBody StandardWorkEntity standardWork) {
 		standardWorkService.updateById(standardWork);
 
-		return RD.ok(standardWork);
+		return RD.success(standardWork);
 	}
 
 	/**
