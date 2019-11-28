@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
-
-
+import io.apj.common.utils.RD;
 
 /**
  * Collection - Revision History 表
@@ -28,63 +27,62 @@ import io.apj.common.utils.R;
 @RestController
 @RequestMapping("/api/v1/revisionhistory")
 public class RevisionHistoryController {
-    @Autowired
-    private RevisionHistoryService revisionHistoryService;
+	@Autowired
+	private RevisionHistoryService revisionHistoryService;
 
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("collection:revisionhistory:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = revisionHistoryService.queryPage(params);
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("collection:revisionhistory:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = revisionHistoryService.queryPage(params);
 
-        return R.ok().put("page", page);
-    }
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("collection:revisionhistory:detail")
-    public R info(@PathVariable("id") Integer id){
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("collection:revisionhistory:detail")
+	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		RevisionHistoryEntity revisionHistory = revisionHistoryService.selectById(id);
 
-        return R.ok().put("revisionHistory", revisionHistory);
-    }
+		return RD.ok(revisionHistory);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("collection:revisionhistory:create")
-    public R save(@RequestBody RevisionHistoryEntity revisionHistory){
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("collection:revisionhistory:create")
+	public ResponseEntity<Object> save(@RequestBody RevisionHistoryEntity revisionHistory) {
 		revisionHistoryService.insert(revisionHistory);
 
-        return R.ok();
-    }
+		return RD.ok(revisionHistory);
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("collection:revisionhistory:update")
-    public R update(@RequestBody RevisionHistoryEntity revisionHistory){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("collection:revisionhistory:update")
+	public ResponseEntity<Object> update(@RequestBody RevisionHistoryEntity revisionHistory) {
 		revisionHistoryService.updateById(revisionHistory);
 
-        return R.ok();
-    }
+		return RD.ok(revisionHistory);
+	}
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("collection:revisionhistory:delete")
-    public R delete(@RequestBody Integer[] ids){
+	/**
+	 * 删除
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("collection:revisionhistory:delete")
+	public ResponseEntity<Object> delete(@RequestBody Integer[] ids) {
 		revisionHistoryService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
-    }
+		return RD.NO_CONTENT(RD.build());
+	}
 
 }
