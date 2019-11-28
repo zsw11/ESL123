@@ -321,8 +321,8 @@
               partId: this.addModelPartId,
               modelId: this.id
             }
-            createModelPartRela(data).then(({code}) => {
-              if (code === 200) {
+            createModelPartRela(data).then(({page, status}) => {
+              if (status === 200) {
                 this.addReal = false
                 this.getDataList()
                 this.$notify({

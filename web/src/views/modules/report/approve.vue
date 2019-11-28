@@ -229,9 +229,9 @@ export default {
           this.listQuery
         )
       )
-        .then(({ data, total }) => {
-          this.dataList = data
-          this.total = total
+      .then((page) => {
+        this.dataList = page.data
+        this.total = page.totalCount
         })
         .catch(() => {
           this.dataList = []
