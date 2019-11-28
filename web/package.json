@@ -33,6 +33,7 @@
     "js-cookie": "^2.2.0",
     "lodash": "4.17.5",
     "node-sass": "4.9.0",
+    "popper.js": "^1.16.0",
     "sass-loader": "6.0.6",
     "script-loader": "^0.7.2",
     "svg-sprite-loader": "3.7.3",

@@ -14,10 +14,9 @@
       <div class="workbook-buttons">
         <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
         <el-button type="primary" @click="copy">复制</el-button>
+        <el-button type="primary" @click="paste">粘贴</el-button>
         <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
-        <el-button type="primary">F4 复制到最后</el-button>
-        <el-button type="primary">F7 复制</el-button>
-        <el-button type="primary">F9 粘贴</el-button> -->
+        <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
       <workbook-table ref="workbookTable"></workbook-table>
       <div class="workbook-switch">
@@ -100,13 +99,18 @@
       },
       // 更新workbook数据
       refreshWorkbookData (workName) {
-        const newRow = this.$refs.workbookTable.createNewRow()
-        newRow.operation = workName
-        this.workbookData[workName] = [newRow]
+        if (!this.workbookData[workName]) {
+          const newRow = this.$refs.workbookTable.createNewRow()
+          newRow.operation = workName
+          this.workbookData[workName] = [newRow]
+        }
         this.$refs.workbookTable.loadData(this.workbookData[workName])
       },
       copy () {
         this.$refs.workbookTable.copy()
+      },
+      paste () {
+        this.$refs.workbookTable.paste()
       },
       addStandardBook () {
         if (this.$refs.workbookTable) {

@@ -54,7 +54,7 @@ import { pick, clone } from 'lodash'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
-import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
+import { measureColumns0, measureColumns1, measureFields, defaultRow, defaultFields } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
@@ -129,7 +129,7 @@ export default {
       this.lastEditCell = cell
     },
     // 获取当前行数据
-    getCurrentRow () {
+    getCurrentCell () {
       return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
     },
     // 添加标准书对话框
@@ -228,24 +228,21 @@ export default {
       this.id = index
       this.workbookData = this.allTable[index]
     },
+    // 清理行，只保留有效属性
+    cleanRow (row) {
+      return pick(row, defaultFields)
+    },
     // 缓存
     copy () {
-      this.$store.dispatch('workbook/copy', (this.getCurrentRow() || {}).row)
+      this.$store.dispatch('workbook/copy', this.cleanRow((this.getCurrentCell() || {}).row))
     },
-    // 添加工位
-    addWorkNum () {
-      this.len ++
-      // this.id = (this.len - 1)
-      this.allTable.push([{}])
-      localStorage.setItem('table', window.JSON.stringify(this.allTable))
-    },
-    // 复制到最后
-    copyEnd () {
-      console.log('复制到最后')
-    },
-    paste (event) {
-      event.target.value = this.WMethod
-      this.workbookData[this.rowIndex].workMethod = this.WMethod
+    // 粘贴
+    async paste (event) {
+      const copyContent = this.$store.getters.copyContent
+      if (!copyContent) return
+      const currentRow = (this.getCurrentCell() || {}).row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      await this.$refs.workbookTable.insertAt(copyContent, currentRow)
     }
   }
 }

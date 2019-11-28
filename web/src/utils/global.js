@@ -42,10 +42,12 @@ export const defaultRow = {
   frequency: null
 }
 export const measureFields = measureColumns0.map(c => c.field).concat(measureColumns1.map(c => c.field))
+export const defaultFields = Object.keys(defaultRow)
 
 export default {
   measureColumns0,
   measureColumns1,
   measureFields,
-  defaultRow
+  defaultRow,
+  defaultFields
 }
