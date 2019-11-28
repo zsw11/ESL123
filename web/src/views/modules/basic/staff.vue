@@ -3,7 +3,7 @@
     <el-card class='filter-card with-title'>
       <div slot='header'
            class='clearfix'>
-        <div class='card-title'>条件搜索</div>
+        <div class='card-title'>条件查询</div>
       </div>
       <el-form :inline='true'
                :model='listQuery'
@@ -154,7 +154,7 @@
                          sortable='custom'
                          ></el-table-column>
 
-        <el-table-column prop='name'
+        <el-table-column prop='name' 
                          align='center'
                          label='姓名'
                          v-if="displayAttributesMap['staff.name'].display"
@@ -399,7 +399,7 @@ export default {
           this.listQuery
         )
       )
-        .then((page) => {
+        .then(({ page }) => {
           this.dataList = page.data
           console.log(this.dataList, 444444)
           this.total = page.totalCount

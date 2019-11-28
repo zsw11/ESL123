@@ -3,7 +3,7 @@
     <el-card class="filter-card with-title">
       <div slot="header"
            class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <!-- <div>{{listQuery}}</div> -->
 

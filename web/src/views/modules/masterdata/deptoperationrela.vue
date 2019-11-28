@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
         <el-form-item :label="'id'" prop="id" >
@@ -40,7 +40,7 @@
       </el-date-picker>
         </el-form-item>
 
-  
+
         <div class='buttons with-complex'>
           <el-button @click="clearQuery()">清   空</el-button>
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>

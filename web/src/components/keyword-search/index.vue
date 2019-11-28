@@ -114,7 +114,7 @@ export default {
               pageSize: 99
             },
             this.apiOptions
-          )).then((page) => {
+          )).then(({page}) => {
             this.options = page.data
           }).finally(() => {
             this.loading = false

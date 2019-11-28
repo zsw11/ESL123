@@ -118,7 +118,7 @@ export default {
         page: this.pageIndex,
         limit: this.pageSize,
         type: type
-      }).then((page) => {
+      }).then(({ page }) => {
         const data = page.data
         if (data.length > 0) {
           this.dataList = data

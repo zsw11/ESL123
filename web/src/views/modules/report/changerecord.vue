@@ -2,7 +2,7 @@
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">条件搜索</div>
+        <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
@@ -30,7 +30,7 @@
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">reportChangeRecord</div>
+        <div class="card-title">ReportChangeRecord</div>
         <div class="buttons">
           <el-button
             :disabled="dataListSelections.length <= 0"
