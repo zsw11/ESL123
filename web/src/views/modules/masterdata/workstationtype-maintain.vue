@@ -68,7 +68,7 @@
         <span>
           <el-button
             v-if=!flag
-            class="delete"
+            id="delete"
             type="text"
             size="mini"
             @click="() => remove(node, data)">
@@ -238,8 +238,8 @@ export default {
         name: this.addForm.name,
         remark: this.addForm.remark
       }
-      createWorkstationTypeNode(data).then((code) => {
-        if (code) {
+      createWorkstationTypeNode(data).then((page, status) => {
+        if (status === 200) {
           this.addReal = false
           this.init()
           this.$notify({

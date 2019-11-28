@@ -235,7 +235,7 @@ export default {
       )
         .then(({ page }) => {
           this.dataList = page.data
-          this.total =  page.totalCount
+          this.total = page.totalCount
         })
         .catch(() => {
           this.dataList = []

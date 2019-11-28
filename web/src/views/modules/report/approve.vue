@@ -232,7 +232,7 @@ export default {
       .then((page) => {
         this.dataList = page.data
         this.total = page.totalCount
-        })
+      })
         .catch(() => {
           this.dataList = []
           this.total = 0
