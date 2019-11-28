@@ -1,5 +1,7 @@
 package io.apj.modules.report.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.report.entity.ChangeRecordEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -16,8 +18,13 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper<StandardTimeEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at")
+                .like(params.get("modelType")!=null&&params.get("modelType")!="", "model_type", (String) params.get("modelType"))
+                .like(params.get("unit")!=null&& params.get("unit")!="","unit", (String) params.get("unit"))
+                ;
         Page<StandardTimeEntity> page = this.selectPage(
-                new Query<StandardTimeEntity>(params).getPage()
+                new Query<StandardTimeEntity>(params).getPage(),entityWrapper
         );
 
         return new PageUtils(page);

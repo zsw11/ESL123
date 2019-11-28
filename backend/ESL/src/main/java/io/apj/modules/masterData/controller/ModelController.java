@@ -9,6 +9,7 @@ import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.masterData.entity.ModelSeriesEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.service.impl.SysDictServiceImpl;
@@ -95,6 +96,7 @@ public class ModelController extends AbstractController {
 		model.setCreateBy(getUserId().intValue());
 		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
 		modelService.insert(model);
+		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 
 		return RD.build().put("code", 200);
 	}
@@ -106,6 +108,7 @@ public class ModelController extends AbstractController {
 	@RequiresPermissions("masterData:model:update")
 	public RD update(@RequestBody ModelEntity model) {
 		modelService.updateById(model);
+		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 
 		return RD.build().put("code", 200);
 	}

@@ -1,10 +1,12 @@
 package io.apj.modules.masterData.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.ReferenceEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -83,10 +85,22 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:opertaiongroup:delete")
-    public RD delete(@RequestBody Integer[] ids){
+    public ResponseEntity<Object> delete(@RequestBody Integer[] ids){
+        for (int i = 0; i < ids.length; i++) {
+            List<ReferenceEntity> referenceEntities = deleteCheckReference("opertaiongroup", ids[i].longValue());
+            if (!referenceEntities.isEmpty()) {
+                for (ReferenceEntity reference : referenceEntities) {
+                    return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById()
+                            + " 在表：" + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+                }
+            } else {
+                // 删除引用表关系
+                deleteTableReference("opertaiongroup", ids[i].longValue());
+            }
+        }
 		opertaionGroupService.deleteBatchIds(Arrays.asList(ids));
 
-        return RD.build().put("code", 200);
+        return RD.NO_CONTENT(RD.build());
     }
 
 }

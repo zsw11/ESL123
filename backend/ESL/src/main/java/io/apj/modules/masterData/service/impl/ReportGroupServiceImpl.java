@@ -40,6 +40,12 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             entityWrapper.andNew(
                     "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
         }
+        if(StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))){
+            String name = (String) params.get("keyWord");
+            name = name.replace(",", "");
+            entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
+                    + " or pinyin  like '%" + name + "%'");
+        }
         Page<ReportGroupEntity> page = this.selectPage(new Query<ReportGroupEntity>(params).getPage(), entityWrapper);
         for (ReportGroupEntity entity : page.getRecords()) {
             List<ReportEntity> reportEntities = reportGroupReportRelaService
