@@ -48,12 +48,15 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
         entityWrapper.eq("code", (opertaionGroup.getCode()));
         OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
         // 主表id,更新到子表中
-        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSON.parseObject(JSONObject.toJSONString(map.get("List<OperationGroupOperationEntity>"),true), (Type) OperationGroupOperationEntity.class);
+        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSON.parseArray(map.get("OperationGroupOperationEntity").toString(),  OperationGroupOperationEntity.class);
         int id = opertaionGroupEntity.getId();
-        for(OperationGroupOperationEntity item : operationGroupOperationEntity){
-            item.setOperationGroupId(id);
+        if(operationGroupOperationEntity!=null && operationGroupOperationEntity.size()!=0){
+            for(OperationGroupOperationEntity item : operationGroupOperationEntity){
+                item.setOperationGroupId(id);
+            }
+            operationGroupOperationService.insertBatch(operationGroupOperationEntity);
         }
-        operationGroupOperationService.insertBatch(operationGroupOperationEntity);
+
         return RD.ok(opertaionGroup);
     }
 
@@ -65,17 +68,20 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
         opertaionGroupService.updateById(opertaionGroup);
         //获取主表id
         int id = opertaionGroup.getId();
-        //获取子表
+        //删除原来子表
         EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("operationGroupId", id);
         List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(entityWrapper);
         operationGroupOperationService.deleteBatchIds(operationGroupOperationEntities);
-        List<OperationGroupOperationEntity> operationGroupOperationEntities1 = JSON.parseObject(JSONObject.toJSONString(map.get("List<OperationGroupOperationEntity>"),true), (Type) OperationGroupOperationEntity.class);
         //遍历子表
-        for(OperationGroupOperationEntity item : operationGroupOperationEntities1){
-            item.setOperationGroupId(id);
+        List<OperationGroupOperationEntity> operationGroupOperationEntities1 = JSON.parseArray(map.get("OperationGroupOperationEntity").toString(),  OperationGroupOperationEntity.class);
+        if(operationGroupOperationEntities1!=null && operationGroupOperationEntities1.size()!=0){
+            for(OperationGroupOperationEntity item : operationGroupOperationEntities1){
+                item.setOperationGroupId(id);
+            }
+            operationGroupOperationService.insertBatch(operationGroupOperationEntities1);
         }
-        operationGroupOperationService.insertBatch(operationGroupOperationEntities1);
+
         return RD.ok(opertaionGroup);
     }
 
