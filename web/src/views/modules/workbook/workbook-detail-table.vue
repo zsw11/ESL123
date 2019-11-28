@@ -97,6 +97,8 @@ export default {
     // 加载数据
     loadData (data) {
       this.$refs.workbookTable.loadData(data)
+      this.lastEditCell = undefined
+      this.currentCell = undefined
       // 增加100行方便操作
       for (let i = 0; i < 100; i++) {
         this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
@@ -126,6 +128,10 @@ export default {
     editActived (cell) {
       this.lastEditCell = cell
     },
+    // 获取当前行数据
+    getCurrentRow () {
+      return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+    },
     // 添加标准书对话框
     async addStandardBook () {
       // console.log(Object.keys(this.$refs.workbookTable))
@@ -145,7 +151,6 @@ export default {
       if (currentRowIndex === -1) { // 新插入的rowIndex为-1
         currentRowIndex = this.$refs.workbookTable.getRowIndex(this.currentCell.row)
       }
-      console.log('currentRowIndex', currentRowIndex)
       for (let i = currentRowIndex; i >= 0; i--) {
         if (tableData[i].type === 'n') tmpData.name = tableData[i].operation
         if (tableData[i + 1] && tableData[i + 1].type === 'c') tmpData.code = tableData[i + 1].operation
@@ -224,9 +229,8 @@ export default {
       this.workbookData = this.allTable[index]
     },
     // 缓存
-    cache () {
-      this.allTable[this.id] = this.workbookData
-      localStorage.setItem('table', window.JSON.stringify(this.allTable))
+    copy () {
+      this.$store.dispatch('workbook/copy', (this.getCurrentRow() || {}).row)
     },
     // 添加工位
     addWorkNum () {
@@ -238,9 +242,6 @@ export default {
     // 复制到最后
     copyEnd () {
       console.log('复制到最后')
-    },
-    copy () {
-      this.WMethod = this.workbookData[this.rowIndex].workMethod
     },
     paste (event) {
       event.target.value = this.WMethod

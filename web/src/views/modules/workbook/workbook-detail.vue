@@ -12,7 +12,8 @@
         </el-select>
       </div>
       <div class="workbook-buttons">
-        <el-button type="primary" size="mini" @click="addStandardBook">增加标准书</el-button>
+        <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
+        <el-button type="primary" @click="copy">复制</el-button>
         <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
         <el-button type="primary">F4 复制到最后</el-button>
         <el-button type="primary">F7 复制</el-button>
@@ -104,8 +105,8 @@
         this.workbookData[workName] = [newRow]
         this.$refs.workbookTable.loadData(this.workbookData[workName])
       },
-      cache () {
-        this.$refs.workbookTable.cache()
+      copy () {
+        this.$refs.workbookTable.copy()
       },
       addStandardBook () {
         if (this.$refs.workbookTable) {
