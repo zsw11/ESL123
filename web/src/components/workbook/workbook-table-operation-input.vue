@@ -57,6 +57,19 @@ export default {
       activeSugguestionIndex: null
     }
   },
+  watch: {
+    '$attrs.value' (v) {
+      if (v === '[') {
+        this.addToSelection(']', false)
+        this.suggest('part')
+      } else if (v === '"') {
+        this.addToSelection('"', false)
+        this.suggest('tool')
+      } else if (v.length === 1) {
+        this.suggest('action', v)
+      }
+    }
+  },
   methods: {
     // 获取光标前文字
     getInputBegin () {

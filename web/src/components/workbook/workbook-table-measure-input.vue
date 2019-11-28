@@ -29,6 +29,13 @@ export default {
       return this.value < 0
     }
   },
+  watch: {
+    value (v) {
+      if (isNaN(v)) {
+        this.$emit('input', 0)
+      }
+    }
+  },
   methods: {
     keydown (e) {
       if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
