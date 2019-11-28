@@ -35,7 +35,6 @@ export default {
   methods: {
     getCellClass (scope) {
       this.$refs.operation.$table.updateStatus(scope)
-      if (scope.row.operation) console.log(scope.row)
       return typeClasses[scope.row.type]
     }
   }

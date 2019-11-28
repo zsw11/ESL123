@@ -12,7 +12,8 @@
       :auto-resize="true"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      @edit-actived="editActived">
       <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -68,6 +69,8 @@ export default {
       len: 10,
       WMethod: '',
       add: true,
+      lastEditCell: null,
+      currentCell: null,
       standardBookDialog: {
         visible: false,
         formData: {
@@ -83,9 +86,6 @@ export default {
     }
   },
   created () {
-    // for (let i = 0; i < 10; i++) {
-    //   this.workbookData.push(this.createNewRow())
-    // }
   },
   methods: {
     // 创建新行数据
@@ -96,8 +96,11 @@ export default {
     },
     // 加载数据
     loadData (data) {
-      console.log(Object.keys(this.$refs.workbookTable))
       this.$refs.workbookTable.loadData(data)
+      // 增加100行方便操作
+      for (let i = 0; i < 100; i++) {
+        this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
+      }
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
@@ -119,33 +122,57 @@ export default {
         }
       }
     },
+    // 单元格开始编辑
+    editActived (cell) {
+      this.lastEditCell = cell
+    },
     // 添加标准书对话框
     async addStandardBook () {
+      // console.log(Object.keys(this.$refs.workbookTable))
+      // 获取插入位置（当前选中或者最后编辑）
+      this.currentCell = this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+      if (!this.currentCell) {
+        this.$message({
+          message: '请选择插入位置！'
+        })
+        return
+      }
+      // 获取联想数据
+      const tmpData = { name: null, code: null }
+      const { tableData } = this.$refs.workbookTable.getTableData()
+      console.log(tableData.length, this.currentCell, this.$refs.workbookTable.getRowIndex(this.currentCell.row))
+      let currentRowIndex = this.currentCell.$rowIndex || this.currentCell.rowIndex
+      if (currentRowIndex === -1) { // 新插入的rowIndex为-1
+        currentRowIndex = this.$refs.workbookTable.getRowIndex(this.currentCell.row)
+      }
+      console.log('currentRowIndex', currentRowIndex)
+      for (let i = currentRowIndex; i >= 0; i--) {
+        if (tableData[i].type === 'n') tmpData.name = tableData[i].operation
+        if (tableData[i + 1] && tableData[i + 1].type === 'c') tmpData.code = tableData[i + 1].operation
+      }
+      // 弹出对话框
       this.standardBookDialog.visible = true
-      console.log(1111, this.$refs.workbookTable.getMouseSelecteds())
       await this.$refs.workbookTable.clearActived()
       await this.$refs.workbookTable.clearSelected()
-      Object.assign(this.standardBookDialog.formData, {
-        name: null,
-        code: null
-      })
+      Object.assign(this.standardBookDialog.formData, tmpData)
     },
     // 增加标准书
     async doAddStandardBook () {
       this.$refs.standardBookForm.validate(async (valid) => {
         if (!valid) return
-        const row = this.workbookData[this.workbookData.length - 1]
+        // 插入标准书名
         await this.$refs.workbookTable.insertAt(Object.assign(
           this.createNewRow('n'),
           { operation: this.standardBookDialog.formData.name }
-        ), row)
+        ), this.currentCell.row)
+        // 插入标准书编号
         if (this.standardBookDialog.formData.code) {
           await this.$refs.workbookTable.insertAt(Object.assign(
             this.createNewRow('c'),
             { operation: this.standardBookDialog.formData.code }
-          ), row)
+          ), this.currentCell.row)
         }
-        await this.$refs.workbookTable.setActiveCell(row, 'version')
+        await this.$refs.workbookTable.setActiveCell(this.currentCell.row, 'version')
         this.standardBookDialog.visible = false
       })
     },
