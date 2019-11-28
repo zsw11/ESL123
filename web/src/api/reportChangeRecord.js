@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取reportChangeRecord列表
 export function listReportChangeRecord (query) {
   return request({
-    url: request.adornUrl('api/v1/reportchangerecord/list'),
+    url: request.adornUrl('/api/v1/changerecord/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listReportChangeRecord (query) {
 // 创建reportChangeRecord
 export function createReportChangeRecord (data) {
   return request({
-    url: request.adornUrl('api/v1/reportchangerecord/create'),
+    url: request.adornUrl('/api/v1/changerecord/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createReportChangeRecord (data) {
 // 获取reportChangeRecord详情
 export function fetchReportChangeRecord (params) {
   return request({
-    url: request.adornUrl('api/v1/reportchangerecord/detail'),
+    url: request.adornUrl('/api/v1/changerecord/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchReportChangeRecord (params) {
 // 修改reportChangeRecord
 export function updateReportChangeRecord (id, data) {
   return request({
-    url: request.adornUrl('api/v1/reportchangerecord/update'),
+    url: request.adornUrl('/api/v1/changerecord/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateReportChangeRecord (id, data) {
 // 删除reportChangeRecord
 export function deleteReportChangeRecord (id) {
   return request({
-    url: request.adornUrl('api/v1/reportchangerecord/delete'),
+    url: request.adornUrl('/api/v1/changerecord/delete'),
     method: 'delete',
     params: { id }
   })

@@ -87,7 +87,7 @@
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="partModel(scope.row.id,scope.row.name)">机种</el-button>
-            <el-button  size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -276,10 +276,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deletePart(ids).then(({msg}) => {
-          if (msg) {
+        deletePart(ids).then(({message, status}) => {
+          console.log(message, 11111)
+          if (message) {
             Message({
-              message: msg,
+              message: message,
               type: 'error',
               duration: 5 * 1000
             })

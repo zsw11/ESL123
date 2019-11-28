@@ -116,7 +116,7 @@
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
           <el-button type="text" size="small" @click="modelPart(scope.row.id, scope.row.name)">部品</el-button>
           <el-button type="text" size="small" @click="modelTool(scope.row.id, scope.row.name)">治工具</el-button>
-          <el-button size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
+          <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 

@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取reportTimeContact列表
 export function listReportTimeContact (query) {
   return request({
-    url: request.adornUrl('api/v1/reporttimecontact/list'),
+    url: request.adornUrl('/api/v1/timecontact/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listReportTimeContact (query) {
 // 创建reportTimeContact
 export function createReportTimeContact (data) {
   return request({
-    url: request.adornUrl('api/v1/reporttimecontact/create'),
+    url: request.adornUrl('/api/v1/timecontact/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createReportTimeContact (data) {
 // 获取reportTimeContact详情
 export function fetchReportTimeContact (params) {
   return request({
-    url: request.adornUrl('api/v1/reporttimecontact/detail'),
+    url: request.adornUrl('/api/v1/timecontact/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchReportTimeContact (params) {
 // 修改reportTimeContact
 export function updateReportTimeContact (id, data) {
   return request({
-    url: request.adornUrl('api/v1/reporttimecontact/update'),
+    url: request.adornUrl('/api/v1/timecontact/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateReportTimeContact (id, data) {
 // 删除reportTimeContact
 export function deleteReportTimeContact (id) {
   return request({
-    url: request.adornUrl('api/v1/reporttimecontact/delete'),
+    url: request.adornUrl('/api/v1/timecontact/delete'),
     method: 'delete',
     params: { id }
   })

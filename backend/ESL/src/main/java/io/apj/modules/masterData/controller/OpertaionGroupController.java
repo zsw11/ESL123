@@ -3,7 +3,6 @@ package io.apj.modules.masterData.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,21 +60,21 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
-    public RD save(@RequestBody OpertaionGroupEntity opertaionGroup){
-		opertaionGroupService.insert(opertaionGroup);
-
-        return RD.build().put("code", 200);
+    public RD save(@RequestBody Map<String, Object> map){
+        opertaionGroupService.insertOpGroup(map);
+        return RD.build();
     }
 
     /**
      * 修改
+     * @return
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
-    public RD update(@RequestBody OpertaionGroupEntity opertaionGroup){
-		opertaionGroupService.updateById(opertaionGroup);
+    public RD update(@RequestBody Map<String, Object> map){
+        opertaionGroupService.UpdataOpertaionGroup(map);
 
-        return RD.build().put("code", 200);
+        return RD.build();
     }
 
     /**

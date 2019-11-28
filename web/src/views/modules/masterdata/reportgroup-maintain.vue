@@ -313,8 +313,8 @@ export default {
             reportId: this.addreportgroupReportId,
             reportGroupId: this.id
           }
-          createReportGroupReportRela(data).then(({code}) => {
-            if (code === 200) {
+          createReportGroupReportRela(data).then(({page, status}) => {
+            if (status === 200) {
               this.addReal = false
               this.getDataList()
               this.$notify({

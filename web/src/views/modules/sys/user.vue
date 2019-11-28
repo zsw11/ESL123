@@ -195,15 +195,15 @@ export default {
         },
         inputErrorMessage: '密码长度在 6 到 32 个字符'
       }).then(({ value }) => {
-        userReset({userId: id, password: value}).then(({data}) => {
-          if (data) {
+        userReset({userId: id, password: value}).then(({data, status, message}) => {
+          if (status === 200) {
             this.$message({
               message: '操作成功',
               type: 'success',
               duration: 1500
             })
           } else {
-            this.$message.error(data.msg)
+            this.$message.error(message)
           }
         })
       })

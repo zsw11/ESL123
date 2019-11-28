@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取reportApprove列表
 export function listReportApprove (query) {
   return request({
-    url: request.adornUrl('api/v1/reportapprove/list'),
+    url: request.adornUrl('/api/v1/approve/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listReportApprove (query) {
 // 创建reportApprove
 export function createReportApprove (data) {
   return request({
-    url: request.adornUrl('api/v1/reportapprove/create'),
+    url: request.adornUrl('/api/v1/approve/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createReportApprove (data) {
 // 获取reportApprove详情
 export function fetchReportApprove (params) {
   return request({
-    url: request.adornUrl('api/v1/reportapprove/detail'),
+    url: request.adornUrl('/api/v1/approve/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchReportApprove (params) {
 // 修改reportApprove
 export function updateReportApprove (id, data) {
   return request({
-    url: request.adornUrl('api/v1/reportapprove/update'),
+    url: request.adornUrl('/api/v1/approve/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateReportApprove (id, data) {
 // 删除reportApprove
 export function deleteReportApprove (id) {
   return request({
-    url: request.adornUrl('api/v1/reportapprove/delete'),
+    url: request.adornUrl('/api/v1/approve/delete'),
     method: 'delete',
     params: { id }
   })

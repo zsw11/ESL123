@@ -75,7 +75,7 @@
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
 <!--            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
 <!--            <el-button  type="text" size="small" @click="toolModel(scope.row.id,scope.row.name)">机种</el-button>-->
-            <el-button  size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -292,8 +292,8 @@
               toolId: this.addModelToolId,
               modelId: this.id
             }
-            createModelToolRela(data).then(({code}) => {
-              if (code === 200) {
+            createModelToolRela(data).then(({page, status}) => {
+              if (status === 200) {
                 this.addReal = false
                 this.getDataList()
                 this.$notify({

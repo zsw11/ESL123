@@ -151,10 +151,10 @@ export default {
     this.$nextTick(() => {
       this.$refs['dataForm'].resetFields()
       if (this.dataForm.id) {
-        fetchUser(this.dataForm.id).then(({data}) => {
+        fetchUser(this.dataForm.id).then(({page}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'username', 'email', 'mobile', 'status', 'roleIds' ])
+            pick(page, [ 'username', 'email', 'mobile', 'status', 'roleIds' ])
           )
         })
       }

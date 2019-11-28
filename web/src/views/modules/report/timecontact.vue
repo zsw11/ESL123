@@ -452,9 +452,11 @@ export default {
           this.listQuery
         )
       )
-        .then(({ data, total }) => {
-          this.dataList = data
-          this.total = total
+        .then((page, status) => {
+          console.log(page)
+          console.log(page.data, 11111111111111111111111111)
+          this.dataList = page.data
+          this.total = page.totalCount
         })
         .catch(() => {
           this.dataList = []

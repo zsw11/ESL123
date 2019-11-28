@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.service.StandardWorkService;
 import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
-
-
+import io.apj.common.utils.RD;
 
 /**
  * 标准工数表
@@ -28,63 +27,62 @@ import io.apj.common.utils.R;
 @RestController
 @RequestMapping("/api/v1/standardwork")
 public class StandardWorkController {
-    @Autowired
-    private StandardWorkService standardWorkService;
+	@Autowired
+	private StandardWorkService standardWorkService;
 
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("report:standardwork:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = standardWorkService.queryPage(params);
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/list")
+	@RequiresPermissions("report:standardwork:list")
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		PageUtils page = standardWorkService.queryPage(params);
 
-        return R.ok().put("page", page);
-    }
+		return RD.ok(page);
+	}
 
-
-    /**
-     * 信息
-     */
-    @RequestMapping("/detail/{id}")
-    @RequiresPermissions("report:standardwork:detail")
-    public R info(@PathVariable("id") Integer id){
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/detail/{id}")
+	@RequiresPermissions("report:standardwork:detail")
+	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StandardWorkEntity standardWork = standardWorkService.selectById(id);
 
-        return R.ok().put("standardWork", standardWork);
-    }
+		return RD.ok(standardWork);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/create")
-    @RequiresPermissions("report:standardwork:create")
-    public R save(@RequestBody StandardWorkEntity standardWork){
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/create")
+	@RequiresPermissions("report:standardwork:create")
+	public ResponseEntity<Object> save(@RequestBody StandardWorkEntity standardWork) {
 		standardWorkService.insert(standardWork);
 
-        return R.ok();
-    }
+		return RD.ok(standardWork);
+	}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("report:standardwork:update")
-    public R update(@RequestBody StandardWorkEntity standardWork){
+	/**
+	 * 修改
+	 */
+	@RequestMapping("/update")
+	@RequiresPermissions("report:standardwork:update")
+	public ResponseEntity<Object> update(@RequestBody StandardWorkEntity standardWork) {
 		standardWorkService.updateById(standardWork);
 
-        return R.ok();
-    }
+		return RD.ok(standardWork);
+	}
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("report:standardwork:delete")
-    public R delete(@RequestBody Integer[] ids){
+	/**
+	 * 删除
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("report:standardwork:delete")
+	public ResponseEntity<Object> delete(@RequestBody Integer[] ids) {
 		standardWorkService.deleteBatchIds(Arrays.asList(ids));
 
-        return R.ok();
-    }
+		return RD.NO_CONTENT(RD.build());
+	}
 
 }
