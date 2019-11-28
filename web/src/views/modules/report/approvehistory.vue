@@ -5,22 +5,23 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+        <div class="min-width">
+          <el-form-item :label="'报表意见'" prop="reportApproveId">
+            <el-input v-model="listQuery.reportApproveId" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'报表意见'" prop="reportApproveId">
-          <el-input v-model="listQuery.reportApproveId" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'结果'" prop="result">
+            <el-input v-model="listQuery.result" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'结果'" prop="result">
-          <el-input v-model="listQuery.result" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'报表组'" prop="reportGroupId">
+            <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'报表组'" prop="reportGroupId">
-          <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
-
-        <el-form-item :label="'下一审批者'" prop="nextApproverId">
-          <el-input v-model="listQuery.nextApproverId" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'下一审批者'" prop="nextApproverId">
+            <el-input v-model="listQuery.nextApproverId" clearable></el-input>
+          </el-form-item>
+        </div>
 
 
         <div class="buttons with-complex">
@@ -314,3 +315,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .min-width{
+    min-width: 1024px;
+  }
+</style>

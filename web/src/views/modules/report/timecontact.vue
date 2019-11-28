@@ -5,55 +5,53 @@
         <div class="card-title">条件搜索</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+        <div class="min-width">
+          <el-form-item :label="'机种'" prop="modelId">
+            <keyword-search class="input" v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
+
+          <el-form-item :label="'ES/AMP/MP'" prop="stage">
+            <el-input class="input" v-model="listQuery.stage" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'发行类别：新规制定/修订'" prop="publishType">
+            <el-input class="input" v-model="listQuery.publishType" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'修订理由'" prop="reviseReason">
+            <el-input class="input" v-model="listQuery.reviseReason" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'ST/LST'" prop="STType">
+            <dict-select dictType="ST" class="input" v-model="listQuery.STType" :allowEmpty="true" clearable></dict-select>
+          </el-form-item>
+
+          <el-form-item :label="'版本号'" prop="RevNo">
+            <el-input class="input" v-model="listQuery.RevNo" clearable></el-input>
+          </el-form-item>
 
 
-
-        <el-form-item :label="'机种'" prop="modelId">
-          <keyword-search class="input" v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
-
-        <el-form-item :label="'ES/AMP/MP'" prop="stage">
-          <el-input class="input" v-model="listQuery.stage" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'发行类别：新规制定/修订'" prop="publishType">
-          <el-input class="input" v-model="listQuery.publishType" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'修订理由'" prop="reviseReason">
-          <el-input class="input" v-model="listQuery.reviseReason" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'ST/LST'" prop="STType">
-          <dict-select dictType="ST" class="input" v-model="listQuery.STType" :allowEmpty="true" clearable></dict-select>
-        </el-form-item>
-
-        <el-form-item :label="'版本号'" prop="RevNo">
-          <el-input class="input" v-model="listQuery.RevNo" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">
+            <el-input class="input" v-model="listQuery.towingLastVersionPrinting" clearable></el-input>
+          </el-form-item>
 
 
-        <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">
-          <el-input class="input" v-model="listQuery.towingLastVersionPrinting" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'opertaionNO'" prop="operationStandardNo">
+            <el-input class="input" v-model="listQuery.operationStandardNo" clearable></el-input>
+          </el-form-item>
 
+          <el-form-item :label="'INstruction'" prop="operationInstruction">
+            <el-input class="input" v-model="listQuery.operationInstruction" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'opertaionNO'" prop="operationStandardNo">
-          <el-input class="input" v-model="listQuery.operationStandardNo" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'EXceprtionOperation'" prop="exceptionOperation">
+            <el-input class="input" v-model="listQuery.exceptionOperation" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'INstruction'" prop="operationInstruction">
-          <el-input class="input" v-model="listQuery.operationInstruction" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'EXceprtionOperation'" prop="exceptionOperation">
-          <el-input class="input" v-model="listQuery.exceptionOperation" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'exceptionoperation'" prop="remarkVersionCopmare">
-          <el-input class="input" v-model="listQuery.remarkVersionCopmare" clearable></el-input>
-        </el-form-item>
-
+          <el-form-item :label="'exceptionoperation'" prop="remarkVersionCopmare">
+            <el-input class="input" v-model="listQuery.remarkVersionCopmare" clearable></el-input>
+          </el-form-item>
+        </div>
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>
@@ -142,6 +140,7 @@
 
 
         <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
@@ -566,5 +565,8 @@ export default {
 <style scoped lang="scss">
   .input{
     width: 150px;
+  }
+  .min-width{
+    min-width: 1024px;
   }
 </style>

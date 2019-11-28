@@ -20,14 +20,14 @@
 <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->
+        <div class="min-width">
+          <el-form-item :label="'机种'" prop="modelId">
+            <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'机种'" prop="modelId">
-          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
-
-        <el-form-item :label="'仕向'" prop="destinations">
-          <el-input v-model="listQuery.destinations" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'仕向'" prop="destinations">
+            <el-input v-model="listQuery.destinations" clearable></el-input>
+          </el-form-item>
 
 <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
 <!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
@@ -37,38 +37,39 @@
 <!--          <el-input-number v-model="listQuery.inChargeBy" clearable></el-input-number>-->
 <!--        </el-form-item>-->
 
-        <el-form-item :label="'制造工厂'" prop="factory">
-          <el-input v-model="listQuery.factory" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'制造工厂'" prop="factory">
+            <el-input v-model="listQuery.factory" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'发行日'" prop="monthResult">
-          <el-date-picker
-            v-model="listQuery.monthResult"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
+          <el-form-item :label="'发行日'" prop="monthResult">
+            <el-date-picker
+              v-model="listQuery.monthResult"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              clearable
+            ></el-date-picker>
+          </el-form-item>
 
-        <el-form-item :label="'版本号'" prop="revNo">
-          <el-input v-model="listQuery.revNo" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'版本号'" prop="revNo">
+            <el-input v-model="listQuery.revNo" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'上版ST'" prop="lastSTname">
-          <el-input v-model="listQuery.lastSTname" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'上版ST'" prop="lastSTname">
+            <el-input v-model="listQuery.lastSTname" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'此版ST'" prop="currentSTname">
-          <el-input v-model="listQuery.currentSTname" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'此版ST'" prop="currentSTname">
+            <el-input v-model="listQuery.currentSTname" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'上版LST'" prop="lastLSTname">
-          <el-input v-model="listQuery.lastLSTname" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'上版LST'" prop="lastLSTname">
+            <el-input v-model="listQuery.lastLSTname" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'此版LST'" prop="currentLSTname">
-          <el-input v-model="listQuery.currentLSTname" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'此版LST'" prop="currentLSTname">
+            <el-input v-model="listQuery.currentLSTname" clearable></el-input>
+          </el-form-item>
+        </div>
 
 <!--        <el-form-item :label="'创建者ID'" prop="createBy">-->
 <!--          <el-input-number v-model="listQuery.createBy" clearable></el-input-number>-->
@@ -565,3 +566,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .min-width{
+    min-width: 1024px;
+  }
+</style>

@@ -6,23 +6,23 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
+        <div class="min-width">
+          <el-form-item :label="'所属部门'" prop="deptId">
+            <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'所属部门'" prop="deptId">
-          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'报表组'" prop="report_group_id">
+            <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'报表组'" prop="report_group_id">
-          <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'下一审批者'" prop="nextApproverId">
+            <el-input v-model="listQuery.nextApproverId" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'下一审批者ID'" prop="nextApproverId">
-          <el-input v-model="listQuery.nextApproverId" clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'状态'" prop="status">
-          <el-input v-model="listQuery.status" clearable></el-input>
-        </el-form-item>
-
+          <el-form-item :label="'状态'" prop="status">
+            <el-input v-model="listQuery.status" clearable></el-input>
+          </el-form-item>
+        </div>
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>
@@ -312,3 +312,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .min-width{
+    min-width: 1024px;
+  }
+</style>
