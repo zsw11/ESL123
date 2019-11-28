@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 // 获取collectionCompare列表
 export function listCollectionCompare (query) {
   return request({
-    url: request.adornUrl('api/v1/collectioncompare/list'),
+    url: request.adornUrl('/api/v1/compare/list'),
     method: 'get',
     params: request.adornParams(query)
   })
@@ -12,7 +12,7 @@ export function listCollectionCompare (query) {
 // 创建collectionCompare
 export function createCollectionCompare (data) {
   return request({
-    url: request.adornUrl('api/v1/collectioncompare/create'),
+    url: request.adornUrl('/api/v1/compare/create'),
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function createCollectionCompare (data) {
 // 获取collectionCompare详情
 export function fetchCollectionCompare (params) {
   return request({
-    url: request.adornUrl('api/v1/collectioncompare/detail'),
+    url: request.adornUrl('/api/v1/compare/detail'),
     method: 'get',
     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
   })
@@ -30,7 +30,7 @@ export function fetchCollectionCompare (params) {
 // 修改collectionCompare
 export function updateCollectionCompare (id, data) {
   return request({
-    url: request.adornUrl('api/v1/collectioncompare/update'),
+    url: request.adornUrl('/api/v1/compare/update'),
     method: 'put',
     params: { id },
     data
@@ -40,7 +40,7 @@ export function updateCollectionCompare (id, data) {
 // 删除collectionCompare
 export function deleteCollectionCompare (id) {
   return request({
-    url: request.adornUrl('api/v1/collectioncompare/delete'),
+    url: request.adornUrl('/api/v1/compare/delete'),
     method: 'delete',
     params: { id }
   })
