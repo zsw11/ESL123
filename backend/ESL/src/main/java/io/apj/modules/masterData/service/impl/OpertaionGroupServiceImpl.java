@@ -3,13 +3,14 @@ package io.apj.modules.masterData.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -40,41 +41,42 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 
     @Override
     @Transactional
-    public RD insertOpGroup(Map<String, Object> map) {
+    public ResponseEntity<Object> insertOpGroup(Map<String, Object> map) {
         OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
         opertaionGroupService.insert(opertaionGroup);
         EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("code", (opertaionGroup.getCode()));
         OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
         // 主表id,更新到子表中
+        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSON.parseObject(JSONObject.toJSONString(map.get("List<OperationGroupOperationEntity>"),true), (Type) OperationGroupOperationEntity.class);
         int id = opertaionGroupEntity.getId();
-        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id", id));
-        for(OperationGroupOperationEntity item : operationGroupOperationEntities){
+        for(OperationGroupOperationEntity item : operationGroupOperationEntity){
             item.setOperationGroupId(id);
         }
-        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
-        return RD.build();
+        operationGroupOperationService.insertBatch(operationGroupOperationEntity);
+        return RD.ok(opertaionGroup);
     }
 
     @Override
     @Transactional
-    public RD UpdataOpertaionGroup(Map<String, Object> map) {
+    public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) {
         OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
         //更新主表
         opertaionGroupService.updateById(opertaionGroup);
         //获取主表id
-        OpertaionGroupEntity opertaionGroupEntity = opertaionGroupService.selectOne((Wrapper<OpertaionGroupEntity>) map.get("OpertaionGroupEntity"));
-        int id = opertaionGroupEntity.getId();
+        int id = opertaionGroup.getId();
         //获取子表
         EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("operationGroupId", id);
-        List<OperationGroupOperationEntity> operationGroupOperationEntities =  operationGroupOperationService.selectList(entityWrapper);
+        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(entityWrapper);
+        operationGroupOperationService.deleteBatchIds(operationGroupOperationEntities);
+        List<OperationGroupOperationEntity> operationGroupOperationEntities1 = JSON.parseObject(JSONObject.toJSONString(map.get("List<OperationGroupOperationEntity>"),true), (Type) OperationGroupOperationEntity.class);
         //遍历子表
-        for(OperationGroupOperationEntity item : operationGroupOperationEntities){
+        for(OperationGroupOperationEntity item : operationGroupOperationEntities1){
             item.setOperationGroupId(id);
         }
-        operationGroupOperationService.insertBatch(operationGroupOperationEntities);
-        return RD.build();
+        operationGroupOperationService.insertBatch(operationGroupOperationEntities1);
+        return RD.ok(opertaionGroup);
     }
 
 }

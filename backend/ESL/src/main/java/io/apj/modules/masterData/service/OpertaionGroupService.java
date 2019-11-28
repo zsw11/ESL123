@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.OpertaionGroupEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -18,8 +19,8 @@ public interface OpertaionGroupService extends IService<OpertaionGroupEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    RD insertOpGroup(Map<String, Object> map);
+    ResponseEntity<Object> insertOpGroup(Map<String, Object> map);
 
-    RD UpdataOpertaionGroup(Map<String, Object> map);
+    ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map);
 }
 

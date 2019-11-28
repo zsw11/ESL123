@@ -1,21 +1,13 @@
 package io.apj.modules.masterData.controller;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
-import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +31,6 @@ import io.apj.common.utils.PageUtils;
 public class OpertaionGroupController extends AbstractController {
     @Autowired
     private OpertaionGroupService opertaionGroupService;
-    @Autowired
-    private OperationGroupOperationService operationGroupOperationService;
 
     /**
      * 列表
@@ -72,18 +62,19 @@ public class OpertaionGroupController extends AbstractController {
     @RequiresPermissions("masterData:opertaiongroup:create")
     public RD save(@RequestBody Map<String, Object> map){
         opertaionGroupService.insertOpGroup(map);
-        return RD.build().put("code", 200);
+        return RD.build();
     }
 
     /**
      * 修改
+     * @return
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
     public RD update(@RequestBody Map<String, Object> map){
         opertaionGroupService.UpdataOpertaionGroup(map);
 
-        return RD.build().put("code", 200);
+        return RD.build();
     }
 
     /**
