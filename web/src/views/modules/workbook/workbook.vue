@@ -5,43 +5,44 @@
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="clearfix" style="min-width: 1000px">
+        <div class="wookbook-min-width">
+          <el-form-item :label="'部门'" prop="deptId" >
+            <keyword-search clearable v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'部门'" prop="deptId" >
-          <keyword-search clearable v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'LST/ST'" prop="STLST" >
+            <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
+          </el-form-item>
 
-        <el-form-item :label="'LST/ST'" prop="STLST" >
-          <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true" clearable></dict-select>
-        </el-form-item>
+          <el-form-item :label="'机种'" prop="modelId" >
+            <keyword-search clearable  v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'机种'" prop="modelId" >
-          <keyword-search clearable  v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'仕向'" prop="destinations" >
+             <el-select v-model="listQuery.destinations" clearable></el-select>
+          </el-form-item>
 
-        <el-form-item :label="'仕向'" prop="destinations" >
-           <el-select v-model="listQuery.destinations" clearable></el-select>
-        </el-form-item>
+          <el-form-item :label="'生产阶段'" prop="phaseId" >
+              <keyword-search clearable  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'生产阶段'" prop="phaseId" >
-            <keyword-search clearable  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'工位'" prop="workstationId" >
+            <keyword-search clearable  v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
+          </el-form-item>
 
-        <el-form-item :label="'工位'" prop="workstationId" >
-          <keyword-search clearable  v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
-        </el-form-item>
+          <el-form-item :label="'作业名'" prop="workName" >
+            <el-input v-model="listQuery.workName" clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'作业名'" prop="workName" >
-          <el-input v-model="listQuery.workName" clearable></el-input>
-        </el-form-item>
+          <el-form-item :label="'制表人'" prop="makerId" >
+            <el-input v-model="listQuery.makerId"  clearable></el-input>
+          </el-form-item>
 
-        <el-form-item :label="'制表人'" prop="makerId" >
-          <el-input v-model="listQuery.makerId"  clearable></el-input>
-        </el-form-item>
-
-        <el-form-item :label="'制表日期'" prop="makedAt" >
-          <el-date-picker v-model="listQuery.makedAt" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" clearable>
-          </el-date-picker>
-        </el-form-item>
+          <el-form-item :label="'制表日期'" prop="makedAt" >
+            <el-date-picker v-model="listQuery.makedAt" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" clearable>
+            </el-date-picker>
+          </el-form-item>
+        </div>
 
       </el-form>
       <div class="clearfix">
@@ -91,7 +92,7 @@
 
         <el-table-column align="center" prop="STLST" label="LST/ST" >
           <template slot-scope="scope">
-            <span>{{scope.row.STLST }}</span>
+            <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>
           </template>
         </el-table-column>
 
@@ -147,11 +148,13 @@
 </template>
 
 <script>
+import { keyBy } from 'lodash'
 import { listWorkBook, deleteWorkBook } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
+import { listDictItem } from '@/api/dict'
 export default {
   name: 'workBookList',
   data () {
@@ -204,11 +207,14 @@ export default {
           { code: 'makedAt', name: '制表日期', type: 'string', required: true }
         ]
       }],
-      complexFilters: []
+      complexFilters: [],
+      dictItemSTLST: []
+
     }
   },
   activated () {
     const self = this
+    self.getDictByType()
     self.getDataList()
   },
   methods: {
@@ -296,19 +302,25 @@ export default {
           this.getDataList()
         })
       })
+    },
+    // 字典表
+    getDictByType () {
+      listDictItem({ type: 'ST' }).then(({data}) => {
+        console.log(data, 6666)
+        this.dictItemSTLST = keyBy(data, 'code')
+      })
     }
   }
 }
 </script>
-<style scoped lang="scss">
-  /*.el-form {*/
-  /*  .el-form-item {*/
-  /*    margin-bottom: 18px;*/
-  /*    width: 248px;*/
-  /*    label {*/
-  /*      display: inline-block;*/
-  /*      width: 68px;*/
-  /*    }*/
-  /*  }*/
-  /*}*/
+<style lang="scss">
+  .wookbook-min-width {
+    min-width: 1045px;
+    .el-form-item {
+      label {
+        display: inline-block;
+        width: 68px;
+      }
+    }
+  }
 </style>

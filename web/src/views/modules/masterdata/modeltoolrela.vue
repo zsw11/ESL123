@@ -333,7 +333,7 @@
 </script>
 
 <style scoped lang="scss">
-  .input{
+ .input{
     width: 130px;
   }
   .el-input__inner {
