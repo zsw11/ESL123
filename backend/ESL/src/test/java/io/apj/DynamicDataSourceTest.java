@@ -1,13 +1,11 @@
 package io.apj;
 
 
-import io.apj.modules.masterData.entity.ActionEntity;
+import com.alibaba.fastjson.JSON;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.entity.OpertaionGroupEntity;
-import io.apj.modules.masterData.service.ActionService;
 import io.apj.modules.masterData.service.OpertaionGroupService;
 import io.apj.modules.sys.entity.SysUserEntity;
-import io.apj.service.DataSourceTestService;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -49,12 +48,11 @@ public class DynamicDataSourceTest {
         OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
         operationGroupOperationEntity.setOperation("test");
         operationGroupOperationEntity.setFrequency(2);
+        String operationGroupOperationEntitys = JSON.toJSONString(operationGroupOperationEntity);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("OpertaionGroupEntity",opertaionGroupEntity);
-        map.put("OperationGroupOperationEntity",operationGroupOperationEntity);
+        map.put("OperationGroupOperationEntity",operationGroupOperationEntitys);
         opertaionGroupService.insertOpGroup(map);
-
-
 
     }
 
