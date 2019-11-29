@@ -28,7 +28,7 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     @Autowired
     private ReportGroupReportRelaService reportGroupReportRelaService;
     @Autowired
-    private  ReportService reportService;
+    private ReportService reportService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -40,7 +40,7 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             entityWrapper.andNew(
                     "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))){
+        if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
             String name = (String) params.get("keyWord");
             name = name.replace(",", "");
             entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
@@ -50,12 +50,12 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
         for (ReportGroupEntity entity : page.getRecords()) {
             List<ReportEntity> reportEntities = reportGroupReportRelaService
                     .selectReportNameByReportGroupId(entity.getId());
-            String name ="";
+            String name = "";
             for (ReportEntity item : reportEntities) {
-                 name += item.getName()+"/";
+                name += item.getName() + "/";
             }
             entity.setAllReportName(name);
-		}
+        }
 
         return new PageUtils(page);
     }
@@ -64,8 +64,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     public List<ReportGroupReportRelaEntity> reportGroupRelaList(Integer id) {
         EntityWrapper<ReportGroupReportRelaEntity> reportRelaEntityEntityWrapper = new EntityWrapper<ReportGroupReportRelaEntity>();
         reportRelaEntityEntityWrapper.eq("report_group_id", id).isNull("delete_at");
-        List<ReportGroupReportRelaEntity>  data = reportGroupReportRelaService.selectList(reportRelaEntityEntityWrapper);
-        for(ReportGroupReportRelaEntity item : data){
+        List<ReportGroupReportRelaEntity> data = reportGroupReportRelaService.selectList(reportRelaEntityEntityWrapper);
+        for (ReportGroupReportRelaEntity item : data) {
             item.setReportEntity(reportService.selectById(item.getReportId()));
         }
         return data;
