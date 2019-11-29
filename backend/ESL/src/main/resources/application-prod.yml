@@ -1,7 +1,7 @@
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
-        driverClassName: com.mysql.cj.jdbc.Driver
+        driverClassName: org.postgresql.Driver
         druid:
             first:
                 url: jdbc:postgresql://117.48.230.8:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC

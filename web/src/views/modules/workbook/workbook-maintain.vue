@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <keyword-search style="width: 100%" v-model="dataForm.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+            <keyword-search style="width: 100%" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
           </el-form-item>
         </el-col>
       </el-row>

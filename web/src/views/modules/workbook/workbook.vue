@@ -92,7 +92,7 @@
 
         <el-table-column align="center" prop="STLST" label="LST/ST" >
           <template slot-scope="scope">
-            <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>
+<!--            <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>-->
           </template>
         </el-table-column>
 
