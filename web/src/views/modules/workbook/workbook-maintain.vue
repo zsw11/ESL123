@@ -19,8 +19,8 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'LST/ST'" prop="STLST">
-            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.stlst" :allowEmpty="true"></dict-select>
+          <el-form-item :label="'LST/ST'" prop="stlst">
+            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -160,10 +160,10 @@ export default {
       listWorkstation,
       dataRules: {
         deptId: [
-          { type: 'number', message: '组织机构ID需为数字值' }
+          { required: true, message: '部门不能为空' }
         ],
-        STLST: [
-          { max: 8, message: '长度超过了8', trigger: 'blur' }
+        stlst: [
+          { required: true, message: 'STLST不能为空', trigger: 'blur' }
         ],
         modelId: [
           { type: 'number', message: '机种ID需为数字值' }
