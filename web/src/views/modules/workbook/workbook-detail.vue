@@ -114,10 +114,10 @@
       handleShortcut () {
         const self = this
         if (this.listener) {
-          document.removeEventListener("keydown", this.listener)
+          document.removeEventListener('keydown', this.listener)
           console.log('Remove Listener')
         } else {
-          this.listener = function(e){
+          this.listener = function (e) {
             // console.log('keydown', e)
             if (e.ctrlKey) {
               switch (e.key) {
@@ -143,7 +143,7 @@
               }
             }
           }
-          document.addEventListener("keydown", this.listener)
+          document.addEventListener('keydown', this.listener)
           console.log('Add Listener')
         }
       },
