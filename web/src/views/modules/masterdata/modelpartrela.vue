@@ -150,7 +150,6 @@
         title: null,
         dataButton: 'list',
         listQuery: {
-          id: null,
           name: null,
           deptId: null,
           modelSeriesId: null,
