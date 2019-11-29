@@ -90,7 +90,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="STLST" label="LST/ST" >
+        <el-table-column align="center" prop="stlst" label="LST/ST" >
           <template slot-scope="scope">
             <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>
           </template>
@@ -163,7 +163,7 @@ export default {
       listQuery: {
         id: null,
         deptId: null,
-        STLST: null,
+        stlst: null,
         modelId: null,
         destinations: null,
         phaseId: null,
@@ -196,17 +196,17 @@ export default {
       dataListSelections: [],
       attributes: [{
         code: 'workBook',
-        name: '分析表',
-        children: [
-          { code: 'id', name: '分析表名称', type: 'string', required: true },
-          { code: 'deptId', name: '部门', type: 'string', required: true },
-          { code: 'STLST', name: 'LST/ST', type: 'string', required: true },
-          { code: 'modelId', name: '机种', type: 'string', required: true },
-          { code: 'phaseId', name: '生产阶段', type: 'string', required: true },
-          { code: 'destinations', name: '仕向', type: 'string', required: true },
-          { code: 'workstationId', name: '工位', type: 'string', required: true },
-          { code: 'makedAt', name: '制表日期', type: 'string', required: true }
-        ]
+        name: '分析表'
+        // children: [
+        //   { code: 'id', name: '分析表名称', type: 'string', required: true },
+        //   { code: 'deptId', name: '部门', type: 'string', required: true },
+        //   { code: 'STLST', name: 'LST/ST', type: 'string', required: true },
+        //   { code: 'modelId', name: '机种', type: 'string', required: true },
+        //   { code: 'phaseId', name: '生产阶段', type: 'string', required: true },
+        //   { code: 'destinations', name: '仕向', type: 'string', required: true },
+        //   { code: 'workstationId', name: '工位', type: 'string', required: true },
+        //   { code: 'makedAt', name: '制表日期', type: 'string', required: true }
+        // ]
       }],
       complexFilters: [],
       dictItemSTLST: []
@@ -232,9 +232,9 @@ export default {
           limit: this.pageSize
         },
         this.listQuery
-      )).then(({page, total}) => {
+      )).then(({page}) => {
         this.dataList = page.data
-        this.total = total
+        this.total = page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -307,7 +307,6 @@ export default {
     // 字典表
     getDictByType () {
       listDictItem({ type: 'ST' }).then(({data}) => {
-        console.log(data, 6666)
         this.dictItemSTLST = keyBy(data, 'code')
       })
     }

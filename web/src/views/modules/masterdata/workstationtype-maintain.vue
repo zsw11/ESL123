@@ -30,7 +30,7 @@
       <span class="tableHeader">工位类型结构</span>
         <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
         <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="addReal">
-          <el-form :mdoel="addForm">
+          <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
           <el-row :gutter="10">
             <el-col :span="11">
               <el-form-item :label="'父工位'" prop="parent">
@@ -120,6 +120,11 @@ export default {
         deleteAt: null
       },
       listWorkstationType,
+      dialogRules: {
+        name: [
+          { required: true, message: '名称不能为空', trigger: 'blur' }
+        ]
+      },
       dataRules: {
         name: [
           // { max: 64, message: '长度超过了64', trigger: 'blur' }
@@ -232,21 +237,25 @@ export default {
     },
     // 新增节点
     addNode () {
-      let data = {
-        workstationTypeId: this.dataForm.id,
-        parentId: this.addForm.parent,
-        name: this.addForm.name,
-        remark: this.addForm.remark
-      }
-      createWorkstationTypeNode(data).then((page, status) => {
-        if (status === 200) {
-          this.addReal = false
-          this.init()
-          this.$notify({
-            title: '成功',
-            message: '添加关系成功',
-            type: 'success',
-            duration: 2000
+      this.$refs['dialogForm'].validate((valid) => {
+        if (valid) {
+          let data = {
+            workstationTypeId: this.dataForm.id,
+            parentId: this.addForm.parent,
+            name: this.addForm.name,
+            remark: this.addForm.remark
+          }
+          createWorkstationTypeNode(data).then((page, status) => {
+            if (status === 200) {
+              this.addReal = false
+              this.init()
+              this.$notify({
+                title: '成功',
+                message: '添加关系成功',
+                type: 'success',
+                duration: 2000
+              })
+            }
           })
         }
       })

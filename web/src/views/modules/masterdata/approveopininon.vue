@@ -213,7 +213,6 @@ export default {
     // 字典表
     getDictByType () {
       listDictItem({ type: 'Status' }).then(({data}) => {
-        console.log(data, 6666)
         this.dictItemApproveOpininon = keyBy(data, 'code')
       })
     }

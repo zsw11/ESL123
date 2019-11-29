@@ -63,7 +63,7 @@ export default {
       },
       dataRules: {
         approveOperation: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '审批状态不能为空', trigger: 'blur' }
         ],
         opininon: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
