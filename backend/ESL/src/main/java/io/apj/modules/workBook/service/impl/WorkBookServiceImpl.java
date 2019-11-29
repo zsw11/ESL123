@@ -42,10 +42,19 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         ;
         Page<WorkBookEntity> page = this.selectPage(new Query<WorkBookEntity>(params).getPage(), entityWrapper);
         for (WorkBookEntity entity : page.getRecords()) {
-            entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
-            entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
-            entity.setWorkName(workstationService.selectById(entity.getWorkstationId()).getName());
+            if(entity.getDeptId()!=null){
+                entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
+            }
+            if(entity.getModelId()!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
+            if(entity.getWorkstationId()!=null){
+                entity.setWorkName(workstationService.selectById(entity.getWorkstationId()).getName());
+            }
+
         }
         return new PageUtils(page);
 

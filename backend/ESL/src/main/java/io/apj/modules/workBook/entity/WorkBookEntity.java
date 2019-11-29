@@ -49,7 +49,7 @@ public class WorkBookEntity implements Serializable {
 	 * 工位名称
 	 * */
 	@TableField(exist = false)
-	private  String Workstation;
+	private  String WorkstationName;
 	/**
 	 * ST/LST
 	 */
