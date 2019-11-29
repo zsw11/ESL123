@@ -1,7 +1,9 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.report.entity.StandardWorkEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -15,16 +17,21 @@ import io.apj.modules.report.service.TimeContactService;
 
 @Service("timeContactService")
 public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeContactEntity> implements TimeContactService {
+    @Autowired
+    private ModelService modelService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
-               ;
+        ;
         Page<TimeContactEntity> page = this.selectPage(
-                new Query<TimeContactEntity>(params).getPage(),entityWrapper
+                new Query<TimeContactEntity>(params).getPage(), entityWrapper
         );
+        for (TimeContactEntity entity : page.getRecords()) {
+            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+        }
 
         return new PageUtils(page);
     }

@@ -90,7 +90,7 @@ public class WorkstationTypeNodeController extends AbstractController {
 		workstationTypeNode.setCreateBy(getUserId().intValue());
 		workstationTypeNodeService.insert(workstationTypeNode);
 
-		return RD.build().put("code", 200);
+		return RD.build().put("status", 200);
 	}
 
 	/**

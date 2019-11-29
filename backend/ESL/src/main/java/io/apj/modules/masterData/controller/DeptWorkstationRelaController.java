@@ -66,7 +66,7 @@ public class DeptWorkstationRelaController extends AbstractController {
 		deptWorkstationRelaService.insert(deptWorkstationRela);
         insertTableReference("dept", deptWorkstationRela.getDeptId().longValue(), "workstation", deptWorkstationRela.getWorkstationId().longValue(), false);
 
-        return RD.build().put("code", 200);
+        return RD.build().put("status", 200);
     }
 
     /**

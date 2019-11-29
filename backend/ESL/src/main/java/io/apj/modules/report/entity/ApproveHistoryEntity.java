@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -40,6 +41,11 @@ public class ApproveHistoryEntity implements Serializable {
 	 * 报表组ID
 	 */
 	private Integer reportGroupId;
+	/**
+	 * 报表组
+	 */
+	@TableField(exist = false)
+	private String reportGroupName;
 	/**
 	 * 下一审批者ID
 	 */

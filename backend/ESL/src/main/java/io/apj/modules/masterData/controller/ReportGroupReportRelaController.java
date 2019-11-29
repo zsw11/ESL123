@@ -66,7 +66,7 @@ public class ReportGroupReportRelaController extends AbstractController {
 		reportGroupReportRelaService.insert(reportGroupReportRela);
         insertTableReference("report", reportGroupReportRela.getReportId().longValue(), "reportGroup", reportGroupReportRela.getReportGroupId().longValue(), false);
 
-        return RD.build().put("code", 200);
+        return RD.build().put("status", 200);
     }
 
     /**

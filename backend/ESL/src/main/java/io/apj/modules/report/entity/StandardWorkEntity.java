@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -42,6 +43,11 @@ public class StandardWorkEntity implements Serializable {
 	 */
 	private Integer modelId;
 	/**
+	 * 机种
+	 */
+	@TableField(exist = false)
+	private String modelName;
+	/**
 	 * 型号
 	 */
 	private String modelType;
@@ -53,6 +59,11 @@ public class StandardWorkEntity implements Serializable {
 	 * 生产阶段ID
 	 */
 	private Integer phaseId;
+	/**
+	 * 生产阶段
+	 */
+	@TableField(exist = false)
+	private String phaseName;
 	/**
 	 * 技通No
 	 */

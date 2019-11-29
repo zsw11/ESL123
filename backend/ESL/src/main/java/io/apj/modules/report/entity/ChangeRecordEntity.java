@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -28,6 +29,11 @@ public class ChangeRecordEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+	/**
+	 * 机种
+	 */
+	@TableField(exist = false)
+	private String ModelName;
 	/**
 	 * 标题
 	 */

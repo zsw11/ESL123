@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -49,6 +50,11 @@ public class TimeContactEntity implements Serializable {
 	 * 机种ID
 	 */
 	private Integer modelId;
+	/**
+	 * 机种ID
+	 */
+	@TableField(exist = false)
+	private String modelName;
 	/**
 	 * ES/AMP/MP
 	 */

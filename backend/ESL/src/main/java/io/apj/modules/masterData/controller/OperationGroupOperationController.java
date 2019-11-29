@@ -71,7 +71,7 @@ public class OperationGroupOperationController extends AbstractController {
 		operationGroupOperation.setPinyin(PinyinUtil.getPinYin(operationGroupOperation.getOperation()));
 		operationGroupOperationService.insert(operationGroupOperation);
 
-		return RD.build().put("code", 200);
+		return RD.build().put("status", 200);
 	}
 
 	/**

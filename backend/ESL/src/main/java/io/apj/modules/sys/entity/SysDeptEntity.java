@@ -21,14 +21,9 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-import io.apj.common.validator.group.AddGroup;
-import io.apj.common.validator.group.UpdateGroup;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 部门管理
@@ -131,7 +126,8 @@ public class SysDeptEntity implements Serializable {
 
 	/**
 	 * 获取：部门名称
-	 */
+     * @return
+     */
 	public String getName() {
 		return name;
 	}

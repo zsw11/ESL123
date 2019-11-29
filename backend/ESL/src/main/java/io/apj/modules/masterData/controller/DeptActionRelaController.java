@@ -66,7 +66,7 @@ public class DeptActionRelaController extends AbstractController {
 		deptActionRelaService.insert(deptActionRela);
         insertTableReference("dept", deptActionRela.getDeptId().longValue(), "action", deptActionRela.getActionId().longValue(), false);
 
-        return RD.build().put("code", 200);
+        return RD.build().put("status", 200);
     }
 
     /**
