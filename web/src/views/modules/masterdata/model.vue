@@ -264,7 +264,6 @@ export default {
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
-          // console.log(this.dataList)
         }).catch(() => {
           this.dataList = []
           this.total = 0
