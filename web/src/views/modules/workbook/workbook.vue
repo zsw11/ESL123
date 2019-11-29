@@ -80,25 +80,25 @@
 
         <el-table-column align="center" prop="deptId" label="部门" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="modelId" label="机种" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="STLST" label="LST/ST" >
           <template slot-scope="scope">
-<!--            <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>-->
+            <span>{{ dictItemSTLST[scope.row.stlst].name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="phaseId" label="生产阶段" >
           <template slot-scope="scope">
-            <span>{{scope.row.phaseId }}</span>
+            <span>{{scope.row.phaseName }}</span>
           </template>
         </el-table-column>
 
@@ -110,7 +110,7 @@
 
         <el-table-column align="center" prop="workstationId" label="工位" >
           <template slot-scope="scope">
-            <span>{{scope.row.workstationId }}</span>
+            <span>{{scope.row.workName }}</span>
           </template>
         </el-table-column>
 
@@ -154,7 +154,7 @@ import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
-import { listDictItem } from '@/api/dict'
+import { listDict, listDictItem } from '@/api/dict'
 export default {
   name: 'workBookList',
   data () {
@@ -183,6 +183,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDict,
       listDept,
       listPhase,
       listModel,

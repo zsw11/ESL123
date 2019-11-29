@@ -20,7 +20,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="STLST">
-            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.STLST" :allowEmpty="true"></dict-select>
+            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.stlst" :allowEmpty="true"></dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -134,7 +134,7 @@ export default {
       dataForm: {
         id: 0,
         deptId: null,
-        STLST: null,
+        stlst: null,
         modelId: null,
         destinations: null,
         phaseId: null,
@@ -249,7 +249,7 @@ export default {
         fetchWorkBook(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'deptId', 'STLST', 'modelId', 'destinations', 'phaseId', 'workstationId', 'workName', 'versionNumber', 'makerId', 'makedAt', 'continueFromId', 'timeValue', 'TMU', 'secondConvert', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'deptId', 'stlst', 'modelId', 'destinations', 'phaseId', 'workstationId', 'workName', 'versionNumber', 'makerId', 'makedAt', 'continueFromId', 'timeValue', 'TMU', 'secondConvert', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true
@@ -266,6 +266,7 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
+      console.log(this.dataForm, 111111111111111111)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id

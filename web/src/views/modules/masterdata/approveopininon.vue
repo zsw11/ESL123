@@ -118,7 +118,7 @@ export default {
   },
   activated () {
     const self = this
-    self.getDicByType()
+    self.getDictByType()
     self.getDataList()
   },
   methods: {
@@ -211,7 +211,7 @@ export default {
       })
     },
     // 字典表
-    getDicByType () {
+    getDictByType () {
       listDictItem({ type: 'Status' }).then(({data}) => {
         console.log(data, 6666)
         this.dictItemApproveOpininon = keyBy(data, 'code')
