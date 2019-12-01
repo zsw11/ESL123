@@ -16,6 +16,41 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
+    <select id="selectpartModel" resultType="io.apj.modules.masterData.vo.ModelVo">
+        SELECT
+        mpr.id,
+        M.NAME AS modelName,
+        d.NAME deptName,
+        d."id" depeId,
+        ms."id" modelSeriesId,
+        ms.NAME modelSeriesName,
+        M.code,M.mp_time,M.es_time,M.ws_time,M.amp_time
+
+        FROM
+        model_part_rela AS mpr
+        LEFT JOIN model AS M ON mpr.model_id = M.ID
+        LEFT JOIN model_series AS ms ON ms.ID = M.model_series_id
+        LEFT JOIN sys_dept AS d ON d.ID = M.dept_id
+        where mpr.part_id = #{id}
+
+            <if test="modelName != null and modelName != ''">
+                AND M.name LIKE '%${modelName}%'
+            </if>
+            <if test="modelSeriesId != null and modelSeriesId != ''">
+                AND ms.id = #{modelSeriesId}
+            </if>
+            <if test="deptId != null and deptId != ''">
+                AND d.id = #{deptId}
+            </if>
+            <if test="code != null and code != ''">
+                AND   M.code LIKE '%${code}%'
+            </if>
+       
+
+        ORDER BY
+        mpr.create_at DESC
+
+    </select>
 
 
 </mapper>

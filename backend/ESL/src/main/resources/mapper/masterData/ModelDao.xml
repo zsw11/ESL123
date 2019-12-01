@@ -46,8 +46,11 @@
 FROM
 	tool
 	JOIN ( SELECT ID AS tmId, tool_id AS tid FROM "model_tool_rela" WHERE "model_id" = #{ id } ) T ON T.tid = tool."id"
-WHERE
-	NAME LIKE '%${name}%'
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE '%${name}%'
+            </if>
+        </where>
 ORDER BY
 	tool.create_at DESC
     </select>

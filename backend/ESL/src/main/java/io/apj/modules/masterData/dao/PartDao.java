@@ -1,8 +1,13 @@
 package io.apj.modules.masterData.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.modules.masterData.entity.PartEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 部品
@@ -13,5 +18,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface PartDao extends BaseMapper<PartEntity> {
+    List<Map<String,Object>> selectpartModel(@Param("id") Integer id, Page<Map<String,Object>> page,
+                                             @Param("modelName")String modelName,@Param("deptId")Integer deptId,
+                                             @Param("modelSeriesId")Integer modelSeriesId,@Param("code")String code);
 	
 }

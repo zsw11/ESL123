@@ -42,17 +42,25 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 
 	@Override
 	public PageUtils toolModeRelaList(Integer id, Map<String, Object> params) {
-		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<>();
-		relaEntityWrapper.eq("tool_id", id).isNull("delete_at");
-		Page<ModelToolRelaEntity> page = modelToolRelaService
-				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
-		for (ModelToolRelaEntity item : page.getRecords()) {
-			item.setModelEntity(modelService.selectById(item.getModelId()));
-			int modelSeriesId =  modelService.selectById(item.getModelId()).getModelSeriesId();
-			item.setModelSeriesEntity(modelSeriesService.selectById(modelSeriesId));
-			item.setDeptName(deptService.selectById(modelService.selectById(item.getModelId()).getDeptId()).getName());
-		}
-		return new PageUtils(page);
+		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+		String modelName = (String) params.get("name");
+		String code = (String) params.get("code");
+		Integer deptId = (Integer) params.get("deptId");
+		Integer modelSeriesId = (Integer) params.get("modelSeriesId");
+		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code)));
+
 	}
+//		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<>();
+//		relaEntityWrapper.eq("tool_id", id).isNull("delete_at");
+//		Page<ModelToolRelaEntity> page = modelToolRelaService
+//				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
+//		for (ModelToolRelaEntity item : page.getRecords()) {
+//			item.setModelEntity(modelService.selectById(item.getModelId()));
+//			int modelSeriesId =  modelService.selectById(item.getModelId()).getModelSeriesId();
+//			item.setModelSeriesEntity(modelSeriesService.selectById(modelSeriesId));
+//			item.setDeptName(deptService.selectById(modelService.selectById(item.getModelId()).getDeptId()).getName());
+//		}
+//		return new PageUtils(page);
+//	}
 }
 
