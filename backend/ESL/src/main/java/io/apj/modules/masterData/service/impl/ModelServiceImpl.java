@@ -73,25 +73,37 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 
 	@Override
 	public PageUtils modelPartRelaList(int id, Map<String, Object> params) {
-		EntityWrapper<ModelPartRelaEntity> relaEntityWrapper = new EntityWrapper<ModelPartRelaEntity>();
-		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
-		Page<ModelPartRelaEntity> page = modelPartRelaService
-				.selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
-		for (ModelPartRelaEntity item : page.getRecords()) {
-			item.setPartEntity(partService.selectById(item.getPartId()));
-		}
-		return new PageUtils(page);
+		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+		String name = (String) params.get("name");
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name)));
+
 	}
+
+//		EntityWrapper<ModelPartRelaEntity> relaEntityWrapper = new EntityWrapper<ModelPartRelaEntity>();
+//		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
+//		Page<ModelPartRelaEntity> page = modelPartRelaService
+//				.selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
+//		for (ModelPartRelaEntity item : page.getRecords()) {
+//			item.setPartEntity(partService.selectById(item.getPartId()));
+//		}
+//		return new PageUtils(page);
+//	}
 
 	@Override
 	public PageUtils modelToolRelaList(int id, Map<String, Object> params) {
-		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<ModelToolRelaEntity>();
-		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
-		Page<ModelToolRelaEntity> page = modelToolRelaService
-				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
-		for (ModelToolRelaEntity item : page.getRecords()) {
-			item.setToolEntity(toolService.selectById(item.getToolId()));
-		}
-		return new PageUtils(page);
+		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+		String name = (String) params.get("name");
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name)));
+
+
 	}
+//		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<ModelToolRelaEntity>();
+//		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
+//		Page<ModelToolRelaEntity> page = modelToolRelaService
+//				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
+//		for (ModelToolRelaEntity item : page.getRecords()) {
+//			item.setToolEntity(toolService.selectById(item.getToolId()));
+//		}
+//		return new PageUtils(page);
+//	}
 }

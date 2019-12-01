@@ -1,17 +1,16 @@
 package io.apj.modules.masterData.controller;
 
-import java.util.*;
-
-import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
-import com.baomidou.mybatisplus.plugins.Page;
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.ToolEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.ModelToolRelaService;
+import io.apj.modules.masterData.service.ToolService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.ReferenceEntity;
 import io.apj.modules.sys.service.SysDictService;
@@ -19,17 +18,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import io.apj.modules.masterData.entity.ToolEntity;
-import io.apj.modules.masterData.service.ToolService;
-import io.apj.common.utils.RD;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * 治工具

@@ -19,6 +19,7 @@ import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
                 Integer entityModelId = entity.getModelId();
                 // 机种里modelid为entityModelId
                 EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<ModelEntity>();
-                entityWrapper.eq("model_id", entityModelId)
+                entityWrapper.in("id", Collections.singleton(entityModelId))
                         .like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
                 if (StringUtils.isNotEmpty((CharSequence) params.get("modelSeriesId"))) {
                     entityWrapper.eq("model_series_id", Integer.parseInt((String) params.get("modelSeriesId")));
@@ -67,7 +68,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
                 if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
                     String name = (String) params.get("name");
                     name = name.replace(",", "");
-                    entityWrapper.andNew("name  like '%" + name + "%'" + " or pinyin  like '%" + name + "%'");
+                    entityWrapper.and("name  like '%" + name + "%'" + " or pinyin  like '%" + name + "%'");
                 }
                 Page<ModelEntity> page = modelService
                         .selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);

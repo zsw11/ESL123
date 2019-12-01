@@ -3,7 +3,7 @@
 
 <mapper namespace="io.apj.modules.masterData.dao.ModelDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.apj.modules.masterData.entity.ModelEntity" id="modelMap">
         <result property="id" column="id"/>
         <result property="modelSeriesId" column="model_series_id"/>
@@ -22,6 +22,35 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
+
+    <select id="selectmodelPart" resultType="io.apj.modules.masterData.vo.PartVo">
+        SELECT
+        *
+        FROM
+        part
+        JOIN ( SELECT id AS pmid, part_id AS pid FROM "model_part_rela" WHERE "model_id" = #{ id } ) T ON T.pid =
+        part."id"
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE '%${name}%'
+        </if>
+        </where>
+
+        ORDER BY
+        part.create_at DESC
+    </select>
+
+    <select id="selectmodelTool" resultType="io.apj.modules.masterData.vo.ToolVo">
+        	SELECT
+	*
+FROM
+	tool
+	JOIN ( SELECT ID AS tmId, tool_id AS tid FROM "model_tool_rela" WHERE "model_id" = #{ id } ) T ON T.tid = tool."id"
+WHERE
+	NAME LIKE '%${name}%'
+ORDER BY
+	tool.create_at DESC
+    </select>
 
 
 </mapper>

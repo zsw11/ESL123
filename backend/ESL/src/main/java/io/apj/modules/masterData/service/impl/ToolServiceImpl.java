@@ -1,8 +1,8 @@
 package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
+import io.apj.modules.masterData.entity.ToolEntity;
 import io.apj.modules.masterData.service.*;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ToolDao;
-import io.apj.modules.masterData.entity.ToolEntity;
+
 
 @Service("toolService")
 public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements ToolService {
