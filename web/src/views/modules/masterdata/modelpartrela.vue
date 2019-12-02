@@ -64,19 +64,19 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="name" label="机种名称" >
+        <el-table-column align="center" prop="modelName" label="机种名称" >
           <template slot-scope="scope">
             <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="部门" >
+        <el-table-column align="center" prop="deptName" label="部门" >
           <template slot-scope="scope">
             <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
+        <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
           <template slot-scope="scope">
             <span>{{scope.row.modelSeriesName }}</span>
           </template>
@@ -88,33 +88,33 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="WSTime" label="WS时间" >
+        <el-table-column align="center" prop="wsTime" label="WS时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.wsTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="ESTime" label="ES时间" >
+        <el-table-column align="center" prop="esTime" label="ES时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.esTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="AMPTime" label="AMP时间" >
+        <el-table-column align="center" prop="ampTime" label="AMP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.ampTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="MPTime" label="MP时间" >
+        <el-table-column align="center" prop="mpime" label="MP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.mpTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="details(scope.row.modelEntity.id)">详情</el-button>
+            <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
 <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
             <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
@@ -154,10 +154,10 @@
           deptId: null,
           modelSeriesId: null,
           code: null,
-          WSTime: null,
-          ESTime: null,
-          AMPTime: null,
-          MPTime: null
+          wsTime: null,
+          esTime: null,
+          ampTime: null,
+          mpTime: null
         },
         listDept,
         listModelSeries,
@@ -276,7 +276,7 @@
       },
       // 删除数据
       deleteHandle (row) {
-        var ids = row ? [row.id] : this.dataListSelections.map(item => {
+        var ids = row ? [row.modelId] : this.dataListSelections.map(item => {
           return item.id
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {

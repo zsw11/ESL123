@@ -54,25 +54,25 @@
 
         <el-table-column align="center" prop="name" label="治工具名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.toolEntity.name }}</span>
+            <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="common" label="是否通用" >
           <template slot-scope="scope">
-            <span v-if="scope.row.toolEntity.common">是</span>
-            <span v-if="!scope.row.toolEntity.common">否</span>
+            <span v-if="scope.row.common">是</span>
+            <span v-if="!scope.row.common">否</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.toolEntity.remark }}</span>
+            <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.toolId)">详情</el-button>
 <!--            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
 <!--            <el-button  type="text" size="small" @click="toolModel(scope.row.id,scope.row.name)">机种</el-button>-->
             <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
@@ -265,7 +265,7 @@
       },
       // 删除数据
       deleteHandle (row) {
-        var ids = row ? [row.id] : this.dataListSelections.map(item => {
+        var ids = row ? [row.toolId] : this.dataListSelections.map(item => {
           return item.id
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
