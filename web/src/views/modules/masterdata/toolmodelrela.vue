@@ -265,7 +265,7 @@
       },
       // 删除数据
       deleteHandle (row) {
-        var ids = row ? [row.toolId] : this.dataListSelections.map(item => {
+        var ids = row ? [row.tmId] : this.dataListSelections.map(item => {
           return item.id
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
