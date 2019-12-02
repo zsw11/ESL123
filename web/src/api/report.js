@@ -27,6 +27,15 @@ export function fetchReport (id) {
   })
 }
 
+// 获取报表所属报表组详情
+export function fetchReportGroup (id) {
+  return request({
+    url: request.adornUrl(`/api/v1/report/reportGroup/${id}`),
+    method: 'get',
+    params: request.adornParams()
+  })
+}
+
 // 修改报表
 export function updateReport (id, data) {
   return request({

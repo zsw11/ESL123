@@ -1,12 +1,17 @@
 package io.apj.modules.masterData.controller;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.ReportGroupReportRelaService;
+import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.config.Ini;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +36,10 @@ import io.apj.common.utils.PageUtils;
 public class ReportController extends AbstractController {
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private ReportGroupService reportGroupService;
+	@Autowired
+	private ReportGroupReportRelaService reportGroupReportRelaService;
 
 	/**
 	 * 列表
@@ -53,6 +62,18 @@ public class ReportController extends AbstractController {
 		ReportEntity report = reportService.selectById(id);
 
 		return RD.build().put("data", report);
+	}
+	/**
+	 * 报表属于哪个报表组
+	 */
+	@RequestMapping("/reportGroup/{id}")
+	public RD reportGroup(@PathVariable("id") Integer id) {
+		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id","id"));
+        List<ReportGroupEntity> reportGroupEntities =  new ArrayList<>();
+         for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
+			 reportGroupEntities = (List<ReportGroupEntity>) reportGroupService.selectById(item.getReportGroupId());
+		}
+		return RD.build().put("data", reportGroupEntities);
 	}
 
 	/**
