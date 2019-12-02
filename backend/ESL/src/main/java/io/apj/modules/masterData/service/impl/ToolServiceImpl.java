@@ -45,8 +45,14 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
 		String modelName = (String) params.get("name");
 		String code = (String) params.get("code");
-		Integer deptId = (Integer) params.get("deptId");
-		Integer modelSeriesId = (Integer) params.get("modelSeriesId");
+		int modelSeriesId = 0;
+		int deptId = 0;
+		if((String) params.get("modelSeriesId")!=null && (String) params.get("modelSeriesId")!=""){
+			modelSeriesId = Integer.parseInt((String) params.get("modelSeriesId"));
+		}
+		if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
+			deptId = Integer.parseInt((String) params.get("deptId"));
+		}
 		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code)));
 
 	}

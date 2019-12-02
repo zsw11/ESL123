@@ -22,7 +22,7 @@ public class ToolVo implements Serializable  {
 	 * $column.comments
 	 */
 	@TableId
-	private Integer id;
+	private Integer toolId;
 	private Integer tmId;
 	/**
 	 * 名称

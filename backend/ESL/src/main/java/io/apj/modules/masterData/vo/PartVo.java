@@ -21,10 +21,11 @@ public class PartVo implements Serializable {
 	/**
 	 * $column.comments
 	 */
-	@TableId
-	private Integer id;
+//	private Integer id;
 
-	private Integer pmid;
+	private Integer pmId;
+	@TableId
+	private Integer partId;
 	/**
 	 * 名称
 	 */

@@ -28,7 +28,7 @@
         *
         FROM
         part
-        JOIN ( SELECT id AS pmid, part_id AS pid FROM "model_part_rela" WHERE "model_id" = #{ id } ) T ON T.pid =
+        JOIN ( SELECT id AS pmid, part_id AS partid FROM "model_part_rela" WHERE "model_id" = #{ id } ) T ON T.partid =
         part."id"
         <where>
             <if test="name != null and name != ''">
@@ -45,7 +45,7 @@
 	*
 FROM
 	tool
-	JOIN ( SELECT ID AS tmId, tool_id AS tid FROM "model_tool_rela" WHERE "model_id" = #{ id } ) T ON T.tid = tool."id"
+	JOIN ( SELECT ID AS tmId, tool_id AS toolid FROM "model_tool_rela" WHERE "model_id" = #{ id } ) T ON T.toolid = tool."id"
         <where>
             <if test="name != null and name != ''">
                 AND name LIKE '%${name}%'
