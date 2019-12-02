@@ -18,10 +18,29 @@
        </el-col>
       </el-row>
 
-      <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>
+<!--      <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>-->
+<!--      <workbook-table ref="workbookTable"></workbook-table>-->
+      <vxe-grid
+        border
+        size="mini"
+        ref="workbookTable"
+        align="center"
+        class="workbook-table"
+        :data="[dataForm]"
+        :mouse-config="{selected: true}"
+        :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
+        :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+        <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+        <operation-column key="operationColumn" min-width="120"></operation-column>
+        <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
+        <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
+        <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+        <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
+      </vxe-grid>
+<!--      <workbook-table ref="workbookTable"></workbook-table>-->
       <el-row :gutter="10">
         <el-col :span="22">
-          <el-form-item style="display: block" :label="'备注'" prop="remark">
+          <el-form-item style="display: block;margin-top: 30px" :label="'备注'" prop="remark">
             <el-input
               :disabled=flag
               type="textarea"
@@ -43,13 +62,28 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
+import { pick, clone } from 'lodash'
 import { fetchOpertaionGroup, createOpertaionGroup, updateOpertaionGroup } from '@/api/opertaionGroup'
 import { listDept } from '@/api/dept'
+import WorkbookTable from '../workbook/workbook-detail-table.vue'
+import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
+import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
+import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
+import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
 export default {
   name: 'editOpertaionGroup',
+  components: {
+    WorkbookTable,
+    MeasureColumn,
+    OperationColumn,
+    KeyColumn
+  },
   data () {
     return {
+      measureColumns0,
+      measureColumns1,
+      lastEditCell: null,
+      currentCell: null,
       title: null,
       flag: false,
       inited: false,
@@ -57,12 +91,22 @@ export default {
         id: 0,
         code: null,
         deptId: null,
-        usedCount: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
+        operation: null,
+        key: null,
+        a0: null,
+        b0: null,
+        g0: null,
+        a1: null,
+        b1: null,
+        p0: null,
+        m0: null,
+        x0: null,
+        i0: null,
+        tool: null,
+        a2: null,
+        b2: null,
+        p1: null,
+        a3: null
       },
       listDept,
       dataRules: {
@@ -95,9 +139,13 @@ export default {
     this.init()
   },
   activated () {
+    this.loadData()
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
       this.init()
     }
+  },
+  mounted () {
+    // this.loadData()
   },
   watch: {
     dataForm: {
@@ -137,6 +185,50 @@ export default {
         this.inited = true
       }
     },
+    // 创建新行数据
+    createNewRow (type) {
+      const newRow = clone(defaultRow)
+      if (type) newRow.type = type
+      return newRow
+    },
+    // 加载数据
+    loadData (data) {
+      this.$refs.workbookTable.loadData(data)
+      this.lastEditCell = undefined
+      this.currentCell = undefined
+      // 增加100行方便操作
+      for (let i = 0; i < 10; i++) {
+        this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
+      }
+    },
+    // 选中单元格并输入时的处理
+    keyboardEdit ({ row, column, cell }, e) {
+      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
+        this.jump(row, column.property, e.key)
+        e.preventDefault()
+        return false
+      }
+      return true
+    },
+    // 调到指定位置
+    jump (row, field, to) {
+      const offset = measureFields.indexOf(field)
+      for (let i = 1; i <= measureFields.length; i++) {
+        const tmpField = measureFields[(offset + i) % measureFields.length]
+        if (tmpField.includes(to)) {
+          this.$refs.workbookTable.setActiveCell(row, tmpField)
+          return
+        }
+      }
+    },
+    // 选择指标组合
+    selctMeasureGroup (mg, row) {
+      Object.assign(
+        row,
+        pick(mg, measureFields)
+      )
+      this.$refs.workbookTable.setActiveCell(row, 'tool')
+    },
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
@@ -145,6 +237,7 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
+      console.log(this.dataForm, 111111111111111111111)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
