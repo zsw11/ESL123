@@ -29,17 +29,17 @@
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
         <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
-        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="addReal">
+        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="addReal" v-if="addReal">
           <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
           <el-row :gutter="10">
             <el-col :span="11">
               <el-form-item :label="'父工位'" prop="parent">
-                <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"  :allowEmpty="true"></keyword-search>
+                <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"   :allowEmpty=true clearable></keyword-search>
               </el-form-item>
             </el-col>
             <el-col :span="11" :offset="2">
             <el-form-item :label="'名称'" prop="name">
-              <el-input  v-model="addForm.name"></el-input>
+              <el-input  v-model="addForm.name" clearable></el-input>
             </el-form-item>
             </el-col>
           </el-row>
@@ -234,6 +234,7 @@ export default {
           })
         }
       })
+
     },
     // 新增节点
     addNode () {
@@ -245,8 +246,9 @@ export default {
             name: this.addForm.name,
             remark: this.addForm.remark
           }
-          createWorkstationTypeNode(data).then((page, status) => {
-            if (status === 200) {
+          createWorkstationTypeNode(data).then((status) => {
+            console.log(status, 111222)
+            if (status) {
               this.addReal = false
               this.init()
               this.$notify({
