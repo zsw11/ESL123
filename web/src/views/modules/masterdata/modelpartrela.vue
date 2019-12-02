@@ -66,7 +66,7 @@
 
         <el-table-column align="center" prop="name" label="机种名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.name }}</span>
+            <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
@@ -78,37 +78,37 @@
 
         <el-table-column align="center" prop="modelSeriesId" label="机种系列" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesEntity.name }}</span>
+            <span>{{scope.row.modelSeriesName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.code }}</span>
+            <span>{{scope.row.code}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="WSTime" label="WS时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.WSTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="ESTime" label="ES时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.ESTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="AMPTime" label="AMP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.AMPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="MPTime" label="MP时间" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelEntity.MPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
