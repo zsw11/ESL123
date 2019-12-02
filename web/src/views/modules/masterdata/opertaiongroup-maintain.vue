@@ -26,7 +26,6 @@
         ref="workbookTable"
         align="center"
         class="workbook-table"
-        :data="[dataForm]"
         :mouse-config="{selected: true}"
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
         :edit-config="{trigger: 'dblclick', mode: 'cell'}">
