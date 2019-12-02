@@ -23,7 +23,8 @@ public class ModelVo implements Serializable {
 	/**
 	 * $column.comments
 	 */
-	private Integer id;
+	private Integer mpId;
+	private Integer mtId;
 
 	/**
 	 * 机种系列ID
@@ -44,6 +45,7 @@ public class ModelVo implements Serializable {
 	 * 名称
 	 */
 	private String modelName;
+	private String modelId;
 	/**
 	 * 拼音
 	 */

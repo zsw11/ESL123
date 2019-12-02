@@ -18,7 +18,8 @@
     </resultMap>
     <select id="selectpartModel" resultType="io.apj.modules.masterData.vo.ModelVo">
         SELECT
-        mpr.id,
+        mpr.id AS mpId,
+        M.id AS modelId,
         M.NAME AS modelName,
         d.NAME deptName,
         d."id" depeId,

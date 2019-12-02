@@ -19,7 +19,8 @@
 
     <select id="selecttoolModel" resultType="io.apj.modules.masterData.vo.ModelVo">
         SELECT
-        mtr.id,
+        mtr.id AS mtId,
+        M.id AS modelId,
         M.NAME AS modelName,
         d.NAME deptName,
         d."id" depeId,
