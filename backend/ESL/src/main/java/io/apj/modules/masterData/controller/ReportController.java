@@ -81,7 +81,7 @@ public class ReportController extends AbstractController {
 				 reportGroupEntities.add(reportGroupEntity);
 			 }
 		}
-		return RD.build().ok( reportGroupEntities);
+		return RD.ok( reportGroupEntities);
 	}
 
 	/**

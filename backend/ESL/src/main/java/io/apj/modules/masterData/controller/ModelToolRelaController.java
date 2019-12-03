@@ -64,6 +64,7 @@ public class ModelToolRelaController extends AbstractController {
         modelToolRela.setCreateBy(getUserId().intValue());
 		modelToolRelaService.insert(modelToolRela);
         insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), false);
+        insertTableReference("tool", modelToolRela.getToolId().longValue(), "model", modelToolRela.getModelId().longValue(), false);
 
         return RD.build().put("status", 200);
     }
@@ -76,7 +77,7 @@ public class ModelToolRelaController extends AbstractController {
     public RD update(@RequestBody ModelToolRelaEntity modelToolRela){
 		modelToolRelaService.updateById(modelToolRela);
         insertTableReference("model", modelToolRela.getModelId().longValue(), "tool", modelToolRela.getToolId().longValue(), true);
-
+        insertTableReference("tool", modelToolRela.getToolId().longValue(), "model", modelToolRela.getModelId().longValue(), true);
         return RD.build().put("status", 200);
     }
 

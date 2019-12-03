@@ -30,7 +30,9 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
                 new Query<TimeContactEntity>(params).getPage(), entityWrapper
         );
         for (TimeContactEntity entity : page.getRecords()) {
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            if(modelService.selectById(entity.getModelId()).getName()!= ""&&modelService.selectById(entity.getModelId()).getName()!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
         }
 
         return new PageUtils(page);
