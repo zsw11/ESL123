@@ -7,26 +7,20 @@
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
         <div class="min-width">
-          <el-form-item :label="'所属部门'" prop="deptId">
-            <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
-          </el-form-item>
-
           <el-form-item :label="'报表组'" prop="report_group_id">
             <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'下一审批者'" prop="nextApproverId">
-            <el-input v-model="listQuery.nextApproverId" clearable></el-input>
+<!--          <el-form-item :label="'审批状态'" prop="status">-->
+<!--            <el-input v-model="listQuery.status" clearable></el-input>-->
+<!--          </el-form-item>-->
+          <el-form-item :label="'审批状态'" prop="status">
+            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>
           </el-form-item>
-
-          <el-form-item :label="'状态'" prop="status">
-            <el-input v-model="listQuery.status" clearable></el-input>
-          </el-form-item>
-        </div>
-
-        <div class="buttons with-complex">
-          <el-button @click="clearQuery()">清 空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <div class="search-box">
+            <el-button @click="getDataList(1)" type="primary">搜 索</el-button>
+            <el-button @click="clearQuery()">清 空</el-button>
+          </div>
         </div>
       </el-form>
     </el-card>
@@ -34,15 +28,15 @@
       <div slot="header" class="clearfix">
         <div class="card-title">ReportApprove</div>
         <div class="buttons">
-          <el-button
-            v-if="isAuth('report:reportapprove:create')"
-            type="primary"
-            @click="addOrUpdateHandle()"
-          >新增</el-button>
+<!--          <el-button-->
+<!--            v-if="isAuth('report:reportapprove:create')"-->
+<!--            type="primary"-->
+<!--            @click="addOrUpdateHandle()"-->
+<!--          >新增</el-button>-->
 
-          <el-button
-            :disabled="dataListSelections.length <= 0"
-          >批量下载</el-button>
+<!--          <el-button-->
+<!--            :disabled="dataListSelections.length <= 0"-->
+<!--          >批量下载</el-button>-->
         </div>
       </div>
       <el-table
@@ -54,41 +48,30 @@
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
 
-        <el-table-column align="center" prop="deptId" label="所属部门">
-          <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="deptId" label="所属部门">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.deptId }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column align="center" prop="report_group_id" label="报表组">
           <template slot-scope="scope">
-            <span>{{scope.row.report_group_id }}</span>
+            <span>{{scope.row.reportGroupName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="nextApproverId" label="下一审批者">
-          <template slot-scope="scope">
-            <span>{{scope.row.nextApproverId }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="status" label="状态">
+        <el-table-column align="center" prop="status" label="审批状态">
           <template slot-scope="scope">
             <span>{{scope.row.status }}</span>
           </template>
         </el-table-column>
 
 
-        <el-table-column
-          align="center"
-          :label="'操作'"
-          class-name="small-padding fixed-width"
-        >
+        <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-            >下载</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button size="mini" type="text" @click="approve(scope.row.id,scope.row.reportGroupName,1)">通过</el-button>
+            <el-button id="delete" size="mini" type="text" @click="approve(scope.row.id,scope.row.reportGroupName,0)">拒绝</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -102,6 +85,26 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-card>
+    <el-dialog
+      class="dialog"
+      :title="dialogTitle"
+      width="600px"
+      :visible.sync="approveShow">
+      <el-form :inline="true" :model="approveForm">
+        <el-form-item :label="'审批意见'" prop="name"  label-width="100px">
+          <el-input type="textarea" rows="4"  v-model="approveForm.name" autocomplete="off" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item :label="'下一审批者'" prop="name"  label-width="100px">
+          <el-input  v-model="approveForm.name" autocomplete="off" clearable></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="approveShow = false">取 消</el-button>
+            <el-button type="primary" @click="approvePut">确 定</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -114,7 +117,9 @@ export default {
   name: 'reportApproveList',
   data () {
     return {
+      approveShow: false,
       dataButton: 'list',
+      dialogTitle: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -126,6 +131,10 @@ export default {
         updateBy: null,
         updateAt: null,
         deleteAt: null
+      },
+      approveForm: {
+        name: null,
+        opininon: null
       },
       listDept,
       listReportGroup,
@@ -308,12 +317,42 @@ export default {
           this.getDataList()
         })
       })
+    },
+    // 详情
+    details (id) {
+      // let noShow = true
+      this.$nextTick(() => {
+        this.$router.push({path: `/details-approve/${id}`, query: {noShow: true}})
+      })
+    },
+    // 审批
+    approve (id, name, flag) {
+      if (flag === 1) {
+        this.dialogTitle = '通过-' + name
+      } else {
+        this.dialogTitle = '拒绝-' + name
+      }
+      this.approveShow = true
+      console.log(id, 222222222222)
+      // fetchReportGroup(id).then((page) => {
+      //   console.log(page, 11111111111111111111)
+      // })
+    },
+    // 提交审批
+    approvePut () {
+      this.approveShow = false
     }
   }
 }
 </script>
-<style scoped lang="scss">
-  .min-width{
-    min-width: 1024px;
+<style lang="scss">
+  .dialog {
+    .el-form-item {
+      display: block;
+      .el-textarea__inner,.el-input {
+        width: 350px;
+      }
+    }
   }
+
 </style>

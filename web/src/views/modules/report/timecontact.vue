@@ -18,9 +18,6 @@
             <el-input class="input" v-model="listQuery.publishType" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'修订理由'" prop="reviseReason">
-            <el-input class="input" v-model="listQuery.reviseReason" clearable></el-input>
-          </el-form-item>
 
           <el-form-item :label="'ST/LST'" prop="STType">
             <dict-select dictType="ST" class="input" v-model="listQuery.STType" :allowEmpty="true" clearable></dict-select>
@@ -31,9 +28,9 @@
           </el-form-item>
 
 
-          <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">
-            <el-input class="input" v-model="listQuery.towingLastVersionPrinting" clearable></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">-->
+<!--            <el-input class="input" v-model="listQuery.towingLastVersionPrinting" clearable></el-input>-->
+<!--          </el-form-item>-->
 
 
           <el-form-item :label="'opertaionNO'" prop="operationStandardNo">
@@ -44,13 +41,6 @@
             <el-input class="input" v-model="listQuery.operationInstruction" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'EXceprtionOperation'" prop="exceptionOperation">
-            <el-input class="input" v-model="listQuery.exceptionOperation" clearable></el-input>
-          </el-form-item>
-
-          <el-form-item :label="'exceptionoperation'" prop="remarkVersionCopmare">
-            <el-input class="input" v-model="listQuery.remarkVersionCopmare" clearable></el-input>
-          </el-form-item>
         </div>
 
         <div class="buttons with-complex">
@@ -77,9 +67,9 @@
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
 
-        <el-table-column align="center" prop="modelId" label="机种">
+        <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
@@ -95,11 +85,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="reviseReason" label="修订理由">
-          <template slot-scope="scope">
-            <span>{{scope.row.reviseReason }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="STType" label="ST/LST">
           <template slot-scope="scope">
@@ -126,19 +111,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="exceptionOperation" label="EXceprtionOperation" width="150">
-          <template slot-scope="scope">
-            <span>{{scope.row.exceptionOperation }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="remarkVersionCopmare" label="exceptionoperation" width="140">
-          <template slot-scope="scope">
-            <span>{{scope.row.remarkVersionCopmare }}</span>
-          </template>
-        </el-table-column>
-
-
         <el-table-column
           fixed="right"
           align="center"
@@ -150,6 +122,11 @@
               size="mini"
               type="text"
             >下载</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="approve(scope.row.id)"
+            >提交审批</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -163,6 +140,27 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-card>
+    <el-dialog
+      class="dialog"
+      title="报表审批"
+      :visible.sync="approveShow"
+      width="406px">
+      <el-form :inline="true" :model="approveForm" @keyup.enter.native="getDataList()">
+        <el-form-item :label="'选择报表组'">
+          <el-radio-group v-model="approveForm.reportGroupId" size="small">
+            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="'下一审批者'" prop="nextApprove" >
+        <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+      </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="approveShow = false">取 消</el-button>
+            <el-button type="primary" @click="approvePut">确 定</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -172,12 +170,37 @@ import {
   deleteReportTimeContact
 } from '@/api/reportTimeContact'
 import { listModel } from '@/api/model'
+import { fetchReportDetail } from '@/api/reportGroup'
 
 export default {
   name: 'reportTimeContactList',
   data () {
     return {
+      approveShow: false,
       dataButton: 'list',
+      approveForm: {
+        reportId: null,
+        reportGroupId: null,
+        nextApprove: null
+      },
+      reportGroup: [
+        {
+          name: '报表组1',
+          id: 1
+        },
+        {
+          name: '报表组2',
+          id: 2
+        },
+        {
+          name: '报表组3',
+          id: 3
+        },
+        {
+          name: '报表组4',
+          id: 4
+        }
+      ],
       listQuery: {
         id: null,
         deptId: null,
@@ -558,15 +581,32 @@ export default {
           this.getDataList()
         })
       })
+    },
+    // 提交审批
+    approve (id) {
+      this.approveShow = true
+      console.log(id, 222222222222)
+      fetchReportDetail(id).then((page) => {
+        console.log(page, 11111111111111111111)
+      })
+    },
+    // 确定提交
+    approvePut () {
+      this.approveShow = false
     }
   }
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
   .input{
     width: 150px;
   }
   .min-width{
     min-width: 1024px;
   }
+   .el-radio+.el-radio {
+     display: block;
+     margin-left: 0;
+     margin-top: 10px;
+   }
 </style>

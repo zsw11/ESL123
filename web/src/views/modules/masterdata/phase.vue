@@ -49,7 +49,7 @@
 
         <el-table-column align="center" prop="continuePhaseId" label="沿用阶段" >
           <template slot-scope="scope">
-            <span>{{scope.row.phaseEntity.name }}</span>
+            <span v-if="scope.row.phaseEntity">{{scope.row.phaseEntity.name }}</span>
           </template>
         </el-table-column>
 
