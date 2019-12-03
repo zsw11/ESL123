@@ -29,11 +29,11 @@
         <div class="card-title">常用指标组合</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <!-- <export-data
+         <export-data
             :config="exportConfig"
             type="primary"
             plain>导   出
-          </export-data> -->
+          </export-data>
           <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
@@ -171,8 +171,8 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 const defaultExport = ['measureGroup.code', 'measureGroup.a0', 'measureGroup.b0', 'measureGroup.g0', 'measureGroup.a1',
-  'measureGroup.b1', 'measureGroup.p0', 'measureGroup.x0', 'measureGroup.i0', 'measureGroup.a2', 'measureGroup.b2',
-  'measureGroup.p1', 'measureGroup.a3', 'measureGroup.deptID']
+  'measureGroup.b1', 'measureGroup.p0', 'measureGroup.m0', 'measureGroup.x0', 'measureGroup.i0', 'measureGroup.a2', 'measureGroup.b2',
+  'measureGroup.p1', 'measureGroup.a3', 'measureGroup.deptId']
 export default {
   name: 'measureGroupList',
   components: {
@@ -216,7 +216,6 @@ export default {
         code: 'measureGroup',
         name: '常用指标组合',
         children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
           { code: 'code', name: '编码', type: 'string', required: true },
           { code: 'a0', name: 'A0', type: 'string', required: true },
           { code: 'b0', name: 'B0', type: 'string', required: true },
@@ -231,15 +230,7 @@ export default {
           { code: 'b2', name: 'B2', type: 'string', required: true },
           { code: 'p1', name: 'P1', type: 'string', required: true },
           { code: 'a3', name: 'A3', type: 'string', required: true },
-          { code: 'deptId', name: '组织机构ID', type: 'string', required: true },
-          { code: 'usedCount', name: '使用次数统计', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'deptId', name: '组织机构ID', type: 'string', required: true }
         ]
       }],
       complexFilters: [],
