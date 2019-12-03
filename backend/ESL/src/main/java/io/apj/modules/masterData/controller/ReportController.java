@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.controller;
 
+import java.io.Serializable;
 import java.util.*;
 
 import cn.hutool.core.util.PinyinUtil;
@@ -68,10 +69,17 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/reportGroup/{id}")
 	public ResponseEntity<Object> reportGroup(@PathVariable("id") Integer id) {
-		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id","id"));
-        List<ReportGroupEntity> reportGroupEntities =  new ArrayList<>();
+		Integer reportId = Integer.parseInt(String.valueOf(id));
+		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id",reportId));
+        int idp;
+		ReportGroupEntity reportGroupEntity;
+		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
          for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
-			 reportGroupEntities = (List<ReportGroupEntity>) reportGroupService.selectById(item.getReportGroupId());
+         	idp = item.getReportGroupId();
+			 reportGroupEntity = reportGroupService.selectById(idp);
+			 if(reportGroupEntity!=null){
+				 reportGroupEntities.add(reportGroupEntity);
+			 }
 		}
 		return RD.build().ok( reportGroupEntities);
 	}
