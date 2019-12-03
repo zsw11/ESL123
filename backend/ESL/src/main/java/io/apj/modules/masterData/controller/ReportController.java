@@ -11,7 +11,6 @@ import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.config.Ini;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,15 +64,16 @@ public class ReportController extends AbstractController {
 	}
 	/**
 	 * 报表属于哪个报表组
+	 * @return
 	 */
 	@RequestMapping("/reportGroup/{id}")
-	public RD reportGroup(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> reportGroup(@PathVariable("id") Integer id) {
 		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id","id"));
         List<ReportGroupEntity> reportGroupEntities =  new ArrayList<>();
          for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
 			 reportGroupEntities = (List<ReportGroupEntity>) reportGroupService.selectById(item.getReportGroupId());
 		}
-		return RD.build().put("data", reportGroupEntities);
+		return RD.build().ok( reportGroupEntities);
 	}
 
 	/**
