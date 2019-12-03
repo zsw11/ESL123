@@ -116,15 +116,8 @@
           code: 'action',
           name: ' 关键词',
           children: [
-            {code: 'id', name: 'ID', type: 'string', required: true},
-            {code: 'name', name: 'keyword Name', type: 'string', required: true},
-            {code: 'createBy', name: '创建者ID', type: 'string', required: true},
-            {code: 'createAt', name: '创建时间', type: 'string', required: true},
-            {code: 'updateBy', name: '更新者ID', type: 'string', required: true},
-            {code: 'updateAt', name: '更新时间', type: 'string', required: true},
-            {code: 'deleteAt', name: '删除时间', type: 'string', required: true},
-            {code: 'createdAt', name: '创建时间', type: 'string', required: true},
-            {code: 'updatedAt', name: '修改时间', type: 'string', required: true}
+            {code: 'name', name: '关键词名称', type: 'string', required: true},
+            {code: 'remark', name: '备注', type: 'string', required: true}
           ]
         }],
         complexFilters: [],

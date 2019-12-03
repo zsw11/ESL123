@@ -73,7 +73,7 @@
 
         <el-table-column align="center" prop="modelName" label="机种名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.modelName }}</span>
+            <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
@@ -83,11 +83,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
-          <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesName }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
@@ -166,7 +161,6 @@
         title: null,
         dataButton: 'list',
         listQuery: {
-          id: 0,
           name: null,
           deptId: null,
           modelSeriesId: null,
@@ -263,6 +257,7 @@
         if (pageNo) {
           this.pageNo = pageNo
         }
+        console.log(this.id, 1111111111111111)
         this.dataButton = 'list'
         this.dataListLoading = true
         fetchModelByModelSeriesId(Object.assign(

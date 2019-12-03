@@ -188,6 +188,7 @@ export default {
     createNewRow (type) {
       const newRow = clone(defaultRow)
       if (type) newRow.type = type
+      console.log(newRow)
       return newRow
     },
     // 加载数据
@@ -195,10 +196,11 @@ export default {
       this.$refs.workbookTable.loadData(data)
       this.lastEditCell = undefined
       this.currentCell = undefined
-      // 增加100行方便操作
+      // 增加10行方便操作
       for (let i = 0; i < 10; i++) {
         this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
       }
+      console.log(this.$refs.workbookTable.data, 22222222222222)
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {

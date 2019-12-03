@@ -29,16 +29,6 @@
               <el-input  v-model="approveForm.name" clearable></el-input>
             </el-form-item>
 
-            <el-form-item  :label="'审批结果'" prop="opininon" >
-                <el-select v-model="approveForm.opininon">
-                  <el-option
-                    v-for="item in option"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-            </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
             <el-button @click="approveShow = false">取 消</el-button>
@@ -114,19 +104,6 @@ export default {
     return {
       approveShow: false,
       dataButton: 'list',
-      value: '',
-      option: [
-        {
-          id: 1,
-          value: true,
-          label: '通过'
-        },
-        {
-          id: 0,
-          value: false,
-          label: '拒绝'
-        }
-      ],
       approveForm: {
         name: null,
         opininon: null

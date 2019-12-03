@@ -41,7 +41,7 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="create" label="生产阶段" >
+        <el-table-column align="center" prop="name" label="生产阶段" >
           <template slot-scope="scope">
             <span>{{scope.row.name}}</span>
           </template>
@@ -49,7 +49,7 @@
 
         <el-table-column align="center" prop="continuePhaseId" label="沿用阶段" >
           <template slot-scope="scope">
-            <span>{{scope.row.phaseEntity.name }}</span>
+            <span v-if="scope.row.phaseEntity">{{scope.row.phaseEntity.name }}</span>
           </template>
         </el-table-column>
 
@@ -114,7 +114,7 @@ export default {
         code: 'phase',
         name: '生产阶段',
         children: [
-          { code: 'create', name: '生产阶段', type: 'string', required: true },
+          { code: 'name', name: '生产阶段', type: 'string', required: true },
           { code: 'continuePhaseId', name: '沿用阶段', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: true }
         ]
