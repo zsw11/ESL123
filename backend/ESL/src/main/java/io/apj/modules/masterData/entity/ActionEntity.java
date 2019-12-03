@@ -32,6 +32,7 @@ public class ActionEntity implements Serializable {
 	 * 拼音
 	 */
 	private String pinyin;
+	private String remark;
 	/**
 	 * 创建者ID
 	 */

@@ -3,9 +3,13 @@ package io.apj.modules.masterData.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
+import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,12 +33,29 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
     private OpertaionGroupService opertaionGroupService;
     @Autowired
     private OperationGroupOperationService operationGroupOperationService;
+    @Autowired
+    private SysDeptService deptService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.isNull("delete_at");
+        if(params.get("code") != null && params.get("code") != ""){
+            entityWrapper.eq("code",params.get("code"));
+        }
+        if(StringUtils.isNotEmpty((CharSequence) params.get("usedCount"))){
+            entityWrapper.eq("used_count", Integer.parseInt((String) params.get("usedCount")));
+        }
+        if(StringUtils.isNotEmpty((CharSequence) params.get("deptId"))){
+            entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
+        }
+
         Page<OpertaionGroupEntity> page = this.selectPage(
-                new Query<OpertaionGroupEntity>(params).getPage()
+                new Query<OpertaionGroupEntity>(params).getPage(), entityWrapper
         );
+        for (OpertaionGroupEntity entity : page.getRecords()) {
+            entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());;
+        }
 
         return new PageUtils(page);
     }

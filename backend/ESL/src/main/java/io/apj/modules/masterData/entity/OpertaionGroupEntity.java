@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -32,6 +33,9 @@ public class OpertaionGroupEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+	@TableField(exist = false)
+	private String deptName;
+	private String remark;
 	/**
 	 * 使用次数统计
 	 */

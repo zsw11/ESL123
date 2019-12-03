@@ -71,12 +71,12 @@ public class ReportController extends AbstractController {
 	public ResponseEntity<Object> reportGroup(@PathVariable("id") Integer id) {
 		Integer reportId = Integer.parseInt(String.valueOf(id));
 		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id",reportId));
-        int idp;
+        int idG;
 		ReportGroupEntity reportGroupEntity;
 		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
          for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
-         	idp = item.getReportGroupId();
-			 reportGroupEntity = reportGroupService.selectById(idp);
+			 idG = item.getReportGroupId();
+			 reportGroupEntity = reportGroupService.selectById(idG);
 			 if(reportGroupEntity!=null){
 				 reportGroupEntities.add(reportGroupEntity);
 			 }
