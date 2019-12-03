@@ -604,9 +604,11 @@ export default {
   .min-width{
     min-width: 1024px;
   }
-   .el-radio+.el-radio {
-     display: block;
-     margin-left: 0;
-     margin-top: 10px;
-   }
+  .dialog{
+    .el-radio+.el-radio {
+      display: block;
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
 </style>

@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
-          <el-input v-model="listQuery.deptId"  clearable></el-input>
+          <keyword-search :disabled=flag style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
 
@@ -72,9 +72,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
 
@@ -106,8 +106,9 @@
 import { listOpertaionGroup, deleteOpertaionGroup, OpertaionGroupExport } from '@/api/opertaionGroup'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
+import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
-const defaultExport = ['opertaiongroup.code', 'opertaiongroup.usedCount', 'opertaiongroup.deptId', 'opertaiongroup.remark']
+const defaultExport = ['opertaionGroup.code', 'opertaionGroup.usedCount', 'opertaionGroup.remark']
 export default {
   name: 'opertaionGroupList',
   components: {
@@ -115,12 +116,14 @@ export default {
   },
   data () {
     return {
+      listDept,
       dataButton: 'list',
       listQuery: {
         id: null,
         code: null,
         deptId: null,
         usedCount: null,
+        remark: null,
         createBy: null,
         createAt: null,
         updateBy: null,
@@ -137,17 +140,10 @@ export default {
         code: 'opertaionGroup',
         name: '手顺组合',
         children: [
-          { code: 'id', name: 'ID', type: 'string', required: true },
-          { code: 'code', name: '编码', type: 'string', required: true },
+          { code: 'code', name: '手顺组合编码', type: 'string', required: true },
+          { code: 'usedCount', name: '手顺数量', type: 'string', required: true },
           { code: 'deptId', name: '组织机构ID', type: 'string', required: true },
-          { code: 'usedCount', name: '使用次数统计', type: 'string', required: true },
-          { code: 'createBy', name: '创建者ID', type: 'string', required: true },
-          { code: 'createAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
-          { code: 'updateAt', name: '更新时间', type: 'string', required: true },
-          { code: 'deleteAt', name: '删除时间', type: 'string', required: true },
-          { code: 'createdAt', name: '创建时间', type: 'string', required: true },
-          { code: 'updatedAt', name: '修改时间', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: true }
         ]
       }],
       complexFilters: [],
