@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { listReport, deleteReport } from '@/api/report'
+import { listReport, deleteReport, fetchReportGroup } from '@/api/report'
 export default {
   name: 'reportList',
   data () {
@@ -233,11 +233,14 @@ export default {
     // 审批
     approve (id) {
       this.approveShow = true
+      console.log(id, 222222222222)
+      fetchReportGroup(id).then((page) => {
+        console.log(page, 11111111111111111111)
+      })
     },
     // 提交审批
     approvePut () {
       this.approveShow = false
-      console.log(this.approveForm, 1111111111111111)
     },
     // 删除数据
     deleteHandle (row) {
