@@ -25,37 +25,10 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-card class="with-title">
+    <el-card class="with-title" style="box-shadow: none;border: none">
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
         <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
-        <el-dialog custom-class="show" width="600px" title="新增工位类型结构" :visible.sync="addReal" v-if="addReal">
-          <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
-          <el-row :gutter="10">
-            <el-col :span="11">
-              <el-form-item :label="'父工位'" prop="parent">
-                <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"   :allowEmpty=true clearable></keyword-search>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11" :offset="2">
-            <el-form-item :label="'名称'" prop="name">
-              <el-input  v-model="addForm.name" clearable></el-input>
-            </el-form-item>
-            </el-col>
-          </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item :label="'备注'" prop="remark">
-                  <el-input  type="textarea" style="width: 490px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="addReal = false">取 消</el-button>
-            <el-button type="primary" @click="addNode">确 定</el-button>
-          </div>
-        </el-dialog>
       </div>
       <el-tree
         style="width: 600px"
@@ -77,6 +50,28 @@
         </span>
       </span>
       </el-tree>
+      <el-dialog custom-class="worktype-dialog" width="40%" title="新增工位类型结构" :visible.sync="addReal" v-if="addReal">
+        <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
+
+          <el-form-item :label="'父工位'" prop="parent">
+            <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"   :allowEmpty=true clearable></keyword-search>
+          </el-form-item>
+
+          <el-form-item :label="'名称'" prop="name">
+            <el-input  v-model="addForm.name" clearable></el-input>
+          </el-form-item>
+
+
+          <el-form-item :label="'备注'" prop="remark">
+            <el-input  type="textarea" style="width:350px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
+          </el-form-item>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addReal = false">取 消</el-button>
+          <el-button type="primary" @click="addNode">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-card>
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
@@ -293,8 +288,8 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-  .is-always-shadow{
+<style lang="scss">
+  .table-box{
     box-shadow: none;
     border: none;
   }
@@ -313,9 +308,6 @@ export default {
   .table{
     width: 600px;
   }
-  .show > .el-dialog__body > .el-form > .el-row>.el-col>.el-form-item {
-    display: inline-flex;
-  }
   .custom-tree-node {
     flex: 1;
     display: flex;
@@ -326,5 +318,14 @@ export default {
   }
   .delete{
     color: orangered;
+  }
+  .worktype-dialog {
+    min-width: 580px;
+    .el-form-item {
+      display: block;
+      .el-input {
+        width: 350px;
+      }
+    }
   }
 </style>

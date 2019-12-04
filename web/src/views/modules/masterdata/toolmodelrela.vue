@@ -21,7 +21,7 @@
         <div class="card-title">治工具信息</div>
         <div class="buttons">
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
-          <el-dialog title="新增机种治工具关系" width="400px" :visible.sync="addReal">
+          <el-dialog custom-class="dialog" title="新增机种治工具关系" width="400px" :visible.sync="addReal">
             治工具<keyword-search  style="margin-left:10px;" v-model="addModelToolId" :allowMultiple="true" :searchApi="this.listTool"  :allowEmpty="true"></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
@@ -310,3 +310,4 @@
     }
   }
 </script>
+

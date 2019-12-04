@@ -40,7 +40,7 @@
         <div class="buttons">
 <!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
-          <el-dialog title="新增部品机种关系" width="400px" :visible.sync="addReal">
+          <el-dialog custom-class="dialog" title="新增部品机种关系" width="30%" :visible.sync="addReal">
             机种<keyword-search  style="margin-left:10px;" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
@@ -331,5 +331,8 @@
   }
   .el-form-item {
     margin-top: 0;
+  }
+  .dialog{
+    min-width: 300px;
   }
 </style>

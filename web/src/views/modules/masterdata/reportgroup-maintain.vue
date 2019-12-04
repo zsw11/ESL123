@@ -32,7 +32,7 @@
         <span class="tableHeader" >报表信息</span>
 <!--        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>-->
         <el-button v-if=!flag style="float: right" @click="addReal=true" type="primary" >新增</el-button>
-        <el-dialog title="新增报表组报表关系" width="400px" :visible.sync="addReal">
+        <el-dialog custom-class="dialog" title="新增报表组报表关系" width="30%" :visible.sync="addReal">
           报表 <keyword-search  style="margin-left:10px;" v-model="addreportgroupReportId" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
           <div slot="footer" class="dialog-footer">
             <el-button @click="addReal = false">取 消</el-button>

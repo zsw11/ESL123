@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
-          <keyword-search :disabled=flag style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+          <keyword-search style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
         </el-form-item>
 
 
