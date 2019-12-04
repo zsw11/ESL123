@@ -1,5 +1,6 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -28,10 +29,16 @@ public class StationTimeEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+
+	@TableField(exist = false)
+	private String phaseName;
+	@TableField(exist = false)
+	private String modelName;
 	/**
 	 * 标题
 	 */
 	private String title;
+	private String stlst;
 	/**
 	 * Sheet名称
 	 */

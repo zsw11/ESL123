@@ -2,10 +2,13 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ChangeRecordEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Map;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -19,6 +22,8 @@ import io.apj.modules.report.service.StandardTimeService;
 public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, StandardTimeEntity> implements StandardTimeService {
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private PhaseService phaseService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -31,7 +36,12 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
                 new Query<StandardTimeEntity>(params).getPage(), entityWrapper
         );
         for (StandardTimeEntity entity : page.getRecords()) {
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            if (entity.getModelId() != null) {
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if (entity.getPhaseId() != null) {
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
         }
 
         return new PageUtils(page);

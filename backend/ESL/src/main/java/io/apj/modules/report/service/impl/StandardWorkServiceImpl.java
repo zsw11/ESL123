@@ -36,8 +36,12 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
                 new Query<StandardWorkEntity>(params).getPage(), entityWrapper
         );
         for (StandardWorkEntity entity : page.getRecords()) {
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
-            entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            if(entity.getModelId()!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
         }
 
         return new PageUtils(page);

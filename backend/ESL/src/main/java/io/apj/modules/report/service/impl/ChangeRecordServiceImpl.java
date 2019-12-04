@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ApproveHistoryEntity;
 import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import io.apj.modules.report.service.ChangeRecordService;
 public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, ChangeRecordEntity> implements ChangeRecordService {
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private PhaseService phaseService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -34,7 +37,13 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
                 new Query<ChangeRecordEntity>(params).getPage(), entityWrapper
         );
         for (ChangeRecordEntity entity : page.getRecords()) {
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            if((entity.getModelId())!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
+
         }
 
         return new PageUtils(page);
