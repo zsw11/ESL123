@@ -11,6 +11,14 @@
           <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
+        <el-form-item :label="'ST/LST'" prop="stlst">
+          <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+        </el-form-item>
+
+        <el-form-item :label="'生产阶段'" prop="phaseId">
+          <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+        </el-form-item>
+
         <el-form-item :label="'型号'" prop="model_type">
           <el-input v-model="listQuery.model_type" clearable></el-input>
         </el-form-item>
@@ -45,9 +53,21 @@
 
 
 
-        <el-table-column align="center" prop="modelId" label="机种">
+        <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST">
+          <template slot-scope="scope">
+            <span>{{scope.row.stlst }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
           </template>
         </el-table-column>
 
@@ -95,6 +115,7 @@ import {
   deleteReportStandardTime
 } from '@/api/reportStandardTime'
 import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 
 export default {
   name: 'reportStandardTimeList',
@@ -107,6 +128,9 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        phaseId: null,
+        phaseName: null,
+        stlst: null,
         model_type: null,
         unit: null,
         createBy: null,
@@ -115,6 +139,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listPhase,
       listModel,
       dataList: [],
       pageNo: 1,

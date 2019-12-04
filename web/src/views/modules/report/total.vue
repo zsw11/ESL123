@@ -25,6 +25,10 @@
             <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
           </el-form-item>
 
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+            <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          </el-form-item>
+
           <el-form-item :label="'发行日'" prop="monthResult">
             <el-date-picker
               v-model="listQuery.monthResult"
@@ -162,9 +166,15 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="modelId" label="机种">
+        <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
           </template>
         </el-table-column>
 
@@ -305,6 +315,7 @@
 <script>
 import { listReportTotal, deleteReportTotal } from '@/api/reportTotal'
 import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 
 export default {
   name: 'reportTotalList',
@@ -317,6 +328,9 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        modelName: null,
+        phaseName: null,
+        phaseId: null,
         monthResult: null,
         destinations: null,
         cotegory: null,
@@ -334,6 +348,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listPhase,
       listModel,
       dataList: [],
       pageNo: 1,

@@ -21,6 +21,18 @@
           <el-input v-model="listQuery.firstColumnName" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'机种'" prop="modelId">
+          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'ST/LST'" prop="stlst">
+          <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+        </el-form-item>
+
+        <el-form-item :label="'生产阶段'" prop="phaseId">
+          <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+        </el-form-item>
+
 <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->
@@ -111,6 +123,24 @@
           </template>
         </el-table-column>
 
+        <el-table-column align="center" prop="modelName" label="机种">
+          <template slot-scope="scope">
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST">
+          <template slot-scope="scope">
+            <span>{{scope.row.stlst }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
+          </template>
+        </el-table-column>
+
 <!--        <el-table-column align="center" prop="sheetName" label="Sheet名称">-->
 <!--          <template slot-scope="scope">-->
 <!--            <span>{{scope.row.sheetName }}</span>-->
@@ -196,6 +226,8 @@ import {
   listCollectionMostValue,
   deleteCollectionMostValue
 } from '@/api/collectionMostValue'
+import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 export default {
   name: 'collectionMostValueList',
   data () {
@@ -204,6 +236,11 @@ export default {
       listQuery: {
         id: null,
         deptId: null,
+        modelId: null,
+        modelName: null,
+        phaseId: null,
+        phaseName: null,
+        stlst: null,
         title: null,
         firstColumnName: null,
         sheetName: null,
@@ -214,7 +251,8 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-
+      listModel,
+      listPhase,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

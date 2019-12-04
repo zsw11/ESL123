@@ -108,7 +108,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
-const defaultExport = ['opertaionGroup.code', 'opertaionGroup.usedCount','opertaionGroup.deptId' ,'opertaionGroup.remark']
+const defaultExport = ['opertaionGroup.code', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
 export default {
   name: 'opertaionGroupList',
   components: {
