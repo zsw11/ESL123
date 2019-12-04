@@ -136,7 +136,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="approve(scope.row.id)"
+              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
             >提交审批</el-button>
           </template>
         </el-table-column>
@@ -181,7 +181,7 @@ import {
   deleteReportTimeContact
 } from '@/api/reportTimeContact'
 import { listModel } from '@/api/model'
-import { fetchReportDetail } from '@/api/reportGroup'
+import { fetchReportGroup } from '@/api/report'
 import { listPhase } from '@/api/phase'
 
 export default {
@@ -226,6 +226,7 @@ export default {
         reviseReason: null,
         stlst: null,
         phaseName: null,
+        phaseId: null,
         RevNo: null,
         allCountSub: null,
         allCountMain: null,
@@ -489,8 +490,6 @@ export default {
         )
       )
         .then((page, status) => {
-          console.log(page)
-          console.log(page.data, 11111111111111111111111111)
           this.dataList = page.data
           this.total = page.totalCount
         })
@@ -597,11 +596,17 @@ export default {
       })
     },
     // 提交审批
-    approve (id) {
+    approve (model, phase, stlst) {
       this.approveShow = true
-      console.log(id, 222222222222)
-      fetchReportDetail(id).then((page) => {
-        console.log(page, 11111111111111111111)
+      console.log(phase, 2222222222222222222)
+      let data = {
+        model,
+        phase,
+        stlst,
+        name: 'timecontact'
+      }
+      fetchReportGroup(data).then((page) => {
+        console.log(page)
       })
     },
     // 确定提交
@@ -616,10 +621,9 @@ export default {
     width: 150px;
   }
   .min-width{
-    min-width: 1024px;
+    min-width: 1100px;
   }
   .dialog{
-    min-width: 406px;
     .el-radio+.el-radio {
       display: block;
       margin-left: 0;

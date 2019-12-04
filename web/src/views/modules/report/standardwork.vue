@@ -269,6 +269,11 @@
               size="mini"
               type="text"
             >下载</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+            >提交审批</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -282,6 +287,27 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-card>
+    <el-dialog
+      customClass="dialog"
+      width="30%"
+      title="报表审批"
+      :visible.sync="approveShow">
+      <el-form :inline="true" :model="approveForm" @keyup.enter.native="getDataList()">
+        <el-form-item :label="'选择报表组'">
+          <el-radio-group v-model="approveForm.reportGroupId" size="small">
+            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="'下一审批者'" prop="nextApprove" >
+          <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="approveShow = false">取 消</el-button>
+            <el-button type="primary" @click="approvePut">确 定</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -292,10 +318,36 @@ import {
 } from '@/api/reportStandardWork'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
+import { fetchReportGroup } from '@/api/report'
+
 export default {
   name: 'reportStandardWorkList',
   data () {
     return {
+      approveShow: false,
+      approveForm: {
+        reportId: null,
+        reportGroupId: null,
+        nextApprove: null
+      },
+      reportGroup: [
+        {
+          name: '报表组1',
+          id: 1
+        },
+        {
+          name: '报表组2',
+          id: 2
+        },
+        {
+          name: '报表组3',
+          id: 3
+        },
+        {
+          name: '报表组4',
+          id: 4
+        }
+      ],
       dataButton: 'list',
       listQuery: {
         id: null,
@@ -556,7 +608,33 @@ export default {
           this.getDataList()
         })
       })
+    },
+    // 提交审批
+    approve (model, phase, stlst) {
+      this.approveShow = true
+      let data = {
+        model,
+        phase,
+        stlst,
+        name: 'standardtime'
+      }
+      fetchReportGroup(data).then((page) => {
+        console.log(page)
+      })
+    },
+    // 确定提交
+    approvePut () {
+      this.approveShow = false
     }
   }
 }
 </script>
+<style lang="scss">
+  .dialog{
+    .el-radio+.el-radio {
+      display: block;
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+</style>

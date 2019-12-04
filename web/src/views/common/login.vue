@@ -104,6 +104,8 @@
     left: 11%;
     width: 78%;
     height:95%;
+    min-width: 800px;
+    min-height: 450px;
     background-size: cover;
     box-sizing: border-box;
     border-radius: 30px;
@@ -174,7 +176,6 @@
     border-top: none;
     border-right: none;
   }
-
 
   .login-btn-submit {
     margin-top: 7%;

@@ -332,7 +332,4 @@
   .el-form-item {
     margin-top: 0;
   }
-  .dialog{
-    min-width: 300px;
-  }
 </style>

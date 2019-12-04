@@ -28,11 +28,12 @@ export function fetchReport (id) {
 }
 
 // 获取报表所属报表组详情
-export function fetchReportGroup (id) {
+export function fetchReportGroup (data) {
   return request({
-    url: request.adornUrl(`/api/v1/report/reportGroup/${id}`),
-    method: 'get',
-    params: request.adornParams()
+    url: request.adornUrl(`/api/v1/report/reportGroup`),
+    method: 'post',
+    params: request.adornParams(),
+    data
   })
 }
 

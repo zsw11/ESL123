@@ -6,7 +6,6 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
-        <div class="min-width">
           <el-form-item :label="'报表组'" prop="report_group_id">
             <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
           </el-form-item>
@@ -21,7 +20,6 @@
             <el-button @click="getDataList(1)" type="primary">搜 索</el-button>
             <el-button @click="clearQuery()">清 空</el-button>
           </div>
-        </div>
       </el-form>
     </el-card>
     <el-card class="with-title">
