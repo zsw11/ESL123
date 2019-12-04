@@ -70,7 +70,7 @@ public class TimeContactEntity implements Serializable {
 	/**
 	 * ST/LST
 	 */
-	private String stType;
+	private String stlst;
 	/**
 	 * 版本号
 	 */
