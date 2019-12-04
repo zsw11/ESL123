@@ -29,6 +29,11 @@
              <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
           </el-form-item>
 
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+          </el-form-item>
+
+
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="listQuery.destinations" clearable></el-input>
           </el-form-item>
@@ -136,15 +141,21 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="modelId" label="机种">
+        <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="phaseId" label="生产阶段">
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
           <template slot-scope="scope">
-            <span>{{scope.row.phaseId }}</span>
+            <span>{{scope.row.phaseName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST">
+          <template slot-scope="scope">
+            <span>{{scope.row.stlst }}</span>
           </template>
         </el-table-column>
 
@@ -271,7 +282,10 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        modelName: null,
         phaseId: null,
+        phaseName: null,
+        stlst: null,
         destinations: null,
         comfirmBy: null,
         inChargeBy: null,
