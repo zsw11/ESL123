@@ -17,6 +17,19 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
+        <result property="key" column="key"/>
+        <result property="a0" column="a0"/>
+        <result property="b0" column="b0"/>
+        <result property="g0" column="g0"/>
+        <result property="a1" column="a1"/>
+        <result property="b1" column="b1"/>
+        <result property="p0" column="p0"/>
+        <result property="x0" column="x0"/>
+        <result property="i0" column="i0"/>
+        <result property="a2" column="a2"/>
+        <result property="b2" column="b2"/>
+        <result property="p1" column="p1"/>
+        <result property="a3" column="a3"/>
     </resultMap>
 
 </mapper>
