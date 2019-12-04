@@ -12,6 +12,7 @@
         <result property="comfirmBy" column="comfirm_by"/>
         <result property="inChargeBy" column="in_charge_by"/>
         <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
         <result property="stage" column="stage"/>
         <result property="publishType" column="publish_type"/>
         <result property="reviseReason" column="revise_reason"/>

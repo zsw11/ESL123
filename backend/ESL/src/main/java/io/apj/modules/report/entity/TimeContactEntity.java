@@ -30,6 +30,9 @@ public class TimeContactEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+	private Integer phaseId;
+	@TableField(exist = false)
+	private String phaseName;
 	/**
 	 * 标题
 	 */
