@@ -40,7 +40,7 @@
         <div class="buttons">
 <!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
-          <el-dialog title="新增机种部品关系" width="400px" :visible.sync="addReal">
+          <el-dialog custom-class="dialog" title="新增机种部品关系" width="30%" :visible.sync="addReal">
             部品<keyword-search  style="margin-left:10px;" v-model="addModelPartId" :allowMultiple="true" :searchApi="this.listPart"  :allowEmpty="true"></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>

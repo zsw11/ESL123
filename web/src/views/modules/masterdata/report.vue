@@ -77,7 +77,7 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  type="text" size="small" @click="approve(scope.row.id)">审批</el-button>
+<!--            <el-button  type="text" size="small" @click="approve(scope.row.id)">审批</el-button>-->
           </template>
         </el-table-column>
 

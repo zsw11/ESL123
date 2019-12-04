@@ -41,7 +41,7 @@
         <div class="buttons">
 <!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
-          <el-dialog title="新增治工具机种关系" width="400px" :visible.sync="addReal">
+          <el-dialog custom-class="dialog" title="新增治工具机种关系" width="30%" :visible.sync="addReal">
             机种<keyword-search  style="margin-left:10px;" v-model="addToolModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>

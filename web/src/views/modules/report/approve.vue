@@ -86,13 +86,13 @@
       ></el-pagination>
     </el-card>
     <el-dialog
-      class="dialog"
+      custom-class="approve-dialog"
+      width="45%"
       :title="dialogTitle"
-      width="600px"
       :visible.sync="approveShow">
       <el-form :inline="true" :model="approveForm">
         <el-form-item :label="'审批意见'" prop="name"  label-width="100px">
-          <el-input type="textarea" rows="4"  v-model="approveForm.name" autocomplete="off" clearable></el-input>
+          <el-input type="textarea" rows="6"  v-model="approveForm.name" autocomplete="off" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'下一审批者'" prop="name"  label-width="100px">
@@ -346,7 +346,8 @@ export default {
 }
 </script>
 <style lang="scss">
-  .dialog {
+  .approve-dialog {
+    min-width: 580px;
     .el-form-item {
       display: block;
       .el-textarea__inner,.el-input {

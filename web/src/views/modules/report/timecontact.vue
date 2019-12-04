@@ -141,10 +141,10 @@
       ></el-pagination>
     </el-card>
     <el-dialog
-      class="dialog"
+      customClass="dialog"
+      width="30%"
       title="报表审批"
-      :visible.sync="approveShow"
-      width="406px">
+      :visible.sync="approveShow">
       <el-form :inline="true" :model="approveForm" @keyup.enter.native="getDataList()">
         <el-form-item :label="'选择报表组'">
           <el-radio-group v-model="approveForm.reportGroupId" size="small">
@@ -605,6 +605,7 @@ export default {
     min-width: 1024px;
   }
   .dialog{
+    min-width: 406px;
     .el-radio+.el-radio {
       display: block;
       margin-left: 0;
