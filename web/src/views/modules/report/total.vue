@@ -299,6 +299,7 @@
         <el-table-column
           align="center"
           :label="'操作'"
+          width="120"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
@@ -650,7 +651,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardtime'
+        name: 'total'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

@@ -161,9 +161,9 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="modelId" label="机种">
+        <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelId }}</span>
+            <span>{{scope.row.modelName }}</span>
           </template>
         </el-table-column>
 
@@ -285,6 +285,7 @@
         <el-table-column
           align="center"
           :label="'操作'"
+          width="120"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
@@ -648,7 +649,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardtime'
+        name: 'revisionhistory'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

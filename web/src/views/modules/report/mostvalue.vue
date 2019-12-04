@@ -495,7 +495,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardtime'
+        name: 'mostvalue'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

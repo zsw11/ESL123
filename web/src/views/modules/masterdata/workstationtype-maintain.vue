@@ -25,7 +25,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-card class="with-title" style="box-shadow: none;border: none">
+    <el-card class="with-title" style="box-shadow: none;border: none" v-if=table>
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
         <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
@@ -103,6 +103,7 @@ export default {
       },
       title: null,
       flag: false,
+      table: false,
       inited: false,
       dataForm: {
         id: 0,
@@ -165,6 +166,12 @@ export default {
   },
   methods: {
     init () {
+      console.log(this.$route.path)
+      if (this.$route.path === '/add-workstationtype') {
+        this.table = false
+      } else {
+        this.table = true
+      }
       this.title = this.$route.meta.title
       if (this.$route.query.noShow) {
         this.flag = true
