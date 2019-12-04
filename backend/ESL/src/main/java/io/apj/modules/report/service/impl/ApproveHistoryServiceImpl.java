@@ -33,7 +33,7 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
         Page<ApproveHistoryEntity> page = this.selectPage(
                 new Query<ApproveHistoryEntity>(params).getPage(), entityWrapper    );
         for (ApproveHistoryEntity entity : page.getRecords()) {
-            if(reportGroupService.selectById(entity.getReportGroupId()).getName()!=null){
+            if(entity.getReportGroupId()!=null){
                 entity.setReportGroupName(reportGroupService.selectById(entity.getReportGroupId()).getName());
             }
 

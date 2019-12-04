@@ -67,8 +67,10 @@ public class ReportController extends AbstractController {
 	 * 报表属于哪个报表组
 	 * @return
 	 */
-	@RequestMapping("/reportGroup/{id}")
-	public ResponseEntity<Object> reportGroup(@PathVariable("id") Integer id) {
+	@RequestMapping("/reportGroup")
+	public ResponseEntity<Object> reportGroup(@RequestBody  Map<String,Object> data) {
+		String reportName = (String) data.get("name");
+		Integer id = reportService.selectByName(reportName);
 		Integer reportId = Integer.parseInt(String.valueOf(id));
 		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id",reportId));
         int idG;

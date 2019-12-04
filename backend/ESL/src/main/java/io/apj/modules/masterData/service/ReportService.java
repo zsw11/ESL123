@@ -16,5 +16,6 @@ import java.util.Map;
 public interface ReportService extends IService<ReportEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    Integer selectByName(String name);
 }
 
