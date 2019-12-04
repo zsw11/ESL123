@@ -403,7 +403,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardtime'
+        name: 'changerecord'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

@@ -583,7 +583,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardtime'
+        name: 'compare'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

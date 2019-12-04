@@ -27,8 +27,8 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title">
-      <div slot="header" class="clearfix">
+    <el-card class="with-title" v-if=table>
+      <div slot="header" class="clearfix" >
         <span class="tableHeader" >报表信息</span>
 <!--        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>-->
         <el-button v-if=!flag style="float: right" @click="addReal=true" type="primary" >新增</el-button>
@@ -94,6 +94,7 @@ export default {
       id: null, // 报表组id
       title: null,
       flag: false,
+      table: false,
       inited: false,
       dataForm: {
         id: 0,
@@ -153,6 +154,7 @@ export default {
   },
   created () {
     this.init()
+    console.log(this.$route.path, 111111111111)
   },
   activated () {
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
@@ -177,6 +179,11 @@ export default {
   },
   methods: {
     init () {
+      if (this.$route.path === '/add-reportgroup') {
+        this.table = false
+      } else {
+        this.table = true
+      }
       this.title = this.$route.meta.title
       if (this.$route.query.noShow) {
         this.flag = true
