@@ -42,6 +42,9 @@ public class TotalEntity implements Serializable {
 	 * 机种ID
 	 */
 	private Integer modelId;
+	private Integer phaseId;
+	@TableField(exist = false)
+	private String phaseName;
 	/**
 	 * 机种
 	 */

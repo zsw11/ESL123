@@ -7,6 +7,9 @@
     <resultMap type="io.apj.modules.collection.entity.MostValueEntity" id="mostValueMap">
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="title" column="title"/>
         <result property="firstColumnName" column="first_column_name"/>
         <result property="sheetName" column="sheet_name"/>

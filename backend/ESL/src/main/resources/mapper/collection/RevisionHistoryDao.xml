@@ -7,6 +7,9 @@
     <resultMap type="io.apj.modules.collection.entity.RevisionHistoryEntity" id="revisionHistoryMap">
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="title" column="title"/>
         <result property="sheetName" column="sheet_name"/>
         <result property="modelId" column="model_id"/>

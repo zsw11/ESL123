@@ -51,6 +51,7 @@ public class StandardWorkEntity implements Serializable {
 	 * 型号
 	 */
 	private String modelType;
+	private String stlst;
 	/**
 	 * 系数
 	 */

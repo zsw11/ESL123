@@ -13,6 +13,7 @@
         <result property="modelType" column="model_type"/>
         <result property="coefficient" column="coefficient"/>
         <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="revNo" column="rev_no"/>
         <result property="monthResult" column="month_result"/>
         <result property="firstStandardWorkTitle" column="first_standard_work_title"/>

@@ -29,11 +29,15 @@ public class ChangeRecordEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+	private Integer phaseId;
+	private String stlst;
 	/**
 	 * 机种
 	 */
 	@TableField(exist = false)
-	private String ModelName;
+	private String modelName;
+	@TableField(exist = false)
+	private String phaseName;
 	/**
 	 * 标题
 	 */

@@ -1,5 +1,6 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -40,6 +41,12 @@ public class RevisionHistoryEntity implements Serializable {
 	 * 机种ID
 	 */
 	private Integer modelId;
+	@TableField(exist = false)
+	private String modelName;
+	@TableField(exist = false)
+	private String phaseName;
+	private Integer phaseId;
+	private String stlst;
 	/**
 	 * 仕向
 	 */

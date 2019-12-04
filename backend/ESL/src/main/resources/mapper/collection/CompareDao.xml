@@ -11,6 +11,7 @@
         <result property="sheetName" column="sheet_name"/>
         <result property="modelId" column="model_id"/>
         <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="destinations" column="destinations"/>
         <result property="comfirmBy" column="comfirm_by"/>
         <result property="inChargeBy" column="in_charge_by"/>

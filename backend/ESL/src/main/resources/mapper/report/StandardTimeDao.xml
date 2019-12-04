@@ -7,6 +7,7 @@
     <resultMap type="io.apj.modules.report.entity.StandardTimeEntity" id="standardTimeMap">
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="title" column="title"/>
         <result property="sheetName" column="sheet_name"/>
         <result property="modelId" column="model_id"/>

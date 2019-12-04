@@ -1,6 +1,7 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.entity.ModelSeriesEntity;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.sys.service.SysDeptService;
@@ -28,8 +29,10 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at")
-                .like(params.get("nextApproverId")!=null&&params.get("nextApproverId")!="", "next_approver_id", (String) params.get("nextApproverId"))
                 .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"));
+        if(StringUtils.isNotEmpty((CharSequence) params.get("reportGroupId"))){
+            entityWrapper.eq("report_group_id", Integer.parseInt((String) params.get("reportGroupId")));
+        }
         Page<ApproveEntity> page = this.selectPage(new Query<ApproveEntity>(params).getPage(), entityWrapper);
         for(ApproveEntity entity: page.getRecords()){
             entity.setDeptName(sysDeptService.selectById(entity.getDeptId()).getName());

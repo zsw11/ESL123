@@ -30,6 +30,13 @@ public class StandardTimeEntity implements Serializable {
 	 */
 	private Integer deptId;
 	/**
+	 * 阶段
+	 */
+	private Integer phaseId;
+	@TableField(exist = false)
+	private String phaseName;
+	private String stlst;
+	/**
 	 * 标题
 	 */
 	private String title;

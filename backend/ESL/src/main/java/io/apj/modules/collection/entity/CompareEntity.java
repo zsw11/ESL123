@@ -1,5 +1,6 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -44,6 +45,11 @@ public class CompareEntity implements Serializable {
 	 * 生产阶段ID
 	 */
 	private Integer phaseId;
+	@TableField(exist = false)
+	private String modelName;
+	@TableField(exist = false)
+	private String phaseName;
+	private String stlst;
 	/**
 	 * 仕向
 	 */
