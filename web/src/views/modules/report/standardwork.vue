@@ -37,6 +37,10 @@
           <keyword-search v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true" clearable></keyword-search>
         </el-form-item>
 
+        <el-form-item :label="'ST/LST'" prop="stlst">
+          <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+        </el-form-item>
+
         <el-form-item :label="'技通No'" prop="RevNo">
           <el-input v-model="listQuery.RevNo" clearable></el-input>
         </el-form-item>
@@ -165,9 +169,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="phaseId" label="生产阶段">
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
           <template slot-scope="scope">
-            <span>{{scope.row.phaseId }}</span>
+            <span>{{scope.row.phaseName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST">
+          <template slot-scope="scope">
+            <span>{{scope.row.stlst }}</span>
           </template>
         </el-table-column>
 
@@ -293,9 +303,12 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        modelName: null,
         model_type: null,
         coefficient: null,
         phaseId: null,
+        phaseName: null,
+        stlst: null,
         RevNo: null,
         monthResult: null,
         firstStandardWorkTitle: null,

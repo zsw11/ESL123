@@ -10,6 +10,14 @@
             <keyword-search class="input" v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
           </el-form-item>
 
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+          </el-form-item>
+
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+            <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          </el-form-item>
+
           <el-form-item :label="'ES/AMP/MP'" prop="stage">
             <el-input class="input" v-model="listQuery.stage" clearable></el-input>
           </el-form-item>
@@ -19,13 +27,10 @@
           </el-form-item>
 
 
-          <el-form-item :label="'ST/LST'" prop="STType">
-            <dict-select dictType="ST" class="input" v-model="listQuery.STType" :allowEmpty="true" clearable></dict-select>
-          </el-form-item>
-
           <el-form-item :label="'版本号'" prop="RevNo">
             <el-input class="input" v-model="listQuery.RevNo" clearable></el-input>
           </el-form-item>
+
 
 
 <!--          <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">-->
@@ -86,9 +91,15 @@
         </el-table-column>
 
 
-        <el-table-column align="center" prop="STType" label="ST/LST">
+        <el-table-column align="center" prop="stlst" label="ST/LST">
           <template slot-scope="scope">
-            <span>{{scope.row.STType }}</span>
+            <span>{{scope.row.stlst }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
           </template>
         </el-table-column>
 
@@ -171,6 +182,7 @@ import {
 } from '@/api/reportTimeContact'
 import { listModel } from '@/api/model'
 import { fetchReportDetail } from '@/api/reportGroup'
+import { listPhase } from '@/api/phase'
 
 export default {
   name: 'reportTimeContactList',
@@ -212,7 +224,8 @@ export default {
         stage: null,
         publishType: null,
         reviseReason: null,
-        STType: null,
+        stlst: null,
+        phaseName: null,
         RevNo: null,
         allCountSub: null,
         allCountMain: null,
@@ -239,6 +252,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listPhase,
       listModel,
       dataList: [],
       pageNo: 1,
@@ -295,7 +309,7 @@ export default {
               type: 'string',
               required: true
             },
-            { code: 'STType', name: 'ST/LST', type: 'string', required: true },
+            { code: 'stlst', name: 'ST/LST', type: 'string', required: true },
             { code: 'RevNo', name: '版本号', type: 'string', required: true },
             {
               code: 'allCountSub',
@@ -500,7 +514,7 @@ export default {
         stage: null,
         publishType: null,
         reviseReason: null,
-        STType: null,
+        stlst: null,
         RevNo: null,
         allCountSub: null,
         allCountMain: null,

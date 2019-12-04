@@ -25,6 +25,10 @@
             <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
           </el-form-item>
 
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+            <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          </el-form-item>
+
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="listQuery.destinations" clearable></el-input>
           </el-form-item>
@@ -156,6 +160,13 @@
         <el-table-column align="center" prop="modelId" label="机种">
           <template slot-scope="scope">
             <span>{{scope.row.modelId }}</span>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
           </template>
         </el-table-column>
 
@@ -293,6 +304,7 @@ import {
   deleteCollectionRevisionHistory
 } from '@/api/collectionRevisionHistory'
 import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 
 export default {
   name: 'collectionRevisionHistoryList',
@@ -305,6 +317,9 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        modelName: null,
+        phaseName: null,
+        phaseId: null,
         destinations: null,
         comfirmBy: null,
         inChargeBy: null,
@@ -321,6 +336,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listPhase,
       listModel,
       dataList: [],
       pageNo: 1,
