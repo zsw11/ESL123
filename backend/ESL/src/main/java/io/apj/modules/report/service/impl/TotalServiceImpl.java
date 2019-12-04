@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ApproveEntity;
 import io.apj.modules.report.entity.TimeContactEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import io.apj.modules.report.service.TotalService;
 public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> implements TotalService {
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private PhaseService phaseService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -36,9 +39,14 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
                 new Query<TotalEntity>(params).getPage(), entityWrapper
         );
         for (TotalEntity entity : page.getRecords()) {
-            entity.setModelName(modelService.selectById(entity.getModelId()).getName());
-        }
+            if(entity.getModelId()!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
 
+        }
         return new PageUtils(page);
     }
 

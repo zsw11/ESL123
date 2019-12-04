@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ import io.apj.modules.report.service.TimeContactService;
 public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeContactEntity> implements TimeContactService {
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private PhaseService phaseService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -30,8 +33,11 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
                 new Query<TimeContactEntity>(params).getPage(), entityWrapper
         );
         for (TimeContactEntity entity : page.getRecords()) {
-            if(modelService.selectById(entity.getModelId()).getName()!= ""&&modelService.selectById(entity.getModelId()).getName()!= null){
+            if(entity.getModelId()!= null){
                 entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
             }
         }
 
