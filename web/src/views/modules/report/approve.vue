@@ -58,6 +58,25 @@
           </template>
         </el-table-column>
 
+        <el-table-column align="center" prop="modelName" label="机种">
+          <template slot-scope="scope">
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST">
+          <template slot-scope="scope">
+            <span>{{scope.row.stlst }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column align="center" prop="status" label="审批状态">
           <template slot-scope="scope">
             <span>{{scope.row.status }}</span>
@@ -110,6 +129,8 @@
 import { listReportApprove, deleteReportApprove } from '@/api/reportApprove'
 import { listDept } from '@/api/dept'
 import { listReportGroup } from '@/api/reportGroup'
+import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 
 export default {
   name: 'reportApproveList',
@@ -121,6 +142,11 @@ export default {
       listQuery: {
         id: null,
         deptId: null,
+        modelId: null,
+        modelName: null,
+        phaseId: null,
+        phaseName: null,
+        stlst: null,
         report_group_id: null,
         nextApproverId: null,
         status: null,
@@ -136,6 +162,8 @@ export default {
       },
       listDept,
       listReportGroup,
+      listModel,
+      listPhase,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

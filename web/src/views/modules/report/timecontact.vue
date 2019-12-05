@@ -193,7 +193,10 @@ export default {
       approveForm: {
         reportId: null,
         reportGroupId: null,
-        nextApprove: null
+        nextApprove: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null
       },
       reportGroup: [],
       listQuery: {
@@ -580,10 +583,10 @@ export default {
     },
     // 提交审批
     approve (model, phase, stlst) {
+      this.approveForm.modelId = model
+      this.approveForm.phaseId = phase
+      this.approveForm.stlst = stlst
       let data = {
-        model,
-        phase,
-        stlst,
         name: 'Report-时间联络表'
       }
       fetchReportGroup(data).then((page) => {

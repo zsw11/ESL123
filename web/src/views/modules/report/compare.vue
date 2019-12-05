@@ -306,7 +306,10 @@ export default {
       approveForm: {
         reportId: null,
         reportGroupId: null,
-        nextApprove: null
+        nextApprove: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null
       },
       reportGroup: [],
       dataButton: 'list',
@@ -561,10 +564,10 @@ export default {
     },
     // 提交审批
     approve (model, phase, stlst) {
+      this.approveForm.modelId = model
+      this.approveForm.phaseId = phase
+      this.approveForm.stlst = stlst
       let data = {
-        model,
-        phase,
-        stlst,
         name: 'Collection-Compare表'
       }
       fetchReportGroup(data).then((page) => {

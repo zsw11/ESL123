@@ -162,7 +162,10 @@ export default {
       approveForm: {
         reportId: null,
         reportGroupId: null,
-        nextApprove: null
+        nextApprove: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null
       },
       reportGroup: [],
       dataButton: 'list',
@@ -381,10 +384,10 @@ export default {
     },
     // 提交审批
     approve (model, phase, stlst) {
+      this.approveForm.modelId = model
+      this.approveForm.phaseId = phase
+      this.approveForm.stlst = stlst
       let data = {
-        model,
-        phase,
-        stlst,
         name: '履历表'
       }
       fetchReportGroup(data).then((page) => {
@@ -395,6 +398,7 @@ export default {
     // 确定提交
     approvePut () {
       this.approveShow = false
+      console.log(this.approveForm, 22222222222222)
     }
   }
 }
