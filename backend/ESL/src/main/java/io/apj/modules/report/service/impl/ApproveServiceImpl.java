@@ -35,8 +35,12 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         }
         Page<ApproveEntity> page = this.selectPage(new Query<ApproveEntity>(params).getPage(), entityWrapper);
         for(ApproveEntity entity: page.getRecords()){
-            entity.setDeptName(sysDeptService.selectById(entity.getDeptId()).getName());
-            entity.setReportGroupName(reportGroupService.selectById(entity.getReportGroupId()).getName());
+            if(entity.getDeptId()!=null){
+                entity.setDeptName(sysDeptService.selectById(entity.getDeptId()).getName());
+            }
+            if(entity.getReportGroupId()!=null){
+                entity.setReportGroupName(reportGroupService.selectById(entity.getReportGroupId()).getName());
+            }
         }
         return new PageUtils(page);
     }
