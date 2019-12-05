@@ -52,7 +52,7 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="report_group_id" label="报表组">
+        <el-table-column align="center" prop="reportGroupName" label="报表组">
           <template slot-scope="scope">
             <span>{{scope.row.reportGroupName }}</span>
           </template>

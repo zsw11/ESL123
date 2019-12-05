@@ -398,11 +398,19 @@ export default {
     },
     // 确定提交
     approvePut () {
-      this.approveShow = false
-      createReportApprove(this.approveForm).then((page) => {
-        console.log(page, 2222222222222)
-      })
-      // console.log(this.approveForm, 22222222222222)
+      if (this.approveShow) {
+        createReportApprove(this.approveForm).then((page) => {
+          if (page.status === 200) {
+            this.approveShow = false
+            this.$notify({
+              title: '成功',
+              message: '提交审批成功',
+              type: 'success',
+              duration: 2000
+            })
+          }
+        })
+      }
     }
   }
 }

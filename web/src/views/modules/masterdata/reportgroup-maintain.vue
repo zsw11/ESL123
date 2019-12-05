@@ -30,7 +30,6 @@
     <el-card class="with-title" v-if=table>
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >报表信息</span>
-<!--        <el-button type="primary" v-if=!flag style="float: right">新增</el-button>-->
         <el-button v-if=!flag style="float: right" @click="addReal=true" type="primary" >新增</el-button>
         <el-dialog custom-class="dialog" title="新增报表组报表关系" width="30%" :visible.sync="addReal">
           报表 <keyword-search  style="margin-left:10px;" v-model="addreportgroupReportId" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
