@@ -651,6 +651,9 @@ drop table if exists report_approve;
 CREATE TABLE report_approve (
   id serial PRIMARY KEY,
   dept_id integer,
+  model_id integer,
+  phase_id integer,
+  stlst varchar(128),
   report_group_id integer,
   next_approver_id integer,
   status varchar(32),

@@ -7,6 +7,9 @@
     <resultMap type="io.apj.modules.report.entity.ApproveEntity" id="approveMap">
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="reportGroupId" column="report_group_id"/>
         <result property="nextApproverId" column="next_approver_id"/>
         <result property="status" column="status"/>

@@ -64,15 +64,18 @@ public class ReportController extends AbstractController {
 		return RD.build().put("data", report);
 	}
 	/**
-	 * 报表属于哪个报表组
+	 * 报表属于哪些报表组
 	 * @return
 	 */
 	@RequestMapping("/reportGroup")
 	public ResponseEntity<Object> reportGroup(@RequestBody  Map<String,Object> data) {
 		String reportName = (String) data.get("name");
-		Integer id = reportService.selectByName(reportName);
-		Integer reportId = Integer.parseInt(String.valueOf(id));
-		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id",reportId));
+		int id =1;
+		if(reportName!=null&&reportName!= ""){
+		    id = reportService.selectByName(reportName);
+        }
+//		Integer reportId = Integer.parseInt(String.valueOf(id));
+		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id", id));
         int idG;
 		ReportGroupEntity reportGroupEntity;
 		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
