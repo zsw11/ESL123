@@ -162,7 +162,6 @@ export default {
     }
     const self = this
     self.id = this.$route.params.id
-    self.getDataList()
   },
   watch: {
     dataForm: {
@@ -183,6 +182,7 @@ export default {
         this.table = false
       } else {
         this.table = true
+        this.getDataList()
       }
       this.title = this.$route.meta.title
       if (this.$route.query.noShow) {

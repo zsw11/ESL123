@@ -603,7 +603,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'timecontact'
+        name: 'report_time_contact'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)
