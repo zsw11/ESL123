@@ -60,7 +60,7 @@ public class ApproveController {
 	public ResponseEntity<Object> save(@RequestBody ApproveEntity approve) {
 		approveService.insert(approve);
 
-		return RD.success(approve);
+		return RD.ok(approve);
 	}
 
 	/**
