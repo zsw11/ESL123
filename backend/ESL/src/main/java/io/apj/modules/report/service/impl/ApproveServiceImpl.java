@@ -3,6 +3,8 @@ package io.apj.modules.report.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.entity.ModelSeriesEntity;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,10 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     private SysDeptService sysDeptService;
     @Autowired
     private ReportGroupService reportGroupService;
+    @Autowired
+    private PhaseService phaseService;
+    @Autowired
+    private ModelService modelService;
 
 
     @Override
@@ -41,6 +47,13 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
             if(entity.getReportGroupId()!=null){
                 entity.setReportGroupName(reportGroupService.selectById(entity.getReportGroupId()).getName());
             }
+            if(entity.getModelId()!=null){
+                entity.setModelName(modelService.selectById(entity.getModelId()).getName());
+            }
+            if(entity.getPhaseId()!=null){
+                entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
+            }
+
         }
         return new PageUtils(page);
     }
