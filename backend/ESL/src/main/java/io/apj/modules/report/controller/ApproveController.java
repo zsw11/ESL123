@@ -1,8 +1,16 @@
 package io.apj.modules.report.controller;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import io.apj.modules.masterData.dao.ModelDao;
+import io.apj.modules.masterData.entity.PhaseEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportGroupService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +37,13 @@ import io.apj.common.utils.RD;
 public class ApproveController {
 	@Autowired
 	private ApproveService approveService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
+	@Autowired
+	private ReportGroupService reportGroupService;
+
 
 	/**
 	 * 列表
@@ -48,6 +63,9 @@ public class ApproveController {
 	@RequiresPermissions("report:approve:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ApproveEntity approve = approveService.selectById(id);
+		approve.setModelName(modelService.selectById(approve.getModelId()).getName());
+		approve.setPhaseName(phaseService.selectById(approve.getPhaseId()).getName());
+		approve.setReportGroupName(reportGroupService.selectById(approve.getReportGroupId()).getName());
 
 		return RD.success(approve);
 	}
