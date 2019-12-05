@@ -651,7 +651,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'total'
+        name: 'report_total'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

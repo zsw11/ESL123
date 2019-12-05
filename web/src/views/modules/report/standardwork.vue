@@ -617,7 +617,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'standardwork'
+        name: 'report_standard_work'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

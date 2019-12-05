@@ -649,7 +649,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'revisionhistory'
+        name: 'collection_revision_history'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

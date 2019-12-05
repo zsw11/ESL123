@@ -583,7 +583,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'compare'
+        name: 'collection_compare'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)

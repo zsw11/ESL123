@@ -495,7 +495,7 @@ export default {
         model,
         phase,
         stlst,
-        name: 'mostvalue'
+        name: 'collection_most_value'
       }
       fetchReportGroup(data).then((page) => {
         console.log(page)
