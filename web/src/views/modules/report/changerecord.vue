@@ -153,6 +153,7 @@ import {
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
+import { createReportApprove } from '@/api/reportApprove'
 
 export default {
   name: 'reportChangeRecordList',
@@ -398,7 +399,10 @@ export default {
     // 确定提交
     approvePut () {
       this.approveShow = false
-      console.log(this.approveForm, 22222222222222)
+      createReportApprove(this.approveForm).then((page) => {
+        console.log(page, 2222222222222)
+      })
+      // console.log(this.approveForm, 22222222222222)
     }
   }
 }
