@@ -18,12 +18,12 @@ export function createReportApprove (data) {
   })
 }
 
-// 获取reportApprove详情
-export function fetchReportApprove (params) {
+// 获取关键词详情
+export function fetchReportApprove (id) {
   return request({
-    url: request.adornUrl('/api/v1/approve/detail'),
+    url: request.adornUrl(`/api/v1/approve/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
