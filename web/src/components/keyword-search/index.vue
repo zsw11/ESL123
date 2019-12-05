@@ -111,7 +111,7 @@ export default {
           searchApi(Object.assign(
             {
               keyWord: keyword,
-              pageSize: 99
+              limit: 99
             },
             this.apiOptions
           )).then(({page}) => {

@@ -97,7 +97,6 @@ export default {
       table: false,
       inited: false,
       dataForm: {
-        id: 0,
         name: null,
         remark: null,
         createBy: null,
@@ -153,15 +152,16 @@ export default {
     })
   },
   created () {
-    this.init()
-    console.log(this.$route.path, 111111111111)
-  },
-  activated () {
-    if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
-      this.init()
-    }
     const self = this
     self.id = this.$route.params.id
+    this.init()
+  },
+  activated () {
+    // const self = this
+    // self.id = this.$route.params.id
+    // if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
+    //   this.init()
+    // }
   },
   watch: {
     dataForm: {
@@ -183,6 +183,7 @@ export default {
       } else {
         this.table = true
         this.getDataList()
+        console.log(this.id)
       }
       this.title = this.$route.meta.title
       if (this.$route.query.noShow) {

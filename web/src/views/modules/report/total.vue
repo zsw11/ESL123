@@ -365,24 +365,7 @@ export default {
         reportGroupId: null,
         nextApprove: null
       },
-      reportGroup: [
-        {
-          name: '报表组1',
-          id: 1
-        },
-        {
-          name: '报表组2',
-          id: 2
-        },
-        {
-          name: '报表组3',
-          id: 3
-        },
-        {
-          name: '报表组4',
-          id: 4
-        }
-      ],
+      reportGroup: [],
       dataButton: 'list',
       listQuery: {
         id: null,
@@ -646,16 +629,16 @@ export default {
     },
     // 提交审批
     approve (model, phase, stlst) {
-      this.approveShow = true
       let data = {
         model,
         phase,
         stlst,
-        name: 'report_total'
+        name: 'Report-Total表'
       }
       fetchReportGroup(data).then((page) => {
-        console.log(page)
+        this.reportGroup = page.page
       })
+      this.approveShow = true
     },
     // 确定提交
     approvePut () {
