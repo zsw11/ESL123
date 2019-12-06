@@ -4,22 +4,23 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+    <el-form
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="150px"
+      :disabled="$route.name==='details-opertaiongroup'">
+
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'手顺组合编码'" prop="code">
-            <el-input :disabled="flag" v-model="dataForm.code"></el-input>
+            <el-input v-model="dataForm.code"></el-input>
           </el-form-item>
         </el-col>
-       <el-col :span="10" :offset="2">
-        <el-form-item :label="'所属组织机构'" prop="deptId">
-          <keyword-search :disabled=flag style="width: 100%" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
-        </el-form-item>
-       </el-col>
       </el-row>
 
-<!--      <div style="width: 910px;height: 150px;background-color: #e2e3e3;"></div>-->
-<!--      <workbook-table ref="workbookTable"></workbook-table>-->
       <vxe-grid
         border
         size="mini"
@@ -30,18 +31,17 @@
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
         :edit-config="{trigger: 'dblclick', mode: 'cell'}">
         <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-        <operation-column key="operationColumn" min-width="120"></operation-column>
+        <operation-column key="operationColumn" min-width="240"></operation-column>
         <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
         <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
         <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
         <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
       </vxe-grid>
-<!--      <workbook-table ref="workbookTable"></workbook-table>-->
+
       <el-row :gutter="10">
         <el-col :span="22">
           <el-form-item style="display: block;margin-top: 30px" :label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -63,7 +63,6 @@
 <script>
 import { pick, clone } from 'lodash'
 import { fetchOpertaionGroup, createOpertaionGroup, updateOpertaionGroup } from '@/api/opertaionGroup'
-import { listDept } from '@/api/dept'
 import WorkbookTable from '../workbook/workbook-detail-table.vue'
 import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
@@ -84,48 +83,16 @@ export default {
       lastEditCell: null,
       currentCell: null,
       title: null,
-      flag: false,
       inited: false,
       dataForm: {
-        id: 0,
-        code: null,
-        deptId: null,
-        operation: null,
-        key: null,
-        a0: null,
-        b0: null,
-        g0: null,
-        a1: null,
-        b1: null,
-        p0: null,
-        m0: null,
-        x0: null,
-        i0: null,
-        tool: null,
-        a2: null,
-        b2: null,
-        p1: null,
-        a3: null
+        code: null
       },
-      listDept,
+      operations: [],
       dataRules: {
         code: [
+          { required: true, message: '请填写手顺组合编码', trigger: 'blur' },
           { max: 64, message: '长度超过了64', trigger: 'blur' }
-        ],
-        deptId: [
-          { type: 'number', message: '组织机构ID需为数字值' }
-        ],
-        usedCount: [
-          { type: 'number', message: '使用次数统计需为数字值' }
-        ],
-        createBy: [
-          { type: 'number', message: '创建者ID需为数字值' }
-        ],
-
-        updateBy: [
-          { type: 'number', message: '更新者ID需为数字值' }
         ]
-
       }
     }
   },
@@ -138,13 +105,11 @@ export default {
     this.init()
   },
   activated () {
-    this.loadData()
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
       this.init()
     }
   },
   mounted () {
-    // this.loadData()
   },
   watch: {
     dataForm: {
@@ -162,9 +127,6 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -175,12 +137,14 @@ export default {
         fetchOpertaionGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'code', 'deptId', 'usedCount', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'code', 'remark', 'operations' ])
           )
+          this.loadData(this.dataForm.operations)
         }).finally(() => {
           this.inited = true
         })
       } else {
+        this.loadData()
         this.inited = true
       }
     },
@@ -200,7 +164,6 @@ export default {
       for (let i = 0; i < 10; i++) {
         this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
       }
-      console.log(this.$refs.workbookTable.data, 22222222222222)
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
@@ -238,12 +201,16 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      console.log(this.dataForm, 111111111111111111111)
+      const tmpDataForm = {
+        operationGroup: this.dataForm,
+        operations: this.$refs.workbookTable.getTableData().fullData
+      }
+      console.log(tmpDataForm)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
-            ? updateOpertaionGroup(this.dataForm.id, this.dataForm)
-            : createOpertaionGroup(this.dataForm)
+            ? updateOpertaionGroup(this.dataForm.id, tmpDataForm)
+            : createOpertaionGroup(tmpDataForm)
           ).then(({data}) => {
             this.$message({
               message: '操作成功',
@@ -258,4 +225,3 @@ export default {
   }
 }
 </script>
-
