@@ -4,19 +4,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.service.SysDeptService;
+import javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -54,6 +56,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
                 new Query<OpertaionGroupEntity>(params).getPage(), entityWrapper
         );
         for (OpertaionGroupEntity entity : page.getRecords()) {
+            EntityWrapper<OperationGroupOperationEntity> operationWrapper = new EntityWrapper();
+            operationWrapper.eq("operation_group_id",entity.getId());
+            entity.setCount(operationGroupOperationService.selectCount(operationWrapper));
             entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());;
         }
 
@@ -63,20 +68,28 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
     @Override
     @Transactional
     public ResponseEntity<Object> insertOpGroup(Map<String, Object> map) {
-        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
+        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"),true),OpertaionGroupEntity.class);
         opertaionGroupService.insert(opertaionGroup);
         EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("code", (opertaionGroup.getCode()));
         OpertaionGroupEntity opertaionGroupEntity =  opertaionGroupService.selectOne(entityWrapper);
         // 主表id,更新到子表中
-        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSONObject.parseArray(map.get("OperationGroupOperationEntity").toString(),  OperationGroupOperationEntity.class);
         int id = opertaionGroupEntity.getId();
-        if(operationGroupOperationEntity!=null && operationGroupOperationEntity.size()!=0){
-            for(OperationGroupOperationEntity item : operationGroupOperationEntity){
-                item.setOperationGroupId(id);
-            }
-            operationGroupOperationService.insertBatch(operationGroupOperationEntity);
+        List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("operations");
+        for(int i= 0; i<maps.size(); i++) {
+            OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
+            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+            operationGroupOperationEntity.setOperationGroupId(id);
+            operationGroupOperationService.insert(operationGroupOperationEntity);
         }
+//        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSONObject.parseArray(map.get("operations").toString(),  OperationGroupOperationEntity.class);
+//        int id = opertaionGroupEntity.getId();
+//        if(operationGroupOperationEntity!=null && operationGroupOperationEntity.size()!=0){
+//            for(OperationGroupOperationEntity item : operationGroupOperationEntity){
+//                item.setOperationGroupId(id);
+//            }
+//            operationGroupOperationService.insertBatch(operationGroupOperationEntity);
+//        }
 
         return RD.ok(opertaionGroup);
     }
@@ -84,23 +97,30 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
     @Override
     @Transactional
     public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) {
-        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("OpertaionGroupEntity"),true),OpertaionGroupEntity.class);
+        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"),true),OpertaionGroupEntity.class);
         //更新主表
         opertaionGroupService.updateById(opertaionGroup);
         //获取主表id
         int id = opertaionGroup.getId();
         //删除原来子表
         EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("operationGroupId", id);
+        entityWrapper.eq("operation_group_id", id);
         List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(entityWrapper);
-        operationGroupOperationService.deleteBatchIds(operationGroupOperationEntities);
+        List<Integer> ids = new ArrayList<>();
+        for(OperationGroupOperationEntity items: operationGroupOperationEntities){
+             ids= Collections.singletonList(items.getId());
+        }
+        if(!ids.isEmpty()){
+            operationGroupOperationService.deleteBatchIds(ids);
+        }
         //遍历子表
-        List<OperationGroupOperationEntity> operationGroupOperationEntities1 = JSONObject.parseArray(map.get("OperationGroupOperationEntity").toString(),  OperationGroupOperationEntity.class);
-        if(operationGroupOperationEntities1!=null && operationGroupOperationEntities1.size()!=0){
-            for(OperationGroupOperationEntity item : operationGroupOperationEntities1){
-                item.setOperationGroupId(id);
-            }
-            operationGroupOperationService.insertBatch(operationGroupOperationEntities1);
+//        OperationGroupOperationEntity[] operationGroupOperationEntity = (OperationGroupOperationEntity[]) map.get("operations");
+        List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("operations");
+        for(int i= 0; i<maps.size(); i++) {
+            OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
+            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+            operationGroupOperationEntity.setOperationGroupId(id);
+            operationGroupOperationService.insert(operationGroupOperationEntity);
         }
 
         return RD.ok(opertaionGroup);

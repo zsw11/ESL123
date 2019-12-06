@@ -3,6 +3,7 @@ package io.apj.modules.workBook.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.common.utils.RD;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,13 +68,14 @@ public class WorkBookController {
 
     /**
      * 修改
+     * @return
      */
     @RequestMapping("/update")
     @RequiresPermissions("workBook:workbook:update")
-    public R update(@RequestBody WorkBookEntity workBook){
-		workBookService.updateById(workBook);
+    public RD update(@RequestBody WorkBookEntity workBook){
+		workBookService.updateWorkBook((Map<String, Object>) workBook);
 
-        return R.ok();
+        return RD.build();
     }
 
     /**
