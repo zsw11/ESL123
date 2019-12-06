@@ -106,13 +106,14 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
         EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("operation_group_id", id);
         List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(entityWrapper);
-        List<Integer> ids = new ArrayList<>();
+        int ids;
         for(OperationGroupOperationEntity items: operationGroupOperationEntities){
-             ids= Collections.singletonList(items.getId());
+             ids= items.getId();
+            if(ids!=0){
+                operationGroupOperationService.deleteById(ids);
+            }
         }
-        if(!ids.isEmpty()){
-            operationGroupOperationService.deleteBatchIds(ids);
-        }
+
         //遍历子表
 //        OperationGroupOperationEntity[] operationGroupOperationEntity = (OperationGroupOperationEntity[]) map.get("operations");
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("operations");
