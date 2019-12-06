@@ -5,7 +5,7 @@
   window.SITE_CONFIG = {};
 
   // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://localhost:8080/esl';
+  window.SITE_CONFIG['baseUrl'] = 'http://10.240.131.42:8080/esl'; // 10.240.131.42 // 117.48.230.8
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain']  = './'; // 域名
   window.SITE_CONFIG['version'] = '';   // 版本号(年月日时分)

@@ -62,14 +62,15 @@
 
 <script>
 import { pick, clone } from 'lodash'
-import { fetchOpertaionGroup, createOpertaionGroup, updateOpertaionGroup } from '@/api/opertaionGroup'
+import { fetchOperationGroup, createOperationGroup, updateOperationGroup } from '@/api/operationGroup'
 import WorkbookTable from '../workbook/workbook-detail-table.vue'
 import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
+
 export default {
-  name: 'editOpertaionGroup',
+  name: 'editOperationGroup',
   components: {
     WorkbookTable,
     MeasureColumn,
@@ -134,17 +135,17 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchOpertaionGroup(this.dataForm.id).then(({data}) => {
+        fetchOperationGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'code', 'remark', 'operations' ])
+            pick(data.operationGroup, [ 'id', 'code', 'remark' ])
           )
-          this.loadData(this.dataForm.operations)
+          this.loadData(data.operations)
         }).finally(() => {
           this.inited = true
         })
       } else {
-        this.loadData()
+        this.loadData([])
         this.inited = true
       }
     },
@@ -157,13 +158,15 @@ export default {
     },
     // 加载数据
     loadData (data) {
-      this.$refs.workbookTable.loadData(data)
-      this.lastEditCell = undefined
-      this.currentCell = undefined
-      // 增加10行方便操作
-      for (let i = 0; i < 10; i++) {
-        this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
-      }
+      this.$nextTick(() => {
+        this.$refs.workbookTable.loadData(data)
+        this.lastEditCell = undefined
+        this.currentCell = undefined
+        // 增加10行方便操作
+        for (let i = 0; i < 10; i++) {
+          this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
+        }
+      })
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
@@ -209,8 +212,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
-            ? updateOpertaionGroup(this.dataForm.id, tmpDataForm)
-            : createOpertaionGroup(tmpDataForm)
+            ? updateOperationGroup(this.dataForm.id, tmpDataForm)
+            : createOperationGroup(tmpDataForm)
           ).then(({data}) => {
             this.$message({
               message: '操作成功',

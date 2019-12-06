@@ -23,6 +23,14 @@
         <el-tooltip content="Ctrl + V" placement="top">
           <el-button type="primary" @click="paste">粘贴</el-button>
         </el-tooltip>
+        <el-button type="primary" @click="addOperationGroup">手顺组合</el-button>
+        <el-autocomplete
+          class="inline-input"
+          v-model="addedOperation"
+          :fetch-suggestions="getOperationGroups"
+          placeholder="手顺组合"
+          @select="addOperationGroup">
+        </el-autocomplete>
         <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
         <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
@@ -51,6 +59,7 @@
 
 <script>
   import WorkbookTable from './workbook-detail-table.vue'
+  import { listOperationGroup } from '@/api/operationGroup'
 
   const workbookPercents = [
     { id: 'mini', name: '30%' },
@@ -71,7 +80,8 @@
         workbookData: {},
         workbooks: [],
         currentWorkbook: null,
-        listener: null
+        listener: null,
+        addedOperation: null
       }
     },
     watch: {
@@ -166,6 +176,15 @@
         if (this.$refs.workbookTable) {
           this.$refs.workbookTable.addStandardBook()
         }
+      },
+      getOperationGroups (keyword, cb) {
+        listOperationGroup({ keyword }).then((res) => {
+          cb(res.page.data.map(g => { g.value = `${g.code} (${g.count})`; return g }))
+        })
+      },
+      addOperationGroup (group) {
+        this.addedOperation = undefined
+        if (this.$refs.workbookTable) this.$refs.workbookTable.addOperationGroup(group)
       }
     }
   }

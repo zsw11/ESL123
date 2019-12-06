@@ -51,6 +51,7 @@
 
 <script>
 import { pick, clone } from 'lodash'
+import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
@@ -180,6 +181,16 @@ export default {
         await this.$refs.workbookTable.setActiveCell(this.currentCell.row, 'version')
         this.standardBookDialog.visible = false
       })
+    },
+    async addOperationGroup (group) {
+      this.addedOperation = undefined
+      if (this.$refs.workbookTable) this.$refs.workbookTable.addOperationGroup(group)
+      const rst = await fetchOperationGroup(group.id)
+      console.log(rst)
+      // await this.$refs.workbookTable.insertAt(Object.assign(
+      //   this.createNewRow('n'),
+      //   { operation: this.standardBookDialog.formData.name }
+      // ), this.currentCell.row)
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {

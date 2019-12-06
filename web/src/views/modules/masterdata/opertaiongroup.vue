@@ -62,13 +62,7 @@
 
         <el-table-column align="center" prop="usedCount" label="手顺数量" >
           <template slot-scope="scope">
-            <span>{{scope.row.usedCount }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column align="center" prop="deptId" label="所属组织机构" >
-          <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.count }}</span>
           </template>
         </el-table-column>
 
@@ -78,8 +72,7 @@
           </template>
         </el-table-column>
 
-
-      <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
@@ -103,12 +96,14 @@
 </template>
 
 <script>
-import { listOpertaionGroup, deleteOpertaionGroup, OpertaionGroupExport } from '@/api/opertaionGroup'
+import { listOperationGroup, deleteOperationGroup, OperationGroupExport } from '@/api/operationGroup'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
+
 const defaultExport = ['opertaionGroup.code', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
+
 export default {
   name: 'opertaionGroupList',
   components: {
@@ -159,7 +154,7 @@ export default {
     exportConfig () {
       return {
         attributes: filterAttributes(this.attributes, 'isExport'),
-        exportApi: OpertaionGroupExport,
+        exportApi: OperationGroupExport,
         filterType: this.dataButton,
         filters: this.listQuery,
         complexFilters: this.complexFilters,
@@ -184,7 +179,7 @@ export default {
       }
       this.dataButton = 'list'
       this.dataListLoading = true
-      listOpertaionGroup(Object.assign(
+      listOperationGroup(Object.assign(
         {
           page: this.pageNo,
           limit: this.pageSize
@@ -259,7 +254,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteOpertaionGroup(ids).then(() => {
+        deleteOperationGroup(ids).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',
