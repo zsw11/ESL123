@@ -127,10 +127,6 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-<<<<<<< HEAD
-
-=======
->>>>>>> a853ff42cc18188ce03ff1971af08f800f11d51c
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
