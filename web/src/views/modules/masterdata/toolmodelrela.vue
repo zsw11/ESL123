@@ -22,7 +22,13 @@
         <div class="buttons">
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog custom-class="dialog" title="新增机种治工具关系" width="400px" :visible.sync="addReal">
-            治工具<keyword-search  style="margin-left:10px;" v-model="addModelToolId" :allowMultiple="true" :searchApi="this.listTool"  :allowEmpty="true"></keyword-search>
+            治工具<keyword-search
+            style="margin-left:10px;"
+            v-model="addModelToolId"
+            :allowMultiple="true"
+            :searchApi="this.listTool"
+            :allowEmpty="true">
+          </keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="modelTool">确 定</el-button>
@@ -36,7 +42,12 @@
           <import-data
             :config="importConfig">
           </import-data>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -70,11 +81,9 @@
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.toolId)">详情</el-button>
-<!--            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-<!--            <el-button  type="text" size="small" @click="toolModel(scope.row.id,scope.row.name)">机种</el-button>-->
             <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -252,9 +261,8 @@
       },
       // 详情
       details (id) {
-        // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-toolmodelrela/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-toolmodelrela/${id}`})
         })
       },
       // 新增 / 修改

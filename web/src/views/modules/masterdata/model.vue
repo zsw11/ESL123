@@ -11,11 +11,25 @@
         </el-form-item>
 
         <el-form-item  :label="'部门'" prop="deptId" >
-          <keyword-search class="input" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.deptId"
+            :allowMultiple="true"
+            :searchApi="this.listDept"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item  :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search class="input" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.modelSeriesId"
+            :allowMultiple="true"
+            :searchApi="this.listModelSeries"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item  :label="'型号'" prop="code" >
@@ -46,7 +60,12 @@
           <import-data
             :config="importConfig">
           </import-data>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -139,12 +158,20 @@ import { listModel, deleteModel, modelImport, modelExport } from '@/api/model'
 import { listDept } from '@/api/dept'
 import { listModelSeries } from '@/api/modelSeries'
 import { filterAttributes } from '@/utils'
-// import { listDictItem } from '@/api/dict'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+const defaultExport = [
+  'model.name',
+  'model.deptId',
+  'model.modelSeriesId',
+  'model.code',
+  'model.WSTime',
+  'model.ESTime',
+  'model.AMPTime',
+  'model.MPTime'
+]
 
 export default {
   name: 'modelList',
@@ -203,7 +230,16 @@ export default {
       // 导出字段
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段，固定不可变
-      importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+      importAttributes: [
+        'model.name',
+        'model.deptId',
+        'model.modelSeriesId',
+        'model.code',
+        'model.WSTime',
+        'model.ESTime',
+        'model.AMPTime',
+        'model.MPTime'
+      ]
     }
   },
   computed: {
@@ -244,7 +280,6 @@ export default {
   },
   activated () {
     const self = this
-    // self.getDicByType()
     self.getDataList()
   },
   methods: {
@@ -270,14 +305,7 @@ export default {
         }).finally(() => {
           this.dataListLoading = false
         })
-      // }
     },
-    // getDicByType () {
-    //   listDictItem({ type: 'ModelCode' }).then(({data}) => {
-    //     console.log(data, 6666)
-    //     this.ModelCode = keyBy(data, 'code')
-    //   })
-    // },
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
@@ -324,7 +352,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-model/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-model/${id}`})
       })
     },
     // 新增 / 修改

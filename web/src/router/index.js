@@ -111,10 +111,10 @@ const mainRoutes = {
     { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '部品-机种关系详情', isTab: true } },
 
     // 机种系列里的机种关系
-    { path: '/details-modelmodelseriesrela/:id(\\d+)', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'edit-modelmodelseriesrela', meta: { title: '机种系列-机种关系详情', isTab: true } },
+    { path: '/details-modelmodelseriesrela/:id(\\d+)', component: _import('modules/masterdata/modelmodelseriesrela-maintain'), name: 'details-modelmodelseriesrela', meta: { title: '机种系列-机种关系详情', isTab: true } },
 
     // 治工具里的机种关系
-    { path: '/details-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'edit-modeltoolrela', meta: { title: '治工具-机种关系详情', isTab: true } },
+    { path: '/details-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'details-modeltoolrela', meta: { title: '治工具-机种关系详情', isTab: true } },
 
     // 机种系列
     { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '机种系列-新增', isTab: true } },

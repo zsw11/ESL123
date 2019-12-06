@@ -15,7 +15,12 @@
           </el-form-item>
 
           <el-form-item :label="'报表组'" prop="reportGroupId">
-            <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
+            <keyword-search
+              v-model="listQuery.reportGroupId"
+              :allowMultiple="true"
+              :searchApi="this.listReportGroup"
+              :allowEmpty="true" clearable>
+            </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'下一审批者'" prop="nextApproverId">

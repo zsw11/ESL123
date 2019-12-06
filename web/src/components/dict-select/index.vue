@@ -33,7 +33,6 @@ export default {
     }
   },
   created () {
-    console.log(11111111, this.dictType)
     listDictItem({ type: this.dictType }).then(({data}) => {
       this.options = orderBy(data, ['orderNumber', 'code'])
     })

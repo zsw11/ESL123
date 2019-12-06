@@ -11,15 +11,34 @@
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId">
-          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            v-model="listQuery.modelId"
+            :allowMultiple="true"
+            :searchApi="this.listModel"
+            :allowEmpty="true" clearable>
+
+          </keyword-search>
         </el-form-item>
 
         <el-form-item :label="'ST/LST'" prop="stlst">
-          <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+          <dict-select
+            dictType="ST"
+            class="input"
+            v-model="listQuery.stlst"
+            :allowEmpty="true"
+            clearable>
+          </dict-select>
         </el-form-item>
 
         <el-form-item :label="'生产阶段'" prop="phaseId">
-          <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          <keyword-search
+            style="width: 100%"
+            v-model="listQuery.phaseId"
+            :allowMultiple="true"
+            :searchApi="this.listPhase"
+            :valueColumn="'name'"
+            :allowEmpty="true">
+          </keyword-search>
         </el-form-item>
 
 
@@ -135,7 +154,6 @@
         <el-form-item :label="'下一审批者'" prop="nextApprove" >
           <el-input  v-model="approveForm.nextApprove" clearable></el-input>
         </el-form-item>
-
       </el-form>
       <span slot="footer" class="dialog-footer">
             <el-button @click="approveShow = false">取 消</el-button>

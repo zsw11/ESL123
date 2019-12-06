@@ -9,9 +9,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@EnableTransactionManagement
 @EnableAutoConfiguration(exclude={org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @Import({DynamicDataSourceConfig.class})
 public class ApjApplication extends SpringBootServletInitializer {

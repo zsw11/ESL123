@@ -35,6 +35,11 @@ public class OpertaionGroupEntity implements Serializable {
 	private Integer deptId;
 	@TableField(exist = false)
 	private String deptName;
+	/**
+	 * shoushunshuliang
+	 */
+	@TableField(exist = false)
+	private Integer count;
 	private String remark;
 	/**
 	 * 使用次数统计

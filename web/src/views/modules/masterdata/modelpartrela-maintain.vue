@@ -3,7 +3,14 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+    <el-form
+      :disabled="$route.path.includes('details')"
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'名称'" prop="name">
@@ -85,8 +92,9 @@
     </el-form>
 
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="!$route.path.includes('details')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="!$route.path.includes('details')" @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="$route.path.includes('details')"  @click="cancleFormSubmit">确   定</el-button>
     </span>
   </el-card>
 </template>
@@ -179,9 +187,6 @@
     methods: {
       init () {
         this.title = this.$route.meta.title
-        if (this.$route.query.noShow) {
-          this.flag = true
-        }
         this.$store.dispatch('common/updateTabAttrs', {
           name: this.$route.name,
           changed: false
@@ -190,10 +195,9 @@
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
           fetchModel(this.dataForm.id).then(({data}) => {
-            console.log(data, 111111111111111)
             Object.assign(
               this.dataForm,
-              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark' ])
             )
           }).finally(() => {
             this.inited = true

@@ -2,11 +2,14 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
+import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.ReferenceEntity;
+import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,10 @@ public class OpertaionGroupController extends AbstractController {
     @Autowired
     private OpertaionGroupService opertaionGroupService;
     @Autowired
+    private OperationGroupOperationService operationGroupOperationService;
+    @Autowired
+    private SysDeptService sysDeptService;
+    @Autowired
     private SysDictService sysDictService;
 
     /**
@@ -57,8 +64,12 @@ public class OpertaionGroupController extends AbstractController {
     @RequiresPermissions("masterData:opertaiongroup:info")
     public RD info(@PathVariable("id") Integer id){
 		OpertaionGroupEntity opertaionGroup = opertaionGroupService.selectById(id);
-
-        return RD.build().put("data", opertaionGroup);
+        opertaionGroup.setDeptName(sysDeptService.selectById(opertaionGroup.getDeptId()).getName());
+        List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id", id));
+        Map<String,Object> item= new HashMap<String, Object>();
+        item.put("operationGroup",opertaionGroup);
+        item.put("operations",operationGroupOperationEntities);
+        return RD.build().put("data", item);
     }
 
     /**

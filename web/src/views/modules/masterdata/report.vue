@@ -18,23 +18,6 @@
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
         </div>
-        <el-dialog
-          class="dialog"
-          title="报表审批"
-          :visible.sync="approveShow"
-          width="406px">
-          <el-form :inline="true" :model="approveForm" @keyup.enter.native="getDataList()">
-
-            <el-form-item :label="'选择报表组'" prop="name" >
-              <el-input  v-model="approveForm.name" clearable></el-input>
-            </el-form-item>
-
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="approveShow = false">取 消</el-button>
-            <el-button type="primary" @click="approvePut">确 定</el-button>
-          </span>
-        </el-dialog>
       </el-form>
     </el-card>
     <el-card class="with-title">
@@ -77,7 +60,6 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-<!--            <el-button  type="text" size="small" @click="approve(scope.row.id)">审批</el-button>-->
           </template>
         </el-table-column>
 
@@ -97,17 +79,12 @@
 </template>
 
 <script>
-import { listReport, deleteReport, fetchReportGroup } from '@/api/report'
+import { listReport, deleteReport } from '@/api/report'
 export default {
   name: 'reportList',
   data () {
     return {
-      approveShow: false,
       dataButton: 'list',
-      approveForm: {
-        name: null,
-        opininon: null
-      },
       listQuery: {
         name: null,
         formCode: null,
@@ -196,9 +173,8 @@ export default {
     },
     // 详情
     details (id) {
-      // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-report/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-report/${id}`})
       })
     },
     // 新增 / 修改
@@ -206,18 +182,6 @@ export default {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/edit-report/${id}` : '/add-report' })
       })
-    },
-    // 审批
-    approve (id) {
-      this.approveShow = true
-      console.log(id, 222222222222)
-      fetchReportGroup(id).then((page) => {
-        console.log(page, 11111111111111111111)
-      })
-    },
-    // 提交审批
-    approvePut () {
-      this.approveShow = false
     },
     // 删除数据
     deleteHandle (row) {
