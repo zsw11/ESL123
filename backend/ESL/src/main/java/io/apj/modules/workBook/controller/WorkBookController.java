@@ -77,6 +77,15 @@ public class WorkBookController {
 
         return RD.build();
     }
+    /**
+     * 批量更新
+     */
+    @RequestMapping("/batchUpdate")
+    @RequiresPermissions("workBook:workbook:update")
+    public RD batchUpdate(@RequestBody Map params) {
+		return null;
+    	
+    }
 
     /**
      * 删除

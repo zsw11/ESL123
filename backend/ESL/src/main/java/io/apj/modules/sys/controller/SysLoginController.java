@@ -93,14 +93,15 @@ public class SysLoginController extends AbstractController {
 //			sysUserService.initUserDataFilter(map);
 		// 用户信息
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
+		// 判断用户是否存在
+		if (user == null) {
+			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
+		}
 //		获取人员信息
 		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
 		if (staff == null) {
-			return RD.build().NOT_FOUND();
-		}
-		// 判断用户是否存在
-		if (user == null)
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
+		}
 
 		// 判断密码
 		if (!user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex()))

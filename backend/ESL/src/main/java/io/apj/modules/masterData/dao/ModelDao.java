@@ -1,9 +1,7 @@
 package io.apj.modules.masterData.dao;
 
-import com.alibaba.druid.sql.ast.SQLPartitionValue;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.vo.PartVo;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;

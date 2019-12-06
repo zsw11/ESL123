@@ -34,10 +34,9 @@
                         label="功能权限">
             <el-tree :data="menuTree.data"
                      :props="menuTree.props"
+                     check-strictly=true
                      node-key="id"
                      ref="menuTree"
-                     @node-click="getDeptTree"
-                     @node-collapse="getDeptTree"
                      :default-expanded-keys="menuTree.defaultExpandedKeys"
                      show-checkbox>
             </el-tree>
@@ -151,6 +150,7 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.id) {
           fetchRole(this.dataForm.id).then(({ page }) => {
+            console.log(8888888, page.menus)
             Object.assign(
               this.dataForm,
               pick(page, ['name', 'remark'])
@@ -159,8 +159,9 @@ export default {
             if (idx !== -1) {
               page.menus.splice(idx, page.menus.length - idx)
             }
-            this.$refs.menuTree.setCheckedKeys(page.menus)
-            // this.$refs.menuTree.setCheckedKeys(page.menus.map(m => m.id))
+            // this.$refs.menuTree.setCheckedKeys(page.menus, true)
+            console.log(666666666, page.menus)
+            this.$refs.menuTree.setCheckedKeys(page.menus.map(m => m.id), true)
             // console.log(page.menus.map(m => m.id))
             this.menuTree.defaultExpandedKeys = compact(page.menus.map(m => m.parentId))
           })
@@ -187,19 +188,19 @@ export default {
       this.$destroy()
     },
     // 获取菜单部门
-    getDeptTree (data) {
-      if (data.typeId === 'menu' || data.typeId === 'button') {
-        this.isMenu = true
-        this.actionNode = data
-        if (data.deptKeys === undefined) {
-          this.$refs.deptTree.setCheckedKeys([])
-        } else {
-          this.$refs.deptTree.setCheckedKeys(data.deptKeys)
-        }
-      } else {
-        this.isMenu = false
-      }
-    },
+    // getDeptTree (data) {
+    //   if (data.typeId === 'menu' || data.typeId === 'button') {
+    //     this.isMenu = true
+    //     this.actionNode = data
+    //     if (data.deptKeys === undefined) {
+    //       this.$refs.deptTree.setCheckedKeys([])
+    //     } else {
+    //       this.$refs.deptTree.setCheckedKeys(data.deptKeys)
+    //     }
+    //   } else {
+    //     this.isMenu = false
+    //   }
+    // },
     // 设置菜单树
     setDeptKeys () {
       this.addDeptKeys(this.menuTree.data)
