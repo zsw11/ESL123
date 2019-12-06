@@ -182,15 +182,12 @@ export default {
         this.standardBookDialog.visible = false
       })
     },
+    // 插入手顺组合
     async addOperationGroup (group) {
-      this.addedOperation = undefined
-      if (this.$refs.workbookTable) this.$refs.workbookTable.addOperationGroup(group)
       const rst = await fetchOperationGroup(group.id)
-      console.log(rst)
-      // await this.$refs.workbookTable.insertAt(Object.assign(
-      //   this.createNewRow('n'),
-      //   { operation: this.standardBookDialog.formData.name }
-      // ), this.currentCell.row)
+      if (rst.data && rst.data.operations) {
+        await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields), this.currentCell.row))
+      }
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
