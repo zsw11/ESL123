@@ -3,7 +3,14 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+    <el-form
+      :disabled="$route.path.includes('details')"
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
         <el-form-item :label="'工位名称'" prop="name">
@@ -25,10 +32,16 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-card class="with-title" style="box-shadow: none;border: none" v-if=table>
+    <el-card class="with-title" style="box-shadow: none;border: none" v-if="!$route.path.includes('add')">
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
-        <el-button @click="addReal=true" type="primary" style="float: right" v-if=!flag>新增</el-button>
+        <el-button
+          @click="addReal=true"
+          type="primary"
+          style="float: right"
+          v-if="!$route.path.includes('details')">
+          新增
+        </el-button>
       </div>
       <el-tree
         style="width: 600px"
@@ -50,11 +63,21 @@
         </span>
       </span>
       </el-tree>
-      <el-dialog custom-class="worktype-dialog" width="40%" title="新增工位类型结构" :visible.sync="addReal" v-if="addReal">
+      <el-dialog
+        custom-class="worktype-dialog"
+        width="40%"
+        title="新增工位类型结构"
+        :visible.sync="addReal"
+        v-if="addReal">
         <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
 
           <el-form-item :label="'父工位'" prop="parent">
-            <keyword-search v-model="addForm.parent" :allowMultiple="true" :searchApi="this.listWorkstationTypeNode"   :allowEmpty=true clearable></keyword-search>
+            <keyword-search
+              v-model="addForm.parent"
+              :allowMultiple="true"
+              :searchApi="this.listWorkstationTypeNode"
+              :allowEmpty=true clearable>
+            </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'名称'" prop="name">
@@ -63,7 +86,13 @@
 
 
           <el-form-item :label="'备注'" prop="remark">
-            <el-input  type="textarea" style="width:350px" :rows="6" placeholder="请输入内容" v-model="addForm.remark"></el-input>
+            <el-input
+              type="textarea"
+              style="width:350px"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="addForm.remark">
+            </el-input>
           </el-form-item>
 
         </el-form>
@@ -74,8 +103,9 @@
       </el-dialog>
     </el-card>
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="!$route.path.includes('details')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="!$route.path.includes('details')" @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="$route.path.includes('details')"  @click="cancleFormSubmit">确   定</el-button>
     </span>
   </el-card>
 </template>
@@ -166,16 +196,7 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route.path)
-      if (this.$route.path === '/add-workstationtype') {
-        this.table = false
-      } else {
-        this.table = true
-      }
       this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

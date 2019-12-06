@@ -13,8 +13,13 @@
 
 
         <el-form-item :label="'所属组织机构'" prop="deptId" >
-<!--          <el-input v-model="listQuery.deptId"  clearable></el-input>-->
-          <keyword-search v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            v-model="listQuery.deptId"
+            :allowMultiple="true"
+            :searchApi="this.listDept"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
 
@@ -34,7 +39,12 @@
             type="primary"
             plain>导   出
           </export-data>
-          <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -170,9 +180,23 @@ import { listDept } from '@/api/dept'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
-const defaultExport = ['measureGroup.code', 'measureGroup.a0', 'measureGroup.b0', 'measureGroup.g0', 'measureGroup.a1',
-  'measureGroup.b1', 'measureGroup.p0', 'measureGroup.m0', 'measureGroup.x0', 'measureGroup.i0', 'measureGroup.a2', 'measureGroup.b2',
-  'measureGroup.p1', 'measureGroup.a3', 'measureGroup.deptId']
+const defaultExport = [
+  'measureGroup.code',
+  'measureGroup.a0',
+  'measureGroup.b0',
+  'measureGroup.g0',
+  'measureGroup.a1',
+  'measureGroup.b1',
+  'measureGroup.p0',
+  'measureGroup.m0',
+  'measureGroup.x0',
+  'measureGroup.i0',
+  'measureGroup.a2',
+  'measureGroup.b2',
+  'measureGroup.p1',
+  'measureGroup.a3',
+  'measureGroup.deptId'
+]
 export default {
   name: 'measureGroupList',
   components: {
@@ -338,9 +362,8 @@ export default {
     },
     // 详情
     details (id) {
-      // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-measuregroup/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-measuregroup/${id}`})
       })
     },
     // 新增 / 修改

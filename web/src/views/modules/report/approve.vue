@@ -7,7 +7,13 @@
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
           <el-form-item :label="'报表组'" prop="report_group_id">
-            <keyword-search v-model="listQuery.reportGroupId" :allowMultiple="true" :searchApi="this.listReportGroup"  :allowEmpty="true" clearable></keyword-search>
+            <keyword-search
+              v-model="listQuery.reportGroupId"
+              :allowMultiple="true"
+              :searchApi="this.listReportGroup"
+              :allowEmpty="true"
+              clearable>
+            </keyword-search>
           </el-form-item>
 
 <!--          <el-form-item :label="'审批状态'" prop="status">-->
@@ -87,8 +93,19 @@
         <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
-            <el-button size="mini" type="text" @click="approve(scope.row.id,scope.row.reportGroupName,1)">通过</el-button>
-            <el-button id="delete" size="mini" type="text" @click="approve(scope.row.id,scope.row.reportGroupName,0)">拒绝</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="approve(scope.row.id,scope.row.reportGroupName,1)">
+              通过
+            </el-button>
+            <el-button
+              id="delete"
+              size="mini"
+              type="text"
+              @click="approve(scope.row.id,scope.row.reportGroupName,0)">
+              拒绝
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -348,7 +365,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-approve/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-approve/${id}`})
       })
     },
     // 审批

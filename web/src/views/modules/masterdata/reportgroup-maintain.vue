@@ -4,7 +4,14 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+    <el-form
+      :disabled="$route.path.includes('details')"
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'报表组名称'" prop="name">
@@ -27,12 +34,24 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title" v-if=table>
+    <el-card class="with-title" v-if="!$route.path.includes('add')">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >报表信息</span>
-        <el-button v-if=!flag style="float: right" @click="addReal=true" type="primary" >新增</el-button>
+        <el-button
+          v-if="!$route.path.includes('details')"
+          style="float: right"
+          @click="addReal=true"
+          type="primary" >
+          新增
+        </el-button>
         <el-dialog custom-class="dialog" title="新增报表组报表关系" width="30%" :visible.sync="addReal">
-          报表 <keyword-search  style="margin-left:10px;" v-model="addreportgroupReportId" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true"></keyword-search>
+          报表 <keyword-search
+          style="margin-left:10px;"
+          v-model="addreportgroupReportId"
+          :allowMultiple="true"
+          :searchApi="this.listReport"
+          :allowEmpty="true">
+        </keyword-search>
           <div slot="footer" class="dialog-footer">
             <el-button @click="addReal = false">取 消</el-button>
             <el-button type="primary" @click="reportgroupReport">确 定</el-button>
@@ -62,9 +81,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column
+          align="center"
+          fixed="right"
+          :label="'操作'"
+          width="230">
           <template slot-scope="scope">
-            <el-button v-if=!flag style="color: orangered" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button
+              v-if="!$route.path.includes('details')"
+              style="color: orangered"
+              size="mini"
+              type="text"
+              @click="deleteHandle(scope.row)">
+              删除
+            </el-button>
           </template>
         </el-table-column>
 
@@ -73,8 +103,9 @@
 
     </el-card>
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="!$route.path.includes('details')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="!$route.path.includes('details')" @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="$route.path.includes('details')"  @click="cancleFormSubmit">确   定</el-button>
     </span>
   </el-card>
 </template>
@@ -177,17 +208,10 @@ export default {
   },
   methods: {
     init () {
-      if (this.$route.path === '/add-reportgroup') {
-        this.table = false
-      } else {
-        this.table = true
+      if (!this.$route.path.includes('add')) {
         this.getDataList()
-        console.log(this.id)
       }
       this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -282,7 +306,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-report/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-report/${id}`})
       })
     },
     // 新增 / 修改

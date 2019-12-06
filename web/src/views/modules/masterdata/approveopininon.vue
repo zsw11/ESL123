@@ -25,7 +25,12 @@
         <div class="card-title">常用审批意见</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -180,7 +185,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-approveopininon/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-approveopininon/${id}`})
       })
     },
     // 新增 / 修改

@@ -41,7 +41,13 @@
 <!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog custom-class="dialog" title="新增机种部品关系" width="30%" :visible.sync="addReal">
-            部品<keyword-search  style="margin-left:10px;" v-model="addModelPartId" :allowMultiple="true" :searchApi="this.listPart"  :allowEmpty="true"></keyword-search>
+            部品<keyword-search
+            style="margin-left:10px;"
+            v-model="addModelPartId"
+            :allowMultiple="true"
+            :searchApi="this.listPart"
+            :allowEmpty="true">
+          </keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="modelPart">确 定</el-button>
@@ -90,7 +96,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.partId)">详情</el-button>
 <!--            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
@@ -275,7 +281,7 @@
       details (id) {
         // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-partmodelrela/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-partmodelrela/${id}`})
         })
       },
       // 新增 / 修改

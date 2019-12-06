@@ -4,10 +4,20 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="clearfix" style="min-width: 1000px">
+      <el-form
+        :inline="true"
+        :model="listQuery"
+        @keyup.enter.native="getDataList()"
+        class="clearfix" style="min-width: 1000px">
         <div class="wookbook-min-width">
           <el-form-item :label="'部门'" prop="deptId" >
-            <keyword-search clearable v-model="listQuery.detId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+            <keyword-search
+              clearable
+              v-model="listQuery.detId"
+              :allowMultiple="true"
+              :searchApi="this.listDept"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'LST/ST'" prop="STLST" >
@@ -15,7 +25,13 @@
           </el-form-item>
 
           <el-form-item :label="'机种'" prop="modelId" >
-            <keyword-search clearable  v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel" :allowEmpty="true"></keyword-search>
+            <keyword-search
+              clearable
+              v-model="listQuery.modelId"
+              :allowMultiple="true"
+              :searchApi="this.listModel"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'仕向'" prop="destinations" >
@@ -23,11 +39,24 @@
           </el-form-item>
 
           <el-form-item :label="'生产阶段'" prop="phaseId" >
-              <keyword-search clearable  class="keyword" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+              <keyword-search
+                clearable
+                class="keyword"
+                v-model="listQuery.phaseId"
+                :allowMultiple="true"
+                :searchApi="this.listPhase"
+                :allowEmpty="true">
+              </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'工位'" prop="workstationId" >
-            <keyword-search clearable  v-model="listQuery.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation" :allowEmpty="true"></keyword-search>
+            <keyword-search
+              clearable
+              v-model="listQuery.workstationId"
+              :allowMultiple="true"
+              :searchApi="this.listWorkstation"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
 
           <el-form-item :label="'作业名'" prop="workName" >
@@ -128,7 +157,7 @@
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">沿用</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-
+            <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
           </template>
         </el-table-column>
 
@@ -142,8 +171,40 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
-
     </el-card>
+    <el-dialog
+      customClass="wookbook-dialog"
+      width="30%"
+      title="选择生成报表组"
+      :visible.sync="createShow">
+      <el-form :inline="true" :model="createForm">
+        <el-form-item>
+<!--          <el-radio-group v-model="createForm.Id" size="small">-->
+<!--            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>-->
+<!--          </el-radio-group>-->
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="checkAll"
+            @change="handleCheckAllChange">
+            全选
+          </el-checkbox>
+          <el-checkbox-group v-model="createForm.id">
+            <el-checkbox
+              :label="item.id"
+              v-for="item in reportGroup"
+              :key="item.id"
+              @change="handleCheckedCitiesChange">
+              {{item.name}}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="createShow = false">取 消</el-button>
+            <el-button type="primary" @click="createReportOK">确 定</el-button>
+          </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -159,7 +220,41 @@ export default {
   name: 'workBookList',
   data () {
     return {
+      flag: true,
       dataButton: 'list',
+      createShow: false,
+      isIndeterminate: true,
+      checkAll: false,
+      reportGroup: [
+        {
+          name: '时间履历表',
+          id: '1'
+        },
+        {
+          name: '标准时间表',
+          id: '2'
+        },
+        {
+          name: '标准工数表',
+          id: '3'
+        },
+        {
+          name: '标准工数表',
+          id: '4'
+        },
+        {
+          name: '标准工数表',
+          id: '5'
+        },
+        {
+          name: '标准工数表',
+          id: '6'
+        }
+      ],
+      arr: [],
+      createForm: {
+        id: []
+      },
       listQuery: {
         id: null,
         deptId: null,
@@ -309,6 +404,34 @@ export default {
       listDictItem({ type: 'ST' }).then(({data}) => {
         this.dictItemSTLST = keyBy(data, 'code')
       })
+    },
+    // 全选生成报表
+    handleCheckAllChange () {
+      if (this.flag) {
+        this.createForm.id = this.reportGroup.map(item => item.id)
+        this.flag = !this.flag
+      } else {
+        this.createForm.id = []
+        this.flag = !this.flag
+      }
+      this.isIndeterminate = false
+    },
+    // 多选
+    handleCheckedCitiesChange () {
+      let checkedCount = this.createForm.id.length
+      this.checkAll = checkedCount === this.reportGroup.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.reportGroup.length
+      this.flag = this.createForm.id.length !== this.reportGroup.length
+    },
+    // 生成报表
+    createReport (row) {
+      this.createShow = true
+    },
+    // 确定生成报表
+    createReportOK (row) {
+      // console.log(this.createForm, 1111111111111111)
+      this.createForm.id = []
+      this.createShow = false
     }
   }
 }
@@ -321,6 +444,13 @@ export default {
         display: inline-block;
         width: 68px;
       }
+    }
+  }
+  .wookbook-dialog {
+    min-width: 400px;
+    .el-checkbox {
+      display: block;
+      margin-left: 0;
     }
   }
 </style>

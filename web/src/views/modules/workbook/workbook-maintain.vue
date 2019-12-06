@@ -4,7 +4,13 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px">
+    <el-form
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'作业名'" prop="workName">
@@ -13,7 +19,13 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <keyword-search style="width: 100%" v-model="dataForm.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.deptId"
+              :allowMultiple="true"
+              :searchApi="this.listDept"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
         </el-col>
       </el-row>
@@ -25,14 +37,26 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
-            <keyword-search style="width: 100%"  v-model="dataForm.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :allowEmpty="true"></keyword-search>
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.phaseId"
+              :allowMultiple="true"
+              :searchApi="this.listPhase"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
-            <keyword-search style="width: 100%" v-model="dataForm.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true"></keyword-search>
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.modelId"
+              :allowMultiple="true"
+              :searchApi="this.listModel"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -46,7 +70,13 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
-            <keyword-search style="width: 100%" v-model="dataForm.workstationId" :allowMultiple="true" :searchApi="this.listWorkstation"  :allowEmpty="true"></keyword-search>
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.workstationId"
+              :allowMultiple="true"
+              :searchApi="this.listWorkstation"
+              :allowEmpty="true">
+            </keyword-search>
           </el-form-item>
         </el-col>
       </el-row>
@@ -249,7 +279,22 @@ export default {
         fetchWorkBook(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'deptId', 'stlst', 'modelId', 'destinations', 'phaseId', 'workstationId', 'workName', 'versionNumber', 'makerId', 'makedAt', 'continueFromId', 'timeValue', 'TMU', 'secondConvert', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [
+              'deptId',
+              'stlst',
+              'modelId',
+              'destinations',
+              'phaseId',
+              'workstationId',
+              'workName',
+              'versionNumber',
+              'makerId',
+              'makedAt',
+              'continueFromId',
+              'timeValue',
+              'TMU',
+              'secondConvert',
+              'remark' ])
           )
         }).finally(() => {
           this.inited = true
@@ -266,7 +311,6 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      console.log(this.dataForm, 111111111111111111)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
@@ -286,18 +330,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-  /*.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {*/
-  /*  margin-bottom: 18px;*/
-  /*  display: inline-block;*/
-  /*  width: 400px;*/
-  /*  input{*/
-  /*    width: 325px;*/
-  /*  }*/
-  /*  .keyword{*/
-  /*    width: 300px;*/
-  /*  }*/
-  /*}*/
-
-</style>

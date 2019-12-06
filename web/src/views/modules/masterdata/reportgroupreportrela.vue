@@ -203,7 +203,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-reportgroupreportrela/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-reportgroupreportrela/${id}`})
       })
     },
     // 新增 / 修改
