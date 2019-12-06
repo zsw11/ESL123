@@ -49,9 +49,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+        <el-table-column
+          align="center"
+          fixed="right"
+          :label="'操作'"
+          width="230">
           <template slot-scope="scope">
-            <el-button style="color: orangered" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button size="mini" type="text">下载</el-button>
           </template>
         </el-table-column>
 

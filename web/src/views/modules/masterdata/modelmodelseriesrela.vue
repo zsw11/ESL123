@@ -11,16 +11,36 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <keyword-search  class="input" v-model="listQuery.code" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.code"
+            :allowMultiple="true"
+            :searchApi="this.listModel"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search  class="input" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.deptId"
+            :allowMultiple="true"
+            :searchApi="this.listDept"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  class="input" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries"  :allowEmpty="true" clearable></keyword-search>
-
+          <keyword-search
+            class="input"
+            v-model="listQuery.modelSeriesId"
+            :allowMultiple="true"
+            :searchApi="this.listModelSeries"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
 
@@ -38,25 +58,6 @@
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">机种</div>
-<!--        <div class="buttons">-->
-<!--          <el-button  @click="addReal=true" type="primary" >新增</el-button>-->
-<!--          <el-dialog title="新增机种系列机种关系" width="400px" :visible.sync="addReal">-->
-<!--            机种<keyword-search  style="margin-left:10px;" v-model="addModelseriesModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>-->
-<!--            <div slot="footer" class="dialog-footer">-->
-<!--              <el-button @click="addReal = false">取 消</el-button>-->
-<!--              <el-button type="primary" @click="modelseriesModel">确 定</el-button>-->
-<!--            </div>-->
-<!--          </el-dialog>-->
-<!--          <export-data-->
-<!--            :config="exportConfig"-->
-<!--            type="primary"-->
-<!--            plain>导   出-->
-<!--          </export-data>-->
-<!--          <import-data-->
-<!--            :config="importConfig">-->
-<!--          </import-data>-->
-<!--          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
-<!--        </div>-->
       </div>
       <el-table
         :data="dataList"
@@ -116,9 +117,7 @@
 
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
-<!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-<!--            <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>-->
+            <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
           </template>
         </el-table-column>
 
@@ -145,7 +144,15 @@
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
 
-  const defaultExport = ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+  const defaultExport = [
+    'model.name',
+    'model.deptId',
+    'model.modelSeriesId',
+    'model.code',
+    'model.WSTime',
+    'model.ESTime',
+    'model.AMPTime',
+    'model.MPTime']
 
   export default {
     name: 'modelList',
@@ -206,7 +213,16 @@
         // 导出字段
         exportAttributes: cloneDeep(defaultExport),
         // 导入字段，固定不可变
-        importAttributes: ['model.name', 'model.deptId', 'model.modelSeriesId', 'model.code', 'model.WSTime', 'model.ESTime', 'model.AMPTime', 'model.MPTime']
+        importAttributes: [
+          'model.name',
+          'model.deptId',
+          'model.modelSeriesId',
+          'model.code',
+          'model.WSTime',
+          'model.ESTime',
+          'model.AMPTime',
+          'model.MPTime'
+        ]
       }
     },
     computed: {
@@ -257,7 +273,6 @@
         if (pageNo) {
           this.pageNo = pageNo
         }
-        console.log(this.id, 1111111111111111)
         this.dataButton = 'list'
         this.dataListLoading = true
         fetchModelByModelSeriesId(Object.assign(
@@ -322,9 +337,8 @@
       },
       // 详情
       details (id) {
-        // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-modelmodelseriesrela/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-modelmodelseriesrela/${id}`})
         })
       },
       // 新增 / 修改

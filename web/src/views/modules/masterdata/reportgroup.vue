@@ -11,8 +11,13 @@
         </el-form-item>
 
         <el-form-item :label="'报表'" prop="remark" >
-<!--          <el-input v-model="listQuery.remark" clearable></el-input>-->
-          <keyword-search v-model="listQuery.remark" :allowMultiple="true" :searchApi="this.listReport"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            v-model="listQuery.remark"
+            :allowMultiple="true"
+            :searchApi="this.listReport"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <div class="search-box">
@@ -26,7 +31,12 @@
         <div class="card-title">报表组</div>
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -183,7 +193,7 @@ export default {
     details (id) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-reportgroup/${id}`, query: {noShow: true}})
+        this.$router.push({path: `/details-reportgroup/${id}`})
       })
     },
     // 新增 / 修改

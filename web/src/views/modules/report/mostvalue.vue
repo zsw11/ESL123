@@ -22,17 +22,34 @@
         </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId">
-          <keyword-search v-model="listQuery.modelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
-        </el-form-item>
-
-        <el-form-item :label="'ST/LST'" prop="stlst">
-          <dict-select dictType="ST" class="input" v-model="listQuery.stlst" :allowEmpty="true" clearable></dict-select>
+          <keyword-search
+            v-model="listQuery.modelId"
+            :allowMultiple="true"
+            :searchApi="this.listModel"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item :label="'生产阶段'" prop="phaseId">
-          <keyword-search style="width: 100%" v-model="listQuery.phaseId" :allowMultiple="true" :searchApi="this.listPhase"  :valueColumn="'name'" :allowEmpty="true"></keyword-search>
+          <keyword-search
+            style="width: 100%"
+            v-model="listQuery.phaseId"
+            :allowMultiple="true"
+            :searchApi="this.listPhase"
+            :valueColumn="'name'"
+            :allowEmpty="true">
+          </keyword-search>
         </el-form-item>
 
+        <el-form-item :label="'ST/LST'" prop="stlst">
+          <dict-select
+            dictType="ST"
+            class="input"
+            v-model="listQuery.stlst"
+            :allowEmpty="true"
+            clearable></dict-select>
+        </el-form-item>
 <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->

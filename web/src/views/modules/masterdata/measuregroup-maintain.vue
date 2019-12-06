@@ -4,7 +4,14 @@
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
     </div>
-    <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="130px">
+    <el-form
+      :disabled="$route.path.includes('details')"
+      :rules="dataRules"
+      ref="dataForm"
+      :model="dataForm"
+      label-position="right"
+      :size="'mini'"
+      label-width="130px">
       <el-row>
         <el-col :span="9">
           <el-form-item  :label="'组合编码'" prop="code">
@@ -30,8 +37,9 @@
     </el-form>
 
     <span class="dialog-footer" style="margin-top: 10px">
-      <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="!$route.path.includes('details')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="!$route.path.includes('details')" @click="cancleFormSubmit">取   消</el-button>
+      <el-button v-if="$route.path.includes('details')"  @click="cancleFormSubmit">确   定</el-button>
     </span>
   </el-card>
 </template>
@@ -108,9 +116,6 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

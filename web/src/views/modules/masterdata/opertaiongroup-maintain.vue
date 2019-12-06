@@ -162,9 +162,7 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-      if (this.$route.query.noShow) {
-        this.flag = true
-      }
+
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false

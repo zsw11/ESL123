@@ -4,8 +4,13 @@
       <div slot="header" class="clearfix">
         <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
-
+      <el-form
+        :disabled="$route.path.includes('details')"
+        :inline="true"
+        :model="listQuery"
+        @keyup.enter.native="getDataList()"
+        class="clearfix"
+        style="width: 1043px">
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input  class="input" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
@@ -15,11 +20,26 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search  class="input" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept"  :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.deptId"
+            :allowMultiple="true"
+            :searchApi="this.listDept"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-          <keyword-search  class="input" v-model="listQuery.modelSeriesId" :allowMultiple="true" :searchApi="this.listModelSeries" labelColunt="name" :allowEmpty="true" clearable></keyword-search>
+          <keyword-search
+            class="input"
+            v-model="listQuery.modelSeriesId"
+            :allowMultiple="true"
+            :searchApi="this.listModelSeries"
+            labelColunt="name"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
         </el-form-item>
 
 
@@ -41,14 +61,26 @@
 <!--          <el-button type="primary" @click="addReal=true">新增</el-button>-->
           <el-button  @click="addReal=true" type="primary" >新增</el-button>
           <el-dialog custom-class="dialog" title="新增部品机种关系" width="30%" :visible.sync="addReal">
-            机种<keyword-search  style="margin-left:10px;" v-model="addPartModelId" :allowMultiple="true" :searchApi="this.listModel"  :allowEmpty="true" clearable></keyword-search>
+            机种<keyword-search
+            style="margin-left:10px;"
+            v-model="addPartModelId"
+            :allowMultiple="true"
+            :searchApi="this.listModel"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="partModel">确 定</el-button>
             </div>
           </el-dialog>
 
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button
+            type="danger"
+            @click="deleteHandle()"
+            :disabled="dataListSelections.length <= 0">
+            批量删除
+          </el-button>
         </div>
       </div>
       <el-table
@@ -115,7 +147,6 @@
         <el-table-column align="center" fixed="right" :label="'操作'" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
-<!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
             <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -264,13 +295,12 @@
       details (id) {
         // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-modelpartrela/${id}`, query: {noShow: true}})
+          this.$router.push({path: `/details-modelpartrela/${id}`})
         })
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
         this.$nextTick(() => {
-          console.log(id)
           this.$router.push({ path: id ? `/edit-modelpartrela/${id}` : '/add-modelpartrela' })
         })
       },
