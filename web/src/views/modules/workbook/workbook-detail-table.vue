@@ -17,7 +17,7 @@
       <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <operation-column key="operationColumn" min-width="120"></operation-column>
+      <operation-column key="operationColumn" min-width="240"></operation-column>
       <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
