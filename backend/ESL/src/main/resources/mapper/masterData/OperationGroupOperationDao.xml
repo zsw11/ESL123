@@ -24,6 +24,7 @@
         <result property="a1" column="a1"/>
         <result property="b1" column="b1"/>
         <result property="p0" column="p0"/>
+        <result property="m0" column="m0"/>
         <result property="x0" column="x0"/>
         <result property="i0" column="i0"/>
         <result property="a2" column="a2"/>

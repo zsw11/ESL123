@@ -78,6 +78,7 @@ public class OperationGroupOperationEntity implements Serializable {
 	private Integer a1;
 	private Integer b1;
 	private Integer p0;
+	private Integer m0;
 	private Integer x0;
 	private Integer i0;
 	private Integer a2;

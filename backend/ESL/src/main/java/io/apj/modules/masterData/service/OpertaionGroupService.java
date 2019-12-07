@@ -6,6 +6,8 @@ import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.OpertaionGroupEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 /**
@@ -19,8 +21,8 @@ public interface OpertaionGroupService extends IService<OpertaionGroupEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    ResponseEntity<Object> insertOpGroup(Map<String, Object> map);
+    ResponseEntity<Object> insertOpGroup(Map<String, Object> map) throws InvocationTargetException, IllegalAccessException, IntrospectionException;
 
-    ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map);
+    ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) throws IntrospectionException, InvocationTargetException, IllegalAccessException;
 }
 

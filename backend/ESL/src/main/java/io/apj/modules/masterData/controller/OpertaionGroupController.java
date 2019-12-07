@@ -1,5 +1,7 @@
 package io.apj.modules.masterData.controller;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -77,7 +79,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
-    public RD save(@RequestBody Map<String, Object> map){
+    public RD save(@RequestBody Map<String, Object> map) throws InvocationTargetException, IllegalAccessException, IntrospectionException {
         opertaionGroupService.insertOpGroup(map);
         return RD.build();
     }
@@ -88,7 +90,7 @@ public class OpertaionGroupController extends AbstractController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("masterData:opertaiongroup:update")
-    public RD update(@RequestBody Map<String, Object> map){
+    public RD update(@RequestBody Map<String, Object> map) throws IllegalAccessException, IntrospectionException, InvocationTargetException {
         opertaionGroupService.UpdataOpertaionGroup(map);
 
         return RD.build();
