@@ -16,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -67,8 +73,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 
     @Override
     @Transactional
-    public ResponseEntity<Object> insertOpGroup(Map<String, Object> map) {
-        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"),true),OpertaionGroupEntity.class);
+    public ResponseEntity<Object> insertOpGroup(Map<String, Object> map) throws InvocationTargetException, IllegalAccessException, IntrospectionException {
+        OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"), true), OpertaionGroupEntity.class);
+        opertaionGroup.setDeptId(1);
         opertaionGroupService.insert(opertaionGroup);
         EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("code", (opertaionGroup.getCode()));
@@ -78,27 +85,29 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("operations");
         for(int i= 0; i<maps.size(); i++) {
             OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
-            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+//            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+//            org.apache.commons.beanutils.BeanUtils.populate(operationGroupOperationEntity, maps.get(i));
+            BeanInfo beanInfo = Introspector.getBeanInfo(operationGroupOperationEntity.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (PropertyDescriptor property : propertyDescriptors) {
+                Method setter = property.getWriteMethod();
+                if (setter != null) {
+                    setter.invoke(operationGroupOperationEntity, maps.get(i).get(property.getName()));
+                }
+            }
             operationGroupOperationEntity.setOperationGroupId(id);
             operationGroupOperationService.insert(operationGroupOperationEntity);
         }
-//        List<OperationGroupOperationEntity> operationGroupOperationEntity = JSONObject.parseArray(map.get("operations").toString(),  OperationGroupOperationEntity.class);
-//        int id = opertaionGroupEntity.getId();
-//        if(operationGroupOperationEntity!=null && operationGroupOperationEntity.size()!=0){
-//            for(OperationGroupOperationEntity item : operationGroupOperationEntity){
-//                item.setOperationGroupId(id);
-//            }
-//            operationGroupOperationService.insertBatch(operationGroupOperationEntity);
-//        }
 
         return RD.ok(opertaionGroup);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) {
+    public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
         OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"),true),OpertaionGroupEntity.class);
         //更新主表
+        opertaionGroup.setDeptId(1);
         opertaionGroupService.updateById(opertaionGroup);
         //获取主表id
         int id = opertaionGroup.getId();
@@ -119,7 +128,15 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
         List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("operations");
         for(int i= 0; i<maps.size(); i++) {
             OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
-            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+//            DataUtils.transMap2Bean2(maps.get(i), operationGroupOperationEntity);
+            BeanInfo beanInfo = Introspector.getBeanInfo(operationGroupOperationEntity.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (PropertyDescriptor property : propertyDescriptors) {
+                Method setter = property.getWriteMethod();
+                if (setter != null) {
+                    setter.invoke(operationGroupOperationEntity, maps.get(i).get(property.getName()));
+                }
+            }
             operationGroupOperationEntity.setOperationGroupId(id);
             operationGroupOperationService.insert(operationGroupOperationEntity);
         }
