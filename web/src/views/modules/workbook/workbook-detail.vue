@@ -23,7 +23,6 @@
         <el-tooltip content="Ctrl + V" placement="top">
           <el-button type="primary" @click="paste">粘贴</el-button>
         </el-tooltip>
-        <el-button type="primary" @click="addOperationGroup">手顺组合</el-button>
         <el-autocomplete
           class="inline-input"
           v-model="addedOperation"
