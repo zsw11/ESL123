@@ -31,6 +31,10 @@
         <result property="b2" column="b2"/>
         <result property="p1" column="p1"/>
         <result property="a3" column="a3"/>
+        <result property="a4" column="a4"/>
+        <result property="b3" column="b3"/>
+        <result property="p2" column="p2"/>
+        <result property="a5" column="a5"/>
     </resultMap>
 
 </mapper>

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class DynamicDataSourceTest {
         System.out.println(ToStringBuilder.reflectionToString(user3));
     }
     @Test
-    public void aVoid() {
+    public void aVoid() throws IllegalAccessException, InvocationTargetException, IntrospectionException {
         OpertaionGroupEntity opertaionGroupEntity = new OpertaionGroupEntity();
         opertaionGroupEntity.setCode("We");
         OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
