@@ -1,10 +1,12 @@
 <template>
   <div class="workbook-detail-page">
-    <video-player  class="video-player-box"
-      ref="videoPlayer"
-      :options="playerOptions"
-      :playsinline="true">
-    </video-player>
+    <div class="video-player-box">
+      <video-player
+        ref="videoPlayer"
+        :options="playerOptions"
+        :playsinline="true">
+      </video-player>
+    </div>
 
     <div class="workbook-content" :class="workbookPercent">
       <div class="video-buttons">
@@ -73,6 +75,7 @@
   import { ipcRenderer } from 'electron'
 
   const workbookPercents = [
+    { id: 'hide', name: 'Hide' },
     { id: 'mini', name: '30%' },
     { id: 'half', name: '50%' },
     { id: 'full', name: '100%' }
@@ -173,9 +176,10 @@
                 }
                 case 'q': {
                   self.workbookPercent = {
+                    hide: 'mini',
                     mini: 'half',
                     half: 'full',
-                    full: 'mini'
+                    full: 'hide'
                   }[self.workbookPercent]
                 }
               }
@@ -222,6 +226,17 @@
 .workbook-detail-page {
   height: 100%;
 
+  .video-player-box{
+    width: 100vw;
+    height: 100vh;
+    .video-js,
+    .vjs-tech,
+    .vjs-poster {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
   .workbook-content{
     position: absolute;
     bottom: 0;
@@ -231,6 +246,9 @@
     width: 100%;
     background-color: #BFBFBD;
     padding: 28px 5px 20px 0;
+    &.hide {
+      display: none;
+    }
     &.half {
       height: 50%;
     }
