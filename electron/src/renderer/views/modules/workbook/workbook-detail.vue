@@ -1,5 +1,11 @@
 <template>
   <div class="workbook-detail-page">
+    <video-player  class="video-player-box"
+      ref="videoPlayer"
+      :options="playerOptions"
+      :playsinline="true">
+    </video-player>
+
     <div class="workbook-content" :class="workbookPercent">
       <div class="video-buttons">
         <el-tooltip content="Ctrl + Q" placement="top">
@@ -13,6 +19,7 @@
           </el-select>
         </el-tooltip>
       </div>
+
       <div class="workbook-buttons">
         <el-tooltip content="Ctrl + I" placement="top">
           <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
@@ -33,7 +40,9 @@
         <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
         <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
+
       <workbook-table ref="workbookTable"></workbook-table>
+
       <div class="workbook-switch">
         <el-tabs
           type="border-card"
@@ -59,6 +68,9 @@
 <script>
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
+  import 'video.js/dist/video-js.css'
+  import { videoPlayer } from 'vue-video-player'
+  import { ipcRenderer } from 'electron'
 
   const workbookPercents = [
     { id: 'mini', name: '30%' },
@@ -69,7 +81,8 @@
   export default {
     name: 'WorkbookDetail',
     components: {
-      WorkbookTable
+      WorkbookTable,
+      videoPlayer
     },
     data () {
       return {
@@ -80,7 +93,18 @@
         workbooks: [],
         currentWorkbook: null,
         listener: null,
-        addedOperation: null
+        addedOperation: null,
+        playerOptions: {
+          // videojs options
+          muted: true,
+          language: 'en',
+          playbackRates: [0.7, 1.0, 1.5, 2.0],
+          sources: [{
+            type: 'video/mp4',
+            src: 'http://127.0.0.1:8888?startTime=0'
+          }],
+          poster: '/static/images/author.jpg'
+        }
       }
     },
     watch: {
@@ -96,6 +120,11 @@
     created () {
       this.init()
       this.handleShortcut()
+      const self = this
+      ipcRenderer.on('openVideo', function (event, message) {
+        console.log('openVideo:', message)
+        self.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
+      })
     },
     destroyed () {
       this.handleShortcut()
