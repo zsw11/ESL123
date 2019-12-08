@@ -1,15 +1,10 @@
 <template>
-  <div id="app">
+  <transition name="fade">
     <router-view></router-view>
-  </div>
+  </transition>
 </template>
 
 <script>
-  export default {
-    name: 'most'
-  }
+export default {
+}
 </script>
-
-<style>
-  /* CSS */
-</style>
