@@ -2,43 +2,49 @@
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
     <main>
-      <div class="left-side">
-        <span class="title">
-          Welcome to your new project!
-        </span>
-        <system-information></system-information>
-      </div>
-
-      <div class="right-side">
-        <div class="doc">
-          <div class="title">Getting Started</div>
-          <p>
-            electron-vue comes packed with detailed documentation that covers everything from
-            internal configurations, using the project structure, building your application,
-            and so much more.
-          </p>
-          <button @click="open('https://simulatedgreg.gitbooks.io/electron-vue/content/')">Read the Docs</button><br><br>
-        </div>
-        <div class="doc">
-          <div class="title alt">Other Documentation</div>
-          <button class="alt" @click="open('https://electron.atom.io/docs/')">Electron</button>
-          <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
-        </div>
-      </div>
+      <video-player  class="video-player-box"
+        ref="videoPlayer"
+        :options="playerOptions"
+        :playsinline="true">
+      </video-player>
     </main>
   </div>
 </template>
 
 <script>
   import SystemInformation from './LandingPage/SystemInformation'
+  import 'video.js/dist/video-js.css'
+  import { videoPlayer } from 'vue-video-player'
+  import { ipcRenderer } from 'electron'
 
   export default {
     name: 'landing-page',
-    components: { SystemInformation },
-    methods: {
-      open (link) {
-        this.$electron.shell.openExternal(link)
+    components: { SystemInformation, videoPlayer },
+    data () {
+      return {
+        playerOptions: {
+          // videojs options
+          muted: true,
+          language: 'en',
+          playbackRates: [0.7, 1.0, 1.5, 2.0],
+          sources: [{
+            type: 'video/mp4',
+            src: 'http://127.0.0.1:8888?startTime=0'
+          }],
+          poster: '/static/images/author.jpg'
+        }
       }
+    },
+    methods: {
+    },
+    created () {
+      // console.log(ipcRenderer)
+      const self = this
+      ipcRenderer.on('openVideo', function (event, message) {
+        console.log('openVideo:', message)
+        self.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
+      })
+      // ipcRenderer.send("ipcRendererReady", "true");
     }
   }
 </script>
