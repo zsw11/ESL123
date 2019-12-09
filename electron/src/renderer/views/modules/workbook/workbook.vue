@@ -439,6 +439,7 @@ export default {
 <style lang="scss">
   .wookbook-min-width {
     min-width: 1045px;
+  }
   .wookbook-dialog {
     min-width: 400px;
     .el-checkbox {
