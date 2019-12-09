@@ -14,7 +14,7 @@
       label-width="100px" >
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'机种系列名称'" prop="name">
+          <el-form-item :label="'名称'" prop="name">
             <el-input  :disabled=flag v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
@@ -64,7 +64,7 @@ export default {
       },
       dataRules: {
         name: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
