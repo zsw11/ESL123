@@ -99,6 +99,10 @@
     top: 10%;
   }
   .main{
+    unselectable: none;
+    -moz-user-select: none;
+    onselectstart: none;
+    -webkit-user-select: none;
     position: absolute;
     top:0;
     left: 11%;
@@ -188,6 +192,9 @@
     font-size: 16px;
   }
   .login-btn-submit:hover{
+    background-color: #172379;
+  }
+  .login-btn-submit:focus{
     background-color: #172379;
   }
   .mainRight{

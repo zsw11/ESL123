@@ -91,7 +91,7 @@ export default {
       listPhaseData: [],
       dataRules: {
         name: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
         // continuePhaseId: [
         //   { type: 'string', message: '沿用阶段需为数字值' }
