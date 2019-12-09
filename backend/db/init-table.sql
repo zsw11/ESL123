@@ -933,6 +933,7 @@ CREATE TABLE report (
   id serial PRIMARY KEY,
   name varchar(64),
   pinyin varchar(128),
+  ename varchar(128),
   form_code varchar(64),
   remark varchar(512),
   create_by integer,
@@ -945,6 +946,7 @@ comment on table report is '报表';
 Create Unique Index index_report_name_UNQ On report(name);
 comment on column report.name is '名称';
 comment on column report.pinyin is '拼音';
+comment on column report.ename is '英文名';
 comment on column report.form_code is '空Form标准编号';
 comment on column report.remark is '备注';
 comment on column report.create_by is '创建者ID';
@@ -952,19 +954,19 @@ comment on column report.create_at is '创建时间';
 comment on column report.update_by is '更新者ID';
 comment on column report.update_at is '更新时间';
 comment on column report.delete_at is '删除时间';
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, '分析表报表', NULL, NULL, 1, '2019-11-15 09:39:22', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (2, '人机联合表', NULL, NULL, 1, '2019-11-15 09:39:37', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (3, 'Collection-工位时间表', NULL, NULL, 1, '2019-11-15 09:39:59', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, 'Collection-Compare表', NULL, NULL, 1, '2019-11-15 09:40:19', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (5, 'Collection-MOST Value表', NULL, NULL, 1, '2019-11-15 09:40:51', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (6, 'Collection-Revision History表', NULL, NULL, 1, '2019-11-15 09:41:09', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (7, 'Report-Total表', NULL, NULL, 1, '2019-11-15 09:41:25', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (8, 'Report-拖机Total表', NULL, NULL, 1, '2019-11-15 09:41:51', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (9, 'Report-时间联络表', NULL, NULL, 1, '2019-11-15 09:42:10', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (10, 'Process List表', NULL, NULL, 1, '2019-11-15 09:42:32', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (11, '标准时间表', NULL, NULL, 1, '2019-11-15 09:42:43', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (12, '标准工数表', NULL, NULL, 1, '2019-11-15 09:42:53', NULL, NULL, NULL);
-INSERT INTO "public"."report"("id", "name", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (13, '履历表', NULL, NULL, 1, '2019-11-15 09:43:00.935864', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin", "ename", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, '分析表报表', 'work_book','work_book',NULL, NULL, 1, '2019-11-15 09:39:22', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (2, '人机联合表','rj','rj', NULL, NULL, 1, '2019-11-15 09:39:37', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (3, 'Collection-工位时间表', 'collection_station_time','collection_station_time',NULL, NULL, 1, '2019-11-15 09:39:59', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename", "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, 'Collection-Compare表','collection_compare','collection_compare', NULL, NULL, 1, '2019-11-15 09:40:19', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (5, 'Collection-MOST Value表','collection_most_value','collection_most_value', NULL, NULL, 1, '2019-11-15 09:40:51', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (6, 'Collection-Revision History表','collection_revision_history','collection_revision_history', NULL, NULL, 1, '2019-11-15 09:41:09', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (7, 'Report-Total表', 'report_total','report_total',NULL, NULL, 1, '2019-11-15 09:41:25', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (8, 'Report-拖机Total表', 'tuoji','tuoji',NULL, NULL, 1, '2019-11-15 09:41:51', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (9, 'Report-时间联络表','report_time_contact','report_time_contact', NULL, NULL, 1, '2019-11-15 09:42:10', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (10, 'Process List表','list','list', NULL, NULL, 1, '2019-11-15 09:42:32', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (11, '标准时间表','report_standard_time','report_standard_time', NULL, NULL, 1, '2019-11-15 09:42:43', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (12, '标准工数表','report_standard_work','report_standard_work', NULL, NULL, 1, '2019-11-15 09:42:53', NULL, NULL, NULL);
+INSERT INTO "public"."report"("id", "name", "pinyin","ename",  "form_code", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (13, '履历表','report_change_record','report_change_record', NULL, NULL, 1, '2019-11-15 09:43:00.935864', NULL, NULL, NULL);
 
 
 -- 报表组

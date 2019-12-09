@@ -1,16 +1,15 @@
 package io.apj.modules.report.controller;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import io.apj.modules.masterData.dao.ModelDao;
 import io.apj.modules.masterData.entity.PhaseEntity;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportGroupService;
+import io.apj.modules.masterData.service.ReportService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +42,8 @@ public class ApproveController {
 	private PhaseService phaseService;
 	@Autowired
 	private ReportGroupService reportGroupService;
+	@Autowired
+	private ReportService reportService;
 
 
 	/**
@@ -63,11 +64,20 @@ public class ApproveController {
 	@RequiresPermissions("report:approve:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ApproveEntity approve = approveService.selectById(id);
-		approve.setModelName(modelService.selectById(approve.getModelId()).getName());
-		approve.setPhaseName(phaseService.selectById(approve.getPhaseId()).getName());
-		approve.setReportGroupName(reportGroupService.selectById(approve.getReportGroupId()).getName());
-
-		return RD.success(approve);
+		if(approve.getModelId()!=null){
+			approve.setModelName(modelService.selectById(approve.getModelId()).getName());
+		}
+		if(approve.getPhaseId()!=null){
+			approve.setPhaseName(phaseService.selectById(approve.getPhaseId()).getName());
+		}
+		if(approve.getReportGroupId()!=null){
+			approve.setReportGroupName(reportGroupService.selectById(approve.getReportGroupId()).getName());
+		}
+		List<ReportEntity> reportEntity = reportService.selectApproveList(id);
+		Map<String,Object> data = new HashMap<>();
+		data.put("reportEntity",reportEntity);
+		data.put("approve",approve);
+		return RD.ok(data);
 	}
 
 	/**
