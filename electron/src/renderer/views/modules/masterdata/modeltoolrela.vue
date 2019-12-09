@@ -4,14 +4,14 @@
       <div slot="header" class="clearfix">
         <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix" style="width: 1043px">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix">
 
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input  class="input" v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code" >
-          <el-input  v-model="listQuery.code"></el-input>
+          <el-input style="width: 130px" v-model="listQuery.code"></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >

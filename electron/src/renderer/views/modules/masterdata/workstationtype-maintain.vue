@@ -269,7 +269,6 @@ export default {
             remark: this.addForm.remark
           }
           createWorkstationTypeNode(data).then((status) => {
-            console.log(status, 111222)
             if (status) {
               this.addReal = false
               this.init()

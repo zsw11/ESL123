@@ -10,14 +10,13 @@
         :model="listQuery"
         @keyup.enter.native="getDataList()"
         class="clearfix"
-        style="width: 1043px"
       >
         <el-form-item :label="'机种名称'" prop="name">
           <el-input class="input" v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code">
-          <el-input v-model="listQuery.code"></el-input>
+          <el-input style="width: 130px" v-model="listQuery.code"></el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId">
@@ -368,13 +367,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.input {
-  width: 130px
-}
-.el-input__inner {
-  padding-right: 0
-}
-.el-form-item {
-  margin-top: 0
-}
+  .input{
+    width: 130px;
+  }
+  .el-input__inner {
+    padding-right:0;
+  }
+  .el-form-item {
+    margin-top: 0;
+  }
 </style>
