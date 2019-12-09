@@ -20,7 +20,7 @@
           </el-form-item>
           <span class="toggleLogin">本地用户登录</span>
           <el-form-item>
-            <el-button  class="login-btn-submit"  @click="dataFormSubmit()" size="large" :loading="logining">立即登录</el-button>
+            <el-button  id="login-btn-submit"  @click="dataFormSubmit()" size="large" :loading="logining">立即登录</el-button>
           </el-form-item>
         </el-form>
       </div><div class="mainRight">
@@ -96,9 +96,12 @@
   .main-wrapper{
     padding-top: 40%;
     position: relative;
-    top: 10%;
+    top: 13%;
   }
   .main{
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
     position: absolute;
     top:0;
     left: 11%;
@@ -177,7 +180,7 @@
     border-right: none;
   }
 
-  .login-btn-submit {
+  #login-btn-submit {
     margin-top: 7%;
     width: 150px;
     height: 12%;
@@ -187,7 +190,10 @@
     font-weight: bold;
     font-size: 16px;
   }
-  .login-btn-submit:hover{
+  #login-btn-submit:hover{
+    background-color: #172379;
+  }
+  #login-btn-submit:focus{
     background-color: #172379;
   }
   .mainRight{

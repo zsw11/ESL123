@@ -67,7 +67,7 @@ export default {
       listReport,
       dataRules: {
         name: [
-          { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
         formCode: [
           { required: true, message: '请填写空Form标准编号', trigger: 'blur' }
