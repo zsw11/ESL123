@@ -19,5 +19,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
     PageUtils queryPage(Map<String, Object> params);
     ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
     boolean updateOperation(Map<String, Object> params);
+
+    void createReports(Map<String, Object> params);
 }
 

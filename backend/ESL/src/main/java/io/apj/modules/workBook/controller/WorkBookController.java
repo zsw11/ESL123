@@ -69,7 +69,7 @@ public class WorkBookController {
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping("/update")
@@ -101,6 +101,18 @@ public class WorkBookController {
 	public R delete(@RequestBody Integer[] ids) {
 		workBookService.deleteBatchIds(Arrays.asList(ids));
 
+		return R.ok();
+	}
+
+	/**
+	 * 生成报表
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/createReport")
+	//@RequiresPermissions("workBook:workbook:createReport")
+	public R createReport(@RequestBody Map<String, Object> params) {
+		workBookService.createReports(params);
 		return R.ok();
 	}
 
