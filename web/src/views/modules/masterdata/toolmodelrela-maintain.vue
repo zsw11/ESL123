@@ -89,7 +89,7 @@
         },
         dataRules: {
           name: [
-            { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
           ],
 
           remark: [

@@ -18,4 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ReportDao extends BaseMapper<ReportEntity> {
     @Select("SELECT id from report WHERE name=#{name}")
     Integer selectByName(@Param("name") String name);
+
+    @Select("SELECT * from report_total where model_id=#{mid} AND phase_id = #{pid} AND stlst = #{stlst}")
+    ReportEntity selectByEname(@Param("pid") int pid, @Param("mid")int mid, @Param("stlst") String stlst);
 }

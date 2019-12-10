@@ -153,7 +153,7 @@ export default {
       },
       dataRules: {
         name: [
-          // { max: 64, message: '长度超过了64', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
@@ -269,7 +269,6 @@ export default {
             remark: this.addForm.remark
           }
           createWorkstationTypeNode(data).then((status) => {
-            console.log(status, 111222)
             if (status) {
               this.addReal = false
               this.init()

@@ -3,6 +3,8 @@ package io.apj.modules.report.dao;
 import io.apj.modules.report.entity.ApproveEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 报表审批表
