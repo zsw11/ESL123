@@ -1349,6 +1349,10 @@ CREATE TABLE work_operations (
   b2 integer,
   p1 integer,
   a3 integer,
+  a4 integer,
+  b3 integer,
+  p2 integer,
+  a5 integer,
   frequency integer,
   time_value decimal(18, 5),
   TMU decimal(18, 5),
@@ -1379,6 +1383,10 @@ comment on column work_operations.a2 is 'A2';
 comment on column work_operations.b2 is 'B2';
 comment on column work_operations.p1 is 'P1';
 comment on column work_operations.a3 is 'A3';
+comment on column work_operations.a4 is 'A4';
+comment on column work_operations.b3 is 'B3';
+comment on column work_operations.p2 is 'P2';
+comment on column work_operations.a5 is 'A5';
 comment on column work_operations.frequency is '频度';
 comment on column work_operations.time_value is '时间值';
 comment on column work_operations.TMU is 'TMU';
