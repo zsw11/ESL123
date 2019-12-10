@@ -6,7 +6,7 @@
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="downloadTemplate">下载模板</el-dropdown-item>
     </el-dropdown-menu>
-    <el-dialog :title="'导入数据'" :visible.sync="importDialog.visible">
+    <el-dialog class="import-data" :title="'导入数据'" :visible.sync="importDialog.visible">
       <upload-excel-component :header="header" :subTables="subAttributes" :on-success="readSuccess" :before-upload="beforeUpload"/>
       <el-table
         v-if="!subAttributes.length"
@@ -309,3 +309,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .import-data{
+    .el-dialog{
+      min-width: 680px;
+    }
+  }
+</style>
