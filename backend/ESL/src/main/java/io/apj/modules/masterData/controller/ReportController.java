@@ -10,6 +10,8 @@ import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportGroupService;
+import io.apj.modules.report.entity.ApproveEntity;
+import io.apj.modules.report.service.ApproveService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class ReportController extends AbstractController {
 	private ReportGroupService reportGroupService;
 	@Autowired
 	private ReportGroupReportRelaService reportGroupReportRelaService;
+	@Autowired
+	private ApproveService approveService;
 
 	/**
 	 * 列表
@@ -64,7 +68,7 @@ public class ReportController extends AbstractController {
 		return RD.build().put("data", report);
 	}
 	/**
-	 * 报表属于哪些报表组
+	 * 报表属于哪些报表组并过滤
 	 * @return
 	 */
 	@RequestMapping("/reportGroup")
@@ -80,12 +84,24 @@ public class ReportController extends AbstractController {
 		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
          for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
 			 idG = item.getReportGroupId();
-			 reportGroupEntity = reportGroupService.selectById(idG);
-			 if(reportGroupEntity!=null){
-				 reportGroupEntities.add(reportGroupEntity);
+			 int modelId = (int) data.get("model");
+			 int phaseId = (int) data.get("phase");
+			 String stlst = (String) data.get("stlst");
+			 // 报表组过滤
+			 List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG));
+			 List<Integer> reportIds = new ArrayList<>();
+			 for(ApproveEntity approveEntity : approveEntityList ){
+				 reportIds = Collections.singletonList(approveEntity.getReportGroupId());
 			 }
+			 if(!reportIds.contains(idG)){
+				 reportGroupEntity = reportGroupService.selectById(idG);
+				 if(reportGroupEntity!=null){
+					 reportGroupEntities.add(reportGroupEntity);
+				 }
+			 }
+
 		}
-		return RD.ok(reportGroupEntities);
+		return RD.success(reportGroupEntities);
 	}
 
 	/**
