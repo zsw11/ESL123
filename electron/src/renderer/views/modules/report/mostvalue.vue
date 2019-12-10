@@ -146,9 +146,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="stlst" label="ST/LST">
+        <el-table-column align="center" prop="stlst" label="ST/LST" >
           <template slot-scope="scope">
-            <span>{{scope.row.stlst }}</span>
+            <span v-if="scope.row.stlst">{{ dictItemSTLST[scope.row.stlst].name }}</span>
           </template>
         </el-table-column>
 
@@ -272,6 +272,8 @@ import {
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
+import { keyBy } from 'lodash'
+import { listDict, listDictItem } from '@/api/dict'
 
 export default {
   name: 'collectionMostValueList',
@@ -306,6 +308,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listDict,
       listModel,
       listPhase,
       dataList: [],
@@ -384,11 +387,13 @@ export default {
           ]
         }
       ],
-      complexFilters: []
+      complexFilters: [],
+      dictItemSTLST: []
     }
   },
   activated () {
     const self = this
+    self.getDictByType()
     self.getDataList()
   },
   methods: {
@@ -500,13 +505,19 @@ export default {
         name: 'Collection-MOST Value表'
       }
       fetchReportGroup(data).then((page) => {
-        this.reportGroup = page.page
+        this.reportGroup = page
       })
       this.approveShow = true
     },
     // 确定提交
     approvePut () {
       this.approveShow = false
+    },
+    // 字典表
+    getDictByType () {
+      listDictItem({ type: 'ST' }).then(({data}) => {
+        this.dictItemSTLST = keyBy(data, 'code')
+      })
     }
   }
 }

@@ -412,7 +412,10 @@ export default {
       this.approveForm.phaseId = phase
       this.approveForm.stlst = stlst
       let data = {
-        name: '履历表'
+        name: '履历表',
+        model,
+        phase,
+        stlst
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page
