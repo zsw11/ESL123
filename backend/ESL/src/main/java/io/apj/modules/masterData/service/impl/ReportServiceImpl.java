@@ -109,15 +109,21 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
             switch (reportName){
                 case "report_total":
                     List<TotalEntity> total = (List<TotalEntity>) totalService.selectList(new EntityWrapper<TotalEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!total.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "work_book":
                     List<WorkBookEntity> workBookEntity = (List<WorkBookEntity>) workBookService.selectList(new EntityWrapper<WorkBookEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!workBookEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "collection_station_time":
                     List<StationTimeEntity> stationTimeEntity = (List<StationTimeEntity>) stationTimeService.selectList(new EntityWrapper<StationTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!stationTimeEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "collection_compare":
                     List<CompareEntity> compareEntity = (List<CompareEntity>) compareService.selectList(new EntityWrapper<CompareEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
@@ -125,27 +131,39 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
                     break;
                 case "collection_most_value":
                     List<MostValueEntity> mostValueEntity = (List<MostValueEntity>) mostValueService.selectList(new EntityWrapper<MostValueEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!mostValueEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "collection_revision_history":
                     List<RevisionHistoryEntity> revisionHistoryEntity = (List<RevisionHistoryEntity>) revisionHistoryService.selectList(new EntityWrapper<RevisionHistoryEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!revisionHistoryEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "report_time_contact":
                     List<TimeContactEntity> timeContactEntity = (List<TimeContactEntity>) timeContactService.selectList(new EntityWrapper<TimeContactEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!timeContactEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "report_standard_time":
                     List<StandardTimeEntity> standardTimeEntity = (List<StandardTimeEntity>) standardTimeService.selectList(new EntityWrapper<StandardTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!standardTimeEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "report_standard_work":
                     List<StandardWorkEntity> standardWorkEntity = (List<StandardWorkEntity>) standardWorkService.selectList(new EntityWrapper<StandardWorkEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!standardWorkEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
                 case "report_change_record":
                     List<ChangeRecordEntity> changeRecordEntity = (List<ChangeRecordEntity>) changeRecordService.selectList(new EntityWrapper<ChangeRecordEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportEntities.add(reportEntity);
+                    if(!changeRecordEntity.isEmpty()){
+                        reportEntities.add(reportEntity);
+                    }
                     break;
             }
         }
