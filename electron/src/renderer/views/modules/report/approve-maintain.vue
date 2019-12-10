@@ -33,19 +33,19 @@
         style="width: 100%;">
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.reportEntity.name }}</span>
+            <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="formCode" label="空Form标准编号" >
           <template slot-scope="scope">
-            <span>{{scope.row.reportEntity.formCode }}</span>
+            <span>{{scope.row.formCode }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.reportEntity.remark }}</span>
+            <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
 
@@ -60,7 +60,6 @@
         </el-table-column>
 
       </el-table>
-
 
     </el-card>
     <span class="dialog-footer">
@@ -165,12 +164,12 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportApprove(this.dataForm.id)
-          .then((data) => {
-            data.status = data.status != null ? data.status : ''
-            data.reportGroupName = data.reportGroupName != null ? data.reportGroupName : ''
+          .then((page) => {
+            page.approve.status = page.approve.status != null ? page.approve.status : ''
+            page.approve.reportGroupName = page.approve.reportGroupName != null ? page.approve.reportGroupName : ''
             Object.assign(
               this.dataForm,
-              pick(data, [
+              pick(page.approve, [
                 'deptId',
                 'reportGroupName',
                 'status',
@@ -183,6 +182,7 @@ export default {
                 'deleteAt'
               ])
             )
+            this.dataList = page.data
           })
           .finally(() => {
             this.inited = true
@@ -236,10 +236,6 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .is-always-shadow{
-    box-shadow: none;
-    border: none;
-  }
   .tableHeader{
     display: inline-block;
     width: 90px;
@@ -255,6 +251,8 @@ export default {
   }
   .table{
     margin-top: 100px;
+    box-shadow: none !important;
+    border: none !important;
   }
 </style>
 

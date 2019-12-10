@@ -20,7 +20,7 @@
             </keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'LST/ST'" prop="STLST" >
+          <el-form-item :label="'ST/LST'" prop="STLST" >
             <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
           </el-form-item>
 
@@ -119,7 +119,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="stlst" label="LST/ST" >
+        <el-table-column align="center" prop="stlst" label="ST/LST" >
           <template slot-scope="scope">
             <span v-if="scope.row.stlst">{{ dictItemSTLST[scope.row.stlst].name }}</span>
           </template>
