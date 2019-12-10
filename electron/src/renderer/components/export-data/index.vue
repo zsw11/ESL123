@@ -128,6 +128,9 @@ export default {
   .export-data {
     text-align: left;
   }
+  .el-dialog{
+    min-width: 500px;
+  }
   .dialog-block {
     + .dialog-block{
       padding-top: 20px;
