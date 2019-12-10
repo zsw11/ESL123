@@ -219,7 +219,8 @@
     span {
       margin-top: -25px;
       margin-left: 15%;
-      font-size: 45px;
+      font-size: 40px;
+      font-family: Dotum;
       font-weight: lighter;
     }
   }
