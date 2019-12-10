@@ -45,3 +45,11 @@ export function deleteWorkBook (id) {
     data: id
   })
 }
+
+export function createReports (data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/createReport'),
+    method: 'post',
+    data: data
+  })
+}

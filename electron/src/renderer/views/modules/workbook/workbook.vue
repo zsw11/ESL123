@@ -210,7 +210,7 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -227,28 +227,56 @@ export default {
       checkAll: false,
       reportGroup: [
         {
-          name: '时间履历表',
+          name: '分析表报表',
           id: '1'
         },
         {
-          name: '标准时间表',
+          name: '人机联合表',
           id: '2'
         },
         {
-          name: '标准工数表',
+          name: 'Collection-工位时间表',
           id: '3'
         },
         {
-          name: '标准工数表',
+          name: 'Collection-Compare表',
           id: '4'
         },
         {
-          name: '标准工数表',
+          name: 'Collection-MOST Value表',
           id: '5'
         },
         {
-          name: '标准工数表',
+          name: 'Collection-Revision History表',
           id: '6'
+        },
+        {
+          name: 'Report-Total表',
+          id: '7'
+        },
+        {
+          name: 'Report-拖机Total表',
+          id: '8'
+        },
+        {
+          name: 'Report-时间联络表',
+          id: '9'
+        },
+        {
+          name: 'Process List表',
+          id: '10'
+        },
+        {
+          name: '标准时间表',
+          id: '11'
+        },
+        {
+          name: '标准工数表',
+          id: '12'
+        },
+        {
+          name: '履历表',
+          id: '13'
         }
       ],
       arr: [],
@@ -304,8 +332,8 @@ export default {
         // ]
       }],
       complexFilters: [],
-      dictItemSTLST: []
-
+      dictItemSTLST: [],
+      id: ''
     }
   },
   activated () {
@@ -422,16 +450,32 @@ export default {
       this.checkAll = checkedCount === this.reportGroup.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.reportGroup.length
       this.flag = this.createForm.id.length !== this.reportGroup.length
+      console.log(this.createForm.id)
     },
     // 生成报表
     createReport (row) {
       this.createShow = true
+      this.id = row.id
     },
     // 确定生成报表
     createReportOK (row) {
       // console.log(this.createForm, 1111111111111111)
-      this.createForm.id = []
-      this.createShow = false
+       createReports(Object.assign(
+        {
+          wookId: this.id,
+          reports: this.createForm.id
+        }
+      )).then(({page}) => {
+        this.createForm.id = []
+        this.createShow = false
+        //this.dataList = page.data
+        //this.total = page.totalCount
+      }).catch(() => {
+        //this.dataList = []
+        //this.total = 0
+      }).finally(() => {
+        //this.dataListLoading = false
+      })
     }
   }
 }
