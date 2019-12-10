@@ -132,4 +132,39 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		return true;
 	}
 
+	@Override
+	public void createReports(Map<String, Object> params) {
+		ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+		Integer wookId = (Integer) params.get("wookId");
+		reportList.forEach(e->{
+			switch (e){
+				case 1 :
+					break;
+				case 2 :
+					break;
+				case 3 :
+					break;
+				case 4 :
+					break;
+				case 5 :
+					break;
+				case 6 :
+					break;
+				case 7 :
+					break;
+				case 8 :
+					break;
+				case 9 :
+					break;
+				case 10 :
+					break;
+				case 11 :
+					break;
+				case 12 :
+					break;
+			}
+
+		});
+	}
+
 }

@@ -74,10 +74,10 @@ public class ApproveController {
 			approve.setReportGroupName(reportGroupService.selectById(approve.getReportGroupId()).getName());
 		}
 		List<ReportEntity> reportEntity = reportService.selectApproveList(id);
-		Map<String,Object> data = new HashMap<>();
-		data.put("reportEntity",reportEntity);
-		data.put("approve",approve);
-		return RD.ok(data);
+		Map<String,Object> page = new HashMap<>();
+		page.put("data",reportEntity);
+        page.put("approve",approve);
+		return RD.success(page);
 	}
 
 	/**
