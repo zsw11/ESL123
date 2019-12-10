@@ -228,55 +228,55 @@ export default {
       reportGroup: [
         {
           name: '分析表报表',
-          id: '1'
+          id: 1
         },
         {
           name: '人机联合表',
-          id: '2'
+          id: 2
         },
         {
           name: 'Collection-工位时间表',
-          id: '3'
+          id: 3
         },
         {
           name: 'Collection-Compare表',
-          id: '4'
+          id: 4
         },
         {
           name: 'Collection-MOST Value表',
-          id: '5'
+          id: 5
         },
         {
           name: 'Collection-Revision History表',
-          id: '6'
+          id: 6
         },
         {
           name: 'Report-Total表',
-          id: '7'
+          id: 7
         },
         {
           name: 'Report-拖机Total表',
-          id: '8'
+          id: 8
         },
         {
           name: 'Report-时间联络表',
-          id: '9'
+          id: 9
         },
         {
           name: 'Process List表',
-          id: '10'
+          id: 10
         },
         {
           name: '标准时间表',
-          id: '11'
+          id: 11
         },
         {
           name: '标准工数表',
-          id: '12'
+          id: 12
         },
         {
           name: '履历表',
-          id: '13'
+          id: 13
         }
       ],
       arr: [],
@@ -450,7 +450,6 @@ export default {
       this.checkAll = checkedCount === this.reportGroup.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.reportGroup.length
       this.flag = this.createForm.id.length !== this.reportGroup.length
-      console.log(this.createForm.id)
     },
     // 生成报表
     createReport (row) {
@@ -462,7 +461,7 @@ export default {
       // console.log(this.createForm, 1111111111111111)
        createReports(Object.assign(
         {
-          wookId: this.id,
+          workId: this.id,
           reports: this.createForm.id
         }
       )).then(({page}) => {
