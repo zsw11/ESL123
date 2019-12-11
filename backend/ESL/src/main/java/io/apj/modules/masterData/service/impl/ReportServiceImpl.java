@@ -1,7 +1,11 @@
 package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.lowagie.text.pdf.PRAcroForm;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.Query;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
@@ -10,8 +14,13 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
+import io.apj.modules.masterData.dao.ReportDao;
+import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
+import io.apj.modules.masterData.service.ReportGroupService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.*;
 import io.apj.modules.report.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -20,25 +29,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.masterData.dao.ReportDao;
-import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.service.ReportService;
 
 @Service("reportService")
 public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> implements ReportService {
     @Autowired
-    private ReportDao reportDao;
-    @Autowired
     private ApproveService approveService;
+    @Autowired
+    private ReportDao reportDao;
     @Autowired
     private ReportGroupReportRelaService reportGroupReportRelaService;
     @Autowired
@@ -63,6 +63,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     private ChangeRecordService changeRecordService;
     @Autowired
     private StandardTimeService standardTimeService;
+    @Autowired
+    private ReportGroupService reportGroupService;
 
 
     @Override
@@ -90,8 +92,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     }
 
     @Override
-    public Integer selectByName(String name) {
-        return reportDao.selectByName(name);
+    public Integer selectByNameTest(String name) {
+        return reportDao.selectByNameTest(name);
     }
 
     @Override
@@ -168,6 +170,48 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
             }
         }
         return reportEntities;
+    }
+
+    /**
+     * 报表属于那些报表组，并过滤
+     * @param data
+     * @return
+     */
+    @Override
+    public List<ReportGroupEntity> selectReportGroup(Map<String, Object> data) {
+        String reportName = (String) data.get("name");
+        int id =0;
+        if(reportName!=null&&reportName!= ""){
+            EntityWrapper<ReportEntity> ew = new EntityWrapper<ReportEntity>();
+            ew.eq("name",reportName);
+            ReportEntity reportEntity = reportService.selectOne(ew);
+            id = reportService.selectByNameTest(reportName);
+            reportEntity.getId();
+        }
+        List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id", id));
+        int idG;
+        ReportGroupEntity reportGroupEntity;
+        List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
+        for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
+            idG = item.getReportGroupId();
+            int modelId = (int) data.get("modelId");
+            int phaseId = (int) data.get("phaseId");
+            String stlst = (String) data.get("stlst");
+            // 报表组过滤
+            List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG));
+            List<Integer> reportIds = new ArrayList<>();
+            for(ApproveEntity approveEntity : approveEntityList ){
+                reportIds = Collections.singletonList(approveEntity.getReportGroupId());
+            }
+            if(!reportIds.contains(idG)){
+                reportGroupEntity = reportGroupService.selectById(idG);
+                if(reportGroupEntity!=null){
+                    reportGroupEntities.add(reportGroupEntity);
+                }
+            }
+
+        }
+        return reportGroupEntities;
     }
 
 }

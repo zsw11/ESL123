@@ -36,8 +36,12 @@ public class ChangeRecordEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private String modelName;
+
 	@TableField(exist = false)
 	private String phaseName;
+
+	@TableField(exist = false)
+	private boolean exist;
 	/**
 	 * 标题
 	 */

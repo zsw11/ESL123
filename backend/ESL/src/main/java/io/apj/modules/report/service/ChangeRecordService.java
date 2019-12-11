@@ -18,6 +18,9 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    PageUtils selectListTest(Map<String, Object> params);
+
     void generateReportData(WorkBookEntity workBookEntity);
+
 }
 

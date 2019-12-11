@@ -96,7 +96,7 @@ public class ApproveController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("report:approve:update")
-	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve) {
+	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve){
 		approveService.updateById(approve);
 
 		return RD.success(approve);
