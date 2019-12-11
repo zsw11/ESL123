@@ -52,8 +52,8 @@
         <el-input v-model="dataForm.reviseReason"></el-input>
       </el-form-item>
 
-      <el-form-item :label="'ST/LST'" prop="STType">
-        <el-input v-model="dataForm.STType"></el-input>
+      <el-form-item :label="'ST/LST'" prop="stlst">
+        <el-input v-model="dataForm.stlst"></el-input>
       </el-form-item>
 
       <el-form-item :label="'版本号'" prop="RevNo">
@@ -199,7 +199,7 @@ export default {
         stage: null,
         publishType: null,
         reviseReason: null,
-        STType: null,
+        stlst: null,
         RevNo: null,
         allCountSub: null,
         allCountMain: null,
@@ -236,7 +236,7 @@ export default {
         stage: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         publishType: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
         reviseReason: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
-        STType: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        stlst: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         RevNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         allCountSub: [
           {
@@ -376,7 +376,7 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportTimeContact(this.dataForm.id)
-          .then(({ data }) => {
+          .then((data) => {
             Object.assign(
               this.dataForm,
               pick(data, [
@@ -389,7 +389,7 @@ export default {
                 'stage',
                 'publishType',
                 'reviseReason',
-                'STType',
+                'stlst',
                 'RevNo',
                 'allCountSub',
                 'allCountMain',
@@ -428,7 +428,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-reporttimecontact' })
+      this.$router.push({ name: 'report-timecontact' })
       this.$destroy()
     },
     // 表单提交
