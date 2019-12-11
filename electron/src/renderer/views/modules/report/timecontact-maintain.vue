@@ -46,8 +46,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'ST/LST'" prop="STType">
-            <el-input :disabled="true" v-model="dataForm.STType"></el-input>
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <el-input :disabled="true" v-model="dataForm.stlst"></el-input>
           </el-form-item>
         </el-col>
 
@@ -118,12 +118,14 @@ import {
   updateReportTimeContact
 } from '@/api/reportTimeContact'
 import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 export default {
   name: 'editReportTimeContact',
   data () {
     return {
       inited: false,
       listModel,
+      listPhase,
       dataForm: {
         id: 0,
         deptId: null,
@@ -136,7 +138,7 @@ export default {
         stage: null,
         publishType: null,
         reviseReason: null,
-        STType: null,
+        stlst: null,
         RevNo: null,
         allCountSub: null,
         allCountMain: null,
@@ -173,7 +175,7 @@ export default {
         stage: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         publishType: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
         reviseReason: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
-        STType: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
+        stlst: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         RevNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         allCountSub: [
           {
@@ -327,7 +329,7 @@ export default {
                 'stage',
                 'publishType',
                 'reviseReason',
-                'STType',
+                'stlst',
                 'RevNo',
                 'allCountSub',
                 'allCountMain',
