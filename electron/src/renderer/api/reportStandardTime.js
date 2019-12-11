@@ -18,12 +18,21 @@ export function createReportStandardTime (data) {
   })
 }
 
-// 获取reportStandardTime详情
-export function fetchReportStandardTime (params) {
+// // 获取reportStandardTime详情
+// export function fetchReportStandardTime (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/standardtime/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchReportStandardTime (id) {
   return request({
-    url: request.adornUrl('/api/v1/standardtime/detail'),
+    url: request.adornUrl(`/api/v1/standardtime/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

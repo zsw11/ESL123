@@ -22,7 +22,6 @@
             v-model="listQuery.phaseId"
             :allowMultiple="true"
             :searchApi="this.listPhase"
-            :valueColumn="'name'"
             :allowEmpty="true">
           </keyword-search>
         </el-form-item>
@@ -226,13 +225,20 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column
+      <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
+          width="200"
         >
           <template slot-scope="scope">
-            <el-button
+             <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
+<el-button
               size="mini"
               type="text"
             >下载</el-button>
@@ -507,7 +513,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           path: id
-            ? `/edit-collectionstationtime/${id}`
+            ? `/edit-stationtime/${id}`
             : '/add-collectionstationtime'
         })
       })
@@ -541,7 +547,10 @@ export default {
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
       let data = {
-        name: 'Collection-工位时间表'
+        name: 'Collection-工位时间表',
+        modelId,
+        phaseId,
+        stlst
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page

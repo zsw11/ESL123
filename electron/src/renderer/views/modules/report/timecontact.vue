@@ -22,7 +22,6 @@
               v-model="listQuery.phaseId"
               :allowMultiple="true"
               :searchApi="this.listPhase"
-              :valueColumn="'name'"
               :allowEmpty="true">
             </keyword-search>
           </el-form-item>
@@ -145,6 +144,7 @@
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
+          width="200"
         >
           <template slot-scope="scope">
              <el-button
@@ -615,7 +615,10 @@ export default {
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
       let data = {
-        name: 'Report-时间联络表'
+        name: 'Report-时间联络表',
+        modelId,
+        phaseId,
+        stlst
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page

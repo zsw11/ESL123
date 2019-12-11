@@ -23,7 +23,6 @@
             v-model="listQuery.phaseId"
             :allowMultiple="true"
             :searchApi="this.listPhase"
-            :valueColumn="'name'"
             :allowEmpty="true">
           </keyword-search>
         </el-form-item>
@@ -101,12 +100,19 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+      <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
+          width="200"
         >
           <template slot-scope="scope">
+             <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
             <el-button
               size="mini"
               type="text"
@@ -358,8 +364,8 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           path: id
-            ? `/edit-reportstandardtime/${id}`
-            : '/add-reportstandardtime'
+            ? `/edit-standardtime/${id}`
+            : '/add-standardtime'
         })
       })
     },
@@ -392,7 +398,10 @@ export default {
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
       let data = {
-        name: '标准时间表'
+        name: '标准时间表',
+        modelId,
+        phaseId,
+        stlst
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page

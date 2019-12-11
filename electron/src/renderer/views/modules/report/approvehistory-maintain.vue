@@ -179,7 +179,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-reportapprovehistory' })
+      this.$router.push({ name: 'report-approvehistory' })
       this.$destroy()
     },
     // 表单提交

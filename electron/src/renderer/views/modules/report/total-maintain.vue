@@ -255,7 +255,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-reporttotal' })
+      this.$router.push({ name: 'report-total' })
       this.$destroy()
     },
     // 表单提交

@@ -16,7 +16,6 @@
             :allowMultiple="true"
             :searchApi="this.listModel"
             :allowEmpty="true" clearable>
-
           </keyword-search>
         </el-form-item>
 
@@ -36,7 +35,6 @@
             v-model="listQuery.phaseId"
             :allowMultiple="true"
             :searchApi="this.listPhase"
-            :valueColumn="'name'"
             :allowEmpty="true">
           </keyword-search>
         </el-form-item>
@@ -72,8 +70,6 @@
         style="width: 100%;"
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
-
-
 
         <el-table-column align="center" prop="factory" label="工场">
           <template slot-scope="scope">
@@ -112,13 +108,20 @@
         </el-table-column>
 
 
-        <el-table-column
+      <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
+          width="200"
         >
           <template slot-scope="scope">
-            <el-button
+             <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
+<el-button
               size="mini"
               type="text"
               @click="edit(scope.row.id)"
@@ -131,7 +134,13 @@
               size="mini"
               type="text"
               @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+              v-if="scope.row.exist"
             >提交审批</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              v-if="!scope.row.exist"
+            >已提交审批</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -383,7 +392,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           path: id
-            ? `/edit-reportchangerecord/${id}`
+            ? `/edit-changerecord/${id}`
             : '/add-reportchangerecord'
         })
       })
