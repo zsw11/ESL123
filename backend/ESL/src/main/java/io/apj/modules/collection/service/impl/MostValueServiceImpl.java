@@ -74,9 +74,9 @@ private MostValueItemService mostValueItemService;
             entity.setPhaseId(phaseId);
             entity.setStlst(stlst);
             entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("");
-            entity.setSheetName("");
-            entity.setFirstColumnName("");
+            entity.setTitle("Most Value");
+            entity.setSheetName("Most Value");
+            entity.setFirstColumnName("Most Value");
             insert(entity);
         }
         return entity;

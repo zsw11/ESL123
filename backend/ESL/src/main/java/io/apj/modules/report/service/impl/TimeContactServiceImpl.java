@@ -3,7 +3,9 @@ package io.apj.modules.report.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.report.entity.StandardWorkEntity;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -17,7 +19,8 @@ import io.apj.modules.report.service.TimeContactService;
 
 
 @Service("timeContactService")
-public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeContactEntity> implements TimeContactService {
+public class TimeContactServiceImpl
+        extends ServiceImpl<TimeContactDao, TimeContactEntity> implements TimeContactService {
     @Autowired
     private ModelService modelService;
     @Autowired
@@ -42,6 +45,36 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void generateReportData(WorkBookEntity workBookEntity) {
+        TimeContactEntity entity = generateStandardTime(workBookEntity);
+    }
+
+    private TimeContactEntity generateStandardTime(WorkBookEntity workBook) {
+        Integer phaseId = workBook.getPhaseId();
+        Integer modelId = workBook.getModelId();
+        String stlst = workBook.getStlst();
+        TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+        if (entity == null) {
+            entity = new TimeContactEntity();
+            entity.setModelId(modelId);
+            entity.setPhaseId(phaseId);
+            entity.setStlst(stlst);
+            entity.setDeptId(workBook.getDeptId());
+            entity.setTitle("时间联络表");
+            entity.setSheetName("时间联络表");
+            insert(entity);
+        }
+        return entity;
+    }
+
+    private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+        EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+        TimeContactEntity entity = selectOne(entityWrapper);
+        return entity;
     }
 
 }

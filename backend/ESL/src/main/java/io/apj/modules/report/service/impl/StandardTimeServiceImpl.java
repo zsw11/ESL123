@@ -72,9 +72,9 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
             entity.setPhaseId(phaseId);
             entity.setStlst(stlst);
             entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("");
-            entity.setSheetName("");
-            entity.setModelType("");
+            entity.setTitle("标准时间表");
+            entity.setSheetName("标准时间表");
+            entity.setModelType(modelService.selectById(entity.getModelId()).getCode());
             entity.setUnit("1/1000 min");
             insert(entity);
         }
