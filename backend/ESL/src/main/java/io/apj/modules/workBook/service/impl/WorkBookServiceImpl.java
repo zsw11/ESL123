@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.collection.service.MostValueService;
+import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.service.StandardTimeService;
+import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private WorkBookService workBookService;
 	@Autowired
 	private WorkOperationsService workOperationService;
+
+	@Autowired
+	private StandardWorkService standardWorkService;
+
+	@Autowired
+	private StationTimeService stationTimeService;
 	@Autowired
 	private StandardTimeService standardTimeService;
 	@Autowired
@@ -141,8 +149,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public void createReports(Map<String, Object> params) {
 		ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
-		Integer wookId = (Integer) params.get("wookId");
-		WorkBookEntity workBook = selectById(wookId);
+		Integer workId = (Integer) params.get("workId");
+		WorkBookEntity workBookEntity = selectById(workId);
 		reportList.forEach(e->{
 			switch (e){
 				case 1 :
@@ -150,11 +158,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 2 :
 					break;
 				case 3 :
+					//工位时间报表
+					stationTimeService.generateReportData(workBookEntity);
 					break;
 				case 4 :
 					break;
 				case 5 :
-					mostValueService.generateReportData(workBook);
+					mostValueService.generateReportData(workBookEntity);
 					break;
 				case 6 :
 					break;
@@ -167,9 +177,11 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 10 :
 					break;
 				case 11 :
-					standardTimeService.generateReportData(workBook);
+					standardTimeService.generateReportData(workBookEntity);
 					break;
 				case 12 :
+					//标准工数表
+					standardWorkService.generateReportData(workBookEntity);
 					break;
 			}
 

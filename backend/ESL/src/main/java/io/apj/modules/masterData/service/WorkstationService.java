@@ -16,5 +16,7 @@ import java.util.Map;
 public interface WorkstationService extends IService<WorkstationEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    Boolean wookStationIdIsSub(Integer wookStationId);
 }
 
