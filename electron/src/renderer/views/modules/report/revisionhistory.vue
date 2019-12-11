@@ -652,9 +652,9 @@ export default {
       })
     },
     // 提交审批
-    approve (model, phase, stlst) {
-      this.approveForm.modelId = model
-      this.approveForm.phaseId = phase
+    approve (modelId, phaseId, stlst) {
+      this.approveForm.modelId = modelId
+      this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
       let data = {
         name: 'Collection-Revision History表'

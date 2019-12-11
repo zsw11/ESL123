@@ -3,6 +3,7 @@ package io.apj.modules.report.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import java.util.Map;
 
@@ -18,5 +19,8 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils selectListTest(Map<String, Object> params);
+
+    void generateReportData(WorkBookEntity workBookEntity);
+
 }
 
