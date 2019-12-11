@@ -32,15 +32,14 @@
           </el-form-item>
 
           <el-form-item :label="'生产阶段'" prop="phaseId">
-            <keyword-search
-              style="width: 100%"
-              v-model="listQuery.phaseId"
-              :allowMultiple="true"
-              :searchApi="this.listPhase"
-              :valueColumn="'name'"
-              :allowEmpty="true">
-            </keyword-search>
-          </el-form-item>
+          <keyword-search
+            style="width: 100%"
+            v-model="listQuery.phaseId"
+            :allowMultiple="true"
+            :searchApi="this.listPhase"
+            :allowEmpty="true">
+          </keyword-search>
+        </el-form-item>
 
           <el-form-item :label="'ST/LST'" prop="stlst">
             <dict-select
@@ -301,12 +300,18 @@
 <!--        </el-table-column>-->
 
         <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
-          width="120"
+          width="200"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
             <el-button
               size="mini"
               type="text"
@@ -623,7 +628,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           path: id
-            ? `/edit-collectionrevisionhistory/${id}`
+            ? `/edit-revisionhistory/${id}`
             : '/add-collectionrevisionhistory'
         })
       })
@@ -657,7 +662,10 @@ export default {
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
       let data = {
-        name: 'Collection-Revision History表'
+        name: 'Collection-Revision History表',
+        modelId,
+        phaseId,
+        stlst
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page

@@ -76,13 +76,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+      <el-table-column
+          fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
+          width="200"
         >
           <template slot-scope="scope">
-            <el-button
+             <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
+<el-button
               size="mini"
               type="text"
             >下载</el-button>
@@ -289,7 +296,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           path: id
-            ? `/edit-reportapprovehistory/${id}`
+            ? `/edit-approvehistory/${id}`
             : '/add-reportapprovehistory'
         })
       })

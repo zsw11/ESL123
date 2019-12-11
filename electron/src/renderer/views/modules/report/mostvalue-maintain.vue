@@ -181,7 +181,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-collectionmostvalue' })
+      this.$router.push({ name: 'report-mostvalue' })
       this.$destroy()
     },
     // 表单提交

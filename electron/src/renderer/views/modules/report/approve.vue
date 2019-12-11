@@ -337,7 +337,7 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({
-          path: id ? `/edit-reportapprove/${id}` : '/add-reportapprove'
+          path: id ? `/edit-approve/${id}` : '/add-reportapprove'
         })
       })
     },

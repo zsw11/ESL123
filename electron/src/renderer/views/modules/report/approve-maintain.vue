@@ -194,7 +194,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      // this.$router.push({ name: 'report-reportapprove' })
+      // this.$router.push({ name: 'report-approve' })
       this.$router.back()
       this.$destroy()
     },

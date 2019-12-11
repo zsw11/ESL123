@@ -193,7 +193,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-reportchangerecord' })
+      this.$router.push({ name: 'report-changerecord' })
       this.$destroy()
     },
     // 表单提交
