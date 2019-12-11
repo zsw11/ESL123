@@ -1,6 +1,9 @@
 package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.masterData.entity.WorkstationTypeEntity;
+import io.apj.modules.masterData.service.WorkstationTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -17,6 +20,8 @@ import io.apj.modules.masterData.service.WorkstationService;
 public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, WorkstationEntity>
 		implements WorkstationService {
 
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
@@ -31,6 +36,23 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);
+	}
+
+	/**
+	 * 判断工位是否SUB
+	 * @param wookStationId
+	 * @return
+	 */
+	public Boolean wookStationIdIsSub(Integer wookStationId){
+		WorkstationEntity workstationEntity = selectById(wookStationId);
+		if(workstationEntity.getWorkstationTypeId()>0){
+			WorkstationTypeEntity workstationType = workstationTypeService.selectById(workstationEntity.getWorkstationTypeId());
+			Boolean bool = workstationType ==null?false:workstationType.getName()== null ? false: workstationType.getName().toLowerCase().contains("sub");
+			return bool;
+		}else {
+			return false;
+		}
+
 	}
 
 }
