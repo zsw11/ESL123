@@ -5,8 +5,12 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -50,6 +54,29 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void generateReportData(WorkBookEntity work) {
+        EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                .eq("phase_id",work.getPhaseId());
+        List<RevisionHistoryEntity> list = selectList(entityWrapper);
+        RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
+        if(list.size()>0){
+            revisionHistoryEntity = list.get(0);
+        }else{
+            //TODO 有未设置
+            revisionHistoryEntity.setModelId(work.getModelId());
+            revisionHistoryEntity.setPhaseId(work.getPhaseId());
+            revisionHistoryEntity.setStlst(work.getStlst());
+            revisionHistoryEntity.setDeptId(work.getDeptId());
+            revisionHistoryEntity.setDestinations(work.getDestinations());
+            revisionHistoryEntity.setSheetName(work.getWorkstationName()+" "+ work.getWorkName());
+            revisionHistoryEntity.setSheetName("sheetName");
+            revisionHistoryEntity.setDestinations(work.getDestinations());
+            insert(revisionHistoryEntity);
+        }
     }
 
 }

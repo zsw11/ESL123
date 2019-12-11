@@ -1,7 +1,5 @@
 package io.apj.modules.collection.service.impl;
 
-import io.apj.modules.collection.entity.MostValueEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -23,13 +21,6 @@ public class MostValueItemServiceImpl extends ServiceImpl<MostValueItemDao, Most
         );
 
         return new PageUtils(page);
-    }
-
-    @Override
-    public void generateMostValue(WorkBookEntity workBook, Integer recordId) {
-        MostValueItemEntity entity = baseMapper.generateDataByWorkBook(workBook.getId());
-        entity.setCollectionMostValueId(recordId);
-        insert(entity);
     }
 
 }
