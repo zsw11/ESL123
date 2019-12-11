@@ -18,12 +18,21 @@ export function createCollectionMostValue (data) {
   })
 }
 
-// 获取Collection - MOST Value 表详情
-export function fetchCollectionMostValue (params) {
+// // 获取Collection - MOST Value 表详情
+// export function fetchCollectionMostValue (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/mostvalue/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchCollectionMostValue (id) {
   return request({
-    url: request.adornUrl('/api/v1/mostvalue/detail'),
+    url: request.adornUrl(`/api/v1/mostvalue/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

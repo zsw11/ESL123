@@ -18,12 +18,21 @@ export function createCollectionStationTime (data) {
   })
 }
 
-// 获取工位时间表详情
-export function fetchCollectionStationTime (params) {
+// // 获取工位时间表详情
+// export function fetchCollectionStationTime (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/stationtime/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchCollectionStationTime (id) {
   return request({
-    url: request.adornUrl('/api/v1/stationtime/detail'),
+    url: request.adornUrl(`/api/v1/stationtime/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

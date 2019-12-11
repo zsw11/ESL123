@@ -41,7 +41,6 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     private ChangeRecordService changeRecordService;
     @Autowired
     private ReportServiceImpl reportServiceimpl;
-
     @Autowired
     private ChangeRecordItemService changeRecordItemService;
 
@@ -86,10 +85,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
             String name = "履历表";
             data.put("name",name);
             List<ReportGroupEntity> reportGroup  =  reportServiceimpl.selectReportGroup(data);
-            if(reportGroup!=null){
+            if(!reportGroup.isEmpty()){
                 //还可以选报表组
-//                ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
                 entity.setExist(true);
+            }else{
+                entity.setExist(false);
             }
         }
         return page;

@@ -227,7 +227,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-collectioncompare' })
+      this.$router.push({ name: 'report-compare' })
       this.$destroy()
     },
     // 表单提交

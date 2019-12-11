@@ -18,7 +18,16 @@ export function createReportTimeContact (data) {
   })
 }
 
-// 获取reportTimeContact详情
+// // 获取reportTimeContact详情
+// export function fetchReportTimeContact (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/timecontact/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
 export function fetchReportTimeContact (id) {
   return request({
     url: request.adornUrl(`/api/v1/timecontact/detail/${id}`),

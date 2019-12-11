@@ -2,14 +2,19 @@ package io.apj.modules.report.controller;
 
 import java.util.*;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.entity.MostValueEntity;
+import io.apj.modules.collection.entity.RevisionHistoryEntity;
+import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.masterData.dao.ModelDao;
 import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportGroupService;
-import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.service.*;
+import io.apj.modules.report.entity.*;
+import io.apj.modules.report.service.ApproveHistoryService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.apj.modules.report.entity.ApproveEntity;
 import io.apj.modules.report.service.ApproveService;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
@@ -44,6 +48,10 @@ public class ApproveController {
 	private ReportGroupService reportGroupService;
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private ApproveHistoryService approveHistoryService;
+	@Autowired
+	private ReportGroupReportRelaService reportGroupReportRelaService;
 
 
 	/**
@@ -86,6 +94,74 @@ public class ApproveController {
 	@RequestMapping("/create")
 	@RequiresPermissions("report:approve:create")
 	public ResponseEntity<Object> save(@RequestBody ApproveEntity approve) {
+//		List<ReportEntity> reportEntityList = reportGroupReportRelaService.selectReportNameByReportGroupId(reportGroupId);
+//		for(ReportEntity item : reportEntityList){
+//			ReportEntity reportEntity= reportService.selectById(item.getId());
+//			String reportName = reportEntity.getEname();
+//			//通过报表的name查所有报表符合3个字段的表
+//			switch (reportName){
+//				case "report_total":
+//					List<TotalEntity> total = (List<TotalEntity>) totalService.selectList(new EntityWrapper<TotalEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!total.isEmpty()){
+//						//提交
+//						approveService.insert(approve);
+//					}
+//					break;
+//				case "work_book":
+//					List<WorkBookEntity> workBookEntity = (List<WorkBookEntity>) workBookService.selectList(new EntityWrapper<WorkBookEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!workBookEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "collection_station_time":
+//					List<StationTimeEntity> stationTimeEntity = (List<StationTimeEntity>) stationTimeService.selectList(new EntityWrapper<StationTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!stationTimeEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "collection_compare":
+//					List<CompareEntity> compareEntity = (List<CompareEntity>) compareService.selectList(new EntityWrapper<CompareEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					reportEntities.add(reportEntity);
+//					break;
+//				case "collection_most_value":
+//					List<MostValueEntity> mostValueEntity = (List<MostValueEntity>) mostValueService.selectList(new EntityWrapper<MostValueEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!mostValueEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "collection_revision_history":
+//					List<RevisionHistoryEntity> revisionHistoryEntity = (List<RevisionHistoryEntity>) revisionHistoryService.selectList(new EntityWrapper<RevisionHistoryEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!revisionHistoryEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "report_time_contact":
+//					List<TimeContactEntity> timeContactEntity = (List<TimeContactEntity>) timeContactService.selectList(new EntityWrapper<TimeContactEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!timeContactEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "report_standard_time":
+//					List<StandardTimeEntity> standardTimeEntity = (List<StandardTimeEntity>) standardTimeService.selectList(new EntityWrapper<StandardTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!standardTimeEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "report_standard_work":
+//					List<StandardWorkEntity> standardWorkEntity = (List<StandardWorkEntity>) standardWorkService.selectList(new EntityWrapper<StandardWorkEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!standardWorkEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//				case "report_change_record":
+//					List<ChangeRecordEntity> changeRecordEntity = (List<ChangeRecordEntity>) changeRecordService.selectList(new EntityWrapper<ChangeRecordEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+//					if(!changeRecordEntity.isEmpty()){
+//						reportEntities.add(reportEntity);
+//					}
+//					break;
+//			}
+//		}
+
 		approveService.insert(approve);
 
 		return RD.ok(approve);
@@ -98,6 +174,7 @@ public class ApproveController {
 	@RequiresPermissions("report:approve:update")
 	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve){
 		approveService.updateById(approve);
+		approveHistoryService.insertApproveHisttory(approve);
 
 		return RD.success(approve);
 	}

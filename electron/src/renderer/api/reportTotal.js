@@ -18,12 +18,20 @@ export function createReportTotal (data) {
   })
 }
 
-// 获取reportTotal详情
-export function fetchReportTotal (params) {
+// // 获取reportTotal详情
+// export function fetchReportTotal (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/total/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+export function fetchReportTotal (id) {
   return request({
-    url: request.adornUrl('/api/v1/total/detail'),
+    url: request.adornUrl(`/api/v1/total/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
