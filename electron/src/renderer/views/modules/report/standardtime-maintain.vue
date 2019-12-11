@@ -3,9 +3,6 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">ReportStandardTime</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取 消</el-button>
-      </div>
     </div>
     <el-form
       :rules="dataRules"
@@ -16,61 +13,51 @@
       label-width="100px"
       style="width: 95%"
     >
-      <el-form-item :label="'组织机构ID'" prop="deptId">
-        <el-input-number v-model="dataForm.deptId"></el-input-number>
-      </el-form-item>
+<!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
+<!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
+<!--      </el-form-item>-->
 
-      <el-form-item :label="'标题'" prop="title">
-        <el-input v-model="dataForm.title"></el-input>
-      </el-form-item>
+<!--      <el-form-item :label="'标题'" prop="title">-->
+<!--        <el-input v-model="dataForm.title"></el-input>-->
+<!--      </el-form-item>-->
 
-      <el-form-item :label="'Sheet名称'" prop="sheetName">
-        <el-input v-model="dataForm.sheetName"></el-input>
+<!--      <el-form-item :label="'Sheet名称'" prop="sheetName">-->
+<!--        <el-input v-model="dataForm.sheetName"></el-input>-->
+<!--      </el-form-item>-->
+    <el-row>
+      <el-col :span="10">
+      <el-form-item :label="'机种'" prop="modelId">
+        <el-input :disabled="true" v-model="dataForm.modelId"></el-input>
       </el-form-item>
+      </el-col>
 
-      <el-form-item :label="'机种ID'" prop="modelId">
-        <el-input-number v-model="dataForm.modelId"></el-input-number>
+      <el-col :span="10" :offset="2">
+      <el-form-item :label="'生产阶段'" prop="phaseId">
+        <el-input :disabled="true" v-model="dataForm.phaseId"></el-input>
       </el-form-item>
+      </el-col>
+    </el-row>
 
-      <el-form-item :label="'型号'" prop="model_type">
-        <el-input v-model="dataForm.model_type"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'stlst'" prop="stlst">
+            <el-input :disabled="true" v-model="dataForm.stlst"></el-input>
+          </el-form-item>
+        </el-col>
+      <el-col :span="10" :offset="2">
+        <el-form-item :label="'型号'" prop="model_type">
+          <el-input v-model="dataForm.model_type"></el-input>
+        </el-form-item>
+      </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'单位'" prop="unit">
+            <el-input v-model="dataForm.unit"></el-input>
+          </el-form-item>
+      </el-col>
+      </el-row>
 
-      <el-form-item :label="'单位'" prop="unit">
-        <el-input v-model="dataForm.unit"></el-input>
-      </el-form-item>
-
-      <el-form-item :label="'创建者ID'" prop="createBy">
-        <el-input-number v-model="dataForm.createBy"></el-input-number>
-      </el-form-item>
-
-      <el-form-item :label="'创建时间'" prop="createAt">
-        <el-date-picker
-          v-model="dataForm.createAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-
-      <el-form-item :label="'更新者ID'" prop="updateBy">
-        <el-input-number v-model="dataForm.updateBy"></el-input-number>
-      </el-form-item>
-
-      <el-form-item :label="'更新时间'" prop="updateAt">
-        <el-date-picker
-          v-model="dataForm.updateAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-
-      <el-form-item :label="'删除时间'" prop="deleteAt">
-        <el-date-picker
-          v-model="dataForm.deleteAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
     </el-form>
 
     <span class="dialog-footer">
@@ -98,6 +85,8 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        phaseId: null,
+        stlst: null,
         model_type: null,
         unit: null,
         createBy: null,
@@ -158,12 +147,14 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportStandardTime(this.dataForm.id)
-          .then(({ data }) => {
+          .then(( data ) => {
             Object.assign(
               this.dataForm,
               pick(data, [
                 'deptId',
                 'title',
+                'phaseId',
+                'stlst',
                 'sheetName',
                 'modelId',
                 'model_type',
