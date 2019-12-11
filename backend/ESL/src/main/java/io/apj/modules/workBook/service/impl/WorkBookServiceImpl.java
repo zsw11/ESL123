@@ -3,10 +3,12 @@ package io.apj.modules.workBook.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private StationTimeService stationTimeService;
+
+	@Autowired
+	private ChangeRecordService changeRecordService;
+
+	@Autowired
+	private RevisionHistoryService revisionHistoryService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -160,6 +168,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 5 :
 					break;
 				case 6 :
+					//Collection-Revision History表
+					revisionHistoryService.generateReportData(workBookEntity);
 					break;
 				case 7 :
 					break;
@@ -174,6 +184,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 12 :
 					//标准工数表
 					standardWorkService.generateReportData(workBookEntity);
+					break;
+				case 13 :
+					//履历表
+					changeRecordService.generateReportData(workBookEntity);
 					break;
 			}
 
