@@ -30,7 +30,7 @@ public class StandardTimeItemServiceImpl extends ServiceImpl<StandardTimeItemDao
     public void generateStandardTimeItem(WorkBookEntity workBook, Integer standardTimeId) {
         StandardTimeItemEntity entity = baseMapper.generateDataByWorkBook(workBook.getId());
         entity.setReportStandardTimeId(standardTimeId);
-        // TODO time_total/time_sample1/time_sample_size可以在Excel中计算,如需计算填充表数据需添加方法计算
+        entity.setTimeSample1(entity.getTimeTotal());
         insert(entity);
     }
 
