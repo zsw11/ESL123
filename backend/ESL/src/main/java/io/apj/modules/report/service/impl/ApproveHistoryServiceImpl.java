@@ -16,12 +16,15 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.ApproveHistoryDao;
 import io.apj.modules.report.entity.ApproveHistoryEntity;
 import io.apj.modules.report.service.ApproveHistoryService;
+import io.apj.modules.report.service.ApproveHistoryService;
 
 
 @Service("approveHistoryService")
 public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, ApproveHistoryEntity> implements ApproveHistoryService {
     @Autowired
     private ReportGroupService reportGroupService;
+    @Autowired
+    private ApproveHistoryService approveHistoryService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveHistoryEntity> entityWrapper = new EntityWrapper<>();
@@ -40,6 +43,19 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public Integer insertApproveHisttory(ApproveEntity approve) {
+        ApproveHistoryEntity approveHistoryEntity = new ApproveHistoryEntity();
+        approveHistoryEntity.setDeptId(approve.getDeptId());
+        approveHistoryEntity.setReportApproveId(approve.getId());
+        approveHistoryEntity.setResult(approve.getStatus());
+        approveHistoryEntity.setReportGroupId(approve.getReportGroupId());
+        approveHistoryEntity.setNextApproverId(approve.getNextApproverId());
+        approveHistoryService.insert(approveHistoryEntity);
+
+        return null;
     }
 
 }
