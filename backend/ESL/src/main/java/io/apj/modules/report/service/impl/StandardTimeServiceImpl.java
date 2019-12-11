@@ -3,10 +3,16 @@ package io.apj.modules.report.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.report.dao.StandardTimeItemDao;
 import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.report.entity.StandardTimeItemEntity;
+import io.apj.modules.report.service.StandardTimeItemService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.plugins.Page;
@@ -24,6 +30,8 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     private ModelService modelService;
     @Autowired
     private PhaseService phaseService;
+    @Autowired
+    private StandardTimeItemService standardTimeItemService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -46,5 +54,39 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 
         return new PageUtils(page);
     }
+
+    @Override
+    public void generateReportData(WorkBookEntity workBook) {
+        StandardTimeEntity entity = generateStandardTime(workBook);
+        standardTimeItemService.generateStandardTimeItem(workBook, entity.getId());
+    }
+
+    private StandardTimeEntity generateStandardTime(WorkBookEntity workBook) {
+        Integer phaseId = workBook.getPhaseId();
+        Integer modelId = workBook.getModelId();
+        String stlst = workBook.getStlst();
+        StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+        if (entity == null) {
+            entity = new StandardTimeEntity();
+            entity.setModelId(modelId);
+            entity.setPhaseId(phaseId);
+            entity.setStlst(stlst);
+            entity.setDeptId(workBook.getDeptId());
+            entity.setTitle("");
+            entity.setSheetName("");
+            entity.setModelType("");
+            entity.setUnit("1/1000 min");
+            insert(entity);
+        }
+        return entity;
+    }
+
+    private StandardTimeEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+        EntityWrapper<StandardTimeEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+        StandardTimeEntity entity = selectOne(entityWrapper);
+        return entity;
+    }
+
 
 }
