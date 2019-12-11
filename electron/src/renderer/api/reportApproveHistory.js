@@ -18,12 +18,21 @@ export function createReportApproveHistory (data) {
   })
 }
 
-// 获取reportApproveHistory详情
-export function fetchReportApproveHistory (params) {
+// // 获取reportApproveHistory详情
+// export function fetchReportApproveHistory (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/approvehistory/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchReportApproveHistory (id) {
   return request({
-    url: request.adornUrl('/api/v1/approvehistory/detail'),
+    url: request.adornUrl(`/api/v1/approvehistory/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

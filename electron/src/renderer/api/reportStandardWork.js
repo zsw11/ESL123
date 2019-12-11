@@ -18,12 +18,21 @@ export function createReportStandardWork (data) {
   })
 }
 
-// 获取reportStandardWork详情
-export function fetchReportStandardWork (params) {
+// // 获取reportStandardWork详情
+// export function fetchReportStandardWork (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/standardwork/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchReportStandardWork (id) {
   return request({
-    url: request.adornUrl('/api/v1/standardwork/detail'),
+    url: request.adornUrl(`/api/v1/standardwork/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

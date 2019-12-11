@@ -18,12 +18,21 @@ export function createCollectionRevisionHistory (data) {
   })
 }
 
-// 获取Collection - Revision History 表详情
-export function fetchCollectionRevisionHistory (params) {
+// // 获取Collection - Revision History 表详情
+// export function fetchCollectionRevisionHistory (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/revisionhistory/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchCollectionRevisionHistory (id) {
   return request({
-    url: request.adornUrl('/api/v1/revisionhistory/detail'),
+    url: request.adornUrl(`/api/v1/revisionhistory/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

@@ -18,12 +18,21 @@ export function createCollectionCompare (data) {
   })
 }
 
-// 获取collectionCompare详情
-export function fetchCollectionCompare (params) {
+// // 获取collectionCompare详情
+// export function fetchCollectionCompare (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/compare/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchCollectionCompare (id) {
   return request({
-    url: request.adornUrl('/api/v1/compare/detail'),
+    url: request.adornUrl(`/api/v1/compare/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 

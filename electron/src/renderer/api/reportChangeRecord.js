@@ -18,12 +18,21 @@ export function createReportChangeRecord (data) {
   })
 }
 
-// 获取reportChangeRecord详情
-export function fetchReportChangeRecord (params) {
+// // 获取reportChangeRecord详情
+// export function fetchReportChangeRecord (params) {
+//   return request({
+//     url: request.adornUrl('/api/v1/changerecord/detail'),
+//     method: 'get',
+//     params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+//   })
+// }
+
+// 获取详情
+export function fetchReportChangeRecord (id) {
   return request({
-    url: request.adornUrl('/api/v1/changerecord/detail'),
+    url: request.adornUrl(`/api/v1/changerecord/detail/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
