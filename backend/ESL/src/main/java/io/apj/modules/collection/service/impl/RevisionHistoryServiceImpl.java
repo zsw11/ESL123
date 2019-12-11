@@ -3,6 +3,7 @@ package io.apj.modules.collection.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.service.RevisionHistoryItemService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ChangeRecordEntity;
@@ -27,6 +28,10 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     private PhaseService phaseService;
     @Autowired
     private ModelService modelService;
+
+    @Autowired
+    private RevisionHistoryItemService revisionHistoryItemService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
@@ -77,6 +82,14 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
             revisionHistoryEntity.setDestinations(work.getDestinations());
             insert(revisionHistoryEntity);
         }
+    }
+
+    @Override
+    public void updateEntity(RevisionHistoryEntity revisionHistory) {
+        revisionHistoryItemService.insertBatch(revisionHistory.getItems());
+        if(revisionHistory.getModelId()==0)revisionHistory.setModelId(null);
+        revisionHistory.setSheetName("sheet");
+        updateById(revisionHistory);
     }
 
 }

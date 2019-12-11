@@ -19,5 +19,7 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
     PageUtils queryPage(Map<String, Object> params);
 
     void generateReportData(WorkBookEntity workBookEntity);
+
+    void updateEntity(RevisionHistoryEntity revisionHistory);
 }
 

@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
  * 履历表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-26 13:23:57
@@ -82,5 +84,8 @@ public class ChangeRecordEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	@TableField(exist = false)
+	private List<ChangeRecordItemEntity> items;
 
 }

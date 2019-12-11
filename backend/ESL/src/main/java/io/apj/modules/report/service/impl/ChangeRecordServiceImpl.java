@@ -74,4 +74,17 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         }
     }
 
+    @Override
+    public void updateEntyty(ChangeRecordEntity changeRecord) {
+
+        if(changeRecord.getItems().size()>0){
+            changeRecordItemService.insertBatch(changeRecord.getItems());
+        }
+        if(changeRecord.getModelId()==0)changeRecord.setModelId(null);
+        //TODO 随意设置一个值 后期要删除
+        changeRecord.setTitle("oo");
+        updateById(changeRecord);
+
+    }
+
 }

@@ -4,12 +4,16 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.collection.service.RevisionHistoryService;
+import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.service.ChangeRecordService;
+
+import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.report.service.StandardWorkService;
+import io.apj.modules.report.service.TotalService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,12 +58,19 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private StationTimeService stationTimeService;
+	@Autowired
+	private StandardTimeService standardTimeService;
+	@Autowired
+	private MostValueService mostValueService;
 
 	@Autowired
 	private ChangeRecordService changeRecordService;
 
 	@Autowired
 	private RevisionHistoryService revisionHistoryService;
+
+	@Autowired
+	private TotalService totalService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -166,12 +177,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 4 :
 					break;
 				case 5 :
+					mostValueService.generateReportData(workBookEntity);
 					break;
 				case 6 :
 					//Collection-Revision History表
 					revisionHistoryService.generateReportData(workBookEntity);
 					break;
 				case 7 :
+					totalService.generateReportData(workBookEntity);
 					break;
 				case 8 :
 					break;
@@ -180,6 +193,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 10 :
 					break;
 				case 11 :
+					standardTimeService.generateReportData(workBookEntity);
 					break;
 				case 12 :
 					//标准工数表
