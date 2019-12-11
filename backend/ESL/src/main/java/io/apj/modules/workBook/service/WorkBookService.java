@@ -21,5 +21,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
     boolean updateOperation(Map<String, Object> params);
 
     void createReports(Map<String, Object> params);
+
+    WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
 }
 

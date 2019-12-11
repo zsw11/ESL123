@@ -1,11 +1,15 @@
 package io.apj.modules.report.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import io.apj.modules.report.service.ChangeRecordItemService;
+import io.apj.modules.masterData.entity.ReportEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,7 @@ import io.apj.modules.report.entity.ChangeRecordEntity;
 import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
+
 
 /**
  * 履历表
@@ -42,7 +47,7 @@ public class ChangeRecordController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:changerecord:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = changeRecordService.queryPage(params);
+        PageUtils page = changeRecordService.selectListTest(params);
 
 		return RD.success(page);
 	}
@@ -76,7 +81,7 @@ public class ChangeRecordController {
 	@RequestMapping("/update")
 	@RequiresPermissions("report:changerecord:update")
 	public ResponseEntity<Object> update(@RequestBody ChangeRecordEntity changeRecord) {
-		changeRecordService.updateEntyty(changeRecord);
+		changeRecordService.updateEntity(changeRecord);
 		return RD.success(changeRecord);
 	}
 

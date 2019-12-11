@@ -147,6 +147,11 @@
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
+             <el-button
+              size="mini"
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button>
             <el-button
               size="mini"
               type="text"
@@ -577,7 +582,7 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({
-          path: id ? `/edit-reporttimecontact/${id}` : '/add-reporttimecontact'
+          path: id ? `/edit-timecontact/${id}` : '/add-timecontact'
         })
       })
     },

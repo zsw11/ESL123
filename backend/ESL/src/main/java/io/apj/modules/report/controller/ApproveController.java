@@ -10,6 +10,7 @@ import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.report.service.ApproveHistoryService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,8 @@ public class ApproveController {
 	private ReportGroupService reportGroupService;
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private ApproveHistoryService approveHistoryService;
 
 
 	/**
@@ -96,8 +99,9 @@ public class ApproveController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("report:approve:update")
-	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve) {
+	public ResponseEntity<Object> update(@RequestBody ApproveEntity approve){
 		approveService.updateById(approve);
+		approveHistoryService.insertApproveHisttory(approve);
 
 		return RD.success(approve);
 	}

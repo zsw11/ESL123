@@ -20,5 +20,20 @@
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
 
-
+    <select id="generateDataByWorkBook" resultMap="compareItemMap">
+        select case wt."name" when 'SUB' then true else false end as sub,
+        w."name" as work_name,  wb.work_name as unit_name,
+        sum(wo.second_convert) * 1.06 as current_value,
+        (select sum(ws.second_convert) * 1.06 from work_book wk
+            join  work_operations ws on wk.id = ws.work_book_id
+            where wk.id = (
+            select id from work_book
+            where model_id= #{modelId} and stlst=#{stlst} and phase_id != #{phaseId} order by create_at desc limit 1)) as last_value
+        from work_book wb
+        join work_operations wo on wb.id = wo.work_book_id
+        join workstation w on wb.workstation_id = w.id
+        join workstation_type wt on w.workstation_type_id = wt.id
+         where wb.id = #{workBookId}
+        group by wt."name", w."name", wb.work_name
+    </select>
 </mapper>

@@ -86,7 +86,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
     @Override
     public void updateEntity(RevisionHistoryEntity revisionHistory) {
-        revisionHistoryItemService.insertBatch(revisionHistory.getItems());
+        revisionHistoryItemService.insertOrUpdateBatch(revisionHistory.getItems());
         if(revisionHistory.getModelId()==0)revisionHistory.setModelId(null);
         revisionHistory.setSheetName("sheet");
         updateById(revisionHistory);

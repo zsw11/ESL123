@@ -54,6 +54,7 @@ public class ReportController extends AbstractController {
 	@RequiresPermissions("masterData:report:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
 		PageUtils page = reportService.queryPage(params);
+		page.getData();
 		return RD.ok(page);
 	}
 
@@ -73,35 +74,8 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/reportGroup")
 	public ResponseEntity<Object> reportGroup(@RequestBody  Map<String,Object> data) {
-		String reportName = (String) data.get("name");
-		int id =0;
-		if(reportName!=null&&reportName!= ""){
-		    id = reportService.selectByName(reportName);
-        }
-		List<ReportGroupReportRelaEntity>  reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id", id));
-        int idG;
-		ReportGroupEntity reportGroupEntity;
-		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
-         for(ReportGroupReportRelaEntity item : reportGroupReportRelaEntities){
-			 idG = item.getReportGroupId();
-			 int modelId = (int) data.get("model");
-			 int phaseId = (int) data.get("phase");
-			 String stlst = (String) data.get("stlst");
-			 // 报表组过滤
-			 List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG));
-			 List<Integer> reportIds = new ArrayList<>();
-			 for(ApproveEntity approveEntity : approveEntityList ){
-				 reportIds = Collections.singletonList(approveEntity.getReportGroupId());
-			 }
-			 if(!reportIds.contains(idG)){
-				 reportGroupEntity = reportGroupService.selectById(idG);
-				 if(reportGroupEntity!=null){
-					 reportGroupEntities.add(reportGroupEntity);
-				 }
-			 }
-
-		}
-		return RD.success(reportGroupEntities);
+		List<ReportGroupEntity> reportGroupEntityList = reportService.selectReportGroup(data);
+		return RD.success(reportGroupEntityList);
 	}
 
 	/**
