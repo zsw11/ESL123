@@ -13,5 +13,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface StandardTimeItemDao extends BaseMapper<StandardTimeItemEntity> {
-	
+    StandardTimeItemEntity generateDataByWorkBook(Integer workBookId);
+
 }

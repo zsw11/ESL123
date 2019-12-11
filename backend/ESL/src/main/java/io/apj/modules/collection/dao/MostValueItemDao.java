@@ -13,5 +13,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface MostValueItemDao extends BaseMapper<MostValueItemEntity> {
-	
+    MostValueItemEntity generateDataByWorkBook(Integer workBookId);
+
 }

@@ -3,13 +3,18 @@ package io.apj.modules.workBook.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.service.CompareService;
+import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.service.ChangeRecordService;
+import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.report.service.StandardWorkService;
+import io.apj.modules.report.service.TimeContactService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +59,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private StationTimeService stationTimeService;
-
+	@Autowired
+	private StandardTimeService standardTimeService;
+	@Autowired
+	private MostValueService mostValueService;
+	@Autowired
+	private TimeContactService timeContactService;
+	@Autowired
+	private CompareService compareService;
 	@Autowired
 	private ChangeRecordService changeRecordService;
 
@@ -164,8 +176,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 					stationTimeService.generateReportData(workBookEntity);
 					break;
 				case 4 :
+					compareService.generateReportData(workBookEntity);
 					break;
 				case 5 :
+					mostValueService.generateReportData(workBookEntity);
 					break;
 				case 6 :
 					//Collection-Revision History表
@@ -176,10 +190,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				case 8 :
 					break;
 				case 9 :
+					timeContactService.generateReportData(workBookEntity);
 					break;
 				case 10 :
 					break;
 				case 11 :
+					standardTimeService.generateReportData(workBookEntity);
 					break;
 				case 12 :
 					//标准工数表
@@ -193,5 +209,19 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 		});
 	}
+
+	@Override
+	public WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId) {
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.ne("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.orderBy("create_at", false);
+		List<WorkBookEntity> list = selectList(entityWrapper);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
 
 }

@@ -136,7 +136,7 @@
         <el-input v-model="dataForm.remarkPacking"></el-input>
       </el-form-item>
 
-      <el-form-item :label="'创建者ID'" prop="createBy">
+      <!-- <el-form-item :label="'创建者ID'" prop="createBy">
         <el-input-number v-model="dataForm.createBy"></el-input-number>
       </el-form-item>
 
@@ -166,7 +166,7 @@
           type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
         ></el-date-picker>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
 
     <span class="dialog-footer">
