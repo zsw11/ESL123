@@ -2,6 +2,7 @@
   <div class="workbook-detail-page">
     <div class="header">
       <el-button icon="el-icon-back" @click="goBack">返回</el-button>
+      <el-button icon="el-icon-upload" @click="save">保存</el-button>
     </div>
 
     <div class="video-player-box">
@@ -146,6 +147,11 @@
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
       },
+      save () {
+        if (this.$refs.workbookTable) {
+          this.$refs.workbookTable.save()
+        }
+      },
       init () {
         const self = this
         // 获取分析表详情
@@ -196,9 +202,7 @@
       // 更新workbook数据
       refreshWorkbookData (workName) {
         if (!this.workbookData[workName]) {
-          const newRow = this.$refs.workbookTable.createNewRow()
-          newRow.operation = workName
-          this.workbookData[workName] = [newRow]
+          this.workbookData[workName] = []
         }
         this.$refs.workbookTable.loadData(this.workbookData[workName])
       },
