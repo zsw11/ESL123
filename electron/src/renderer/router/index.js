@@ -207,7 +207,7 @@ const mainRoutes = {
     // 报表审批表
     { path: '/add-approve', component: _import('modules/report/approve-maintain'), name: 'add-approve', meta: { title: '新增报表审批表', isTab: true } },
     { path: '/edit-approve/:id(\\d+)', component: _import('modules/report/approve-maintain'), name: 'edit-approve', meta: { title: '编辑报表审批表', isTab: true } },
-    { path: '/details-approve/:id(\\d+)', component: _import('modules/report/approve-maintain'), name: 'details-approve', meta: { title: '报表审批表-详情', isTab: true } },
+    { path: '/details-approve/:id(\\d+)/:reportGroupId', component: _import('modules/report/approve-maintain'), name: 'details-approve', meta: { title: '报表审批表-详情', isTab: true } },
 
     // 报表审批历史表
     { path: '/add-approvehistory', component: _import('modules/report/approvehistory-maintain'), name: 'add-approvehistory', meta: { title: '新增报表审批历史表', isTab: true } },

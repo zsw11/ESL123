@@ -9,6 +9,7 @@
 <!--          <el-input-number v-model="listQuery.id" clearable></el-input-number>-->
 <!--        </el-form-item>-->
 
+        <div class="form-min-width">
         <el-form-item :label="'sheet名称'" prop="sheetName">
           <el-input v-model="listQuery.sheetName" clearable></el-input>
         </el-form-item>
@@ -31,6 +32,15 @@
           </keyword-search>
         </el-form-item>
 
+        <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select
+                dictType="ST"
+                class="input"
+                v-model="listQuery.stlst"
+                :allowEmpty="true"
+                clearable>
+            </dict-select>
+        </el-form-item>
         <el-form-item :label="'生产阶段'" prop="phaseId">
           <keyword-search
             style="width: 100%"
@@ -41,14 +51,7 @@
           </keyword-search>
         </el-form-item>
 
-        <el-form-item :label="'ST/LST'" prop="stlst">
-          <dict-select
-            dictType="ST"
-            class="input"
-            v-model="listQuery.stlst"
-            :allowEmpty="true"
-            clearable></dict-select>
-        </el-form-item>
+
 <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->
@@ -91,6 +94,7 @@
 <!--            clearable-->
 <!--          ></el-date-picker>-->
 <!--        </el-form-item>-->
+        </div>
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>

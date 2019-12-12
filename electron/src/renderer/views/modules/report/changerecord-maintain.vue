@@ -13,56 +13,58 @@
       label-width="100px"
       style="width: 95%"
     >
-        
       <el-row>
-        <el-col :span="12">
-          <el-form-item :label="'标题'" prop="title">
-            <el-input v-model="dataForm.title"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item :label="'Sheet名称'" prop="sheetName">
+            <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
 
-
-
-
-        <el-row>
-        <el-col :span="12">
-          <el-form-item :label="'工场'" prop="factory">
-            <el-input v-model="dataForm.factory"></el-input>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'机种'" prop="modelName">
+            <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
           </el-form-item>
-        </el-col>
-         <el-col :span="12">
-            <el-form-item :label="'机种ID'" prop="modelId">
-              <el-input-number v-model="dataForm.modelId"></el-input-number>
-            </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :span="10">
+          <el-form-item :label="'生产阶段'" prop="phaseName">
+            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select dictType="ST" style="width:100%" :disabled="true" v-model="dataForm.stlst"></dict-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+
+
+      <el-row>
+        <el-col :span="10">
           <el-form-item :label="'型号'" prop="model_type">
             <el-input v-model="dataForm.model_type"></el-input>
           </el-form-item>
         </el-col>
-         <el-col :span="12">
+         <el-col :span="10" :offset="2">
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
-
-    <el-row>
+      <el-row>
         <el-col :span="10">
-            <el-form-item :label="'Sheet名称'" prop="sheetName">
-                <el-input v-model="dataForm.sheetName"></el-input>
-            </el-form-item>
+          <el-form-item :label="'工场'" prop="factory">
+            <el-input v-model="dataForm.factory"></el-input>
+          </el-form-item>
         </el-col>
-    </el-row>
+      </el-row>
+
+
 
       <el-button @click="addItem()">加记录</el-button>
       <el-row>
@@ -206,6 +208,11 @@ export default {
                 'deptId',
                 'title',
                 'sheetName',
+                'modelId',
+                'phaseId',
+                'modelName',
+                'phaseName',
+                'stlst',
                 'factory',
                 'model_type',
                 'destinations',

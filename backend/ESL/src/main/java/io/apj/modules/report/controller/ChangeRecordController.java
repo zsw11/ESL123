@@ -1,28 +1,19 @@
 package io.apj.modules.report.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.RD;
+import io.apj.modules.report.entity.ChangeRecordEntity;
 import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import io.apj.modules.report.service.ChangeRecordItemService;
-import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.report.service.ChangeRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.modules.report.entity.ChangeRecordEntity;
-import io.apj.modules.report.service.ChangeRecordService;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**

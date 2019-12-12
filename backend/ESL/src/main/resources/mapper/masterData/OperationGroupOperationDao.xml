@@ -18,6 +18,7 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
         <result property="key" column="key"/>
+        <result property="tool" column="tool"/>
         <result property="a0" column="a0"/>
         <result property="b0" column="b0"/>
         <result property="g0" column="g0"/>

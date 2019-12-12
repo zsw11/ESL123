@@ -18,7 +18,7 @@
 <!--        </el-form-item>-->
 
 
-        <div class="min-width">
+        <div class="form-min-width">
 
         <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="listQuery.sheetName" clearable></el-input>
@@ -624,9 +624,6 @@ export default {
 }
 </script>
 <style lang="scss">
-  .min-width{
-    min-width: 1024px;
-  }
   .dialog{
     .el-radio+.el-radio {
       display: block;

@@ -23,6 +23,11 @@
         <result property="b2" column="b2"/>
         <result property="p1" column="p1"/>
         <result property="a3" column="a3"/>
+        <result property="a2" column="a4"/>
+        <result property="b2" column="b3"/>
+        <result property="p1" column="p2"/>
+        <result property="a3" column="a5"/>
+        <result property="tool" column="tool"/>
         <result property="frequency" column="frequency"/>
         <result property="timeValue" column="time_value"/>
         <result property="tmu" column="tmu"/>

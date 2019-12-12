@@ -72,6 +72,7 @@ public class OperationGroupOperationEntity implements Serializable {
 	 * 类型
 	 */
 	private String key;
+	private String tool;
 	private Integer a0;
 	private Integer b0;
 	private Integer g0;
