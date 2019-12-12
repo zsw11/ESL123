@@ -137,7 +137,7 @@ export default {
     async addStandardBook () {
       // console.log(Object.keys(this.$refs.workbookTable))
       // 获取插入位置（当前选中或者最后编辑）
-      this.currentCell = this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+      this.currentCell = this.getCurrentCell()
       if (!this.currentCell) {
         this.$message({
           message: '请选择插入位置！'
@@ -184,7 +184,7 @@ export default {
     },
     // 插入手顺组合
     async addOperationGroup (group) {
-      this.currentCell = this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+      this.currentCell = this.getCurrentCell()
       if (!this.currentCell) {
         this.$message({
           message: '请选择插入位置！'
