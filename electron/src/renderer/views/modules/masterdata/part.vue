@@ -282,7 +282,6 @@ export default {
         type: 'warning'
       }).then(() => {
         deletePart(ids).then(({message, status}) => {
-          console.log(message, 11111)
           if (message) {
             Message({
               message: message,
