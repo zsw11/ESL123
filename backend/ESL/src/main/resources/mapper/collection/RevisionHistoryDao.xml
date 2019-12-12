@@ -12,7 +12,6 @@
         <result property="stlst" column="stlst"/>
         <result property="title" column="title"/>
         <result property="sheetName" column="sheet_name"/>
-        <result property="modelId" column="model_id"/>
         <result property="destinations" column="destinations"/>
         <result property="comfirmBy" column="comfirm_by"/>
         <result property="inChargeBy" column="in_charge_by"/>
