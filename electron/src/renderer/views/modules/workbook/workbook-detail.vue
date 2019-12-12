@@ -75,7 +75,7 @@
 <script>
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBook } from '@/api/workbook'
+  import { fetchWorkBookWithOperations } from '@/api/workbook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
@@ -158,10 +158,11 @@
       init () {
         const self = this
         // 获取分析表详情
-        fetchWorkBook(this.$route.params.id).then(({ workBook }) => {
+        fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
+          self.workbookData[workBook.workName] = workBook.workOperationsList
         })
       },
       // 快捷键

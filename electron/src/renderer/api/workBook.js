@@ -27,6 +27,15 @@ export function fetchWorkBook (id) {
   })
 }
 
+// 获取分析表详情
+export function fetchWorkBookWithOperations (id) {
+  return request({
+    url: request.adornUrl(`/api/v1/workbook/detailWithOperations/${id}`),
+    method: 'get',
+    params: request.adornParams()
+  })
+}
+
 // 修改分析表
 export function updateWorkBook (id, data) {
   return request({
