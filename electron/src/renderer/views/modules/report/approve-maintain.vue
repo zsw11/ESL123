@@ -33,19 +33,19 @@
         style="width: 100%;">
         <el-table-column align="center" prop="name" label="名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
+            <span>{{scope.row.reportEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="formCode" label="空Form标准编号" >
           <template slot-scope="scope">
-            <span>{{scope.row.formCode }}</span>
+            <span>{{scope.row.reportEntity.formCode }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
-            <span>{{scope.row.remark }}</span>
+            <span>{{scope.row.reportEntity.remark }}</span>
           </template>
         </el-table-column>
 
@@ -55,7 +55,7 @@
           :label="'操作'"
           width="230">
           <template slot-scope="scope">
-            <el-button size="mini" type="text">下载</el-button>
+            <el-button size="mini" type="text" @click="down(scope.row.reportEntity.name)">下载</el-button>
           </template>
         </el-table-column>
 
@@ -76,17 +76,22 @@ import {
   createReportApprove,
   updateReportApprove
 } from '@/api/reportApprove'
+import { fetchReportDetail } from '@/api/reportGroup'
 export default {
   name: 'editReportApprove',
   data () {
     return {
       reportGroupName: '报表组',
       inited: false,
+      reportGroupId: null,
       dataForm: {
         id: 0,
         status: '',
         reportGroupName: '',
         deptId: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null,
         report_group_id: null,
         nextApproverId: null,
         createBy: null,
@@ -162,6 +167,17 @@ export default {
       })
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
+      this.reportGroupId = parseInt(this.$route.params.reportGroupId) || 0
+      if(this.reportGroupId) {
+        fetchReportDetail(this.reportGroupId).then(({data}) => {
+          this.dataList = data.data
+        }).catch(() => {
+          this.dataList = []
+          this.total = 0
+        }).finally(() => {
+          this.dataListLoading = false
+        })
+      }
       if (this.dataForm.id) {
         fetchReportApprove(this.dataForm.id)
           .then((page) => {
@@ -173,6 +189,9 @@ export default {
                 'deptId',
                 'reportGroupName',
                 'status',
+                'modelId',
+                'phaseId',
+                'stlst',
                 'report_group_id',
                 'nextApproverId',
                 'createBy',
@@ -182,7 +201,6 @@ export default {
                 'deleteAt'
               ])
             )
-            this.dataList = page.data
           })
           .finally(() => {
             this.inited = true
@@ -216,21 +234,15 @@ export default {
         }
       })
     },
-    // 普通查询
-    getDataList (pageNo) {
-      if (pageNo) {
-        this.pageNo = pageNo
+    // 下载
+    down(name){
+      let data ={
+        modelId: this.dataForm.modelId,
+        phaseId: this.dataForm.phaseId,
+        stlst: this.dataForm.stlst,
+        name
       }
-      this.dataButton = 'list'
-      this.dataListLoading = true
-      // fetchReportDetail(this.id).then(({data}) => {
-      //   this.dataList = data.data
-      // }).catch(() => {
-      //   this.dataList = []
-      //   this.total = 0
-      // }).finally(() => {
-      //   this.dataListLoading = false
-      // })
+      console.log(data)
     }
   }
 }

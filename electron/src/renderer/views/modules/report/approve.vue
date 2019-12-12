@@ -92,7 +92,7 @@
 
         <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
+            <el-button  type="text" size="small" @click="details(scope.row.id,scope.row.reportGroupId)">详情</el-button>
             <el-button
               size="mini"
               type="text"
@@ -365,10 +365,10 @@ export default {
       })
     },
     // 详情
-    details (id) {
+    details (id,reportGroupId) {
       // let noShow = true
       this.$nextTick(() => {
-        this.$router.push({path: `/details-approve/${id}`})
+        this.$router.push({path: `/details-approve/${id}/${reportGroupId}`})
       })
     },
     // 审批

@@ -34,7 +34,7 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title" v-if="!$route.path.includes('add')">
+    <el-card class="with-title table" v-if="!$route.path.includes('add')">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >报表信息</span>
         <el-button
@@ -364,9 +364,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .is-always-shadow{
-    box-shadow: none;
-    border: none;
+  .table{
+    box-shadow: none !important;
+    border: none !important;
   }
   .tableHeader{
     display: inline-block;

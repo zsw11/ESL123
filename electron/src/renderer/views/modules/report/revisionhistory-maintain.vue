@@ -15,57 +15,60 @@
     >
 
 <!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
-<!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
+<!--        <el-input v-model="dataForm.deptId"></el-input>-->
 <!--      </el-form-item>-->
 
 <!--      <el-form-item :label="'标题'" prop="title">-->
 <!--        <el-input v-model="dataForm.title"></el-input>-->
 <!--      </el-form-item>-->
 
-        <el-col :span="12">
-          <el-form-item :label="'组织机构ID'" prop="deptId">
-            <el-input-number v-model="dataForm.deptId"></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'标题'" prop="title">
-            <el-input v-model="dataForm.title"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+<!--        <el-col :span="12">-->
+<!--          <el-form-item :label="'组织机构ID'" prop="deptId">-->
+<!--            <el-input v-model="dataForm.deptId"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--        <el-col :span="12">-->
+<!--          <el-form-item :label="'标题'" prop="title">-->
+<!--            <el-input v-model="dataForm.title"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
       <el-row>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'机种ID'" prop="modelId">
-            <el-input-number v-model="dataForm.modelId"></el-input-number>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'机种'" prop="modelName">
+            <el-input :disabled="true" v-model="dataForm.modelId"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="dataForm.destinations"></el-input>
+            <el-input :disabled="true" v-model="dataForm.destinations"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'确认ID'" prop="comfirmBy">
-            <el-input-number v-model="dataForm.comfirmBy"></el-input-number>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'生产阶段'" prop="phaseName">
+            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
+
+
       <el-row>
-        <el-col :span="12">
-          <el-form-item :label="'承认ID'" prop="inChargeBy">
-            <el-input-number v-model="dataForm.inChargeBy"></el-input-number>
+        <el-col :span="10">
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select dictType="ST" style="width:100%" :disabled="true" v-model="dataForm.stlst"></dict-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'制造工厂'" prop="factory">
             <el-input v-model="dataForm.factory"></el-input>
           </el-form-item>
@@ -73,16 +76,18 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item :label="'发行日'" prop="monthResult">
             <el-date-picker
+              style="width: 100%"
               v-model="dataForm.monthResult"
               type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'版本号'" prop="revNo">
             <el-input v-model="dataForm.revNo"></el-input>
           </el-form-item>
@@ -90,13 +95,14 @@
       </el-row>
 
       <el-row>
-        <el-col :span="12">
-          <el-form-item :label="'上一版本ST名称'" prop="lastSTname">
+        <el-col :span="10">
+          <el-form-item :label="'上版ST名称'" prop="lastSTname">
             <el-input v-model="dataForm.lastSTname"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'当前版本ST名称'" prop="currentSTname">
+
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'此版ST名称'" prop="currentSTname">
             <el-input v-model="dataForm.currentSTname"></el-input>
           </el-form-item>
         </el-col>
@@ -104,24 +110,18 @@
 
 
 
-<!--      <el-form-item :label="'确认ID'" prop="comfirmBy">-->
-<!--        <el-input-number v-model="dataForm.comfirmBy"></el-input-number>-->
-<!--      </el-form-item>-->
-
-<!--      <el-form-item :label="'承认ID'" prop="inChargeBy">-->
-<!--        <el-input-number v-model="dataForm.inChargeBy"></el-input-number>-->
-<!--      </el-form-item>-->
 
 
 
       <el-row>
-        <el-col :span="12">
-          <el-form-item :label="'上一版本LST名称'" prop="lastLSTname">
+        <el-col :span="10">
+          <el-form-item :label="'上版LST名称'" prop="lastLSTname">
             <el-input v-model="dataForm.lastLSTname"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'当前版本LST名称'" prop="currentLSTname">
+
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'此版LST名称'" prop="currentLSTname">
             <el-input v-model="dataForm.currentLSTname"></el-input>
           </el-form-item>
         </el-col>
@@ -145,7 +145,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="center" prop="currentStTime" label="当前版本ST耗时">
+          <el-table-column align="center" prop="currentStTime" label="此版ST耗时">
             <template slot-scope="scope">
               <el-input type="text" v-model="scope.row.currentStTime" />
             </template>
@@ -163,7 +163,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="center" prop="currentLstTime" label="当前版本LST耗时">
+          <el-table-column align="center" prop="currentLstTime" label="此版LST耗时">
             <template slot-scope="scope">
               <el-input type="text" v-model="scope.row.currentLstTime" />
             </template>
@@ -183,13 +183,6 @@
         </el-table>
       </el-row>
 
-      <el-form-item :label="'删除时间'" prop="deleteAt">
-        <el-date-picker
-          v-model="dataForm.deleteAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
     </el-form>
 
     <span class="dialog-footer">

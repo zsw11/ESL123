@@ -131,11 +131,6 @@
               type="text"
               @click="addOrUpdateHandle(scope.row.id)"
             >编辑</el-button>
-<el-button
-              size="mini"
-              type="text"
-              @click="edit(scope.row.id)"
-            >编辑</el-button>
             <el-button
               size="mini"
               type="text"
@@ -403,7 +398,7 @@ export default {
         this.$router.push({
           path: id
             ? `/edit-changerecord/${id}`
-            : '/add-reportchangerecord'
+            : '/add-changerecord'
         })
       })
     },
@@ -459,6 +454,7 @@ export default {
               duration: 2000
             })
           }
+          this.getDataList()
         })
       }
     },
