@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -31,25 +33,30 @@ public class WorkBookEntity implements Serializable {
 	 */
 	private Integer deptId;
 	/*
-	* 部门名称
-	* */
+	 * 部门名称
+	 */
 	@TableField(exist = false)
-	private  String DeptName;
+	private String DeptName;
 	/*
 	 * model名称
-	 * */
+	 */
 	@TableField(exist = false)
-	private  String ModelName;
+	private String ModelName;
 	/*
 	 * Phase名称
-	 * */
+	 */
 	@TableField(exist = false)
-	private  String PhaseName;
+	private String PhaseName;
+	/**
+	 * 手顺列表
+	 */
+	@TableField(exist = false)
+	private List<WorkOperationsEntity> workOperationsList;
 	/*
 	 * 工位名称
-	 * */
+	 */
 	@TableField(exist = false)
-	private  String WorkstationName;
+	private String WorkstationName;
 	/**
 	 * ST/LST
 	 */

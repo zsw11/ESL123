@@ -16,12 +16,15 @@ import java.util.Map;
  */
 public interface WorkBookService extends IService<WorkBookEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
-    ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
-    boolean updateOperation(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params);
 
-    void createReports(Map<String, Object> params);
+	ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
 
-    WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
+	boolean updateOperation(Map<String, Object> params);
+
+	void createReports(Map<String, Object> params);
+
+	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
+
+	WorkBookEntity detailWithOperations(Integer id);
 }
-

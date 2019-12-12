@@ -57,6 +57,16 @@ public class WorkBookController {
 	}
 
 	/**
+	 * 分析表和手顺详情
+	 */
+	@RequestMapping("/detailWithOperations/{id}")
+	@RequiresPermissions("workBook:workbook:info")
+	public R detailWithOperations(@PathVariable("id") Integer id) {
+		WorkBookEntity workBook = workBookService.detailWithOperations(id);
+		return R.ok().put("workBook", workBook);
+	}
+
+	/**
 	 * 保存
 	 */
 	@RequestMapping("/create")
@@ -106,11 +116,12 @@ public class WorkBookController {
 
 	/**
 	 * 生成报表
+	 * 
 	 * @param params
 	 * @return
 	 */
 	@RequestMapping("/createReport")
-	//@RequiresPermissions("workBook:workbook:createReport")
+	// @RequiresPermissions("workBook:workbook:createReport")
 	public R createReport(@RequestBody Map<String, Object> params) {
 		workBookService.createReports(params);
 		return R.ok();
