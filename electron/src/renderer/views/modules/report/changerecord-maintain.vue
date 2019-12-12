@@ -13,58 +13,48 @@
       label-width="100px"
       style="width: 95%"
     >
-<!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
-<!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
-<!--      </el-form-item>-->
-
-<!--      <el-form-item :label="'标题'" prop="title">-->
-<!--        <el-input v-model="dataForm.title"></el-input>-->
-<!--      </el-form-item>-->
-
-
-
+        
       <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'机种'" prop="modelName">
-            <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
+        <el-col :span="12">
+          <el-form-item :label="'标题'" prop="title">
+            <el-input v-model="dataForm.title"></el-input>
           </el-form-item>
         </el-col>
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'生产阶段'" prop="phaseName">
-            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
+        <el-col :span="12">
+          <el-form-item :label="'Sheet名称'" prop="sheetName">
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'ST/LST'" prop="stlst">
-            <dict-select :disabled="true" style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select>
-          </el-form-item>
-        </el-col>
 
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'工程'" prop="factory">
+
+
+        <el-row>
+        <el-col :span="12">
+          <el-form-item :label="'工场'" prop="factory">
             <el-input v-model="dataForm.factory"></el-input>
           </el-form-item>
         </el-col>
+         <el-col :span="12">
+            <el-form-item :label="'机种ID'" prop="modelId">
+              <el-input-number v-model="dataForm.modelId"></el-input-number>
+            </el-form-item>
+        </el-col>
       </el-row>
 
-
       <el-row>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="'型号'" prop="model_type">
             <el-input v-model="dataForm.model_type"></el-input>
           </el-form-item>
-      </el-col>
-
-        <el-col :span="10" :offset="2">
+        </el-col>
+         <el-col :span="12">
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
+
 
     <el-row>
         <el-col :span="10">
@@ -73,6 +63,44 @@
             </el-form-item>
         </el-col>
     </el-row>
+
+      <el-button @click="addItem()">加记录</el-button>
+      <el-row>
+        <el-table
+          :data="dataForm.items"
+          style="width: 100%;"
+        >
+          <el-table-column align="center" prop="makedAt" label="制定日期">
+            <template slot-scope="scope">
+              <el-input type="date" v-model="scope.row.makedAt" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="processName" label="工程名">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.processName" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="content" label="修改内容">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.content" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="currentValue" label="当前耗时值" >
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.currentValue" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="lastValue" label="变更前耗时值">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.lastValue" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
 
     </el-form>
 
@@ -114,7 +142,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        items: []
       },
       dataRules: {
         deptId: [{ type: 'number', message: '组织机构ID需为数字值' }],
@@ -125,9 +154,9 @@ export default {
         model_type: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         destinations: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
-
         updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
-      }
+      },
+      dataList: []
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -167,30 +196,30 @@ export default {
       })
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
-      if (this.dataForm.id) {
+      if (this.dataForm.id) {//this.dataForm.id
         fetchReportChangeRecord(this.dataForm.id)
-          .then((data) => {
+          .then((data ) => {
             Object.assign(
               this.dataForm,
               pick(data, [
+                'id',
                 'deptId',
                 'title',
                 'sheetName',
                 'factory',
-                'modelId',
-                'phaseId',
-                'modelName',
-                'phaseName',
-                'stlst',
                 'model_type',
                 'destinations',
                 'createBy',
                 'createAt',
                 'updateBy',
                 'updateAt',
-                'deleteAt'
+                'deleteAt',
+                'items'
               ])
             )
+            this.dataList = data.items||[]
+            console.log(this.dataForm)
+             console.log(this.dataList)
           })
           .finally(() => {
             this.inited = true
@@ -212,16 +241,19 @@ export default {
           (this.dataForm.id
             ? updateReportChangeRecord(this.dataForm.id, this.dataForm)
             : createReportChangeRecord(this.dataForm)
-          ).then(({ data }) => {
+          ).then((data) => {
             this.$message({
               message: '操作成功',
               type: 'success',
-              duration: 1500,
+              duration: 500,
               onClose: this.cancleFormSubmit
             })
           })
         }
       })
+    },
+    addItem(){
+      this.dataForm.items.push({'maked_at':new Date(),'reportChangeRecordId':this.dataForm.id})
     }
   }
 }

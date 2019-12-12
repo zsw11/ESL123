@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.report.entity.ChangeRecordItemEntity;
+import io.apj.modules.report.service.ChangeRecordItemService;
 import io.apj.modules.masterData.entity.ReportEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,9 @@ public class ChangeRecordController {
 	@Autowired
 	private ChangeRecordService changeRecordService;
 
+	@Autowired
+	private ChangeRecordItemService changeRecordItemService;
+
 	/**
 	 * 列表
 	 */
@@ -52,7 +59,9 @@ public class ChangeRecordController {
 	@RequiresPermissions("report:changerecord:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ChangeRecordEntity changeRecord = changeRecordService.selectById(id);
-
+		EntityWrapper<ChangeRecordItemEntity> ew = new EntityWrapper<>();
+		ew.eq("report_change_record_id",changeRecord.getId());
+		changeRecord.setItems(changeRecordItemService.selectList(ew));
 		return RD.success(changeRecord);
 	}
 
@@ -63,7 +72,6 @@ public class ChangeRecordController {
 	@RequiresPermissions("report:changerecord:create")
 	public ResponseEntity<Object> save(@RequestBody ChangeRecordEntity changeRecord) {
 		changeRecordService.insert(changeRecord);
-
 		return RD.success(changeRecord);
 	}
 
@@ -73,8 +81,7 @@ public class ChangeRecordController {
 	@RequestMapping("/update")
 	@RequiresPermissions("report:changerecord:update")
 	public ResponseEntity<Object> update(@RequestBody ChangeRecordEntity changeRecord) {
-		changeRecordService.updateById(changeRecord);
-
+		changeRecordService.updateEntity(changeRecord);
 		return RD.success(changeRecord);
 	}
 

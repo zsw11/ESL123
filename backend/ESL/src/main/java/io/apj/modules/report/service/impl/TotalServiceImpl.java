@@ -1,12 +1,16 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ApproveEntity;
 import io.apj.modules.report.entity.TimeContactEntity;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -48,6 +52,29 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 
         }
         return new PageUtils(page);
+    }
+
+    @Override
+    public void generateReportData(WorkBookEntity work) {
+        EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                .eq("phase_id",work.getPhaseId());
+        List<TotalEntity> list = selectList(entityWrapper);
+        TotalEntity totalEntity = new TotalEntity();
+        if(list.size()>0){
+            totalEntity = list.get(0);
+        }else{
+            //TODO 有未设置
+            totalEntity.setModelId(work.getModelId());
+            totalEntity.setPhaseId(work.getPhaseId());
+            totalEntity.setStlst(work.getStlst());
+            totalEntity.setDeptId(work.getDeptId());
+            totalEntity.setDestinations(work.getDestinations());
+            totalEntity.setSheetName(work.getWorkstationName()+" "+ work.getWorkName());
+            totalEntity.setSheetName("sheetName");
+            totalEntity.setDestinations(work.getDestinations());
+            insert(totalEntity);
+        }
     }
 
 }

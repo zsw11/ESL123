@@ -7,11 +7,16 @@ import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
+import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.service.ChangeRecordService;
+
+import io.apj.modules.report.service.StandardTimeService;
+import io.apj.modules.report.service.StandardWorkService;
+import io.apj.modules.report.service.TotalService;
 import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.report.service.TimeContactService;
@@ -63,6 +68,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private StandardTimeService standardTimeService;
 	@Autowired
 	private MostValueService mostValueService;
+
 	@Autowired
 	private TimeContactService timeContactService;
 	@Autowired
@@ -72,6 +78,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private RevisionHistoryService revisionHistoryService;
+
+	@Autowired
+	private TotalService totalService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -186,6 +195,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 					revisionHistoryService.generateReportData(workBookEntity);
 					break;
 				case 7 :
+					totalService.generateReportData(workBookEntity);
 					break;
 				case 8 :
 					break;

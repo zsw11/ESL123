@@ -13,6 +13,7 @@
       label-width="100px"
       style="width: 95%"
     >
+
 <!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
 <!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
 <!--      </el-form-item>-->
@@ -21,42 +22,86 @@
 <!--        <el-input v-model="dataForm.title"></el-input>-->
 <!--      </el-form-item>-->
 
+        <el-col :span="12">
+          <el-form-item :label="'组织机构ID'" prop="deptId">
+            <el-input-number v-model="dataForm.deptId"></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'标题'" prop="title">
+            <el-input v-model="dataForm.title"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-row>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
-
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'机种'" prop="modelName">
-            <el-input  :disabled="true" v-model="dataForm.modelName"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'生产阶段'" prop="phaseName">
-            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'ST/LST'" prop="stlst">
-            <dict-select dictType="ST" style="width: 100%" :disabled="true" v-model="dataForm.stlst"></dict-select>
+        <el-col :span="12">
+          <el-form-item :label="'机种ID'" prop="modelId">
+            <el-input-number v-model="dataForm.modelId"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'确认ID'" prop="comfirmBy">
+            <el-input-number v-model="dataForm.comfirmBy"></el-input-number>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item :label="'承认ID'" prop="inChargeBy">
+            <el-input-number v-model="dataForm.inChargeBy"></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'制造工厂'" prop="factory">
+            <el-input v-model="dataForm.factory"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item :label="'发行日'" prop="monthResult">
+            <el-date-picker
+              v-model="dataForm.monthResult"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'版本号'" prop="revNo">
+            <el-input v-model="dataForm.revNo"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item :label="'上一版本ST名称'" prop="lastSTname">
+            <el-input v-model="dataForm.lastSTname"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'当前版本ST名称'" prop="currentSTname">
+            <el-input v-model="dataForm.currentSTname"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
 
 
 <!--      <el-form-item :label="'确认ID'" prop="comfirmBy">-->
@@ -67,91 +112,84 @@
 <!--        <el-input-number v-model="dataForm.inChargeBy"></el-input-number>-->
 <!--      </el-form-item>-->
 
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'制造工厂'" prop="factory">
-            <el-input v-model="dataForm.factory"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+
 
       <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'发行日'" prop="monthResult">
-            <el-date-picker
-              style="width:100%"
-              v-model="dataForm.monthResult"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'版本号'" prop="revNo">
-            <el-input v-model="dataForm.revNo"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'上版ST'" prop="lastSTname">
-            <el-input v-model="dataForm.lastSTname"></el-input>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'此版ST'" prop="currentSTname">
-            <el-input v-model="dataForm.currentSTname"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'上版LST'" prop="lastLSTname">
+        <el-col :span="12">
+          <el-form-item :label="'上一版本LST名称'" prop="lastLSTname">
             <el-input v-model="dataForm.lastLSTname"></el-input>
           </el-form-item>
         </el-col>
-
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'此版LST'" prop="currentLSTname">
+        <el-col :span="12">
+          <el-form-item :label="'当前版本LST名称'" prop="currentLSTname">
             <el-input v-model="dataForm.currentLSTname"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
-<!--      <el-form-item :label="'创建者ID'" prop="createBy">-->
-<!--        <el-input-number v-model="dataForm.createBy"></el-input-number>-->
-<!--      </el-form-item>-->
+      <el-button @click="addItem()">加记录</el-button>
+      <el-row>
+        <el-table
+          :data="dataForm.items"
+          style="width: 100%;"
+        >
+          <el-table-column align="center" prop="name" label="工程名">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.name" />
+            </template>
+          </el-table-column>
 
-<!--      <el-form-item :label="'创建时间'" prop="createAt">-->
-<!--        <el-date-picker-->
-<!--          v-model="dataForm.createAt"-->
-<!--          type="datetime"-->
-<!--          value-format="yyyy-MM-dd HH:mm:ss"-->
-<!--        ></el-date-picker>-->
-<!--      </el-form-item>-->
+          <el-table-column align="center" prop="lastStTime" label="上一ST版本耗时">
+            <template slot-scope="scope">
+              <el-input type="number" v-model="scope.row.lastStTime" />
+            </template>
+          </el-table-column>
 
-<!--      <el-form-item :label="'更新者ID'" prop="updateBy">-->
-<!--        <el-input-number v-model="dataForm.updateBy"></el-input-number>-->
-<!--      </el-form-item>-->
+          <el-table-column align="center" prop="currentStTime" label="当前版本ST耗时">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.currentStTime" />
+            </template>
+          </el-table-column>
 
-<!--      <el-form-item :label="'更新时间'" prop="updateAt">-->
-<!--        <el-date-picker-->
-<!--          v-model="dataForm.updateAt"-->
-<!--          type="datetime"-->
-<!--          value-format="yyyy-MM-dd HH:mm:ss"-->
-<!--        ></el-date-picker>-->
-<!--      </el-form-item>-->
+          <el-table-column align="center" prop="stInterval" label="ST版本耗时差异值" >
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.stInterval" />
+            </template>
+          </el-table-column>
 
-<!--      <el-form-item :label="'删除时间'" prop="deleteAt">-->
-<!--        <el-date-picker-->
-<!--          v-model="dataForm.deleteAt"-->
-<!--          type="datetime"-->
-<!--          value-format="yyyy-MM-dd HH:mm:ss"-->
-<!--        ></el-date-picker>-->
-<!--      </el-form-item>-->
+          <el-table-column align="center" prop="lastLstTime" label="上一LST版本耗时">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.lastLstTime" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="currentLstTime" label="当前版本LST耗时">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.currentLstTime" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="lstInterval" label="LST版本耗时差异值">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.lstInterval" />
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" prop="remark" label="改訂履歴">
+            <template slot-scope="scope">
+              <el-input type="text" v-model="scope.row.remark" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+
+      <el-form-item :label="'删除时间'" prop="deleteAt">
+        <el-date-picker
+          v-model="dataForm.deleteAt"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+        ></el-date-picker>
+      </el-form-item>
     </el-form>
 
     <span class="dialog-footer">
@@ -196,7 +234,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        items: []
       },
       dataRules: {
         deptId: [{ type: 'number', message: '组织机构ID需为数字值' }],
@@ -216,7 +255,8 @@ export default {
         createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
 
         updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
-      }
+      },
+      dataList: []
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -258,7 +298,7 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchCollectionRevisionHistory(this.dataForm.id)
-          .then(({ data }) => {
+          .then((data) => {
             Object.assign(
               this.dataForm,
               pick(data, [
@@ -283,9 +323,11 @@ export default {
                 'createAt',
                 'updateBy',
                 'updateAt',
-                'deleteAt'
+                'deleteAt',
+                'items'
               ])
             )
+           this.dataList = data.items||[]
           })
           .finally(() => {
             this.inited = true
@@ -302,21 +344,25 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.$refs['dataForm'].validate(valid => {
+      const _this = this;
+      _this.$refs['dataForm'].validate(valid => {
         if (valid) {
           (this.dataForm.id
             ? updateCollectionRevisionHistory(this.dataForm.id, this.dataForm)
             : createCollectionRevisionHistory(this.dataForm)
-          ).then(({ data }) => {
+          ).then((data) => {
             this.$message({
               message: '操作成功',
               type: 'success',
-              duration: 1500,
+              duration: 500,
               onClose: this.cancleFormSubmit
             })
           })
         }
       })
+    },
+    addItem(){
+      this.dataForm.items.push({"collectionRevisionHistoryId": this.dataForm.id})
     }
   }
 }

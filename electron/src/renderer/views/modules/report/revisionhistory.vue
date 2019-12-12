@@ -315,7 +315,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="addOrUpdateHandle(scope.row.id)"
+              @click="edit(scope.row.id)"
             >编辑</el-button>
             <el-button
               size="mini"
@@ -685,6 +685,12 @@ export default {
     getDictByType () {
       listDictItem({ type: 'ST' }).then(({data}) => {
         this.dictItemSTLST = keyBy(data, 'code')
+      })
+    },
+    // 新增 / 修改
+    edit (id) {
+      this.$nextTick(() => {
+        this.$router.push({ path: id ? `/edit-revisionhistory/${id}` : '/add-revisionhistory' })
       })
     }
   }

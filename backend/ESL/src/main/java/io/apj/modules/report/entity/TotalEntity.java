@@ -11,7 +11,7 @@ import lombok.Data;
 
 /**
  * Report - Total表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-26 13:23:58
@@ -45,6 +45,7 @@ public class TotalEntity implements Serializable {
 	private Integer phaseId;
 	@TableField(exist = false)
 	private String phaseName;
+	private String stlst;
 	/**
 	 * 机种
 	 */

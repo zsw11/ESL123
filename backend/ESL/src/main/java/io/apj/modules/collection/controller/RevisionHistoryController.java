@@ -3,6 +3,9 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+import io.apj.modules.collection.service.RevisionHistoryItemService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,9 @@ public class RevisionHistoryController {
 	@Autowired
 	private RevisionHistoryService revisionHistoryService;
 
+	@Autowired
+	private RevisionHistoryItemService revisionHistoryItemService;
+
 	/**
 	 * 列表
 	 */
@@ -48,7 +54,9 @@ public class RevisionHistoryController {
 	@RequiresPermissions("collection:revisionhistory:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		RevisionHistoryEntity revisionHistory = revisionHistoryService.selectById(id);
-
+		EntityWrapper<RevisionHistoryItemEntity> ew = new EntityWrapper<>();
+		ew.eq("collection_revision_history_id",id);
+		revisionHistory.setItems(revisionHistoryItemService.selectList(ew));
 		return RD.success(revisionHistory);
 	}
 
@@ -69,7 +77,7 @@ public class RevisionHistoryController {
 	@RequestMapping("/update")
 	@RequiresPermissions("collection:revisionhistory:update")
 	public ResponseEntity<Object> update(@RequestBody RevisionHistoryEntity revisionHistory) {
-		revisionHistoryService.updateById(revisionHistory);
+		revisionHistoryService.updateEntity(revisionHistory);
 
 		return RD.success(revisionHistory);
 	}

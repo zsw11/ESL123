@@ -22,5 +22,6 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
 
     void generateReportData(WorkBookEntity workBookEntity);
 
+    void updateEntity(ChangeRecordEntity changeRecord);
 }
 
