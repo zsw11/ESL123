@@ -85,7 +85,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at")
+		entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",

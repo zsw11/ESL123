@@ -2,6 +2,8 @@ package io.apj.modules.masterData.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -17,7 +19,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at");
+		entityWrapper.isNull("delete_at").orderBy("update_at").last("desc");
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
 			entityWrapper.andNew(

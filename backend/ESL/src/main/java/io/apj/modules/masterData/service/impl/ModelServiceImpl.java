@@ -35,7 +35,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at")
+		entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
 				.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
 		if(StringUtils.isNotEmpty((CharSequence) params.get("deptId"))){
 			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
@@ -65,7 +65,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	@Override
 	public PageUtils selectBySeriesId(int id, Map<String, Object> params) {
 		EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").eq("model_series_id", id);
+		entityWrapper.isNull("delete_at").eq("model_series_id", id).orderBy("update_at").last("desc");
 		Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);

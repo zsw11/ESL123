@@ -34,7 +34,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
                 .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"));
         if(StringUtils.isNotEmpty((CharSequence) params.get("reportGroupId"))){
             entityWrapper.eq("report_group_id", Integer.parseInt((String) params.get("reportGroupId")));

@@ -34,7 +34,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("coefficient") != null && params.get("coefficient") != "", "coefficient", (String) params.get("coefficient"))
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))

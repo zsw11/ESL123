@@ -31,7 +31,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
                 .like(params.get("cotegory") != null && params.get("cotegory") != "", "cotegory", (String) params.get("cotegory"))
                 .like(params.get("mecha") != null && params.get("mecha") != "", "mecha", (String) params.get("mecha"))
