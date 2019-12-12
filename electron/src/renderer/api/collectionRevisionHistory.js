@@ -18,9 +18,6 @@ export function createCollectionRevisionHistory (data) {
   })
 }
 
-<<<<<<< HEAD
-// 获取Collection - Revision History 表详情
-=======
 // // 获取Collection - Revision History 表详情
 // export function fetchCollectionRevisionHistory (params) {
 //   return request({
@@ -31,7 +28,6 @@ export function createCollectionRevisionHistory (data) {
 // }
 
 // 获取详情
->>>>>>> 4a0a7b8fb5c61f86c12fad8b959afda48bb648e1
 export function fetchCollectionRevisionHistory (id) {
   return request({
     url: request.adornUrl(`/api/v1/revisionhistory/detail/${id}`),
