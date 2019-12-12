@@ -9,9 +9,9 @@
 <!--          <el-input-number v-model="listQuery.id" clearable></el-input-number>-->
 <!--        </el-form-item>-->
 
-<!--        <el-form-item :label="'组织机构ID'" prop="deptId">-->
-<!--          <el-input-number v-model="listQuery.deptId" clearable></el-input-number>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'sheet名称'" prop="sheetName">
+          <el-input v-model="listQuery.sheetName" clearable></el-input>
+        </el-form-item>
 
 <!--        <el-form-item :label="'标题'" prop="title">-->
 <!--          <el-input v-model="listQuery.title" clearable></el-input>-->
@@ -132,6 +132,11 @@
 <!--            <span>{{scope.row.title }}</span>-->
 <!--          </template>-->
 <!--        </el-table-column>-->
+          <el-table-column align="center" prop="sheetName" label="Sheet名称">
+              <template slot-scope="scope">
+                  <span>{{scope.row.sheetName }}</span>
+              </template>
+          </el-table-column>
 
         <el-table-column align="center" prop="firstColumnName" label="组立职场名称">
           <template slot-scope="scope">
@@ -157,11 +162,7 @@
           </template>
         </el-table-column>
 
-<!--        <el-table-column align="center" prop="sheetName" label="Sheet名称">-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.sheetName }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+
 
 <!--        <el-table-column align="center" prop="remark" label="备注">-->
 <!--          <template slot-scope="scope">-->

@@ -3,9 +3,6 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">Collection - Revision History</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取 消</el-button>
-      </div>
     </div>
     <el-form
       :rules="dataRules"
@@ -16,7 +13,15 @@
       label-width="100px"
       style="width: 95%"
     >
-      <el-row>
+
+<!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
+<!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
+<!--      </el-form-item>-->
+
+<!--      <el-form-item :label="'标题'" prop="title">-->
+<!--        <el-input v-model="dataForm.title"></el-input>-->
+<!--      </el-form-item>-->
+
         <el-col :span="12">
           <el-form-item :label="'组织机构ID'" prop="deptId">
             <el-input-number v-model="dataForm.deptId"></el-input-number>
@@ -97,6 +102,18 @@
         </el-col>
       </el-row>
 
+
+
+<!--      <el-form-item :label="'确认ID'" prop="comfirmBy">-->
+<!--        <el-input-number v-model="dataForm.comfirmBy"></el-input-number>-->
+<!--      </el-form-item>-->
+
+<!--      <el-form-item :label="'承认ID'" prop="inChargeBy">-->
+<!--        <el-input-number v-model="dataForm.inChargeBy"></el-input-number>-->
+<!--      </el-form-item>-->
+
+
+
       <el-row>
         <el-col :span="12">
           <el-form-item :label="'上一版本LST名称'" prop="lastLSTname">
@@ -165,29 +182,6 @@
           </el-table-column>
         </el-table>
       </el-row>
-      <!-- <el-form-item :label="'创建者ID'" prop="createBy">
-        <el-input-number v-model="dataForm.createBy"></el-input-number>
-      </el-form-item>
-
-      <el-form-item :label="'创建时间'" prop="createAt">
-        <el-date-picker
-          v-model="dataForm.createAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-
-      <el-form-item :label="'更新者ID'" prop="updateBy">
-        <el-input-number v-model="dataForm.updateBy"></el-input-number>
-      </el-form-item>
-
-      <el-form-item :label="'更新时间'" prop="updateAt">
-        <el-date-picker
-          v-model="dataForm.updateAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
 
       <el-form-item :label="'删除时间'" prop="deleteAt">
         <el-date-picker
@@ -195,7 +189,7 @@
           type="datetime"
           value-format="yyyy-MM-dd HH:mm:ss"
         ></el-date-picker>
-      </el-form-item> -->
+      </el-form-item>
     </el-form>
 
     <span class="dialog-footer">
@@ -222,7 +216,10 @@ export default {
         deptId: null,
         title: null,
         sheetName: null,
+        phaseName: null,
+        modelName: null,
         modelId: null,
+        stlst: null,
         destinations: null,
         comfirmBy: null,
         inChargeBy: null,
@@ -308,6 +305,9 @@ export default {
                 'deptId',
                 'title',
                 'sheetName',
+                'phaseName',
+                'modelName',
+                'stlst',
                 'modelId',
                 'destinations',
                 'comfirmBy',

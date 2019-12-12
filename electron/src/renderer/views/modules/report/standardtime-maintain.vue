@@ -21,28 +21,25 @@
 <!--        <el-input v-model="dataForm.title"></el-input>-->
 <!--      </el-form-item>-->
 
-<!--      <el-form-item :label="'Sheet名称'" prop="sheetName">-->
-<!--        <el-input v-model="dataForm.sheetName"></el-input>-->
-<!--      </el-form-item>-->
+
     <el-row>
       <el-col :span="10">
-      <el-form-item :label="'机种'" prop="modelId">
-        <el-input :disabled="true" v-model="dataForm.modelId"></el-input>
+      <el-form-item :label="'机种'" prop="modelName">
+        <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
       </el-form-item>
       </el-col>
 
       <el-col :span="10" :offset="2">
-      <el-form-item :label="'生产阶段'" prop="phaseId">
-        <el-input :disabled="true" v-model="dataForm.phaseId"></el-input>
+      <el-form-item :label="'生产阶段'" prop="phaseName">
+        <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
       </el-form-item>
       </el-col>
     </el-row>
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'stlst'" prop="stlst">
-            <el-input :disabled="true" v-model="dataForm.stlst"></el-input>
-          </el-form-item>
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select :disabled="true" style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select></el-form-item>
         </el-col>
       <el-col :span="10" :offset="2">
         <el-form-item :label="'型号'" prop="model_type">
@@ -56,6 +53,11 @@
             <el-input v-model="dataForm.unit"></el-input>
           </el-form-item>
       </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'Sheet名称'" prop="sheetName">
+            <el-input v-model="dataForm.sheetName"></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
 
     </el-form>
@@ -85,6 +87,8 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
+        modelName: null,
+        phaseName: null,
         phaseId: null,
         stlst: null,
         model_type: null,
@@ -154,6 +158,8 @@ export default {
                 'deptId',
                 'title',
                 'phaseId',
+                'modelName',
+                'phaseName',
                 'stlst',
                 'sheetName',
                 'modelId',

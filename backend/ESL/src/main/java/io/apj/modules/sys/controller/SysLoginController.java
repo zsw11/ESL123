@@ -45,8 +45,8 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
-	@Autowired
-	private APOService APOService;
+//	@Autowired
+//	private APOService APOService;
 
 	/**
 	 * 验证码
@@ -98,12 +98,12 @@ public class SysLoginController extends AbstractController {
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 		// 判断用户是否存在
 		if (user == null) {
-			try {
-				APOService.login(form.getUsername(), form.getPassword());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				APOService.login(form.getUsername(), form.getPassword());
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
 		}
 //		获取人员信息

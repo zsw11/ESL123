@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="from-min-width">
 <!--        <el-form-item :label="'ID'" prop="id">-->
 <!--          <el-input-number v-model="listQuery.id" clearable></el-input-number>-->
 <!--        </el-form-item>-->
@@ -17,9 +17,9 @@
 <!--          <el-input v-model="listQuery.title" clearable></el-input>-->
 <!--        </el-form-item>-->
 
-<!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
-<!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'Sheet名称'" prop="sheetName">
+          <el-input v-model="listQuery.sheetName" clearable></el-input>
+        </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
@@ -63,6 +63,15 @@
           <el-input v-model="listQuery.RevNo" clearable></el-input>
         </el-form-item>
 
+          <el-form-item :label="'发行日'" prop="monthResult">
+              <el-date-picker
+                      v-model="listQuery.monthResult"
+                      type="datetime"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      clearable
+              ></el-date-picker>
+          </el-form-item>
+
         <el-form-item :label="'首个标准工数title'" prop="firstStandardWorkTitle">
           <el-input v-model="listQuery.firstStandardWorkTitle" clearable></el-input>
         </el-form-item>
@@ -71,14 +80,7 @@
           <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'发行日'" prop="monthResult">
-          <el-date-picker
-            v-model="listQuery.monthResult"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          ></el-date-picker>
-        </el-form-item>
+
 <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
 <!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
 <!--        </el-form-item>-->
@@ -163,11 +165,11 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-<!--        <el-table-column align="center" prop="sheetName" label="Sheet名称">-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.sheetName }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <el-table-column align="center" prop="sheetName" label="Sheet名称">
+          <template slot-scope="scope">
+            <span>{{scope.row.sheetName }}</span>
+          </template>
+        </el-table-column>
 
         <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
@@ -655,6 +657,10 @@ export default {
 }
 </script>
 <style lang="scss">
+    .from-min-width{
+        min-width: 1070px !important;
+    }
+
   .dialog{
     .el-radio+.el-radio {
       display: block;
