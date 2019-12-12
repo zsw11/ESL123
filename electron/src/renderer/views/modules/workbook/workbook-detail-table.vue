@@ -219,6 +219,12 @@ export default {
       const currentRow = (this.getCurrentCell() || {}).row
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(copyContent, currentRow)
+    },
+    save () {
+      console.log('new', this.$refs.workbookTable.getInsertRecords())
+      console.log('remove', this.$refs.workbookTable.getRemoveRecords())
+      console.log('update', this.$refs.workbookTable.getUpdateRecords())
+      // const lastRowIndex = this.getLastRowIndex(fullData)
     }
   }
 }
