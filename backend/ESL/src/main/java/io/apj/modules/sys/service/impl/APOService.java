@@ -29,14 +29,14 @@ public class APOService {
 
 	}
 
-	public static void main(String[] args) {
-		APOService service = new APOService();
-		try {
-			service.login("apo\\cn000303", "123456");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
+//	public static void main(String[] args) {
+//		APOService service = new APOService();
+//		try {
+//			service.login("apo\\cn000303", "123456");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 }
