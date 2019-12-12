@@ -27,6 +27,7 @@ import io.apj.modules.sys.form.SysLoginForm;
 import io.apj.modules.sys.service.SysCaptchaService;
 import io.apj.modules.sys.service.SysUserService;
 import io.apj.modules.sys.service.SysUserTokenService;
+import io.apj.modules.sys.service.impl.APOService;
 import io.apj.modules.sys.vo.SysUserEntityVo;
 
 /**
@@ -44,6 +45,8 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
+	@Autowired
+	private APOService APOService;
 
 	/**
 	 * 验证码
@@ -95,12 +98,18 @@ public class SysLoginController extends AbstractController {
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 		// 判断用户是否存在
 		if (user == null) {
+			try {
+				APOService.login(form.getUsername(), form.getPassword());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
 		}
 //		获取人员信息
 		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
 		if (staff == null) {
-			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
+			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户未绑定人员信息，请联系管理员");
 		}
 
 		// 判断密码
