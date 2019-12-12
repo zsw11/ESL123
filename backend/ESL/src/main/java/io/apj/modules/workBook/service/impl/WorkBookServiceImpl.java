@@ -74,10 +74,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Autowired
 	private CompareService compareService;
 	@Autowired
-	private TimeContactService timeContactService;
-	@Autowired
-	private CompareService compareService;
-	@Autowired
 	private ChangeRecordService changeRecordService;
 
 	@Autowired
