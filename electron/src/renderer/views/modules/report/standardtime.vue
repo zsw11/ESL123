@@ -6,6 +6,9 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
+        <el-form-item :label="'Sheet名称'" prop="sheetName">
+          <el-input v-model="listQuery.sheetName" clearable></el-input>
+        </el-form-item>
 
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
@@ -68,7 +71,11 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-
+        <el-table-column align="center" prop="sheetName" label="Sheet名称">
+          <template slot-scope="scope">
+            <span>{{scope.row.sheetName }}</span>
+          </template>
+        </el-table-column>
 
         <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">

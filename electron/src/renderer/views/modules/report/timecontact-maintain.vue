@@ -16,30 +16,14 @@
 
     <el-row>
       <el-col :span="10">
-      <el-form-item :label="'机种'" prop="modelId">
-        <keyword-search
-          :disabled="true"
-          v-model="dataForm.modelId"
-          :allowMultiple="true"
-          :searchApi="this.listModel"
-          :allowEmpty="true"
-          style="width: 100%"
-          clearable>
-        </keyword-search>
+      <el-form-item :label="'机种'" prop="modelName">
+        <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
       </el-form-item>
-
-
       </el-col>
+
       <el-col :span="10" :offset="2">
-      <el-form-item :label="'生产阶段'" prop="phaseId">
-        <keyword-search
-          :disabled="true"
-          style="width: 100%"
-          v-model="dataForm.phaseId"
-          :allowMultiple="true"
-          :searchApi="this.listPhase"
-          :allowEmpty="true">
-        </keyword-search>
+      <el-form-item :label="'生产阶段'" prop="phaseName">
+        <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
       </el-form-item>
       </el-col>
     </el-row>
@@ -47,8 +31,7 @@
       <el-row>
         <el-col :span="10">
           <el-form-item :label="'ST/LST'" prop="stlst">
-            <el-input :disabled="true" v-model="dataForm.stlst"></el-input>
-          </el-form-item>
+            <dict-select :disabled="true" style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select></el-form-item>
         </el-col>
 
         <el-col :span="10" :offset="2">
@@ -87,11 +70,10 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'印字/检查/调整'" prop="allCountPrinting">
-            <el-input v-model="dataForm.allCountPrinting"></el-input>
+          <el-form-item :label="'Sheet名称'" prop="sheetName">
+            <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
-
         <el-col :span="10" :offset="2">
           <el-form-item :label="'捆包'" prop="allCountPacking">
             <el-input v-model="dataForm.allCountPacking"></el-input>
@@ -99,6 +81,14 @@
         </el-col>
       </el-row>
 
+
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'印字/检查/调整'"  prop="allCountPrinting">
+            <el-input v-model="dataForm.allCountPrinting"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
 
     </el-form>
@@ -134,6 +124,8 @@ export default {
         comfirmBy: null,
         inChargeBy: null,
         modelId: null,
+        modelName: null,
+        phaseName: null,
         phaseId: null,
         stage: null,
         publishType: null,
@@ -325,6 +317,8 @@ export default {
                 'comfirmBy',
                 'inChargeBy',
                 'modelId',
+                'modelName',
+                'phaseName',
                 'phaseId',
                 'stage',
                 'publishType',
