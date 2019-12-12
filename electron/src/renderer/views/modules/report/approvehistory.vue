@@ -328,7 +328,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .min-width{
-    min-width: 1024px;
-  }
+
 </style>

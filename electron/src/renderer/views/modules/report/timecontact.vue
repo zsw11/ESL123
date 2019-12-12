@@ -5,7 +5,7 @@
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <div class="min-width">
+        <div class="form-min-width">
 
           <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="listQuery.sheetName" clearable></el-input>

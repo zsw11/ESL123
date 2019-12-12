@@ -6,6 +6,7 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
+        <div class="form-min-width">
         <el-form-item :label="'Sheet名称'" prop="sheetName">
           <el-input v-model="listQuery.sheetName" clearable></el-input>
         </el-form-item>
@@ -51,6 +52,7 @@
         <el-form-item :label="'仕向'" prop="destinations">
           <el-input v-model="listQuery.destinations" clearable></el-input>
         </el-form-item>
+        </div>
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>

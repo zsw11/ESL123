@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="from-min-width">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 <!--        <el-form-item :label="'ID'" prop="id">-->
 <!--          <el-input-number v-model="listQuery.id" clearable></el-input-number>-->
 <!--        </el-form-item>-->
@@ -17,6 +17,7 @@
 <!--          <el-input v-model="listQuery.title" clearable></el-input>-->
 <!--        </el-form-item>-->
 
+        <div class="form-min-width">
         <el-form-item :label="'Sheet名称'" prop="sheetName">
           <el-input v-model="listQuery.sheetName" clearable></el-input>
         </el-form-item>
@@ -79,7 +80,7 @@
         <el-form-item :label="'第三个标准工数title'" prop="secondStandardWorkTitle">
           <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
         </el-form-item>
-
+        </div>
 
 <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
 <!--          <el-input-number v-model="listQuery.comfirmBy" clearable></el-input-number>-->
@@ -657,9 +658,6 @@ export default {
 }
 </script>
 <style lang="scss">
-    .from-min-width{
-        min-width: 1070px !important;
-    }
 
   .dialog{
     .el-radio+.el-radio {
