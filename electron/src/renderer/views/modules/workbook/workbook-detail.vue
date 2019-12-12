@@ -1,5 +1,9 @@
 <template>
   <div class="workbook-detail-page">
+    <div class="header">
+      <el-button icon="el-icon-back" @click="goBack">返回</el-button>
+    </div>
+
     <div class="video-player-box">
       <video-player
         ref="videoPlayer"
@@ -80,6 +84,7 @@
     { id: 'half', name: '50%' },
     { id: 'full', name: '100%' }
   ]
+  let fromRoute = null
 
   export default {
     name: 'WorkbookDetail',
@@ -120,6 +125,10 @@
         }
       }
     },
+    beforeRouteEnter (to, from, next) {
+      fromRoute = from
+      next()
+    },
     created () {
       this.init()
       this.handleShortcut()
@@ -133,6 +142,9 @@
       this.handleShortcut()
     },
     methods: {
+      goBack () {
+        fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      },
       init () {
         const self = this
         // Todo，对接API，获取分析表

@@ -1,6 +1,5 @@
 <template>
   <div class="mod-home">
-   <router-link to="/workbook-detail" tag="div" class="alyBox">分析表录入</router-link>
   </div>
 </template>
 <style scoped lang="scss">
