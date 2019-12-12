@@ -403,7 +403,7 @@ export default {
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook' })
+        this.$router.push({ path: id ? `/workbook-detail/${id}` : '/add-workbook' })
       })
     },
     // 删除数据

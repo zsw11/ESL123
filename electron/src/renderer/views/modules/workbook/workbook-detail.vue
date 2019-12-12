@@ -1,5 +1,9 @@
 <template>
   <div class="workbook-detail-page">
+    <div class="header">
+      <el-button icon="el-icon-back" @click="goBack">返回</el-button>
+    </div>
+
     <div class="video-player-box">
       <video-player
         ref="videoPlayer"
@@ -70,6 +74,7 @@
 <script>
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
+  import { fetchWorkBook } from '@/api/workbook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
@@ -80,6 +85,7 @@
     { id: 'half', name: '50%' },
     { id: 'full', name: '100%' }
   ]
+  let fromRoute = null
 
   export default {
     name: 'WorkbookDetail',
@@ -120,6 +126,10 @@
         }
       }
     },
+    beforeRouteEnter (to, from, next) {
+      fromRoute = from
+      next()
+    },
     created () {
       this.init()
       this.handleShortcut()
@@ -133,23 +143,17 @@
       this.handleShortcut()
     },
     methods: {
+      goBack () {
+        fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      },
       init () {
         const self = this
-        // Todo，对接API，获取分析表
-        setTimeout(() => {
-          self.workbook = { id: 0, workName: 'A' }
+        // 获取分析表详情
+        fetchWorkBook(this.$route.params.id).then(({ workBook }) => {
+          self.workbook = workBook
           self.workbooks = [self.workbook]
-          self.currentWorkbook = 'A'
-        }, 500)
-        // Todo，对接API，获取其他工位
-        setTimeout(() => {
-          self.workbooks = [
-            { id: 0, workName: 'A' },
-            { id: 1, workName: 'B' },
-            { id: 2, workName: 'C' },
-            { id: 3, workName: 'D' }
-          ]
-        }, 500)
+          self.currentWorkbook = workBook.workName
+        })
       },
       // 快捷键
       handleShortcut () {

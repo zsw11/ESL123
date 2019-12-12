@@ -29,7 +29,7 @@
         class="workbook-table"
         :mouse-config="{selected: true}"
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
-        :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+        :edit-config="$route.name==='details-opertaiongroup' ? {} : {trigger: 'dblclick', mode: 'cell'}">
         <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
         <operation-column key="operationColumn" min-width="240"></operation-column>
         <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
@@ -203,15 +203,29 @@ export default {
       this.$router.push({ name: 'masterdata-opertaiongroup' })
       this.$destroy()
     },
+    getLastRowIndex (data) {
+      for (let i = data.length - 1; i >= 0; i--) {
+        if (data[i].operation) return i
+      }
+      return -1
+    },
     // 表单提交
     dataFormSubmit () {
-      const tmpDataForm = {
-        operationGroup: this.dataForm,
-        operations: this.$refs.workbookTable.getTableData().fullData
-      }
-      console.log(tmpDataForm)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          const fullData = this.$refs.workbookTable.getTableData().fullData
+          const lastRowIndex = this.getLastRowIndex(fullData)
+          if (lastRowIndex < 0) {
+            this.$message({
+              message: '请确认是否存在有效手顺',
+              type: 'error'
+            })
+            return
+          }
+          const tmpDataForm = {
+            operationGroup: this.dataForm,
+            operations: fullData.slice(0, lastRowIndex + 1)
+          }
           (this.dataForm.id
             ? updateOperationGroup(this.dataForm.id, tmpDataForm)
             : createOperationGroup(tmpDataForm)

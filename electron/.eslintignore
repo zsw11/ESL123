@@ -1,6 +1,6 @@
 src/main/ffmpeg-helper.js
 src/main/subtitle-helper.js
 src/main/VideoServer.js
-src/plugins/
+src/renderer/plugins/
 src/renderer/views
 src/renderer/main.js
