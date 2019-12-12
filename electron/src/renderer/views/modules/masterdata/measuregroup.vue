@@ -138,8 +138,38 @@
             <span>{{scope.row.p1 }}</span>
           </template>
         </el-table-column>
-
+        
         <el-table-column align="center" prop="a3" label="A" width="40">
+          <template slot-scope="scope">
+            <span>{{scope.row.a3 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="tool" label="Tool" width="80" >
+          <template slot-scope="scope">
+            <span>{{scope.row.tool }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="a4" label="A" width="40" >
+          <template slot-scope="scope">
+            <span>{{scope.row.a2 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="b3" label="B" width="40" >
+          <template slot-scope="scope">
+            <span>{{scope.row.b2 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="p2" label="P" width="40" >
+          <template slot-scope="scope">
+            <span>{{scope.row.p1 }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="a5" label="A" width="40">
           <template slot-scope="scope">
             <span>{{scope.row.a3 }}</span>
           </template>
