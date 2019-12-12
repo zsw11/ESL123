@@ -225,7 +225,7 @@ export default {
           const tmpDataForm = {
             operationGroup: this.dataForm,
             operations: fullData.slice(0, lastRowIndex + 1)
-          }
+          };
           (this.dataForm.id
             ? updateOperationGroup(this.dataForm.id, tmpDataForm)
             : createOperationGroup(tmpDataForm)
