@@ -243,7 +243,7 @@ const mainRoutes = {
   ],
   beforeEnter (to, from, next) {
     let token = store.getters.token
-    console.log('token', token, to)
+    // console.log('token', token, to)
     if (!token || !/\S/.test(token)) {
       clearLoginInfo()
       next({ name: 'login' })
