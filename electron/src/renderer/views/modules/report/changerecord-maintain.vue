@@ -3,9 +3,6 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">ReportChangeRecord</div>
-      <div class="buttons">
-        <el-button @click="cancleFormSubmit">取 消</el-button>
-      </div>
     </div>
     <el-form
       :rules="dataRules"
@@ -16,66 +13,70 @@
       label-width="100px"
       style="width: 95%"
     >
-      <el-form-item :label="'组织机构ID'" prop="deptId">
-        <el-input-number v-model="dataForm.deptId"></el-input-number>
-      </el-form-item>
+<!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
+<!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
+<!--      </el-form-item>-->
 
-      <el-form-item :label="'标题'" prop="title">
-        <el-input v-model="dataForm.title"></el-input>
-      </el-form-item>
+<!--      <el-form-item :label="'标题'" prop="title">-->
+<!--        <el-input v-model="dataForm.title"></el-input>-->
+<!--      </el-form-item>-->
 
-      <el-form-item :label="'Sheet名称'" prop="sheetName">
-        <el-input v-model="dataForm.sheetName"></el-input>
-      </el-form-item>
 
-      <el-form-item :label="'工场'" prop="factory">
-        <el-input v-model="dataForm.factory"></el-input>
-      </el-form-item>
 
-      <el-form-item :label="'机种ID'" prop="modelId">
-        <el-input-number v-model="dataForm.modelId"></el-input-number>
-      </el-form-item>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'机种'" prop="modelName">
+            <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
+          </el-form-item>
+        </el-col>
 
-      <el-form-item :label="'型号'" prop="model_type">
-        <el-input v-model="dataForm.model_type"></el-input>
-      </el-form-item>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'生产阶段'" prop="phaseName">
+            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-      <el-form-item :label="'仕向'" prop="destinations">
-        <el-input v-model="dataForm.destinations"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select :disabled="true" style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select>
+          </el-form-item>
+        </el-col>
 
-      <el-form-item :label="'创建者ID'" prop="createBy">
-        <el-input-number v-model="dataForm.createBy"></el-input-number>
-      </el-form-item>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'工程'" prop="factory">
+            <el-input v-model="dataForm.factory"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-      <el-form-item :label="'创建时间'" prop="createAt">
-        <el-date-picker
-          v-model="dataForm.createAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
 
-      <el-form-item :label="'更新者ID'" prop="updateBy">
-        <el-input-number v-model="dataForm.updateBy"></el-input-number>
-      </el-form-item>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'型号'" prop="model_type">
+            <el-input v-model="dataForm.model_type"></el-input>
+          </el-form-item>
+      </el-col>
 
-      <el-form-item :label="'更新时间'" prop="updateAt">
-        <el-date-picker
-          v-model="dataForm.updateAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'仕向'" prop="destinations">
+            <el-input v-model="dataForm.destinations"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-      <el-form-item :label="'删除时间'" prop="deleteAt">
-        <el-date-picker
-          v-model="dataForm.deleteAt"
-          type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
+    <el-row>
+        <el-col :span="10">
+            <el-form-item :label="'Sheet名称'" prop="sheetName">
+                <el-input v-model="dataForm.sheetName"></el-input>
+            </el-form-item>
+        </el-col>
+    </el-row>
+
     </el-form>
+
+
 
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>
@@ -103,6 +104,10 @@ export default {
         sheetName: null,
         factory: null,
         modelId: null,
+        phaseId: null,
+        modelName: null,
+        phaseName: null,
+        stlst: null,
         model_type: null,
         destinations: null,
         createBy: null,
@@ -164,7 +169,7 @@ export default {
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
         fetchReportChangeRecord(this.dataForm.id)
-          .then(({ data }) => {
+          .then((data) => {
             Object.assign(
               this.dataForm,
               pick(data, [
@@ -173,6 +178,10 @@ export default {
                 'sheetName',
                 'factory',
                 'modelId',
+                'phaseId',
+                'modelName',
+                'phaseName',
+                'stlst',
                 'model_type',
                 'destinations',
                 'createBy',

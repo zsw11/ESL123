@@ -6,7 +6,11 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
-        <el-form-item :label="'工场'" prop="factory">
+        <el-form-item :label="'Sheet名称'" prop="sheetName">
+          <el-input v-model="listQuery.sheetName" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item :label="'工程'" prop="factory">
           <el-input v-model="listQuery.factory" clearable></el-input>
         </el-form-item>
 
@@ -71,7 +75,13 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-        <el-table-column align="center" prop="factory" label="工场">
+        <el-table-column align="center" prop="sheetName" label="Sheet名称">
+          <template slot-scope="scope">
+            <span>{{scope.row.sheetName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="factory" label="工程">
           <template slot-scope="scope">
             <span>{{scope.row.factory }}</span>
           </template>
@@ -245,7 +255,7 @@ export default {
               name: 'Sheet名称',
               required: true
             },
-            { code: 'factory', name: '工场', type: 'string', required: true },
+            { code: 'factory', name: '工程', type: 'string', required: true },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
               code: 'model_type',
