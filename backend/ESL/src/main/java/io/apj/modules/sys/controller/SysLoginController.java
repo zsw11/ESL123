@@ -45,8 +45,8 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
-//	@Autowired
-//	private APOService APOService;
+	@Autowired
+	private APOService APOService;
 
 	/**
 	 * 验证码
@@ -70,57 +70,43 @@ public class SysLoginController extends AbstractController {
 //	@PostMapping("/sys/login")
 	@PutMapping("/api/v1/passport/login")
 	public ResponseEntity<Object> login(@RequestBody SysLoginForm form) throws IOException {
-//			boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
-//			if(!captcha){
-//				return R.error("验证码不正确");
-//			}
-// 			账号不存在、密码错误
-//			if (user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
-//				return R.error("账号或密码不正确！");
-//			}
-// 			账号锁定
-//			if (user.getStatus() == 0)
-//				return R.error("账号已被锁定,请联系管理员！");
-//			生成token，并保存到数据库
-//			R r = sysUserTokenService.createToken(user.getUserId());
-//			获取人员信息
-//			MemberEntity memebr = memebrService.selectOne(
-//				new EntityWrapper<MemberEntity>().eq("user_id", user.getUserId()));
-//			if (memebr == null) {
-//			return R.error("该账号人员信息不全,请联系管理员！");
-//			}
-//			r.put("member", memebr);
-//			初始化用户数据权限
-//			Map<String, Object> map = new HashMap<String, Object>();
-//			map.put("userId", user.getUserId());
-//			sysUserService.initUserDataFilter(map);
-		// 用户信息
-		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
-		// 判断用户是否存在
-		if (user == null) {
-//			try {
-//				APOService.login(form.getUsername(), form.getPassword());
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		if (form.getApo()) {
+			Boolean flag = false;
+			try {
+				flag = APOService.login(form.getUsername(), form.getPassword());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return RD.UNAUTHORIZED("请求错误", "请求错误");
+			}
+			if (flag) {
+				SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
+				return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
+			}
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
+		}else {
+			// 用户信息
+			SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
+			// 判断用户是否存在
+			if (user == null) {
+				return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
+			}
+//			获取人员信息
+			StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
+			if (staff == null) {
+				return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户未绑定人员信息，请联系管理员");
+			}
+
+			// 判断密码
+			if (!user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex()))
+				return RD.UNAUTHORIZED("WRONG_PASSWORD", "密码错误");
+
+			// 账号锁定
+			if (user.getStatus() == 0)
+				return RD.UNAUTHORIZED("USER_LOCK", "账号已被锁定");
+
+			return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
 		}
-//		获取人员信息
-		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
-		if (staff == null) {
-			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户未绑定人员信息，请联系管理员");
-		}
-
-		// 判断密码
-		if (!user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex()))
-			return RD.UNAUTHORIZED("WRONG_PASSWORD", "密码错误");
-
-		// 账号锁定
-		if (user.getStatus() == 0)
-			return RD.UNAUTHORIZED("USER_LOCK", "账号已被锁定");
-
-		return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
 	}
 
 	/**

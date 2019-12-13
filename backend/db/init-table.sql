@@ -137,7 +137,17 @@ INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (2, 3, 1
 INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (3, 4, 1);
 INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (4, 5, 1);
 INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (5, 6, 1);
-
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (8, 13, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (9, 14, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (10, 15, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (11, 16, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (12, 17, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (13, 18, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (14, 19, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (1, 2, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (15, 20, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (6, 11, 6);
+INSERT INTO "public"."sys_user_role"("id", "user_id", "role_id") VALUES (7, 12, 6);
 
 -- 角色与菜单对应关系
 drop table if exists sys_role_menu;
@@ -2125,6 +2135,17 @@ INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code",
 INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (3, NULL, 1, 4, '2', '何福睿', 'hefuzuo', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-24 11:27:15.329', NULL, '2019-11-24 11:27:15.329', NULL);
 INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, NULL, 1, 5, '3', '周述文', 'zhoushuwen', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-24 11:27:45.24', NULL, '2019-11-24 11:27:45.24', NULL);
 INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (5, NULL, 1, 6, '4', '熊驰', 'xiongchi', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-24 11:28:08.506', NULL, '2019-11-24 11:28:08.506', NULL);
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (8, NULL, 1, 11, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', '2019-12-03 12:56:06.151');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (9, NULL, 1, 12, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', '2019-12-03 13:21:46.609');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (10, NULL, 1, 13, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', '2019-12-03 16:51:25.803');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (11, NULL, 1, 14, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, 'E000037364', 1, '2019-11-28 09:43:07.696', 11, '2019-12-04 12:36:49.242', '2019-12-04 12:42:28.339');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (12, NULL, 1, 15, 'ESL001', 'ESL', 'ESL', '02', NULL, NULL, NULL, '2019-11-01', NULL, '3435465', 1, '2019-11-28 09:43:07.696', 11, '2019-12-04 12:49:57.644', '2019-12-04 12:50:10.389');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (13, NULL, 1, 16, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', '2019-12-05 11:25:36.823');
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (14, NULL, 1, 17, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', NULL);
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (15, NULL, 1, 18, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', NULL);
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (16, NULL, 1, 19, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', NULL);
+INSERT INTO "public"."basic_staff"("id", "job_id", "dept_id", "user_id", "code", "name", "pinyin", "gender", "mobilephone", "status", "remark", "employment_date", "email", "job_number", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (17, NULL, 1, 20, 'ESL001', 'ESL', 'ESL', NULL, NULL, NULL, NULL, '2019-11-01', NULL, NULL, 1, '2019-11-28 09:43:07.696', NULL, '2019-11-28 09:43:07.696', NULL);
+
 
 
 
@@ -2366,6 +2387,8 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO "public"."sys_role"("id", "role_name", "dept_id", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'admin', 1, NULL, 1, '2019-02-25 10:13:01', 1, '2019-11-24 11:28:35.273', '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_role"("id", "role_name", "dept_id", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (6, '测试', 1, NULL, 1, '2019-11-26 17:46:55.443', 1, '2019-11-26 17:52:16.252', NULL);
+
 
 
 -- ----------------------------
@@ -2376,6 +2399,17 @@ INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt",
 INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, 1, 'freedom', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-24 11:27:15.321', NULL, NULL, NULL);
 INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (5, 1, 'zsw', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-24 11:27:45.231', NULL, NULL, NULL);
 INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (6, 1, 'xc', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-24 11:28:08.498', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (11, 1, 'esl001', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (12, 1, 'esl002', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (13, 1, 'esl003', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (14, 1, 'esl004', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (15, 1, 'esl005', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (16, 1, 'esl006', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (17, 1, 'esl007', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (18, 1, 'esl008', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (19, 1, 'esl009', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+INSERT INTO "public"."sys_user"("id", "dept_id", "username", "password", "salt", "email", "mobile", "status", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (20, 1, 'esl010', '7d0ec1bcc916e97f9e6392efeee74e6862f566613e7457c710d9862b5a3751e2', 'YzcmCZNvbXocrsz9dm8e', NULL, NULL, 1, 1, '2019-11-28 09:43:07.655', NULL, NULL, NULL);
+
 
 
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (1, 1, 1);
@@ -2571,3 +2605,148 @@ INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (190, 1,
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (191, 1, 561);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (192, 1, 562);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (193, 1, -666666);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (430, 6, 562);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (289, 6, 47);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (290, 6, 48);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (291, 6, 49);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (292, 6, 50);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (293, 6, 51);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (294, 6, 72);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (295, 6, 73);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (296, 6, 74);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (297, 6, 75);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (298, 6, 76);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (299, 6, 82);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (300, 6, 83);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (301, 6, 84);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (302, 6, 85);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (303, 6, 86);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (304, 6, 307);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (305, 6, 401);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (306, 6, 402);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (307, 6, 403);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (308, 6, 404);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (309, 6, 405);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (310, 6, 416);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (311, 6, 417);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (312, 6, 418);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (313, 6, 419);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (314, 6, 420);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (315, 6, 421);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (316, 6, 422);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (317, 6, 423);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (318, 6, 424);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (319, 6, 425);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (320, 6, 427);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (321, 6, 428);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (322, 6, 429);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (323, 6, 430);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (324, 6, 426);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (325, 6, 431);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (326, 6, 432);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (327, 6, 433);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (328, 6, 434);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (329, 6, 435);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (330, 6, 436);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (331, 6, 437);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (332, 6, 438);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (333, 6, 439);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (334, 6, 440);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (335, 6, 446);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (336, 6, 447);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (337, 6, 448);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (338, 6, 449);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (339, 6, 450);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (340, 6, 451);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (341, 6, 452);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (342, 6, 453);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (343, 6, 454);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (344, 6, 455);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (345, 6, 461);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (346, 6, 462);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (347, 6, 463);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (348, 6, 464);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (349, 6, 465);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (350, 6, 471);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (351, 6, 472);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (352, 6, 473);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (353, 6, 474);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (354, 6, 475);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (355, 6, 481);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (356, 6, 483);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (357, 6, 484);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (358, 6, 485);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (359, 6, 482);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (360, 6, 496);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (361, 6, 497);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (362, 6, 498);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (363, 6, 499);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (364, 6, 500);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (365, 6, 501);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (366, 6, 502);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (367, 6, 503);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (368, 6, 504);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (369, 6, 505);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (370, 6, 486);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (371, 6, 487);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (372, 6, 488);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (373, 6, 489);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (374, 6, 490);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (375, 6, 506);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (376, 6, 508);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (377, 6, 509);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (378, 6, 510);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (379, 6, 511);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (380, 6, 512);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (381, 6, 513);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (382, 6, 514);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (383, 6, 515);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (384, 6, 516);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (385, 6, 517);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (386, 6, 518);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (387, 6, 519);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (388, 6, 520);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (389, 6, 521);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (390, 6, 522);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (391, 6, 523);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (392, 6, 524);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (393, 6, 525);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (394, 6, 526);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (395, 6, 527);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (396, 6, 528);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (397, 6, 529);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (398, 6, 530);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (399, 6, 531);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (400, 6, 532);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (401, 6, 533);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (402, 6, 534);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (403, 6, 535);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (404, 6, 536);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (405, 6, 537);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (406, 6, 538);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (407, 6, 539);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (408, 6, 540);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (409, 6, 541);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (410, 6, 542);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (411, 6, 543);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (412, 6, 544);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (413, 6, 545);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (414, 6, 546);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (415, 6, 547);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (416, 6, 548);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (417, 6, 549);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (418, 6, 550);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (419, 6, 551);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (420, 6, 552);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (421, 6, 553);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (422, 6, 554);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (423, 6, 555);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (424, 6, 556);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (425, 6, 557);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (426, 6, 558);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (427, 6, 559);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (428, 6, 560);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (429, 6, 561);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (431, 6, -666666);
+INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (432, 6, 31);
+
