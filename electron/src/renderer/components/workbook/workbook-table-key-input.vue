@@ -34,9 +34,11 @@
 </template>
 
 <script>
-import Popper from '@plugins/vue-popperjs/vue-popper.js'
-import '@plugins/vue-popperjs/vue-popper.min.css'
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/vue-popper.min.css'
 import { listMeasureGroup } from '@/api/measureGroup'
+
+console.log('popper', Popper)
 
 export default {
   name: 'KeyInput',

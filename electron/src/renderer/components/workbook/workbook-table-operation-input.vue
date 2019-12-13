@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import Popper from '@plugins/vue-popperjs/vue-popper.js'
-import '@plugins/vue-popperjs/vue-popper.min.css'
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/vue-popper.min.css'
 import { listAction } from '@/api/action'
 import { listPart } from '@/api/part'
 import { listTool } from '@/api/tool'

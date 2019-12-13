@@ -13,6 +13,7 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      @keydown.enter="enter"
       @edit-actived="editActived">
       <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
@@ -113,6 +114,10 @@ export default {
         return false
       }
       return true
+    },
+    // 按下回车
+    enter (e) {
+      console.log(e)
     },
     // 调到指定位置
     jump (row, field, to) {
