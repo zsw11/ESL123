@@ -122,6 +122,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column align="center" prop="remark" label="备注">
+          <template slot-scope="scope">
+            <span>{{scope.row.remark}}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column align="center" fixed="right" :label="'操作'" width="220">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
@@ -157,12 +163,13 @@ import ImportData from "@/components/import-data";
 const defaultExport = [
   "model.name",
   "model.deptName",
-  "model.modelSeriesId",
+  "model.modelSeriesName",
   "model.code",
   "model.WSTime",
   "model.ESTime",
   "model.AMPTime",
-  "model.MPTime"
+  "model.MPTime",
+  "model.remark"
 ];
 
 export default {
@@ -204,7 +211,7 @@ export default {
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
             {
-              code: "modelSeriesId",
+              code: "modelSeriesName",
               name: "机种系列",
               type: "string",
               required: true
@@ -229,13 +236,14 @@ export default {
       // 导入字段，固定不可变
       importAttributes: [
         "model.name",
-        "model.deptId",
-        "model.modelSeriesId",
+        "model.deptName",
+        "model.modelSeriesName",
         "model.code",
         "model.WSTime",
         "model.ESTime",
         "model.AMPTime",
-        "model.MPTime"
+        "model.MPTime",
+        "model.remark"
       ]
     };
   },
@@ -250,7 +258,7 @@ export default {
               attributes: this.importAttributes,
               plain: true
             }),
-            sampleDatas: [["机种x", "1", "1", "code008", "", "", "", ""]]
+            sampleDatas: [["机种x", "部门1", "机种系列1", "code008", "", "", "", "",""]]
           }
         ],
         importApi: modelImport,
