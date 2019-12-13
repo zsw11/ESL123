@@ -15,7 +15,6 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
       @keydown="keydown"
       @edit-actived="editActived">
-      <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" min-width="240"></operation-column>
@@ -98,13 +97,13 @@ export default {
     },
     // 加载数据
     loadData (data) {
+      // 增加100行方便操作
+      for (let i = 0; i < 100; i++) {
+        data.push(this.createNewRow())
+      }
       this.$refs.workbookTable.loadData(data)
       this.lastEditCell = undefined
       this.currentCell = undefined
-      // 增加100行方便操作
-      for (let i = 0; i < 100; i++) {
-        this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
-      }
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
