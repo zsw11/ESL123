@@ -35,11 +35,11 @@
         ref="standardBookForm"
         :model="standardBookDialog.formData"
         :rules="standardBookDialog.rules">
-        <el-form-item label="标准书名称" prop="name" :label-width="'100px'">
-          <el-input v-model="standardBookDialog.formData.name" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="标准书编号" prop="code" :label-width="'100px'">
           <el-input v-model="standardBookDialog.formData.code" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="标准书名称" prop="name" :label-width="'100px'">
+          <el-input v-model="standardBookDialog.formData.name" autocomplete="off"></el-input>
         </el-form-item>
         <span class="dialog-footer">
           <el-button type="primary" @click="doAddStandardBook()">确定</el-button>

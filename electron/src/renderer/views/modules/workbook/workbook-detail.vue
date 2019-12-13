@@ -28,7 +28,7 @@
       </div>
 
       <div class="workbook-buttons">
-        <el-tooltip content="Ctrl + I" placement="top">
+        <!-- <el-tooltip content="Ctrl + I" placement="top">
           <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
         </el-tooltip>
         <el-tooltip content="Ctrl + C" placement="top">
@@ -36,7 +36,7 @@
         </el-tooltip>
         <el-tooltip content="Ctrl + V" placement="top">
           <el-button type="primary" @click="paste">粘贴</el-button>
-        </el-tooltip>
+        </el-tooltip> -->
         <el-autocomplete
           class="inline-input"
           v-model="addedOperation"
@@ -44,8 +44,6 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
-        <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
-        <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
