@@ -16,9 +16,12 @@ import '@/components/common'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+import VXETablePluginExcel from 'vxe-table-plugin-excel'
+import 'vxe-table-plugin-excel/dist/style.css'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.use(VXETable)
+VXETable.use(VXETablePluginExcel)
 
 Vue.use(VueCookie)
 Vue.config.productionTip = false

@@ -13,7 +13,7 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
-      @keydown.enter="enter"
+      @keydown="keydown"
       @edit-actived="editActived">
       <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
@@ -116,7 +116,7 @@ export default {
       return true
     },
     // 按下回车
-    enter (e) {
+    keydown (e) {
       console.log(e)
     },
     // 调到指定位置
@@ -203,6 +203,7 @@ export default {
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
+      console.log(222)
       Object.assign(
         row,
         pick(mg, measureFields)
