@@ -73,6 +73,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.apo =  this.title === 'APO'
+          console.log(this.dataForm, 22222222222222222)
           if (valid) {
             this.logining = true
             this.$store.dispatch('user/login', this.dataForm)
@@ -122,7 +123,7 @@
     left: 11%;
     width: 78%;
     height:95%;
-    min-width: 800px;
+    min-width: 890px;
     min-height: 450px;
     background-size: cover;
     box-sizing: border-box;
@@ -190,7 +191,7 @@
 
   .username > input,.password >input {
     border-radius: 0;
-    width: 250px;
+    width: 90%;
     border-left: none;
     border-top: none;
     border-right: none;
@@ -198,7 +199,7 @@
 
   #login-btn-submit {
     margin-top: 7%;
-    width: 150px;
+    width: 50%;
     height: 12%;
     border-radius: 90px;
     background-color: #172379;

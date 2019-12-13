@@ -156,7 +156,7 @@ import ImportData from "@/components/import-data";
 
 const defaultExport = [
   "model.name",
-  "model.deptId",
+  "model.deptName",
   "model.modelSeriesId",
   "model.code",
   "model.WSTime",
@@ -178,6 +178,7 @@ export default {
         id: 0,
         name: null,
         deptId: null,
+        deptName: null,
         modelSeriesId: null,
         code: null,
         WSTime: null,
@@ -200,16 +201,15 @@ export default {
           code: "model",
           name: "机种",
           children: [
-            { code: "id", name: "ID", type: "string", required: true },
-            { code: "name", name: "名称", type: "string", required: true },
-            { code: "deptId", name: "部门ID", type: "string", required: true },
+            { code: "name", name: "机种名称", type: "string", required: true },
+            { code: "deptName", name: "部门", type: "string", required: true },
             {
               code: "modelSeriesId",
-              name: "机种系列ID",
+              name: "机种系列",
               type: "string",
               required: true
             },
-            { code: "code", name: "type", type: "string", required: true },
+            { code: "code", name: "型号", type: "string", required: true },
             { code: "WSTime", name: "WS Date", type: "string", required: true },
             { code: "ESTime", name: "ES Date", type: "string", required: true },
             {
@@ -219,49 +219,7 @@ export default {
               required: true
             },
             { code: "MPTime", name: "MP Date", type: "string", required: true },
-            { code: "remark", name: "remark", type: "string", required: true },
-            {
-              code: "createBy",
-              name: "创建者ID",
-              type: "string",
-              required: true
-            },
-            {
-              code: "createAt",
-              name: "创建时间",
-              type: "string",
-              required: true
-            },
-            {
-              code: "updateBy",
-              name: "更新者ID",
-              type: "string",
-              required: true
-            },
-            {
-              code: "updateAt",
-              name: "更新时间",
-              type: "string",
-              required: true
-            },
-            {
-              code: "deleteAt",
-              name: "删除时间",
-              type: "string",
-              required: true
-            },
-            {
-              code: "createdAt",
-              name: "创建时间",
-              type: "string",
-              required: true
-            },
-            {
-              code: "updatedAt",
-              name: "修改时间",
-              type: "string",
-              required: true
-            }
+            { code: "remark", name: "备注", type: "string", required: true }
           ]
         }
       ],
