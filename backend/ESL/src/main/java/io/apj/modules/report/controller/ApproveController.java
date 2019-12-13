@@ -11,16 +11,12 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
-import io.apj.modules.masterData.dao.ModelDao;
-import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.*;
 import io.apj.modules.report.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import lombok.experimental.PackagePrivate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -116,97 +112,170 @@ public class ApproveController {
 
 	/**
 	 * 保存
+	 * @return
 	 */
 	@RequestMapping("/create")
 	@RequiresPermissions("report:approve:create")
-	public ResponseEntity<Object> save(@RequestBody ApproveEntity approve) {
+	public List<Object> save(@RequestBody ApproveEntity approve) {
 		//判断所选报表组里的报表是否生成了
+		int pid = approve.getPhaseId();
+		int mid = approve.getModelId();
+		String stlst = approve.getStlst();
 		int reportGroupId = approve.getReportGroupId();
 		List<ReportEntity> reportEntityList = reportGroupReportRelaService.selectReportNameByReportGroupId(reportGroupId);
-		List<Object> reportList = new ArrayList<>();
-		for(ReportEntity item : reportEntityList){
-			ReportEntity reportEntity= reportService.selectById(item.getId());
-			String reportName = reportEntity.getEname();
-			//通过Ename去所有报表里查是否生产了表
-			switch (reportName){
-				case "report_total":
-					int total =  totalService.selectCount(null);
-					if(total<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "work_book":
-					int workBook =  workBookService.selectCount(null);
-					if(workBook<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "collection_station_time":
-					int station =  stationTimeService.selectCount(null);
-					if(station<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "collection_compare":
-					int compare =  compareService.selectCount(null);
-					if(compare<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "collection_most_value":
-					int mostValue =  mostValueService.selectCount(null);
-					if(mostValue<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "collection_revision_history":
-					int revision =  revisionHistoryService.selectCount(null);
-					if(revision<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "report_time_contact":
-					int timeContact =  timeContactService.selectCount(null);
-					if(timeContact<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "report_standard_time":
-					int standardTime =  standardTimeService.selectCount(null);
-					if(standardTime<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "report_standard_work":
-					int standardWork =  standardWorkService.selectCount(null);
-					if(standardWork<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
-				case "report_change_record":
-					int changRecord =  changeRecordService.selectCount(null);
-					if(changRecord<0){
-						//提醒生成
-						reportList.add(reportName);
-					}
-					break;
+//		List<Object> reportList = new ArrayList<>();
+//		for(ReportEntity item : reportEntityList){
+//			ReportEntity reportEntity= reportService.selectById(item.getId());
+//			String reportName = reportEntity.getEname();
+//			//通过Ename去所有报表里查是否生产了表
+//			switch (reportName){
+//				case "report_total":
+//					int total =  totalService.selectCount(null);
+//					if(total<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "work_book":
+//					int workBook =  workBookService.selectCount(null);
+//					if(workBook<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "collection_station_time":
+//					int station =  stationTimeService.selectCount(null);
+//					if(station<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "collection_compare":
+//					int compare =  compareService.selectCount(null);
+//					if(compare<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "collection_most_value":
+//					int mostValue =  mostValueService.selectCount(null);
+//					if(mostValue<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "collection_revision_history":
+//					int revision =  revisionHistoryService.selectCount(null);
+//					if(revision<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "report_time_contact":
+//					int timeContact =  timeContactService.selectCount(null);
+//					if(timeContact<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "report_standard_time":
+//					int standardTime =  standardTimeService.selectCount(null);
+//					if(standardTime<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "report_standard_work":
+//					int standardWork =  standardWorkService.selectCount(null);
+//					if(standardWork<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//				case "report_change_record":
+//					int changRecord =  changeRecordService.selectCount(null);
+//					if(changRecord<0){
+//						//提醒生成
+//						reportList.add(reportName);
+//					}
+//					break;
+//			}
+//		}
+//		if(!reportList.isEmpty()){
+//			return reportList;
+//		}else {
+			List<Object> reportItemList = new ArrayList<>();
+			for(ReportEntity item : reportEntityList){
+				//判断是否符合3个字段
+				ReportEntity reportEntity= reportService.selectById(item.getId());
+				String reportName = reportEntity.getEname();
+				switch (reportName){
+					case "report_total":
+						List<TotalEntity> total = (List<TotalEntity>) totalService.selectList(new EntityWrapper<TotalEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(total.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "work_book":
+						List<WorkBookEntity> workBookEntity = (List<WorkBookEntity>) workBookService.selectList(new EntityWrapper<WorkBookEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(workBookEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "collection_station_time":
+						List<StationTimeEntity> stationTimeEntity = (List<StationTimeEntity>) stationTimeService.selectList(new EntityWrapper<StationTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(stationTimeEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "collection_compare":
+						List<CompareEntity> compareEntity = (List<CompareEntity>) compareService.selectList(new EntityWrapper<CompareEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						reportItemList.add(reportEntity);
+						break;
+					case "collection_most_value":
+						List<MostValueEntity> mostValueEntity = (List<MostValueEntity>) mostValueService.selectList(new EntityWrapper<MostValueEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(mostValueEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "collection_revision_history":
+						List<RevisionHistoryEntity> revisionHistoryEntity = (List<RevisionHistoryEntity>) revisionHistoryService.selectList(new EntityWrapper<RevisionHistoryEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(!revisionHistoryEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "report_time_contact":
+						List<TimeContactEntity> timeContactEntity = (List<TimeContactEntity>) timeContactService.selectList(new EntityWrapper<TimeContactEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(timeContactEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "report_standard_time":
+						List<StandardTimeEntity> standardTimeEntity = (List<StandardTimeEntity>) standardTimeService.selectList(new EntityWrapper<StandardTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(standardTimeEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "report_standard_work":
+						List<StandardWorkEntity> standardWorkEntity = (List<StandardWorkEntity>) standardWorkService.selectList(new EntityWrapper<StandardWorkEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(standardWorkEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+					case "report_change_record":
+						List<ChangeRecordEntity> changeRecordEntity = (List<ChangeRecordEntity>) changeRecordService.selectList(new EntityWrapper<ChangeRecordEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+						if(changeRecordEntity.isEmpty()){
+							reportItemList.add(reportEntity);
+						}
+						break;
+				}
+				if(!reportItemList.isEmpty()){
+					approveService.insert(approve);
+				}else {
+					return  reportItemList;
+				}
 			}
-		}
-		if(!reportList.isEmpty()){
-			return (ResponseEntity<Object>) reportList;
-		}else {
-			approveService.insert(approve);
-			return RD.ok(approve);
-		}
+		return null;
 
 	}
 

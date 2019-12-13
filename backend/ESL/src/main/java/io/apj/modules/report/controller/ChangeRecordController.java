@@ -38,6 +38,7 @@ public class ChangeRecordController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:changerecord:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		//判断是否还可以提交审批
         PageUtils page = changeRecordService.selectListTest(params);
 
 		return RD.success(page);
