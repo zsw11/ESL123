@@ -3,6 +3,7 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ import io.apj.common.utils.RD;
  */
 @RestController
 @RequestMapping("/api/v1/stationtime")
-public class StationTimeController {
+public class StationTimeController extends AbstractController {
 	@Autowired
 	private StationTimeService stationTimeService;
 
@@ -58,6 +59,7 @@ public class StationTimeController {
 	@RequestMapping("/create")
 	@RequiresPermissions("collection:stationtime:create")
 	public ResponseEntity<Object> save(@RequestBody StationTimeEntity stationTime) {
+		stationTime.setDeptId(getUserDeptId().intValue());
 		stationTimeService.insert(stationTime);
 
 		return RD.success(stationTime);

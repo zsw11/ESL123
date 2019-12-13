@@ -80,7 +80,10 @@ public class OpertaionGroupController extends AbstractController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:opertaiongroup:create")
     public RD save(@RequestBody Map<String, Object> map) throws InvocationTargetException, IllegalAccessException, IntrospectionException {
-        opertaionGroupService.insertOpGroup(map);
+        OpertaionGroupEntity opertaionGroup = new OpertaionGroupEntity();
+        DataUtils.transMap2Bean2((Map<String, Object>) map.get("operationGroup"), opertaionGroup);
+        opertaionGroup.setDeptId(getUserDeptId().intValue());
+        opertaionGroupService.insertOpGroup(map,opertaionGroup);
         return RD.build();
     }
 

@@ -21,7 +21,7 @@ public interface OpertaionGroupService extends IService<OpertaionGroupEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    ResponseEntity<Object> insertOpGroup(Map<String, Object> map) throws InvocationTargetException, IllegalAccessException, IntrospectionException;
+    ResponseEntity<Object> insertOpGroup(Map<String, Object> map,OpertaionGroupEntity opertaionGroup) throws InvocationTargetException, IllegalAccessException, IntrospectionException;
 
     ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) throws IntrospectionException, InvocationTargetException, IllegalAccessException;
 }
