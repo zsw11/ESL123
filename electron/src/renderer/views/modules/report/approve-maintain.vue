@@ -14,7 +14,7 @@
     >
   <el-row>
     <el-col :span="10">
-      <el-form-item :label="'报表组:'+ dataForm.reportGroupName" prop="reportGroupName">
+      <el-form-item :label="'报表组:'+ dataForm.reportGroupName" prop="reportGroupName" label-width="300">
       </el-form-item>
     </el-col>
     <el-col :span="10" :offset="2">
