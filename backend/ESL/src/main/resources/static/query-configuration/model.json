@@ -12,7 +12,7 @@
             {
                 "code": "code",
                 "name": "型号",
-                "type": "int"
+                "type": "String"
             },
             {
                 "code": "deptName",

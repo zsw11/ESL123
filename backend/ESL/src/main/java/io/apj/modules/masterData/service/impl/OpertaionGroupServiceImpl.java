@@ -63,7 +63,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 			operationWrapper.eq("operation_group_id", entity.getId());
 			entity.setCount(operationGroupOperationService.selectCount(operationWrapper));
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
-			;
+
 		}
 
 		return new PageUtils(page);

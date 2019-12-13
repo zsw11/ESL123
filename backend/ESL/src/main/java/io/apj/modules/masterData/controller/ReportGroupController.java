@@ -59,13 +59,6 @@ public class ReportGroupController extends AbstractController {
 
 		return RD.build().put("data", data);
 
-//		ReportGroupEntity reportGroup = reportGroupService.selectById(id);
-//		List<ReportEntity> reportEntities = reportGroupReportRelaService.selectReportNameByReportGroupId(id);
-//
-//		HashMap<Object, Object> data = new HashMap<>();
-//		data.put("reportGroup", reportGroup);
-//		data.put("reportEntities", reportEntities);
-//		return RD.build().put("data", data);
 	}
 	/**
 	 * 报表组详情

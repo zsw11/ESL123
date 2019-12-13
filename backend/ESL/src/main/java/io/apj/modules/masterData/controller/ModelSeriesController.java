@@ -100,6 +100,7 @@ public class ModelSeriesController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:modelseries:update")
 	public RD update(@RequestBody ModelSeriesEntity modelSeries) {
+		modelSeries.setPinyin(PinyinUtil.getPinYin(modelSeries.getName()));
 		modelSeriesService.updateById(modelSeries);
 
 		return RD.build().put("code", 200);
