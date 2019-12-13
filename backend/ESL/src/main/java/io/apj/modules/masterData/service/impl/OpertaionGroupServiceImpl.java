@@ -71,11 +71,12 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 
 	@Override
 	@Transactional
-	public ResponseEntity<Object> insertOpGroup(Map<String, Object> map)
+	public ResponseEntity<Object> insertOpGroup(Map<String, Object> map, OpertaionGroupEntity opertaionGroup)
 			throws InvocationTargetException, IllegalAccessException, IntrospectionException {
-		OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"), true),
-				OpertaionGroupEntity.class);
-		opertaionGroup.setDeptId(1);
+//		OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"), true),
+//				OpertaionGroupEntity.class);
+////		model.setDeptId(getUserDeptId().intValue());
+//		opertaionGroup.setDeptId(getUserDeptId().intValue());
 		opertaionGroupService.insert(opertaionGroup);
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("code", (opertaionGroup.getCode()));

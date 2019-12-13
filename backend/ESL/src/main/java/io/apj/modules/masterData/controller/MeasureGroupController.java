@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
+import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/api/v1/measuregroup")
-public class MeasureGroupController {
+public class MeasureGroupController extends AbstractController {
     @Autowired
     private MeasureGroupService measureGroupService;
     @Autowired
@@ -66,6 +67,7 @@ public class MeasureGroupController {
     @RequestMapping("/create")
     @RequiresPermissions("masterData:measuregroup:create")
     public RD save(@RequestBody MeasureGroupEntity measureGroup){
+        measureGroup.setDeptId(getUserDeptId().intValue());
 		measureGroupService.insert(measureGroup);
 
         return RD.build().put("code", 200);

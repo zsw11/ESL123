@@ -43,20 +43,20 @@ public class DynamicDataSourceTest {
         SysUserEntity user3 = dataSourceTestService.queryUser(1L);
         System.out.println(ToStringBuilder.reflectionToString(user3));
     }
-    @Test
-    public void aVoid() throws IllegalAccessException, InvocationTargetException, IntrospectionException {
-        OpertaionGroupEntity opertaionGroupEntity = new OpertaionGroupEntity();
-        opertaionGroupEntity.setCode("We");
-        OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
-        operationGroupOperationEntity.setOperation("test");
-        operationGroupOperationEntity.setFrequency(2);
-        String operationGroupOperationEntitys = JSON.toJSONString(operationGroupOperationEntity);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("OpertaionGroupEntity",opertaionGroupEntity);
-        map.put("OperationGroupOperationEntity",operationGroupOperationEntitys);
-        opertaionGroupService.insertOpGroup(map);
-
-    }
+//    @Test
+//    public void aVoid() throws IllegalAccessException, InvocationTargetException, IntrospectionException {
+//        OpertaionGroupEntity opertaionGroupEntity = new OpertaionGroupEntity();
+//        opertaionGroupEntity.setCode("We");
+//        OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
+//        operationGroupOperationEntity.setOperation("test");
+//        operationGroupOperationEntity.setFrequency(2);
+//        String operationGroupOperationEntitys = JSON.toJSONString(operationGroupOperationEntity);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("OpertaionGroupEntity",opertaionGroupEntity);
+//        map.put("OperationGroupOperationEntity",operationGroupOperationEntitys);
+//        opertaionGroupService.insertOpGroup(map);
+//
+//    }
 
 
 }

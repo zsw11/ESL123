@@ -95,6 +95,7 @@ public class ModelController extends AbstractController {
 	public RD save(@RequestBody ModelEntity model) {
 		model.setCreateBy(getUserId().intValue());
 		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
+		model.setDeptId(getUserDeptId().intValue());
 		modelService.insert(model);
 		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 

@@ -3,6 +3,7 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ import io.apj.common.utils.RD;
  */
 @RestController
 @RequestMapping("/api/v1/compare")
-public class CompareController {
+public class CompareController extends AbstractController {
 	@Autowired
 	private CompareService compareService;
 
@@ -58,6 +59,7 @@ public class CompareController {
 	@RequestMapping("/create")
 	@RequiresPermissions("collection:compare:create")
 	public ResponseEntity<Object> save(@RequestBody CompareEntity compare) {
+		compare.setDeptId(getUserDeptId().intValue());
 		compareService.insert(compare);
 
 		return RD.success(compare);
