@@ -47,7 +47,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at",false);
 		if (params.get("code") != null && params.get("code") != "") {
-			entityWrapper.eq("code", params.get("code"));
+			entityWrapper.like("code", (String) params.get("code"));
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("usedCount"))) {
 			entityWrapper.eq("used_count", Integer.parseInt((String) params.get("usedCount")));

@@ -1,6 +1,7 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
@@ -32,6 +33,9 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
+                .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
+                .like(params.get("monthResult") != null && params.get("monthResult") != "", "month_result", (String) params.get("monthResult"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
                 .like(params.get("cotegory") != null && params.get("cotegory") != "", "cotegory", (String) params.get("cotegory"))
                 .like(params.get("mecha") != null && params.get("mecha") != "", "mecha", (String) params.get("mecha"))
@@ -39,6 +43,12 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
                 .like(params.get("allowanceRate") != null && params.get("allowanceRate") != "", "allowanceRate", (String) params.get("allowanceRate"))
                 .like(params.get("stRev") != null && params.get("stRev") != "", "st_rev", (String) params.get("stRev"))
                 .like(params.get("lstRev") != null && params.get("lstRev") != "", "lst_rev", (String) params.get("lstRev"));
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
+        }
         Page<TotalEntity> page = this.selectPage(
                 new Query<TotalEntity>(params).getPage(), entityWrapper
         );

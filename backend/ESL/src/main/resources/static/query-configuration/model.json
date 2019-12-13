@@ -15,14 +15,14 @@
                 "type": "int"
             },
             {
-                "code": "deptId",
+                "code": "deptName",
                 "name": "部门",
-                "type": "int"
+                "type": "String"
             },
             {
-                "code": "modelSeriesId",
+                "code": "modelSeriesName",
                 "name": "机种系列",
-                "type": "int"
+                "type": "String"
             },
             {
                 "code": "WSTime",

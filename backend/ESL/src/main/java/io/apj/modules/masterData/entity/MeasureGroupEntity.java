@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -53,6 +54,11 @@ public class MeasureGroupEntity implements Serializable {
 	 * 组织机构ID
 	 */
 	private Integer deptId;
+	/**
+	 * 机构名称
+	 */
+	@TableField(exist = false)
+	private String  deptName;
 	/**
 	 * 使用次数统计
 	 */
