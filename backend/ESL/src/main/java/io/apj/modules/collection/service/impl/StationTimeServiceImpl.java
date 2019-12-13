@@ -43,7 +43,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
                 .like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))

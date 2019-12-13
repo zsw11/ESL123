@@ -29,7 +29,7 @@ public class TimeContactServiceImpl
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
         ;
         Page<TimeContactEntity> page = this.selectPage(

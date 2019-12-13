@@ -19,7 +19,7 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ApproveOpininonEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.orderBy("update_at").last("desc").isNull("delete_at").like(params.get("opininon") != null && params.get("opininon") != "",
+		entityWrapper.orderBy("update_at",false).isNull("delete_at").like(params.get("opininon") != null && params.get("opininon") != "",
 				"opininon", (String) params.get("opininon"));
 		if (params.get("approveOperation") != null && params.get("approveOperation") != "") {
 			entityWrapper.andNew("pinyin like '%" + params.get("approveOperation") + "%' "

@@ -19,7 +19,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at").last("desc");
+		entityWrapper.isNull("delete_at").orderBy("update_at",false);
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
 			entityWrapper.andNew(

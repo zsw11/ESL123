@@ -33,7 +33,7 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ReportGroupEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at").last("desc")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("id") != null && params.get("id") != "", "id", (String) params.get("id"))
                 .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
