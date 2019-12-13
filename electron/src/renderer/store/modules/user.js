@@ -42,7 +42,8 @@ export default {
       return new Promise((resolve, reject) => {
         login({
           username: loginInfo.username.trim(),
-          password: loginInfo.apo ? loginInfo.password.trim() : md5('security' + loginInfo.password.trim())
+          password: loginInfo.apo ? loginInfo.password.trim() : md5('security' + loginInfo.password.trim()),
+          apo: loginInfo.apo
         }).then(response => {
           const data = response.page
           commit('SetId', data.id)
