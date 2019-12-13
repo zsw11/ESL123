@@ -24,7 +24,7 @@
         <el-col :span="22">
           <el-form-item style="display: block" :rules="dataRules" :label="'常用审批意见'" prop="opininon">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"

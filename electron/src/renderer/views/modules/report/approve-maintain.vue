@@ -63,8 +63,8 @@
 
     </el-card>
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>
-      <el-button @click="cancleFormSubmit">取 消</el-button>
+<!--      <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>-->
+      <el-button @click="cancleFormSubmit">确定</el-button>
     </span>
   </el-card>
 </template>

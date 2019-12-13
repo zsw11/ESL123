@@ -14,7 +14,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
         <el-form-item :label="'工位名称'" prop="name">
-            <el-input  :disabled=flag v-model="dataForm.name"></el-input>
+            <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -22,7 +22,7 @@
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -53,7 +53,7 @@
         <span>{{ node.label }}</span>
         <span>
           <el-button
-            v-if=!flag
+            v-if="$route.path.includes('edit')"
             id="delete"
             type="text"
             size="mini"
