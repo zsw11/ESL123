@@ -138,10 +138,10 @@
         this.inited = false
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
-          fetchPart(this.dataForm.id).then(({data}) => {
+          fetchPart(this.dataForm.id).then(({page, status}) => {
             Object.assign(
               this.dataForm,
-              pick(data, [ 'name', 'common', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+              pick(page, [ 'name', 'common', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
             )
           }).finally(() => {
             this.inited = true

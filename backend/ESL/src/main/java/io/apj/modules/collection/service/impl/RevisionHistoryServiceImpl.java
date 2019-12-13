@@ -35,7 +35,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
         ;

@@ -1,5 +1,5 @@
 <template>
-  <div class="workbook-detail-page">
+  <div class="workbook-detail-page" :class="workbookPercent">
     <div class="header">
       <el-button icon="el-icon-back" @click="goBack">返回</el-button>
       <el-button icon="el-icon-upload" @click="save">保存</el-button>
@@ -13,7 +13,7 @@
       </video-player>
     </div>
 
-    <div class="workbook-content" :class="workbookPercent">
+    <div class="workbook-content">
       <div class="video-buttons">
         <el-tooltip content="Ctrl + Q" placement="top">
           <el-select v-model="workbookPercent" class="workbook-percent">
@@ -75,7 +75,7 @@
 <script>
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBook } from '@/api/workbook'
+  import { fetchWorkBookWithOperations } from '@/api/workbook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
@@ -97,7 +97,7 @@
     data () {
       return {
         workbookPercents,
-        workbookPercent: 'mini',
+        workbookPercent: 'half',
         workbook: {},
         workbookData: {},
         workbooks: [],
@@ -108,12 +108,15 @@
           // videojs options
           muted: true,
           language: 'en',
+          notSupportedMessage: '请选择打开视频文件',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: [{
             type: 'video/mp4',
             src: 'http://127.0.0.1:8888?startTime=0'
           }],
-          poster: '/static/images/author.jpg'
+          controlBar: {
+            fullscreenToggle: false
+          }
         }
       }
     },
@@ -155,10 +158,11 @@
       init () {
         const self = this
         // 获取分析表详情
-        fetchWorkBook(this.$route.params.id).then(({ workBook }) => {
+        fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
+          self.workbookData[workBook.workName] = workBook.workOperationsList
         })
       },
       // 快捷键
@@ -233,18 +237,52 @@
 <style lang="scss">
 .workbook-detail-page {
   height: 100%;
+  overflow: hidden;
 
   .video-player-box{
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 28px);
     .video-js,
     .vjs-tech,
     .vjs-poster {
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - 28px);
+    }
+    .vjs-big-play-button {
+      left: calc(50vw - 1.5em);
+      top: calc(35vh - 0.8em)
     }
   }
 
+  &.hide {
+    .vjs-control-bar {
+      bottom: 0;
+    }
+    .workbook-content {
+      display: none;
+    }
+  }
+  &.mini {
+    .vjs-control-bar {
+      bottom: calc(33% + 36px);
+    }
+    .workbook-content {
+      height: 33%;
+    }
+  }
+  &.half {
+    .vjs-control-bar {
+      bottom: calc(50% + 42px);
+    }
+    .workbook-content {
+      height: 50%;
+    }
+  }
+  &.full {
+    .workbook-content {
+      height: calc(100% - 56px);
+    }
+  }
   .workbook-content{
     position: absolute;
     bottom: 0;
@@ -252,17 +290,9 @@
     right: 0;
     height: 33%;
     width: 100%;
+    z-index: 2;
     background-color: #BFBFBD;
     padding: 28px 5px 20px 0;
-    &.hide {
-      display: none;
-    }
-    &.half {
-      height: 50%;
-    }
-    &.full {
-      height: calc(100% - 28px);
-    }
     .more{
       margin-left: 160px;
       width: 80px;

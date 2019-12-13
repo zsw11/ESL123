@@ -70,7 +70,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ReportEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("formCode") != null && params.get("formCode") != "", "form_code",
                         (String) params.get("formCode"))
                 .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));

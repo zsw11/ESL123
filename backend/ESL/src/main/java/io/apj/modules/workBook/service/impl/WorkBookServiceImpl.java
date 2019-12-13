@@ -7,7 +7,6 @@ import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
-import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
@@ -17,8 +16,6 @@ import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.report.service.TotalService;
-import io.apj.modules.report.service.StandardTimeService;
-import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.report.service.TimeContactService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -58,34 +56,29 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private WorkBookService workBookService;
 	@Autowired
 	private WorkOperationsService workOperationService;
-
 	@Autowired
 	private StandardWorkService standardWorkService;
-
 	@Autowired
 	private StationTimeService stationTimeService;
 	@Autowired
 	private StandardTimeService standardTimeService;
 	@Autowired
 	private MostValueService mostValueService;
-
 	@Autowired
 	private TimeContactService timeContactService;
 	@Autowired
 	private CompareService compareService;
 	@Autowired
 	private ChangeRecordService changeRecordService;
-
 	@Autowired
 	private RevisionHistoryService revisionHistoryService;
-
 	@Autowired
 	private TotalService totalService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at")
+		entityWrapper.isNull("delete_at").orderBy("update_at",false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
@@ -149,21 +142,43 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	@Transactional
 	public boolean updateOperation(Map<String, Object> params) {
-		ArrayList<Integer> deleteList = (ArrayList<Integer>) params.get("delete");
-		if (deleteList.size() > 0) {
+		String type = (String) params.get("type");
+		Integer seqNumber = (Integer) params.get("seqNumber") + 1;
+		Integer workBookId = (Integer) params.get("workBookId");
+		EntityWrapper<WorkOperationsEntity> workOperationsWrapper = new EntityWrapper<>();
+		if (type.equals("delete")) {
+			ArrayList<Integer> deleteList = (ArrayList<Integer>) params.get("list");
 			workOperationService.deleteBatchIds(deleteList);
-		}
-		List<Map<String, Object>> updateMaps = (List<Map<String, Object>>) params.get("update");
-		for (int i = 0; i < updateMaps.size(); i++) {
-			WorkOperationsEntity workOperationsEntity = new WorkOperationsEntity();
-			DataUtils.transMap2Bean2(updateMaps.get(i), workOperationsEntity);
-			workOperationService.updateById(workOperationsEntity);
-		}
-		List<Map<String, Object>> newMaps = (List<Map<String, Object>>) params.get("new");
-		for (int i = 0; i < newMaps.size(); i++) {
-			WorkOperationsEntity workOperationsEntity = new WorkOperationsEntity();
-			DataUtils.transMap2Bean2(newMaps.get(i), workOperationsEntity);
-			workOperationService.insert(workOperationsEntity);
+			Integer deleteNumber = deleteList.size();
+			workOperationsWrapper.eq("work_book_id", workBookId).isNull("delete_at").ge("seq_number", seqNumber);
+			List<WorkOperationsEntity> workOperationsEntityList = workOperationService
+					.selectList(workOperationsWrapper);
+			for (WorkOperationsEntity item : workOperationsEntityList) {
+				item.setSeqNumber(item.getSeqNumber() - deleteNumber);
+			}
+			workOperationService.updateBatchById(workOperationsEntityList);
+		} else {
+			List<WorkOperationsEntity> workOperationsList = new ArrayList<>();
+			List<Map<String, Object>> operateList = (List<Map<String, Object>>) params.get("list");
+			for (int i = 0; i < operateList.size(); i++) {
+				WorkOperationsEntity workOperationsEntity = new WorkOperationsEntity();
+				DataUtils.transMap2Bean2(operateList.get(i), workOperationsEntity);
+				workOperationsList.add(workOperationsEntity);
+			}
+			if (type.equals("update")) {
+				workOperationService.updateBatchById(workOperationsList);
+			} else {
+				workOperationsWrapper.eq("work_book_id", workBookId).isNull("delete_at").ge("seq_number", seqNumber);
+				List<WorkOperationsEntity> workOperationsEntityList = workOperationService
+						.selectList(workOperationsWrapper);
+				Integer operateNumber = operateList.size();
+				for (WorkOperationsEntity item : workOperationsEntityList) {
+					item.setSeqNumber(item.getSeqNumber() + operateNumber);
+				}
+				workOperationService.updateBatchById(workOperationsEntityList);
+				workOperationService.insertBatch(workOperationsList);
+			}
+
 		}
 
 		return true;
@@ -174,47 +189,47 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
 		Integer workId = (Integer) params.get("workId");
 		WorkBookEntity workBookEntity = selectById(workId);
-		reportList.forEach(e->{
-			switch (e){
-				case 1 :
-					break;
-				case 2 :
-					break;
-				case 3 :
-					//工位时间报表
-					stationTimeService.generateReportData(workBookEntity);
-					break;
-				case 4 :
-					compareService.generateReportData(workBookEntity);
-					break;
-				case 5 :
-					mostValueService.generateReportData(workBookEntity);
-					break;
-				case 6 :
-					//Collection-Revision History表
-					revisionHistoryService.generateReportData(workBookEntity);
-					break;
-				case 7 :
-					totalService.generateReportData(workBookEntity);
-					break;
-				case 8 :
-					break;
-				case 9 :
-					timeContactService.generateReportData(workBookEntity);
-					break;
-				case 10 :
-					break;
-				case 11 :
-					standardTimeService.generateReportData(workBookEntity);
-					break;
-				case 12 :
-					//标准工数表
-					standardWorkService.generateReportData(workBookEntity);
-					break;
-				case 13 :
-					//履历表
-					changeRecordService.generateReportData(workBookEntity);
-					break;
+		reportList.forEach(e -> {
+			switch (e) {
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				// 工位时间报表
+				stationTimeService.generateReportData(workBookEntity);
+				break;
+			case 4:
+				compareService.generateReportData(workBookEntity);
+				break;
+			case 5:
+				mostValueService.generateReportData(workBookEntity);
+				break;
+			case 6:
+				// Collection-Revision History表
+				revisionHistoryService.generateReportData(workBookEntity);
+				break;
+			case 7:
+				totalService.generateReportData(workBookEntity);
+				break;
+			case 8:
+				break;
+			case 9:
+				timeContactService.generateReportData(workBookEntity);
+				break;
+			case 10:
+				break;
+			case 11:
+				standardTimeService.generateReportData(workBookEntity);
+				break;
+			case 12:
+				// 标准工数表
+				standardWorkService.generateReportData(workBookEntity);
+				break;
+			case 13:
+				// 履历表
+				changeRecordService.generateReportData(workBookEntity);
+				break;
 			}
 
 		});
@@ -233,5 +248,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		}
 	}
 
+	@Override
+	public WorkBookEntity detailWithOperations(Integer id) {
+		WorkBookEntity workBook = this.selectById(id);
+		EntityWrapper<WorkOperationsEntity> workOperationsWrapper = new EntityWrapper<>();
+		workOperationsWrapper.eq("work_book_id", id).isNull("delete_at");
+		List<WorkOperationsEntity> workOperationsList = workOperationService.selectList(workOperationsWrapper);
+		workBook.setWorkOperationsList(workOperationsList);
+		return workBook;
+	}
 
 }

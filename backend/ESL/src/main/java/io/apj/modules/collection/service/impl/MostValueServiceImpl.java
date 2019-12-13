@@ -31,7 +31,7 @@ private MostValueItemService mostValueItemService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<MostValueEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("firstColumnName") != null && params.get("firstColumnName") != "", "first_column_name", (String) params.get("firstColumnName"))
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
         ;

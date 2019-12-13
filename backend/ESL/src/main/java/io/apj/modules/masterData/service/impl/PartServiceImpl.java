@@ -38,7 +38,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at");
+        entityWrapper.isNull("delete_at").orderBy("update_at",false);
         if (params.get("name") != null && params.get("name") != "") {
             params.put("name", ((String) params.get("name")).replace('*', '%'));
             entityWrapper.andNew(
@@ -62,50 +62,8 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
             deptId = Integer.parseInt((String) params.get("deptId"));
         }
-        return new PageUtils(page.setRecords(this.baseMapper.selectpartModel(id, page, modelName,deptId,modelSeriesId,code)));
+        return new PageUtils(page.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId,code)));
 
     }
-
-
-//    	//判断从哪里查
-//        if (params.size() > 5) {
-//            List<ModelPartRelaEntity> modelPartRelaEntityList = modelPartRelaService.selectList(new EntityWrapper<ModelPartRelaEntity>().eq("part_id", id));
-//            for (ModelPartRelaEntity entity : modelPartRelaEntityList) {
-//                Integer entityModelId = entity.getModelId();
-//                // 机种里modelid为entityModelId
-//                EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<ModelEntity>();
-//                entityWrapper.in("id", Collections.singleton(entityModelId))
-//                        .like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
-//                if (StringUtils.isNotEmpty((CharSequence) params.get("modelSeriesId"))) {
-//                    entityWrapper.eq("model_series_id", Integer.parseInt((String) params.get("modelSeriesId")));
-//                }
-//                if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
-//                    entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
-//                }
-//                if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
-//                    String name = (String) params.get("name");
-//                    name = name.replace(",", "");
-//                    entityWrapper.and("name  like '%" + name + "%'" + " or pinyin  like '%" + name + "%'");
-//                }
-//                Page<ModelEntity> page = modelService
-//                        .selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
-//                return new PageUtils(page);
-//            }
-//
-//        } else {
-//            EntityWrapper<ModelPartRelaEntity> relaEntityWrapper = new EntityWrapper<ModelPartRelaEntity>();
-//            relaEntityWrapper.eq("part_id", id).isNull("delete_at");
-//            Page<ModelPartRelaEntity> page = modelPartRelaService
-//                    .selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
-//            for (ModelPartRelaEntity item : page.getRecords()) {
-//                item.setModelEntity(modelService.selectById(item.getModelId()));
-//                int modelSeriesId = modelService.selectById(item.getModelId()).getModelSeriesId();
-//                item.setModelSeriesEntity(modelSeriesService.selectById(modelSeriesId));
-//                item.setDeptName(deptService.selectById(modelService.selectById(item.getModelId()).getDeptId()).getName());
-//            }
-//            return new PageUtils(page);
-//        }
-//		return null;
-//    }
 
 }

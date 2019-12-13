@@ -37,7 +37,7 @@
         </where>
 
         ORDER BY
-        part.create_at DESC
+        part.update_at DESC
     </select>
 
     <select id="selectmodelTool" resultType="io.apj.modules.masterData.vo.ToolVo">
@@ -52,7 +52,7 @@ FROM
             </if>
         </where>
 ORDER BY
-	tool.create_at DESC
+	tool.update_at DESC
     </select>
 
 

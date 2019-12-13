@@ -36,7 +36,7 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StandardTimeEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("unit") != null && params.get("unit") != "", "unit", (String) params.get("unit"))
         ;

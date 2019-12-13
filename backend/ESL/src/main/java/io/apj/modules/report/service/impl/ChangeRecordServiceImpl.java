@@ -47,7 +47,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
+        entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("factory") != null && params.get("factory") != "", "factory", (String) params.get("factory"))
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"));

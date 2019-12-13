@@ -138,7 +138,7 @@
             <span>{{scope.row.p1 }}</span>
           </template>
         </el-table-column>
-        
+
         <el-table-column align="center" prop="a3" label="A" width="40">
           <template slot-scope="scope">
             <span>{{scope.row.a3 }}</span>

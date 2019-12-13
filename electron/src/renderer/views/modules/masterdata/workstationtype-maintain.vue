@@ -245,17 +245,24 @@ export default {
     },
     // 树的操作
     remove (node, data) {
+
       let arr = [data.id]
-      deleteWorkstationTypeNode(arr).then((code) => {
-        if (code) {
-          this.init()
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
+      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+          deleteWorkstationTypeNode(arr).then((code) => {
+            if (code) {
+              this.init()
+              this.$notify({
+                title: '成功',
+                message: '删除成功',
+                type: 'success',
+                duration: 2000
+              })
+            }
           })
-        }
       })
     },
     // 新增节点
