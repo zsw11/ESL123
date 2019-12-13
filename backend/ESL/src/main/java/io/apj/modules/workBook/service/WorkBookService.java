@@ -5,6 +5,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +21,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
 
-	boolean updateOperation(Map<String, Object> params);
+	List<Integer> updateOperation(Map<String, Object> params);
 
 	void createReports(Map<String, Object> params);
 

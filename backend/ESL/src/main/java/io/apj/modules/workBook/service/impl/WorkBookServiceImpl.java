@@ -78,7 +78,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false)
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
@@ -141,7 +141,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Override
 	@Transactional
-	public boolean updateOperation(Map<String, Object> params) {
+	public List<Integer> updateOperation(Map<String, Object> params) {
+		// 新增的手顺ID列表
+		List<Integer> newIDList = new ArrayList<>();
 		String type = (String) params.get("type");
 		Integer seqNumber = (Integer) params.get("seqNumber") + 1;
 		Integer workBookId = (Integer) params.get("workBookId");
@@ -168,6 +170,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			if (type.equals("update")) {
 				workOperationService.updateBatchById(workOperationsList);
 			} else {
+				// 更新seqNumber大于所要新增的最大值的所有记录
 				workOperationsWrapper.eq("work_book_id", workBookId).isNull("delete_at").ge("seq_number", seqNumber);
 				List<WorkOperationsEntity> workOperationsEntityList = workOperationService
 						.selectList(workOperationsWrapper);
@@ -175,13 +178,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				for (WorkOperationsEntity item : workOperationsEntityList) {
 					item.setSeqNumber(item.getSeqNumber() + operateNumber);
 				}
-				workOperationService.updateBatchById(workOperationsEntityList);
+				workOperationService.insertOrUpdateBatch(workOperationsEntityList);
+				// 批量插入新增的手顺
 				workOperationService.insertBatch(workOperationsList);
+				for (WorkOperationsEntity item : workOperationsList) {
+					newIDList.add(item.getId());
+				}
 			}
 
 		}
 
-		return true;
+		return newIDList;
 	}
 
 	@Override
