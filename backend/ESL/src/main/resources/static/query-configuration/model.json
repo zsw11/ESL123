@@ -25,6 +25,11 @@
                 "type": "String"
             },
             {
+                "code": "remark",
+                "name": "备注",
+                "type": "string"
+            },
+            {
                 "code": "WSTime",
                 "name": "WS时间",
                 "type": "data"
