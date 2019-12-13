@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ import io.apj.common.utils.RD;
  */
 @RestController
 @RequestMapping("/api/v1/revisionhistory")
-public class RevisionHistoryController {
+public class RevisionHistoryController extends AbstractController {
 	@Autowired
 	private RevisionHistoryService revisionHistoryService;
 
@@ -66,6 +67,7 @@ public class RevisionHistoryController {
 	@RequestMapping("/create")
 	@RequiresPermissions("collection:revisionhistory:create")
 	public ResponseEntity<Object> save(@RequestBody RevisionHistoryEntity revisionHistory) {
+		revisionHistory.setDeptId(getUserDeptId().intValue());
 		revisionHistoryService.insert(revisionHistory);
 
 		return RD.success(revisionHistory);

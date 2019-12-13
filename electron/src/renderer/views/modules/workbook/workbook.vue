@@ -13,7 +13,7 @@
           <el-form-item :label="'部门'" prop="deptId" >
             <keyword-search
               clearable
-              v-model="listQuery.detId"
+              v-model="listQuery.deptId"
               :allowMultiple="true"
               :searchApi="this.listDept"
               :allowEmpty="true">
@@ -107,13 +107,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId" label="部门" >
+        <el-table-column align="center" prop="deptName" label="部门" >
           <template slot-scope="scope">
             <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="modelId" label="机种" >
+        <el-table-column align="center" prop="modelName" label="机种" >
           <template slot-scope="scope">
             <span>{{scope.row.modelName }}</span>
           </template>
@@ -125,7 +125,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="phaseId" label="生产阶段" >
+        <el-table-column align="center" prop="phaseName" label="生产阶段" >
           <template slot-scope="scope">
             <span>{{scope.row.phaseName }}</span>
           </template>
@@ -137,7 +137,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="workstationId" label="工位" >
+        <el-table-column align="center" prop="workstationName" label="工位" >
           <template slot-scope="scope">
             <span>{{scope.row.workName }}</span>
           </template>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
@@ -30,7 +31,7 @@ import io.apj.common.utils.R;
  */
 @RestController
 @RequestMapping("/api/v1/workbook")
-public class WorkBookController {
+public class WorkBookController extends AbstractController {
 	@Autowired
 	private WorkBookService workBookService;
 
@@ -72,6 +73,7 @@ public class WorkBookController {
 	@RequestMapping("/create")
 	@RequiresPermissions("workBook:workbook:create")
 	public R save(@RequestBody WorkBookEntity workBook) {
+		workBook.setDeptId(getUserDeptId().intValue());
 		workBookService.insert(workBook);
 
 		return R.ok();

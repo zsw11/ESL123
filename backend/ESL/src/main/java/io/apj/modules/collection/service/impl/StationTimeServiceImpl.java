@@ -44,15 +44,16 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
                 .like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
         ;
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
 
         Page<StationTimeEntity> page = this.selectPage(

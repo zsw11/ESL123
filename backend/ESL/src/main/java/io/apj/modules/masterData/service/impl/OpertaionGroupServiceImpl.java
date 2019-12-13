@@ -47,7 +47,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at",false);
 		if (params.get("code") != null && params.get("code") != "") {
-			entityWrapper.eq("code", params.get("code"));
+			entityWrapper.like("code", (String) params.get("code"));
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("usedCount"))) {
 			entityWrapper.eq("used_count", Integer.parseInt((String) params.get("usedCount")));
@@ -63,7 +63,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 			operationWrapper.eq("operation_group_id", entity.getId());
 			entity.setCount(operationGroupOperationService.selectCount(operationWrapper));
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
-			;
+
 		}
 
 		return new PageUtils(page);
@@ -71,11 +71,12 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 
 	@Override
 	@Transactional
-	public ResponseEntity<Object> insertOpGroup(Map<String, Object> map)
+	public ResponseEntity<Object> insertOpGroup(Map<String, Object> map, OpertaionGroupEntity opertaionGroup)
 			throws InvocationTargetException, IllegalAccessException, IntrospectionException {
-		OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"), true),
-				OpertaionGroupEntity.class);
-		opertaionGroup.setDeptId(1);
+//		OpertaionGroupEntity opertaionGroup = JSON.parseObject(JSONObject.toJSONString(map.get("operationGroup"), true),
+//				OpertaionGroupEntity.class);
+////		model.setDeptId(getUserDeptId().intValue());
+//		opertaionGroup.setDeptId(getUserDeptId().intValue());
 		opertaionGroupService.insert(opertaionGroup);
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("code", (opertaionGroup.getCode()));

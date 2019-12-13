@@ -175,9 +175,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptId"  width="200px" label="所属组织机构" >
+        <el-table-column align="center" prop="deptName"  width="200px" label="所属组织机构" >
           <template slot-scope="scope">
-            <span>{{scope.row.deptId }}</span>
+            <span>{{scope.row.deptName }}</span>
           </template>
         </el-table-column>
 
@@ -252,6 +252,7 @@ export default {
         p1: null,
         a3: null,
         deptId: null,
+        deptName: null,
         usedCount: null,
         createBy: null,
         createAt: null,

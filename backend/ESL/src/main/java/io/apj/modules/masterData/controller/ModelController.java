@@ -95,6 +95,7 @@ public class ModelController extends AbstractController {
 	public RD save(@RequestBody ModelEntity model) {
 		model.setCreateBy(getUserId().intValue());
 		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
+		model.setDeptId(getUserDeptId().intValue());
 		modelService.insert(model);
 		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 
@@ -107,6 +108,7 @@ public class ModelController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:model:update")
 	public RD update(@RequestBody ModelEntity model) {
+		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
 		modelService.updateById(model);
 		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 

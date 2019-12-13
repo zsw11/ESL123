@@ -14,12 +14,12 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'治工具名称'" prop="name">
-            <el-input :disabled=flag v-model="dataForm.name"></el-input>
+            <el-input  v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'是否通用'" prop="common">
-            <el-select :disabled=flag v-model="dataForm.common">
+            <el-select  v-model="dataForm.common">
               <el-option
                 v-for="item in option"
                 :key="item.id"
@@ -33,7 +33,7 @@
     <el-row :gutter="10"> <el-col :span="22">
       <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"

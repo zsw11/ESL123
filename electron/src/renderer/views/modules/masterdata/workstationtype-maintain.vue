@@ -14,7 +14,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
         <el-form-item :label="'工位名称'" prop="name">
-            <el-input  :disabled=flag v-model="dataForm.name"></el-input>
+            <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -22,7 +22,7 @@
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -36,7 +36,7 @@
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
       <span class="tableHeader">工位类型结构</span>
         <el-button
-          @click="addReal=true"
+          @click="show"
           type="primary"
           style="float: right"
           v-if="!$route.path.includes('details')">
@@ -53,7 +53,7 @@
         <span>{{ node.label }}</span>
         <span>
           <el-button
-            v-if=!flag
+            v-if="$route.path.includes('edit')"
             id="delete"
             type="text"
             size="mini"
@@ -71,13 +71,24 @@
         v-if="addReal">
         <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
 
+<!--          <el-form-item :label="'父工位'" prop="parent">-->
+<!--            <keyword-search-->
+<!--              v-model="addForm.parent"-->
+<!--              :allowMultiple="true"-->
+<!--              :searchApi="this.listWorkstationTypeNode"-->
+<!--              :allowEmpty=true clearable>-->
+<!--            </keyword-search>-->
+<!--          </el-form-item>-->
+
           <el-form-item :label="'父工位'" prop="parent">
-            <keyword-search
-              v-model="addForm.parent"
-              :allowMultiple="true"
-              :searchApi="this.listWorkstationTypeNode"
-              :allowEmpty=true clearable>
-            </keyword-search>
+            <el-select v-model="addForm.parent" filterable placeholder="请选择" clearable>
+              <el-option
+                v-for="item in node"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item :label="'名称'" prop="name">
@@ -123,6 +134,7 @@ export default {
         remark: null,
         parent: null
       },
+      node: null, //工位节点
       listWorkstationTypeNode,
       parentNode: null,
       addReal: false, // 新增页面显示
@@ -206,6 +218,7 @@ export default {
       if (this.dataForm.id) {
         fetchTypeNode(this.dataForm.id).then((page) => {
           this.tree(page.data)
+          this.node = page.data
         })
         fetchWorkstationType(this.dataForm.id).then(({data}) => {
           Object.assign(
@@ -245,7 +258,6 @@ export default {
     },
     // 树的操作
     remove (node, data) {
-
       let arr = [data.id]
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -318,7 +330,17 @@ export default {
       }
       translator(parents, children)
       this.data = parents
+    },
+    // show
+    show(){
+      this.addReal = true
+      this.addForm.parent = null
+      this.addForm.name = null
+      this.addForm.remark = null
+
     }
+
+
   }
 }
 </script>

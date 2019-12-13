@@ -40,6 +40,9 @@ public class OpertaionGroupEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private Integer count;
+	/**
+	 * 备注
+	 */
 	private String remark;
 	/**
 	 * 使用次数统计

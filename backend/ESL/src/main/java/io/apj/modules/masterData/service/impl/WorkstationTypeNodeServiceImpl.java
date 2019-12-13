@@ -33,10 +33,9 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
                 .like(params.get("remark") != null && params.get("remark") != "", "remark",
                         (String) params.get("remark"));
                 if(StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))){
-                    entityWrapper.eq("workstation_type_id","keyWord");
-                }
-//                .like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
-//                        (String) params.get("keyWord"));
+                    entityWrapper.like("name","keyWord");
+               }
+
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
             entityWrapper.andNew(
                     "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");

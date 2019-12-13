@@ -14,7 +14,7 @@
     >
   <el-row>
     <el-col :span="10">
-      <el-form-item :label="'报表组:'+ dataForm.reportGroupName" prop="reportGroupName">
+      <el-form-item :label="'报表组:'+ dataForm.reportGroupName" prop="reportGroupName" label-width="300">
       </el-form-item>
     </el-col>
     <el-col :span="10" :offset="2">
@@ -63,8 +63,8 @@
 
     </el-card>
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>
-      <el-button @click="cancleFormSubmit">取 消</el-button>
+<!--      <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>-->
+      <el-button @click="cancleFormSubmit">确定</el-button>
     </span>
   </el-card>
 </template>

@@ -29,9 +29,13 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveHistoryEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
-                .like(params.get("result") != null && params.get("result") != "", "result", (String) params.get("result"));
+                .like(params.get("result") != null && params.get("result") != "", "result", (String) params.get("result"))
+               ;
         if(StringUtils.isNotEmpty((CharSequence) params.get("nextApproverId"))){
             entityWrapper.eq("next_approver_id", Integer.parseInt((String) params.get("nextApproverId")));
+        }
+        if(StringUtils.isNotEmpty((CharSequence) params.get("reportGroupId"))){
+            entityWrapper.eq("report_group_id", Integer.parseInt((String) params.get("reportGroupId")));
         }
         Page<ApproveHistoryEntity> page = this.selectPage(
                 new Query<ApproveHistoryEntity>(params).getPage(), entityWrapper    );

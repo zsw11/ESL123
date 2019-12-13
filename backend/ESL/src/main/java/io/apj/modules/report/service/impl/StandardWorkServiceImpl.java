@@ -1,6 +1,7 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.StandardTimeEntity;
@@ -35,11 +36,21 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
+                .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
+                .like(params.get("monthResult") != null && params.get("monthResult") != "", "month_result", (String) params.get("monthResult"))
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("coefficient") != null && params.get("coefficient") != "", "coefficient", (String) params.get("coefficient"))
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
-                .like(params.get("firstStandardWorkTitle") != null && params.get("firstStandardWorkTitle") != "", "first_standard_work_title", (String) params.get("firstStandardWorkTitle"));
+                .like(params.get("firstStandardWorkTitle") != null && params.get("firstStandardWorkTitle") != "", "first_standard_work_title", (String) params.get("firstStandardWorkTitle"))
+                .like(params.get("thirdStandardWorkTitle") != null && params.get("thirdStandardWorkTitle") != "", "third_standard_work_title", (String) params.get("thirdStandardWorkTitle"));
 
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
+        }
         Page<StandardWorkEntity> page = this.selectPage(
                 new Query<StandardWorkEntity>(params).getPage(), entityWrapper
         );

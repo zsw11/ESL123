@@ -1,30 +1,22 @@
 package io.apj.modules.masterData.controller;
 
-import java.io.Serializable;
-import java.util.*;
-
 import cn.hutool.core.util.PinyinUtil;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
-import io.apj.modules.masterData.service.ReportGroupService;
-import io.apj.modules.report.entity.ApproveEntity;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.service.ApproveService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.service.ReportService;
-import io.apj.common.utils.PageUtils;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 报表
@@ -38,8 +30,6 @@ import io.apj.common.utils.PageUtils;
 public class ReportController extends AbstractController {
 	@Autowired
 	private ReportService reportService;
-	@Autowired
-	private ReportGroupService reportGroupService;
 	@Autowired
 	private ReportGroupReportRelaService reportGroupReportRelaService;
 	@Autowired

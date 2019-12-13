@@ -3,6 +3,7 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ import io.apj.common.utils.RD;
  */
 @RestController
 @RequestMapping("/api/v1/mostvalue")
-public class MostValueController {
+public class MostValueController extends AbstractController {
 	@Autowired
 	private MostValueService mostValueService;
 
@@ -58,6 +59,7 @@ public class MostValueController {
 	@RequestMapping("/create")
 	@RequiresPermissions("collection:mostvalue:create")
 	public ResponseEntity<Object> save(@RequestBody MostValueEntity mostValue) {
+		mostValue.setDeptId(getUserDeptId().intValue());
 		mostValueService.insert(mostValue);
 
 		return RD.success(mostValue);

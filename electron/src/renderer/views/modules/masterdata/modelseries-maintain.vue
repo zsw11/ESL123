@@ -15,7 +15,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'名称'" prop="name">
-            <el-input  :disabled=flag v-model="dataForm.name"></el-input>
+            <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -23,7 +23,7 @@
       <el-col :span="22">
       <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
