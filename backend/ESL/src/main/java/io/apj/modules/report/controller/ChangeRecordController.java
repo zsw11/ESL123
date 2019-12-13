@@ -3,6 +3,8 @@ package io.apj.modules.report.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ChangeRecordEntity;
 import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import io.apj.modules.report.service.ChangeRecordItemService;
@@ -31,6 +33,10 @@ public class ChangeRecordController {
 
 	@Autowired
 	private ChangeRecordItemService changeRecordItemService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
 
 	/**
 	 * 列表
@@ -51,6 +57,8 @@ public class ChangeRecordController {
 	@RequiresPermissions("report:changerecord:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		ChangeRecordEntity changeRecord = changeRecordService.selectById(id);
+		changeRecord.setModelName(modelService.selectById(changeRecord.getModelId()).getName());
+		changeRecord.setPhaseName(phaseService.selectById(changeRecord.getPhaseId()).getName());
 		EntityWrapper<ChangeRecordItemEntity> ew = new EntityWrapper<>();
 		ew.eq("report_change_record_id",changeRecord.getId());
 		changeRecord.setItems(changeRecordItemService.selectList(ew));

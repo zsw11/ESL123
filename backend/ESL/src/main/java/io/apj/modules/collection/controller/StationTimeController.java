@@ -3,6 +3,8 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ import io.apj.common.utils.RD;
 public class StationTimeController extends AbstractController {
 	@Autowired
 	private StationTimeService stationTimeService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
 
 	/**
 	 * 列表
@@ -49,6 +55,8 @@ public class StationTimeController extends AbstractController {
 	@RequiresPermissions("collection:stationtime:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		StationTimeEntity stationTime = stationTimeService.selectById(id);
+		stationTime.setModelName(modelService.selectById(stationTime.getModelId()).getName());
+		stationTime.setPhaseName(phaseService.selectById(stationTime.getPhaseId()).getName());
 
 		return RD.success(stationTime);
 	}
