@@ -49,11 +49,11 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
                 .like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
         ;
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
 
         Page<StationTimeEntity> page = this.selectPage(

@@ -43,11 +43,11 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
                 .like(params.get("lastVersionName") != null && params.get("lastVersionName") != "", "last_version_name", (String) params.get("lastVersionName"))
                 .like(params.get("currentVersionName") != null && params.get("currentVersionName") != "", "current_version_name", (String) params.get("currentVersionName"))
         ;
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
         Page<CompareEntity> page = this.selectPage(
                 new Query<CompareEntity>(params).getPage(),entityWrapper

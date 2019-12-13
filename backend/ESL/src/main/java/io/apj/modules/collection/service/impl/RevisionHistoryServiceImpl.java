@@ -47,17 +47,11 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
                 .like(params.get("currentLstName") != null && params.get("currentLstName") != "", "current_lst_name", (String) params.get("currentLstName"))
         ;
 
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
-        }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
-        }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
         Page<RevisionHistoryEntity> page = this.selectPage(
                 new Query<RevisionHistoryEntity>(params).getPage()
