@@ -8,8 +8,8 @@
       <div class="login-main">
         <img src="@/assets/img/favicon.png" alt="">
         <div class="title">
-          <h1 class="login-title">APO登录</h1>
-          <p class="title-eng">APO Login</p>
+          <h1 class="login-title">{{title}}登录</h1>
+          <p class="title-eng">{{EngTitle}} Login</p>
         </div>
         <el-form class="from" :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
           <el-form-item prop="username">
@@ -18,7 +18,7 @@
           <el-form-item prop="password">
             <el-input class="password" v-model="dataForm.password" type="password" placeholder="密码" size="medium"></el-input>
           </el-form-item>
-          <span class="toggleLogin">本地用户登录</span>
+          <span class="toggleLogin" @click="toggleLogin()">{{btmTitle}}登录</span>
           <el-form-item>
             <el-button  id="login-btn-submit"  @click="dataFormSubmit()" size="large" :loading="logining">立即登录</el-button>
           </el-form-item>
@@ -44,9 +44,13 @@
     data () {
       return {
         logining: false,
+        title:'本地用户',
+        btmTitle: 'APO',
+        EngTitle: 'Local',
         dataForm: {
           username: null,
           password: null,
+          apo: null,
           uuid: '',
           jigsawVerify: undefined
         },
@@ -68,6 +72,7 @@
       // 提交表单
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
+          this.dataForm.apo =  this.title === 'APO'
           if (valid) {
             this.logining = true
             this.$store.dispatch('user/login', this.dataForm)
@@ -78,6 +83,16 @@
               })
           }
         })
+      },
+      // 切换登录
+      toggleLogin(){
+        this.dataForm.username = null
+        this.dataForm.password = null
+        let data
+        data = this.title
+        this.title = this.btmTitle
+        this.btmTitle = data
+        this.title === 'APO' ? this.EngTitle = 'APO' : this.EngTitle = 'Local'
       }
     }
   }
@@ -165,6 +180,7 @@
     margin-top: -20px;
     color: #BDBDBD;
     font-size: 18px;
+    padding-left: 5px;
   }
 
   .from{
