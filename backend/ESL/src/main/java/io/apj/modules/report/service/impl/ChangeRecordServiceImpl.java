@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.*;
@@ -48,12 +49,21 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("factory") != null && params.get("factory") != "", "factory", (String) params.get("factory"))
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"));
+
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
+        }
         Page<ChangeRecordEntity> page = this.selectPage(
                 new Query<ChangeRecordEntity>(params).getPage(), entityWrapper
         );
+
         for (ChangeRecordEntity entity : page.getRecords()) {
             if((entity.getModelId())!=null){
                 entity.setModelName(modelService.selectById(entity.getModelId()).getName());

@@ -57,7 +57,7 @@ public class ActionController extends AbstractController {
 	 * 信息
 	 */
 	@RequestMapping("/detail/{id}")
-	@RequiresPermissions("masterData:action:detail")
+//	@RequiresPermissions("masterData:action:detail")
 	public RD info(@PathVariable("id") Integer id) {
 		ActionEntity action = actionService.selectById(id);
 

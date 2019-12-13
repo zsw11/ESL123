@@ -36,9 +36,23 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
+                .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
+                .like(params.get("factory") != null && params.get("factory") != "", "factory", (String) params.get("factory"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
+                .like(params.get("lastStName") != null && params.get("lastStName") != "", "last_st_name", (String) params.get("lastStName"))
+                .like(params.get("currentStName") != null && params.get("currentStName") != "", "current_st_name", (String) params.get("currentStName"))
+                .like(params.get("lastLstName") != null && params.get("lastLstName") != "", "last_lst_name", (String) params.get("lastLstName"))
+                .like(params.get("currentLstName") != null && params.get("currentLstName") != "", "current_lst_name", (String) params.get("currentLstName"))
         ;
+
+        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
+            entityWrapper.eq("model_id","modelId");
+        }
+        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
+            entityWrapper.eq("phase_id","phaseId");
+        }
         if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
             entityWrapper.eq("model_id","modelId");
         }

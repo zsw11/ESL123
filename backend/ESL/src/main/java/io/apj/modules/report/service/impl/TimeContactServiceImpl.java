@@ -1,6 +1,7 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.StandardTimeEntity;
@@ -29,9 +30,21 @@ public class TimeContactServiceImpl
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at",false)
+        entityWrapper.isNull("delete_at").orderBy("update_at", false)
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
+                .like(params.get("operationStandardNo") != null && params.get("operationStandardNo") != "", "operation_standard_no", (String) params.get("operationStandardNo"))
+                .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
+                .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
+                .like(params.get("stage") != null && params.get("stage") != "", "stage", (String) params.get("stage"))
+                .like(params.get("publishType") != null && params.get("publishType") != "", "publish_type", (String) params.get("publishType"))
+                .like(params.get("operationInstruction") != null && params.get("operationInstruction") != "", "operation_instruction", (String) params.get("operationInstruction"))
         ;
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
+        }
         Page<TimeContactEntity> page = this.selectPage(
                 new Query<TimeContactEntity>(params).getPage(), entityWrapper
         );
