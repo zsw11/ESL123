@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'空Form标准编号'" prop="formCode">
-            <el-input :disabled=flag v-model="dataForm.formCode"></el-input>
+            <el-input  v-model="dataForm.formCode"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -28,7 +28,7 @@
         <el-col :span="22">
           <el-form-item style="display: block":label="'备注'" prop="remark">
             <el-input
-              :disabled=flag
+
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
