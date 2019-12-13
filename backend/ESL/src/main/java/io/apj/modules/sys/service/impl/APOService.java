@@ -5,6 +5,9 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.ldap.InitialLdapContext;
 
+import org.springframework.stereotype.Service;
+
+@Service("APOService")
 public class APOService {
 	private String ldapUrl = "LDAP://170.0.0.0";
 

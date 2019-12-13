@@ -34,7 +34,6 @@
                         label="功能权限">
             <el-tree :data="menuTree.data"
                      :props="menuTree.props"
-                     check-strictly=true
                      node-key="id"
                      ref="menuTree"
                      :default-expanded-keys="menuTree.defaultExpandedKeys"
