@@ -88,7 +88,7 @@
 
         <el-table-column align="center" label="机种系列">
           <template slot-scope="scope">
-            <span>{{scope.row.modelSeriesEntity.name }}</span>
+            <span v-if="scope.row.modelSeriesEntity">{{scope.row.modelSeriesEntity.name }}</span>
           </template>
         </el-table-column>
 
