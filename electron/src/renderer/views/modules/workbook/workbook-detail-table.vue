@@ -12,7 +12,7 @@
       :auto-resize="true"
       :mouse-config="{selected: true}"
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @keydown="cellKeydown"
       @edit-actived="editActived">
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
@@ -55,7 +55,15 @@ import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
-import { measureColumns0, measureColumns1, measureFields, defaultRow, defaultFields } from '@/utils/global'
+import {
+  measureColumns0,
+  measureColumns1,
+  measureFields,
+  defaultRow,
+  defaultFields,
+  modeMeasureFields,
+  measureMode
+  } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
@@ -128,6 +136,16 @@ export default {
           return
         }
       }
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = measureMode[modeMeasureFields.find(f => {
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
+      console.log(mode)
+      return !mode || mode === measureMode[column.property]
     },
     // 单元格开始编辑
     editActived (cell) {
