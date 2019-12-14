@@ -11,6 +11,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -20,6 +21,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TotalDao;
 import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.TotalService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("totalService")
@@ -85,6 +88,11 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
             totalEntity.setDestinations(work.getDestinations());
             insert(totalEntity);
         }
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
 }

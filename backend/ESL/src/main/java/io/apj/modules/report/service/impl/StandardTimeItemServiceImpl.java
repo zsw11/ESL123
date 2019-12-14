@@ -1,7 +1,11 @@
 package io.apj.modules.report.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -30,6 +34,13 @@ public class StandardTimeItemServiceImpl extends ServiceImpl<StandardTimeItemDao
         entity.setReportStandardTimeId(standardTimeId);
         entity.setTimeSample1(entity.getTimeTotal());
         insert(entity);
+    }
+
+    @Override
+    public List<StandardTimeItemEntity> selectByStandardTimeId(Integer standardTimeId) {
+        EntityWrapper<StandardTimeItemEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("report_standard_time_id", standardTimeId);
+        return selectList(wrapper);
     }
 
 }
