@@ -171,7 +171,6 @@
           console.log('Remove Listener')
         } else {
           this.listener = function (e) {
-            // console.log('keydown', e)
             if (e.ctrlKey) {
               switch (e.key) {
                 case 'c': {

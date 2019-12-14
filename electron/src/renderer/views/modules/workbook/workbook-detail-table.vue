@@ -11,9 +11,9 @@
       height="100%"
       :auto-resize="true"
       :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
+      :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
-      @keydown="keydown"
+      @keydown="cellKeydown"
       @edit-actived="editActived">
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -26,7 +26,7 @@
       <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="tmu" title="TMU" width="50" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}" @keydown="cellKeydown"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible">
@@ -115,7 +115,7 @@ export default {
       return true
     },
     // 按下回车
-    keydown (e) {
+    cellKeydown (e) {
       console.log(e)
     },
     // 调到指定位置
