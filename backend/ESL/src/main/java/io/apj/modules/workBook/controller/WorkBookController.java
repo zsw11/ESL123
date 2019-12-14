@@ -105,6 +105,19 @@ public class WorkBookController extends AbstractController {
 	}
 
 	/**
+	 * 批量更新
+	 */
+	@RequestMapping("/updateAll")
+	@RequiresPermissions("workBook:workbook:update")
+	public ResponseEntity<Object> updateAll(@RequestBody Map<String, Object> params) {
+		workBookService.updateAll(params);
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", "success");
+		return RD.success(map);
+
+	}
+
+	/**
 	 * 删除
 	 */
 	@RequestMapping("/delete")
