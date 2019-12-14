@@ -1,5 +1,7 @@
 package io.apj.modules.report.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -28,6 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 报表审批表
@@ -222,4 +227,13 @@ public class ApproveController {
         return RD.NO_CONTENT(RD.build());
     }
 
+    @RequestMapping("/download")
+//    @RequiresPermissions("report:approve:list")
+    public void download(@RequestBody Map<String, Object> params, HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+
+        approveService.download(params, response);
+
+    }
 }

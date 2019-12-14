@@ -10,6 +10,8 @@ import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -18,6 +20,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.MostValueDao;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.service.MostValueService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("mostValueService")
@@ -62,6 +66,11 @@ private MostValueItemService mostValueItemService;
     public void generateReportData(WorkBookEntity workBook) {
         MostValueEntity entity = generateMostValue(workBook);
         mostValueItemService.generateMostValue(workBook, entity.getId());
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
     private MostValueEntity generateMostValue(WorkBookEntity workBook) {

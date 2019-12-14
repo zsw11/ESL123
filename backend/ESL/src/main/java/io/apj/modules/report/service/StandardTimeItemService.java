@@ -5,6 +5,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,5 +20,6 @@ public interface StandardTimeItemService extends IService<StandardTimeItemEntity
     PageUtils queryPage(Map<String, Object> params);
     void generateStandardTimeItem(WorkBookEntity workBook, Integer standardTimeId);
 
+    List<StandardTimeItemEntity> selectByStandardTimeId(Integer standardTimeId);
 }
 

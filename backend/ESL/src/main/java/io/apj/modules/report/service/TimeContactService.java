@@ -5,6 +5,8 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -19,5 +21,7 @@ public interface TimeContactService extends IService<TimeContactEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void generateReportData(WorkBookEntity workBookEntity);
+
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
 

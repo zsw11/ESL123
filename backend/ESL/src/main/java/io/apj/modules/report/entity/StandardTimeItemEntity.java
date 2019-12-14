@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -82,4 +83,6 @@ public class StandardTimeItemEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	@TableField(exist = false)
+	private BigDecimal conv;
 }

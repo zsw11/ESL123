@@ -11,6 +11,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -20,6 +21,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.RevisionHistoryDao;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.service.RevisionHistoryService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("revisionHistoryService")
@@ -98,6 +101,11 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
         if(revisionHistory.getModelId()==0)revisionHistory.setModelId(null);
         revisionHistory.setSheetName("sheet");
         updateById(revisionHistory);
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
 }
