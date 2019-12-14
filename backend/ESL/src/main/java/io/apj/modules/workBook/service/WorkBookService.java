@@ -1,5 +1,6 @@
 package io.apj.modules.workBook.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -28,4 +29,14 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
 
 	WorkBookEntity detailWithOperations(Integer id);
+
+	void updateAll(Map<String, Object> params);
+
+	/**
+	 * 根据Wrapper条件删除所有符合条件的记录
+	 * 
+	 * @param wrapper
+	 * @return
+	 */
+	void deleteByWrapper(Wrapper wrapper);
 }
