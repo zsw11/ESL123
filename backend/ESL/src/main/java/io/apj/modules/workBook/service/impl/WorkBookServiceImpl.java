@@ -271,7 +271,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		// 更新主表
 		WorkBookEntity workBook = new WorkBookEntity();
 		DataUtils.transMap2Bean2((Map<String, Object>) params.get("workBook"), workBook);
-		this.updateById(workBook);
 
 		// 删除原有子表
 		workOperationService.deletebyWrapper(

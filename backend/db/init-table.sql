@@ -12,7 +12,7 @@ CREATE TABLE sys_menu (
   create_by bigint,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_menu is '菜单管理';
@@ -43,7 +43,7 @@ CREATE TABLE sys_user (
   create_by bigint,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 Create Unique Index index_username_UNQ On sys_user(username);
@@ -110,7 +110,7 @@ CREATE TABLE sys_role (
   create_by bigint,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_role is '角色';
@@ -171,7 +171,7 @@ CREATE TABLE sys_config (
   create_by bigint  NOT NULL,
   create_at timestamp default now()  NOT NULL,
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 Create Unique Index index_paramKey_UNQ On sys_config(param_key);
@@ -281,7 +281,7 @@ CREATE TABLE sys_dept (
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_dept is '部门管理';
@@ -323,7 +323,7 @@ CREATE TABLE sys_dict (
   create_by bigint  NOT NULL,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_dict is '字典项';
@@ -350,7 +350,7 @@ CREATE TABLE sys_dict_type (
   create_by bigint NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_dict_type is '字典类型';
@@ -385,7 +385,7 @@ CREATE TABLE basic_staff (
   create_by bigint  NOT NULL,
   create_at timestamp default now() NOT NULL,
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table basic_staff is '人员信息';
@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS basic_job (
   create_by bigint  NOT NULL,
   create_at timestamp default now()  NOT NULL,
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table basic_job is '岗位信息';
@@ -447,7 +447,7 @@ CREATE TABLE sys_code_rule (
   create_by bigint,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_code_rule is '编码规则';
@@ -477,7 +477,7 @@ CREATE TABLE sys_code_rule_item (
   create_by bigint,
   create_at timestamp default now(),
   update_by bigint,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table sys_code_rule_item is '编码规则子项';
@@ -743,7 +743,7 @@ CREATE TABLE approve_opininon (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table approve_opininon is '常用审批意见';
@@ -767,7 +767,7 @@ CREATE TABLE action (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table action is '关键词';
@@ -792,7 +792,7 @@ CREATE TABLE tool (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table tool is '治工具';
@@ -818,7 +818,7 @@ CREATE TABLE part (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table part is '部品';
@@ -844,7 +844,7 @@ CREATE TABLE phase (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table phase is '生产阶段';
@@ -870,7 +870,7 @@ CREATE TABLE workstation (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table workstation is '工位';
@@ -898,7 +898,7 @@ CREATE TABLE workstation_type_node (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table workstation_type_node is '工位类型节点';
@@ -925,7 +925,7 @@ CREATE TABLE workstation_type (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table workstation_type is '工位类型';
@@ -951,7 +951,7 @@ CREATE TABLE report (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report is '报表';
@@ -991,7 +991,7 @@ CREATE TABLE report_group (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_group is '报表组';
@@ -1022,7 +1022,7 @@ CREATE TABLE model (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table model is '机种';
@@ -1053,7 +1053,7 @@ CREATE TABLE model_series (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table model_series is '机种系列';
@@ -1076,7 +1076,7 @@ CREATE TABLE dept_action_rela (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table dept_action_rela is '组织机构关键词关系';
@@ -1097,7 +1097,7 @@ CREATE TABLE dept_workstation_rela (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table dept_workstation_rela is '组织机构工位关系';
@@ -1118,7 +1118,7 @@ CREATE TABLE model_tool_rela (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table model_tool_rela is '机种治工具关系';
@@ -1139,7 +1139,7 @@ CREATE TABLE model_part_rela (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table model_part_rela is '机种部品关系';
@@ -1160,7 +1160,7 @@ CREATE TABLE report_group_report_rela (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_group_report_rela is '报表组报表关系';
@@ -1200,7 +1200,7 @@ CREATE TABLE measure_group (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table measure_group is '常用指标组合';
@@ -1237,7 +1237,7 @@ CREATE TABLE opertaion_group (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table opertaion_group is '手顺组合';
@@ -1283,7 +1283,7 @@ CREATE TABLE operation_group_operation (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table operation_group_operation is '手顺';
@@ -1322,7 +1322,7 @@ CREATE TABLE work_book (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table work_book is '分析表';
@@ -1382,7 +1382,7 @@ CREATE TABLE work_operations (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table work_operations is '分析表明细';
@@ -1436,7 +1436,7 @@ CREATE TABLE collection_station_time (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_station_time is 'Collection - 工位时间表';
@@ -1467,7 +1467,7 @@ CREATE TABLE collection_station_time_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_station_time_item is 'Collection - 工位时间表子表';
@@ -1498,7 +1498,7 @@ CREATE TABLE collection_most_value (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_most_value is 'Collection - MOST Value 表';
@@ -1524,7 +1524,7 @@ CREATE TABLE collection_most_value_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_most_value_item is 'Collection - MOST Value 表';
@@ -1561,7 +1561,7 @@ CREATE TABLE collection_revision_history (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_revision_history is 'Collection - Revision History 表';
@@ -1601,7 +1601,7 @@ CREATE TABLE collection_revision_history_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_revision_history_item is 'Collection - Revision History 表子表';
@@ -1639,7 +1639,7 @@ CREATE TABLE collection_compare (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_compare is 'Collection - Compare表';
@@ -1674,7 +1674,7 @@ CREATE TABLE collection_compare_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table collection_compare_item is 'Collection - Compare表子表';
@@ -1716,7 +1716,7 @@ CREATE TABLE report_total (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_total is 'Report - Total表';
@@ -1766,7 +1766,7 @@ CREATE TABLE report_total_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_total_item is 'Report - Total表子表';
@@ -1823,7 +1823,7 @@ CREATE TABLE report_time_contact (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_time_contact is 'Report - 时间联络表';
@@ -1876,7 +1876,7 @@ CREATE TABLE report_standard_time (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_standard_time is '标准时间表';
@@ -1909,7 +1909,7 @@ CREATE TABLE report_standard_time_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_standard_time_item is '标准时间表子表';
@@ -1950,7 +1950,7 @@ CREATE TABLE report_standard_work (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_standard_work is '标准工数表';
@@ -1987,7 +1987,7 @@ CREATE TABLE report_standard_work_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_standard_work_item is '标准时间表子表';
@@ -2019,7 +2019,7 @@ CREATE TABLE report_change_record (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_change_record is '履历表';
@@ -2050,7 +2050,7 @@ CREATE TABLE report_change_record_item (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_change_record_item is '履历表子表';
@@ -2081,7 +2081,7 @@ CREATE TABLE report_approve (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_approve is '报表审批表';
@@ -2107,7 +2107,7 @@ CREATE TABLE report_approve_history (
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
-  update_at timestamp,
+  update_at timestamp default now(),
   delete_at timestamp
 );
 comment on table report_approve_history is '报表审批表';
