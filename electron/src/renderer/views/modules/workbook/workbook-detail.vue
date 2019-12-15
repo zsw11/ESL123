@@ -106,10 +106,12 @@
         addedOperation: null,
         playerOptions: {
           // videojs options
-          muted: true,
+          muted: false,
+          autoplay: true,
           language: 'en',
           notSupportedMessage: '请选择打开视频文件',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
+          duration: null,
           sources: [{
             type: 'video/mp4',
             src: 'http://127.0.0.1:8888?startTime=0'
@@ -138,8 +140,13 @@
       this.init()
       this.handleShortcut()
       const self = this
-      ipcRenderer.on('openVideo', function (event, message) {
-        console.log('openVideo:', message)
+      ipcRenderer.on('openVideo', function (event, duration) {
+        console.log('openVideo:', duration)
+        self.playerOptions.preload = {
+          metadata: {
+            duration: parseFloat(duration)
+          }
+        }
         self.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
       })
     },

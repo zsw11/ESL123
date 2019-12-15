@@ -19,30 +19,13 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-const INDEX_HTML = 'src/renderer/index.html'
 // const INDEX_STREAM_HTML = 'src/renderer/index-stream.html'
 let httpServer
-let currentLoadFile
 
 function onVideoFileSeleted (videoFilePath) {
   videoSupport(videoFilePath).then((checkResult) => {
     if (checkResult.videoCodecSupport && checkResult.audioCodecSupport) {
       console.log('INDEX_HTML')
-      if (httpServer) {
-        httpServer.killFfmpegCommand()
-      }
-      if (currentLoadFile === INDEX_HTML) {
-        mainWindow.webContents.send('fileSelected', videoFilePath)
-      } else {
-        ipcMain.once('ipcRendererReady', (event, args) => {
-          mainWindow.webContents.send('fileSelected', videoFilePath)
-        })
-        mainWindow.loadFile(INDEX_HTML)
-        currentLoadFile = INDEX_HTML
-      }
-    }
-    if (!checkResult.videoCodecSupport || !checkResult.audioCodecSupport) {
-      console.log('INDEX_STREAM_HTML')
       if (!httpServer) {
         httpServer = new VideoServer()
       }
@@ -50,12 +33,7 @@ function onVideoFileSeleted (videoFilePath) {
       httpServer.createServer()
       if (httpServer) {
         console.log('createVideoServer success')
-        ipcMain.once('ipcRendererReady', (event, args) => {
-          mainWindow.webContents.send('duration', checkResult.duration)
-        })
-        mainWindow.webContents.send('openVideo')
-        // mainWindow.loadFile(INDEX_HTML)
-        // currentLoadFile = INDEX_HTML
+        mainWindow.webContents.send('openVideo', checkResult.duration)
       }
     }
   }).catch((err) => {
@@ -82,7 +60,9 @@ function createWindow () {
     width: 1000
   })
 
-  mainWindow.loadURL(winURL)
+  mainWindow.loadURL(winURL, {
+    extraHeaders: "Content-Security-Policy: default-src 'self'"
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -95,10 +75,10 @@ function createWindow () {
   })
   ipcMain.on('openVideo', (event, arg) => {
     electron.dialog.showOpenDialog({
-      properties: ['openFile'],
-      filters: [
-        {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
-      ]
+      properties: ['openFile']
+      // filters: [
+      //   {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
+      // ]
     }, (result) => {
       console.log(result)
 
