@@ -1,6 +1,12 @@
 'use strict';
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace(
+	'app.asar',
+	'app.asar.unpacked'
+);
+const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace(
+	'app.asar',
+	'app.asar.unpacked'
+);
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
@@ -23,11 +29,11 @@ var videoSupport = function (videoPath) {
                 if (streams) {
                     streams.map((value) => {
                         // mp4, webm, ogg
-                        if (value.codec_type == 'video' && (value.codec_name == 'h264' || 
+                        if (value.codec_type == 'video' && (value.codec_name == 'h264' ||
                         value.codec_name == 'vp8' || value.codec_name == 'theora')) {
                             checkResult.videoCodecSupport = true;
                         }
-                        if (value.codec_type == 'audio' && (value.codec_name == 'aac' || 
+                        if (value.codec_type == 'audio' && (value.codec_name == 'aac' ||
                         value.codec_name == 'vorbis')) {
                             checkResult.audioCodecSupport = true;
                         }

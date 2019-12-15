@@ -41,7 +41,7 @@ function onVideoFileSeleted (videoFilePath) {
     const options = {
       type: 'info',
       title: 'Error',
-      message: 'It is not a video file!',
+      message: 'It is not a video file!' + err,
       buttons: ['OK']
     }
     dialog.showMessageBox(options, function (index) {
