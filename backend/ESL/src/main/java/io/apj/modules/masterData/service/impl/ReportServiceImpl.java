@@ -173,7 +173,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     }
 
     /**
-     * 报表属于那些报表组，并过滤
+     * 报表属于那些报表组，并过滤(以提交的)
      * @param data
      * @return
      */
@@ -199,11 +199,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
             String stlst = (String) data.get("stlst");
             // 报表组过滤
             List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG));
-            List<Integer> reportIds = new ArrayList<>();
+            List<Integer> reportGIds = new ArrayList<>();
             for(ApproveEntity approveEntity : approveEntityList ){
-                reportIds = Collections.singletonList(approveEntity.getReportGroupId());
+                reportGIds = Collections.singletonList(approveEntity.getReportGroupId());
             }
-            if(!reportIds.contains(idG)){
+            if(!reportGIds.contains(idG)){
                 reportGroupEntity = reportGroupService.selectById(idG);
                 if(reportGroupEntity!=null){
                     reportGroupEntities.add(reportGroupEntity);

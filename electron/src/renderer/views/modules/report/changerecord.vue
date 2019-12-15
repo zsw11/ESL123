@@ -449,7 +449,7 @@ export default {
     approvePut () {
       if (this.approveShow) {
         createReportApprove(this.approveForm).then((page) => {
-          if (page.status === 200) {
+          if (!page) {
             this.approveShow = false
             this.$notify({
               title: '成功',
@@ -457,6 +457,20 @@ export default {
               type: 'success',
               duration: 2000
             })
+          }else {
+            let name = ''
+            page.forEach((item)=>{
+              name += (item.name + '   ')
+            })
+            this.$message({
+              message: name+'未生成',
+              type: 'warning',
+              duration: 3000,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+            this.approveShow = false
           }
           this.getDataList()
         })
