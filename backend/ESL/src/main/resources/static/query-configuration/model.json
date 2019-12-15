@@ -20,7 +20,7 @@
                 "type": "String"
             },
             {
-                "code": "modelSeriesName",
+                "code": "modelSeriesId",
                 "name": "机种系列",
                 "type": "String"
             },
@@ -30,22 +30,22 @@
                 "type": "string"
             },
             {
-                "code": "WSTime",
+                "code": "wsTime",
                 "name": "WS时间",
                 "type": "data"
             },
             {
-                "code": "ESTime",
+                "code": "esTime",
                 "name": "ES时间",
                 "type": "data"
             },
             {
-                "code": "AMPTime",
+                "code": "ampTime",
                 "name": "AMP时间",
                 "type": "data"
             },
             {
-                "code": "MPTime",
+                "code": "mpTime",
                 "name": "MP时间",
                 "type": "data"
             },

@@ -76,7 +76,7 @@ public class SysLoginController extends AbstractController {
 		if (form.getApo()) {
 			Boolean flag = false;
 			try {
-				flag = APOService.login(form.getUsername(), form.getPassword());
+				flag = APOService.login("apo\\" + form.getUsername(), form.getPassword());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
