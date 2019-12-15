@@ -47,7 +47,10 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         for(MeasureGroupEntity item : measureGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(measureGroupEntityList);
+        if(measureGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(measureGroupEntityList);
+        }
+
     }
 
     @Override
@@ -56,7 +59,9 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         for(MeasureGroupEntity item : measureGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(measureGroupEntityList);
+        if(measureGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(measureGroupEntityList);
+        }
     }
 
     @Override
@@ -65,7 +70,9 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         for(MeasureGroupEntity item: measureGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(measureGroupEntityList);
+        if(measureGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(measureGroupEntityList);
+        }
     }
 
     @Override

@@ -69,7 +69,10 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		for(WorkstationEntity item : workstationEntities){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(workstationEntities);
+		if(workstationEntities.size()>0){
+			this.updateAllColumnBatchById(workstationEntities);
+		}
+
 	}
 
 	@Override
@@ -78,7 +81,10 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		for(WorkstationEntity item: workstationEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(workstationEntityList);
+		if(workstationEntityList.size()>0){
+			this.updateAllColumnBatchById(workstationEntityList);
+		}
+
 	}
 
 	@Override

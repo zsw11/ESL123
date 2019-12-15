@@ -65,7 +65,10 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
         for(WorkstationTypeNodeEntity item : workstationTypeNodeEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(workstationTypeNodeEntityList);
+        if(workstationTypeNodeEntityList.size()>0){
+            this.updateAllColumnBatchById(workstationTypeNodeEntityList);
+        }
+
     }
 
     @Override
@@ -74,7 +77,9 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
         for(WorkstationTypeNodeEntity item: workstationTypeNodeEntities){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(workstationTypeNodeEntities);
+        if(workstationTypeNodeEntities.size()>0){
+            this.updateAllColumnBatchById(workstationTypeNodeEntities);
+        }
     }
 
     @Override
