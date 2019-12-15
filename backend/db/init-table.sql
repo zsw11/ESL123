@@ -796,7 +796,6 @@ CREATE TABLE tool (
   delete_at timestamp
 );
 comment on table tool is '治工具';
-Create Unique Index index_tool_name_UNQ On tool(name);
 comment on column tool.name is '名称';
 comment on column tool.pinyin is '拼音';
 comment on column tool.common is '是否通用';
@@ -822,7 +821,6 @@ CREATE TABLE part (
   delete_at timestamp
 );
 comment on table part is '部品';
-Create Unique Index index_part_name_UNQ On part(name);
 comment on column part.name is '名称';
 comment on column part.pinyin is '拼音';
 comment on column part.common is '是否通用';

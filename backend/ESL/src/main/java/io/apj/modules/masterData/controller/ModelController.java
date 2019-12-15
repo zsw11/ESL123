@@ -1,8 +1,11 @@
 package io.apj.modules.masterData.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
@@ -12,6 +15,8 @@ import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.masterData.entity.ModelSeriesEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.ReferenceEntity;
+import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.sys.service.impl.SysDictServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.common.utils.RD;
 
@@ -43,6 +49,10 @@ public class ModelController extends AbstractController {
 	private ModelService modelService;
 	@Autowired
 	private SysDictServiceImpl sysDictService;
+	@Autowired
+	private SysDeptService sysDeptService;
+	@Autowired
+	private ModelSeriesService modelSeriesService;
 
 	/**
 	 * 列表
@@ -66,23 +76,27 @@ public class ModelController extends AbstractController {
 
 		return RD.build().put("data", model);
 	}
+
 	/**
-	 *modelpartRela
+	 * modelpartRela
+	 * 
 	 * @return
 	 */
 	@RequestMapping("/partdetail/{id}")
 	public ResponseEntity<Object> partInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
-		PageUtils page = modelService.modelPartRelaList(id,params);
+		PageUtils page = modelService.modelPartRelaList(id, params);
 
 		return RD.ok(page);
 	}
+
 	/**
-	 *modeltoolRela
+	 * modeltoolRela
+	 * 
 	 * @return
 	 */
 	@RequestMapping("/tooldetail/{id}")
 	public ResponseEntity<Object> toolInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
-		PageUtils page = modelService.modelToolRelaList(id,params);
+		PageUtils page = modelService.modelToolRelaList(id, params);
 
 		return RD.ok(page);
 	}
@@ -97,7 +111,8 @@ public class ModelController extends AbstractController {
 		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
 		model.setDeptId(getUserDeptId().intValue());
 		modelService.insert(model);
-		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
+		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(),
+				false);
 
 		return RD.build().put("code", 200);
 	}
@@ -109,7 +124,8 @@ public class ModelController extends AbstractController {
 	@RequiresPermissions("masterData:model:update")
 	public RD update(@RequestBody ModelEntity model) {
 		modelService.updatePinAndDataById(model);
-		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
+		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(),
+				false);
 
 		return RD.build().put("code", 200);
 	}
@@ -126,8 +142,8 @@ public class ModelController extends AbstractController {
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("model", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
-					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById()
-							+ " 在表：" + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
 				}
 			} else {
 				// 删除引用表关系
@@ -184,34 +200,72 @@ public class ModelController extends AbstractController {
 	 *
 	 * @param map
 	 * @return
+	 * @throws ParseException
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) {
+	public RD importExcel(@RequestBody Map<String, Object> map) throws ParseException {
+		EntityWrapper<SysDeptEntity> deptWrapper = new EntityWrapper<>();
+		deptWrapper.isNull("delete_at");
+		List<SysDeptEntity> deptList = sysDeptService.selectList(deptWrapper);
+		Map<String, String> deptNameMap = new HashMap<>();
+		for (SysDeptEntity item : deptList) {
+			deptNameMap.put(item.getName(), item.getId().toString());
+		}
+		EntityWrapper<ModelSeriesEntity> modelSeriesWrapper = new EntityWrapper<>();
+		modelSeriesWrapper.isNull("delete_at");
+		List<ModelSeriesEntity> modelSeriesSList = modelSeriesService.selectList(modelSeriesWrapper);
+		Map<String, Integer> modelSeriesMap = new HashMap<>();
+		for (ModelSeriesEntity item : modelSeriesSList) {
+			modelSeriesMap.put(item.getName(), item.getId());
+		}
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<ModelEntity> modelEntities = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ModelEntity modelEntity = new ModelEntity();
-			// deviceMap
-			Map<String, Object> deviceMap = new HashMap<>();
-			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
+
+			Map<String, Object> buildMap = maps.get(i);
+			// 日期强转
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+			modelEntity.setWsTime(ft.parse((String) buildMap.get("model.wsTime")));
+			modelEntity.setAmpTime(ft.parse((String) buildMap.get("model.ampTime")));
+			modelEntity.setEsTime(ft.parse((String) buildMap.get("model.esTime")));
+			modelEntity.setMpTime(ft.parse((String) buildMap.get("model.mpTime")));
+			// modelMap
+			Map<String, Object> modelMap = new HashMap<>();
+			buildMap.remove("model.wsTime");
+			buildMap.remove("model.ampTime");
+			buildMap.remove("model.esTime");
+			buildMap.remove("model.mpTime");
+			for (Map.Entry<String, Object> entry : buildMap.entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-                if (keyStrs[0].equals("model")) {
-                    if (keyStrs[1].equals("common")) {
-                        if(value.equals("是")) {
-                            deviceMap.put(keyStrs[1], true);
-                        } else {
-                            deviceMap.put(keyStrs[1], false);
-                        }
-                        continue;
-                    }
-                    deviceMap.put(keyStrs[1], value);
-            }
+				if (keyStrs[0].equals("model")) {
+					if (keyStrs[1].equals("common")) {
+						if (value.equals("是")) {
+							modelMap.put(keyStrs[1], true);
+						} else {
+							modelMap.put(keyStrs[1], false);
+						}
+						continue;
+					}
+					if (keyStrs[1].equals("deptName")) {
+						modelMap.put(keyStrs[1], deptNameMap.get(value));
+						continue;
+					}
+					if (keyStrs[1].equals("modelSeriesId")) {
+						modelMap.put(keyStrs[1], modelSeriesMap.get(value));
+						continue;
+					}
+					modelMap.put(keyStrs[1], value);
+				}
 			}
-			DataUtils.transMap2Bean2(deviceMap, modelEntity);
+			// map 转javabean
+			DataUtils.transMap2Bean2(modelMap, modelEntity);
+			modelEntity.setPinyin(PinyinUtil.getPinYin(modelEntity.getName()));
+			modelEntity.setDeptId(getUserId().intValue());
 			ValidatorUtils.validateEntity(modelEntity, i);
 			modelEntity.setCreateBy(getUserId().intValue());
 			modelEntities.add(modelEntity);
