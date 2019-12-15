@@ -13,6 +13,7 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
+      @selected-changed="selectedChanged"
       @keydown="cellKeydown"
       @edit-actived="editActived">
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
@@ -64,7 +65,10 @@ import {
   defaultFields,
   modeMeasureFields,
   measureMode,
-  jumpFields
+  jumpFields,
+  modeFields,
+  modeCheckZeroFields,
+  modeSetZeroFields
   } from '@/utils/global'
 
 export default {
@@ -80,6 +84,7 @@ export default {
       len: 10,
       WMethod: '',
       add: true,
+      lastSelected: undefined,
       lastEditCell: null,
       currentCell: null,
       standardBookDialog: {
@@ -145,6 +150,7 @@ export default {
         })]
         if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
+          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
           return
         }
       }
@@ -157,6 +163,37 @@ export default {
         return ![ null, undefined, '' ].includes(row[f])
       })]
       return !mode || mode === measureMode[column.property]
+    },
+    selectedChanged (val) {
+      // 补0操作
+      // 判断模式
+      if (this.lastSelected) {
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
+        })]
+        if (mode &&
+          measureMode[this.lastSelected.column.property] === mode &&
+          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+        ) {
+          // 因为都是设置0，不用管是否频率
+          // let v = 0
+          // for (const f of modeCheckZeroFields[mode]) {
+          //   if (this.lastSelected.row[f]) {
+          //     v = this.lastSelected.row[f]
+          //     break
+          //   }
+          // }
+          // if (v) {
+          //   for (const f of modeCheckZeroFields[mode]) {
+          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          //   }
+          // }
+          for (const f of modeSetZeroFields[mode]) {
+            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          }
+        }
+      }
+      this.lastSelected = val
     },
     // 单元格开始编辑
     editActived (cell) {

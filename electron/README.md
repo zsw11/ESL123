@@ -41,4 +41,8 @@ vxe-table
         params.column = visibleColumn[params.enterToColumnIndex];
       }
 
+  lib\edit\src\mixin.js
+    在598行添加
+      _this7.$emit('selected-changed', { row, column });
+
 This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[45a3e22](https://github.com/SimulatedGREG/electron-vue/tree/45a3e224e7bb8fc71909021ccfdcfec0f461f634) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
