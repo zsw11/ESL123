@@ -1,7 +1,15 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.PartEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -34,6 +42,39 @@ public class OperationGroupOperationServiceImpl
 				.selectPage(new Query<OperationGroupOperationEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);
+	}
+
+	@Override
+	public void deleteList(List<OperationGroupOperationEntity> operationGroupOperationEntityList) {
+		for(OperationGroupOperationEntity item : operationGroupOperationEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<OperationGroupOperationEntity> operationGroupOperationEntityList = this.selectBatchIds(ids);
+		for(OperationGroupOperationEntity item : operationGroupOperationEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<OperationGroupOperationEntity> wrapper) {
+		List<OperationGroupOperationEntity> operationGroupOperationEntityList = this.selectList(wrapper);
+		for(OperationGroupOperationEntity item: operationGroupOperationEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(OperationGroupOperationEntity operationGroupOperationEntity) {
+		operationGroupOperationEntity.setPinyin(PinyinUtil.getPinYin(operationGroupOperationEntity.getOperation()));
+		operationGroupOperationEntity.setUpdateAt(new Date());
+		this.updateById(operationGroupOperationEntity);
 	}
 
 }

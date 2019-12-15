@@ -80,8 +80,7 @@ public class PhaseController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:phase:update")
 	public RD update(@RequestBody PhaseEntity phase) {
-		phase.setPinyin(PinyinUtil.getPinYin(phase.getName()));
-		phaseService.updateById(phase);
+		phaseService.updatePinAndDataById(phase);
 
 		return RD.build().put("code", 200);
 	}
@@ -94,7 +93,7 @@ public class PhaseController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:phase:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		phaseService.deleteBatchIds(Arrays.asList(ids));
+		phaseService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

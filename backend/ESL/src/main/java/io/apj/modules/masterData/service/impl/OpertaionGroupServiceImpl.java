@@ -3,12 +3,14 @@ package io.apj.modules.masterData.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -60,7 +63,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 				entityWrapper);
 		for (OpertaionGroupEntity entity : page.getRecords()) {
 			EntityWrapper<OperationGroupOperationEntity> operationWrapper = new EntityWrapper();
-			operationWrapper.eq("operation_group_id", entity.getId());
+			operationWrapper.isNull("delete_at").eq("operation_group_id", entity.getId());
 			entity.setCount(operationGroupOperationService.selectCount(operationWrapper));
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
 
@@ -101,11 +104,11 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		OpertaionGroupEntity opertaionGroup = new OpertaionGroupEntity();
 		DataUtils.transMap2Bean2((Map<String, Object>) map.get("operationGroup"), opertaionGroup);
 		// 更新主表
-		opertaionGroupService.updateById(opertaionGroup);
+		opertaionGroupService.updatePinAndDataById(opertaionGroup);
 		// 删除原来子表
 		EntityWrapper<OperationGroupOperationEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("operation_group_id", opertaionGroup.getId());
-		operationGroupOperationService.delete(entityWrapper);
+		operationGroupOperationService.deleteByWrapper(entityWrapper);
 
 		// 遍历子表
 		List<Map<String, Object>> operations = (List<Map<String, Object>>) map.get("operations");
@@ -118,6 +121,38 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		}
 
 		return RD.ok(opertaionGroup);
+	}
+
+	@Override
+	public void deleteList(List<OpertaionGroupEntity> opertaionGroupEntityList) {
+		for(OpertaionGroupEntity item : opertaionGroupEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(opertaionGroupEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<OpertaionGroupEntity> opertaionGroupEntityList = this.selectBatchIds(ids);
+		for(OpertaionGroupEntity item : opertaionGroupEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(opertaionGroupEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<OpertaionGroupEntity> wrapper) {
+		List<OpertaionGroupEntity> opertaionGroupEntityList = this.selectList(wrapper);
+		for(OpertaionGroupEntity item: opertaionGroupEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(opertaionGroupEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(OpertaionGroupEntity opertaionGroupEntity) {
+		opertaionGroupEntity.setUpdateAt(new Date());
+		this.updateById(opertaionGroupEntity);
 	}
 
 }

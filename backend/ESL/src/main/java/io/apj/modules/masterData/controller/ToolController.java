@@ -101,8 +101,7 @@ public class ToolController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:tool:update")
 	public RD update(@RequestBody ToolEntity tool) {
-		tool.setPinyin(PinyinUtil.getPinYin(tool.getName()));
-		toolService.updateById(tool);
+		toolService.updatePinAndDataById(tool);
 
 		return RD.build();
 	}
@@ -114,21 +113,23 @@ public class ToolController extends AbstractController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:tool:delete")
-	public RD delete(@RequestBody Integer[] ids) {
+	public ResponseEntity<Object> delete(@RequestBody Integer[] ids) {
 		// 判断治工具下是否有机种
 		for (int i = 0; i < ids.length; i++) {
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("tool", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
-					return RD.build().put("msg", reference.getByEntity() + "，id=" + reference.getById() + " 在表："
-							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById()
+							+ " 在表：" + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
 				}
 			} else {
 				// 删除引用表关系
 				deleteTableReference("tool", ids[i].longValue());
 			}
 		}
-		return RD.build();
+		toolService.deleteByIds(Arrays.asList(ids));
+
+		return RD.NO_CONTENT(RD.build());
 	}
 
 	/**

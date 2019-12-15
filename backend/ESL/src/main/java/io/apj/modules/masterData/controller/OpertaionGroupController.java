@@ -122,7 +122,7 @@ public class OpertaionGroupController extends AbstractController {
 				deleteTableReference("opertaiongroup", ids[i].longValue());
 			}
 		}
-		opertaionGroupService.deleteBatchIds(Arrays.asList(ids));
+		opertaionGroupService.deleteByIds(Arrays.asList(ids));
 
 		return RD.NO_CONTENT(RD.build());
 	}

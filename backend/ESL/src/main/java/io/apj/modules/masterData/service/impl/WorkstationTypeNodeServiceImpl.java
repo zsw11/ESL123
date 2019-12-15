@@ -1,12 +1,17 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import io.apj.common.utils.TreeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +57,31 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
         JSONArray array = new JSONArray();
         TreeUtils.setNodeTypeTree(id, data, array);
         return ResponseEntity.ok(array);
+    }
+
+    @Override
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = this.selectBatchIds(ids);
+        for(WorkstationTypeNodeEntity item : workstationTypeNodeEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(workstationTypeNodeEntityList);
+    }
+
+    @Override
+    public void deleteByWrapper(Wrapper<WorkstationTypeNodeEntity> wrapper) {
+        List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = this.selectList(wrapper);
+        for(WorkstationTypeNodeEntity item: workstationTypeNodeEntities){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(workstationTypeNodeEntities);
+    }
+
+    @Override
+    public void updatePinAndDataById(WorkstationTypeNodeEntity workstationTypeNodeEntity) {
+        workstationTypeNodeEntity.setPinyin(PinyinUtil.getPinYin(workstationTypeNodeEntity.getName()));
+        workstationTypeNodeEntity.setUpdateAt(new Date());
+        this.updateById(workstationTypeNodeEntity);
     }
 
 }

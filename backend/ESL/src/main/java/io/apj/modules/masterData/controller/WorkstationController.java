@@ -84,8 +84,7 @@ public class WorkstationController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:workstation:update")
 	public RD update(@RequestBody WorkstationEntity workstation) {
-		workstation.setPinyin(PinyinUtil.getPinYin(workstation.getName()));
-		workstationService.updateById(workstation);
+		workstationService.updatePinAndDataById(workstation);
 
 		return RD.build();
 	}
@@ -110,7 +109,7 @@ public class WorkstationController extends AbstractController {
 				deleteTableReference("workstation", ids[i].longValue());
 			}
 		}
-		workstationService.deleteBatchIds(Arrays.asList(ids));
+		workstationService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build();
 	}

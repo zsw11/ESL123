@@ -87,8 +87,7 @@ public class ReportController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:report:update")
 	public RD update(@RequestBody ReportEntity report) {
-		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
-		reportService.updateById(report);
+		reportService.updatePinAndDataById(report);
 
 		return RD.build().put("code", 200);
 	}
@@ -101,7 +100,7 @@ public class ReportController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:report:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		reportService.deleteBatchIds(Arrays.asList(ids));
+		reportService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

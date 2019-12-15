@@ -1,12 +1,20 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -106,4 +114,37 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 //		}
 //		return new PageUtils(page);
 //	}
+
+	@Override
+	public void deleteList(List<ModelEntity> modelEntityList) {
+		for(ModelEntity item : modelEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(modelEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<ModelEntity> modelEntityList = this.selectBatchIds(ids);
+		for(ModelEntity item : modelEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(modelEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<ModelEntity> wrapper) {
+		List<ModelEntity> modelEntityList = this.selectList(wrapper);
+		for(ModelEntity item: modelEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(modelEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(ModelEntity modelEntity) {
+		modelEntity.setPinyin(PinyinUtil.getPinYin(modelEntity.getName()));
+		modelEntity.setUpdateAt(new Date());
+		this.updateById(modelEntity);
+	}
 }

@@ -1,14 +1,17 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.apj.modules.masterData.entity.ModelPartRelaEntity;
-import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +22,6 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ReportGroupDao;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ReportGroupService;
 
 @Service("reportGroupService")
@@ -69,5 +71,38 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             item.setReportEntity(reportService.selectById(item.getReportId()));
         }
         return data;
+    }
+
+    @Override
+    public void deleteList(List<ReportGroupEntity> reportGroupEntityList) {
+        for(ReportGroupEntity item : reportGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportGroupEntityList);
+    }
+
+    @Override
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        List<ReportGroupEntity> reportGroupEntityList = this.selectBatchIds(ids);
+        for(ReportGroupEntity item : reportGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportGroupEntityList);
+    }
+
+    @Override
+    public void deleteByWrapper(Wrapper<ReportGroupEntity> wrapper) {
+        List<ReportGroupEntity> reportGroupEntityList = this.selectList(wrapper);
+        for(ReportGroupEntity item: reportGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportGroupEntityList);
+    }
+
+    @Override
+    public void updatePinAndDataById(ReportGroupEntity reportGroupEntity) {
+        reportGroupEntity.setPinyin(PinyinUtil.getPinYin(reportGroupEntity.getName()));
+        reportGroupEntity.setUpdateAt(new Date());
+        this.updateById(reportGroupEntity);
     }
 }

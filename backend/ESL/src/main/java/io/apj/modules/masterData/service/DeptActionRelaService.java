@@ -16,4 +16,6 @@ import java.util.Map;
 public interface DeptActionRelaService extends IService<DeptActionRelaEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
+
+
 }

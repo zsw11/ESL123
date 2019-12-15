@@ -89,8 +89,7 @@ public class ReportGroupController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:reportgroup:update")
 	public RD update(@RequestBody ReportGroupEntity reportGroup) {
-		reportGroup.setPinyin(PinyinUtil.getPinYin(reportGroup.getName()));
-		reportGroupService.updateById(reportGroup);
+		reportGroupService.updatePinAndDataById(reportGroup);
 
 		return RD.build().put("code", 200);
 	}
@@ -117,7 +116,7 @@ public class ReportGroupController extends AbstractController {
 			}
 		}
 
-		reportGroupService.deleteBatchIds(Arrays.asList(ids));
+		reportGroupService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

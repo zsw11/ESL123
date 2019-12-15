@@ -1,7 +1,15 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.PartEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -30,6 +38,31 @@ public class WorkstationTypeServiceImpl extends ServiceImpl<WorkstationTypeDao, 
 				entityWrapper);
 
 		return new PageUtils(page);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<WorkstationTypeEntity> workstationTypeEntityList = this.selectBatchIds(ids);
+		for(WorkstationTypeEntity item : workstationTypeEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(workstationTypeEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<WorkstationTypeEntity> wrapper) {
+		List<WorkstationTypeEntity> workstationTypeEntities = this.selectList(wrapper);
+		for(WorkstationTypeEntity item: workstationTypeEntities){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(workstationTypeEntities);
+	}
+
+	@Override
+	public void updatePinAndDataById(WorkstationTypeEntity workstationTypeEntity) {
+		workstationTypeEntity.setPinyin(PinyinUtil.getPinYin(workstationTypeEntity.getName()));
+		workstationTypeEntity.setUpdateAt(new Date());
+		this.updateById(workstationTypeEntity);
 	}
 
 }

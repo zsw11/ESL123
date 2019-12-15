@@ -99,8 +99,7 @@ public class WorkstationTypeNodeController extends AbstractController {
 	@RequestMapping("/update")
 //	@RequiresPermissions("masterData:workstationtypenode:update")
 	public RD update(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
-		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
-		workstationTypeNodeService.updateById(workstationTypeNode);
+		workstationTypeNodeService.updatePinAndDataById(workstationTypeNode);
 
 		return RD.build().put("code", 200);
 	}
@@ -113,7 +112,7 @@ public class WorkstationTypeNodeController extends AbstractController {
 	@RequestMapping("/delete")
 //	@RequiresPermissions("masterData:workstationtypenode:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		workstationTypeNodeService.deleteBatchIds(Arrays.asList(ids));
+		workstationTypeNodeService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

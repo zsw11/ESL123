@@ -1,10 +1,14 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.ReportEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -29,6 +33,39 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
 
 		return new PageUtils(page);
+	}
+
+	@Override
+	public void deleteList(List<ActionEntity> actionEntityList) {
+		for(ActionEntity item : actionEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(actionEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<ActionEntity> actionEntityList = this.selectBatchIds(ids);
+		for(ActionEntity item : actionEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(actionEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<ActionEntity> wrapper) {
+		List<ActionEntity> actionEntityList = this.selectList(wrapper);
+		for(ActionEntity item: actionEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(actionEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(ActionEntity actionEntity) {
+		actionEntity.setPinyin(PinyinUtil.getPinYin(actionEntity.getName()));
+		actionEntity.setUpdateAt(new Date());
+		this.updateById(actionEntity);
 	}
 
 }

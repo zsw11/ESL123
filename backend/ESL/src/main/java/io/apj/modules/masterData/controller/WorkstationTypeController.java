@@ -74,8 +74,7 @@ public class WorkstationTypeController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:workstationtype:update")
 	public RD update(@RequestBody WorkstationTypeEntity workstationType) {
-		workstationType.setPinyin(PinyinUtil.getPinYin(workstationType.getName()));
-		workstationTypeService.updateById(workstationType);
+		workstationTypeService.updatePinAndDataById(workstationType);
 
 		return RD.build();
 	}
@@ -88,7 +87,7 @@ public class WorkstationTypeController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:workstationtype:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		workstationTypeService.deleteBatchIds(Arrays.asList(ids));
+		workstationTypeService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build();
 	}

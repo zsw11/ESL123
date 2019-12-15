@@ -1,8 +1,16 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.PartEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -34,6 +42,38 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 			entity.setPhaseEntity(phaseService.selectById(entity.getContinuePhaseId()));
 		}
 		return new PageUtils(page);
+	}
+	@Override
+	public void deleteList(List<PhaseEntity> phaseEntityList) {
+		for(PhaseEntity item : phaseEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(phaseEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<PhaseEntity> phaseEntityList = this.selectBatchIds(ids);
+		for(PhaseEntity item : phaseEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(phaseEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<PhaseEntity> wrapper) {
+		List<PhaseEntity> phaseEntityList = this.selectList(wrapper);
+		for(PhaseEntity item: phaseEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(phaseEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(PhaseEntity phase) {
+		phase.setPinyin(PinyinUtil.getPinYin(phase.getName()));
+		phase.setUpdateAt(new Date());
+		this.updateById(phase);
 	}
 
 }

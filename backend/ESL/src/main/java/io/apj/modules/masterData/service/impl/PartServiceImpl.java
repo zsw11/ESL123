@@ -1,6 +1,8 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -20,9 +22,8 @@ import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
 @Service("partService")
 public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements PartService {
@@ -64,6 +65,39 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         }
         return new PageUtils(page.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId,code)));
 
+    }
+
+    @Override
+    public void deleteList(List<PartEntity> partList) {
+        for(PartEntity item : partList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(partList);
+    }
+
+    @Override
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        List<PartEntity> partEntityList = this.selectBatchIds(ids);
+        for(PartEntity item : partEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(partEntityList);
+    }
+
+    @Override
+    public void deleteByWrapper(Wrapper<PartEntity> wrapper) {
+        List<PartEntity> partEntityList = this.selectList(wrapper);
+        for(PartEntity item: partEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(partEntityList);
+    }
+
+    @Override
+    public void updatePinAndDataById(PartEntity part) {
+        part.setPinyin(PinyinUtil.getPinYin(part.getName()));
+        part.setUpdateAt(new Date());
+        this.updateById(part);
     }
 
 }
