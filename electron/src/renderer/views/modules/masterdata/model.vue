@@ -163,12 +163,12 @@ import ImportData from "@/components/import-data";
 const defaultExport = [
   "model.name",
   "model.deptName",
-  "model.modelSeriesName",
+  "model.modelSeriesId",
   "model.code",
-  "model.WSTime",
-  "model.ESTime",
-  "model.AMPTime",
-  "model.MPTime",
+  "model.wsTime",
+  "model.esTime",
+  "model.ampTime",
+  "model.mpTime",
   "model.remark"
 ];
 
@@ -211,21 +211,21 @@ export default {
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
             {
-              code: "modelSeriesName",
+              code: "modelSeriesId",
               name: "机种系列",
               type: "string",
               required: true
             },
             { code: "code", name: "型号", type: "string", required: true },
-            { code: "WSTime", name: "WS Date", type: "string", required: true },
-            { code: "ESTime", name: "ES Date", type: "string", required: true },
+            { code: "wsTime", name: "WS Date", type: "string", required: true },
+            { code: "esTime", name: "ES Date", type: "string", required: true },
             {
-              code: "AMPTime",
+              code: "ampTime",
               name: "AMP Date",
               type: "string",
               required: true
             },
-            { code: "MPTime", name: "MP Date", type: "string", required: true },
+            { code: "mpTime", name: "MP Date", type: "string", required: true },
             { code: "remark", name: "备注", type: "string", required: true }
           ]
         }
@@ -237,12 +237,12 @@ export default {
       importAttributes: [
         "model.name",
         "model.deptName",
-        "model.modelSeriesName",
+        "model.modelSeriesId",
         "model.code",
-        "model.WSTime",
-        "model.ESTime",
-        "model.AMPTime",
-        "model.MPTime",
+        "model.wsTime",
+        "model.esTime",
+        "model.ampTime",
+        "model.mpTime",
         "model.remark"
       ]
     };

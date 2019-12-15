@@ -150,7 +150,7 @@ export default {
             const dept = page.dept
             Object.assign(
               this.dataForm,
-              pick(dept, [ 'name', 'orderNum', 'parentId', 'deptType', 'deptLevel' ])
+              pick(dept, [ 'name', 'orderNum', 'parentId', 'deptType', 'deptLevel','deptCode' ])
             )
           }).finally(() => {
             this.inited = true
