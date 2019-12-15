@@ -20,7 +20,7 @@
       <operation-column key="operationColumn" min-width="240"></operation-column>
       <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+      <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -55,6 +55,7 @@ import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
+import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
 import {
   measureColumns0,
   measureColumns1,
@@ -62,12 +63,13 @@ import {
   defaultRow,
   defaultFields,
   modeMeasureFields,
-  measureMode
+  measureMode,
+  jumpFields
   } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
-  components: { MeasureColumn, KeyColumn, OperationColumn },
+  components: { MeasureColumn, KeyColumn, OperationColumn, ToolColumn },
   data () {
     return {
       measureColumns0,
@@ -115,8 +117,9 @@ export default {
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
-        this.jump(row, column.property, e.key)
+      console.log(jumpFields, column.property)
+      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
+        this.jump(row, column.property, e.key) // field是operation
         e.preventDefault()
         return false
       }
@@ -128,10 +131,19 @@ export default {
     },
     // 调到指定位置
     jump (row, field, to) {
-      const offset = measureFields.indexOf(field)
-      for (let i = 1; i <= measureFields.length; i++) {
-        const tmpField = measureFields[(offset + i) % measureFields.length]
-        if (tmpField.includes(to)) {
+      const offset = jumpFields.indexOf(field)
+      for (let i = 1; i <= jumpFields.length; i++) {
+        const tmpField = jumpFields[(offset + i) % jumpFields.length]
+        const fieldMap = {
+          operation: 'w',
+          tool: 't',
+          fre: 'f'
+        }
+        // 判断模式
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(row[f])
+        })]
+        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
           return
         }
@@ -144,7 +156,6 @@ export default {
       const mode = measureMode[modeMeasureFields.find(f => {
         return ![ null, undefined, '' ].includes(row[f])
       })]
-      console.log(mode)
       return !mode || mode === measureMode[column.property]
     },
     // 单元格开始编辑

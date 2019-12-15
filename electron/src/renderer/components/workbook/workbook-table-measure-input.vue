@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     keydown (e) {
-      if (['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
+      if (['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
         e.preventDefault()
         this.$emit('jump', e.key)
       } else if (e.key === '.') {
