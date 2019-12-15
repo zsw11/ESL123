@@ -12,6 +12,9 @@
         :options="playerOptions"
         :playsinline="true">
       </video-player>
+      <!-- <div class="control-bar">
+        <el-slider v-model="time" :max="duration"></el-slider>
+      </div> -->
     </div>
 
     <div class="workbook-content">
@@ -104,6 +107,8 @@
         currentWorkbook: null,
         listener: null,
         addedOperation: null,
+        time: 0,
+        duration: null,
         playerOptions: {
           // videojs options
           muted: false,
@@ -111,7 +116,6 @@
           language: 'en',
           notSupportedMessage: '请选择打开视频文件',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
-          duration: null,
           sources: [{
             type: 'video/mp4',
             src: 'http://127.0.0.1:8888?startTime=0'
@@ -141,12 +145,7 @@
       this.handleShortcut()
       const self = this
       ipcRenderer.on('openVideo', function (event, duration) {
-        console.log('openVideo:', duration)
-        self.playerOptions.preload = {
-          metadata: {
-            duration: parseFloat(duration)
-          }
-        }
+        this.duration = parseFloat(duration)
         self.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
       })
     },
@@ -268,10 +267,30 @@
       width: 100vw;
       height: calc(100vh - 28px);
     }
+    // .vjs-control-bar,
+    .vjs-big-play-button {
+      display: none;
+    }
     .vjs-big-play-button {
       left: calc(50vw - 1.5em);
       top: calc(35vh - 0.8em)
     }
+    // .control-bar {
+    //   position: absolute;
+    //   left: 0;
+    //   right: 0;
+    //   height: 20px;
+    //   background-color: rgba(0, 0, 0, .5);
+    //   .el-slider {
+    //     width: 100%;
+    //     .el-slider__runway {
+    //       margin: 0;
+    //     }
+    //     .el-slider__button-wrapper {
+    //       display: none;
+    //     }
+    //   }
+    // }
   }
 
   &.hide {
