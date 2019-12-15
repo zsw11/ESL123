@@ -214,8 +214,12 @@
                     half: 'full',
                     full: 'hide'
                   }[self.workbookPercent]
+                  break
                 }
               }
+            }
+            if (e.key === 'Delete') {
+              self.delete()
             }
           }
           document.addEventListener('keydown', this.listener)
@@ -234,6 +238,11 @@
       },
       paste () {
         this.$refs.workbookTable.paste()
+      },
+      delete () {
+        if (this.$refs.workbookTable) {
+          this.$refs.workbookTable.delete()
+        }
       },
       addStandardBook () {
         if (this.$refs.workbookTable) {

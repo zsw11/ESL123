@@ -291,6 +291,11 @@ export default {
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(copyContent, currentRow)
     },
+    async delete() {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        this.$refs.workbookTable.remove(this.lastSelected.row)
+      }
+    },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
         if (data[i].operation) return i
