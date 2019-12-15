@@ -262,6 +262,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		workOperationsWrapper.eq("work_book_id", id).isNull("delete_at");
 		List<WorkOperationsEntity> workOperationsList = workOperationService.selectList(workOperationsWrapper);
 		workBook.setWorkOperationsList(workOperationsList);
+		EntityWrapper<WorkBookEntity> workBookWrapper = new EntityWrapper<>();
+		workBookWrapper.isNull("delete_at").eq("stlst", workBook.getStlst()).eq("model_id", workBook.getModelId())
+				.eq("destinations", workBook.getDestinations()).eq("version_number", workBook.getVersionNumber())
+				.eq("phase_id", workBook.getPhaseId());
+		List<WorkBookEntity> otherWorkBookEntities = this.selectList(workBookWrapper);
+		workBook.setOtherWorkBookEnties(otherWorkBookEntities);
 		return workBook;
 	}
 
