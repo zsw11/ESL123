@@ -40,7 +40,10 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		for(ActionEntity item : actionEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(actionEntityList);
+		if(actionEntityList.size()>0){
+			this.updateAllColumnBatchById(actionEntityList);
+		}
+
 	}
 
 	@Override
@@ -49,7 +52,9 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		for(ActionEntity item : actionEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(actionEntityList);
+		if(actionEntityList.size()>0){
+			this.updateAllColumnBatchById(actionEntityList);
+		}
 	}
 
 	@Override
@@ -58,7 +63,9 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		for(ActionEntity item: actionEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(actionEntityList);
+		if(actionEntityList.size()>0){
+			this.updateAllColumnBatchById(actionEntityList);
+		}
 	}
 
 	@Override

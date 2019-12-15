@@ -48,7 +48,10 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 		for(PhaseEntity item : phaseEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(phaseEntityList);
+		if(phaseEntityList.size()>0){
+			this.updateAllColumnBatchById(phaseEntityList);
+		}
+
 	}
 
 	@Override
@@ -57,7 +60,9 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 		for(PhaseEntity item : phaseEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(phaseEntityList);
+		if(phaseEntityList.size()>0){
+			this.updateAllColumnBatchById(phaseEntityList);
+		}
 	}
 
 	@Override
@@ -66,7 +71,9 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 		for(PhaseEntity item: phaseEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(phaseEntityList);
+		if(phaseEntityList.size()>0){
+			this.updateAllColumnBatchById(phaseEntityList);
+		}
 	}
 
 	@Override

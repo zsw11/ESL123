@@ -120,7 +120,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for(ModelEntity item : modelEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelEntityList);
+		if(modelEntityList.size()>0){
+			this.updateAllColumnBatchById(modelEntityList);
+		}
 	}
 
 	@Override
@@ -129,7 +131,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for(ModelEntity item : modelEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelEntityList);
+		if(modelEntityList.size()>0){
+			this.updateAllColumnBatchById(modelEntityList);
+		}
 	}
 
 	@Override
@@ -138,7 +142,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for(ModelEntity item: modelEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelEntityList);
+		if(modelEntityList.size()>0){
+			this.updateAllColumnBatchById(modelEntityList);
+		}
+
 	}
 
 	@Override

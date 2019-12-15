@@ -46,7 +46,10 @@ public class WorkstationTypeServiceImpl extends ServiceImpl<WorkstationTypeDao, 
 		for(WorkstationTypeEntity item : workstationTypeEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(workstationTypeEntityList);
+		if(workstationTypeEntityList.size()>0){
+			this.updateAllColumnBatchById(workstationTypeEntityList);
+		}
+
 	}
 
 	@Override
@@ -55,7 +58,9 @@ public class WorkstationTypeServiceImpl extends ServiceImpl<WorkstationTypeDao, 
 		for(WorkstationTypeEntity item: workstationTypeEntities){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(workstationTypeEntities);
+		if(workstationTypeEntities.size()>0){
+			this.updateAllColumnBatchById(workstationTypeEntities);
+		}
 	}
 
 	@Override

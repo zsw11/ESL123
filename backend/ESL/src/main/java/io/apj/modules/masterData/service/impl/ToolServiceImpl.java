@@ -82,7 +82,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		for(ToolEntity item : toolEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(toolEntityList);
+		if(toolEntityList.size()>0){
+			this.updateAllColumnBatchById(toolEntityList);
+		}
+
 	}
 
 	@Override
@@ -91,7 +94,9 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		for(ToolEntity item : toolEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(toolEntityList);
+		if(toolEntityList.size()>0){
+			this.updateAllColumnBatchById(toolEntityList);
+		}
 	}
 
 	@Override
@@ -100,7 +105,9 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		for(ToolEntity item: toolEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(toolEntityList);
+		if(toolEntityList.size()>0){
+			this.updateAllColumnBatchById(toolEntityList);
+		}
 	}
 
 	@Override

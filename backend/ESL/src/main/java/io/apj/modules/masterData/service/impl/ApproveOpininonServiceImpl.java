@@ -43,7 +43,10 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 		for(ApproveOpininonEntity item : approveOpininonEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(approveOpininonEntityList);
+		if(approveOpininonEntityList.size()>0){
+			this.updateAllColumnBatchById(approveOpininonEntityList);
+		}
+
 	}
 
 	@Override
@@ -52,7 +55,9 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 		for(ApproveOpininonEntity item : approveOpininonEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(approveOpininonEntityList);
+		if(approveOpininonEntityList.size()>0){
+			this.updateAllColumnBatchById(approveOpininonEntityList);
+		}
 	}
 
 	@Override
@@ -61,7 +66,9 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 		for(ApproveOpininonEntity item: approveOpininonEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(approveOpininonEntityList);
+		if(approveOpininonEntityList.size()>0){
+			this.updateAllColumnBatchById(approveOpininonEntityList);
+		}
 	}
 
 	@Override

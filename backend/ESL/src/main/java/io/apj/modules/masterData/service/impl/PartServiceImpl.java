@@ -72,7 +72,10 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         for(PartEntity item : partList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(partList);
+        if(partList.size()>0){
+            this.updateAllColumnBatchById(partList);
+        }
+
     }
 
     @Override
@@ -81,7 +84,10 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         for(PartEntity item : partEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(partEntityList);
+        if(partEntityList.size()>0){
+            this.updateAllColumnBatchById(partEntityList);
+        }
+
     }
 
     @Override
@@ -90,7 +96,9 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         for(PartEntity item: partEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(partEntityList);
+        if(partEntityList.size()>0){
+            this.updateAllColumnBatchById(partEntityList);
+        }
     }
 
     @Override

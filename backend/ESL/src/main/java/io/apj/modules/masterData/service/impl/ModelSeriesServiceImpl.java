@@ -45,7 +45,10 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 		for(ModelSeriesEntity item : modelSeriesEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelSeriesEntityList);
+		if(modelSeriesEntityList.size()>0){
+			this.updateAllColumnBatchById(modelSeriesEntityList);
+		}
+
 	}
 
 	@Override
@@ -54,7 +57,9 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 		for(ModelSeriesEntity item : modelSeriesEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelSeriesEntityList);
+		if(modelSeriesEntityList.size()>0){
+			this.updateAllColumnBatchById(modelSeriesEntityList);
+		}
 	}
 
 	@Override
@@ -63,7 +68,9 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 		for(ModelSeriesEntity item: modelSeriesEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(modelSeriesEntityList);
+		if(modelSeriesEntityList.size()>0){
+			this.updateAllColumnBatchById(modelSeriesEntityList);
+		}
 	}
 
 	@Override
