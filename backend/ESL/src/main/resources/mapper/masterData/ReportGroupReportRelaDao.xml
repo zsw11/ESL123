@@ -19,7 +19,7 @@
 	*
 FROM
 	report
-	JOIN ( SELECT report_id FROM report_group_report_rela WHERE report_group_id = #{id} ) T ON T.report_id = report."id" ORDER BY report.create_at DESC
+	JOIN ( SELECT report_id FROM report_group_report_rela WHERE report_group_id = #{id} ) T ON T.report_id = report."id" ORDER BY report.update_at DESC
 
     </select>
 

@@ -20,6 +20,11 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    /**
+     * 判断当前报表是否可以提交审批
+     * @param params
+     * @return
+     */
     PageUtils selectListTest(Map<String, Object> params);
 
     void generateReportData(WorkBookEntity workBookEntity);
