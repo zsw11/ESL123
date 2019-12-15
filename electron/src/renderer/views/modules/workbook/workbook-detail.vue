@@ -3,6 +3,7 @@
     <div class="header">
       <el-button icon="el-icon-back" @click="goBack">返回</el-button>
       <el-button icon="el-icon-upload" @click="save">保存</el-button>
+      <el-button icon="el-icon-open" @click="openVideo">打开</el-button>
     </div>
 
     <div class="video-player-box">
@@ -163,8 +164,10 @@
               onClose: this.cancleFormSubmit
             })
           })
-          // ()
         }
+      },
+      openVideo () {
+        ipcRenderer.send('openVideo')
       },
       init () {
         const self = this
