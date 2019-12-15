@@ -34,7 +34,7 @@
                   size="medium"
                 ></el-input>
               </el-form-item>
-              <span class="toggleLogin" @click="toggleLogin()">{{btmTitle}}登录</span>
+              <span class="toggle-login" @click="toggleLogin()">{{btmTitle}}登录</span>
               <el-form-item>
                 <el-button
                   id="login-btn-submit"
@@ -53,6 +53,7 @@
         </div>
       </div>
     </div>
+    <div class="footer">@ Copyright Seiko Epson Corporation 2008</div>
   </div>
 </template>
 
@@ -93,7 +94,6 @@ export default {
     dataFormSubmit() {
       this.$refs["dataForm"].validate(valid => {
         this.dataForm.apo = this.title === "APO";
-        console.log(this.dataForm, 22222222222222222);
         if (valid) {
           this.logining = true;
           this.$store
@@ -266,7 +266,7 @@ export default {
   }
 }
 
-.toggleLogin {
+.toggle-login {
   cursor: pointer;
   color: #1f297e;
   height: 20px;
@@ -276,4 +276,14 @@ export default {
   margin-top: 10px;
   width: 250px;
 }
+  .footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background-color:#000000;
+    color: #FFFFFF;
+  }
 </style>

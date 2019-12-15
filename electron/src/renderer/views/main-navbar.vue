@@ -11,7 +11,7 @@
           <icon-svg name="zhedie"></icon-svg>
         </el-menu-item>
       </el-menu>
-      <el-menu class="site-navbar__menu site-navbar__menu--right" mode="horizontal">
+      <el-menu class="site-navbar__menu site-navbar__menu--right show-right" mode="horizontal">
         <el-menu-item index="2" class="message-menu-item" @click.native="messageView()">
           <template>
             <el-badge
@@ -22,11 +22,14 @@
             <span>消息</span>
           </template>
         </el-menu-item>
-        <el-menu-item class="site-navbar__avatar" index="3">
+        <el-menu-item class="site-navbar__avatar user-data show-right" index="3">
           <el-dropdown :show-timeout="0" placement="bottom" size="small">
-            <span class="el-dropdown-link">
+            <span class="el-dropdown-link user-wrp">
               <img src="~@/assets/img/avatar.png" :alt="userName" />
-              {{ userName }}
+              <span class="user-wrp">
+                <span class="user">{{ userName }}</span>
+                <p class="department">{{department}}</p>
+              </span>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item>
@@ -91,6 +94,11 @@ export default {
     userName: {
       get() {
         return this.$store.state.user.name;
+      }
+    },
+    department: {
+      get () {
+        return this.$store.state.user.department
       }
     }
   },
@@ -190,6 +198,35 @@ export default {
   > span {
     color: #606266;
     font-size: 14px;
+  }
+}
+.user-data{
+  width: 160px;
+}
+.user-wrp{
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  height: 30px;
+}
+.user{
+  margin: 0;
+  padding: 0;
+  height: 30%;
+  position: absolute;
+  top: -15%;
+}
+.department{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  top: 40%;
+}
+
+@media screen and (max-width: 580px){
+  .show-right{
+    display: none;
   }
 }
 </style>

@@ -7,6 +7,7 @@ export default {
   state: {
     id: 0,
     name: '',
+    department: '',
     token: getToken(),
     member: {},
     unreadCount: 0,
@@ -35,6 +36,9 @@ export default {
     SetADisplay (state, payload) {
       state.displaySetting[payload.page] = payload.display
       setDisplay(state.member.id, state.displaySetting)
+    },
+    SetDepartment (state, department) {
+      state.department = department
     }
   },
   actions: {
@@ -62,6 +66,7 @@ export default {
         const data = res.page
         commit('SetId', data.id)
         commit('SetName', data.username)
+        commit('SetDepartment', data.deptName)
       })
     },
     SetUnreadCount ({ commit }, unreadCount) {
