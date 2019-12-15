@@ -3,6 +3,8 @@ package io.apj.modules.report.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,10 @@ import io.apj.common.utils.RD;
 public class TotalController {
 	@Autowired
 	private TotalService totalService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
 
 	/**
 	 * 列表
@@ -48,6 +54,8 @@ public class TotalController {
 	@RequiresPermissions("report:total:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		TotalEntity total = totalService.selectById(id);
+		total.setModelName(modelService.selectById(total.getModelId()).getName());
+		total.setPhaseName(phaseService.selectById(total.getPhaseId()).getName());
 
 		return RD.success(total);
 	}

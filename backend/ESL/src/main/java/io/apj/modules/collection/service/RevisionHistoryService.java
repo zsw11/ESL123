@@ -5,6 +5,8 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -21,5 +23,7 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
     void generateReportData(WorkBookEntity workBookEntity);
 
     void updateEntity(RevisionHistoryEntity revisionHistory);
+
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
 

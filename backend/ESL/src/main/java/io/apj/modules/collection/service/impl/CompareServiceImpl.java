@@ -11,6 +11,8 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -19,6 +21,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.CompareDao;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.service.CompareService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("compareService")
@@ -69,6 +73,11 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
     public void generateReportData(WorkBookEntity workBook) {
         CompareEntity entity = generateStandardTime(workBook);
         compareItemService.generateCompareItem(workBook, entity.getId());
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
     private CompareEntity generateStandardTime(WorkBookEntity workBook) {

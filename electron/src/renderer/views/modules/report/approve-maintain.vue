@@ -55,7 +55,7 @@
           :label="'操作'"
           width="230">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="down(scope.row.reportEntity.name)">下载</el-button>
+            <el-button size="mini" type="text" @click="down(scope.row.reportEntity.id)">下载</el-button>
           </template>
         </el-table-column>
 
@@ -74,7 +74,8 @@ import { pick } from 'lodash'
 import {
   fetchReportApprove,
   createReportApprove,
-  updateReportApprove
+  updateReportApprove,
+  downloadReportApprove
 } from '@/api/reportApprove'
 import { fetchReportDetail } from '@/api/reportGroup'
 export default {
@@ -235,13 +236,14 @@ export default {
       })
     },
     // 下载
-    down(name){
+    down(id){
       let data ={
         modelId: this.dataForm.modelId,
         phaseId: this.dataForm.phaseId,
         stlst: this.dataForm.stlst,
-        name
+        reportId: id
       }
+      downloadReportApprove(data);
       console.log(data)
     }
   }

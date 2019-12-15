@@ -6,6 +6,8 @@ import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,10 @@ public class RevisionHistoryController extends AbstractController {
 
 	@Autowired
 	private RevisionHistoryItemService revisionHistoryItemService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
 
 	/**
 	 * 列表
@@ -55,6 +61,9 @@ public class RevisionHistoryController extends AbstractController {
 	@RequiresPermissions("collection:revisionhistory:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		RevisionHistoryEntity revisionHistory = revisionHistoryService.selectById(id);
+		revisionHistory.setModelName(modelService.selectById(revisionHistory.getModelId()).getName());
+		revisionHistory.setPhaseName(phaseService.selectById(revisionHistory.getPhaseId()).getName());
+
 		EntityWrapper<RevisionHistoryItemEntity> ew = new EntityWrapper<>();
 		ew.eq("collection_revision_history_id",id);
 		revisionHistory.setItems(revisionHistoryItemService.selectList(ew));

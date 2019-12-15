@@ -9,6 +9,8 @@ import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -17,6 +19,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TimeContactDao;
 import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.report.service.TimeContactService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("timeContactService")
@@ -63,6 +67,11 @@ public class TimeContactServiceImpl
     @Override
     public void generateReportData(WorkBookEntity workBookEntity) {
         TimeContactEntity entity = generateStandardTime(workBookEntity);
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        // TODo
     }
 
     private TimeContactEntity generateStandardTime(WorkBookEntity workBook) {

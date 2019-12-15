@@ -11,22 +11,23 @@
       height="100%"
       :auto-resize="true"
       :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
+      :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
+      @selected-changed="selectedChanged"
+      @keydown="cellKeydown"
       @edit-actived="editActived">
-      <!-- <vxe-table-column type="checkbox" width="60" ></vxe-table-column> -->
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" min-width="240"></operation-column>
       <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+      <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
       <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="tmu" title="TMU" width="50" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}" @keydown="cellKeydown"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible">
@@ -34,11 +35,11 @@
         ref="standardBookForm"
         :model="standardBookDialog.formData"
         :rules="standardBookDialog.rules">
-        <el-form-item label="标准书名称" prop="name" :label-width="'100px'">
-          <el-input v-model="standardBookDialog.formData.name" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="标准书编号" prop="code" :label-width="'100px'">
           <el-input v-model="standardBookDialog.formData.code" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="标准书名称" prop="name" :label-width="'100px'">
+          <el-input v-model="standardBookDialog.formData.name" autocomplete="off"></el-input>
         </el-form-item>
         <span class="dialog-footer">
           <el-button type="primary" @click="doAddStandardBook()">确定</el-button>
@@ -55,11 +56,24 @@ import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
-import { measureColumns0, measureColumns1, measureFields, defaultRow, defaultFields } from '@/utils/global'
+import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
+import {
+  measureColumns0,
+  measureColumns1,
+  measureFields,
+  defaultRow,
+  defaultFields,
+  modeMeasureFields,
+  measureMode,
+  jumpFields,
+  modeFields,
+  modeCheckZeroFields,
+  modeSetZeroFields
+  } from '@/utils/global'
 
 export default {
   name: 'WorkbookTable',
-  components: { MeasureColumn, KeyColumn, OperationColumn },
+  components: { MeasureColumn, KeyColumn, OperationColumn, ToolColumn },
   data () {
     return {
       measureColumns0,
@@ -70,6 +84,7 @@ export default {
       len: 10,
       WMethod: '',
       add: true,
+      lastSelected: undefined,
       lastEditCell: null,
       currentCell: null,
       standardBookDialog: {
@@ -97,33 +112,88 @@ export default {
     },
     // 加载数据
     loadData (data) {
+      // 增加100行方便操作
+      for (let i = 0; i < 100; i++) {
+        data.push(this.createNewRow())
+      }
       this.$refs.workbookTable.loadData(data)
       this.lastEditCell = undefined
       this.currentCell = undefined
-      // 增加100行方便操作
-      for (let i = 0; i < 100; i++) {
-        this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
-      }
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
-        this.jump(row, column.property, e.key)
+      console.log(jumpFields, column.property)
+      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
+        this.jump(row, column.property, e.key) // field是operation
         e.preventDefault()
         return false
       }
       return true
     },
+    // 按下回车
+    cellKeydown (e) {
+      console.log(e)
+    },
     // 调到指定位置
     jump (row, field, to) {
-      const offset = measureFields.indexOf(field)
-      for (let i = 1; i <= measureFields.length; i++) {
-        const tmpField = measureFields[(offset + i) % measureFields.length]
-        if (tmpField.includes(to)) {
+      const offset = jumpFields.indexOf(field)
+      for (let i = 1; i <= jumpFields.length; i++) {
+        const tmpField = jumpFields[(offset + i) % jumpFields.length]
+        const fieldMap = {
+          operation: 'w',
+          tool: 't',
+          fre: 'f'
+        }
+        // 判断模式
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(row[f])
+        })]
+        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
+          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
           return
         }
       }
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = measureMode[modeMeasureFields.find(f => {
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
+      return !mode || mode === measureMode[column.property]
+    },
+    selectedChanged (val) {
+      // 补0操作
+      // 判断模式
+      if (this.lastSelected) {
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
+        })]
+        if (mode &&
+          measureMode[this.lastSelected.column.property] === mode &&
+          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+        ) {
+          // 因为都是设置0，不用管是否频率
+          // let v = 0
+          // for (const f of modeCheckZeroFields[mode]) {
+          //   if (this.lastSelected.row[f]) {
+          //     v = this.lastSelected.row[f]
+          //     break
+          //   }
+          // }
+          // if (v) {
+          //   for (const f of modeCheckZeroFields[mode]) {
+          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          //   }
+          // }
+          for (const f of modeSetZeroFields[mode]) {
+            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          }
+        }
+      }
+      this.lastSelected = val
     },
     // 单元格开始编辑
     editActived (cell) {
@@ -198,6 +268,7 @@ export default {
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
+      console.log(222)
       Object.assign(
         row,
         pick(mg, measureFields)

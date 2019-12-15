@@ -3,6 +3,8 @@ package io.apj.modules.collection.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ import io.apj.common.utils.RD;
 public class CompareController extends AbstractController {
 	@Autowired
 	private CompareService compareService;
+	@Autowired
+	private PhaseService phaseService;
+	@Autowired
+	private ModelService modelService;
 
 	/**
 	 * 列表
@@ -49,6 +55,8 @@ public class CompareController extends AbstractController {
 	@RequiresPermissions("collection:compare:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		CompareEntity compare = compareService.selectById(id);
+		compare.setModelName(modelService.selectById(compare.getModelId()).getName());
+		compare.setPhaseName(phaseService.selectById(compare.getPhaseId()).getName());
 
 		return RD.success(compare);
 	}

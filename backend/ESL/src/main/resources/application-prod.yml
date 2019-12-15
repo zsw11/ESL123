@@ -1,3 +1,4 @@
+APOIP: "LDAP://172.16.73.82"
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource

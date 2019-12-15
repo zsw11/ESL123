@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ApproveEntity;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface ApproveService extends IService<ApproveEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
 

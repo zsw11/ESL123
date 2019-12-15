@@ -3,6 +3,9 @@ package io.apj.modules.report.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.apj.modules.masterData.service.ModelSeriesService;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,10 @@ import io.apj.common.utils.RD;
 public class TimeContactController {
 	@Autowired
 	private TimeContactService timeContactService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
 
 	/**
 	 * 列表
@@ -47,6 +54,9 @@ public class TimeContactController {
 	@RequiresPermissions("report:timecontact:detail")
 	public ResponseEntity<Object> info(@PathVariable("id") Integer id) {
 		TimeContactEntity timeContact = timeContactService.selectById(id);
+
+		timeContact.setModelName(modelService.selectById(timeContact.getModelId()).getName());
+		timeContact.setPhaseName(phaseService.selectById(timeContact.getPhaseId()).getName());
 
 		return RD.success(timeContact);
 	}

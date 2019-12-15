@@ -34,8 +34,9 @@
 </template>
 
 <script>
-import Popper from '@plugins/vue-popperjs/vue-popper.js'
-import '@plugins/vue-popperjs/vue-popper.min.css'
+import { debounce } from 'lodash'
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/vue-popper.min.css'
 import { listAction } from '@/api/action'
 import { listPart } from '@/api/part'
 import { listTool } from '@/api/tool'
@@ -61,13 +62,18 @@ export default {
     '$attrs.value' (v) {
       if (v === '[') {
         this.addToSelection(']', false)
-        this.suggest('part')
+        this.debounceSuggest('part')
       } else if (v === '"') {
         this.addToSelection('"', false)
-        this.suggest('tool')
+        this.debounceSuggest('tool')
       } else if (v.length === 1) {
-        this.suggest('action', v)
+        this.debounceSuggest('action', v)
       }
+    }
+  },
+  computed: {
+    debounceSuggest () {
+      return debounce(this.suggest, 500)
     }
   },
   methods: {
@@ -151,13 +157,13 @@ export default {
           }
           // 在[]间会再次提示
           if (/\[[^[\]]*$/.test(beginStr)) {
-            this.suggest('part', /\[([^[\]]*)$/.exec(beginStr)[1])
+            this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr)[1])
             return e.preventDefault()
           }
           // 补]并开始提示
           this.addToSelection(']', false)
           e.stopPropagation()
-          this.suggest('part')
+          this.debounceSuggest('part')
           break
         }
         case ']': {
@@ -179,13 +185,13 @@ export default {
           }
           // 在""间会再次提示
           if ((beginStr.match(/"/g) || []).length % 2 === 1) {
-            this.suggest('tool', /"([^"]*)$/.exec(beginStr)[1])
+            this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr)[1])
             return e.preventDefault()
           }
           // 补"并开始提示
           this.addToSelection('"', false)
           e.stopPropagation()
-          this.suggest('tool')
+          this.debounceSuggest('tool')
           break
         }
         case 'ArrowLeft':
@@ -229,13 +235,13 @@ export default {
             const beginStr = this.getInputBegin()
             if (!/[`~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
               // 操作关键字
-              this.suggest('action', beginStr + e.key)
+              this.debounceSuggest('action', beginStr + e.key)
             } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
               // 部品
-              this.suggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
+              this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
             } else if (((beginStr + e.key).match(/"/g) || []).length % 2 === 1) {
               // 治工具
-              this.suggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
+              this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
             } else {
               this.endSuggest()
               console.log(e.key)
