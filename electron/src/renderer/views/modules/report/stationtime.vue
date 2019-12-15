@@ -475,6 +475,7 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
+        stlst: null,
         deptId: null,
         title: null,
         sheetName: null,

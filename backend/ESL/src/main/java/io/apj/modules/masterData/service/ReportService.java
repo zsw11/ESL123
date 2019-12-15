@@ -1,10 +1,13 @@
 package io.apj.modules.masterData.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -24,5 +27,29 @@ public interface ReportService extends IService<ReportEntity> {
     List<ReportEntity> selectApproveList(Integer id);
 
     List<ReportGroupEntity> selectReportGroup(Map<String,Object> data);
+
+    /**
+     * 软删除实体对象List
+     * @param reportEntityList
+     */
+    void deleteList(List<ReportEntity> reportEntityList);
+
+    /**
+     * 通过ids软删除
+     * @param ids
+     */
+    void deleteByIds(Collection<? extends Serializable> ids);
+
+    /**
+     * 根据条件软删除
+     * @param wrapper
+     */
+    void deleteByWrapper(Wrapper<ReportEntity> wrapper);
+
+    /**
+     * update时更新拼音和日期
+     * @return
+     */
+    void updatePinAndDataById(ReportEntity reportEntity);
 }
 

@@ -45,8 +45,8 @@
         </el-form-item>
 
 
-        <el-form-item :label="'型号'" prop="model_type">
-          <el-input v-model="listQuery.model_type" clearable></el-input>
+        <el-form-item :label="'型号'" prop="modelType">
+          <el-input v-model="listQuery.modelType" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'仕向'" prop="destinations">
@@ -107,9 +107,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="model_type" label="型号">
+        <el-table-column align="center" prop="modelType" label="型号">
           <template slot-scope="scope">
-            <span>{{scope.row.model_type }}</span>
+            <span>{{scope.row.modelType }}</span>
           </template>
         </el-table-column>
 
@@ -222,7 +222,7 @@ export default {
         phaseName: null,
         phaseId: null,
         stlst: null,
-        model_type: null,
+        modelType: null,
         destinations: null,
         createBy: null,
         createAt: null,
@@ -260,7 +260,7 @@ export default {
             { code: 'factory', name: '工程', type: 'string', required: true },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
-              code: 'model_type',
+              code: 'modelType',
               name: '型号',
               type: 'string',
               required: true
@@ -357,12 +357,14 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
+        phaseId: null,
+        stlst: null,
         deptId: null,
         title: null,
         sheetName: null,
         factory: null,
         modelId: null,
-        model_type: null,
+        modelType: null,
         destinations: null,
         createBy: null,
         createAt: null,

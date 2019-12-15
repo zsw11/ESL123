@@ -40,8 +40,8 @@
             clearable></dict-select>
         </el-form-item>
 
-        <el-form-item :label="'型号'" prop="model_type">
-          <el-input v-model="listQuery.model_type" clearable></el-input>
+        <el-form-item :label="'型号'" prop="modelType">
+          <el-input v-model="listQuery.modelType" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'单位'" prop="unit">
@@ -97,9 +97,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="model_type" label="型号">
+        <el-table-column align="center" prop="modelType" label="型号">
           <template slot-scope="scope">
-            <span>{{scope.row.model_type }}</span>
+            <span>{{scope.row.modelType }}</span>
           </template>
         </el-table-column>
 
@@ -203,7 +203,7 @@ export default {
         phaseId: null,
         phaseName: null,
         stlst: null,
-        model_type: null,
+        modelType: null,
         unit: null,
         createBy: null,
         createAt: null,
@@ -240,7 +240,7 @@ export default {
             },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
-              code: 'model_type',
+              code: 'modelType',
               name: '型号',
               type: 'string',
               required: true
@@ -333,10 +333,12 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
+        stlst: null,
+        phaseId: null,
         title: null,
         sheetName: null,
         modelId: null,
-        model_type: null,
+        modelType: null,
         unit: null,
         createBy: null,
         createAt: null,

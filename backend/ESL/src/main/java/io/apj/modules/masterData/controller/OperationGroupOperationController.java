@@ -80,8 +80,7 @@ public class OperationGroupOperationController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:operationgroupoperation:update")
 	public RD update(@RequestBody OperationGroupOperationEntity operationGroupOperation) {
-		operationGroupOperation.setPinyin(PinyinUtil.getPinYin(operationGroupOperation.getOperation()));
-		operationGroupOperationService.updateById(operationGroupOperation);
+		operationGroupOperationService.updatePinAndDataById(operationGroupOperation);
 
 		return RD.build().put("code", 200);
 	}
@@ -94,7 +93,7 @@ public class OperationGroupOperationController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:operationgroupoperation:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		operationGroupOperationService.deleteBatchIds(Arrays.asList(ids));
+		operationGroupOperationService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

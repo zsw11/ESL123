@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import io.apj.modules.masterData.entity.WorkstationEntity;
+
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
@@ -57,6 +59,11 @@ public class WorkBookEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private String WorkstationName;
+	/**
+	 * 其他工位列表
+	 */
+	@TableField(exist = false)
+	private List<WorkBookEntity> otherWorkBookEnties;
 	/**
 	 * ST/LST
 	 */

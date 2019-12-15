@@ -1,10 +1,17 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -33,6 +40,38 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void deleteList(List<MeasureGroupEntity> measureGroupEntityList) {
+        for(MeasureGroupEntity item : measureGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(measureGroupEntityList);
+    }
+
+    @Override
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        List<MeasureGroupEntity> measureGroupEntityList = this.selectBatchIds(ids);
+        for(MeasureGroupEntity item : measureGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(measureGroupEntityList);
+    }
+
+    @Override
+    public void deleteByWrapper(Wrapper<MeasureGroupEntity> wrapper) {
+        List<MeasureGroupEntity> measureGroupEntityList = this.selectList(wrapper);
+        for(MeasureGroupEntity item: measureGroupEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(measureGroupEntityList);
+    }
+
+    @Override
+    public void updatePinAndDataById(MeasureGroupEntity measureGroupEntity) {
+        measureGroupEntity.setUpdateAt(new Date());
+        this.updateById(measureGroupEntity);
     }
 
 }

@@ -108,8 +108,7 @@ public class PartController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:part:update")
 	public ResponseEntity<Object> update(@RequestBody PartEntity part) {
-		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
-		partService.updateById(part);
+		partService.updatePinAndDataById(part);
 
 		return RD.ok(part);
 	}
@@ -134,7 +133,7 @@ public class PartController extends AbstractController {
 				deleteTableReference("part", ids[i].longValue());
 			}
 		}
-		partService.deleteBatchIds(Arrays.asList(ids));
+		partService.deleteByIds(Arrays.asList(ids));
 
 		return RD.NO_CONTENT(RD.build());
 	}

@@ -79,7 +79,7 @@ public class MeasureGroupController extends AbstractController {
     @RequestMapping("/update")
     @RequiresPermissions("masterData:measuregroup:update")
     public RD update(@RequestBody MeasureGroupEntity measureGroup){
-		measureGroupService.updateById(measureGroup);
+		measureGroupService.updatePinAndDataById(measureGroup);
 
         return RD.build().put("code", 200);
     }
@@ -91,7 +91,7 @@ public class MeasureGroupController extends AbstractController {
     @RequestMapping("/delete")
     @RequiresPermissions("masterData:measuregroup:delete")
     public RD delete(@RequestBody Integer[] ids){
-		measureGroupService.deleteBatchIds(Arrays.asList(ids));
+		measureGroupService.deleteByIds(Arrays.asList(ids));
 
         return RD.build().put("code", 200);
     }

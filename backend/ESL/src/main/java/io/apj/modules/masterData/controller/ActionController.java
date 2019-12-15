@@ -83,8 +83,7 @@ public class ActionController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:action:update")
 	public RD update(@RequestBody ActionEntity action) {
-		action.setPinyin(PinyinUtil.getPinYin(action.getName()));
-		actionService.updateById(action);
+		actionService.updatePinAndDataById(action);
 
 		return RD.build().put("code", 200);
 	}
@@ -109,7 +108,7 @@ public class ActionController extends AbstractController {
 				deleteTableReference("action", ids[i].longValue());
 			}
 		}
-		actionService.deleteBatchIds(Arrays.asList(ids));
+		actionService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

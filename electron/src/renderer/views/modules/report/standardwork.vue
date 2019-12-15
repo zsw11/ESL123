@@ -51,8 +51,8 @@
             clearable></dict-select>
         </el-form-item>
 
-        <el-form-item :label="'型号'" prop="model_type">
-          <el-input v-model="listQuery.model_type" clearable></el-input>
+        <el-form-item :label="'型号'" prop="modelType">
+          <el-input v-model="listQuery.modelType" clearable></el-input>
         </el-form-item>
 
         <el-form-item :label="'系数'" prop="coefficient">
@@ -60,26 +60,30 @@
         </el-form-item>
 
 
-        <el-form-item :label="'技通No'" prop="RevNo">
-          <el-input v-model="listQuery.RevNo" clearable></el-input>
+        <el-form-item :label="'技通No'" prop="revNo">
+          <el-input v-model="listQuery.revNo" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item :label="'首个工数title'" prop="firstStandardWorkTitle">
+            <el-input v-model="listQuery.firstStandardWorkTitle" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item :label="'第三工数title'" prop="secondStandardWorkTitle">
+            <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
         </el-form-item>
 
           <el-form-item :label="'发行日'" prop="monthResult">
               <el-date-picker
                       v-model="listQuery.monthResult"
-                      type="datetime"
-                      value-format="yyyy-MM-dd HH:mm:ss"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
                       clearable
               ></el-date-picker>
           </el-form-item>
 
-        <el-form-item :label="'首个标准工数title'" prop="firstStandardWorkTitle">
-          <el-input v-model="listQuery.firstStandardWorkTitle" clearable></el-input>
-        </el-form-item>
 
-        <el-form-item :label="'第三个标准工数title'" prop="secondStandardWorkTitle">
-          <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
-        </el-form-item>
         </div>
 
 <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
@@ -178,9 +182,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="model_type" label="型号">
+        <el-table-column align="center" prop="modelType" label="型号">
           <template slot-scope="scope">
-            <span>{{scope.row.model_type }}</span>
+            <span>{{scope.row.modelType }}</span>
           </template>
         </el-table-column>
 
@@ -202,9 +206,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="RevNo" label="技通No">
+        <el-table-column align="center" prop="revNo" label="技通No">
           <template slot-scope="scope">
-            <span>{{scope.row.RevNo }}</span>
+            <span>{{scope.row.revNo }}</span>
           </template>
         </el-table-column>
 
@@ -372,12 +376,12 @@ export default {
         sheetName: null,
         modelId: null,
         modelName: null,
-        model_type: null,
+        modelType: null,
         coefficient: null,
         phaseId: null,
         phaseName: null,
         stlst: null,
-        RevNo: null,
+        revNo: null,
         monthResult: null,
         firstStandardWorkTitle: null,
         secondStandardWorkTitle: null,
@@ -418,7 +422,7 @@ export default {
             },
             { code: 'modelId', name: '机种ID', type: 'string', required: true },
             {
-              code: 'model_type',
+              code: 'modelType',
               name: '型号',
               type: 'string',
               required: true
@@ -435,7 +439,7 @@ export default {
               type: 'string',
               required: true
             },
-            { code: 'RevNo', name: '技通No', type: 'string', required: true },
+            { code: 'revNo', name: '技通No', type: 'string', required: true },
             {
               code: 'monthResult',
               name: '发行日',
@@ -556,10 +560,10 @@ export default {
         title: null,
         sheetName: null,
         modelId: null,
-        model_type: null,
+        modelType: null,
         coefficient: null,
         phaseId: null,
-        RevNo: null,
+        revNo: null,
         monthResult: null,
         firstStandardWorkTitle: null,
         secondStandardWorkTitle: null,
@@ -569,7 +573,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        stlst: null
       })
     },
     // 每页数

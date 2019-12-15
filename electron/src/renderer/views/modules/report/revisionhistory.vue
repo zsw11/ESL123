@@ -75,21 +75,21 @@
             <el-input v-model="listQuery.revNo" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'上版ST'" prop="lastSTname">
-            <el-input v-model="listQuery.lastSTname" clearable></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'上版ST'" prop="lastSTname">-->
+<!--            <el-input v-model="listQuery.lastSTname" clearable></el-input>-->
+<!--          </el-form-item>-->
 
-          <el-form-item :label="'此版ST'" prop="currentSTname">
-            <el-input v-model="listQuery.currentSTname" clearable></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'此版ST'" prop="currentSTname">-->
+<!--            <el-input v-model="listQuery.currentSTname" clearable></el-input>-->
+<!--          </el-form-item>-->
 
-          <el-form-item :label="'上版LST'" prop="lastLSTname">
-            <el-input v-model="listQuery.lastLSTname" clearable></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'上版LST'" prop="lastLSTname">-->
+<!--            <el-input v-model="listQuery.lastLSTname" clearable></el-input>-->
+<!--          </el-form-item>-->
 
-          <el-form-item :label="'此版LST'" prop="currentLSTname">
-            <el-input v-model="listQuery.currentLSTname" clearable></el-input>
-          </el-form-item>
+<!--          <el-form-item :label="'此版LST'" prop="currentLSTname">-->
+<!--            <el-input v-model="listQuery.currentLSTname" clearable></el-input>-->
+<!--          </el-form-item>-->
 
           <el-form-item :label="'发行日'" prop="monthResult">
             <el-date-picker
@@ -238,29 +238,29 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="lastSTname" label="上版ST">
-          <template slot-scope="scope">
-            <span>{{scope.row.lastSTname }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="lastSTname" label="上版ST">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.lastSTname }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="currentSTname" label="此版ST">
-          <template slot-scope="scope">
-            <span>{{scope.row.currentSTname }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="currentSTname" label="此版ST">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.currentSTname }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="lastLSTname" label="上版LST">
-          <template slot-scope="scope">
-            <span>{{scope.row.lastLSTname }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="lastLSTname" label="上版LST">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.lastLSTname }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="currentLSTname" label="此版LST">
-          <template slot-scope="scope">
-            <span>{{scope.row.currentLSTname }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="currentLSTname" label="此版LST">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.currentLSTname }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
 <!--        <el-table-column align="center" prop="createBy" label="创建者ID">-->
 <!--          <template slot-scope="scope">-->
@@ -584,6 +584,8 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
+        phaseId: null,
+        stlst: null,
         deptId: null,
         title: null,
         sheetName: null,

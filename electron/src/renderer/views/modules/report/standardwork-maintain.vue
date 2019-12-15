@@ -49,8 +49,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'型号'" prop="model_type">
-            <el-input v-model="dataForm.model_type"></el-input>
+          <el-form-item :label="'型号'" prop="modelType">
+            <el-input v-model="dataForm.modelType"></el-input>
           </el-form-item>
         </el-col>
 
@@ -63,8 +63,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'技通No'" prop="RevNo">
-            <el-input v-model="dataForm.RevNo"></el-input>
+          <el-form-item :label="'技通No'" prop="revNo">
+            <el-input v-model="dataForm.revNo"></el-input>
           </el-form-item>
         </el-col>
 
@@ -162,12 +162,12 @@ export default {
         sheetName: null,
         modelId: null,
         modelName: null,
-        model_type: null,
+        modelType: null,
         coefficient: null,
         phaseId: null,
         phaseName: null,
         stlst: null,
-        RevNo: null,
+        revNo: null,
         monthResult: null,
         firstStandardWorkTitle: null,
         secondStandardWorkTitle: null,
@@ -184,12 +184,15 @@ export default {
         title: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         sheetName: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         modelId: [{ type: 'number', message: '机种ID需为数字值' }],
-        model_type: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        modelType: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         coefficient: [
-          { type: 'number', max: 100000000, message: '系数需为8位数字值' }
+          {
+            pattern:/^\d{8}$/,
+            message: '系数需为8位数字值'
+          }
         ],
         phaseId: [{ type: 'number', message: '生产阶段ID需为数字值' }],
-        RevNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        revNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
 
         firstStandardWorkTitle: [
           { max: 32, message: '长度超过了32', trigger: 'blur' }
@@ -254,10 +257,10 @@ export default {
                 'modelId',
                 'modelName',
                 'phaseName',
-                'model_type',
+                'modelType',
                 'coefficient',
                 'phaseId',
-                'RevNo',
+                'revNo',
                 'monthResult',
                 'firstStandardWorkTitle',
                 'secondStandardWorkTitle',
