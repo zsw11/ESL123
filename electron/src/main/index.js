@@ -2,7 +2,6 @@
 
 import {videoSupport} from './ffmpeg-helper'
 import VideoServer from './VideoServer'
-import {srtToVtt} from './subtitle-helper'
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const electron = require('electron')
 const dialog = require('electron').dialog
@@ -73,81 +72,6 @@ function onVideoFileSeleted (videoFilePath) {
   })
 }
 
-let applicationMenu = [
-  {
-    label: 'File',
-    submenu: [
-      {
-        label: 'Open video',
-        accelerator: 'CmdOrCtrl+O',
-        click: () => {
-          electron.dialog.showOpenDialog({
-            properties: ['openFile']
-            // filters: [
-            //   {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'rmvb', 'flv', 'ogv','webm', '3gp', 'mov']},
-            // ]
-          }, (result) => {
-            console.log(result)
-
-            if (result && mainWindow && result.length > 0) {
-              onVideoFileSeleted(result[0])
-            }
-          })
-        }
-      },
-      {
-        label: 'Opne subtitile',
-        accelerator: 'CmdOrCtrl+P',
-        click: () => {
-          electron.dialog.showOpenDialog({
-            properties: ['openFile'],
-            filters: [
-              { name: 'subtitiles', extensions: ['srt', 'vtt'] }
-            ]
-          }, (result) => {
-            console.log(result)
-            if (result && mainWindow && result.length > 0) {
-              if (result[0].endsWith('.vtt')) {
-                mainWindow.webContents.send('subtitleSelected', result[0])
-              } else {
-                srtToVtt(result[0], (err, vttpath) => {
-                  if (!err) {
-                    console.log(vttpath)
-                    mainWindow.webContents.send('subtitleSelected', vttpath)
-                  }
-                })
-              }
-            }
-          })
-        }
-      }
-
-    ]
-  },
-  {
-    label: 'Tools',
-    submenu: [
-      {
-        label: 'Reload',
-        accelerator: 'CmdOrCtrl+R',
-        click: function (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload()
-        }
-      },
-      {
-        label: 'Toggle Developer Tools',
-        accelerator: (function () {
-          if (process.platform === 'darwin') return 'Alt+Command+I'
-          else return 'Ctrl+Shift+I'
-        })(),
-        click: function (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.toggleDevTools()
-        }
-      }
-    ]
-  }
-]
-
 function createWindow () {
   /**
    * Initial window options
@@ -164,11 +88,24 @@ function createWindow () {
     mainWindow = null
   })
 
-  var menu = Menu.buildFromTemplate(applicationMenu)
-  Menu.setApplicationMenu(menu)
+  Menu.setApplicationMenu(null)
   ipcMain.on('fileDrop', (event, arg) => {
     console.log('fileDrop:', arg)
     onVideoFileSeleted(arg)
+  })
+  ipcMain.on('openVideo', (event, arg) => {
+    electron.dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [
+        {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
+      ]
+    }, (result) => {
+      console.log(result)
+
+      if (result && mainWindow && result.length > 0) {
+        onVideoFileSeleted(result[0])
+      }
+    })
   })
 }
 

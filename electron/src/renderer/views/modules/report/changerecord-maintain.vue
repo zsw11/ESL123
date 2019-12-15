@@ -45,8 +45,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'型号'" prop="model_type">
-            <el-input v-model="dataForm.model_type"></el-input>
+          <el-form-item :label="'型号'" prop="modelType">
+            <el-input v-model="dataForm.modelType"></el-input>
           </el-form-item>
         </el-col>
          <el-col :span="10" :offset="2">
@@ -138,7 +138,7 @@ export default {
         modelName: null,
         phaseName: null,
         stlst: null,
-        model_type: null,
+        modelType: null,
         destinations: null,
         createBy: null,
         createAt: null,
@@ -153,7 +153,7 @@ export default {
         sheetName: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         factory: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         modelId: [{ type: 'number', message: '机种ID需为数字值' }],
-        model_type: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        modelType: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         destinations: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
         updateBy: [{ type: 'number', message: '更新者ID需为数字值' }]
@@ -214,7 +214,7 @@ export default {
                 'phaseName',
                 'stlst',
                 'factory',
-                'model_type',
+                'modelType',
                 'destinations',
                 'createBy',
                 'createAt',

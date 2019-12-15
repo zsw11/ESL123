@@ -74,8 +74,8 @@
             <el-input v-model="listQuery.lastVersionName" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'此版名称'" prop="current_version_name">
-            <el-input v-model="listQuery.current_version_name" clearable></el-input>
+          <el-form-item :label="'此版名称'" prop="currentVersionName">
+            <el-input v-model="listQuery.currentVersionName" clearable></el-input>
           </el-form-item>
         </div>
 
@@ -209,9 +209,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="current_version_name" label="此版名称">
+        <el-table-column align="center" prop="currentVersionName" label="此版名称">
           <template slot-scope="scope">
-            <span>{{scope.row.current_version_name }}</span>
+            <span>{{scope.row.currentVersionName }}</span>
           </template>
         </el-table-column>
 
@@ -357,7 +357,7 @@ export default {
         inChargeBy: null,
         firstColumnName: null,
         lastVersionName: null,
-        current_version_name: null,
+        currentVersionName: null,
         createBy: null,
         createAt: null,
         updateBy: null,
@@ -431,7 +431,7 @@ export default {
               required: true
             },
             {
-              code: 'current_version_name',
+              code: 'currentVersionName',
               name: '当前版本名称',
               type: 'string',
               required: true
@@ -522,6 +522,7 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
+        stlst: null,
         deptId: null,
         title: null,
         sheetName: null,
@@ -532,7 +533,7 @@ export default {
         inChargeBy: null,
         firstColumnName: null,
         lastVersionName: null,
-        current_version_name: null,
+        currentVersionName: null,
         createBy: null,
         createAt: null,
         updateBy: null,

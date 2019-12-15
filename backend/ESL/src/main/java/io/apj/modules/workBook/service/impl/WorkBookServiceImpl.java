@@ -288,6 +288,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		for (int i = 0; i < workOperationsMapList.size(); i++) {
 			WorkOperationsEntity workOperations = new WorkOperationsEntity();
 			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
+			workOperations.setWorkBookId(workBook.getId());
 			workOperationsList.add(workOperations);
 		}
 		workOperationService.insertBatch(workOperationsList);

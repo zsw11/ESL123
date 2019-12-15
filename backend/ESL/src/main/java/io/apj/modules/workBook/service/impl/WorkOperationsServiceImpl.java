@@ -33,7 +33,9 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		for (WorkOperationsEntity item : WorkOperationsList) {
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(WorkOperationsList);
+		if (WorkOperationsList.size() > 0) {
+			this.updateAllColumnBatchById(WorkOperationsList);
+		}
 	}
 
 }
