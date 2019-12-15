@@ -13,7 +13,7 @@
       <main-navbar />
       <main-sidebar />
       <div class="site-content__wrapper" :style="{ 'min-height': documentClientHeight + 'px' }">
-        <main-tabs v-if="$route.meta.isTab" />
+        <!-- <main-tabs v-if="$route.meta.isTab" /> -->
         <main-content />
       </div>
     </template>
