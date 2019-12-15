@@ -30,10 +30,26 @@
         :data="[dataForm]"
         :mouse-config="{selected: true}"
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
-        :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+        :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit}"
+        @selected-changed="selectedChanged">
         <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
         <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
         <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
+        <!-- <vxe-table-column title="TimeValue" width="65">
+          <template slot-scope="scope">
+            {{getTimeValue(scope)}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmu" title="TMU" width="50">
+          <template slot-scope="scope">
+            {{getTmu(scope)}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="scv" title="Sec./comV" width="80">
+          <template slot-scope="scope">
+            {{getSecConv(scope)}}
+          </template>
+        </vxe-table-column> -->
       </vxe-grid>
     </el-form>
 
@@ -46,8 +62,21 @@
 </template>
 
 <script>
-import { pick } from 'lodash'
-import { measureColumns0, measureColumns1, measureFields } from '@/utils/global'
+import { pick, round } from 'lodash'
+import {
+  measureColumns0,
+  measureColumns1,
+  measureFields,
+  defaultRow,
+  defaultFields,
+  modeMeasureFields,
+  measureMode,
+  jumpFields,
+  modeFields,
+  modeCheckZeroFields,
+  modeSetZeroFields,
+  allNumericMeasureField
+  } from '@/utils/global'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import { fetchMeasureGroup, createMeasureGroup, updateMeasureGroup } from '@/api/measureGroup'
 import { listDept } from '@/api/dept'
@@ -137,10 +166,29 @@ export default {
         this.inited = true
       }
     },
+    // // 计算列
+    // getTimeValue ({ row }) {
+    //   let base = 0
+    //   let fre = 0
+    //   allNumericMeasureField.forEach(f => {
+    //     if (row[f] > 0) base += row[f]
+    //     if (row[f] < 0) fre -= row[f]
+    //   })
+    //   const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
+    //   return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
+    // },
+    // // 计算列
+    // getTmu (scope) {
+    //   return this.getTimeValue(scope) / 6 * 10
+    // },
+    // // 计算列
+    // getSecConv (scope) {
+    //   return round(this.getTimeValue(scope) * 0.06, 2)
+    // },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
-        this.jump(row, column.property, e.key)
+      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 't', 'f'].includes(e.key)) {
+        this.jump(row, column.property, e.key) // field是operation
         e.preventDefault()
         return false
       }
@@ -148,14 +196,64 @@ export default {
     },
     // 调到指定位置
     jump (row, field, to) {
-      const offset = measureFields.indexOf(field)
-      for (let i = 1; i <= measureFields.length; i++) {
-        const tmpField = measureFields[(offset + i) % measureFields.length]
-        if (tmpField.includes(to)) {
+      const offset = jumpFields.indexOf(field)
+      for (let i = 1; i <= jumpFields.length; i++) {
+        const tmpField = jumpFields[(offset + i) % jumpFields.length]
+        const fieldMap = {
+          operation: 'w',
+          tool: 't',
+          frequency: 'f'
+        }
+        // 判断模式
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(row[f])
+        })]
+        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
+          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
           return
         }
       }
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = measureMode[modeMeasureFields.find(f => {
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
+      return !mode || mode === measureMode[column.property]
+    },
+    selectedChanged (val) {
+      // 补0操作
+      // 判断模式
+      if (this.lastSelected) {
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
+        })]
+        if (mode &&
+          measureMode[this.lastSelected.column.property] === mode &&
+          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+        ) {
+          // 因为都是设置0，不用管是否频率
+          // let v = 0
+          // for (const f of modeCheckZeroFields[mode]) {
+          //   if (this.lastSelected.row[f]) {
+          //     v = this.lastSelected.row[f]
+          //     break
+          //   }
+          // }
+          // if (v) {
+          //   for (const f of modeCheckZeroFields[mode]) {
+          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          //   }
+          // }
+          for (const f of modeSetZeroFields[mode]) {
+            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          }
+        }
+      }
+      this.lastSelected = val
     },
     // 取消信息
     cancleFormSubmit () {

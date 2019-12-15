@@ -14,7 +14,6 @@
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @selected-changed="selectedChanged"
-      @keydown="cellKeydown"
       @edit-actived="editActived">
       <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -39,7 +38,7 @@
           {{getSecConv(scope)}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75" @keydown="cellKeydown"></vxe-table-column>
+      <vxe-table-column field="remark" title="Remark" width="75"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible" append-to-body>
@@ -161,10 +160,6 @@ export default {
         return false
       }
       return true
-    },
-    // 按下回车
-    cellKeydown (e) {
-      console.log(e)
     },
     // 调到指定位置
     jump (row, field, to) {
