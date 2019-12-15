@@ -216,6 +216,10 @@
                   }[self.workbookPercent]
                   break
                 }
+                case '+': {
+                  self.addRow()
+                  break
+                }
               }
             }
             if (e.key === 'Delete') {
@@ -242,6 +246,12 @@
       delete () {
         if (this.$refs.workbookTable) {
           this.$refs.workbookTable.delete()
+        }
+      },
+      addRow () {
+        if (this.$refs.workbookTable) {
+          console.log(1111)
+          this.$refs.workbookTable.addRow()
         }
       },
       addStandardBook () {

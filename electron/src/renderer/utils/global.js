@@ -48,7 +48,7 @@ export const limitMeasureFields = measureColumns0.slice(6, 9).map(c => c.field)
 export const toolMeasureFields = [ ...measureColumns0.slice(9, 13).map(c => c.field), 'tool', ...measureColumns1.slice(0, 3).map(c => c.field) ]
 export const modeMeasureFields = [ ...commonMeasureFields, ...limitMeasureFields, ...toolMeasureFields ]
 export const measureMode = []
-export const jumpFields = [ 'operation', ...measureFields, 'fre' ]
+export const jumpFields = [ 'operation', ...measureFields, 'frequency' ]
 export const modeFields = {
   c: commonMeasureFields,
   l: limitMeasureFields,
@@ -64,6 +64,7 @@ export const modeSetZeroFields = {
   l: limitMeasureFields,
   t: [ ...toolMeasureFields.slice(0, 4), ...toolMeasureFields.slice(5, 8) ]
 }
+export const allNumericMeasureField = [...measureColumns0, ...measureColumns1].map(c => c.field)
 commonMeasureFields.forEach(f => { measureMode[f] = 'c' })
 limitMeasureFields.forEach(f => { measureMode[f] = 'l' })
 toolMeasureFields.forEach(f => { measureMode[f] = 't' })
@@ -82,5 +83,6 @@ export default {
   jumpFields,
   modeFields,
   modeCheckZeroFields,
-  modeSetZeroFields
+  modeSetZeroFields,
+  allNumericMeasureField
 }

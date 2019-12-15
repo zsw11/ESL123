@@ -23,11 +23,23 @@
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="fre" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="timeValue" title="TimeValue" width="65" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="tmu" title="TMU" width="50" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="scv" title="Sec./comV" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75" :edit-render="{name: 'input'}" @keydown="cellKeydown"></vxe-table-column>
+      <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column title="TimeValue" width="65">
+        <template slot-scope="scope">
+          {{getTimeValue(scope)}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="tmu" title="TMU" width="50">
+        <template slot-scope="scope">
+          {{getTmu(scope)}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="scv" title="Sec./comV" width="80">
+        <template slot-scope="scope">
+          {{getSecConv(scope)}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="remark" title="Remark" width="75" @keydown="cellKeydown"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible">
@@ -51,7 +63,7 @@
 </template>
 
 <script>
-import { pick, clone } from 'lodash'
+import { pick, clone, round } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
@@ -68,7 +80,8 @@ import {
   jumpFields,
   modeFields,
   modeCheckZeroFields,
-  modeSetZeroFields
+  modeSetZeroFields,
+  allNumericMeasureField
   } from '@/utils/global'
 
 export default {
@@ -120,6 +133,25 @@ export default {
       this.lastEditCell = undefined
       this.currentCell = undefined
     },
+    // 计算列
+    getTimeValue ({ row }) {
+      let base = 0
+      let fre = 0
+      allNumericMeasureField.forEach(f => {
+        if (row[f] > 0) base += row[f]
+        if (row[f] < 0) fre -= row[f]
+      })
+      const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
+      return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
+    },
+    // 计算列
+    getTmu (scope) {
+      return this.getTimeValue(scope) / 6 * 10
+    },
+    // 计算列
+    getSecConv (scope) {
+      return round(this.getTimeValue(scope) * 0.06, 2)
+    },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
       console.log(jumpFields, column.property)
@@ -142,7 +174,7 @@ export default {
         const fieldMap = {
           operation: 'w',
           tool: 't',
-          fre: 'f'
+          frequency: 'f'
         }
         // 判断模式
         const mode = measureMode[modeMeasureFields.find(f => {
@@ -291,10 +323,17 @@ export default {
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(copyContent, currentRow)
     },
+    // 删除行
     async delete() {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
         this.$refs.workbookTable.remove(this.lastSelected.row)
       }
+    },
+    // 增加行
+    async addRow() {
+      const currentRow = (this.getCurrentCell() || this.lastSelected || {}).row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      await this.$refs.workbookTable.insertAt(this.createNewRow(), currentRow)
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
