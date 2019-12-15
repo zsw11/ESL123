@@ -11,6 +11,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import io.apj.modules.report.service.ChangeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +138,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         changeRecord.setTitle("oo");
         updateById(changeRecord);
 
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
 }

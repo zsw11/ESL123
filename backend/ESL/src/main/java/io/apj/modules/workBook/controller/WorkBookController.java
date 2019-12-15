@@ -3,6 +3,7 @@ package io.apj.modules.workBook.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
@@ -98,10 +99,21 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/updateOperation")
 	@RequiresPermissions("workBook:workbook:update")
 	public ResponseEntity<Object> updateOperation(@RequestBody Map<String, Object> params) {
-		workBookService.updateOperation(params);
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("message", "success");
-		return RD.success(data);
+		List<Integer> newIDList = workBookService.updateOperation(params);
+		return RD.success(newIDList);
+
+	}
+
+	/**
+	 * 批量更新
+	 */
+	@RequestMapping("/updateAll")
+	@RequiresPermissions("workBook:workbook:update")
+	public ResponseEntity<Object> updateAll(@RequestBody Map<String, Object> params) {
+		workBookService.updateAll(params);
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", "success");
+		return RD.success(map);
 
 	}
 

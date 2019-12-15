@@ -108,8 +108,7 @@ public class ModelController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:model:update")
 	public RD update(@RequestBody ModelEntity model) {
-		model.setPinyin(PinyinUtil.getPinYin(model.getName()));
-		modelService.updateById(model);
+		modelService.updatePinAndDataById(model);
 		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(), false);
 
 		return RD.build().put("code", 200);
@@ -135,7 +134,7 @@ public class ModelController extends AbstractController {
 				deleteTableReference("model", ids[i].longValue());
 			}
 		}
-		modelService.deleteBatchIds(Arrays.asList(ids));
+		modelService.deleteByIds(Arrays.asList(ids));
 
 		return RD.NO_CONTENT(RD.build());
 	}

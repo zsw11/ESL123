@@ -1,8 +1,16 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import io.apj.modules.masterData.entity.PartEntity;
+import io.apj.modules.report.entity.ApproveEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -29,6 +37,38 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 				entityWrapper);
 
 		return new PageUtils(page);
+	}
+	@Override
+	public void deleteList(List<ApproveOpininonEntity> approveOpininonEntityList) {
+		for(ApproveOpininonEntity item : approveOpininonEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(approveOpininonEntityList);
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<ApproveOpininonEntity> approveOpininonEntityList = this.selectBatchIds(ids);
+		for(ApproveOpininonEntity item : approveOpininonEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(approveOpininonEntityList);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<ApproveOpininonEntity> wrapper) {
+		List<ApproveOpininonEntity> approveOpininonEntityList = this.selectList(wrapper);
+		for(ApproveOpininonEntity item: approveOpininonEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(approveOpininonEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(ApproveOpininonEntity approveOpininonEntity) {
+		approveOpininonEntity.setPinyin(PinyinUtil.getPinYin(approveOpininonEntity.getApproveOperation()));
+		approveOpininonEntity.setUpdateAt(new Date());
+		this.updateById(approveOpininonEntity);
 	}
 
 }

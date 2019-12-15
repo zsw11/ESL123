@@ -3,6 +3,7 @@
     <div class="header">
       <el-button icon="el-icon-back" @click="goBack">返回</el-button>
       <el-button icon="el-icon-upload" @click="save">保存</el-button>
+      <el-button icon="el-icon-open" @click="openVideo">打开</el-button>
     </div>
 
     <div class="video-player-box">
@@ -28,7 +29,7 @@
       </div>
 
       <div class="workbook-buttons">
-        <el-tooltip content="Ctrl + I" placement="top">
+        <!-- <el-tooltip content="Ctrl + I" placement="top">
           <el-button type="primary" @click="addStandardBook">增加标准书</el-button>
         </el-tooltip>
         <el-tooltip content="Ctrl + C" placement="top">
@@ -36,7 +37,7 @@
         </el-tooltip>
         <el-tooltip content="Ctrl + V" placement="top">
           <el-button type="primary" @click="paste">粘贴</el-button>
-        </el-tooltip>
+        </el-tooltip> -->
         <el-autocomplete
           class="inline-input"
           v-model="addedOperation"
@@ -44,8 +45,6 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
-        <!-- <el-button type="primary" size="mini">F2 手顺组合</el-button>
-        <el-button type="primary">F4 复制到最后</el-button> -->
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -73,9 +72,10 @@
 </template>
 
 <script>
+  import { pick } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations } from '@/api/workbook'
+  import { fetchWorkBookWithOperations, updateAll } from '@/api/workbook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
@@ -152,8 +152,22 @@
       },
       save () {
         if (this.$refs.workbookTable) {
-          this.$refs.workbookTable.save()
+          updateAll(this.workbook.id, {
+            workBook: pick(this.workbook, ['id']),
+            workOperations: this.$refs.workbookTable.getFullData()
+          }).then(res => {
+            console.log(res)
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          })
         }
+      },
+      openVideo () {
+        ipcRenderer.send('openVideo')
       },
       init () {
         const self = this
@@ -173,7 +187,6 @@
           console.log('Remove Listener')
         } else {
           this.listener = function (e) {
-            // console.log('keydown', e)
             if (e.ctrlKey) {
               switch (e.key) {
                 case 'c': {

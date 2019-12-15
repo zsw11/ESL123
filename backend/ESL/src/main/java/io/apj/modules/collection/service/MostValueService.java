@@ -5,6 +5,8 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -20,5 +22,6 @@ public interface MostValueService extends IService<MostValueEntity> {
 
     void generateReportData(WorkBookEntity workBook);
 
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
 

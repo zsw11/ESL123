@@ -76,8 +76,7 @@ public class ApproveOpininonController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:approveopininon:update")
 	public RD update(@RequestBody ApproveOpininonEntity approveOpininon) {
-		approveOpininon.setPinyin(PinyinUtil.getPinYin(approveOpininon.getApproveOperation()));
-		approveOpininonService.updateById(approveOpininon);
+		approveOpininonService.updatePinAndDataById(approveOpininon);
 
 		return RD.build().put("code", 200);
 	}
@@ -90,7 +89,7 @@ public class ApproveOpininonController extends AbstractController {
 	@RequestMapping("/delete")
 	@RequiresPermissions("masterData:approveopininon:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		approveOpininonService.deleteBatchIds(Arrays.asList(ids));
+		approveOpininonService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
 	}

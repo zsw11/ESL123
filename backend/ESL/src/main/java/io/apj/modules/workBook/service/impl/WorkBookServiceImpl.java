@@ -1,9 +1,9 @@
 package io.apj.modules.workBook.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.RD;
-import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +78,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false)
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
@@ -141,7 +141,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Override
 	@Transactional
-	public boolean updateOperation(Map<String, Object> params) {
+	public List<Integer> updateOperation(Map<String, Object> params) {
+		// 新增的手顺ID列表
+		List<Integer> newIDList = new ArrayList<>();
 		String type = (String) params.get("type");
 		Integer seqNumber = (Integer) params.get("seqNumber") + 1;
 		Integer workBookId = (Integer) params.get("workBookId");
@@ -168,6 +170,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			if (type.equals("update")) {
 				workOperationService.updateBatchById(workOperationsList);
 			} else {
+				// 更新seqNumber大于所要新增的最大值的所有记录
 				workOperationsWrapper.eq("work_book_id", workBookId).isNull("delete_at").ge("seq_number", seqNumber);
 				List<WorkOperationsEntity> workOperationsEntityList = workOperationService
 						.selectList(workOperationsWrapper);
@@ -175,13 +178,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				for (WorkOperationsEntity item : workOperationsEntityList) {
 					item.setSeqNumber(item.getSeqNumber() + operateNumber);
 				}
-				workOperationService.updateBatchById(workOperationsEntityList);
+				workOperationService.insertOrUpdateBatch(workOperationsEntityList);
+				// 批量插入新增的手顺
 				workOperationService.insertBatch(workOperationsList);
+				for (WorkOperationsEntity item : workOperationsList) {
+					newIDList.add(item.getId());
+				}
 			}
 
 		}
 
-		return true;
+		return newIDList;
 	}
 
 	@Override
@@ -255,7 +262,45 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		workOperationsWrapper.eq("work_book_id", id).isNull("delete_at");
 		List<WorkOperationsEntity> workOperationsList = workOperationService.selectList(workOperationsWrapper);
 		workBook.setWorkOperationsList(workOperationsList);
+		EntityWrapper<WorkBookEntity> workBookWrapper = new EntityWrapper<>();
+		workBookWrapper.isNull("delete_at").eq("stlst", workBook.getStlst()).eq("model_id", workBook.getModelId())
+				.eq("destinations", workBook.getDestinations()).eq("version_number", workBook.getVersionNumber())
+				.eq("phase_id", workBook.getPhaseId());
+		List<WorkBookEntity> otherWorkBookEntities = this.selectList(workBookWrapper);
+		workBook.setOtherWorkBookEnties(otherWorkBookEntities);
 		return workBook;
 	}
 
+	@Override
+	@Transactional
+	public void updateAll(Map<String, Object> params) {
+		// 更新主表
+		WorkBookEntity workBook = new WorkBookEntity();
+		DataUtils.transMap2Bean2((Map<String, Object>) params.get("workBook"), workBook);
+
+		// 删除原有子表
+		workOperationService.deletebyWrapper(
+				new EntityWrapper<WorkOperationsEntity>().eq("work_book_id", workBook.getId()).isNull("delete_at"));
+
+		// 遍历子表数组，批量插入
+		List<WorkOperationsEntity> workOperationsList = new ArrayList<>();
+		List<Map<String, Object>> workOperationsMapList = (List<Map<String, Object>>) params.get("workOperations");
+		for (int i = 0; i < workOperationsMapList.size(); i++) {
+			WorkOperationsEntity workOperations = new WorkOperationsEntity();
+			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
+			workOperations.setWorkBookId(workBook.getId());
+			workOperationsList.add(workOperations);
+		}
+		workOperationService.insertBatch(workOperationsList);
+	}
+
+	@Override
+	@Transactional
+	public void deleteByWrapper(Wrapper wrapper) {
+		List<WorkBookEntity> workBookList = this.selectList(wrapper);
+		for (WorkBookEntity item : workBookList) {
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(workBookList);
+	}
 }

@@ -53,15 +53,6 @@
               clearable></dict-select>
           </el-form-item>
 
-          <el-form-item :label="'发行日'" prop="monthResult">
-            <el-date-picker
-              v-model="listQuery.monthResult"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              clearable
-            ></el-date-picker>
-          </el-form-item>
-
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="listQuery.destinations" clearable></el-input>
           </el-form-item>
@@ -74,8 +65,8 @@
             <el-input v-model="listQuery.mecha" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'R_code'" prop="RCode">
-            <el-input v-model="listQuery.RCode" clearable></el-input>
+          <el-form-item :label="'R_code'" prop="rcode">
+            <el-input v-model="listQuery.rcode" clearable></el-input>
           </el-form-item>
 
           <el-form-item :label="'津贴'" prop="allowanceRate">
@@ -83,12 +74,23 @@
           </el-form-item>
 
 
-        <el-form-item :label="'ST版本号'" prop="STRev">
-          <el-input v-model="listQuery.STRev" clearable></el-input>
+        <el-form-item :label="'ST版本号'" prop="stRev">
+          <el-input v-model="listQuery.stRev" clearable></el-input>
         </el-form-item>
 
-          <el-form-item :label="'LST版本号'" prop="LSTRev">
-            <el-input v-model="listQuery.LSTRev" clearable></el-input>
+          <el-form-item :label="'LST版本号'" prop="lstRev">
+            <el-input v-model="listQuery.lstRev" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'发行日'" prop="monthResult">
+            <el-date-picker
+              v-model="listQuery.monthResult"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              clearable
+            ></el-date-picker>
           </el-form-item>
         </div>
 
@@ -232,21 +234,21 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="RCode" label="R_code">
+        <el-table-column align="center" prop="rcode" label="R_code">
           <template slot-scope="scope">
-            <span>{{scope.row.RCode }}</span>
+            <span>{{scope.row.rcode }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="STRev" label="ST版本号">
+        <el-table-column align="center" prop="stRev" label="ST版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.STRev }}</span>
+            <span>{{scope.row.stRev }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="LSTRev" label="LST版本号">
+        <el-table-column align="center" prop="lstRev" label="LST版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.LSTRev }}</span>
+            <span>{{scope.row.lstRev }}</span>
           </template>
         </el-table-column>
 
@@ -412,9 +414,9 @@ export default {
         destinations: null,
         cotegory: null,
         mecha: null,
-        RCode: null,
-        STRev: null,
-        LSTRev: null,
+        rcode: null,
+        stRev: null,
+        lstRev: null,
         allowanceRate: null,
         comfirmBy: null,
         inChargeBy: null,
@@ -468,10 +470,10 @@ export default {
             },
             { code: 'cotegory', name: '类别', type: 'string', required: true },
             { code: 'mecha', name: 'mecha', type: 'string', required: true },
-            { code: 'RCode', name: 'R_code', type: 'string', required: true },
-            { code: 'STRev', name: 'ST版本号', type: 'string', required: true },
+            { code: 'rcode', name: 'R_code', type: 'string', required: true },
+            { code: 'stRev', name: 'ST版本号', type: 'string', required: true },
             {
-              code: 'LSTRev',
+              code: 'lstRev',
               name: 'LST版本号',
               type: 'string',
               required: true
@@ -586,6 +588,8 @@ export default {
     // 清除查询条件
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
+        phaseId: null,
+        stlst: null,
         deptId: null,
         title: null,
         sheetName: null,
@@ -595,9 +599,9 @@ export default {
         destinations: null,
         cotegory: null,
         mecha: null,
-        RCode: null,
-        STRev: null,
-        LSTRev: null,
+        rcode: null,
+        stRev: null,
+        lstRev: null,
         allowanceRate: null,
         comfirmBy: null,
         inChargeBy: null,

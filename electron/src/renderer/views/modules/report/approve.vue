@@ -6,7 +6,7 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
-          <el-form-item :label="'报表组'" prop="report_group_id">
+          <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
               v-model="listQuery.reportGroupId"
               :allowMultiple="true"
@@ -167,7 +167,7 @@ export default {
         phaseId: null,
         phaseName: null,
         stlst: null,
-        report_group_id: null,
+        reportGroupId: null,
         nextApproverId: null,
         status: null,
         createBy: null,
@@ -204,7 +204,7 @@ export default {
               required: true
             },
             {
-              code: 'report_group_id',
+              code: 'reportGroupId',
               name: '报表组ID',
               type: 'string',
               required: true
@@ -300,7 +300,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
-        report_group_id: null,
+        reportGroupId: null,
         nextApproverId: null,
         status: null,
         createBy: null,

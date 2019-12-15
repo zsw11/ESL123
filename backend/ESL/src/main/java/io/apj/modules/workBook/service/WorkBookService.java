@@ -1,10 +1,12 @@
 package io.apj.modules.workBook.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,11 +22,21 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
 
-	boolean updateOperation(Map<String, Object> params);
+	List<Integer> updateOperation(Map<String, Object> params);
 
 	void createReports(Map<String, Object> params);
 
 	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
 
 	WorkBookEntity detailWithOperations(Integer id);
+
+	void updateAll(Map<String, Object> params);
+
+	/**
+	 * 根据Wrapper条件删除所有符合条件的记录
+	 * 
+	 * @param wrapper
+	 * @return
+	 */
+	void deleteByWrapper(Wrapper wrapper);
 }

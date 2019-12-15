@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import Popper from '@plugins/vue-popperjs/vue-popper.js'
-import '@plugins/vue-popperjs/vue-popper.min.css'
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/vue-popper.min.css'
 import { listMeasureGroup } from '@/api/measureGroup'
 
 export default {
@@ -66,21 +66,24 @@ export default {
       return this.$refs.key.value.substr(this.$refs.key.selectionEnd, this.$refs.key.value.length)
     },
     // 查询并提示
-    suggest (keyword) {
-      this.suggestions = []
-      listMeasureGroup({ code: keyword }).then(({ page }) => {
-        this.suggestions = page.data
+    suggest (keyword, isEnter = false) {
+      const self = this
+      self.suggestions = []
+      return listMeasureGroup({ code: keyword }).then(({ page }) => {
+        self.suggestions = page.data
+        if (!isEnter) {
+          setTimeout(() => {
+            self.activeSugguestionIndex = null
+            self.popoverVisible = true
+          }, 100)
+        }
       })
-      setTimeout(() => {
-        this.activeSugguestionIndex = null
-        this.popoverVisible = true
-      }, 100)
     },
     // j结束提示
     endSuggest () {
       setTimeout(() => {
         this.popoverVisible = false
-        this.$refs.popper.doClose()
+        if (this.$refs.popper) this.$refs.popper.doClose()
         this.activeSugguestionIndex = null
       }, 100)
     },
@@ -124,6 +127,18 @@ export default {
             e.stopPropagation()
             this.selectSuggestion(this.suggestions[this.activeSugguestionIndex])
           }
+          // 直接回车
+          const self = this
+          this.suggest(this.getInputBegin(), true).then(() => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (self.suggestions.length === 1) {
+              console.log(111, self.suggestions[0])
+              self.$emit('input', '')
+              self.$emit('select', self.suggestions[0])
+              self.endSuggest()
+            }
+          })
           break
         }
         default: {

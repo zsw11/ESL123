@@ -15,6 +15,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -24,6 +25,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.StationTimeDao;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.service.StationTimeService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("stationTimeService")
@@ -97,6 +100,11 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
         stationTimeItem.setStationName(work.getWorkstationName());
         stationTimeItem.setLstValue(work.getSecondConvert());
         StationTimeItemService.insert(stationTimeItem);
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        // TODO
     }
 
 }

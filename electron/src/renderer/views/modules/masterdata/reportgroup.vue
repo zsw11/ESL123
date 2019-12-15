@@ -212,13 +212,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteReportGroup(ids).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
+        deleteReportGroup(ids).then((data) => {
+          if(data.code === 200) {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.pageNo = this.dataList.length === 1 ? this.pageNo-1 : this.pageNo
+          }else {
+            this.$message.error(data.msg)
+          }
           this.getDataList()
         })
       })

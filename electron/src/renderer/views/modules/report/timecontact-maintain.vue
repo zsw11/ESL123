@@ -56,8 +56,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'版本号'" prop="RevNo">
-            <el-input v-model="dataForm.RevNo"></el-input>
+          <el-form-item :label="'版本号'" prop="revNo">
+            <el-input v-model="dataForm.revNo"></el-input>
           </el-form-item>
         </el-col>
 
@@ -131,7 +131,7 @@ export default {
         publishType: null,
         reviseReason: null,
         stlst: null,
-        RevNo: null,
+        revNo: null,
         allCountSub: null,
         allCountMain: null,
         allCountPrinting: null,
@@ -168,77 +168,74 @@ export default {
         publishType: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
         reviseReason: [{ max: 16, message: '长度超过了16', trigger: 'blur' }],
         stlst: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
-        RevNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        revNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         allCountSub: [
           {
-            type: 'number',
-            max: 100000000,
+            pattern:/^\d{8}$/,
             message: '全数sub工序用时需为8位数字值'
           }
         ],
-        allCountMain: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '全数main工序用时需为8位数字值'
-          }
-        ],
+        // allCountMain: [
+        //   {
+        //     type: 'string',
+        //     max: 8,
+        //     message: '全数main工序用时需为8位数字值'
+        //   }
+        // ],
         allCountPrinting: [
           {
-            type: 'number',
-            max: 100000000,
+            pattern:/^\d{8}$/,
             message: '全数印字/检查/调整工序用时需为8位数字值'
           }
         ],
-        allCountExternalInspection: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '全数外装工序用时需为8位数字值'
-          }
-        ],
+        // allCountExternalInspection: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '全数外装工序用时需为8位数字值'
+        //   }
+        // ],
         allCountPacking: [
           {
-            type: 'number',
-            max: 100000000,
-            message: '全数捆包工序用时需为8位数字值'
+            pattern:/^\d{8}$/,
+            message: '全数捆包工序用时需为8位数字值',
           }
         ],
-        towingLastVersionSub: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '拖机上一版本sub工序用时需为8位数字值'
-          }
-        ],
-        towingLastVersionMain: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '拖机上一版本main工序用时需为8位数字值'
-          }
-        ],
-        towingLastVersionPrinting: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '拖机上一版本印字需为8位数字值'
-          }
-        ],
-        towingLastVersionExternalInspection: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '拖机上一版本外装工序用时需为8位数字值'
-          }
-        ],
-        towingLastVersionPacking: [
-          {
-            type: 'number',
-            max: 100000000,
-            message: '拖机上一版本捆包工序用时需为8位数字值'
-          }
-        ],
+        // towingLastVersionSub: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '拖机上一版本sub工序用时需为8位数字值'
+        //   }
+        // ],
+        // towingLastVersionMain: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '拖机上一版本main工序用时需为8位数字值'
+        //   }
+        // ],
+        // towingLastVersionPrinting: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '拖机上一版本印字需为8位数字值'
+        //   }
+        // ],
+        // towingLastVersionExternalInspection: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '拖机上一版本外装工序用时需为8位数字值'
+        //   }
+        // ],
+        // towingLastVersionPacking: [
+        //   {
+        //     type: 'number',
+        //     max: 100000000,
+        //     message: '拖机上一版本捆包工序用时需为8位数字值'
+        //   }
+        // ],
         operationStandardNo: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
@@ -324,7 +321,7 @@ export default {
                 'publishType',
                 'reviseReason',
                 'stlst',
-                'RevNo',
+                'revNo',
                 'allCountSub',
                 'allCountMain',
                 'allCountPrinting',

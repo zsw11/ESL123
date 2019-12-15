@@ -420,6 +420,7 @@ export default {
             type: 'success',
             duration: 2000
           })
+          this.pageNo = this.dataList.length === 1 ? this.pageNo-1 : this.pageNo
           this.getDataList()
         })
       })

@@ -188,3 +188,7 @@ export function filterAttributes (attributeConfig, options = {}) {
     }
   }
 }
+
+export function isCtrlKeys (e) {
+  return ['Backspace', 'Delete', 'Shift', 'Alt', 'Meta', 'Control'].includes(e.key)
+}

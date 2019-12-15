@@ -11,6 +11,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -20,6 +21,8 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.StandardWorkDao;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.service.StandardWorkService;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("standardWorkService")
@@ -40,11 +43,13 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
                 .like(params.get("monthResult") != null && params.get("monthResult") != "", "month_result", (String) params.get("monthResult"))
                 .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
-                .like(params.get("coefficient") != null && params.get("coefficient") != "", "coefficient", (String) params.get("coefficient"))
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
                 .like(params.get("firstStandardWorkTitle") != null && params.get("firstStandardWorkTitle") != "", "first_standard_work_title", (String) params.get("firstStandardWorkTitle"))
                 .like(params.get("thirdStandardWorkTitle") != null && params.get("thirdStandardWorkTitle") != "", "third_standard_work_title", (String) params.get("thirdStandardWorkTitle"));
 
+        if (StringUtils.isNotEmpty((CharSequence) params.get("coefficient"))) {
+            entityWrapper.eq("coefficient",(String) params.get("coefficient"));
+        }
         if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
             entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
@@ -95,6 +100,11 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         standardWorkItem.setProcessName(work.getWorkName());
         standardWorkItemService.insert(standardWorkItem);
 
+    }
+
+    @Override
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+        //TODO
     }
 
 }

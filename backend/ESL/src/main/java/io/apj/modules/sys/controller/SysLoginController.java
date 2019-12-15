@@ -25,6 +25,7 @@ import io.apj.modules.basic.entity.StaffEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
 import io.apj.modules.sys.form.SysLoginForm;
 import io.apj.modules.sys.service.SysCaptchaService;
+import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.sys.service.SysUserService;
 import io.apj.modules.sys.service.SysUserTokenService;
 import io.apj.modules.sys.service.impl.APOService;
@@ -47,6 +48,8 @@ public class SysLoginController extends AbstractController {
 	private SysCaptchaService sysCaptchaService;
 	@Autowired
 	private APOService APOService;
+	@Autowired
+	private SysDeptService sysDeptService;
 
 	/**
 	 * 验证码
@@ -84,7 +87,7 @@ public class SysLoginController extends AbstractController {
 				return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
 			}
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
-		}else {
+		} else {
 			// 用户信息
 			SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 			// 判断用户是否存在
@@ -116,7 +119,9 @@ public class SysLoginController extends AbstractController {
 	 */
 	@GetMapping("/api/v1/passport/userdetail")
 	public ResponseEntity<Object> userDetail() {
-		return RD.ok(SysUserEntityVo.makeVo(getUser()));
+		SysUserEntity user = getUser();
+		user.setDeptName(sysDeptService.selectById(user.getDeptId()).getName());
+		return RD.ok(SysUserEntityVo.makeVo(user));
 	}
 
 	/**

@@ -1,10 +1,18 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.entity.WorkstationTypeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -53,6 +61,31 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 			return false;
 		}
 
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<WorkstationEntity> workstationEntities = this.selectBatchIds(ids);
+		for(WorkstationEntity item : workstationEntities){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(workstationEntities);
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<WorkstationEntity> wrapper) {
+		List<WorkstationEntity> workstationEntityList = this.selectList(wrapper);
+		for(WorkstationEntity item: workstationEntityList){
+			item.setDeleteAt(new Date());
+		}
+		this.updateAllColumnBatchById(workstationEntityList);
+	}
+
+	@Override
+	public void updatePinAndDataById(WorkstationEntity workstationEntity) {
+		workstationEntity.setPinyin(PinyinUtil.getPinYin(workstationEntity.getName()));
+		workstationEntity.setUpdateAt(new Date());
+		this.updateById(workstationEntity);
 	}
 
 }

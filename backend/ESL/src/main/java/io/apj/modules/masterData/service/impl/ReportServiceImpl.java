@@ -1,6 +1,8 @@
 package io.apj.modules.masterData.service.impl;
 
+import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -28,10 +30,8 @@ import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
 @Service("reportService")
 public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> implements ReportService {
@@ -212,6 +212,39 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
 
         }
         return reportGroupEntities;
+    }
+
+    @Override
+    public void deleteList(List<ReportEntity> reportEntityList) {
+        for(ReportEntity item : reportEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportEntityList);
+    }
+
+    @Override
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        List<ReportEntity> reportEntityList = this.selectBatchIds(ids);
+        for(ReportEntity item : reportEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportEntityList);
+    }
+
+    @Override
+    public void deleteByWrapper(Wrapper<ReportEntity> wrapper) {
+        List<ReportEntity> reportEntityList = this.selectList(wrapper);
+        for(ReportEntity item: reportEntityList){
+            item.setDeleteAt(new Date());
+        }
+        this.updateAllColumnBatchById(reportEntityList);
+    }
+
+    @Override
+    public void updatePinAndDataById(ReportEntity reportEntity) {
+        reportEntity.setPinyin(PinyinUtil.getPinYin(reportEntity.getName()));
+        reportEntity.setUpdateAt(new Date());
+        this.updateById(reportEntity);
     }
 
 }
