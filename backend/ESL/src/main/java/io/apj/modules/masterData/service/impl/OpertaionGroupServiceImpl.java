@@ -128,7 +128,10 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		for(OpertaionGroupEntity item : opertaionGroupEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(opertaionGroupEntityList);
+		if(opertaionGroupEntityList.size()>0){
+			this.updateAllColumnBatchById(opertaionGroupEntityList);
+		}
+
 	}
 
 	@Override
@@ -137,7 +140,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		for(OpertaionGroupEntity item : opertaionGroupEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(opertaionGroupEntityList);
+		if(opertaionGroupEntityList.size()>0){
+			this.updateAllColumnBatchById(opertaionGroupEntityList);
+		}
 	}
 
 	@Override
@@ -146,7 +151,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		for(OpertaionGroupEntity item: opertaionGroupEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(opertaionGroupEntityList);
+		if(opertaionGroupEntityList.size()>0){
+			this.updateAllColumnBatchById(opertaionGroupEntityList);
+		}
 	}
 
 	@Override

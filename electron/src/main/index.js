@@ -36,6 +36,18 @@ function onVideoFileSeleted (videoFilePath) {
         mainWindow.webContents.send('openVideo', checkResult.duration)
       }
     }
+    if (!checkResult.videoCodecSupport || !checkResult.audioCodecSupport) {
+      console.log('INDEX_HTML')
+      if (!httpServer) {
+        httpServer = new VideoServer()
+      }
+      httpServer.videoSourceInfo = { videoSourcePath: videoFilePath, checkResult: checkResult }
+      httpServer.createServer()
+      if (httpServer) {
+        console.log('createVideoServer success')
+        mainWindow.webContents.send('openVideo', checkResult.duration)
+      }
+    }
   }).catch((err) => {
     console.log('video format error', err)
     const options = {
@@ -75,10 +87,10 @@ function createWindow () {
   })
   ipcMain.on('openVideo', (event, arg) => {
     electron.dialog.showOpenDialog({
-      properties: ['openFile']
-      // filters: [
-      //   {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
-      // ]
+      properties: ['openFile'],
+      filters: [
+        {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
+      ]
     }, (result) => {
       console.log(result)
 

@@ -78,7 +78,10 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
         for(ReportGroupEntity item : reportGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportGroupEntityList);
+        if(reportGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(reportGroupEntityList);
+        }
+
     }
 
     @Override
@@ -87,7 +90,9 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
         for(ReportGroupEntity item : reportGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportGroupEntityList);
+        if(reportGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(reportGroupEntityList);
+        }
     }
 
     @Override
@@ -96,7 +101,9 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
         for(ReportGroupEntity item: reportGroupEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportGroupEntityList);
+        if(reportGroupEntityList.size()>0){
+            this.updateAllColumnBatchById(reportGroupEntityList);
+        }
     }
 
     @Override

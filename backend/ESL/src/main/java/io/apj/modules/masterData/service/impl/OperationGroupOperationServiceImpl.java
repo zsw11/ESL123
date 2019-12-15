@@ -49,7 +49,10 @@ public class OperationGroupOperationServiceImpl
 		for(OperationGroupOperationEntity item : operationGroupOperationEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		if(operationGroupOperationEntityList.size()>0){
+			this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		}
+
 	}
 
 	@Override
@@ -58,7 +61,9 @@ public class OperationGroupOperationServiceImpl
 		for(OperationGroupOperationEntity item : operationGroupOperationEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		if(operationGroupOperationEntityList.size()>0){
+			this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		}
 	}
 
 	@Override
@@ -67,7 +72,9 @@ public class OperationGroupOperationServiceImpl
 		for(OperationGroupOperationEntity item: operationGroupOperationEntityList){
 			item.setDeleteAt(new Date());
 		}
-		this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		if(operationGroupOperationEntityList.size()>0){
+			this.updateAllColumnBatchById(operationGroupOperationEntityList);
+		}
 	}
 
 	@Override

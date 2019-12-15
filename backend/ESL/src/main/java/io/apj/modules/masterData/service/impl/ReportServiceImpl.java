@@ -219,7 +219,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         for(ReportEntity item : reportEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportEntityList);
+        if(reportEntityList.size()>0){
+            this.updateAllColumnBatchById(reportEntityList);
+        }
+
     }
 
     @Override
@@ -228,7 +231,9 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         for(ReportEntity item : reportEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportEntityList);
+        if(reportEntityList.size()>0){
+            this.updateAllColumnBatchById(reportEntityList);
+        }
     }
 
     @Override
@@ -237,7 +242,9 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         for(ReportEntity item: reportEntityList){
             item.setDeleteAt(new Date());
         }
-        this.updateAllColumnBatchById(reportEntityList);
+        if(reportEntityList.size()>0){
+            this.updateAllColumnBatchById(reportEntityList);
+        }
     }
 
     @Override
