@@ -42,7 +42,7 @@
       <vxe-table-column field="remark" title="Remark" width="75" @keydown="cellKeydown"></vxe-table-column>
     </vxe-grid>
 
-    <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible">
+    <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible" append-to-body>
       <el-form
         ref="standardBookForm"
         :model="standardBookDialog.formData"
@@ -269,7 +269,7 @@ export default {
       this.$refs.standardBookForm.validate(async (valid) => {
         if (!valid) return
         // 插入标准书名
-        await this.$refs.workbookTable.insertAt(Object.assign(
+        const newRow = await this.$refs.workbookTable.insertAt(Object.assign(
           this.createNewRow('n'),
           { operation: this.standardBookDialog.formData.name }
         ), this.currentCell.row)
@@ -280,7 +280,7 @@ export default {
             { operation: this.standardBookDialog.formData.code }
           ), this.currentCell.row)
         }
-        await this.$refs.workbookTable.setActiveCell(this.currentCell.row, 'version')
+        await this.$refs.workbookTable.setActiveCell(newRow, 'version')
         this.standardBookDialog.visible = false
       })
     },
