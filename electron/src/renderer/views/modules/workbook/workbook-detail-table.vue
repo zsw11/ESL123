@@ -291,11 +291,18 @@ export default {
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(copyContent, currentRow)
     },
-    save () {
-      console.log('new', this.$refs.workbookTable.getInsertRecords())
-      console.log('remove', this.$refs.workbookTable.getRemoveRecords())
-      console.log('update', this.$refs.workbookTable.getUpdateRecords())
-      // const lastRowIndex = this.getLastRowIndex(fullData)
+    getLastRowIndex (data) {
+      for (let i = data.length - 1; i >= 0; i--) {
+        if (data[i].operation) return i
+      }
+      return -1
+    },
+    getFullData () {
+      if (this.$refs.workbookTable) {
+        const fullData = this.$refs.workbookTable.getTableData().fullData
+        const lastRowIndex = this.getLastRowIndex(fullData)
+        return fullData.slice(0, lastRowIndex + 1)
+      }
     }
   }
 }

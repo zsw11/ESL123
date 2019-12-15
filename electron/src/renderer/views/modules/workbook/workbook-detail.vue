@@ -71,9 +71,10 @@
 </template>
 
 <script>
+  import { pick } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations } from '@/api/workbook'
+  import { fetchWorkBookWithOperations, updateAll } from '@/api/workbook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
@@ -150,7 +151,19 @@
       },
       save () {
         if (this.$refs.workbookTable) {
-          this.$refs.workbookTable.save()
+          updateAll(this.workbook.id, {
+            workBook: pick(this.workbook, ['id']),
+            workOperations: this.$refs.workbookTable.getFullData()
+          }).then(res => {
+            console.log(res)
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          })
+          // ()
         }
       },
       init () {
