@@ -84,8 +84,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'R_code'" prop="RCode">
-            <el-input v-model="dataForm.RCode"></el-input>
+          <el-form-item :label="'R_code'" prop="rcode">
+            <el-input v-model="dataForm.rcode"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -98,14 +98,14 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'ST版本号'" prop="STRev">
-            <el-input v-model="dataForm.STRev"></el-input>
+          <el-form-item :label="'ST版本号'" prop="stRev">
+            <el-input v-model="dataForm.stRev"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'LST版本号'" prop="LSTRev">
-            <el-input v-model="dataForm.LSTRev"></el-input>
+          <el-form-item :label="'LST版本号'" prop="lstRev">
+            <el-input v-model="dataForm.lstRev"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -188,9 +188,9 @@ export default {
         destinations: null,
         cotegory: null,
         mecha: null,
-        RCode: null,
-        STRev: null,
-        LSTRev: null,
+        rcode: null,
+        stRev: null,
+        lstRev: null,
         allowanceRate: null,
         comfirmBy: null,
         inChargeBy: null,
@@ -210,11 +210,14 @@ export default {
         destinations: [{ max: 128, message: '长度超过了128', trigger: 'blur' }],
         cotegory: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         mecha: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
-        RCode: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
-        STRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
-        LSTRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        rcode: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        stRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        lstRev: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         allowanceRate: [
-          { type: 'number', max: 100000000, message: '津贴需为8位数字值' }
+          {
+            pattern:/^\d{8}$/,
+            message: '津贴需为8位数字值'
+          }
         ],
         comfirmBy: [{ type: 'number', message: '确认ID需为数字值' }],
         inChargeBy: [{ type: 'number', message: '承认ID需为数字值' }],
@@ -279,9 +282,9 @@ export default {
                 'destinations',
                 'cotegory',
                 'mecha',
-                'RCode',
-                'STRev',
-                'LSTRev',
+                'rcode',
+                'stRev',
+                'lstRev',
                 'allowanceRate',
                 'comfirmBy',
                 'inChargeBy',

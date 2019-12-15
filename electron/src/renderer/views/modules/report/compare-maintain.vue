@@ -79,8 +79,8 @@
         </el-col>
 
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'当前版本名称'" prop="current_version_name">
-            <el-input v-model="dataForm.current_version_name"></el-input>
+          <el-form-item :label="'当前版本名称'" prop="currentVersionName">
+            <el-input v-model="dataForm.currentVersionName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -152,7 +152,7 @@ export default {
         inChargeBy: null,
         firstColumnName: null,
         lastVersionName: null,
-        current_version_name: null,
+        currentVersionName: null,
         createBy: null,
         createAt: null,
         updateBy: null,
@@ -174,7 +174,7 @@ export default {
         lastVersionName: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
-        current_version_name: [
+        currentVersionName: [
           { max: 64, message: '长度超过了64', trigger: 'blur' }
         ],
         createBy: [{ type: 'number', message: '创建者ID需为数字值' }],
@@ -239,7 +239,7 @@ export default {
                 'inChargeBy',
                 'firstColumnName',
                 'lastVersionName',
-                'current_version_name',
+                'currentVersionName',
                 'createBy',
                 'createAt',
                 'updateBy',

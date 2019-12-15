@@ -94,38 +94,38 @@
         </el-col>
       </el-row>
 
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'上版ST名称'" prop="lastSTname">
-            <el-input v-model="dataForm.lastSTname"></el-input>
-          </el-form-item>
-        </el-col>
+<!--      <el-row>-->
+<!--        <el-col :span="10">-->
+<!--          <el-form-item :label="'上版ST名称'" prop="lastSTname">-->
+<!--            <el-input v-model="dataForm.lastSTname"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
 
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'此版ST名称'" prop="currentSTname">
-            <el-input v-model="dataForm.currentSTname"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-
+<!--        <el-col :span="10" :offset="2">-->
+<!--          <el-form-item :label="'此版ST名称'" prop="currentSTname">-->
+<!--            <el-input v-model="dataForm.currentSTname"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
 
 
 
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'上版LST名称'" prop="lastLSTname">
-            <el-input v-model="dataForm.lastLSTname"></el-input>
-          </el-form-item>
-        </el-col>
 
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'此版LST名称'" prop="currentLSTname">
-            <el-input v-model="dataForm.currentLSTname"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+
+<!--      <el-row>-->
+<!--        <el-col :span="10">-->
+<!--          <el-form-item :label="'上版LST名称'" prop="lastLSTname">-->
+<!--            <el-input v-model="dataForm.lastLSTname"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+
+<!--        <el-col :span="10" :offset="2">-->
+<!--          <el-form-item :label="'此版LST名称'" prop="currentLSTname">-->
+<!--            <el-input v-model="dataForm.currentLSTname"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
       <el-button @click="addItem()">加记录</el-button>
       <el-row>

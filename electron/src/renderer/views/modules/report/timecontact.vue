@@ -49,8 +49,8 @@
           </el-form-item>
 
 
-          <el-form-item :label="'版本号'" prop="RevNo">
-            <el-input class="input" v-model="listQuery.RevNo" clearable></el-input>
+          <el-form-item :label="'版本号'" prop="revNo">
+            <el-input class="input" v-model="listQuery.revNo" clearable></el-input>
           </el-form-item>
 
 
@@ -131,9 +131,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="RevNo" label="版本号">
+        <el-table-column align="center" prop="revNo" label="版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.RevNo }}</span>
+            <span>{{scope.row.revNo }}</span>
           </template>
         </el-table-column>
 
@@ -249,7 +249,7 @@ export default {
         stlst: null,
         phaseName: null,
         phaseId: null,
-        RevNo: null,
+        revNo: null,
         allCountSub: null,
         allCountMain: null,
         allCountPrinting: null,
@@ -334,7 +334,7 @@ export default {
               required: true
             },
             { code: 'stlst', name: 'ST/LST', type: 'string', required: true },
-            { code: 'RevNo', name: '版本号', type: 'string', required: true },
+            { code: 'revNo', name: '版本号', type: 'string', required: true },
             {
               code: 'allCountSub',
               name: '全数sub工序用时',
@@ -535,11 +535,12 @@ export default {
         comfirmBy: null,
         inChargeBy: null,
         modelId: null,
+        phaseId: null,
         stage: null,
         publishType: null,
         reviseReason: null,
         stlst: null,
-        RevNo: null,
+        revNo: null,
         allCountSub: null,
         allCountMain: null,
         allCountPrinting: null,
