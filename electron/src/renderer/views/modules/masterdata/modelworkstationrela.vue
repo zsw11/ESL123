@@ -213,8 +213,9 @@
           {
             page: this.pageNo,
             limit: this.pageSize,
-            id: this.id
-          }
+            id: this.id,
+            name: this.listQuery.name
+          },
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
