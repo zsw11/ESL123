@@ -187,10 +187,7 @@
 </template>
 
 <script>
-import {
-  listReportChangeRecord,
-  deleteReportChangeRecord
-} from '@/api/reportChangeRecord'
+import { listReportChangeRecord, deleteReportChangeRecord } from '@/api/reportChangeRecord'
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'

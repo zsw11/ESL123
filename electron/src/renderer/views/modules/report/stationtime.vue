@@ -299,15 +299,13 @@
 </template>
 
 <script>
-import {
-  listCollectionStationTime,
-  deleteCollectionStationTime
-} from '@/api/collectionStationTime'
+import { listCollectionStationTime, deleteCollectionStationTime } from '@/api/collectionStationTime'
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { createReportApprove } from '@/api/reportApprove'
 
 export default {
   name: 'collectionStationTimeList',
@@ -574,7 +572,34 @@ export default {
     },
     // 确定提交
     approvePut () {
-      this.approveShow = false
+      if (this.approveShow) {
+        createReportApprove(this.approveForm).then((page) => {
+          if (!page) {
+            this.approveShow = false
+            this.$notify({
+              title: '成功',
+              message: '提交审批成功',
+              type: 'success',
+              duration: 2000
+            })
+          }else {
+            let name = ''
+            page.forEach((item)=>{
+              name += (item.name + '   ')
+            })
+            this.$message({
+              message: name+'未生成',
+              type: 'warning',
+              duration: 3000,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+            this.approveShow = false
+          }
+          this.getDataList()
+        })
+      }
     },
     // 字典表
     getDictByType () {

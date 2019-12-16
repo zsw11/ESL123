@@ -6,8 +6,8 @@
           <div class="login-main">
             <img src="@/assets/img/favicon.png" alt />
             <div class="title">
-              <h1 class="login-title">{{title}}登录</h1>
-              <p class="title-eng">{{EngTitle}} Login</p>
+              <h1 class="login-title">{{title.name}}登录</h1>
+              <p class="title-eng">{{title.engName}} Login</p>
             </div>
             <!-- 登录框 -->
             <el-form
@@ -34,7 +34,7 @@
                   size="medium"
                 ></el-input>
               </el-form-item>
-              <span class="toggle-login" @click="toggleLogin()">{{btmTitle}}登录</span>
+              <span class="toggle-login" @click="toggleLogin()">{{btmTitle.name}}登录</span>
               <el-form-item>
                 <el-button
                   id="login-btn-submit"
@@ -67,9 +67,16 @@ export default {
   data() {
     return {
       logining: false,
-      title: "本地用户",
-      btmTitle: "APO",
-      EngTitle: "Local",
+      title:{
+        name: '本地登录',
+        engName: 'Local',
+        code: 2
+      },
+      btmTitle: {
+        name: 'APO',
+        engName: 'APO',
+        code: 1
+      },
       dataForm: {
         username: null,
         password: null,
@@ -114,10 +121,6 @@ export default {
       let data;
       data = this.title;
       this.title = this.btmTitle;
-      this.btmTitle = data;
-      this.title === "APO"
-        ? (this.EngTitle = "APO")
-        : (this.EngTitle = "Local");
     }
   }
 };
