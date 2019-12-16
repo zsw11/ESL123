@@ -89,6 +89,15 @@ public class ModelController extends AbstractController {
 
 		return RD.ok(page);
 	}
+	/**
+	 * 机种工位关系表list
+	 */
+	@RequestMapping("/workStationDetail/{id}")
+	public ResponseEntity<Object> workStationDetail(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
+		PageUtils page = modelService.modelWorkStationList(id, params);
+
+		return RD.ok(page);
+	}
 
 	/**
 	 * modeltoolRela

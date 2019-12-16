@@ -1111,8 +1111,8 @@ comment on column dept_workstation_rela.delete_at is '删除时间';
 drop table if exists model_tool_rela;
 CREATE TABLE model_tool_rela (
   id serial PRIMARY KEY,
-  modelId integer,
-  toolId integer,
+  model_id integer,
+  tool_id integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -1120,8 +1120,8 @@ CREATE TABLE model_tool_rela (
   delete_at timestamp
 );
 comment on table model_tool_rela is '机种治工具关系';
-comment on column model_tool_rela.modelId is '机种ID';
-comment on column model_tool_rela.toolId is '治工具ID';
+comment on column model_tool_rela.model_id is '机种ID';
+comment on column model_tool_rela.tool_id is '治工具ID';
 comment on column model_tool_rela.create_by is '创建者ID';
 comment on column model_tool_rela.create_at is '创建时间';
 comment on column model_tool_rela.update_by is '更新者ID';
@@ -1539,7 +1539,7 @@ CREATE TABLE collection_most_value_item (
   collection_most_value_id integer,
   type varchar(32),
   work_name varchar(64),
-  unit_name varchar(64) NULL,,
+  unit_name varchar(64) NULL,
   total decimal(10, 2),
   create_by integer,
   create_at timestamp default now(),

@@ -50,6 +50,11 @@ public class ModelEntity implements Serializable {
 	@TableField(exist = false)
 	private String modelSeriesName;
 	/**
+	 * 机种工位表父表ID
+	 */
+	@TableField(exist = false)
+	private Integer modelWorkStationRelaId;
+	/**
 	 * 名称
 	 */
 	private String name;
@@ -68,22 +73,22 @@ public class ModelEntity implements Serializable {
 	/**
 	 * WS时间
 	 */
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date wsTime;
 	/**
 	 * ES时间
 	 */
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date esTime;
 	/**
 	 * AMP时间
 	 */
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date ampTime;
 	/**
 	 * MP时间
 	 */
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date mpTime;
 	/**
 	 * 备注

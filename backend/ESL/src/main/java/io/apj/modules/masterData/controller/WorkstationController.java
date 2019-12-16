@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.common.utils.RD;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -87,6 +86,17 @@ public class WorkstationController extends AbstractController {
 		workstationService.updatePinAndDataById(workstation);
 
 		return RD.build();
+	}
+
+	/**
+	 * 工位机种关系表list
+	 */
+	@RequestMapping("/modelDetail/{id}")
+	public ResponseEntity<Object> modelDetailList(@PathVariable("id") Integer id,
+			@RequestParam Map<String, Object> params) {
+		PageUtils page = workstationService.modelDetailList(id, params);
+
+		return RD.ok(page);
 	}
 
 	/**

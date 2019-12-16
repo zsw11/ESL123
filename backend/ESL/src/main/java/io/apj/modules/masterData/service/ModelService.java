@@ -20,36 +20,47 @@ import java.util.Map;
  */
 public interface ModelService extends IService<ModelEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params);
 
-    PageUtils selectBySeriesId(int id, Map<String, Object> params);
+	PageUtils selectBySeriesId(int id, Map<String, Object> params);
 
-    PageUtils modelPartRelaList(int id, Map<String, Object> params);
+	PageUtils modelPartRelaList(int id, Map<String, Object> params);
 
-    PageUtils modelToolRelaList(int id, Map<String, Object> params);
+	PageUtils modelToolRelaList(int id, Map<String, Object> params);
 
-    /**
-     * 软删除实体对象
-     * @param modelEntityList
-     */
-    void deleteList(List<ModelEntity> modelEntityList);
+	/**
+	 * 软删除实体对象
+	 * 
+	 * @param modelEntityList
+	 */
+	void deleteList(List<ModelEntity> modelEntityList);
 
-    /**
-     * 通过ids软删除
-     * @param ids
-     */
-    void deleteByIds(Collection<? extends Serializable> ids);
+	/**
+	 * 通过ids软删除
+	 * 
+	 * @param ids
+	 */
+	void deleteByIds(Collection<? extends Serializable> ids);
 
-    /**
-     * 根据条件软删除
-     * @param wrapper
-     */
-    void deleteByWrapper(Wrapper<ModelEntity> wrapper);
+	/**
+	 * 根据条件软删除
+	 * 
+	 * @param wrapper
+	 */
+	void deleteByWrapper(Wrapper<ModelEntity> wrapper);
 
-    /**
-     * update时更新拼音和日期
-     * @return
-     */
-    void updatePinAndDataById(ModelEntity modelEntity);
+	/**
+	 * update时更新拼音和日期
+	 * 
+	 * @return
+	 */
+	void updatePinAndDataById(ModelEntity modelEntity);
+
+	/**
+	 * 获取机种工位关系表list
+	 * @param id
+	 * @param params
+	 * @return
+	 */
+	PageUtils modelWorkStationList(Integer id, Map<String, Object> params);
 }
-

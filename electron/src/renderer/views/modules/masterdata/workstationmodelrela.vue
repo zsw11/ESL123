@@ -79,7 +79,7 @@
                     <template slot-scope="scope">
                         <el-button  type="text" size="small" @click="details(scope.row.workstationId)">详情</el-button>
 <!--                        <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-<!--                        <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>-->
+                       <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
 
@@ -105,7 +105,7 @@
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
   import { fetchModelWorkstation } from '@/api/model'
-  // import { createModelWorkstationRela, deleteModelWorkstationRela } from '@/api/modelWorkstationRela'
+  import { createModelWorkstationRela, deleteModelWorkstationRela } from '@/api/modelWorkstationRela'
   import { Message } from 'element-ui'
 
   const defaultExport = ['workstation.name', 'workstation.remark']
@@ -261,7 +261,7 @@
       },
       // 删除数据
       deleteHandle (row) {
-        var ids = row ? [row.id] : this.dataListSelections.map(item => {
+        var ids = row ? [row.modelWorkStationRelaId] : this.dataListSelections.map(item => {
           return item.id
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
@@ -270,22 +270,14 @@
           type: 'warning'
         }).then(() => {
           deleteModelWorkstationRela(ids).then(() => {
-            if (msg) {
-              Message({
-                message: msg,
-                type: 'error',
-                duration: 5 * 1000
-              })
-            } else {
-              this.$notify({
-                title: '成功',
-                message: '删除成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.pageNo = this.dataList.length === 1 ? this.pageNo-1 : this.pageNo
-            }
-            this.getDataList()
+            this.$notify({
+            title: "成功",
+            message: "删除成功",
+            type: "success",
+            duration: 2000
+          })
+          this.pageNo = this.dataList.length === 1 ? this.pageNo-1 : this.pageNo
+          this.getDataList()
           })
         })
       },
@@ -294,7 +286,7 @@
         this.$nextTick(() => {
           if (this.addReal) {
             let data = {
-              partId: this.addModelWorkstationId,
+              workstationId: this.addModelWorkstationId,
               modelId: this.id
             }
             createModelWorkstationRela(data).then(({page, status}) => {

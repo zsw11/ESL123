@@ -19,26 +19,37 @@ import java.util.Map;
  */
 public interface WorkstationService extends IService<WorkstationEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params);
 
-    Boolean wookStationIdIsSub(Integer wookStationId);
+	Boolean wookStationIdIsSub(Integer wookStationId);
 
-    /**
-     * 通过ids软删除
-     * @param ids
-     */
-    void deleteByIds(Collection<? extends Serializable> ids);
+	/**
+	 * 通过ids软删除
+	 * 
+	 * @param ids
+	 */
+	void deleteByIds(Collection<? extends Serializable> ids);
 
-    /**
-     * 根据条件软删除
-     * @param wrapper
-     */
-    void deleteByWrapper(Wrapper<WorkstationEntity> wrapper);
+	/**
+	 * 根据条件软删除
+	 * 
+	 * @param wrapper
+	 */
+	void deleteByWrapper(Wrapper<WorkstationEntity> wrapper);
 
-    /**
-     * update时更新拼音和日期
-     * @return
-     */
-    void updatePinAndDataById(WorkstationEntity workstationEntity);
+	/**
+	 * update时更新拼音和日期
+	 * 
+	 * @return
+	 */
+	void updatePinAndDataById(WorkstationEntity workstationEntity);
+
+	/**
+	 * 工位机种列表
+	 * 
+	 * @param id
+	 * @param params
+	 * @return
+	 */
+	PageUtils modelDetailList(Integer id, Map<String, Object> params);
 }
-

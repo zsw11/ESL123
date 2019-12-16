@@ -63,3 +63,12 @@ export function workstationExport (data) {
     responseType: 'blob'
   })
 }
+
+// 获取机种工位关系
+export function fetchWorkstationModel (params) {
+  return request({
+    url: request.adornUrl(`/api/v1/workstation/modelDetail/${params.id}`),
+    method: 'get',
+    params: request.adornParams(params)
+  })
+}

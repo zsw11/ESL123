@@ -10,32 +10,6 @@
                     <el-input  v-model="listQuery.name"  clearable></el-input>
                 </el-form-item>
 
-                <el-form-item class="title" :label="'型号'" prop="code" >
-                    <el-input v-model="listQuery.code"></el-input>
-                </el-form-item>
-
-                <el-form-item class="title" :label="'部门'" prop="deptId" >
-                    <keyword-search
-                            class="input"
-                            v-model="listQuery.deptId"
-                            :allowMultiple="true"
-                            :searchApi="this.listDept"
-                            :allowEmpty="true"
-                            clearable>
-                    </keyword-search>
-                </el-form-item>
-
-                <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
-                    <keyword-search
-                            v-model="listQuery.modelSeriesId"
-                            :allowMultiple="true"
-                            :searchApi="this.listModelSeries"
-                            labelColunt="name"
-                            :allowEmpty="true"
-                            clearable>
-                    </keyword-search>
-                </el-form-item>
-
 
                 <!--        <el-form-item class="title" :label="'阶段'" prop="wsTime" >-->
                 <!--          <el-input class="input" v-model="listQuery.wsTime"  clearable></el-input>-->
@@ -91,7 +65,7 @@
 
                 <el-table-column align="center" prop="modelName" label="机种名称" >
                     <template slot-scope="scope">
-                        <span>{{scope.row.modelName }}</span>
+                        <span>{{scope.row.name }}</span>
                     </template>
                 </el-table-column>
 
@@ -103,7 +77,7 @@
 
                 <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
                     <template slot-scope="scope">
-                        <span>{{scope.row.modelSeriesName }}</span>
+                        <span>{{scope.row.modelSeriesEntity.name }}</span>
                     </template>
                 </el-table-column>
 
@@ -163,8 +137,8 @@
   import { listModel } from '@/api/model'
   import { listDept } from '@/api/dept'
   import { listModelSeries } from '@/api/modelSeries'
-  import { fetchModelByWotkstation } from '@/api/workstation'
-  // import { createModelWorkstationRela, deleteModelWorkstationRela } from '@/api/modelWorkstationRela'
+  import { fetchWorkstationModel } from '@/api/workstation'
+  import { createModelWorkstationRela, deleteModelWorkstationRela } from '@/api/modelWorkstationRela'
 
   export default {
     name: 'modelworkstationrela',
@@ -235,7 +209,7 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchModelByWotkstation(Object.assign(
+        fetchWorkstationModel(Object.assign(
           {
             page: this.pageNo,
             limit: this.pageSize,
@@ -304,7 +278,7 @@
       },
       // 删除数据
       deleteHandle (row) {
-        var ids = row ? [row.mtId] : this.dataListSelections.map(item => {
+        var ids = row ? [row.modelWorkStationRelaId] : this.dataListSelections.map(item => {
           return item.id
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
