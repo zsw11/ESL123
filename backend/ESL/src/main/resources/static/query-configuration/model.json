@@ -25,6 +25,11 @@
                 "type": "String"
             },
             {
+                "code": "modelSeriesName",
+                "name": "机种系列",
+                "type": "String"
+            },
+            {
                 "code": "remark",
                 "name": "备注",
                 "type": "string"

@@ -3,15 +3,19 @@ package io.apj.modules.report.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.ApproveEntity;
+import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -31,6 +35,10 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     private ModelService modelService;
     @Autowired
     private PhaseService phaseService;
+    @Autowired
+    private TotalService totalService;
+    @Autowired
+    private ReportService reportService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -65,6 +73,34 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 
         }
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = totalService.queryPage(params);
+        List<TotalEntity> items = (List<TotalEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for(TotalEntity entity : items){
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId",modelId);
+            data.put("phaseId",phaseId);
+            data.put("stlst",stlst);
+            String name = "Report-Total表";
+            data.put("name",name);
+            List<ReportGroupEntity> reportGroup  =  reportService.selectReportGroup(data);
+            if(!reportGroup.isEmpty()){
+                //还可以选报表组
+                entity.setExist(true);
+            }else{
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     @Override

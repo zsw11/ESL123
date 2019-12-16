@@ -23,5 +23,12 @@ public interface TotalService extends IService<TotalEntity> {
     void generateReportData(WorkBookEntity workBookEntity);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    /**
+     * 是否还可以提交审批
+     * @param params
+     * @return
+     */
+    PageUtils selectListTest(Map<String, Object> params);
 }
 

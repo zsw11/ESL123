@@ -34,6 +34,8 @@ public class StationTimeEntity implements Serializable {
 	private String phaseName;
 	@TableField(exist = false)
 	private String modelName;
+	@TableField(exist = false)
+	private boolean Exist;
 	/**
 	 * 标题
 	 */

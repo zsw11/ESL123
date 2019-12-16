@@ -42,7 +42,7 @@ public class StandardWorkController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:standardwork:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = standardWorkService.queryPage(params);
+		PageUtils page = standardWorkService.selectListTest(params);
 
 		return RD.success(page);
 	}

@@ -43,7 +43,7 @@ public class MostValueController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("collection:mostvalue:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = mostValueService.queryPage(params);
+		PageUtils page = mostValueService.selectListTest(params);
 
 		return RD.success(page);
 	}

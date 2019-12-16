@@ -37,40 +37,40 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'WS时间'" prop="WSTime">
+          <el-form-item :label="'WS时间'" prop="wsTime">
             <el-date-picker
               style="width: 100%"
 
-              v-model="dataForm.WSTime">
+              v-model="dataForm.wsTime">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-          <el-form-item  :label="'ES时间'" prop="ESTime">
+          <el-form-item  :label="'ES时间'" prop="esTime">
             <el-date-picker
               style="width: 100%"
 
-              v-model="dataForm.ESTime">
+              v-model="dataForm.esTime">
             </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'AMP时间'" prop="AMPTime">
+          <el-form-item :label="'AMP时间'" prop="ampTime">
             <el-date-picker
               style="width: 100%"
 
-              v-model="dataForm.AMPTime">
+              v-model="dataForm.ampTime">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'MP时间'" prop="MPTime">
+          <el-form-item :label="'MP时间'" prop="mpTime">
             <el-date-picker
               style="width: 100%"
 
-              v-model="dataForm.MPTime">
+              v-model="dataForm.mpTime">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -117,10 +117,10 @@
           deptId: null,
           modelSeriesId: null,
           code: null,
-          WSTime: null,
-          ESTime: null,
-          AMPTime: null,
-          MPTime: null,
+          wsTime: null,
+          esTime: null,
+          ampTime: null,
+          mpTime: null,
           remark: null,
           createBy: null,
           createAt: null,
@@ -197,7 +197,7 @@
           fetchModel(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
-              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'WSTime', 'ESTime', 'AMPTime', 'MPTime', 'remark' ])
+              pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime', 'remark' ])
             )
           }).finally(() => {
             this.inited = true

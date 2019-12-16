@@ -35,7 +35,7 @@
           </el-form-item>
 
           <el-form-item :label="'仕向'" prop="destinations" >
-             <el-select v-model="listQuery.destinations" clearable></el-select>
+            <el-input v-model="listQuery.destinations" clearable></el-input>
           </el-form-item>
 
           <el-form-item :label="'生产阶段'" prop="phaseId" >
@@ -67,9 +67,15 @@
             <el-input v-model="listQuery.makerId"  clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'制表日期'" prop="makedAt" >
-            <el-date-picker v-model="listQuery.makedAt" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" clearable>
-            </el-date-picker>
+          <el-form-item :label="'制表日期'" prop="createAt" >
+            <el-date-picker
+              v-model="listQuery.createAt"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              clearable
+            ></el-date-picker>
           </el-form-item>
         </div>
 
@@ -145,9 +151,9 @@
 
 
 
-        <el-table-column align="center" prop="makedAt" label="制表日期" >
+        <el-table-column align="center" prop="createAt" label="制表日期" >
           <template slot-scope="scope">
-            <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
@@ -374,7 +380,7 @@ export default {
         destinations: null,
         phaseId: null,
         workstationId: null,
-        makedAt: null
+        createAt: null
       })
     },
     // 每页数

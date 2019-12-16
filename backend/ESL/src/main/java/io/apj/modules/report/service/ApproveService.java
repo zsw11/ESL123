@@ -3,9 +3,12 @@ package io.apj.modules.report.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ApproveEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +23,15 @@ public interface ApproveService extends IService<ApproveEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    List<Object> insertApprove(ApproveEntity approve);
+
+    /**
+     * 审批通过拒决
+     * @param approveEntity
+     * @param data
+     * @return
+     */
+    ResponseEntity<Object> saveView(ApproveEntity approveEntity, @RequestBody Map<String,Object> data);
 }
 

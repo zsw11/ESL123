@@ -85,13 +85,14 @@ export default {
     suggest (mode, keyword) {
       this.suggestMode = mode
       this.suggestions = []
+      const self = this
       listFuncs[mode]({ name: keyword }).then(({ page }) => {
         this.suggestions = page.data
+        setTimeout(() => {
+          this.activeSugguestionIndex = self.suggestions.length ? 0 : null
+          this.popoverVisible = true
+        }, 100)
       })
-      setTimeout(() => {
-        this.activeSugguestionIndex = null
-        this.popoverVisible = true
-      }, 100)
     },
     // j结束提示
     endSuggest () {

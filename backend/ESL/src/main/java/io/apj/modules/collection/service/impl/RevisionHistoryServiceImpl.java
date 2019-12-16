@@ -3,15 +3,19 @@ package io.apj.modules.collection.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.ChangeRecordEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -31,6 +35,10 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     private PhaseService phaseService;
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private RevisionHistoryService revisionHistoryService;
+    @Autowired
+    private ReportService reportService;
 
     @Autowired
     private RevisionHistoryItemService revisionHistoryItemService;
@@ -70,6 +78,34 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = revisionHistoryService.queryPage(params);
+        List<RevisionHistoryEntity> items = (List<RevisionHistoryEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for(RevisionHistoryEntity entity : items){
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId",modelId);
+            data.put("phaseId",phaseId);
+            data.put("stlst",stlst);
+            String name = "Collection-Revision History表";
+            data.put("name",name);
+            List<ReportGroupEntity> reportGroup  =  reportService.selectReportGroup(data);
+            if(!reportGroup.isEmpty()){
+                //还可以选报表组
+                entity.setExist(true);
+            }else{
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     @Override

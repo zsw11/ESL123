@@ -42,7 +42,7 @@ public class TotalController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:total:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = totalService.queryPage(params);
+		PageUtils page = totalService.selectListTest(params);
 
 		return RD.success(page);
 	}

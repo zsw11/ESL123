@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
@@ -177,10 +178,18 @@ public class ModelController extends AbstractController {
 		params.put("limit", "9999999");
 		PageUtils pageUtils = modelService.queryPage(params);
 		List<ModelEntity> modelEntities = (List<ModelEntity>) pageUtils.getData();
+		EntityWrapper<ModelSeriesEntity> modelSeriesWrapper = new EntityWrapper<>();
+		modelSeriesWrapper.isNull("delete_at");
+		List<ModelSeriesEntity> modelSeriesSList = modelSeriesService.selectList(modelSeriesWrapper);
+		Map<Integer, String> modelSeriesMap = new HashMap<>();
+		for (ModelSeriesEntity item : modelSeriesSList) {
+			modelSeriesMap.put(item.getId(), item.getName());
+		}
 		// 处理数据源
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dict = sysDictService.getDictDetail();
 		for (ModelEntity item : modelEntities) {
+			item.setModelSeriesName(modelSeriesMap.get(item.getModelSeriesId()));
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("model", item, dict);
 			dataList.add(arr);
@@ -223,14 +232,22 @@ public class ModelController extends AbstractController {
 		List<ModelEntity> modelEntities = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ModelEntity modelEntity = new ModelEntity();
-
 			Map<String, Object> buildMap = maps.get(i);
+			buildMap.put("modelSeriesId", buildMap.get("modelSeriesName"));
 			// 日期强转
 			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-			modelEntity.setWsTime(ft.parse((String) buildMap.get("model.wsTime")));
-			modelEntity.setAmpTime(ft.parse((String) buildMap.get("model.ampTime")));
-			modelEntity.setEsTime(ft.parse((String) buildMap.get("model.esTime")));
-			modelEntity.setMpTime(ft.parse((String) buildMap.get("model.mpTime")));
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.wsTime"))) {
+				modelEntity.setWsTime(ft.parse((String) buildMap.get("model.wsTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.ampTime"))) {
+				modelEntity.setAmpTime(ft.parse((String) buildMap.get("model.ampTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.esTime"))) {
+				modelEntity.setEsTime(ft.parse((String) buildMap.get("model.esTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.mpTime"))) {
+				modelEntity.setMpTime(ft.parse((String) buildMap.get("model.mpTime")));
+			}
 			// modelMap
 			Map<String, Object> modelMap = new HashMap<>();
 			buildMap.remove("model.wsTime");

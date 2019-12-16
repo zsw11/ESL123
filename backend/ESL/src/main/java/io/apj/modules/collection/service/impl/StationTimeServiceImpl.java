@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
 import io.apj.modules.collection.service.StationTimeItemService;
 import io.apj.modules.masterData.entity.PhaseEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.modules.masterData.service.WorkstationTypeService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -37,6 +36,10 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     private ModelService modelService;
     @Autowired
     private StationTimeItemService StationTimeItemService;
+    @Autowired
+    private StationTimeService stationTimeService;
+    @Autowired
+    private ReportService reportService;
 
     @Autowired
     private WorkstationService workstationService;
@@ -73,6 +76,34 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = stationTimeService.queryPage(params);
+        List<StationTimeEntity> items = (List<StationTimeEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for(StationTimeEntity entity : items){
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId",modelId);
+            data.put("phaseId",phaseId);
+            data.put("stlst",stlst);
+            String name = "Collection-工位时间表";
+            data.put("name",name);
+            List<ReportGroupEntity> reportGroup  =  reportService.selectReportGroup(data);
+            if(!reportGroup.isEmpty()){
+                //还可以选报表组
+                entity.setExist(true);
+            }else{
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     @Override

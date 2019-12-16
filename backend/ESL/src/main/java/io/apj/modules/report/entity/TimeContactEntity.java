@@ -34,6 +34,11 @@ public class TimeContactEntity implements Serializable {
 	@TableField(exist = false)
 	private String phaseName;
 	/**
+	 * 是否可以提交
+	 */
+	@TableField(exist = false)
+	private boolean Exist;
+	/**
 	 * 标题
 	 */
 	private String title;

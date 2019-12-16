@@ -49,7 +49,7 @@ public class RevisionHistoryController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("collection:revisionhistory:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = revisionHistoryService.queryPage(params);
+		PageUtils page = revisionHistoryService.selectListTest(params);
 
 		return RD.success(page);
 	}

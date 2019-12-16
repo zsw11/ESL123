@@ -1,25 +1,22 @@
 package io.apj.modules.masterData.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
 import lombok.Data;
 
 /**
- * 报表组
+ * 机种工位关系表
  * 
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
- * @date 2019-11-07 10:39:25
+ * @date 2019-12-16 17:37:03
  */
 @Data
-@TableName("report_group")
-public class ReportGroupEntity implements Serializable {
+@TableName("model_workstation_rela")
+public class ModelWorkstationRelaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,23 +25,13 @@ public class ReportGroupEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 报表组名称
+	 * 机种ID
 	 */
-	private String name;
+	private Integer modelId;
 	/**
-	 * 拼音
+	 * 工位ID
 	 */
-	private String pinyin;
-	/**
-	 * 报表
-	 */
-	@TableField(exist = false)
-	private String allReportName;
-
-	/**
-	 * 备注
-	 */
-	private String remark;
+	private Integer workstationId;
 	/**
 	 * 创建者ID
 	 */
@@ -65,4 +52,5 @@ public class ReportGroupEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
 }

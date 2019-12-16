@@ -43,7 +43,7 @@ public class CompareController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("collection:compare:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = compareService.queryPage(params);
+		PageUtils page = compareService.selectListTest(params);
 
 		return RD.success(page);
 	}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ public class StationTimeController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("collection:stationtime:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = stationTimeService.queryPage(params);
+		PageUtils page = stationTimeService.selectListTest(params);
+
 
 		return RD.success(page);
 	}

@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.enums.FieldFill;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -42,6 +45,11 @@ public class ModelEntity implements Serializable {
 	@TableField(exist = false)
 	private String deptName;
 	/**
+	 * 机种系列名称
+	 */
+	@TableField(exist = false)
+	private String modelSeriesName;
+	/**
 	 * 名称
 	 */
 	private String name;
@@ -60,18 +68,22 @@ public class ModelEntity implements Serializable {
 	/**
 	 * WS时间
 	 */
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date wsTime;
 	/**
 	 * ES时间
 	 */
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date esTime;
 	/**
 	 * AMP时间
 	 */
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date ampTime;
 	/**
 	 * MP时间
 	 */
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date mpTime;
 	/**
 	 * 备注
