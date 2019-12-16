@@ -27,7 +27,7 @@
             type="textarea"
             :rows="6"
             placeholder="请输入内容"
-            v-model="dataForm.opininon">
+            v-model="dataForm.remark">
           </el-input>
         </el-form-item>
        </el-col>
@@ -59,7 +59,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        remark: null
       },
       dataRules: {
         name: [
@@ -115,7 +116,7 @@ export default {
         fetchAction(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data, [ 'name', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt','remark' ])
           )
         }).finally(() => {
           this.inited = true

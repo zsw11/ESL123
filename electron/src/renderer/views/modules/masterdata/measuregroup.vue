@@ -12,15 +12,15 @@
         </el-form-item>
 
 
-        <el-form-item :label="'所属组织机构'" prop="deptId" >
-          <keyword-search
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
-        </el-form-item>
+<!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
+<!--          <keyword-search-->
+<!--            v-model="listQuery.deptId"-->
+<!--            :allowMultiple="true"-->
+<!--            :searchApi="this.listDept"-->
+<!--            :allowEmpty="true"-->
+<!--            clearable>-->
+<!--          </keyword-search>-->
+<!--        </el-form-item>-->
 
 
         <div class="search-box">
