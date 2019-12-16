@@ -163,7 +163,7 @@ import ImportData from "@/components/import-data";
 const defaultExport = [
   "model.name",
   "model.deptName",
-  "model.modelSeriesId",
+  "model.modelSeriesName",
   "model.code",
   "model.wsTime",
   "model.esTime",
@@ -211,7 +211,7 @@ export default {
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
             {
-              code: "modelSeriesId",
+              code: "modelSeriesName",
               name: "机种系列",
               type: "string",
               required: true
@@ -237,7 +237,7 @@ export default {
       importAttributes: [
         "model.name",
         "model.deptName", 
-        "model.modelSeriesId",
+        "model.modelSeriesName",
         "model.code",
         "model.wsTime",
         "model.esTime",
