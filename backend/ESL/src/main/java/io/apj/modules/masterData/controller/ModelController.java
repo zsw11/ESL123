@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
@@ -227,10 +228,18 @@ public class ModelController extends AbstractController {
 			Map<String, Object> buildMap = maps.get(i);
 			// 日期强转
 			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-			modelEntity.setWsTime(ft.parse((String) buildMap.get("model.wsTime")));
-			modelEntity.setAmpTime(ft.parse((String) buildMap.get("model.ampTime")));
-			modelEntity.setEsTime(ft.parse((String) buildMap.get("model.esTime")));
-			modelEntity.setMpTime(ft.parse((String) buildMap.get("model.mpTime")));
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.wsTime"))) {
+				modelEntity.setWsTime(ft.parse((String) buildMap.get("model.wsTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.ampTime"))) {
+				modelEntity.setAmpTime(ft.parse((String) buildMap.get("model.ampTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.esTime"))) {
+				modelEntity.setEsTime(ft.parse((String) buildMap.get("model.esTime")));
+			}
+			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.mpTime"))) {
+				modelEntity.setMpTime(ft.parse((String) buildMap.get("model.mpTime")));
+			}
 			// modelMap
 			Map<String, Object> modelMap = new HashMap<>();
 			buildMap.remove("model.wsTime");
