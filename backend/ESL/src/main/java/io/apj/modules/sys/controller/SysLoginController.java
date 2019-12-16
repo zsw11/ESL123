@@ -84,7 +84,10 @@ public class SysLoginController extends AbstractController {
 			}
 			if (flag) {
 				SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
-				return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
+				if (user != null) {
+					return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));	
+				}
+				return RD.UNAUTHORIZED("USER_NOT_EXIST", "APO登录失败，请联系管理员");
 			}
 			return RD.UNAUTHORIZED("USER_NOT_EXIST", "用户不存在");
 		} else {
