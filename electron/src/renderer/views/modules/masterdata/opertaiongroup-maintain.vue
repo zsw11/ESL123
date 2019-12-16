@@ -29,7 +29,8 @@
         class="workbook-table"
         :mouse-config="{selected: true}"
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
-        :edit-config="$route.name==='details-opertaiongroup' ? {} : {trigger: 'dblclick', mode: 'cell'}">
+        :edit-config="$route.name==='details-opertaiongroup' ? {} : {trigger: 'dblclick', mode: 'cell', activeMethod: canEdit}"
+        @selected-changed="selectedChanged">
         <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
         <operation-column key="operationColumn" min-width="240"></operation-column>
         <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
@@ -65,7 +66,20 @@
 import { pick, clone } from 'lodash'
 import { fetchOperationGroup, createOperationGroup, updateOperationGroup } from '@/api/operationGroup'
 import WorkbookTable from '../workbook/workbook-detail-table.vue'
-import { measureColumns0, measureColumns1, measureFields, defaultRow } from '@/utils/global'
+import {
+  measureColumns0,
+  measureColumns1,
+  measureFields,
+  defaultRow,
+  defaultFields,
+  modeMeasureFields,
+  measureMode,
+  jumpFields,
+  modeFields,
+  modeCheckZeroFields,
+  modeSetZeroFields,
+  allNumericMeasureField
+  } from '@/utils/global'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
@@ -83,6 +97,7 @@ export default {
       measureColumns0,
       measureColumns1,
       lastEditCell: null,
+      lastSelected: undefined,
       currentCell: null,
       title: null,
       inited: false,
@@ -105,13 +120,15 @@ export default {
   },
   created () {
     this.init()
+    this.handleShortcut()
   },
   activated () {
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
       this.init()
     }
   },
-  mounted () {
+  destroyed () {
+    this.handleShortcut()
   },
   watch: {
     dataForm: {
@@ -150,6 +167,67 @@ export default {
         this.inited = true
       }
     },
+    // // 计算列
+    // getTimeValue ({ row }) {
+    //   let base = 0
+    //   let fre = 0
+    //   allNumericMeasureField.forEach(f => {
+    //     if (row[f] > 0) base += row[f]
+    //     if (row[f] < 0) fre -= row[f]
+    //   })
+    //   const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
+    //   return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
+    // },
+    // // 计算列
+    // getTmu (scope) {
+    //   return this.getTimeValue(scope) / 6 * 10
+    // },
+    // // 计算列
+    // getSecConv (scope) {
+    //   return round(this.getTimeValue(scope) * 0.06, 2)
+    // },
+    // 选中单元格并输入时的处理
+    keyboardEdit ({ row, column, cell }, e) {
+      console.log(jumpFields, column.property)
+      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
+        this.jump(row, column.property, e.key) // field是operation
+        e.preventDefault()
+        return false
+      }
+      return true
+    },
+    // 快捷键
+    handleShortcut () {
+      const self = this
+      if (this.listener) {
+        document.removeEventListener('keydown', this.listener)
+        console.log('Remove Listener')
+      } else {
+        this.listener = function (e) {
+          if (e.ctrlKey) {
+            switch (e.key) {
+              case 'c': {
+                self.copy()
+                break
+              }
+              case 'v': {
+                self.paste()
+                break
+              }
+              case '+': {
+                self.addRow()
+                break
+              }
+            }
+          }
+          if (e.key === 'Delete') {
+            self.delete()
+          }
+        }
+        document.addEventListener('keydown', this.listener)
+        console.log('Add Listener')
+      }
+    },
     // 创建新行数据
     createNewRow (type) {
       const newRow = clone(defaultRow)
@@ -169,25 +247,98 @@ export default {
         }
       })
     },
-    // 选中单元格并输入时的处理
-    keyboardEdit ({ row, column, cell }, e) {
-      if (measureFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i'].includes(e.key)) {
-        this.jump(row, column.property, e.key)
-        e.preventDefault()
-        return false
-      }
-      return true
-    },
     // 调到指定位置
     jump (row, field, to) {
-      const offset = measureFields.indexOf(field)
-      for (let i = 1; i <= measureFields.length; i++) {
-        const tmpField = measureFields[(offset + i) % measureFields.length]
-        if (tmpField.includes(to)) {
+      const offset = jumpFields.indexOf(field)
+      for (let i = 1; i <= jumpFields.length; i++) {
+        const tmpField = jumpFields[(offset + i) % jumpFields.length]
+        const fieldMap = {
+          operation: 'w',
+          tool: 't',
+          frequency: 'f'
+        }
+        // 判断模式
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(row[f])
+        })]
+        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
+          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
           return
         }
       }
+    },
+    // 删除行
+    async delete() {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        this.$refs.workbookTable.remove(this.lastSelected.row)
+      }
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = measureMode[modeMeasureFields.find(f => {
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
+      return !mode || mode === measureMode[column.property]
+    },
+    // 获取当前行数据
+    getCurrentCell () {
+      return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+    },
+    // 清理行，只保留有效属性
+    cleanRow (row) {
+      return pick(row, defaultFields)
+    },
+    // 缓存
+    copy () {
+      localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
+    },
+    // 粘贴
+    async paste (event) {
+      const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
+      if (!copyContent) return
+      const currentRow = (this.getCurrentCell() || {}).row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      await this.$refs.workbookTable.insertAt(copyContent, currentRow)
+    },
+    // 删除行
+    async delete() {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        this.$refs.workbookTable.remove(this.lastSelected.row)
+      }
+    },
+    selectedChanged (val) {
+      // 补0操作
+      // 判断模式
+      if (this.lastSelected) {
+        const mode = measureMode[modeMeasureFields.find(f => {
+          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
+        })]
+        if (mode &&
+          measureMode[this.lastSelected.column.property] === mode &&
+          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+        ) {
+          // 因为都是设置0，不用管是否频率
+          // let v = 0
+          // for (const f of modeCheckZeroFields[mode]) {
+          //   if (this.lastSelected.row[f]) {
+          //     v = this.lastSelected.row[f]
+          //     break
+          //   }
+          // }
+          // if (v) {
+          //   for (const f of modeCheckZeroFields[mode]) {
+          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          //   }
+          // }
+          for (const f of modeSetZeroFields[mode]) {
+            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          }
+        }
+      }
+      this.lastSelected = val
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
