@@ -60,6 +60,7 @@ export default class VideoServer {
                 let videoCodec = this.videoSourceInfo.checkResult.videoCodecSupport ? 'copy' : 'libx264';
                 let audioCodec = this.videoSourceInfo.checkResult.audioCodecSupport ? 'copy' : 'aac';
                 this.killFfmpegCommand();
+                console.log(startTime)
                 this._ffmpegCommand = ffmpeg()
                     .input(this.videoSourceInfo.videoSourcePath)
                     .nativeFramerate()

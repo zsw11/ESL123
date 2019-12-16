@@ -10,7 +10,8 @@
       <video-player
         ref="videoPlayer"
         :options="playerOptions"
-        :playsinline="true">
+        :playsinline="true"
+        @ready="event($event)">
       </video-player>
       <!-- <div class="control-bar">
         <el-slider v-model="time" :max="duration"></el-slider>
@@ -98,6 +99,7 @@
       videoPlayer
     },
     data () {
+      const self = this
       return {
         workbookPercents,
         workbookPercent: 'half',
@@ -109,6 +111,7 @@
         addedOperation: null,
         time: 0,
         duration: null,
+        currentTime: null,
         playerOptions: {
           // videojs options
           muted: false,
@@ -122,6 +125,27 @@
           }],
           controlBar: {
             fullscreenToggle: false
+          },
+          middleware (player) {
+            return {
+              duration (dur) {
+                return self.$data.duration || dur
+              },
+              setCurrentTime (time) {
+                if (self.$data.currentTime) {
+                  const tmpTime = self.$data.currentTime
+                  self.$data.currentTime = undefined
+                  return tmpTime
+                } else {
+                  self.$data.playerOptions.sources = [{
+                    type: 'video/mp4',
+                    src: `http://127.0.0.1:8888?startTime=${time}&t=${Math.random()}`
+                  }]
+                  self.$data.currentTime = time
+                  return time
+                }
+              }
+            }
           }
         }
       }
@@ -145,14 +169,22 @@
       this.handleShortcut()
       const self = this
       ipcRenderer.on('openVideo', function (event, duration) {
-        this.duration = parseFloat(duration)
-        self.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
+        self.duration = parseFloat(duration)
+        Object.assign(self.playerOptions, {
+          sources: [{
+            type: 'video/mp4',
+            src: `http://127.0.0.1:8888?startTime=0&t=${Math.random()}`
+          }],
+        })
       })
     },
     destroyed () {
       this.handleShortcut()
     },
     methods: {
+      event (e) {
+        // if (this.currentTime) (this.$refs.videoPlayer.player.currentTime = this.currentTime)
+      },
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
       },
@@ -250,7 +282,6 @@
       },
       addRow () {
         if (this.$refs.workbookTable) {
-          console.log(1111)
           this.$refs.workbookTable.addRow()
         }
       },

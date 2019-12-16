@@ -89,7 +89,7 @@ function createWindow () {
     electron.dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
-        {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mts', 'm2ts']}
+        {name: 'Movies', extensions: ['mpg', 'wmv', 'avi', 'mp4', 'mts']}
       ]
     }, (result) => {
       console.log(result)
