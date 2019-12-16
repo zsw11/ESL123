@@ -9,6 +9,7 @@
         <result property="collectionMostValueId" column="collection_most_value_id"/>
         <result property="type" column="type"/>
         <result property="workName" column="work_name"/>
+        <result property="unitName" column="unit_name"/>
         <result property="total" column="total"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
@@ -18,14 +19,14 @@
     </resultMap>
 
     <select id="generateDataByWorkBook" resultMap="mostValueItemMap">
-        select wt."name" as type, wb.model_id, wb.phase_id, wb.stlst,  wb.work_name,
+        select wt."name" as type, wb.model_id, wb.phase_id, wb.stlst,  wb.work_name as unit_name, w."name" as work_name,
          sum(wo.second_convert) * 1.06 / 60 as total
         from work_book wb
         join work_operations wo on wb.id = wo.work_book_id
         join workstation w on wb.workstation_id = w.id
         join workstation_type wt on w.workstation_type_id = wt.id
         where wb.id = #{workBookId}
-        group by wt."name", wb.model_id, wb.phase_id, wb.stlst,  wb.work_name
+        group by wt."name", wb.model_id, wb.phase_id, wb.stlst,  wb.work_name, w."name"
     </select>
 
 </mapper>

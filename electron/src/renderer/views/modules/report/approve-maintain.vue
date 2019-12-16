@@ -78,6 +78,7 @@ import {
   downloadReportApprove
 } from '@/api/reportApprove'
 import { fetchReportDetail } from '@/api/reportGroup'
+import { download } from '@/utils/index'
 export default {
   name: 'editReportApprove',
   data () {
@@ -243,8 +244,10 @@ export default {
         stlst: this.dataForm.stlst,
         reportId: id
       }
-      downloadReportApprove(data);
-      console.log(data)
+      downloadReportApprove(data).then(response => {
+        console.log(response)
+        download(response)
+      });
     }
   }
 }

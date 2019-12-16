@@ -1,12 +1,13 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Collection - Compare表子表
@@ -74,4 +75,12 @@ public class CompareItemEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	@TableField(exist = false)
+	private BigDecimal secondDifference;
+
+	@TableField(exist = false)
+	private BigDecimal minuteDifference;
+
+	@TableField(exist = false)
+	private String secondColumnName;
 }

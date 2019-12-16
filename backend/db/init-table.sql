@@ -1518,6 +1518,7 @@ CREATE TABLE collection_most_value_item (
   collection_most_value_id integer,
   type varchar(32),
   work_name varchar(64),
+  unit_name varchar(64) NULL,,
   total decimal(10, 2),
   create_by integer,
   create_at timestamp default now(),
@@ -1529,6 +1530,7 @@ comment on table collection_most_value_item is 'Collection - MOST Value 表';
 comment on column collection_most_value_item.collection_most_value_id is 'Most Value表ID';
 comment on column collection_most_value_item.type is '类型:Sub/Man/测试、检查/捆包';
 comment on column collection_most_value_item.work_name is '作业名';
+comment on column collection_most_value_item.unit_name is '组合名称';
 comment on column collection_most_value_item.total is '耗时（Min）';
 comment on column collection_most_value_item.create_by is '创建者ID';
 comment on column collection_most_value_item.create_at is '创建时间';

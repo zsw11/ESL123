@@ -50,6 +50,7 @@ export function downloadReportApprove (data) {
   return request({
     url: request.adornUrl('/api/v1/approve/download'),
     method: 'post',
+    responseType: 'blob',
     data
   })
 }

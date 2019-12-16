@@ -1,43 +1,37 @@
 package io.apj.modules.report.service.impl;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.enums.WriteDirectionEnum;
-import com.alibaba.excel.metadata.CellData;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.report.dao.StandardTimeItemDao;
-import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.report.dao.StandardTimeDao;
+import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.service.StandardTimeItemService;
+import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
-import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.*;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.StandardTimeDao;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.service.StandardTimeService;
-
-import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("standardTimeService")
@@ -102,12 +96,9 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         map.put("unit", standardTime.getUnit());
         map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
         generateTotalData(list, map);
-        // TODO 添加调用模版方法及生成目标excel文件方法
-        String templateFileName = "D:/ESL-MOST/backend/ESL/src/main/resources/static/exportTemplates/standard_time_template.xls";
-        String fileName1 = "D:/ESL-MOST/backend/ESL/src/main/resources/static/exportTemplates/standard_time_template1.xls";
+        String templateFileName = PathUtil.getExcelTemplatePath("standard_time_template");
         OutputStream out = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-//        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
         WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);

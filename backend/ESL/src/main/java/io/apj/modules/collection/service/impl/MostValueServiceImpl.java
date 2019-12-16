@@ -1,27 +1,38 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.modules.collection.entity.StationTimeEntity;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
+import io.apj.modules.collection.dao.MostValueDao;
+import io.apj.modules.collection.entity.MostValueEntity;
+import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.MostValueItemService;
+import io.apj.modules.collection.service.MostValueService;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.collection.dao.MostValueDao;
-import io.apj.modules.collection.entity.MostValueEntity;
-import io.apj.modules.collection.service.MostValueService;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("mostValueService")
@@ -70,7 +81,52 @@ private MostValueItemService mostValueItemService;
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
-        //TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+        Integer entityId = entity.getId();
+        List<MostValueItemEntity> list = mostValueItemService.selectByMostValueId(entityId);
+        ModelEntity model = modelService.selectById(modelId);
+        PhaseEntity phase = phaseService.selectById(phaseId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("modelName", model.getName());
+        map.put("phaseName", phase.getName());
+        map.put("customer", "??");
+        map.put("esl", "??");
+        map.put("firstColumnName", entity.getFirstColumnName());
+        map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
+        generateTotalData(list, map);
+
+        String templateFileName = PathUtil.getExcelTemplatePath("collection_most_value");
+        OutputStream out = response.getOutputStream();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "Most_Value";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        excelWriter.finish();
+    }
+
+    private void generateTotalData(List<MostValueItemEntity> list, Map<String, Object> map) {
+        BigDecimal timeStTotal = BigDecimal.ZERO;
+        BigDecimal timeTotal = BigDecimal.ZERO;
+
+        for (MostValueItemEntity entity: list) {
+            timeTotal = timeTotal.add(entity.getTotal());
+            BigDecimal timeSt = entity.getTotal().multiply(new BigDecimal(60));
+            timeTotal = timeTotal.add(timeSt);
+            entity.setTimeSt(timeSt);
+        }
+        BigDecimal totalAll = timeTotal.divide(new BigDecimal(60),3,BigDecimal.ROUND_HALF_UP);
+        map.put("timeStTotal", timeStTotal);
+        map.put("timeTotal", timeTotal);
+        map.put("totalAll", totalAll);
+
     }
 
     private MostValueEntity generateMostValue(WorkBookEntity workBook) {

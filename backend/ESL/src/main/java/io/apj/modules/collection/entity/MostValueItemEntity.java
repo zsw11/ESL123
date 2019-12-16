@@ -1,12 +1,13 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Collection - MOST Value 表
@@ -61,5 +62,13 @@ public class MostValueItemEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	/**
+	 * 工位ID
+	 */
+	private String unitName;
+
+	@TableField(exist = false)
+	private BigDecimal timeSt;
 
 }

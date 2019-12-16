@@ -5,6 +5,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +20,8 @@ public interface MostValueItemService extends IService<MostValueItemEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void generateMostValue(WorkBookEntity workBook, Integer recordId);
+
+    List<MostValueItemEntity> selectByMostValueId(Integer entityId);
 
 }
 

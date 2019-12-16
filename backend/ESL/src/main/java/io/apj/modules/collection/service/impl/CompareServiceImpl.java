@@ -1,28 +1,39 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.modules.collection.entity.MostValueEntity;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
+import io.apj.modules.collection.dao.CompareDao;
+import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.entity.CompareItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
+import io.apj.modules.collection.service.CompareService;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.collection.dao.CompareDao;
-import io.apj.modules.collection.entity.CompareEntity;
-import io.apj.modules.collection.service.CompareService;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("compareService")
@@ -77,7 +88,71 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
-        //TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+        Integer entityId = entity.getId();
+        List<CompareItemEntity> list = compareItemService.selectByMostValueId(entityId);
+        ModelEntity model = modelService.selectById(modelId);
+        PhaseEntity phase = phaseService.selectById(phaseId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("modelName", model.getName());
+        map.put("phaseName", phase.getName());
+        map.put("lastVersionName", entity.getLastVersionName());
+        map.put("currentVersionName", entity.getCurrentVersionName());
+        map.put("firstColumnName", entity.getFirstColumnName());
+        map.put("customer", "??");
+        map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
+        generateTotalData(list, map);
+
+        String templateFileName = PathUtil.getExcelTemplatePath("collection_compare");
+        OutputStream out = response.getOutputStream();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "Most_Value_Compare";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.finish();
+    }
+
+    private void generateTotalData(List<CompareItemEntity> list, Map<String, Object> map) {
+        BigDecimal lastValueToatal = BigDecimal.ZERO;
+        BigDecimal currentValueTotal = BigDecimal.ZERO;
+        BigDecimal secondDifferenceTotal = BigDecimal.ZERO;
+        BigDecimal minuteDifferenceTotal = BigDecimal.ZERO;
+
+        for (CompareItemEntity entity: list) {
+            BigDecimal lastValue = entity.getLastValue();
+            BigDecimal currentValue = entity.getCurrentValue();
+            currentValueTotal = currentValueTotal.add(currentValue);
+            if (lastValue == null) {
+                lastValue = BigDecimal.ZERO;
+                entity.setLastValue(lastValue);
+            }
+            lastValueToatal = lastValueToatal.add(lastValue);
+            BigDecimal secondDifference = currentValue.subtract(lastValue);
+            BigDecimal minuteDifference = secondDifference.divide(new BigDecimal(60), 3 , BigDecimal.ROUND_HALF_UP);
+            entity.setSecondDifference(secondDifference);
+            entity.setMinuteDifference(minuteDifference);
+            secondDifferenceTotal = secondDifferenceTotal.add(secondDifference);
+            minuteDifferenceTotal = minuteDifferenceTotal.add(minuteDifference);
+
+            Boolean sub = entity.getSub();
+            if (sub) {
+                entity.setSecondColumnName("SUB");
+            } else {
+                entity.setSecondColumnName("MAIN");
+            }
+        }
+        map.put("lastValueToatal", lastValueToatal);
+        map.put("currentValueTotal", currentValueTotal);
+        map.put("secondDifferenceTotal", secondDifferenceTotal);
+        map.put("minuteDifferenceTotal", minuteDifferenceTotal);
     }
 
     private CompareEntity generateStandardTime(WorkBookEntity workBook) {
