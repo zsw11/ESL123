@@ -36,6 +36,15 @@ export function fetchModelPart (params) {
   })
 }
 
+// 获取机种工位关系
+export function fetchModelWorkstation (params) {
+  return request({
+    url: request.adornUrl(`/api/v1/model/workStationDetail/${params.id}`),
+    method: 'get',
+    params: request.adornParams(params)
+  })
+}
+
 // 获取机种治工具关系
 export function fetchModelTool (params) {
   return request({

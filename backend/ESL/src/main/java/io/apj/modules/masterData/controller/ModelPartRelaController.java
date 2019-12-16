@@ -8,6 +8,7 @@ import io.apj.common.utils.RD;
 import io.apj.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,7 @@ public class ModelPartRelaController extends AbstractController {
 	 * 保存
 	 */
 	@RequestMapping("/create")
+	@Transactional
 //    @RequiresPermissions("masterData:modelpartrela:create")
 	public RD save(@RequestBody ModelPartRelaEntity modelPartRela) {
 		modelPartRela.setCreateBy(getUserId().intValue());
