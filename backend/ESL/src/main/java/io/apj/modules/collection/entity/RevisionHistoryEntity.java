@@ -113,4 +113,7 @@ public class RevisionHistoryEntity implements Serializable {
 	@TableField(exist = false)
 	private List<RevisionHistoryItemEntity> items;
 
+	@TableField(exist = false)
+	private boolean Exist;
+
 }

@@ -172,11 +172,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         return reportEntities;
     }
 
-    /**
-     * 报表属于那些报表组，并过滤(以提交的)
-     * @param data
-     * @return
-     */
     @Override
     public List<ReportGroupEntity> selectReportGroup(Map<String, Object> data) {
         String reportName = (String) data.get("name");

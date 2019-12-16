@@ -95,4 +95,7 @@ public class CompareEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	@TableField(exist = false)
+	private boolean Exist;
+
 }

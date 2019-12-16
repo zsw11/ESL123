@@ -25,5 +25,10 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
     void updateEntity(RevisionHistoryEntity revisionHistory);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    /**
+     * 是否还可以提交审批
+     */
+    PageUtils selectListTest(Map<String, Object> params);
 }
 
