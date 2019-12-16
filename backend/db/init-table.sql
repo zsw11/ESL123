@@ -1128,6 +1128,27 @@ comment on column model_tool_rela.update_by is '更新者ID';
 comment on column model_tool_rela.update_at is '更新时间';
 comment on column model_tool_rela.delete_at is '删除时间';
 
+-- 机种工位关系表
+drop table if exists model_workstation_rela;
+CREATE TABLE model_workstation_rela (
+  id serial PRIMARY KEY,
+  model_id integer,
+  workstation_id integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table model_workstation_rela is '机种工位关系表';
+comment on column model_workstation_rela.model_id is '机种ID';
+comment on column model_workstation_rela.workstation_id is '工位ID';
+comment on column model_workstation_rela.create_by is '创建者ID';
+comment on column model_workstation_rela.create_at is '创建时间';
+comment on column model_workstation_rela.update_by is '更新者ID';
+comment on column model_workstation_rela.update_at is '更新时间';
+comment on column model_workstation_rela.delete_at is '删除时间';
+
 -- 机种部品关系
 drop table if exists model_part_rela;
 CREATE TABLE model_part_rela (
