@@ -12,11 +12,14 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.DateUtils;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.dao.StandardTimeItemDao;
 import io.apj.modules.report.entity.ChangeRecordEntity;
 import io.apj.modules.report.entity.StandardTimeItemEntity;
+import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.report.service.StandardTimeItemService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
@@ -48,6 +51,10 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     private PhaseService phaseService;
     @Autowired
     private StandardTimeItemService standardTimeItemService;
+    @Autowired
+    private StandardTimeService standardTimeService;
+    @Autowired
+    private ReportService  reportService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -77,6 +84,34 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = standardTimeService.queryPage(params);
+        List<StandardTimeEntity> items = (List<StandardTimeEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for(StandardTimeEntity entity : items){
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId",modelId);
+            data.put("phaseId",phaseId);
+            data.put("stlst",stlst);
+            String name = "标准时间表";
+            data.put("name",name);
+            List<ReportGroupEntity> reportGroup  =  reportService.selectReportGroup(data);
+            if(!reportGroup.isEmpty()){
+                //还可以选报表组
+                entity.setExist(true);
+            }else{
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     @Override

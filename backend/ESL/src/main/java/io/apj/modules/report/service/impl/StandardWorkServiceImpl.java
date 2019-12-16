@@ -8,11 +8,14 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.DateUtils;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
+import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.StandardWorkItemService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +46,12 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     private ModelService modelService;
     @Autowired
     private PhaseService phaseService;
-
+    @Autowired
+    private StandardWorkService standardWorkService;
     @Autowired
     private  StandardWorkItemService standardWorkItemService;
+    @Autowired
+    private ReportService reportService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -81,6 +87,34 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = standardWorkService.queryPage(params);
+        List<StandardWorkEntity> items = (List<StandardWorkEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for(StandardWorkEntity entity : items){
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId",modelId);
+            data.put("phaseId",phaseId);
+            data.put("stlst",stlst);
+            String name = "标准工数表";
+            data.put("name",name);
+            List<ReportGroupEntity> reportGroup  =  reportService.selectReportGroup(data);
+            if(!reportGroup.isEmpty()){
+                //还可以选报表组
+                entity.setExist(true);
+            }else{
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     /**

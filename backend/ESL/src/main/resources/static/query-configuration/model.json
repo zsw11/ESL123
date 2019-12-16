@@ -20,6 +20,11 @@
                 "type": "String"
             },
             {
+                "code": "modelSeriesId",
+                "name": "机种系列",
+                "type": "String"
+            },
+            {
                 "code": "modelSeriesName",
                 "name": "机种系列",
                 "type": "String"

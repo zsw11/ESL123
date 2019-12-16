@@ -67,7 +67,7 @@ public class OpertaionGroupController extends AbstractController {
 		OpertaionGroupEntity opertaionGroup = opertaionGroupService.selectById(id);
 		opertaionGroup.setDeptName(sysDeptService.selectById(opertaionGroup.getDeptId()).getName());
 		List<OperationGroupOperationEntity> operationGroupOperationEntities = operationGroupOperationService
-				.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id", id));
+				.selectList(new EntityWrapper<OperationGroupOperationEntity>().eq("operation_group_id", id).isNull("delete_at"));
 		Map<String, Object> item = new HashMap<String, Object>();
 		item.put("operationGroup", opertaionGroup);
 		item.put("operations", operationGroupOperationEntities);

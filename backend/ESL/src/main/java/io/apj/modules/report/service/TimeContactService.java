@@ -23,5 +23,7 @@ public interface TimeContactService extends IService<TimeContactEntity> {
     void generateReportData(WorkBookEntity workBookEntity);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    PageUtils selectListTest(Map<String, Object> params);
 }
 

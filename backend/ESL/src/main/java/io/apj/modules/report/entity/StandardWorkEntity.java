@@ -47,6 +47,8 @@ public class StandardWorkEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private String modelName;
+	@TableField(exist = false)
+	private boolean Exist;
 	/**
 	 * 型号
 	 */

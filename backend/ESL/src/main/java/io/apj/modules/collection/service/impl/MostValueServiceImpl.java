@@ -2,17 +2,23 @@ package io.apj.modules.collection.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.service.MostValueItemService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.StandardTimeEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -26,40 +32,73 @@ import javax.servlet.http.HttpServletResponse;
 
 @Service("mostValueService")
 public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEntity> implements MostValueService {
-@Autowired
-private PhaseService phaseService;
-@Autowired
-private ModelService modelService;
-@Autowired
-private MostValueItemService mostValueItemService;
+    @Autowired
+    private PhaseService phaseService;
+    @Autowired
+    private ModelService modelService;
+    @Autowired
+    private MostValueItemService mostValueItemService;
+    @Autowired
+    private MostValueService mostValueService;
+    @Autowired
+    private ReportService reportService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<MostValueEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at",false)
+        entityWrapper.isNull("delete_at").orderBy("update_at", false)
                 .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("firstColumnName") != null && params.get("firstColumnName") != "", "first_column_name", (String) params.get("firstColumnName"))
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
         ;
-        if(StringUtils.isNotEmpty((CharSequence) params.get("modelId"))){
-            entityWrapper.eq("model_id","modelId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", "modelId");
         }
-        if(StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))){
-            entityWrapper.eq("phase_id","phaseId");
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", "phaseId");
         }
         Page<MostValueEntity> page = this.selectPage(
-                new Query<MostValueEntity>(params).getPage(),entityWrapper
+                new Query<MostValueEntity>(params).getPage(), entityWrapper
         );
-        for(MostValueEntity entity: page.getRecords()){
-            if(entity.getPhaseId()!=null){
+        for (MostValueEntity entity : page.getRecords()) {
+            if (entity.getPhaseId() != null) {
                 entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
             }
-            if(entity.getModelId()!=null){
+            if (entity.getModelId() != null) {
                 entity.setModelName(modelService.selectById(entity.getModelId()).getName());
             }
 
         }
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils selectListTest(Map<String, Object> params) {
+        PageUtils page = mostValueService.queryPage(params);
+        List<MostValueEntity> items = (List<MostValueEntity>) page.getData();
+        int phaseId;
+        int modelId;
+        String stlst;
+        for (MostValueEntity entity : items) {
+            phaseId = entity.getPhaseId();
+            modelId = entity.getModelId();
+            stlst = entity.getStlst();
+            Map<String, Object> data = new HashMap<>();
+            data.put("modelId", modelId);
+            data.put("phaseId", phaseId);
+            data.put("stlst", stlst);
+            String name = "Collection-MOST Value表";
+            data.put("name", name);
+            List<ReportGroupEntity> reportGroup = reportService.selectReportGroup(data);
+            if (!reportGroup.isEmpty()) {
+                //还可以选报表组
+                entity.setExist(true);
+            } else {
+                entity.setExist(false);
+            }
+        }
+        return page;
     }
 
     @Override

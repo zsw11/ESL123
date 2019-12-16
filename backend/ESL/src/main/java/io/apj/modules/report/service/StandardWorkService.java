@@ -23,5 +23,10 @@ public interface StandardWorkService extends IService<StandardWorkEntity> {
     void generateReportData(WorkBookEntity work);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    /**
+     * 是否还可以提交审批
+     */
+    PageUtils selectListTest(Map<String, Object> params);
 }
 

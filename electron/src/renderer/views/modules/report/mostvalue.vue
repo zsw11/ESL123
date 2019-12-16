@@ -237,7 +237,13 @@
               size="mini"
               type="text"
               @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+              v-if="scope.row.exist"
             >提交审批</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              v-if="!scope.row.exist"
+            >已提交审批</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -262,9 +268,11 @@
             <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="'下一审批者'" prop="nextApprove" >
-          <el-input  v-model="approveForm.nextApprove" clearable></el-input>
-        </el-form-item>
+        <div>
+          <el-form-item :label="'下一审批者'" prop="nextApprove" >
+            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+          </el-form-item>
+        </div>
 
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -276,15 +284,13 @@
 </template>
 
 <script>
-import {
-  listCollectionMostValue,
-  deleteCollectionMostValue
-} from '@/api/collectionMostValue'
+import { listCollectionMostValue, deleteCollectionMostValue } from '@/api/collectionMostValue'
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { createReportApprove } from '@/api/reportApprove'
 
 export default {
   name: 'collectionMostValueList',
@@ -527,7 +533,34 @@ export default {
     },
     // 确定提交
     approvePut () {
-      this.approveShow = false
+      if (this.approveShow) {
+        createReportApprove(this.approveForm).then((page) => {
+          if (!page) {
+            this.approveShow = false
+            this.$notify({
+              title: '成功',
+              message: '提交审批成功',
+              type: 'success',
+              duration: 2000
+            })
+          }else {
+            let name = ''
+            page.forEach((item)=>{
+              name += (item.name + '   ')
+            })
+            this.$message({
+              message: name+'未生成',
+              type: 'warning',
+              duration: 3000,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+            this.approveShow = false
+          }
+          this.getDataList()
+        })
+      }
     },
     // 字典表
     getDictByType () {

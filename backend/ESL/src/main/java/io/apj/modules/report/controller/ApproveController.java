@@ -1,38 +1,24 @@
 package io.apj.modules.report.controller;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.*;
-
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.apj.modules.collection.entity.CompareEntity;
-import io.apj.modules.collection.entity.MostValueEntity;
-import io.apj.modules.collection.entity.RevisionHistoryEntity;
-import io.apj.modules.collection.entity.StationTimeEntity;
-import io.apj.modules.collection.service.CompareService;
-import io.apj.modules.collection.service.MostValueService;
-import io.apj.modules.collection.service.RevisionHistoryService;
-import io.apj.modules.collection.service.StationTimeService;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.*;
-import io.apj.modules.report.entity.*;
+import io.apj.modules.report.entity.ApproveEntity;
+import io.apj.modules.report.entity.ApproveHistoryEntity;
 import io.apj.modules.report.service.*;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import io.apj.modules.workBook.service.WorkBookService;
+import io.apj.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.RD;
-
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 报表审批表
@@ -43,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/api/v1/approve")
-public class ApproveController {
+public class ApproveController extends AbstractController {
     @Autowired
     private ApproveService approveService;
     @Autowired
@@ -56,28 +42,7 @@ public class ApproveController {
     private ReportService reportService;
     @Autowired
     private ApproveHistoryService approveHistoryService;
-    @Autowired
-    private ReportGroupReportRelaService reportGroupReportRelaService;
-    @Autowired
-    private TotalService totalService;
-    @Autowired
-    private WorkBookService workBookService;
-    @Autowired
-    private StationTimeService stationTimeService;
-    @Autowired
-    private CompareService compareService;
-    @Autowired
-    private MostValueService mostValueService;
-    @Autowired
-    private RevisionHistoryService revisionHistoryService;
-    @Autowired
-    private TimeContactService timeContactService;
-    @Autowired
-    private StandardTimeService standardTimeService;
-    @Autowired
-    private StandardWorkService standardWorkService;
-    @Autowired
-    private ChangeRecordService changeRecordService;
+
 
 
     /**
@@ -116,91 +81,27 @@ public class ApproveController {
     }
 
     /**
-     * 保存
+     * 从具体的报表来保存
      *
      * @return
      */
     @RequestMapping("/create")
     @RequiresPermissions("report:approve:create")
     public List<Object> save(@RequestBody ApproveEntity approve) {
-        //判断所选报表组里的报表是否生成了
-        int pid = approve.getPhaseId();
-        int mid = approve.getModelId();
-        String stlst = approve.getStlst();
-        int reportGroupId = approve.getReportGroupId();
-        List<ReportEntity> reportEntityList = reportGroupReportRelaService.selectReportNameByReportGroupId(reportGroupId);
-        List<Object> reportItemList = new ArrayList<>();
-        for (ReportEntity item : reportEntityList) {
-            //判断是否符合3个字段
-            ReportEntity reportEntity = reportService.selectById(item.getId());
-            String reportName = reportEntity.getEname();
-            switch (reportName) {
-                case "report_total":
-                    List<TotalEntity> total = (List<TotalEntity>) totalService.selectList(new EntityWrapper<TotalEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (total.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "work_book":
-                    List<WorkBookEntity> workBookEntity = (List<WorkBookEntity>) workBookService.selectList(new EntityWrapper<WorkBookEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (workBookEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "collection_station_time":
-                    List<StationTimeEntity> stationTimeEntity = (List<StationTimeEntity>) stationTimeService.selectList(new EntityWrapper<StationTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (stationTimeEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "collection_compare":
-                    List<CompareEntity> compareEntity = (List<CompareEntity>) compareService.selectList(new EntityWrapper<CompareEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportItemList.add(reportEntity);
-                    break;
-                case "collection_most_value":
-                    List<MostValueEntity> mostValueEntity = (List<MostValueEntity>) mostValueService.selectList(new EntityWrapper<MostValueEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (mostValueEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "collection_revision_history":
-                    List<RevisionHistoryEntity> revisionHistoryEntity = (List<RevisionHistoryEntity>) revisionHistoryService.selectList(new EntityWrapper<RevisionHistoryEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (!revisionHistoryEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "report_time_contact":
-                    List<TimeContactEntity> timeContactEntity = (List<TimeContactEntity>) timeContactService.selectList(new EntityWrapper<TimeContactEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (timeContactEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "report_standard_time":
-                    List<StandardTimeEntity> standardTimeEntity = (List<StandardTimeEntity>) standardTimeService.selectList(new EntityWrapper<StandardTimeEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (standardTimeEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "report_standard_work":
-                    List<StandardWorkEntity> standardWorkEntity = (List<StandardWorkEntity>) standardWorkService.selectList(new EntityWrapper<StandardWorkEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (standardWorkEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-                case "report_change_record":
-                    List<ChangeRecordEntity> changeRecordEntity = (List<ChangeRecordEntity>) changeRecordService.selectList(new EntityWrapper<ChangeRecordEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (changeRecordEntity.isEmpty()) {
-                        reportItemList.add(reportEntity);
-                    }
-                    break;
-            }
-        }
-        if (!reportItemList.isEmpty()) {
-            return reportItemList;
-        } else {
-            approveService.insert(approve);
-        }
-        return null;
+        //提交审批，点击确定时
+        List<Object> data = approveService.insertApprove(approve);
+
+        return data;
+
+    }
+
+    @RequestMapping("/createview")
+//    @RequiresPermissions("report:approve:create")
+    public ResponseEntity<Object> saveView(Integer id, @RequestBody Map<String,Object> data) {
+        ApproveEntity approveEntity = approveService.selectById(id);
+        approveEntity.setDeptId(getUserDeptId().intValue());
+        ResponseEntity<Object> approveHistoryEntity = approveService.saveView(approveEntity,data);
+        return RD.success(approveHistoryEntity);
 
     }
 

@@ -431,9 +431,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.input {
-  width: 130px;
-}
 .el-input__inner {
   padding-right: 0;
 }

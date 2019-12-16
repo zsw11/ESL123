@@ -23,5 +23,10 @@ public interface StationTimeService extends IService<StationTimeEntity> {
     void generateReportData(WorkBookEntity workBookEntity);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    /**
+     * 是否还可以提交审批
+     */
+    PageUtils selectListTest(Map<String, Object> params);
 }
 

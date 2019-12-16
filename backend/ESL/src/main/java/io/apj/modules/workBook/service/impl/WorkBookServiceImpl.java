@@ -287,6 +287,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		List<Map<String, Object>> workOperationsMapList = (List<Map<String, Object>>) params.get("workOperations");
 		for (int i = 0; i < workOperationsMapList.size(); i++) {
 			WorkOperationsEntity workOperations = new WorkOperationsEntity();
+			if (workOperationsMapList.get(i).get("frequency") != "" && workOperationsMapList.get(i).get("frequency") != null) {
+				workOperationsMapList.get(i).put("frequency",
+						Integer.parseInt(workOperationsMapList.get(i).get("frequency").toString()));
+			}
 			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
 			workOperations.setWorkBookId(workBook.getId());
 			workOperationsList.add(workOperations);

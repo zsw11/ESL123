@@ -24,5 +24,12 @@ public interface StandardTimeService extends IService<StandardTimeEntity> {
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
+    /**
+     *
+     * @param params
+     * @return
+     */
+    PageUtils selectListTest(Map<String, Object> params);
+
 }
 

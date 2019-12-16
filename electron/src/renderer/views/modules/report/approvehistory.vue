@@ -89,7 +89,7 @@
               type="text"
               @click="addOrUpdateHandle(scope.row.id)"
             >编辑</el-button>
-<el-button
+            <el-button
               size="mini"
               type="text"
             >下载</el-button>
@@ -110,11 +110,9 @@
 </template>
 
 <script>
-import {
-  listReportApproveHistory,
-  deleteReportApproveHistory
-} from '@/api/reportApproveHistory'
+import { listReportApproveHistory, deleteReportApproveHistory } from '@/api/reportApproveHistory'
 import { listReportGroup } from '@/api/reportGroup'
+
 
 export default {
   name: 'reportApproveHistoryList',

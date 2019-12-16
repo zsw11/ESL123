@@ -43,7 +43,7 @@ public class TimeContactController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:timecontact:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = timeContactService.queryPage(params);
+		PageUtils page = timeContactService.selectListTest(params);
 		return RD.success(page);
 	}
 

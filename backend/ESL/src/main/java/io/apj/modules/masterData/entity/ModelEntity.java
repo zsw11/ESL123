@@ -45,6 +45,11 @@ public class ModelEntity implements Serializable {
 	@TableField(exist = false)
 	private String deptName;
 	/**
+	 * 机种系列名称
+	 */
+	@TableField(exist = false)
+	private String modelSeriesName;
+	/**
 	 * 名称
 	 */
 	private String name;

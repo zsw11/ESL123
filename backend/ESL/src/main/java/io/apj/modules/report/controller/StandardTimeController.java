@@ -42,7 +42,7 @@ public class StandardTimeController {
 	@RequestMapping("/list")
 	@RequiresPermissions("report:standardtime:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
-		PageUtils page = standardTimeService.queryPage(params);
+		PageUtils page = standardTimeService.selectListTest(params);
 
 		return RD.success(page);
 	}

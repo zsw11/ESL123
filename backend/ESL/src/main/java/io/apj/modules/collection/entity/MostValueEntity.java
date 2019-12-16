@@ -71,6 +71,10 @@ public class MostValueEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
 	private String stlst;
+
+	@TableField(exist = false)
+	private boolean Exist;
 
 }
