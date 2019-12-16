@@ -44,8 +44,8 @@
         </el-form-item>
 
 
-        <el-form-item class="title" :label="'阶段'" prop="WSTime" >
-          <el-input class="input" v-model="listQuery.WSTime"  clearable></el-input>
+        <el-form-item class="title" :label="'阶段'" prop="wsTime" >
+          <el-input class="input" v-model="listQuery.wsTime"  clearable></el-input>
         </el-form-item>
       </el-form>
       <div class="clearfix">
@@ -149,10 +149,10 @@
     'model.deptId',
     'model.modelSeriesId',
     'model.code',
-    'model.WSTime',
-    'model.ESTime',
-    'model.AMPTime',
-    'model.MPTime']
+    'model.wsTime',
+    'model.esTime',
+    'model.ampTime',
+    'model.mpTime']
 
   export default {
     name: 'modelList',
@@ -195,10 +195,10 @@
             { code: 'deptId', name: '部门ID', type: 'string', required: true },
             { code: 'modelSeriesId', name: '机种系列ID', type: 'string', required: true },
             { code: 'code', name: 'type', type: 'string', required: true },
-            { code: 'WSTime', name: 'WS Date', type: 'string', required: true },
-            { code: 'ESTime', name: 'ES Date', type: 'string', required: true },
-            { code: 'AMPTime', name: 'AMP Date', type: 'string', required: true },
-            { code: 'MPTime', name: 'MP Date', type: 'string', required: true },
+            { code: 'wsTime', name: 'WS Date', type: 'string', required: true },
+            { code: 'esTime', name: 'ES Date', type: 'string', required: true },
+            { code: 'ampTime', name: 'AMP Date', type: 'string', required: true },
+            { code: 'mpTime', name: 'MP Date', type: 'string', required: true },
             { code: 'remark', name: 'remark', type: 'string', required: true },
             { code: 'createBy', name: '创建者ID', type: 'string', required: true },
             { code: 'createAt', name: '创建时间', type: 'string', required: true },
@@ -218,10 +218,10 @@
           'model.deptId',
           'model.modelSeriesId',
           'model.code',
-          'model.WSTime',
-          'model.ESTime',
-          'model.AMPTime',
-          'model.MPTime'
+          'model.wsTime',
+          'model.esTime',
+          'model.ampTime',
+          'model.mpTime'
         ]
       }
     },
@@ -300,10 +300,10 @@
           deptId: null,
           modelSeriesId: null,
           code: null,
-          WSTime: null,
-          ESTime: null,
-          AMPTime: null,
-          MPTime: null,
+          wsTime: null,
+          esTime: null,
+          ampTime: null,
+          mpTime: null,
           remark: null,
           createBy: null,
           createAt: null,

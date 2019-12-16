@@ -42,8 +42,8 @@
           ></keyword-search>
         </el-form-item>
 
-        <el-form-item class="title" :label="'阶段'" prop="WSTime">
-          <el-input class="input" v-model="listQuery.WSTime" clearable></el-input>
+        <el-form-item class="title" :label="'阶段'" prop="wsTime">
+          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>
         </el-form-item>
       </el-form>
       <div class="clearfix">
@@ -208,15 +208,15 @@ export default {
               required: true
             },
             { code: "code", name: "type", type: "string", required: true },
-            { code: "WSTime", name: "WS Date", type: "string", required: true },
-            { code: "ESTime", name: "ES Date", type: "string", required: true },
+            { code: "wsTime", name: "WS Date", type: "string", required: true },
+            { code: "esTime", name: "ES Date", type: "string", required: true },
             {
-              code: "AMPTime",
+              code: "ampTime",
               name: "AMP Date",
               type: "string",
               required: true
             },
-            { code: "MPTime", name: "MP Date", type: "string", required: true }
+            { code: "mpTime", name: "MP Date", type: "string", required: true }
           ]
         }
       ],
@@ -266,10 +266,10 @@ export default {
         deptId: null,
         modelSeriesId: null,
         code: null,
-        WSTime: null,
-        ESTime: null,
-        AMPTime: null,
-        MPTime: null,
+        wsTime: null,
+        esTime: null,
+        ampTime: null,
+        mpTime: null,
         remark: null,
         createBy: null,
         createAt: null,

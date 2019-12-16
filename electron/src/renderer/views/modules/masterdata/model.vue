@@ -41,9 +41,9 @@
           <el-input class="input" v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'阶段'" prop="WSTime">
-          <el-input class="input" v-model="listQuery.WSTime" clearable></el-input>
-        </el-form-item>
+<!--        <el-form-item :label="'阶段'" prop="wsTime">-->
+<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
+<!--        </el-form-item>-->
       </el-form>
       <div class="clearfix">
         <div style="float:right;">
@@ -98,27 +98,27 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="WSTime" label="WS时间">
+        <el-table-column align="center" prop="wsTime" label="WS时间">
           <template slot-scope="scope">
-            <span>{{scope.row.WSTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.wsTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="ESTime" label="ES时间">
+        <el-table-column align="center" prop="esTime" label="ES时间">
           <template slot-scope="scope">
-            <span>{{scope.row.ESTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.esTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="AMPTime" label="AMP时间">
+        <el-table-column align="center" prop="ampTime" label="AMP时间">
           <template slot-scope="scope">
-            <span>{{scope.row.AMPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.ampTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="MPTime" label="MP时间">
+        <el-table-column align="center" prop="mpTime" label="MP时间">
           <template slot-scope="scope">
-            <span>{{scope.row.MPTime | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.mpTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
@@ -163,7 +163,7 @@ import ImportData from "@/components/import-data";
 const defaultExport = [
   "model.name",
   "model.deptName",
-  "model.modelSeriesId",
+  "model.modelSeriesName",
   "model.code",
   "model.wsTime",
   "model.esTime",
@@ -188,10 +188,10 @@ export default {
         deptName: null,
         modelSeriesId: null,
         code: null,
-        WSTime: null,
-        ESTime: null,
-        AMPTime: null,
-        MPTime: null
+        wsTime: null,
+        esTime: null,
+        ampTime: null,
+        mpTime: null
       },
       listDept,
       listModelSeries,
@@ -211,7 +211,7 @@ export default {
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
             {
-              code: "modelSeriesId",
+              code: "modelSeriesName",
               name: "机种系列",
               type: "string",
               required: true
@@ -237,7 +237,7 @@ export default {
       importAttributes: [
         "model.name",
         "model.deptName",
-        "model.modelSeriesId",
+        "model.modelSeriesName",
         "model.code",
         "model.wsTime",
         "model.esTime",
@@ -341,10 +341,10 @@ export default {
         deptId: null,
         modelSeriesId: null,
         code: null,
-        WSTime: null,
-        ESTime: null,
-        AMPTime: null,
-        MPTime: null,
+        wsTime: null,
+        esTime: null,
+        ampTime: null,
+        mpTime: null,
         remark: null,
         createBy: null,
         createAt: null,
