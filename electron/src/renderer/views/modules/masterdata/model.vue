@@ -236,7 +236,7 @@ export default {
       // 导入字段，固定不可变
       importAttributes: [
         "model.name",
-        "model.deptName", 
+        "model.deptName",
         "model.modelSeriesName",
         "model.code",
         "model.wsTime",
@@ -431,9 +431,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.input {
-  width: 130px;
-}
 .el-input__inner {
   padding-right: 0;
 }

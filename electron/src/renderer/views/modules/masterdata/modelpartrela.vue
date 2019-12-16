@@ -42,9 +42,9 @@
           ></keyword-search>
         </el-form-item>
 
-        <el-form-item class="title" :label="'阶段'" prop="wsTime">
-          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>
-        </el-form-item>
+<!--        <el-form-item class="title" :label="'阶段'" prop="wsTime">-->
+<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
+<!--        </el-form-item>-->
       </el-form>
       <div class="clearfix">
         <div style="float:right">
@@ -368,9 +368,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .input{
-    width: 130px;
-  }
+
   .el-input__inner {
     padding-right:0;
   }
