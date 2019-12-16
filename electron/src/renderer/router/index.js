@@ -100,12 +100,16 @@ const mainRoutes = {
     { path: '/details-model/:id(\\d+)', component: _import('modules/masterdata/model-maintain'), name: 'details-model', meta: { title: '机种-详情', isTab: true } },
     { path: '/model-part/:id(\\d+)/:name', component: _import('modules/masterdata/partmodelrela'), name: 'model-part', meta: { title: '机种-部品', isTab: true } },
     { path: '/model-tool/:id(\\d+)/:name', component: _import('modules/masterdata/toolmodelrela'), name: 'model-tool', meta: { title: '机种-治工具', isTab: true } },
+    { path: '/model-workstation/:id(\\d+)/:name', component: _import('modules/masterdata/workstationmodelrela'), name: 'model-workstation', meta: { title: '机种-工位', isTab: true } },
 
     // 机种里的部品关系
     { path: '/details-partmodelrela/:id(\\d+)', component: _import('modules/masterdata/partmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
 
     // 机种里的治工具关系
     { path: '/details-toolmodelrela/:id(\\d+)', component: _import('modules/masterdata/toolmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-治工具关系详情', isTab: true } },
+
+    // 机种里的工位关系
+    { path: '/details-workstationmodelrela/:id(\\d+)', component: _import('modules/masterdata/workstationmodelrela-maintain'), name: 'details-modelworkstationrela', meta: { title: '机种-工位关系详情', isTab: true } },
 
     // 部品里的机种关系
     { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '部品-机种关系详情', isTab: true } },
@@ -115,6 +119,9 @@ const mainRoutes = {
 
     // 治工具里的机种关系
     { path: '/details-modeltoolrela/:id(\\d+)', component: _import('modules/masterdata/modeltoolrela-maintain'), name: 'details-modeltoolrela', meta: { title: '治工具-机种关系详情', isTab: true } },
+
+    // 工位里的机种关系
+    { path: '/details-modelworkstationrela/:id(\\d+)', component: _import('modules/masterdata/modelworkstationrela-maintain'), name: 'details-modelworkstationrela', meta: { title: '工位-机种关系详情', isTab: true } },
 
     // 机种系列
     { path: '/add-modelseries', component: _import('modules/masterdata/modelseries-maintain'), name: 'add-modelseries', meta: { title: '机种系列-新增', isTab: true } },
@@ -163,6 +170,7 @@ const mainRoutes = {
     { path: '/add-workstation', component: _import('modules/masterdata/workstation-maintain'), name: 'add-workstation', meta: { title: '工位-新增', isTab: true } },
     { path: '/edit-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'edit-workstation', meta: { title: '工位-编辑', isTab: true } },
     { path: '/details-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'details-workstation', meta: { title: '工位-详情', isTab: true } },
+    { path: '/workstation-model/:id(\\d+)/:name', component: _import('modules/masterdata/modelworkstationrela'), name: 'workstation-model', meta: { title: '工位-机种', isTab: true } },
 
     // 工位类型
     { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '工位类型-新增', isTab: true } },

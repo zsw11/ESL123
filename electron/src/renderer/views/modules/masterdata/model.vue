@@ -8,11 +8,11 @@
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
-        class="clearfix"
-        style="width: 1043px"
+        class="clearfix model-min-width"
       >
         <el-form-item :label="'机种名称'" prop="name">
-          <el-input class="input" v-model="listQuery.name" clearable></el-input>
+          <el-input class="input" v-model="listQuery.name" clearable>
+          </el-input>
         </el-form-item>
 
         <el-form-item :label="'部门'" prop="deptId">
@@ -22,8 +22,8 @@
             :allowMultiple="true"
             :searchApi="this.listDept"
             :allowEmpty="true"
-            clearable
-          ></keyword-search>
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item :label="'机种系列'" prop="modelSeriesId">
@@ -33,12 +33,13 @@
             :allowMultiple="true"
             :searchApi="this.listModelSeries"
             :allowEmpty="true"
-            clearable
-          ></keyword-search>
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item :label="'型号'" prop="code">
-          <el-input class="input" v-model="listQuery.code" clearable></el-input>
+          <el-input class="input" v-model="listQuery.code" clearable>
+          </el-input>
         </el-form-item>
 
 <!--        <el-form-item :label="'阶段'" prop="wsTime">-->
@@ -58,7 +59,8 @@
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
-          <import-data :config="importConfig"></import-data>
+          <import-data :config="importConfig">
+          </import-data>
           <el-button
             type="danger"
             @click="deleteHandle()"
@@ -72,7 +74,8 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%;"
       >
-        <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50"></el-table-column>
+        <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50">
+        </el-table-column>
 
         <el-table-column align="center" prop="name" label="机种名称">
           <template slot-scope="scope">
@@ -128,12 +131,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" fixed="right" :label="'操作'" width="220">
+        <el-table-column align="center" fixed="right" :label="'操作'" width="280">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button type="text" size="small" @click="modelPart(scope.row.id, scope.row.name)">部品</el-button>
             <el-button type="text" size="small" @click="modelTool(scope.row.id, scope.row.name)">治工具</el-button>
+            <el-button type="text" size="small" @click="modelWorkStation(scope.row.id, scope.row.name)">工位</el-button>
             <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -145,8 +149,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -402,6 +406,12 @@ export default {
         this.$router.push({ path: `/model-tool/${id}/${name}` });
       });
     },
+    // 机种关联工位
+    modelWorkStation(id, name) {
+      this.$nextTick(() => {
+        this.$router.push({ path: `/model-workstation/${id}/${name}` });
+      });
+    },
     // 删除数据
     deleteHandle(row) {
       var ids = row
@@ -431,6 +441,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.model-min-width{
+  min-width: 1080px;
+}
 .el-input__inner {
   padding-right: 0;
 }

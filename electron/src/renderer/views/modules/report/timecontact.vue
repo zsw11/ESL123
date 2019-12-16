@@ -34,38 +34,38 @@
           <el-form-item :label="'ST/LST'" prop="stlst">
             <dict-select
               dictType="ST"
-              class="input"
+
               v-model="listQuery.stlst"
               :allowEmpty="true"
               clearable></dict-select>
           </el-form-item>
 
           <el-form-item :label="'ES/AMP/MP'" prop="stage">
-            <el-input class="input" v-model="listQuery.stage" clearable></el-input>
+            <el-input  v-model="listQuery.stage" clearable></el-input>
           </el-form-item>
 
           <el-form-item :label="'发行类别：新规制定/修订'" prop="publishType">
-            <el-input class="input" v-model="listQuery.publishType" clearable></el-input>
+            <el-input  v-model="listQuery.publishType" clearable></el-input>
           </el-form-item>
 
 
           <el-form-item :label="'版本号'" prop="revNo">
-            <el-input class="input" v-model="listQuery.revNo" clearable></el-input>
+            <el-input  v-model="listQuery.revNo" clearable></el-input>
           </el-form-item>
 
 
 
 <!--          <el-form-item :label="'拖机上一版本印字'" prop="towingLastVersionPrinting">-->
-<!--            <el-input class="input" v-model="listQuery.towingLastVersionPrinting" clearable></el-input>-->
+<!--            <el-input  v-model="listQuery.towingLastVersionPrinting" clearable></el-input>-->
 <!--          </el-form-item>-->
 
 
           <el-form-item :label="'opertaionNO'" prop="operationStandardNo">
-            <el-input class="input" v-model="listQuery.operationStandardNo" clearable></el-input>
+            <el-input  v-model="listQuery.operationStandardNo" clearable></el-input>
           </el-form-item>
 
           <el-form-item :label="'INstruction'" prop="operationInstruction">
-            <el-input class="input" v-model="listQuery.operationInstruction" clearable></el-input>
+            <el-input  v-model="listQuery.operationInstruction" clearable></el-input>
           </el-form-item>
 
         </div>
@@ -684,9 +684,6 @@ export default {
 }
 </script>
 <style lang="scss">
-  .input{
-    width: 150px;
-  }
   .min-width{
     min-width: 1100px;
   }

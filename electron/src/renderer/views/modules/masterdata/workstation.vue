@@ -66,6 +66,7 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  size="mini" type="text"  @click="workstationModel(scope.row.id,scope.row.name)">机种</el-button>
             <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -233,6 +234,12 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/edit-workstation/${id}` : '/add-workstation' })
+      })
+    },
+    // 工位机种
+    workstationModel (id, name) {
+      this.$nextTick(() => {
+        this.$router.push({path: `/workstation-model/${id}/${name}`})
       })
     },
     // 删除数据

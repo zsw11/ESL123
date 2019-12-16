@@ -9,37 +9,36 @@
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
-        class="clearfix"
-      >
+        class="clearfix model-min-width">
         <el-form-item :label="'机种名称'" prop="name">
-          <el-input class="input" v-model="listQuery.name" clearable></el-input>
+          <el-input  v-model="listQuery.name" clearable>
+          </el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'型号'" prop="code">
-          <el-input style="width: 130px" v-model="listQuery.code"></el-input>
+          <el-input v-model="listQuery.code">
+          </el-input>
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId">
           <keyword-search
-            class="input"
             v-model="listQuery.deptId"
             :allowMultiple="true"
             :searchApi="this.listDept"
             :allowEmpty="true"
-            clearable
-          ></keyword-search>
+            clearable>
+          </keyword-search>
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId">
           <keyword-search
-            class="input"
             v-model="listQuery.modelSeriesId"
             :allowMultiple="true"
             :searchApi="this.listModelSeries"
             labelColunt="name"
             :allowEmpty="true"
-            clearable
-          ></keyword-search>
+            clearable>
+          </keyword-search>
         </el-form-item>
 
 <!--        <el-form-item class="title" :label="'阶段'" prop="wsTime">-->
@@ -67,8 +66,8 @@
               :allowMultiple="true"
               :searchApi="this.listModel"
               :allowEmpty="true"
-              clearable
-            ></keyword-search>
+              clearable>
+            </keyword-search>
             <div slot="footer" class="dialog-footer">
               <el-button @click="addReal = false">取 消</el-button>
               <el-button type="primary" @click="partModel">确 定</el-button>
@@ -88,7 +87,8 @@
         @selection-change="selectionChangeHandle"
         style="width: 100%"
       >
-        <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50"></el-table-column>
+        <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50">
+        </el-table-column>
 
         <el-table-column align="center" prop="modelName" label="机种名称">
           <template slot-scope="scope">
@@ -152,8 +152,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -201,21 +201,11 @@ export default {
             { code: "id", name: "ID", type: "string", required: true },
             { code: "name", name: "名称", type: "string", required: true },
             { code: "deptId", name: "部门ID", type: "string", required: true },
-            {
-              code: "modelSeriesId",
-              name: "机种系列ID",
-              type: "string",
-              required: true
-            },
+            { code: "modelSeriesId", name: "机种系列ID", type: "string", required: true },
             { code: "code", name: "type", type: "string", required: true },
             { code: "wsTime", name: "WS Date", type: "string", required: true },
             { code: "esTime", name: "ES Date", type: "string", required: true },
-            {
-              code: "ampTime",
-              name: "AMP Date",
-              type: "string",
-              required: true
-            },
+            { code: "ampTime", name: "AMP Date", type: "string", required: true },
             { code: "mpTime", name: "MP Date", type: "string", required: true }
           ]
         }
@@ -368,7 +358,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+  .model-min-width{
+    min-width: 1080px;
+  }
   .el-input__inner {
     padding-right:0;
   }
