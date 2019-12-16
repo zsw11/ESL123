@@ -237,7 +237,13 @@
               size="mini"
               type="text"
               @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+              v-if="scope.row.exist"
             >提交审批</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              v-if="!scope.row.exist"
+            >已提交审批</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -262,9 +268,11 @@
             <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="'下一审批者'" prop="nextApprove" >
-          <el-input  v-model="approveForm.nextApprove" clearable></el-input>
-        </el-form-item>
+        <div>
+          <el-form-item :label="'下一审批者'" prop="nextApprove" >
+            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+          </el-form-item>
+        </div>
 
       </el-form>
       <span slot="footer" class="dialog-footer">
