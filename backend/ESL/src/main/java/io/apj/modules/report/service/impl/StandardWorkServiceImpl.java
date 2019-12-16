@@ -1,12 +1,19 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.DateUtils;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.StandardTimeEntity;
+import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
 import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.StandardWorkItemService;
@@ -15,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +35,7 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.StandardWorkDao;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.service.StandardWorkService;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -140,6 +151,55 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        StandardWorkEntity standardWorkEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        if(standardWorkEntity!=null){
+            id = standardWorkEntity.getId();
+        }
+        List<StandardWorkItemEntity> list = standardWorkItemService.getListBySWId(id);
+        ModelEntity model = modelService.selectById(modelId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+        //map.put("unit", standardWorkEntity.getUnit());
+        map.put("date", standardWorkEntity.getMonthResult());
+        generateTotalData(list, map);
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        System.out.println(path);
+        String templateFileName = path+"src/main/resources/static/exportTemplates/report_standard_work_template.xls";
+        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_standard_work.xls";
+        OutputStream out = response.getOutputStream();
+        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("standardWork").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "标准工数表";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.finish();
+    }
+
+    private void generateTotalData(List<StandardWorkItemEntity> list, Map<String, Object> map) {
+        BigDecimal htTotal = BigDecimal.ZERO;
+        BigDecimal stTotal = BigDecimal.ZERO;
+
+        for (StandardWorkItemEntity entity: list) {
+            htTotal = htTotal.add(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600)));
+            stTotal = stTotal.add(entity.getFirstTime());
+            entity.setHfTime(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600)));
+        }
+        map.put("htTotal", htTotal);
+        map.put("stTotal", stTotal);
+
     }
 
 }

@@ -1,6 +1,9 @@
 package io.apj.modules.report.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -21,6 +24,13 @@ public class TotalItemServiceImpl extends ServiceImpl<TotalItemDao, TotalItemEnt
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<TotalItemEntity> getListBySWId(Integer id) {
+        EntityWrapper<TotalItemEntity> ew = new EntityWrapper<>();
+        ew.eq("report_total_id",id);
+        return selectList(ew);
     }
 
 }

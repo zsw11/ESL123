@@ -1,8 +1,13 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.*;
@@ -12,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +35,7 @@ import io.apj.modules.report.dao.ChangeRecordDao;
 import io.apj.modules.report.service.ChangeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -143,6 +152,51 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
+        Integer phaseId =  Integer.valueOf(params.get("phaseId").toString());
+        Integer modelId = Integer.valueOf(params.get("modelId").toString());
+        String stlst =  params.get("stlst").toString();
+
+        EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        ChangeRecordEntity changeRecordEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        if(changeRecordEntity!=null){
+            id = changeRecordEntity.getId();
+        }
+        List<ChangeRecordItemEntity> list = changeRecordItemService.getListBySWId(id);
+        ModelEntity model = modelService.selectById(modelId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+        generateTotalData(list, map);
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        System.out.println(path);
+        path = path.split("target")[0];
+        String templateFileName = path+"src/main/resources/static/exportTemplates/report_change_record_template.xls";
+        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_change_record.xls";
+        String fileName = "test";
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String((fileName).getBytes(), "ISO-8859-1") + ".xls");
+        OutputStream out = response.getOutputStream();
+
+        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("report_change_record").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        excelWriter.finish();
+        out.flush();
+    }
+
+    private void generateTotalData(List<ChangeRecordItemEntity> list, Map<String, Object> map) {
+        for (ChangeRecordItemEntity entity: list) {
+            BigDecimal sub = entity.getLastValue()==null?BigDecimal.valueOf(0):entity.getLastValue();
+            entity.setSubValue(entity.getCurrentValue()==null?BigDecimal.valueOf(0):entity.getCurrentValue().subtract(sub));
+        }
     }
 
 }

@@ -3,7 +3,9 @@ package io.apj.modules.collection.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+import io.apj.modules.report.entity.ChangeRecordItemEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface RevisionHistoryItemService extends IService<RevisionHistoryItemEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<RevisionHistoryItemEntity> getListBySWId(Integer id);
 }
 

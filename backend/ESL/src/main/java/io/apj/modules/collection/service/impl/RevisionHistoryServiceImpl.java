@@ -1,8 +1,15 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+import io.apj.modules.collection.service.RevisionHistoryItemService;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
@@ -10,11 +17,13 @@ import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +34,7 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.RevisionHistoryDao;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.service.RevisionHistoryService;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -142,6 +152,45 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        RevisionHistoryEntity revisionHistoryEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        Map<String, Object> map = new HashMap<>();
+        if(revisionHistoryEntity!=null){
+            id = revisionHistoryEntity.getId();
+            map.put("factory", revisionHistoryEntity.getFactory());
+            map.put("monthResult", revisionHistoryEntity.getMonthResult());
+            map.put("rev_no", revisionHistoryEntity.getRevNo());
+            map.put("destinations", revisionHistoryEntity.getDestinations());
+        }
+        List<RevisionHistoryItemEntity> list = revisionHistoryItemService.getListBySWId(id);
+        ModelEntity model = modelService.selectById(modelId);
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+
+
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        String templateFileName = path+"src/main/resources/static/static/exportTemplates/collection_revision_history_template.xls";
+        //String fileName1 = path+"src/main/resources/static/static/exportTemplates/collection_revision_history.xls";
+        OutputStream out = response.getOutputStream();
+        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+
+        WriteSheet writeSheet = EasyExcel.writerSheet("collection_revision_history").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "Revision_History";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.finish();
     }
 
 }

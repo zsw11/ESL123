@@ -1,6 +1,10 @@
 package io.apj.modules.report.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -21,6 +25,15 @@ public class StandardWorkItemServiceImpl extends ServiceImpl<StandardWorkItemDao
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<StandardWorkItemEntity> getListBySWId(Integer id) {
+        List<StandardWorkItemEntity> list = Collections.EMPTY_LIST;
+        EntityWrapper<StandardWorkItemEntity> ew = new EntityWrapper<>();
+        ew.eq("report_standard_work_id",id);
+        list = selectList(ew);
+        return list;
     }
 
 }

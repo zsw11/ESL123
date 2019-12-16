@@ -2,7 +2,11 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.modules.report.entity.ApproveHistoryEntity;
+import io.apj.modules.report.entity.StandardWorkItemEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -24,6 +28,15 @@ public class ChangeRecordItemServiceImpl extends ServiceImpl<ChangeRecordItemDao
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<ChangeRecordItemEntity> getListBySWId(Integer id) {
+        List<ChangeRecordItemEntity> list = Collections.EMPTY_LIST;
+        EntityWrapper<ChangeRecordItemEntity> ew = new EntityWrapper<>();
+        ew.eq("report_change_record_id",id);
+        list = selectList(ew);
+        return list;
     }
 
 }
