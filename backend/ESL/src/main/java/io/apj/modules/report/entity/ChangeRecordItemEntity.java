@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -10,7 +11,7 @@ import lombok.Data;
 
 /**
  * 履历表子表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-26 13:23:57
@@ -53,6 +54,9 @@ public class ChangeRecordItemEntity implements Serializable {
 	 * 变更前耗时值
 	 */
 	private BigDecimal lastValue;
+
+	@TableField(exist = false)
+	private BigDecimal subValue;
 	/**
 	 * 创建者ID
 	 */

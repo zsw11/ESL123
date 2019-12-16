@@ -1,6 +1,11 @@
 package io.apj.modules.collection.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -21,6 +26,14 @@ public class RevisionHistoryItemServiceImpl extends ServiceImpl<RevisionHistoryI
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<RevisionHistoryItemEntity> getListBySWId(Integer id) {
+        List<RevisionHistoryItemEntity> list = Collections.EMPTY_LIST;
+        EntityWrapper<RevisionHistoryItemEntity> ew = new EntityWrapper<>();
+        ew.eq("collection_revision_history_id",id);
+        return selectList(ew);
     }
 
 }

@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -7,10 +8,11 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 
 /**
  * 标准时间表子表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-26 13:23:57
@@ -41,6 +43,9 @@ public class StandardWorkItemEntity implements Serializable {
 	 * 第一个时间
 	 */
 	private BigDecimal firstTime;
+
+	@TableField(exist = false)
+	private BigDecimal hfTime;
 	/**
 	 * 第二个时间
 	 */
@@ -69,5 +74,7 @@ public class StandardWorkItemEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+
 
 }

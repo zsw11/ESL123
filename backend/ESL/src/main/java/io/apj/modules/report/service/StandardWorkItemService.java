@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface StandardWorkItemService extends IService<StandardWorkItemEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<StandardWorkItemEntity> getListBySWId(Integer id);
 }
 

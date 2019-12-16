@@ -1,17 +1,27 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
+import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.report.entity.ApproveEntity;
 import io.apj.modules.report.entity.TimeContactEntity;
+import io.apj.modules.report.entity.TotalItemEntity;
+import io.apj.modules.report.service.TotalItemService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -21,6 +31,7 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TotalDao;
 import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.TotalService;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +42,9 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     private ModelService modelService;
     @Autowired
     private PhaseService phaseService;
+
+    @Autowired
+    private TotalItemService totalItemService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -93,6 +107,39 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        TotalEntity totalEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        Map<String, Object> map = new HashMap<>();
+        if(totalEntity!=null){
+            id = totalEntity.getId();
+        }
+        List<TotalItemEntity> list = totalItemService.getListBySWId(id);
+        ModelEntity model = modelService.selectById(modelId);
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+
+
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
+        String path =ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String templateFileName = path+"exportTemplates/collection_revision_history_template.xls";
+        String fileName1 = path+"exportTemplates/collection_revision_history.xls";
+        OutputStream out = response.getOutputStream();
+        ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        //    ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("collection_revision_history").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "Revision_History";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        excelWriter.finish();
     }
 
 }
