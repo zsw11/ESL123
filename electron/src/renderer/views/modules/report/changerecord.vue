@@ -172,9 +172,11 @@
             <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="'下一审批者'" prop="nextApprove" >
-          <el-input  v-model="approveForm.nextApprove" clearable></el-input>
-        </el-form-item>
+        <div>
+          <el-form-item :label="'下一审批者'" prop="nextApprove" >
+            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
             <el-button @click="approveShow = false">取 消</el-button>
