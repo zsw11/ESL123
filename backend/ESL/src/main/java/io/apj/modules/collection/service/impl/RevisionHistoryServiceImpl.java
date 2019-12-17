@@ -6,6 +6,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
@@ -175,10 +176,11 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
 
         // TODO 添加调用模版方法及生成目标excel文件方法
-        System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
+
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
-        String templateFileName = path+"src/main/resources/static/static/exportTemplates/collection_revision_history_template.xls";
-        //String fileName1 = path+"src/main/resources/static/static/exportTemplates/collection_revision_history.xls";
+        String templateFileName = PathUtil.getExcelTemplatePath("collection_revision_history_template");
+        System.out.println(templateFileName);
+        //String fileName1 = path+"src/main/resources/static/exportTemplates/collection_revision_history.xls";
         OutputStream out = response.getOutputStream();
         //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
 
