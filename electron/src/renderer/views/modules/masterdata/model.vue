@@ -101,25 +101,25 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="wsTime" label="WS时间">
+        <el-table-column align="center" prop="wsTime" label="WS时间" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.wsTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="esTime" label="ES时间">
+        <el-table-column align="center" prop="esTime" label="ES时间" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.esTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="ampTime" label="AMP时间">
+        <el-table-column align="center" prop="ampTime" label="AMP时间" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.ampTime | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="mpTime" label="MP时间">
+        <el-table-column align="center" prop="mpTime" label="MP时间" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.mpTime | format('YYYY-MM-DD')}}</span>
           </template>

@@ -212,7 +212,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="monthResult" label="发行日">
+        <el-table-column align="center" prop="monthResult" label="发行日" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.monthResult | format('YYYY-MM-DD')}}</span>
           </template>
