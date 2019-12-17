@@ -82,15 +82,15 @@
             <el-input v-model="listQuery.lstRev" clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'发行日'" prop="monthResult">
+          <el-form-item :label="'发行日'" prop="issueDate">
             <el-date-picker
-              v-model="listQuery.monthResult"
+              v-model="issueDate"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              clearable
-            ></el-date-picker>
+              clearable>
+            </el-date-picker>
           </el-form-item>
         </div>
 
@@ -356,8 +356,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
     <el-dialog
       customClass="dialog"
@@ -372,7 +372,8 @@
         </el-form-item>
         <div>
           <el-form-item :label="'下一审批者'" prop="nextApprove" >
-            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+            <el-input  v-model="approveForm.nextApprove" clearable>
+            </el-input>
           </el-form-item>
         </div>
 
@@ -409,6 +410,7 @@ export default {
       },
       reportGroup: [],
       dataButton: 'list',
+      issueDate: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -451,20 +453,35 @@ export default {
           name: 'reportTotal',
           // eslint-disable-next-line no-sparse-arrays
           children: [
-            { code: 'id', name: 'ID', type: 'string', required: true },
+            {
+              code: 'id',
+              name: 'ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'deptId',
               name: '组织机构ID',
               type: 'string',
               required: true
             },
-             { code: 'title', name: '标题', type: 'string', required: true },
+            {
+              code: 'title',
+              name: '标题',
+              type: 'string',
+              required: true
+            },
             {
               code: 'sheetName',
               name: 'Sheet名称',
               required: true
             },
-            { code: 'modelId', name: '机种ID', type: 'string', required: true },,
+            {
+              code: 'modelId',
+              name: '机种ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'monthResult',
               name: '发行日',
@@ -477,10 +494,30 @@ export default {
               type: 'string',
               required: true
             },
-            { code: 'cotegory', name: '类别', type: 'string', required: true },
-            { code: 'mecha', name: 'mecha', type: 'string', required: true },
-            { code: 'rcode', name: 'R_code', type: 'string', required: true },
-            { code: 'stRev', name: 'ST版本号', type: 'string', required: true },
+            {
+              code: 'cotegory',
+              name: '类别',
+              type: 'string',
+              required: true
+            },
+            {
+              code: 'mecha',
+              name: 'mecha',
+              type: 'string',
+              required: true
+            },
+            {
+              code: 'rcode',
+              name: 'R_code',
+              type: 'string',
+              required: true
+            },
+            {
+              code: 'stRev',
+              name: 'ST版本号',
+              type: 'string',
+              required: true
+            },
             {
               code: 'lstRev',
               name: 'LST版本号',
@@ -562,12 +599,21 @@ export default {
   },
   activated () {
     const self = this
+    self.issueDate = null
+    self.listQuery.monthResult = null
     self.getDictByType()
     self.getDataList()
   },
   methods: {
     // 普通查询
     getDataList (pageNo) {
+      if(this.issueDate){
+        let result = {
+          monthResultStart: this.issueDate[0],
+          monthResultStop: this.issueDate[1]
+        }
+        this.listQuery.monthResult = result
+      }
       if (pageNo) {
         this.pageNo = pageNo
       }
@@ -621,6 +667,7 @@ export default {
         updateAt: null,
         deleteAt: null
       })
+      this.issueDate = null
     },
     // 每页数
     sizeChangeHandle (val) {

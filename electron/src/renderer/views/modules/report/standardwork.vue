@@ -48,7 +48,8 @@
             class="input"
             v-model="listQuery.stlst"
             :allowEmpty="true"
-            clearable></dict-select>
+            clearable>
+          </dict-select>
         </el-form-item>
 
         <el-form-item :label="'型号'" prop="modelType">
@@ -72,15 +73,15 @@
             <el-input v-model="listQuery.secondStandardWorkTitle" clearable></el-input>
         </el-form-item>
 
-          <el-form-item :label="'发行日'" prop="monthResult">
+          <el-form-item :label="'发行日'" prop="issueDate">
               <el-date-picker
-                      v-model="listQuery.monthResult"
-                      type="daterange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      clearable
-              ></el-date-picker>
+                  v-model="issueDate"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  clearable>
+              </el-date-picker>
           </el-form-item>
 
 
@@ -289,8 +290,7 @@
           align="center"
           :label="'操作'"
           width="200"
-          class-name="small-padding fixed-width"
-        >
+          class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -322,8 +322,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
     <el-dialog
       customClass="dialog"
@@ -375,6 +375,7 @@ export default {
       },
       reportGroup: [],
       dataButton: 'list',
+      issueDate: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -413,20 +414,35 @@ export default {
           code: 'reportStandardWork',
           name: 'reportStandardWork',
           children: [
-            { code: 'id', name: 'ID', type: 'string', required: true },
+            {
+              code: 'id',
+              name: 'ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'deptId',
               name: '组织机构ID',
               type: 'string',
               required: true
             },
-             { code: 'title', name: '标题', type: 'string', required: true },
+            {
+              code: 'title',
+              name: '标题',
+              type: 'string',
+              required: true
+            },
             {
               code: 'sheetName',
               name: 'Sheet名称',
               required: true
             },
-            { code: 'modelId', name: '机种ID', type: 'string', required: true },
+            {
+              code: 'modelId',
+              name: '机种ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'modelType',
               name: '型号',
@@ -445,7 +461,11 @@ export default {
               type: 'string',
               required: true
             },
-            { code: 'revNo', name: '技通No', type: 'string', required: true },
+            { code: 'revNo',
+              name: '技通No',
+              type: 'string',
+              required: true
+            },
             {
               code: 'monthResult',
               name: '发行日',
@@ -527,12 +547,21 @@ export default {
   },
   activated () {
     const self = this
+    self.issueDate = null
+    self.listQuery.monthResult = null
     self.getDictByType()
     self.getDataList()
   },
   methods: {
     // 普通查询
     getDataList (pageNo) {
+      if(this.issueDate){
+        let result = {
+          monthResultStart: this.issueDate[0],
+          monthResultStop: this.issueDate[1]
+        }
+        this.listQuery.monthResult = result
+      }
       if (pageNo) {
         this.pageNo = pageNo
       }
@@ -582,6 +611,7 @@ export default {
         deleteAt: null,
         stlst: null
       })
+      this.issueDate = null
     },
     // 每页数
     sizeChangeHandle (val) {
