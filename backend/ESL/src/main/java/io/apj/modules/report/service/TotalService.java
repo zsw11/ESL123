@@ -7,6 +7,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public interface TotalService extends IService<TotalEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
     void generateReportData(WorkBookEntity workBookEntity);
 
@@ -29,6 +30,6 @@ public interface TotalService extends IService<TotalEntity> {
      * @param params
      * @return
      */
-    PageUtils selectListTest(Map<String, Object> params);
+    PageUtils selectListTest(Map<String, Object> params) throws ParseException;
 }
 

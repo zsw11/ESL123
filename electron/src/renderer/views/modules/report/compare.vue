@@ -21,7 +21,8 @@
         <div class="form-min-width">
 
         <el-form-item :label="'Sheet名称'" prop="sheetName">
-            <el-input v-model="listQuery.sheetName" clearable></el-input>
+            <el-input v-model="listQuery.sheetName" clearable>
+            </el-input>
         </el-form-item>
 
           <el-form-item :label="'机种'" prop="modelId">
@@ -50,12 +51,14 @@
               class="input"
               v-model="listQuery.stlst"
               :allowEmpty="true"
-              clearable></dict-select>
+              clearable>
+            </dict-select>
           </el-form-item>
 
 
           <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="listQuery.destinations" clearable></el-input>
+            <el-input v-model="listQuery.destinations" clearable>
+            </el-input>
           </el-form-item>
 
   <!--        <el-form-item :label="'确认ID'" prop="comfirmBy">-->
@@ -67,15 +70,18 @@
   <!--        </el-form-item>-->
 
           <el-form-item :label="'组立职场名称'" prop="firstColumnName">
-            <el-input v-model="listQuery.firstColumnName" clearable></el-input>
+            <el-input v-model="listQuery.firstColumnName" clearable>
+            </el-input>
           </el-form-item>
 
           <el-form-item :label="'上版名称'" prop="lastVersionName">
-            <el-input v-model="listQuery.lastVersionName" clearable></el-input>
+            <el-input v-model="listQuery.lastVersionName" clearable>
+            </el-input>
           </el-form-item>
 
           <el-form-item :label="'此版名称'" prop="currentVersionName">
-            <el-input v-model="listQuery.currentVersionName" clearable></el-input>
+            <el-input v-model="listQuery.currentVersionName" clearable>
+            </el-input>
           </el-form-item>
         </div>
 
@@ -124,18 +130,16 @@
       <div slot="header" class="clearfix">
         <div class="card-title">collectionCompare</div>
         <div class="buttons">
-          <el-button
-            :disabled="dataListSelections.length <= 0"
-          >批量下载</el-button>
+          <el-button :disabled="dataListSelections.length <= 0">批量下载</el-button>
         </div>
       </div>
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;"
-      >
-        <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
+        style="width: 100%;">
+        <el-table-column type="selection" header-align="left" align="left" width="50">
+        </el-table-column>
 
 <!--        <el-table-column align="center" prop="id" label="ID">-->
 <!--          <template slot-scope="scope">-->

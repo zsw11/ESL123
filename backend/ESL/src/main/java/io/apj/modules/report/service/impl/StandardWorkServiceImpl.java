@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.DateUtils;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +58,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     private ReportService reportService;
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
+    public PageUtils queryPage(Map<String, Object> params) throws ParseException {
         EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
@@ -66,6 +69,13 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
                 .like(params.get("firstStandardWorkTitle") != null && params.get("firstStandardWorkTitle") != "", "first_standard_work_title", (String) params.get("firstStandardWorkTitle"))
                 .like(params.get("thirdStandardWorkTitle") != null && params.get("thirdStandardWorkTitle") != "", "third_standard_work_title", (String) params.get("thirdStandardWorkTitle"));
 
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+        if(map!=null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date start = format.parse((String) map.get("createAtStart"));
+            Date stop = format.parse((String) map.get("createAtStop"));
+            entityWrapper.between("maked_at",start,stop);
+        }
         if (StringUtils.isNotEmpty((CharSequence) params.get("coefficient"))) {
             entityWrapper.eq("coefficient",(String) params.get("coefficient"));
         }
@@ -91,7 +101,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     }
 
     @Override
-    public PageUtils selectListTest(Map<String, Object> params) {
+    public PageUtils selectListTest(Map<String, Object> params) throws ParseException {
         PageUtils page = standardWorkService.queryPage(params);
         List<StandardWorkEntity> items = (List<StandardWorkEntity>) page.getData();
         int phaseId;

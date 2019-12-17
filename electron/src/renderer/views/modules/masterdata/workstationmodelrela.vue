@@ -1,39 +1,39 @@
 <template>
-    <div class="gen-list-page">
-        <el-card class="filter-card with-title">
-            <div slot="header" class="clearfix">
-                <div class="card-title">{{title}}-工位</div>
+  <div class="gen-list-page">
+    <el-card class="filter-card with-title">
+      <div slot="header" class="clearfix">
+        <div class="card-title">{{title}}-工位</div>
+        </div>
+          <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+
+            <el-form-item :label="'工位名称'" prop="name" ><el-input v-model="listQuery.name" clearable></el-input>
+            </el-form-item>
+
+            <div class="search-box">
+              <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索
+              </el-button>
+              <el-button @click="clearQuery()">清   空</el-button>
             </div>
-            <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-
-                <el-form-item :label="'工位名称'" prop="name" >
-                    <el-input v-model="listQuery.name" clearable></el-input>
-                </el-form-item>
-
-                <div class="search-box">
-                    <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-                    <el-button @click="clearQuery()">清   空</el-button>
-                </div>
-            </el-form>
-        </el-card>
-        <el-card class="with-title">
-            <div slot="header" class="clearfix">
-                <div class="card-title">工位信息</div>
-                <div class="buttons">
-                    <el-button type="primary" @click="addReal='true'">新增</el-button>
-                    <el-dialog custom-class="dialog" title="新增机种工位关系" width="30%" :visible.sync="addReal">
-                        工位<keyword-search
-                            style="margin-left:10px;"
-                            v-model="addModelWorkstationId"
-                            :allowMultiple="true"
-                            :searchApi="this.listWorkstation"
-                            :allowEmpty="true">
-                    </keyword-search>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="addReal = false">取 消</el-button>
-                            <el-button type="primary" @click="modelWorkstation">确 定</el-button>
-                        </div>
-                    </el-dialog>
+          </el-form>
+    </el-card>
+    <el-card class="with-title">
+      <div slot="header" class="clearfix">
+        <div class="card-title">工位信息</div>
+          <div class="buttons">
+            <el-button type="primary" @click="addReal='true'">新增</el-button>
+              <el-dialog custom-class="dialog" title="新增机种工位关系" width="30%" :visible.sync="addReal">
+                工位<keyword-search
+                    style="margin-left:10px;"
+                    v-model="addModelWorkstationId"
+                    :allowMultiple="true"
+                    :searchApi="this.listWorkstation"
+                    :allowEmpty="true">
+                  </keyword-search>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="addReal = false">取 消</el-button>
+                    <el-button type="primary" @click="modelWorkstation">确 定</el-button>
+                  </div>
+              </el-dialog>
 <!--                    <export-data-->
 <!--                            :config="exportConfig"-->
 <!--                            type="primary"-->
@@ -42,59 +42,58 @@
 <!--                    <import-data-->
 <!--                            :config="importConfig">-->
 <!--                    </import-data>-->
-                    <el-button
-                            type="danger"
-                            @click="deleteHandle()"
-                            :disabled="dataListSelections.length <= 0">
-                        批量删除
-                    </el-button>
-                </div>
-            </div>
-            <el-table
-                    :data="dataList"
-                    v-loading="dataListLoading"
-                    @selection-change="selectionChangeHandle"
-                    style="width: 100%;">
-                <el-table-column
-                        fixed="left"
-                        type="selection"
-                        header-align="left"
-                        align="left"
-                        width="50">
-                </el-table-column>
+              <el-button
+                type="danger"
+                @click="deleteHandle()"
+                :disabled="dataListSelections.length <= 0">
+                批量删除
+              </el-button>
+          </div>
+        </div>
+        <el-table
+          :data="dataList"
+          v-loading="dataListLoading"
+          @selection-change="selectionChangeHandle"
+          style="width: 100%;">
+            <el-table-column
+              fixed="left"
+              type="selection"
+              header-align="left"
+              align="left"
+              width="50">
+            </el-table-column>
 
-                <el-table-column align="center" prop="name" label="工位名称" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.name }}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="name" label="工位名称" >
+              <template slot-scope="scope">
+                <span>{{scope.row.name }}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="remark" label="备注" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.remark }}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="remark" label="备注" >
+              <template slot-scope="scope">
+                <span>{{scope.row.remark }}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
-                    <template slot-scope="scope">
-                        <el-button  type="text" size="small" @click="details(scope.row.workstationId)">详情</el-button>
+            <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+              <template slot-scope="scope">
+                <el-button  type="text" size="small" @click="details(scope.row.workstationId)">详情</el-button>
 <!--                        <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-                       <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
+               <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
 
             </el-table>
             <el-pagination
-                    @size-change="sizeChangeHandle"
-                    @current-change="currentChangeHandle"
-                    :current-page="pageNo"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :page-size="pageSize"
-                    :total="total"
-                    layout="total, sizes, prev, pager, next, jumper">
+              @size-change="sizeChangeHandle"
+              @current-change="currentChangeHandle"
+              :current-page="pageNo"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              :total="total"
+              layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </el-card>
-
     </div>
 </template>
 
@@ -106,7 +105,6 @@
   import ImportData from '@/components/import-data'
   import { fetchModelWorkstation } from '@/api/model'
   import { createModelWorkstationRela, deleteModelWorkstationRela } from '@/api/modelWorkstationRela'
-  import { Message } from 'element-ui'
 
   const defaultExport = ['workstation.name', 'workstation.remark']
 

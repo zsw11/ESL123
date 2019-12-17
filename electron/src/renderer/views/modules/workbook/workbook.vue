@@ -67,15 +67,15 @@
             <el-input v-model="listQuery.makerId"  clearable></el-input>
           </el-form-item>
 
-          <el-form-item :label="'制表日期'" prop="createAt" >
+          <el-form-item :label="'制表日期'" prop="tableAt" >
             <el-date-picker
-              v-model="listQuery.createAt"
+              v-model="tableAt"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              clearable
-            ></el-date-picker>
+              clearable>
+            </el-date-picker>
           </el-form-item>
         </div>
 
@@ -289,6 +289,7 @@ export default {
       createForm: {
         id: []
       },
+      tableAt: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -344,12 +345,21 @@ export default {
   },
   activated () {
     const self = this
+    self.tableAt = null
+    self.listQuery.createAt = null
     self.getDictByType()
     self.getDataList()
   },
   methods: {
     // 普通查询
     getDataList (pageNo) {
+      if(this.tableAt){
+        let result = {
+          createAtStart: this.tableAt[0],
+          createAtStop: this.tableAt[1]
+        }
+        this.listQuery.createAt = result
+      }
       if (pageNo) {
         this.pageNo = pageNo
       }
@@ -382,6 +392,7 @@ export default {
         workstationId: null,
         createAt: null
       })
+      this.tableAt = null
     },
     // 每页数
     sizeChangeHandle (val) {
@@ -464,7 +475,6 @@ export default {
     },
     // 确定生成报表
     createReportOK (row) {
-      // console.log(this.createForm, 1111111111111111)
        createReports(Object.assign(
         {
           workId: this.id,

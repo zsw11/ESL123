@@ -34,14 +34,14 @@
               <el-button type="primary" @click="modelTool">确 定</el-button>
             </div>
           </el-dialog>
-          <export-data
-            :config="exportConfig"
-            type="primary"
-            plain>导   出
-          </export-data>
-          <import-data
-            :config="importConfig">
-          </import-data>
+<!--          <export-data-->
+<!--            :config="exportConfig"-->
+<!--            type="primary"-->
+<!--            plain>导   出-->
+<!--          </export-data>-->
+<!--          <import-data-->
+<!--            :config="importConfig">-->
+<!--          </import-data>-->
           <el-button
             type="danger"
             @click="deleteHandle()"

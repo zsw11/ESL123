@@ -1,5 +1,6 @@
 package io.apj.modules.report.controller;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class TotalController {
 	 */
 	@RequestMapping("/list")
 	@RequiresPermissions("report:total:list")
-	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) throws ParseException {
 		PageUtils page = totalService.selectListTest(params);
 
 		return RD.success(page);

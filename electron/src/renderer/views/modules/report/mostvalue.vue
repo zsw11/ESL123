@@ -18,10 +18,6 @@
 <!--          <el-input v-model="listQuery.title" clearable></el-input>-->
 <!--        </el-form-item>-->
 
-        <el-form-item :label="'组立职场名称'" prop="firstColumnName">
-          <el-input v-model="listQuery.firstColumnName" clearable></el-input>
-        </el-form-item>
-
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
             v-model="listQuery.modelId"
@@ -41,6 +37,7 @@
                 clearable>
             </dict-select>
         </el-form-item>
+
         <el-form-item :label="'生产阶段'" prop="phaseId">
           <keyword-search
             style="width: 100%"
@@ -52,7 +49,13 @@
         </el-form-item>
 
 
-<!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
+        <el-form-item :label="'组立职场名称'" prop="firstColumnName">
+          <el-input v-model="listQuery.firstColumnName" clearable></el-input>
+        </el-form-item>
+
+
+
+          <!--        <el-form-item :label="'Sheet名称'" prop="sheetName">-->
 <!--          <el-input v-model="listQuery.sheetName" clearable></el-input>-->
 <!--        </el-form-item>-->
 
@@ -339,14 +342,24 @@ export default {
           code: 'collectionMostValue',
           name: 'Collection - MOST Value 表',
           children: [
-            { code: 'id', name: 'ID', type: 'string', required: true },
+            {
+              code: 'id',
+              name: 'ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'deptId',
               name: '组织机构ID',
               type: 'string',
               required: true
             },
-             { code: 'title', name: '标题', type: 'string', required: true },
+            {
+              code: 'title',
+              name: '标题',
+              type: 'string',
+              required: true
+            },
             {
               code: 'firstColumnName',
               name: '组立职场名称',
@@ -358,7 +371,12 @@ export default {
               name: 'Sheet名称',
               required: true
             },
-            { code: 'remark', name: '备注', type: 'string', required: true },
+            {
+              code: 'remark',
+              name: '备注',
+              type: 'string',
+              required: true
+            },
             {
               code: 'createBy',
               name: '创建者ID',

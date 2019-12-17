@@ -6,6 +6,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public interface WorkBookService extends IService<WorkBookEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
 	ResponseEntity<Object> updateWorkBook(Map<String, Object> workBook);
 
