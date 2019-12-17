@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
@@ -174,7 +175,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
         System.out.println(path);
         path = path.split("target")[0];
-        String templateFileName = path+"src/main/resources/static/exportTemplates/report_change_record_template.xls";
+        String templateFileName = PathUtil.getExcelTemplatePath("report_change_record_template");
         //String fileName1 = path+"src/main/resources/static/exportTemplates/report_change_record.xls";
         String fileName = "test";
 

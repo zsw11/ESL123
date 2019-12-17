@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -159,22 +160,22 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
         StandardWorkEntity standardWorkEntity = selectOne(entityWrapper);
         Integer id = 0;
+        Map<String, Object> map = new HashMap<>();
         if(standardWorkEntity!=null){
             id = standardWorkEntity.getId();
+            map.put("date", standardWorkEntity.getMonthResult());
         }
         List<StandardWorkItemEntity> list = standardWorkItemService.getListBySWId(id);
         ModelEntity model = modelService.selectById(modelId);
-
-        Map<String, Object> map = new HashMap<>();
         map.put("modelName", model.getName());
         map.put("modelType", model.getCode());
         //map.put("unit", standardWorkEntity.getUnit());
-        map.put("date", standardWorkEntity.getMonthResult());
+
         generateTotalData(list, map);
         // TODO 添加调用模版方法及生成目标excel文件方法
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
         System.out.println(path);
-        String templateFileName = path+"src/main/resources/static/exportTemplates/report_standard_work_template.xls";
+        String templateFileName = PathUtil.getExcelTemplatePath("report_standard_work_template");
         //String fileName1 = path+"src/main/resources/static/exportTemplates/report_standard_work.xls";
         OutputStream out = response.getOutputStream();
         //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
