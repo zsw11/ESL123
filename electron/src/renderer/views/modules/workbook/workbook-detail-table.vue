@@ -41,7 +41,10 @@
       <vxe-table-column field="remark" title="Remark" width="75"></vxe-table-column>
     </vxe-grid>
 
-    <el-dialog title="添加标准书" :visible.sync="standardBookDialog.visible" append-to-body>
+    <el-dialog title="添加标准书"
+      :visible.sync="standardBookDialog.visible"
+      @keyup.enter.native="doAddStandardBook()"
+      append-to-body>
       <el-form
         ref="standardBookForm"
         :model="standardBookDialog.formData"
@@ -234,8 +237,7 @@ export default {
     async addStandardBook () {
       // console.log(Object.keys(this.$refs.workbookTable))
       // 获取插入位置（当前选中或者最后编辑）
-      this.currentCell = this.getCurrentCell()
-      if (!this.currentCell) {
+      if (!this.lastSelected) {
         this.$message({
           message: '请选择插入位置！'
         })
@@ -243,15 +245,11 @@ export default {
       }
       // 获取联想数据
       const tmpData = { name: null, code: null }
-      const { tableData } = this.$refs.workbookTable.getTableData()
-      console.log(tableData.length, this.currentCell, this.$refs.workbookTable.getRowIndex(this.currentCell.row))
-      let currentRowIndex = this.currentCell.$rowIndex || this.currentCell.rowIndex
-      if (currentRowIndex === -1) { // 新插入的rowIndex为-1
-        currentRowIndex = this.$refs.workbookTable.getRowIndex(this.currentCell.row)
-      }
+      const { fullData: tableData } = this.$refs.workbookTable.getTableData()
+      let currentRowIndex = this.$refs.workbookTable.getRowIndex(this.lastSelected.row)
       for (let i = currentRowIndex; i >= 0; i--) {
-        if (tableData[i].type === 'n') tmpData.name = tableData[i].operation
-        if (tableData[i + 1] && tableData[i + 1].type === 'c') tmpData.code = tableData[i + 1].operation
+        if (tableData[i].type === 'c') tmpData.code = tableData[i].operation
+        if (tableData[i + 1] && tableData[i + 1].type === 'n') tmpData.name = tableData[i + 1].operation
       }
       // 弹出对话框
       this.standardBookDialog.visible = true
@@ -263,19 +261,25 @@ export default {
     async doAddStandardBook () {
       this.$refs.standardBookForm.validate(async (valid) => {
         if (!valid) return
-        // 插入标准书名
-        const newRow = await this.$refs.workbookTable.insertAt(Object.assign(
-          this.createNewRow('n'),
-          { operation: this.standardBookDialog.formData.name }
-        ), this.currentCell.row)
+        let rst
         // 插入标准书编号
         if (this.standardBookDialog.formData.code) {
-          await this.$refs.workbookTable.insertAt(Object.assign(
+          rst = await this.$refs.workbookTable.insertAt(Object.assign(
             this.createNewRow('c'),
             { operation: this.standardBookDialog.formData.code }
-          ), this.currentCell.row)
+          ), this.lastSelected.row)
+          await this.$refs.workbookTable.insertAt(Object.assign(
+            this.createNewRow('n'),
+            { operation: this.standardBookDialog.formData.name }
+          ), this.lastSelected.row)
+        } else {
+          rst = await this.$refs.workbookTable.insertAt(Object.assign(
+            this.createNewRow('n'),
+            { operation: this.standardBookDialog.formData.name }
+          ), this.lastSelected.row)
         }
-        await this.$refs.workbookTable.setActiveCell(newRow, 'version')
+        // 插入标准书名
+        await this.$refs.workbookTable.setActiveCell(rst.row, 'version')
         this.standardBookDialog.visible = false
       })
     },
@@ -295,7 +299,6 @@ export default {
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
-      console.log(222)
       Object.assign(
         row,
         pick(mg, measureFields)
@@ -308,15 +311,17 @@ export default {
     },
     // 缓存
     copy () {
-      localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
+      }
     },
     // 粘贴
     async paste (event) {
-      const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
-      if (!copyContent) return
-      const currentRow = (this.getCurrentCell() || {}).row
-      if (!currentRow || currentRow.$rowIndex === -1) return
-      await this.$refs.workbookTable.insertAt(copyContent, currentRow)
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
+        if (!copyContent) return
+        await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
+      }
     },
     // 删除行
     async delete() {

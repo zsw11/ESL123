@@ -252,6 +252,10 @@
                   self.addRow()
                   break
                 }
+                case '-': {
+                  self.delete()
+                  break
+                }
               }
             }
             if (e.key === 'Delete') {

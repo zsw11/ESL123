@@ -226,6 +226,7 @@ export default {
 }
 .sit-navbar-title {
   font-size: 24px;
+  font-weight: 600;
   line-height: 50px;
   width: calc(100% - 320px);
   display: inline-block;
