@@ -1,133 +1,162 @@
 <template>
-    <div class="gen-list-page">
-        <el-card class="filter-card with-title clearfix">
-            <div slot="header" class="clearfix">
-                <div class="card-title">{{title}}-机种</div>
-            </div>
-            <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix model-min-width">
+  <div class="gen-list-page">
+    <el-card class="filter-card with-title clearfix">
+      <div slot="header" class="clearfix">
+        <div class="card-title">{{title}}-机种</div>
+      </div>
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix model-min-width">
 
-                <el-form-item :label="'机种名称'" prop="name" >
-                    <el-input  v-model="listQuery.name"  clearable></el-input>
-                </el-form-item>
+        <el-form-item :label="'机种名称'" prop="name" >
+            <el-input  v-model="listQuery.name"  clearable></el-input>
+        </el-form-item>
 
+        <el-form-item :label="'部门'" prop="deptId">
+          <keyword-search
+            class="input"
+            v-model="listQuery.deptId"
+            :allowMultiple="true"
+            :searchApi="this.listDept"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
+        </el-form-item>
 
-                <!--        <el-form-item class="title" :label="'阶段'" prop="wsTime" >-->
-                <!--          <el-input class="input" v-model="listQuery.wsTime"  clearable></el-input>-->
-                <!--        </el-form-item>-->
-            </el-form>
-            <div class="clearfix">
-                <div style="float:right;">
-                    <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-                    <el-button @click="clearQuery()">清   空</el-button>
-                </div>
-            </div>
+        <el-form-item :label="'机种系列'" prop="modelSeriesId">
+          <keyword-search
+            class="input"
+            v-model="listQuery.modelSeriesId"
+            :allowMultiple="true"
+            :searchApi="this.listModelSeries"
+            :allowEmpty="true"
+            clearable>
+          </keyword-search>
+      </el-form-item>
+
+      <el-form-item :label="'型号'" prop="code">
+        <el-input class="input" v-model="listQuery.code" clearable>
+        </el-input>
+      </el-form-item>
+
+      </el-form>
+      <div class="clearfix">
+        <div style="float:right;">
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
+          <el-button @click="clearQuery()">清   空</el-button>
+        </div>
+      </div>
         </el-card>
         <el-card class="with-title">
-            <div slot="header" class="clearfix">
-                <div class="card-title">机种</div>
-                <div class="buttons">
+          <div slot="header" class="clearfix">
+            <div class="card-title">机种</div>
+              <div class="buttons">
                     <!--          <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
-                    <el-button  @click="addReal=true" type="primary" >新增</el-button>
-                    <el-dialog custom-class="dialog" title="新增工位机种关系" width="30%" :visible.sync="addReal">
-                        机种<keyword-search
-                            style="margin-left:10px;"
-                            v-model="addWorkstationModelId"
-                            :allowMultiple="true"
-                            :searchApi="this.listModel"
-                            :allowEmpty="true"
-                            clearable>
-                    </keyword-search>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="addReal = false">取 消</el-button>
-                            <el-button type="primary" @click="toolModel">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <el-button
-                            type="danger"
-                            @click="deleteHandle()"
-                            :disabled="dataListSelections.length <= 0">
-                        批量删除
-                    </el-button>
-                </div>
+                <el-button  @click="addReal=true" type="primary" >新增</el-button>
+                <el-dialog custom-class="dialog" title="新增工位机种关系" width="30%" :visible.sync="addReal">
+                  机种<keyword-search
+                        style="margin-left:10px;"
+                        v-model="addWorkstationModelId"
+                        :allowMultiple="true"
+                        :searchApi="this.listModel"
+                        :allowEmpty="true"
+                        clearable>
+                      </keyword-search>
+                    <div slot="footer" class="dialog-footer">
+                      <el-button @click="addReal = false">取 消</el-button>
+                      <el-button type="primary" @click="toolModel">确 定</el-button>
+                    </div>
+                </el-dialog>
+                <el-button
+                  type="danger"
+                  @click="deleteHandle()"
+                  :disabled="dataListSelections.length <= 0">
+                    批量删除
+                </el-button>
             </div>
-            <el-table
-                    :data="dataList"
-                    v-loading="dataListLoading"
-                    @selection-change="selectionChangeHandle"
-                    style="width: 100%;">
-                <el-table-column
-                        fixed="left"
-                        type="selection"
-                        header-align="left"
-                        align="left"
-                        width="50">
-                </el-table-column>
+          </div>
+        <el-table
+          :data="dataList"
+          v-loading="dataListLoading"
+          @selection-change="selectionChangeHandle"
+          style="width: 100%;">
+            <el-table-column
+              fixed="left"
+              type="selection"
+              header-align="left"
+              align="left"
+              width="50">
+            </el-table-column>
 
-                <el-table-column align="center" prop="modelName" label="机种名称" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.name }}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="modelName" label="机种名称" >
+              <template slot-scope="scope">
+                <span>{{scope.row.name }}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="deptName" label="部门" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.deptName }}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="deptName" label="部门" >
+              <template slot-scope="scope">
+                <span>{{scope.row.deptName }}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.modelSeriesEntity.name }}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
+              <template slot-scope="scope">
+                <span>{{scope.row.modelSeriesEntity.name }}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="code" label="型号" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.code}}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="code" label="型号" >
+              <template slot-scope="scope">
+                <span>{{scope.row.code}}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="wsTime" label="WS时间" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.wsTime | format('YYYY-MM-DD')}}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="wsTime" label="WS时间" >
+              <template slot-scope="scope">
+                <span>{{scope.row.wsTime | format('YYYY-MM-DD')}}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="esTime" label="ES时间" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.esTime | format('YYYY-MM-DD')}}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="esTime" label="ES时间" >
+              <template slot-scope="scope">
+                <span>{{scope.row.esTime | format('YYYY-MM-DD')}}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="ampTime" label="AMP时间" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.ampTime | format('YYYY-MM-DD')}}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="ampTime" label="AMP时间" >
+              <template slot-scope="scope">
+                <span>{{scope.row.ampTime | format('YYYY-MM-DD')}}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" prop="mpime" label="MP时间" >
-                    <template slot-scope="scope">
-                        <span>{{scope.row.mpTime | format('YYYY-MM-DD')}}</span>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="mpTime" label="MP时间" >
+              <template slot-scope="scope">
+                <span>{{scope.row.mpTime | format('YYYY-MM-DD')}}</span>
+              </template>
+            </el-table-column>
 
-                <el-table-column align="center" fixed="right" :label="'操作'" width="200">
-                    <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
-                        <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
-                        <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
+            <el-table-column align="center" prop="remark" label="备注" >
+              <template slot-scope="scope">
+                <span>{{scope.row.remark}}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column align="center" fixed="right" :label="'操作'" width="200">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
+                <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
+                <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
 
             </el-table>
             <el-pagination
-                    @size-change="sizeChangeHandle"
-                    @current-change="currentChangeHandle"
-                    :current-page="pageNo"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :page-size="pageSize"
-                    :total="total"
-                    layout="total, sizes, prev, pager, next, jumper">
+              @size-change="sizeChangeHandle"
+              @current-change="currentChangeHandle"
+              :current-page="pageNo"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              :total="total"
+              layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </el-card>
     </div>
@@ -158,7 +187,8 @@
           wsTime: null,
           esTime: null,
           ampTime: null,
-          mpTime: null
+          mpTime: null,
+          remark: null
         },
         listDept,
         listModelSeries,
@@ -182,7 +212,7 @@
             { code: 'esTime', name: 'ES Date', type: 'string', required: true },
             { code: 'ampTime', name: 'AMP Date', type: 'string', required: true },
             { code: 'mpTime', name: 'MP Date', type: 'string', required: true },
-            { code: 'remark', name: 'remark', type: 'string', required: true },
+            { code: 'remark', name: '备注', type: 'string', required: true },
             { code: 'createBy', name: '创建者ID', type: 'string', required: true },
             { code: 'createAt', name: '创建时间', type: 'string', required: true },
             { code: 'updateBy', name: '更新者ID', type: 'string', required: true },
