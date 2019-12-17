@@ -1,5 +1,6 @@
 package io.apj.modules.workBook.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -22,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -76,15 +80,20 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private TotalService totalService;
 
 	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
+	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
 						(String) params.get("workName"));
-		if (StringUtils.isNotEmpty((CharSequence) params.get("makerId"))) {
-			entityWrapper.eq("maker_id", Integer.parseInt((String) params.get("makerId")));
+
+		Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+		if(map!=null){
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date start = format.parse((String) map.get("createAtStart"));
+			Date stop = format.parse((String) map.get("createAtStop"));
+			entityWrapper.between("maked_at",start,stop);
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
 			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));

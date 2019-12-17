@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.apj.modules.masterData.entity.WorkstationEntity;
 
 import java.math.BigDecimal;
@@ -99,6 +100,7 @@ public class WorkBookEntity implements Serializable {
 	/**
 	 * 制表日期
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date makedAt;
 	/**
 	 * 沿用来源ID

@@ -1,5 +1,6 @@
 package io.apj.modules.collection.controller;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class RevisionHistoryController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	@RequiresPermissions("collection:revisionhistory:list")
-	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) throws ParseException {
 		PageUtils page = revisionHistoryService.selectListTest(params);
 
 		return RD.success(page);

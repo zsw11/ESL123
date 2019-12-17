@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
@@ -24,6 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +58,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     private TotalItemService totalItemService;
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
+    public PageUtils queryPage(Map<String, Object> params) throws ParseException {
         EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
@@ -67,6 +71,14 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
                 .like(params.get("allowanceRate") != null && params.get("allowanceRate") != "", "allowanceRate", (String) params.get("allowanceRate"))
                 .like(params.get("stRev") != null && params.get("stRev") != "", "st_rev", (String) params.get("stRev"))
                 .like(params.get("lstRev") != null && params.get("lstRev") != "", "lst_rev", (String) params.get("lstRev"));
+
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+        if(map!=null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date start = format.parse((String) map.get("createAtStart"));
+            Date stop = format.parse((String) map.get("createAtStop"));
+            entityWrapper.between("maked_at",start,stop);
+        }
         if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
             entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
@@ -89,7 +101,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     }
 
     @Override
-    public PageUtils selectListTest(Map<String, Object> params) {
+    public PageUtils selectListTest(Map<String, Object> params) throws ParseException {
         PageUtils page = totalService.queryPage(params);
         List<TotalEntity> items = (List<TotalEntity>) page.getData();
         int phaseId;

@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PathUtil;
@@ -25,6 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +59,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     private RevisionHistoryItemService revisionHistoryItemService;
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
+    public PageUtils queryPage(Map<String, Object> params) throws ParseException {
         EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
@@ -69,6 +73,13 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
                 .like(params.get("currentLstName") != null && params.get("currentLstName") != "", "current_lst_name", (String) params.get("currentLstName"))
         ;
 
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+        if(map!=null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date start = format.parse((String) map.get("createAtStart"));
+            Date stop = format.parse((String) map.get("createAtStop"));
+            entityWrapper.between("maked_at",start,stop);
+        }
         if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
             entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
         }
@@ -92,7 +103,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     }
 
     @Override
-    public PageUtils selectListTest(Map<String, Object> params) {
+    public PageUtils selectListTest(Map<String, Object> params) throws ParseException {
         PageUtils page = revisionHistoryService.queryPage(params);
         List<RevisionHistoryEntity> items = (List<RevisionHistoryEntity>) page.getData();
         int phaseId;

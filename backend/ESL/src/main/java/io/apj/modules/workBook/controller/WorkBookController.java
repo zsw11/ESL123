@@ -1,5 +1,6 @@
 package io.apj.modules.workBook.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	@RequiresPermissions("workBook:workbook:list")
-	public R list(@RequestParam Map<String, Object> params) {
+	public R list(@RequestParam Map<String, Object> params) throws ParseException {
 		PageUtils page = workBookService.queryPage(params);
 
 		return R.ok().put("page", page);
