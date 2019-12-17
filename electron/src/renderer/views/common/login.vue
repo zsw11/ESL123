@@ -22,8 +22,8 @@
                   class="username"
                   v-model="dataForm.username"
                   placeholder="帐号"
-                  size="medium"
-                ></el-input>
+                  size="medium">
+                </el-input>
               </el-form-item>
               <el-form-item prop="password">
                 <el-input
@@ -31,8 +31,8 @@
                   v-model="dataForm.password"
                   type="password"
                   placeholder="密码"
-                  size="medium"
-                ></el-input>
+                  size="medium">
+                </el-input>
               </el-form-item>
               <span class="toggle-login" @click="toggleLogin()">{{modesMap[currentMode].otherName}}登录</span>
               <el-form-item>
@@ -65,10 +65,10 @@ const modesMap = {
   apo: {
     name: 'APO',
     engName: 'APO',
-    otherName: '本地登录'
+    otherName: '本地用户'
   },
   local: {
-    name: '本地登录',
+    name: '本地用户',
     engName: 'Local',
     otherName: 'APO'
   }
