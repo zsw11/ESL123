@@ -6,8 +6,8 @@
           <div class="login-main">
             <img src="@/assets/img/favicon.png" alt />
             <div class="title">
-              <h1 class="login-title">{{title.name}}登录</h1>
-              <p class="title-eng">{{title.engName}} Login</p>
+              <h1 class="login-title">{{modesMap[currentMode].name}}登录</h1>
+              <p class="title-eng">{{modesMap[currentMode].engName}} Login</p>
             </div>
             <!-- 登录框 -->
             <el-form
@@ -34,7 +34,7 @@
                   size="medium"
                 ></el-input>
               </el-form-item>
-              <span class="toggle-login" @click="toggleLogin()">{{btmTitle.name}}登录</span>
+              <span class="toggle-login" @click="toggleLogin()">{{modesMap[currentMode].otherName}}登录</span>
               <el-form-item>
                 <el-button
                   id="login-btn-submit"
@@ -58,7 +58,21 @@
 </template>
 
 <script>
+import { keyBy } from 'lodash'
 import VerifySlide from "@/components/verify-slide";
+
+const modesMap = {
+  apo: {
+    name: 'APO',
+    engName: 'APO',
+    otherName: '本地登录'
+  },
+  local: {
+    name: '本地登录',
+    engName: 'Local',
+    otherName: 'APO'
+  }
+}
 
 export default {
   components: {
@@ -67,16 +81,7 @@ export default {
   data() {
     return {
       logining: false,
-      title:{
-        name: '本地登录',
-        engName: 'Local',
-        code: 2
-      },
-      btmTitle: {
-        name: 'APO',
-        engName: 'APO',
-        code: 1
-      },
+      currentMode: 'apo',
       dataForm: {
         username: null,
         password: null,
@@ -93,14 +98,16 @@ export default {
         ],
         jigsawVerify: [{ required: true, message: "请拖动拼图进行校验" }]
       },
-      captchaPath: ""
+      captchaPath: "",
+      modesMap
     };
   },
   methods: {
     // 提交表单
     dataFormSubmit() {
       this.$refs["dataForm"].validate(valid => {
-        this.dataForm.apo = this.title === "APO";
+        this.dataForm.apo = this.currentMode === "apo";
+        console.log(this.dataForm)
         if (valid) {
           this.logining = true;
           this.$store
@@ -118,9 +125,7 @@ export default {
     toggleLogin() {
       this.dataForm.username = null;
       this.dataForm.password = null;
-      let data;
-      data = this.title;
-      this.title = this.btmTitle;
+      this.currentMode = this.currentMode === 'apo' ? 'local' : 'apo';
     }
   }
 };

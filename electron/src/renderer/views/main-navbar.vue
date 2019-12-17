@@ -11,6 +11,7 @@
           <icon-svg name="zhedie"></icon-svg>
         </el-menu-item>
       </el-menu>
+      <div class="sit-navbar-title">标准时间分析管理系统</div>
       <el-menu class="site-navbar__menu site-navbar__menu--right show-right" mode="horizontal">
         <el-menu-item index="2" class="message-menu-item" @click.native="messageView()">
           <template>
@@ -222,6 +223,13 @@ export default {
   padding: 0;
   width: auto;
   top: 40%;
+}
+.sit-navbar-title {
+  font-size: 24px;
+  line-height: 50px;
+  width: calc(100% - 320px);
+  display: inline-block;
+  text-align: center;
 }
 
 @media screen and (max-width: 580px){
