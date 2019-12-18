@@ -191,9 +191,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-        int approveId =  approveEntity.getId();
-        Map<String, Object> result = approveHistoryService.selectMap(new EntityWrapper<ApproveHistoryEntity>().eq("report_approve_id", "approveId"));
-        if(result.isEmpty()){
+        if(StringUtils.isNotEmpty((CharSequence) data.get("nextApproverId"))){
             approveEntity.setStatus("01");
         }else {
             approveEntity.setStatus("02");
