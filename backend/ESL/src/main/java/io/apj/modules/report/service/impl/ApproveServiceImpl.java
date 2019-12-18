@@ -81,9 +81,16 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
-                .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"));
+                .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"))
+                .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"));
         if(StringUtils.isNotEmpty((CharSequence) params.get("reportGroupId"))){
             entityWrapper.eq("report_group_id", Integer.parseInt((String) params.get("reportGroupId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
         Page<ApproveEntity> page = this.selectPage(new Query<ApproveEntity>(params).getPage(), entityWrapper);
         for(ApproveEntity entity: page.getRecords()){
