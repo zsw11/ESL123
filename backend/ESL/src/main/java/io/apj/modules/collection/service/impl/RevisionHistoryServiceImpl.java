@@ -60,25 +60,25 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
-        EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
+        EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
                 .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
                 .like(params.get("factory") != null && params.get("factory") != "", "factory", (String) params.get("factory"))
-                .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
-                .like(params.get("lastStName") != null && params.get("lastStName") != "", "last_st_name", (String) params.get("lastStName"))
-                .like(params.get("currentStName") != null && params.get("currentStName") != "", "current_st_name", (String) params.get("currentStName"))
-                .like(params.get("lastLstName") != null && params.get("lastLstName") != "", "last_lst_name", (String) params.get("lastLstName"))
-                .like(params.get("currentLstName") != null && params.get("currentLstName") != "", "current_lst_name", (String) params.get("currentLstName"))
-        ;
+                .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"));
+//                .like(params.get("lastStName") != null && params.get("lastStName") != "", "last_st_name", (String) params.get("lastStName"))
+//                .like(params.get("currentStName") != null && params.get("currentStName") != "", "current_st_name", (String) params.get("currentStName"))
+//                .like(params.get("lastLstName") != null && params.get("lastLstName") != "", "last_lst_name", (String) params.get("lastLstName"))
+//                .like(params.get("currentLstName") != null && params.get("currentLstName") != "", "current_lst_name", (String) params.get("currentLstName"))
 
-        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("monthResult"));
         if(map!=null){
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Date start = format.parse((String) map.get("createAtStart"));
-            Date stop = format.parse((String) map.get("createAtStop"));
-            entityWrapper.between("maked_at",start,stop);
+            Date start = format.parse((String) map.get("monthResultStart"));
+            Date stop = format.parse((String) map.get("monthResultStop"));
+            entityWrapper.between("month_result",start,stop);
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
             entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
@@ -87,7 +87,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
             entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
         Page<RevisionHistoryEntity> page = this.selectPage(
-                new Query<RevisionHistoryEntity>(params).getPage()
+                new Query<RevisionHistoryEntity>(params).getPage(),entityWrapper
         );
         for(RevisionHistoryEntity entity: page.getRecords()){
             if(entity.getPhaseId()!=null){
