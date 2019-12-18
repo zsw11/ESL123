@@ -139,7 +139,8 @@
       // 取消信息
       cancleFormSubmit () {
         this.$store.dispatch('common/closeActiveTab')
-        this.$router.push({ name: 'masterdata-workstation' })
+        // this.$router.push({ name: 'model-workstation' })
+        this.$router.back()
         this.$destroy()
       },
       // 表单提交
