@@ -10,74 +10,79 @@
                 "type": "int"
             },
             {
-                "code": "A",
-                "name": "A",
+                "code": "a0",
+                "name": "a0",
                 "type": "int"
             },
             {
-                "code": "B",
-                "name": "B",
+                "code": "b0",
+                "name": "b0",
                 "type": "int"
             },
             {
-                "code": "G",
-                "name": "G",
+                "code": "g0",
+                "name": "g0",
                 "type": "int"
             },
             {
-                "code": "A",
-                "name": "A",
+                "code": "a1",
+                "name": "a1",
                 "type": "int"
             },
             {
-                "code": "B",
-                "name": "B",
+                "code": "b1",
+                "name": "b1",
                 "type": "int"
             },
             {
-                "code": "P",
-                "name": "P",
+                "code": "p0",
+                "name": "p0",
                 "type": "int"
             },
             {
-                "code": "M",
-                "name": "M",
+                "code": "m0",
+                "name": "m0",
                 "type": "int"
             },
             {
-                "code": "X",
-                "name": "X",
+                "code": "x0",
+                "name": "x0",
                 "type": "int"
             },
             {
-                "code": "L",
-                "name": "L",
+                "code": "i0",
+                "name": "i0",
                 "type": "int"
             },
             {
-                "code": "A",
-                "name": "A",
+                "code": "tool",
+                "name": "tool",
                 "type": "int"
             },
             {
-                "code": "B",
-                "name": "B",
+                "code": "a2",
+                "name": "a2",
                 "type": "int"
             },
             {
-                "code": "P",
-                "name": "P",
+                "code": "b2",
+                "name": "b2",
                 "type": "int"
             },
             {
-                "code": "A",
-                "name": "A",
+                "code": "p1",
+                "name": "p1",
                 "type": "int"
             },
             {
-                "code": "seqNumber",
+                "code": "a3",
+                "name": "a3",
+                "type": "int"
+            },
+            {
+                "code": "deptId",
                 "name": "所属组织机构",
-                "type": "string"
+                "type": "int"
             },
             {
                 "code": "createAt",

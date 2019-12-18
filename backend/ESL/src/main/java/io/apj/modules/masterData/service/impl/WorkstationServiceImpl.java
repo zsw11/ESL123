@@ -130,7 +130,15 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		}
 		modelIDs.add(0);
 		EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").in("id", modelIDs);
+		entityWrapper.isNull("delete_at").in("id", modelIDs)
+		.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
+
+		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
+			entityWrapper.eq("dept_id",Integer.parseInt((String) params.get("deptId")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("modelSeriesId"))) {
+			entityWrapper.eq("model_series_id", Integer.parseInt((String) params.get("modelSeriesId")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"name  like '%" + params.get("name") + "%'" + " or pinyin  like '%" + params.get("name") + "%'");
