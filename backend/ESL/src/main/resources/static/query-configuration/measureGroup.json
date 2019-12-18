@@ -55,11 +55,6 @@
                 "type": "int"
             },
             {
-                "code": "tool",
-                "name": "tool",
-                "type": "int"
-            },
-            {
                 "code": "a2",
                 "name": "a2",
                 "type": "int"
@@ -77,6 +72,31 @@
             {
                 "code": "a3",
                 "name": "a3",
+                "type": "int"
+            },
+            {
+                "code": "tool",
+                "name": "tool",
+                "type": "int"
+            },
+            {
+                "code": "a4",
+                "name": "a4",
+                "type": "int"
+            },
+            {
+                "code": "b3",
+                "name": "b3",
+                "type": "int"
+            },
+            {
+                "code": "p2",
+                "name": "p2",
+                "type": "int"
+            },
+            {
+                "code": "a5",
+                "name": "a5",
                 "type": "int"
             },
             {
