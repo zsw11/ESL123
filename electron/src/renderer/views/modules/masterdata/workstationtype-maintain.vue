@@ -2,6 +2,11 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
+      <div class="buttons">
+        <el-button v-if="!$route.path.includes('details')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+        <el-button v-if="!$route.path.includes('details')" @click="cancleFormSubmit">取   消</el-button>
+        <el-button v-if="$route.path.includes('details')"  @click="cancleFormSubmit">确   定</el-button>
+      </div>
     </div>
     <el-form
       :disabled="$route.path.includes('details')"

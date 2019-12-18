@@ -64,6 +64,10 @@ public class MeasureGroupEntity implements Serializable {
 	 */
 	private Integer usedCount;
 	/**
+	 * 频度
+	 */
+	private Integer frequency;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

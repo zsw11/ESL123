@@ -62,19 +62,18 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
-                .like(params.get("monthResult") != null && params.get("monthResult") != "", "month_result", (String) params.get("monthResult"))
                 .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
                 .like(params.get("modelType") != null && params.get("modelType") != "", "model_type", (String) params.get("modelType"))
                 .like(params.get("revNo") != null && params.get("revNo") != "", "rev_no", (String) params.get("revNo"))
                 .like(params.get("firstStandardWorkTitle") != null && params.get("firstStandardWorkTitle") != "", "first_standard_work_title", (String) params.get("firstStandardWorkTitle"))
                 .like(params.get("thirdStandardWorkTitle") != null && params.get("thirdStandardWorkTitle") != "", "third_standard_work_title", (String) params.get("thirdStandardWorkTitle"));
 
-        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("monthResult"));
         if(map!=null){
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Date start = format.parse((String) map.get("createAtStart"));
-            Date stop = format.parse((String) map.get("createAtStop"));
-            entityWrapper.between("maked_at",start,stop);
+            Date start = format.parse((String) map.get("monthResultStart"));
+            Date stop = format.parse((String) map.get("monthResultStop"));
+            entityWrapper.between("month_result",start,stop);
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("coefficient"))) {
             entityWrapper.eq("coefficient",(String) params.get("coefficient"));

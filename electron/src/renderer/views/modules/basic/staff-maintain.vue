@@ -28,10 +28,12 @@
                 :offset="2">
           <el-form-item label="入职日期"
                         prop="employmentDate">
-            <el-date-picker v-model="dataForm.employmentDate"
-                            value-format="yyyy-MM-dd"
-                            type="date"
-                            placeholder="选择入职日期"></el-date-picker>
+            <el-date-picker
+              style="width: 100%"
+              v-model="dataForm.employmentDate"
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择入职日期"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -63,8 +65,10 @@
                 :offset="2">
           <el-form-item label="性别"
                         prop="gender">
-            <dict-select dictType="Gender"
-                         v-model="dataForm.gender"></dict-select>
+            <dict-select
+              style="width: 100%"
+              dictType="Gender"
+              v-model="dataForm.gender"></dict-select>
           </el-form-item>
         </el-col>
       </el-row>

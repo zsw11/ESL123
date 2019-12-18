@@ -14,8 +14,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="9" :offset="2">
-          <el-form-item label="编码" prop="deptCode">
-            <el-input v-model="dataForm.deptCode" placeholder="部门编码" style="width:300px"></el-input>
+          <el-form-item label="排序号" prop="orderNum">
+            <el-input v-model="dataForm.orderNum" placeholder="排序号" style="width:150px"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -29,11 +29,6 @@
               :api="listDept"
               :apiQuery="parentDeptQuery"
               :treeOptions="{ ancestorDisabled: true, exclude: dataForm.id }"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="9" :offset="2">
-          <el-form-item label="排序号" prop="orderNum">
-            <el-input v-model="dataForm.orderNum" placeholder="排序号" style="width:150px"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

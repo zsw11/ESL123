@@ -5,14 +5,8 @@
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-        <div class="min-width">
-          <el-form-item :label="'报表意见'" prop="reportApproveId">
-            <el-input v-model="listQuery.reportApproveId" clearable></el-input>
-          </el-form-item>
+        <div class="form-min-width">
 
-          <el-form-item :label="'结果'" prop="result">
-            <el-input v-model="listQuery.result" clearable></el-input>
-          </el-form-item>
 
           <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
@@ -23,15 +17,52 @@
             </keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'下一审批者'" prop="nextApproverId">
+          <el-form-item :label="'机种'" prop="modelId">
+            <keyword-search
+              v-model="listQuery.modelId"
+              :allowMultiple="true"
+              :searchApi="this.listModel"
+              :allowEmpty="true" clearable>
+            </keyword-search>
+          </el-form-item>
+
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <dict-select
+              dictType="ST"
+              class="input"
+              v-model="listQuery.stlst"
+              :allowEmpty="true"
+              clearable>
+            </dict-select>
+          </el-form-item>
+
+          <el-form-item :label="'生产阶段'" prop="phaseId">
+            <keyword-search
+              style="width: 100%"
+              v-model="listQuery.phaseId"
+              :allowMultiple="true"
+              :searchApi="this.listPhase"
+              :allowEmpty="true">
+            </keyword-search>
+          </el-form-item>
+
+          <el-form-item :label="'下一审批者'" prop="nextApproveId">
             <el-input v-model="listQuery.nextApproverId" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'审批意见'" prop="opinion">
+            <el-input v-model="listQuery.opinion" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item :label="'结果'" prop="result">
+            <dict-select dictType="Result" v-model="listQuery.result" :allowEmpty="true" clearable></dict-select>
           </el-form-item>
         </div>
 
 
         <div class="buttons with-complex">
           <el-button @click="clearQuery()">清 空</el-button>
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click="getDataList(1)" type="primary">搜 索</el-button>
         </div>
       </el-form>
     </el-card>
@@ -48,51 +79,69 @@
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;"
-      >
+        style="width: 100%;">
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-        <el-table-column align="center" prop="reportApproveId" label="报表意见">
+
+        <el-table-column align="center" prop="reportGroupName" label="报表组">
           <template slot-scope="scope">
-            <span>{{scope.row.reportApproveId }}</span>
+            <span>{{scope.row.reportGroupName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="modelName" label="机种">
+          <template slot-scope="scope">
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="phaseName" label="生产阶段">
+          <template slot-scope="scope">
+            <span>{{scope.row.phaseName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="stlst" label="ST/LST" >
+          <template slot-scope="scope">
+            <span v-if="scope.row.stlst">{{ dictItemSTLST[scope.row.stlst].name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="nextApproveName" label="下一审批者">
+          <template slot-scope="scope">
+            <span>{{scope.row.nextApproveName }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="result" label="结果">
           <template slot-scope="scope">
-            <span>{{scope.row.result }}</span>
+            <span>{{ dictItemApproveResult[scope.row.result].name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="reportGroupId" label="报表组">
+        <el-table-column align="center" prop="opinion" label="审批意见">
           <template slot-scope="scope">
-            <span>{{scope.row.reportGroupId }}</span>
+            <span>{{scope.row.opinion }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="nextApproverId" label="下一审批者">
-          <template slot-scope="scope">
-            <span>{{scope.row.nextApproverId }}</span>
-          </template>
-        </el-table-column>
 
-      <el-table-column
+        <el-table-column
           fixed="right"
           align="center"
           :label="'操作'"
           class-name="small-padding fixed-width"
-          width="200"
-        >
+          width="200">
           <template slot-scope="scope">
-             <el-button
-              size="mini"
-              type="text"
-              @click="addOrUpdateHandle(scope.row.id)"
-            >编辑</el-button>
-            <el-button
-              size="mini"
-              type="text"
-            >下载</el-button>
+<!--             <el-button-->
+<!--              size="mini"-->
+<!--              type="text"-->
+<!--              @click="addOrUpdateHandle(scope.row.id)"-->
+<!--            >编辑</el-button>-->
+<!--            <el-button-->
+<!--              size="mini"-->
+<!--              type="text"-->
+<!--            >下载</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -103,8 +152,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -112,7 +161,10 @@
 <script>
 import { listReportApproveHistory, deleteReportApproveHistory } from '@/api/reportApproveHistory'
 import { listReportGroup } from '@/api/reportGroup'
-
+import { listDict, listDictItem } from '@/api/dict'
+import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
+import { keyBy } from 'lodash'
 
 export default {
   name: 'reportApproveHistoryList',
@@ -123,7 +175,11 @@ export default {
         id: null,
         deptId: null,
         reportApproveId: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null,
         result: null,
+        opinion: null,
         reportGroupId: null,
         nextApproverId: null,
         createBy: null,
@@ -132,6 +188,9 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listModel,
+      listPhase,
+      listDict,
       listReportGroup,
       dataList: [],
       pageNo: 1,
@@ -144,7 +203,12 @@ export default {
           code: 'reportApproveHistory',
           name: 'reportApproveHistory',
           children: [
-            { code: 'id', name: 'ID', type: 'string', required: true },
+            {
+              code: 'id',
+              name: 'ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'deptId',
               name: '所属部门',
@@ -152,12 +216,17 @@ export default {
               required: true
             },
             {
-              code: 'reportApproveId',
-              name: '报表意见ID',
+              code: 'opinion',
+              name: '审批意见',
               type: 'string',
               required: true
             },
-            { code: 'result', name: '结果', type: 'string', required: true },
+            {
+              code: 'result',
+              name: '结果',
+              type: 'string',
+              required: true
+            },
             {
               code: 'reportGroupId',
               name: '报表组ID',
@@ -215,11 +284,14 @@ export default {
           ]
         }
       ],
-      complexFilters: []
+      complexFilters: [],
+      dictItemApproveResult: [],
+      dictItemSTLST: []
     }
   },
   activated () {
     const self = this
+    self.getDictByType()
     self.getDataList()
   },
   methods: {
@@ -257,6 +329,10 @@ export default {
         deptId: null,
         reportApproveId: null,
         result: null,
+        opinion: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null,
         reportGroupId: null,
         nextApproverId: null,
         createBy: null,
@@ -321,10 +397,17 @@ export default {
           this.getDataList()
         })
       })
+    },
+    // 字典表
+    getDictByType () {
+      listDictItem({ type: 'Result' }).then(({data}) => {
+        this.dictItemApproveResult = keyBy(data, 'code')
+      })
+      listDictItem({ type: 'ST' }).then(({data}) => {
+        this.dictItemSTLST = keyBy(data, 'code')
+      })
     }
   }
 }
 </script>
-<style scoped lang="scss">
 
-</style>

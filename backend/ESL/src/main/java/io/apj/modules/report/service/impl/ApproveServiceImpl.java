@@ -26,6 +26,7 @@ import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -80,9 +81,16 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ApproveEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
-                .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"));
+                .like(params.get("status")!=null&& params.get("status")!="","status", (String) params.get("status"))
+                .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"));
         if(StringUtils.isNotEmpty((CharSequence) params.get("reportGroupId"))){
             entityWrapper.eq("report_group_id", Integer.parseInt((String) params.get("reportGroupId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+            entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
+            entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
         }
         Page<ApproveEntity> page = this.selectPage(new Query<ApproveEntity>(params).getPage(), entityWrapper);
         for(ApproveEntity entity: page.getRecords()){
@@ -180,19 +188,33 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         if (!reportItemList.isEmpty()) {
             return reportItemList;
         } else {
+            approve.setStatus("03");
             approveService.insert(approve);
         }
         return null;
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-//        approveEntity.setStatus((String) data.get("status"));
+        if(StringUtils.isNotEmpty((CharSequence) data.get("nextApproverId"))){
+            approveEntity.setStatus("01");
+        }else {
+            approveEntity.setStatus("02");
+        }
         approveService.updateAllColumnById(approveEntity);
+        //上面更新下面保存
+        ApproveEntity approveEntity1 =approveService.selectById(approveEntity);
+        int deptId = approveEntity1.getDeptId();
+        int modelId = approveEntity1.getModelId();
+        String stlst = approveEntity1.getStlst();
         ApproveHistoryEntity approveHistoryEntity = new ApproveHistoryEntity();
-        approveHistoryEntity.setNextApproverId((Integer) data.get("nextApproverId"));
+        approveHistoryEntity.setDeptId(deptId);
+        approveHistoryEntity.setModelId(modelId);
+        approveHistoryEntity.setStlst(stlst);
         approveHistoryEntity.setReportGroupId(approveEntity.getReportGroupId());
+        approveHistoryEntity.setOpinion((String) data.get("opinion"));
         approveHistoryEntity.setResult((String) data.get("result"));
         approveHistoryEntity.setReportApproveId(approveEntity.getId());
         approveHistoryEntity.setDeptId(approveEntity.getDeptId());

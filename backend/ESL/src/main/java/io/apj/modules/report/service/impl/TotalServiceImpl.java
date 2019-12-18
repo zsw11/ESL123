@@ -63,7 +63,6 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
                 .like(params.get("sheetName") != null && params.get("sheetName") != "", "sheet_name", (String) params.get("sheetName"))
-                .like(params.get("monthResult") != null && params.get("monthResult") != "", "month_result", (String) params.get("monthResult"))
                 .like(params.get("destinations") != null && params.get("destinations") != "", "destinations", (String) params.get("destinations"))
                 .like(params.get("cotegory") != null && params.get("cotegory") != "", "cotegory", (String) params.get("cotegory"))
                 .like(params.get("mecha") != null && params.get("mecha") != "", "mecha", (String) params.get("mecha"))
@@ -72,12 +71,12 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
                 .like(params.get("stRev") != null && params.get("stRev") != "", "st_rev", (String) params.get("stRev"))
                 .like(params.get("lstRev") != null && params.get("lstRev") != "", "lst_rev", (String) params.get("lstRev"));
 
-        Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+        Map<String,Object> map = (Map) JSON.parse((String) params.get("monthResult"));
         if(map!=null){
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Date start = format.parse((String) map.get("createAtStart"));
-            Date stop = format.parse((String) map.get("createAtStop"));
-            entityWrapper.between("maked_at",start,stop);
+            Date start = format.parse((String) map.get("monthResultStart"));
+            Date stop = format.parse((String) map.get("monthResultStop"));
+            entityWrapper.between("month_result",start,stop);
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
             entityWrapper.eq("model_id", Integer.parseInt((String) params.get("modelId")));

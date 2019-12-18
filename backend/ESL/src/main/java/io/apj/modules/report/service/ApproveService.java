@@ -24,6 +24,11 @@ public interface ApproveService extends IService<ApproveEntity> {
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
+    /**
+     * 提交审批，点击确定时
+     * @param approve
+     * @return
+     */
     List<Object> insertApprove(ApproveEntity approve);
 
     /**

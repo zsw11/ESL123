@@ -2,6 +2,9 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">ReportApprove</div>
+      <div class="buttons">
+        <el-button @click="cancleFormSubmit">确定</el-button>
+      </div>
     </div>
     <el-form
       :rules="dataRules"

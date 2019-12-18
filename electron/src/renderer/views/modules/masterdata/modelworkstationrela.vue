@@ -100,7 +100,7 @@
 
             <el-table-column align="center" prop="modelSeriesName" label="机种系列" >
               <template slot-scope="scope">
-                <span>{{scope.row.modelSeriesEntity.name }}</span>
+                <span v-if="scope.row.modelSeriesEntity">{{scope.row.modelSeriesEntity.name }}</span>
               </template>
             </el-table-column>
 
@@ -142,7 +142,7 @@
 
             <el-table-column align="center" fixed="right" :label="'操作'" width="200">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="details(scope.row.modelId)">详情</el-button>
+                <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
                 <!--            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>-->
                 <el-button size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
               </template>
@@ -179,7 +179,6 @@
         title: null,
         dataButton: 'list',
         listQuery: {
-          id: null,
           deptId: null,
           name: null,
           modelSeriesId: null,
@@ -244,8 +243,8 @@
             page: this.pageNo,
             limit: this.pageSize,
             id: this.id,
-            name: this.listQuery.name
           },
+          this.listQuery
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
@@ -304,7 +303,7 @@
       details (id) {
         // let noShow = true
         this.$nextTick(() => {
-          this.$router.push({path: `/details-modelworkstationrela//${id}`})
+          this.$router.push({path: `/details-modelworkstationrela/${id}`})
         })
       },
       // 删除数据

@@ -20,6 +20,11 @@
                 "type": "int"
             },
             {
+                "code": "frequency",
+                "name": "频度",
+                "type": "int"
+            },
+            {
                 "code": "remark",
                 "name": "备注",
                 "type": "string"

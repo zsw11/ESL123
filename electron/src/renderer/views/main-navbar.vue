@@ -26,7 +26,7 @@
         <el-menu-item class="site-navbar__avatar user-data show-right" index="3">
           <el-dropdown :show-timeout="0" placement="bottom" size="small">
             <span class="el-dropdown-link user-wrp">
-              <img src="~@/assets/img/avatar.png" :alt="userName" />
+              <img src="~@/assets/img/logo.png" :alt="userName" />
               <span class="user-wrp">
                 <span class="user">{{ userName }}</span>
                 <p class="department">{{department}}</p>
@@ -192,6 +192,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.site-navbar{
+  min-width: 850px;
+}
 .message-menu-item {
   .el-badge {
     font-size: 20px;

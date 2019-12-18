@@ -15,7 +15,8 @@
       <el-row>
         <el-col :span="9">
           <el-form-item  :label="'组合编码'" prop="code">
-              <el-input :disabled="flag" v-model="dataForm.code"></el-input>
+              <el-input :disabled="flag" v-model="dataForm.code">
+              </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -103,11 +104,15 @@ export default {
         m0: null,
         x0: null,
         i0: null,
-        tool: null,
         a2: null,
         b2: null,
         p1: null,
-        a3: null
+        a3: null,
+        tool: null,
+        a4: null,
+        b3: null,
+        p2: null,
+        a5: null
       },
       listDept,
       dataRules: {
@@ -157,7 +162,8 @@ export default {
         fetchMeasureGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'code', 'a0', 'b0', 'g0', 'a1', 'b1', 'p0', 'm0', 'x0', 'i0', 'tool','a2', 'b2', 'p1', 'a3' ])
+            pick(data, [ 'code', 'a0', 'b0', 'g0', 'a1', 'b1', 'p0', 'm0', 'x0', 'i0',
+                          'a2', 'b2', 'p1', 'a3','tool', 'a4', 'b3', 'p2', 'a5'  ])
           )
         }).finally(() => {
           this.inited = true

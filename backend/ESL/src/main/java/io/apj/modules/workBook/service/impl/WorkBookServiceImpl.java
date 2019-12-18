@@ -88,7 +88,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
 						(String) params.get("workName"));
 
-		Map<String,Object> map = (Map) JSON.parse((String) params.get("createAt"));
+		Map<String,Object> map = (Map) JSON.parse((String) params.get("makedAt"));
 		if(map!=null){
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date start = format.parse((String) map.get("createAtStart"));

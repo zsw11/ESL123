@@ -8,7 +8,11 @@
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
         <result property="reportApproveId" column="report_approve_id"/>
+        <result property="opinion" column="opinion"/>
         <result property="result" column="result"/>
+        <result property="modelId" column="model_id"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="stlst" column="stlst"/>
         <result property="reportGroupId" column="report_group_id"/>
         <result property="nextApproverId" column="next_approver_id"/>
         <result property="createBy" column="create_by"/>

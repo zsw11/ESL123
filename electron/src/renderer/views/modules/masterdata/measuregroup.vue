@@ -11,6 +11,10 @@
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'频率'" prop="frequency" >
+          <el-input v-model="listQuery.frequency" clearable></el-input>
+        </el-form-item>
+
 
 <!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
 <!--          <keyword-search-->
@@ -64,6 +68,12 @@
         <el-table-column align="center" prop="code" width="200px" label="常用指标组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.code }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop=" frequency" width="200px" label="频率" >
+          <template slot-scope="scope">
+            <span>{{scope.row. frequency }}</span>
           </template>
         </el-table-column>
 
@@ -153,25 +163,25 @@
 
         <el-table-column align="center" prop="a4" label="A" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.a2 }}</span>
+            <span>{{scope.row.a4 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="b3" label="B" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.b2 }}</span>
+            <span>{{scope.row.b3 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="p2" label="P" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.p1 }}</span>
+            <span>{{scope.row.p2 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="a5" label="A" width="40">
           <template slot-scope="scope">
-            <span>{{scope.row.a3 }}</span>
+            <span>{{scope.row.a5 }}</span>
           </template>
         </el-table-column>
 
@@ -212,6 +222,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 const defaultExport = [
   'measureGroup.code',
+  'measureGroup.frequency',
   'measureGroup.a0',
   'measureGroup.b0',
   'measureGroup.g0',
@@ -225,6 +236,11 @@ const defaultExport = [
   'measureGroup.b2',
   'measureGroup.p1',
   'measureGroup.a3',
+  'measureGroup.tool',
+  'measureGroup.a4',
+  'measureGroup.b3',
+  'measureGroup.p2',
+  'measureGroup.a5',
   'measureGroup.deptId'
 ]
 export default {
@@ -238,6 +254,7 @@ export default {
       listQuery: {
         id: null,
         code: null,
+        frequency: null,
         a0: null,
         b0: null,
         g0: null,
@@ -251,6 +268,11 @@ export default {
         b2: null,
         p1: null,
         a3: null,
+        tool: null,
+        a4: null,
+        b3: null,
+        p2: null,
+        a5: null,
         deptId: null,
         deptName: null,
         usedCount: null,
@@ -272,6 +294,7 @@ export default {
         name: '常用指标组合',
         children: [
           { code: 'code', name: '编码', type: 'string', required: true },
+          { code: 'frequency', name: '频率', type: 'string', required: true },
           { code: 'a0', name: 'A0', type: 'string', required: true },
           { code: 'b0', name: 'B0', type: 'string', required: true },
           { code: 'g0', name: 'G0', type: 'string', required: true },
@@ -285,6 +308,11 @@ export default {
           { code: 'b2', name: 'B2', type: 'string', required: true },
           { code: 'p1', name: 'P1', type: 'string', required: true },
           { code: 'a3', name: 'A3', type: 'string', required: true },
+          { code: 'tool', name: 'Tool', type: 'string', required: true },
+          { code: 'a4', name: 'A4', type: 'string', required: true },
+          { code: 'b3', name: 'B3', type: 'string', required: true },
+          { code: 'p2', name: 'P2', type: 'string', required: true },
+          { code: 'a5', name: 'A5', type: 'string', required: true },
           { code: 'deptId', name: '组织机构ID', type: 'string', required: true }
         ]
       }],
@@ -346,6 +374,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         code: null,
+        frequency: null,
         a0: null,
         b0: null,
         g0: null,

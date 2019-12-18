@@ -8,7 +8,7 @@ import io.apj.modules.report.entity.ApproveHistoryEntity;
 import java.util.Map;
 
 /**
- * 报表审批表
+ * 报表历史审批表
  *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com

@@ -243,21 +243,40 @@ export default {
           code: 'reportChangeRecord',
           name: 'reportChangeRecord',
           children: [
-            { code: 'id', name: 'ID', type: 'string', required: true },
+            {
+              code: 'id',
+              name: 'ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'deptId',
               name: '组织机构ID',
               type: 'string',
               required: true
             },
-             { code: 'title', name: '标题', type: 'string', required: true },
+            { code: 'title',
+              name: '标题',
+              type: 'string',
+              required: true
+            },
             {
               code: 'sheetName',
               name: 'Sheet名称',
               required: true
             },
-            { code: 'factory', name: '工程', type: 'string', required: true },
-            { code: 'modelId', name: '机种ID', type: 'string', required: true },
+            {
+              code: 'factory',
+              name: '工程',
+              type: 'string',
+              required: true
+            },
+            {
+              code: 'modelId',
+              name: '机种ID',
+              type: 'string',
+              required: true
+            },
             {
               code: 'modelType',
               name: '型号',
