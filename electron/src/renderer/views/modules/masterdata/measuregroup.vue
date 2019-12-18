@@ -153,25 +153,25 @@
 
         <el-table-column align="center" prop="a4" label="A" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.a2 }}</span>
+            <span>{{scope.row.a4 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="b3" label="B" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.b2 }}</span>
+            <span>{{scope.row.b3 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="p2" label="P" width="40" >
           <template slot-scope="scope">
-            <span>{{scope.row.p1 }}</span>
+            <span>{{scope.row.p2 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="a5" label="A" width="40">
           <template slot-scope="scope">
-            <span>{{scope.row.a3 }}</span>
+            <span>{{scope.row.a5 }}</span>
           </template>
         </el-table-column>
 
@@ -225,6 +225,11 @@ const defaultExport = [
   'measureGroup.b2',
   'measureGroup.p1',
   'measureGroup.a3',
+  'measureGroup.tool',
+  'measureGroup.a4',
+  'measureGroup.b3',
+  'measureGroup.p2',
+  'measureGroup.a5',
   'measureGroup.deptId'
 ]
 export default {
@@ -251,6 +256,11 @@ export default {
         b2: null,
         p1: null,
         a3: null,
+        tool: null,
+        a4: null,
+        b3: null,
+        p2: null,
+        a5: null,
         deptId: null,
         deptName: null,
         usedCount: null,
@@ -285,6 +295,11 @@ export default {
           { code: 'b2', name: 'B2', type: 'string', required: true },
           { code: 'p1', name: 'P1', type: 'string', required: true },
           { code: 'a3', name: 'A3', type: 'string', required: true },
+          { code: 'tool', name: 'Tool', type: 'string', required: true },
+          { code: 'a4', name: 'A4', type: 'string', required: true },
+          { code: 'b3', name: 'B3', type: 'string', required: true },
+          { code: 'p2', name: 'P2', type: 'string', required: true },
+          { code: 'a5', name: 'A5', type: 'string', required: true },
           { code: 'deptId', name: '组织机构ID', type: 'string', required: true }
         ]
       }],

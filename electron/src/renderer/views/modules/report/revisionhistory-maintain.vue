@@ -3,6 +3,10 @@
   <el-card class="with-title">
     <div slot="header" class="clearfix">
       <div class="card-title">Collection - Revision History</div>
+      <div class="buttons">
+        <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>
+        <el-button @click="cancleFormSubmit">取 消</el-button>
+      </div>
     </div>
     <el-form
       :rules="dataRules"

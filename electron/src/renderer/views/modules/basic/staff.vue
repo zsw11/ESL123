@@ -8,7 +8,7 @@
       <el-form :inline='true'
                :model='listQuery'
                @keyup.enter.native='getDataList()'>
-        <!-- <el-row>
+        <el-row>
           <el-col :span='6'>
             <el-form-item label='部门'
                           prop='deptId'>
@@ -17,10 +17,9 @@
             </el-form-item>
           </el-col>
           <el-col :span='6'>
-            <el-form-item label='编号'
-                          prop='code'>
-              <el-input v-model='listQuery.code'
-                        clearable></el-input>
+            <el-form-item label='编号' prop='code'>
+              <el-input v-model='listQuery.code' clearable>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span='6'>
@@ -31,72 +30,78 @@
             </el-form-item>
           </el-col>
           <el-col :span='6'>
-            <el-form-item label='性别'
-                          prop='gender'>
-              <dict-select dictCode='gender'
-                           v-model='listQuery.gender'
-                           clearable></dict-select>
+            <el-form-item label='电话' prop='mobilephone'>
+              <el-input v-model='listQuery.mobilephone' clearable>
+              </el-input>
             </el-form-item>
           </el-col>
+<!--          <el-col :span='6'>-->
+<!--            <el-form-item label='性别'-->
+<!--                          prop='gender'>-->
+<!--              <dict-select dictCode='gender'-->
+<!--                           v-model='listQuery.gender'-->
+<!--                           clearable></dict-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
         </el-row>
 
         <el-row>
           <el-col :span='6'>
-            <el-form-item label='家庭地址'
-                          prop='familyAddress'>
-              <el-input v-model='listQuery.familyAddress'
-                        clearable></el-input>
-            </el-form-item>
+<!--            <el-form-item label='家庭地址' label-width="120"-->
+<!--                          prop='familyAddress'>-->
+<!--              <el-input v-model='listQuery.familyAddress'-->
+<!--                        clearable></el-input>-->
+<!--            </el-form-item>-->
           </el-col>
+<!--          <el-col :span='6'>-->
+<!--            <el-form-item label='电话'-->
+<!--                          prop='mobilephone'>-->
+<!--              <el-input v-model='listQuery.mobilephone'-->
+<!--                        clearable></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span='6'>
-            <el-form-item label='电话'
-                          prop='mobilephone'>
-              <el-input v-model='listQuery.mobilephone'
-                        clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span='6'>
-            <el-form-item label='邮箱'
-                          prop='email'>
-              <el-input v-model='listQuery.email'
-                        clearable></el-input>
+            <el-form-item label='邮箱' prop='email'>
+              <el-input v-model='listQuery.email' clearable>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :label="'状态'"
-                          prop="status">
-              <dict-select dictCode="workStatus"
-                           v-model="listQuery.status"
-                           clearable></dict-select>
+            <el-form-item :label="'状态'" prop="status">
+              <dict-select dictCode="workStatus" v-model="listQuery.status" clearable>
+              </dict-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span='8'>
+            <el-form-item label='入职日期'
+                          prop='employmentDate'>
+              <el-date-picker
+                v-model='listQuery.employmentDate'
+                value-format='yyyy-MM-dd'
+                type='date'
+                placeholder='选择入职日期'>
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
-          <el-col :span='8'>
-            <el-form-item label='入职日期'
-                          prop='employmentDate'>
-              <el-date-picker v-model='listQuery.employmentDate'
-                              value-format='yyyy-MM-dd'
-                              type='date'
-                              placeholder='选择入职日期'></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span='8'>
-            <el-form-item label='生日'
-                          prop='birthDate'>
-              <el-date-picker v-model='listQuery.birthDate'
-                              value-format='yyyy-MM-dd'
-                              type='date'
-                              placeholder='选择出生日期'></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row> -->
+
+<!--          <el-col :span='8'>-->
+<!--            <el-form-item label='生日'-->
+<!--                          prop='birthDate'>-->
+<!--              <el-date-picker v-model='listQuery.birthDate'-->
+<!--                              value-format='yyyy-MM-dd'-->
+<!--                              type='date'-->
+<!--                              placeholder='选择出生日期'></el-date-picker>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+        </el-row>
         <div class='buttons with-complex'>
-          <complex-filter :config="complexFilterConfig"
-                          @confirm="doComplexSearch(1)"
-                          :type="dataButton==='complex' ? 'primary' : ''"
-                          class='complex-button'>高级搜索</complex-filter>
+<!--          <complex-filter :config="complexFilterConfig"-->
+<!--                          @confirm="doComplexSearch(1)"-->
+<!--                          :type="dataButton==='complex' ? 'primary' : ''"-->
+<!--                          class='complex-button'>高级搜索</complex-filter>-->
           <el-button @click='clearQuery()'>清 空</el-button>
           <el-button @click='getDataList(1)'
                      :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
@@ -154,7 +159,7 @@
                          sortable='custom'
                          ></el-table-column>
 
-        <el-table-column prop='name' 
+        <el-table-column prop='name'
                          align='center'
                          label='姓名'
                          v-if="displayAttributesMap['staff.name'].display"
@@ -164,12 +169,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center"
-                         label="性别">
-          <template slot-scope="scope">
-            <span>{{genderMap[scope.row.gender]}}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align='center'
                          label='电话'

@@ -84,15 +84,15 @@
           width="200"
         >
           <template slot-scope="scope">
-             <el-button
-              size="mini"
-              type="text"
-              @click="addOrUpdateHandle(scope.row.id)"
-            >编辑</el-button>
-            <el-button
-              size="mini"
-              type="text"
-            >下载</el-button>
+<!--             <el-button-->
+<!--              size="mini"-->
+<!--              type="text"-->
+<!--              @click="addOrUpdateHandle(scope.row.id)"-->
+<!--            >编辑</el-button>-->
+<!--            <el-button-->
+<!--              size="mini"-->
+<!--              type="text"-->
+<!--            >下载</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -103,8 +103,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
   </div>
 </template>

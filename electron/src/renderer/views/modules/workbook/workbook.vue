@@ -151,9 +151,9 @@
 
 
 
-        <el-table-column align="center" prop="createAt" label="制表日期" >
+        <el-table-column align="center" prop="makedAt" label="制表日期" >
           <template slot-scope="scope">
-            <span>{{scope.row.createAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
@@ -161,7 +161,7 @@
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">版本修订</el-button>
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">沿用</el-button>
+            <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
           </template>
@@ -346,7 +346,7 @@ export default {
   activated () {
     const self = this
     self.tableAt = null
-    self.listQuery.createAt = null
+    self.listQuery.makedAt = null
     self.getDictByType()
     self.getDataList()
   },
@@ -358,7 +358,7 @@ export default {
           createAtStart: this.tableAt[0],
           createAtStop: this.tableAt[1]
         }
-        this.listQuery.createAt = result
+        this.listQuery.makedAt = result
       }
       if (pageNo) {
         this.pageNo = pageNo
@@ -421,6 +421,12 @@ export default {
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/workbook-detail/${id}` : '/add-workbook' })
+      })
+    },
+    // 复制
+    copySon (id) {
+      this.$nextTick(() => {
+        this.$router.push( { path: `/copy-workbook/${id}`} )
       })
     },
     // 删除数据

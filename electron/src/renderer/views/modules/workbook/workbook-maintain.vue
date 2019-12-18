@@ -142,7 +142,8 @@
     </el-form>
 
     <span class="dialog-footer">
-      <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="!$route.path.includes('copy')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="$route.path.includes('copy')"  type="primary">复   制</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
     </span>
   </el-card>
