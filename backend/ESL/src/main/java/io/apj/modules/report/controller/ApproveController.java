@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -97,14 +98,14 @@ public class ApproveController extends AbstractController {
 
     /**
      * 审批意见，通过拒绝
-     * @param id
+     * @param data
      * @param data
      * @return
      */
     @RequestMapping("/createview")
 //    @RequiresPermissions("report:approve:create")
-    public ResponseEntity<Object> saveView(Integer id, @RequestBody Map<String,Object> data) {
-        ApproveEntity approveEntity = approveService.selectById(id);
+    public ResponseEntity<Object> saveView(@RequestBody Map<String,Object> data) {
+        ApproveEntity approveEntity = approveService.selectById((Serializable) data.get("id"));
         approveEntity.setDeptId(getUserDeptId().intValue());
         ResponseEntity<Object> approveHistoryEntity = approveService.saveView(approveEntity,data);
         return RD.success(approveHistoryEntity);
