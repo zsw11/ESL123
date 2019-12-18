@@ -43,11 +43,13 @@ public class TotalEntity implements Serializable {
 	 */
 	private Integer modelId;
 	private Integer phaseId;
+	private String stlst;
+
 	@TableField(exist = false)
 	private String phaseName;
+
 	@TableField(exist = false)
 	private boolean Exist;
-	private String stlst;
 	/**
 	 * 机种
 	 */

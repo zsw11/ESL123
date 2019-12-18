@@ -16,7 +16,7 @@ import lombok.Data;
 
 /**
  * 分析表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-11 11:29:03
