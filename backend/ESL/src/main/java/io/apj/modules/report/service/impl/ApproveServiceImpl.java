@@ -197,10 +197,17 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
             approveEntity.setStatus("02");
         }
         approveService.updateAllColumnById(approveEntity);
+        //上面更新下面保存
+        ApproveEntity approveEntity1 =approveService.selectById(approveEntity);
+        int deptId = approveEntity1.getDeptId();
+        int modelId = approveEntity1.getModelId();
+        String stlst = approveEntity1.getStlst();
         ApproveHistoryEntity approveHistoryEntity = new ApproveHistoryEntity();
-        approveHistoryEntity.setNextApproverId((Integer) data.get("nextApproverId"));
+        approveHistoryEntity.setDeptId(deptId);
+        approveHistoryEntity.setModelId(modelId);
+        approveHistoryEntity.setStlst(stlst);
         approveHistoryEntity.setReportGroupId(approveEntity.getReportGroupId());
-        approveHistoryEntity.setView((String) data.get("view"));
+        approveHistoryEntity.setOpinion((String) data.get("opinion"));
         approveHistoryEntity.setResult((String) data.get("result"));
         approveHistoryEntity.setReportApproveId(approveEntity.getId());
         approveHistoryEntity.setDeptId(approveEntity.getDeptId());

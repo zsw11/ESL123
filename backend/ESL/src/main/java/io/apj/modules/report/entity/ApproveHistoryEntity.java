@@ -40,7 +40,7 @@ public class ApproveHistoryEntity implements Serializable {
 	/**
 	 * 审批意见
 	 */
-	private String view;
+	private String opinion;
 	/**
 	 * 报表组ID
 	 */
@@ -74,5 +74,15 @@ public class ApproveHistoryEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	private Integer modelId;
+	private Integer phaseId;
+	private String stlst;
+
+	@TableField(exist = false)
+	private String modelName;
+
+	@TableField(exist = false)
+	private String phaseName;
 
 }
