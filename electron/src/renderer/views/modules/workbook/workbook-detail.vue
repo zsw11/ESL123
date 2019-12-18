@@ -11,7 +11,7 @@
         ref="videoPlayer"
         :options="playerOptions"
         :playsinline="true"
-        @ready="event($event)">
+        @loadeddata="event($event)">
       </video-player>
       <!-- <div class="control-bar">
         <el-slider v-model="time" :max="duration"></el-slider>
@@ -127,23 +127,28 @@
             fullscreenToggle: false
           },
           middleware (player) {
+            player.on('seeked', (e) => {
+              console.log('seeked', player.currentTime(), e)
+            })
             return {
               duration (dur) {
                 return self.$data.duration || dur
               },
-              setCurrentTime (time) {
-                if (self.$data.currentTime) {
-                  const tmpTime = self.$data.currentTime
-                  self.$data.currentTime = undefined
-                  return tmpTime
-                } else {
-                  self.$data.playerOptions.sources = [{
-                    type: 'video/mp4',
-                    src: `http://127.0.0.1:8888?startTime=${time}&t=${Math.random()}`
-                  }]
-                  self.$data.currentTime = time
-                  return time
+              currentTime (time) {
+                console.log(time, self.$data.currentTime, self.$data.duration)
+                if (time) {
+                  if (self.$data.currentTime) {
+                    if (time < self.$data.currentTime) return self.$data.currentTime + time
+                    else return time
+                  } else {
+                    return time
+                  }
                 }
+              },
+              setCurrentTime (time) {
+                self.$data.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=${time}&t=${Math.random()}`
+                self.$data.currentTime = time
+                return time
               }
             }
           }
@@ -183,7 +188,11 @@
     },
     methods: {
       event (e) {
-        // if (this.currentTime) (this.$refs.videoPlayer.player.currentTime = this.currentTime)
+        // if (this.currentTime) {
+        //   console.log(this.currentTime)
+        //   this.$refs.videoPlayer.player.currentTime(this.currentTime)
+        //   this.currentTime = undefined
+        // }
       },
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
