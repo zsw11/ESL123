@@ -6,7 +6,7 @@
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
         <div class="min-width">
-          <el-form-item :label="'报表意见'" prop="reportApproveId">
+          <el-form-item :label="'审批意见'" prop="reportApproveId">
             <el-input v-model="listQuery.reportApproveId" clearable></el-input>
           </el-form-item>
 
@@ -52,9 +52,9 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
-        <el-table-column align="center" prop="reportApproveId" label="报表意见">
+        <el-table-column align="center" prop="reportApproveId" label="审批意见">
           <template slot-scope="scope">
-            <span>{{scope.row.reportApproveId }}</span>
+            <span>{{scope.row.reportApprove }}</span>
           </template>
         </el-table-column>
 
@@ -64,15 +64,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="reportGroupId" label="报表组">
+        <el-table-column align="center" prop="reportGroupName" label="报表组">
           <template slot-scope="scope">
-            <span>{{scope.row.reportGroupId }}</span>
+            <span>{{scope.row.reportGroupName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="nextApproverId" label="下一审批者">
+        <el-table-column align="center" prop="nextApproverName" label="下一审批者">
           <template slot-scope="scope">
-            <span>{{scope.row.nextApproverId }}</span>
+            <span>{{scope.row.nextApproverName }}</span>
           </template>
         </el-table-column>
 
@@ -153,7 +153,7 @@ export default {
             },
             {
               code: 'reportApproveId',
-              name: '报表意见ID',
+              name: '审批意见ID',
               type: 'string',
               required: true
             },

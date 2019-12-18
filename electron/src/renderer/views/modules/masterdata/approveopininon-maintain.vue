@@ -15,8 +15,8 @@
       style='width: 95%'>
     <el-row :gutter="10">
       <el-col :span="10">
-        <el-form-item :label="'审批状态'" prop="approveOperation" >
-          <dict-select style="width: 100%" dictType="Status" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
+        <el-form-item :label="'审批结果'" prop="approveOperation" >
+          <dict-select style="width: 100%" dictType="Result" v-model="dataForm.approveOperation" :allowEmpty="true"></dict-select>
         </el-form-item>
       </el-col>
     </el-row>

@@ -125,12 +125,12 @@
       :title="dialogTitle"
       :visible.sync="approveShow">
       <el-form :inline="true" :model="approveForm">
-        <el-form-item :label="'审批意见'" prop="name"  label-width="100px">
-          <el-input type="textarea" rows="6"  v-model="approveForm.name" autocomplete="off" clearable></el-input>
+        <el-form-item :label="'审批意见'" prop="opinion"  label-width="100px">
+          <el-input type="textarea" rows="6"  v-model="approveForm.opinion" autocomplete="off" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'下一审批者'" prop="name"  label-width="100px">
-          <el-input  v-model="approveForm.name" autocomplete="off" clearable></el-input>
+        <el-form-item :label="'下一审批者'" prop="nextApprove"  label-width="100px">
+          <el-input  v-model="approveForm.nextApprove" autocomplete="off" clearable></el-input>
         </el-form-item>
 
       </el-form>
@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { listReportApprove, deleteReportApprove } from '@/api/reportApprove'
+import { listReportApprove, deleteReportApprove, approveReport } from '@/api/reportApprove'
 import { listDept } from '@/api/dept'
 import { listReportGroup } from '@/api/reportGroup'
 import { listModel } from '@/api/model'
@@ -176,8 +176,10 @@ export default {
         deleteAt: null
       },
       approveForm: {
-        name: null,
-        opininon: null
+        nextApprove: null,
+        opinion: null,
+        id: null,
+        result: null
       },
       listDict,
       listDept,
@@ -372,20 +374,35 @@ export default {
     },
     // 审批
     approve (id, name, flag) {
+      this.approveForm.id = null
+      this.approveForm.result = null
+      this.approveForm.nextApprove = null
+      this.approveForm.opinion = null
       if (flag === 1) {
         this.dialogTitle = '通过-' + name
+        this.approveForm.result = '01'
       } else {
         this.dialogTitle = '拒绝-' + name
+        this.approveForm.result = '02'
       }
+      this.approveForm.id = id
       this.approveShow = true
-      console.log(id, 222222222222)
-      // fetchReportGroup(id).then((page) => {
-      //   console.log(page, 11111111111111111111)
-      // })
     },
     // 提交审批
     approvePut () {
-      this.approveShow = false
+      approveReport(this.approveForm).then(({page, status})=>{
+        if(status === 200){
+          this.approveShow = false
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
+        }
+      })
     },
     // 字典表
     getDictByType () {

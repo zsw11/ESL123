@@ -192,6 +192,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.site-navbar{
+  min-width: 850px;
+}
 .message-menu-item {
   .el-badge {
     font-size: 20px;

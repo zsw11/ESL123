@@ -14,9 +14,13 @@
           <el-input v-model="listQuery.usedCount"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'所属组织机构'" prop="deptId" >
-          <keyword-search style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>
+        <el-form-item :label="'频率'" prop="frequency" >
+          <el-input v-model="listQuery.frequency" clearable></el-input>
         </el-form-item>
+
+<!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
+<!--          <keyword-search style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>-->
+<!--        </el-form-item>-->
 
 
 
@@ -65,6 +69,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column align="center" prop="frequency" label="频率" >
+          <template slot-scope="scope">
+            <span>{{scope.row.frequency }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column align="center" prop="usedCount" label="手顺数量" >
           <template slot-scope="scope">
             <span>{{scope.row.count }}</span>
@@ -107,7 +117,7 @@ import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
 
-const defaultExport = ['opertaionGroup.code', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
+const defaultExport = ['opertaionGroup.code', 'opertaionGroup.frequency', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
 
 export default {
   name: 'opertaionGroupList',
@@ -121,6 +131,7 @@ export default {
       listQuery: {
         id: null,
         code: null,
+        frequency: null,
         deptId: null,
         usedCount: null,
         remark: null,
@@ -141,6 +152,7 @@ export default {
         name: '手顺组合',
         children: [
           { code: 'code', name: '手顺组合编码', type: 'string', required: true },
+          { code: 'frequency', name: '频率', type: 'string', required: true },
           { code: 'usedCount', name: '手顺数量', type: 'string', required: true },
           { code: 'deptId', name: '组织机构ID', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: true }
@@ -204,6 +216,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         code: null,
+        frequency: null,
         deptId: null,
         usedCount: null,
         createBy: null,

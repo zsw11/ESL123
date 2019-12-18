@@ -11,6 +11,10 @@
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'频率'" prop="frequency" >
+          <el-input v-model="listQuery.frequency" clearable></el-input>
+        </el-form-item>
+
 
 <!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
 <!--          <keyword-search-->
@@ -64,6 +68,12 @@
         <el-table-column align="center" prop="code" width="200px" label="常用指标组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.code }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop=" frequency" width="200px" label="频率" >
+          <template slot-scope="scope">
+            <span>{{scope.row. frequency }}</span>
           </template>
         </el-table-column>
 
@@ -212,6 +222,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 const defaultExport = [
   'measureGroup.code',
+  'measureGroup.frequency',
   'measureGroup.a0',
   'measureGroup.b0',
   'measureGroup.g0',
@@ -243,6 +254,7 @@ export default {
       listQuery: {
         id: null,
         code: null,
+        frequency: null,
         a0: null,
         b0: null,
         g0: null,
@@ -282,6 +294,7 @@ export default {
         name: '常用指标组合',
         children: [
           { code: 'code', name: '编码', type: 'string', required: true },
+          { code: 'frequency', name: '频率', type: 'string', required: true },
           { code: 'a0', name: 'A0', type: 'string', required: true },
           { code: 'b0', name: 'B0', type: 'string', required: true },
           { code: 'g0', name: 'G0', type: 'string', required: true },
@@ -361,6 +374,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         code: null,
+        frequency: null,
         a0: null,
         b0: null,
         g0: null,

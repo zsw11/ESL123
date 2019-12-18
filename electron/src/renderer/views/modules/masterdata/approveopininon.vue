@@ -10,8 +10,8 @@
           <el-input v-model="listQuery.opininon" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'审批状态'" prop="approveOperation">
-          <dict-select dictType="Status" v-model="listQuery.approveOperation" :allowEmpty="true" clearable></dict-select>
+        <el-form-item :label="'审批结果'" prop="approveOperation">
+          <dict-select dictType="Result" v-model="listQuery.approveOperation" :allowEmpty="true" clearable></dict-select>
         </el-form-item>
 
         <div class="search-box">
@@ -51,7 +51,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="approveOperation" label="审批状态" >
+        <el-table-column align="center" prop="approveOperation" label="审批结果" >
           <template slot-scope="scope">
             <span>{{ dictItemApproveOpininon[scope.row.approveOperation].name }}</span>
           </template>
@@ -218,7 +218,7 @@ export default {
     },
     // 字典表
     getDictByType () {
-      listDictItem({ type: 'Status' }).then(({data}) => {
+      listDictItem({ type: 'Result' }).then(({data}) => {
         this.dictItemApproveOpininon = keyBy(data, 'code')
       })
     }

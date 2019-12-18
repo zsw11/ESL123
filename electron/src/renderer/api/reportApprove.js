@@ -54,3 +54,12 @@ export function downloadReportApprove (data) {
     data
   })
 }
+
+// 审批
+export function approveReport (data) {
+  return request({
+    url: request.adornUrl('/api/v1/approve/createview'),
+    method: 'post',
+    data
+  })
+}
