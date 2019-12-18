@@ -108,7 +108,7 @@ public class ApproveController extends AbstractController {
         ApproveEntity approveEntity = approveService.selectById((Serializable) data.get("id"));
         approveEntity.setDeptId(getUserDeptId().intValue());
         ResponseEntity<Object> approveHistoryEntity = approveService.saveView(approveEntity,data);
-        return RD.success(approveHistoryEntity);
+        return RD.ok(approveHistoryEntity);
 
     }
 
