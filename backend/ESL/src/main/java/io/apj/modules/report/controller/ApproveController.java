@@ -81,20 +81,26 @@ public class ApproveController extends AbstractController {
     }
 
     /**
-     * 从具体的报表来保存
+     * 从各个报表提交审批，点击确定时
      *
      * @return
      */
     @RequestMapping("/create")
     @RequiresPermissions("report:approve:create")
     public List<Object> save(@RequestBody ApproveEntity approve) {
-        //提交审批，点击确定时
+
         List<Object> data = approveService.insertApprove(approve);
 
         return data;
 
     }
 
+    /**
+     * 审批意见，通过拒绝
+     * @param id
+     * @param data
+     * @return
+     */
     @RequestMapping("/createview")
 //    @RequiresPermissions("report:approve:create")
     public ResponseEntity<Object> saveView(Integer id, @RequestBody Map<String,Object> data) {

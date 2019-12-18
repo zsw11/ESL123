@@ -26,6 +26,7 @@ import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -180,19 +181,28 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         if (!reportItemList.isEmpty()) {
             return reportItemList;
         } else {
+            approve.setStatus("03");
             approveService.insert(approve);
         }
         return null;
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-//        approveEntity.setStatus((String) data.get("status"));
+        int approveId =  approveEntity.getId();
+        Map<String, Object> result = approveHistoryService.selectMap(new EntityWrapper<ApproveHistoryEntity>().eq("report_approve_id", "approveId"));
+        if(result.isEmpty()){
+            approveEntity.setStatus("01");
+        }else {
+            approveEntity.setStatus("02");
+        }
         approveService.updateAllColumnById(approveEntity);
         ApproveHistoryEntity approveHistoryEntity = new ApproveHistoryEntity();
         approveHistoryEntity.setNextApproverId((Integer) data.get("nextApproverId"));
         approveHistoryEntity.setReportGroupId(approveEntity.getReportGroupId());
+        approveHistoryEntity.setView((String) data.get("view"));
         approveHistoryEntity.setResult((String) data.get("result"));
         approveHistoryEntity.setReportApproveId(approveEntity.getId());
         approveHistoryEntity.setDeptId(approveEntity.getDeptId());

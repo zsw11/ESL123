@@ -8,6 +8,7 @@
         <result property="id" column="id"/>
         <result property="deptId" column="dept_id"/>
         <result property="reportApproveId" column="report_approve_id"/>
+        <result property="view" column="view"/>
         <result property="result" column="result"/>
         <result property="reportGroupId" column="report_group_id"/>
         <result property="nextApproverId" column="next_approver_id"/>

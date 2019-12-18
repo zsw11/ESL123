@@ -38,6 +38,10 @@ public class ApproveHistoryEntity implements Serializable {
 	 */
 	private String result;
 	/**
+	 * 审批意见
+	 */
+	private String view;
+	/**
 	 * 报表组ID
 	 */
 	private Integer reportGroupId;

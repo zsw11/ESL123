@@ -24,6 +24,11 @@ public interface ReportService extends IService<ReportEntity> {
 
     Integer selectByNameTest(String name);
 
+    /**
+     *  报表审批详情，符合三个字段所在的报表组里的报表（此方法没用过）
+     * @param id
+     * @return
+     */
     List<ReportEntity> selectApproveList(Integer id);
     /**
      * 报表属于那些报表组，并过滤(以提交的)

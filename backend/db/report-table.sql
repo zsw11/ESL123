@@ -680,6 +680,7 @@ CREATE TABLE report_approve_history (
   id serial PRIMARY KEY,
   dept_id integer,
   report_approve_id integer,
+  view varchar(128),
   result varchar(32),
   report_group_id integer,
   next_approver_id integer,
@@ -693,6 +694,7 @@ comment on table report_approve_history is '报表审批表';
 comment on column report_approve_history.report_approve_id is '报表审批表ID';
 comment on column report_approve_history.report_group_id is '报表组ID';
 comment on column report_approve_history.next_approver_id is '下一审批者ID';
+comment on column report_approve_history.view is '审批意见';
 comment on column report_approve_history.result is '审批结果';
 comment on column report_approve_history.create_by is '创建者ID';
 comment on column report_approve_history.create_at is '创建时间';
