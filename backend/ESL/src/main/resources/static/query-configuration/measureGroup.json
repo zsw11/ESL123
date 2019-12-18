@@ -100,6 +100,11 @@
                 "type": "int"
             },
             {
+                "code": "frequency",
+                "name": "频度",
+                "type": "int"
+            },
+            {
                 "code": "deptId",
                 "name": "所属组织机构",
                 "type": "int"

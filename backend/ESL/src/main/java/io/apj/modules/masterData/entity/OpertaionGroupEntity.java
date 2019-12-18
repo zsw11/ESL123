@@ -36,10 +36,14 @@ public class OpertaionGroupEntity implements Serializable {
 	@TableField(exist = false)
 	private String deptName;
 	/**
-	 * shoushunshuliang
+	 * 手顺数量
 	 */
 	@TableField(exist = false)
 	private Integer count;
+	/**
+	 * 频度
+	 */
+	private Integer frequency;
 	/**
 	 * 备注
 	 */

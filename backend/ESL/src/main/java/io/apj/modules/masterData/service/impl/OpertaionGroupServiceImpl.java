@@ -52,6 +52,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		if (params.get("code") != null && params.get("code") != "") {
 			entityWrapper.like("code", (String) params.get("code"));
 		}
+		if(StringUtils.isNotEmpty((CharSequence) params.get("frequency"))){
+			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("usedCount"))) {
 			entityWrapper.eq("used_count", Integer.parseInt((String) params.get("usedCount")));
 		}

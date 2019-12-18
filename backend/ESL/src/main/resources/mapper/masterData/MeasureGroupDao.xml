@@ -25,6 +25,7 @@
         <result property="p1" column="p2"/>
         <result property="a3" column="a5"/>
         <result property="tool" column="tool"/>
+        <result property="frequency" column="frequency"/>
         <result property="deptId" column="dept_id"/>
         <result property="usedcount" column="used_count"/>
         <result property="createBy" column="create_by"/>
