@@ -5,7 +5,7 @@
         <div class="card-title">条件查询</div>
       </div>
       <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
-
+        <div class="form-min-width">
           <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
               v-model="listQuery.reportGroupId"
@@ -16,15 +16,46 @@
             </keyword-search>
           </el-form-item>
 
-<!--          <el-form-item :label="'审批状态'" prop="status">-->
+        <el-form-item :label="'机种'" prop="modelId">
+          <keyword-search
+            v-model="listQuery.modelId"
+            :allowMultiple="true"
+            :searchApi="this.listModel"
+            :allowEmpty="true" clearable>
+          </keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'ST/LST'" prop="stlst">
+          <dict-select
+            dictType="ST"
+            class="input"
+            v-model="listQuery.stlst"
+            :allowEmpty="true"
+            clearable>
+          </dict-select>
+        </el-form-item>
+
+        <el-form-item :label="'生产阶段'" prop="phaseId">
+          <keyword-search
+            style="width: 100%"
+            v-model="listQuery.phaseId"
+            :allowMultiple="true"
+            :searchApi="this.listPhase"
+            :allowEmpty="true">
+          </keyword-search>
+        </el-form-item>
+      </div>
+
+
+        <!--          <el-form-item :label="'审批状态'" prop="status">-->
 <!--            <el-input v-model="listQuery.status" clearable></el-input>-->
 <!--          </el-form-item>-->
-          <el-form-item :label="'审批状态'" prop="status">
-            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>
-          </el-form-item>
-          <div class="search-box">
-            <el-button @click="getDataList(1)" type="primary">搜 索</el-button>
+<!--          <el-form-item :label="'审批状态'" prop="status">-->
+<!--            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>-->
+<!--          </el-form-item>-->
+          <div class="buttons with-complex">
             <el-button @click="clearQuery()">清 空</el-button>
+            <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
           </div>
       </el-form>
     </el-card>
@@ -47,8 +78,7 @@
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;"
-      >
+        style="width: 100%;">
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
 
@@ -83,11 +113,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="status" label="审批状态">
-          <template slot-scope="scope">
-            <span>{{scope.row.status }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="status" label="审批状态">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.status }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
 
         <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
@@ -116,8 +146,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper">
+      </el-pagination>
     </el-card>
     <el-dialog
       custom-class="approve-dialog"
