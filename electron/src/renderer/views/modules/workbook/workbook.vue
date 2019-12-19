@@ -10,13 +10,18 @@
         @keyup.enter.native="getDataList()"
         class="clearfix" style="min-width: 1000px">
         <div class="wookbook-min-width">
+
+          <el-form-item :label="'分析表名称'" prop="workName" >
+            <el-input v-model="listQuery.workName" clearable></el-input>
+          </el-form-item>
+
           <el-form-item :label="'部门'" prop="deptId" >
             <keyword-search
-              clearable
               v-model="listQuery.deptId"
               :allowMultiple="true"
               :searchApi="this.listDept"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              clearable>
             </keyword-search>
           </el-form-item>
 
@@ -59,17 +64,16 @@
             </keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'作业名'" prop="workName" >
-            <el-input v-model="listQuery.workName" clearable></el-input>
-          </el-form-item>
 
-          <el-form-item :label="'制表人'" prop="makerId" >
-            <el-input v-model="listQuery.makerId"  clearable></el-input>
-          </el-form-item>
+
+<!--          <el-form-item :label="'制表人'" prop="makerId" >-->
+<!--            <el-input v-model="listQuery.makerId"  clearable></el-input>-->
+<!--          </el-form-item>-->
 
           <el-form-item :label="'制表日期'" prop="tableAt" >
             <el-date-picker
               v-model="tableAt"
+              type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -106,9 +110,9 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="分析表名称" >
+        <el-table-column align="center" prop="workName" label="分析表名称" >
           <template slot-scope="scope">
-            <span>{{scope.row.id }}</span>
+            <span>{{scope.row.workName }}</span>
           </template>
         </el-table-column>
 
@@ -144,7 +148,7 @@
 
         <el-table-column align="center" prop="workstationName" label="工位" >
           <template slot-scope="scope">
-            <span>{{scope.row.workName }}</span>
+            <span>{{scope.row.workstationName }}</span>
           </template>
         </el-table-column>
 
@@ -389,7 +393,9 @@ export default {
         destinations: null,
         phaseId: null,
         workstationId: null,
-        createAt: null
+        createAt: null,
+        makedAt: null,
+        workName: null
       })
       this.tableAt = null
     },
@@ -502,7 +508,7 @@ export default {
 </script>
 <style lang="scss">
   .wookbook-min-width {
-    min-width: 1045px;
+    min-width: 1080px;
   }
   .wookbook-dialog {
     min-width: 400px;

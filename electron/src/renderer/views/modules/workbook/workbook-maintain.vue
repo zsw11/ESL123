@@ -13,7 +13,7 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'作业名'" prop="workName">
+          <el-form-item :label="'分析表名称'" prop="workName">
             <el-input v-model="dataForm.workName"></el-input>
           </el-form-item>
         </el-col>
@@ -336,8 +336,15 @@ export default {
     // 复制
     copyWBook(){
       console.log(this.dataForm)
-      copyWorkBook(this.dataForm).then(()=>{
-
+      copyWorkBook(this.dataForm).then((data)=>{
+        if(data.status === 200){
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: this.cancleFormSubmit
+          })
+        }
       })
 
     }
