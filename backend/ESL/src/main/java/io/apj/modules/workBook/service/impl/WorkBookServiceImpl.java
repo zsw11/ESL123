@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,6 +77,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private RevisionHistoryService revisionHistoryService;
 	@Autowired
 	private TotalService totalService;
+	@Autowired
+	private WorkOperationsService workOperationsService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -305,6 +306,21 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			workOperationsList.add(workOperations);
 		}
 		workOperationService.insertBatch(workOperationsList);
+	}
+
+	@Override
+	@Transactional
+	public WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId) {
+		workBookService.insert(workBook);
+		int newId = workBook.getId();
+		List<WorkOperationsEntity> workOperationsEntityList =  workOperationsService.selectList(new EntityWrapper<WorkOperationsEntity>().eq("work_book_id",workBookId));
+		for(WorkOperationsEntity item : workOperationsEntityList){
+			item.setWorkBookId(newId);
+		}
+		if(!workOperationsEntityList.isEmpty()){
+			workOperationService.insertBatch(workOperationsEntityList);
+		}
+		return workBook;
 	}
 
 	@Override
