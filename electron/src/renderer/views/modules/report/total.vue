@@ -50,7 +50,8 @@
               class="input"
               v-model="listQuery.stlst"
               :allowEmpty="true"
-              clearable></dict-select>
+              clearable>
+            </dict-select>
           </el-form-item>
 
           <el-form-item :label="'仕向'" prop="destinations">

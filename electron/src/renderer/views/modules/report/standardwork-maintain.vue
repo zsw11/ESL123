@@ -73,9 +73,8 @@
             <el-date-picker
               style="width: 100%"
               v-model="dataForm.monthResult"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            ></el-date-picker>
+              value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>

@@ -51,7 +51,6 @@
           <el-form-item :label="'WS时间'" prop="wsTime">
             <el-date-picker
               style="width: 100%"
-
               v-model="dataForm.wsTime">
             </el-date-picker>
           </el-form-item>
