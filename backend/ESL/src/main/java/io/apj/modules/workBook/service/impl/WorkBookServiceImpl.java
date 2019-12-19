@@ -87,7 +87,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
-						(String) params.get("workName"));
+						(String) params.get("workName"))
+				.like(params.get("destinations") != null && params.get("destinations") != "", "destinations",
+						(String) params.get("destinations"));
 
 		Map<String,Object> map = (Map) JSON.parse((String) params.get("makedAt"));
 		if(map!=null){
@@ -121,7 +123,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
 			}
 			if (entity.getWorkstationId() != null) {
-				entity.setWorkName(workstationService.selectById(entity.getWorkstationId()).getName());
+				entity.setWorkstationName(workstationService.selectById(entity.getWorkstationId()).getName());
 			}
 
 		}

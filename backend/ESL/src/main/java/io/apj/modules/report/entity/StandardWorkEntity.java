@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -75,6 +77,7 @@ public class StandardWorkEntity implements Serializable {
 	/**
 	 * 发行日
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date monthResult;
 	/**
 	 * 首个标准工数title
