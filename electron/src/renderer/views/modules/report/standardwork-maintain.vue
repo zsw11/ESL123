@@ -72,8 +72,7 @@
           <el-form-item :label="'发行日'" prop="monthResult">
             <el-date-picker
               style="width: 100%"
-              v-model="dataForm.monthResult"
-              value-format="yyyy-MM-dd HH:mm:ss">
+              v-model="dataForm.monthResult">
             </el-date-picker>
           </el-form-item>
         </el-col>

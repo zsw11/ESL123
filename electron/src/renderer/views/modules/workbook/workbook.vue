@@ -70,7 +70,6 @@
           <el-form-item :label="'制表日期'" prop="tableAt" >
             <el-date-picker
               v-model="tableAt"
-              type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"

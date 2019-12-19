@@ -83,8 +83,7 @@
           <el-form-item :label="'制表日期'" prop="makedAt">
             <el-date-picker
               style="width: 100%"
-              v-model="dataForm.makedAt"
-              value-format="yyyy-MM-dd">
+              v-model="dataForm.makedAt">
             </el-date-picker>
           </el-form-item>
         </el-col>

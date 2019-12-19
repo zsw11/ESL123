@@ -89,7 +89,6 @@
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
