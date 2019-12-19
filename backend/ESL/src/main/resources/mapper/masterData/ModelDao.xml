@@ -38,6 +38,16 @@
 				AND name LIKE '%${name}%'
 			</if>
 		</where>
+		<where>
+			<if test="remark != null and remark != ''">
+				AND remark LIKE '%${remark}%'
+			</if>
+		</where>
+		<where>
+			<if test="common != null and common != ''">
+				AND common  = #{common}
+			</if>
+		</where>
 
 		ORDER BY
 		part.update_at DESC
@@ -54,6 +64,16 @@
 		<where>
 			<if test="name != null and name != ''">
 				AND name LIKE '%${name}%'
+			</if>
+		</where>
+		<where>
+			<if test="remark != null and remark != ''">
+				AND remark LIKE '%${remark}%'
+			</if>
+		</where>
+		<where>
+			<if test="common != null and common != ''">
+				AND common  = #{common}
 			</if>
 		</where>
 		ORDER BY

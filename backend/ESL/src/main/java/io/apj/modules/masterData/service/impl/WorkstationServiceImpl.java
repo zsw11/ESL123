@@ -53,6 +53,7 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
 				.like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
 						(String) params.get("keyWord"));

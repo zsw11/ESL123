@@ -3,7 +3,7 @@
 
 <mapper namespace="io.apj.modules.masterData.dao.ToolDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.apj.modules.masterData.entity.ToolEntity" id="toolMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -21,6 +21,7 @@
         SELECT
         mtr.id AS mtId,
         M.id AS modelId,
+        M.remark AS remark,
         M.NAME AS modelName,
         d.NAME deptName,
         d."id" depeId,
@@ -33,19 +34,22 @@
         LEFT JOIN model AS M ON mtr.model_id = M.ID
         LEFT JOIN model_series AS ms ON ms.ID = M.model_series_id
         LEFT JOIN sys_dept AS d ON d.ID = M.dept_id
-           where mtr.tool_id = #{id}
-            <if test="modelName != null and modelName != ''">
-                AND M.name LIKE '%${modelName}%'
-            </if>
-            <if test="modelSeriesId != null and modelSeriesId != ''">
-                AND ms.id = #{modelSeriesId}
-            </if>
-            <if test="deptId != null and deptId != ''">
-                AND d.id = #{deptId}
-            </if>
-            <if test="code != null and code != ''">
-                AND   M.code LIKE '%${code}%'
-            </if>
+        where mtr.tool_id = #{id}
+        <if test="modelName != null and modelName != ''">
+            AND M.name LIKE '%${modelName}%'
+        </if>
+        <if test="modelSeriesId != null and modelSeriesId != ''">
+            AND ms.id = #{modelSeriesId}
+        </if>
+        <if test="deptId != null and deptId != ''">
+            AND d.id = #{deptId}
+        </if>
+        <if test="code != null and code != ''">
+            AND M.code LIKE '%${code}%'
+        </if>
+        <if test="remark != null and remark != ''">
+            AND M.code LIKE '%${remark}%'
+        </if>
 
 
         ORDER BY

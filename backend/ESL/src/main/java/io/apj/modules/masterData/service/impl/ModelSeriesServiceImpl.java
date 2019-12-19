@@ -29,7 +29,9 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ModelSeriesEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false).like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
+		entityWrapper.isNull("delete_at").orderBy("update_at",false)
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
+				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
 				(String) params.get("keyWord"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(

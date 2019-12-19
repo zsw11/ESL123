@@ -37,7 +37,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ToolEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false);
+		entityWrapper.isNull("delete_at")
+				.eq(params.get("common") != null && params.get("common") != "", "common", Boolean.parseBoolean((String) params.get("common")))
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
+				.orderBy("update_at",false);
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
 			entityWrapper.andNew(
@@ -53,6 +56,7 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
 		String modelName = (String) params.get("name");
 		String code = (String) params.get("code");
+		String remark = (String) params.get("remark");
 		int modelSeriesId = 0;
 		int deptId = 0;
 		if((String) params.get("modelSeriesId")!=null && (String) params.get("modelSeriesId")!=""){
@@ -61,7 +65,7 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
 			deptId = Integer.parseInt((String) params.get("deptId"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code)));
+		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code,remark)));
 
 	}
 //		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<>();

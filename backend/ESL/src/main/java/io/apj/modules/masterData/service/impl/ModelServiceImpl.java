@@ -4,6 +4,7 @@ import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 import io.apj.modules.masterData.entity.ModelWorkstationRelaEntity;
@@ -91,7 +92,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name)));
+		String remark = (String) params.get("remark");
+		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name,remark,common)));
 
 	}
 
@@ -110,7 +113,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name)));
+		String remark = (String) params.get("remark");
+		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name,remark,common)));
 
 	}
 //		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<ModelToolRelaEntity>();

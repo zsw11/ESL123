@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -36,8 +33,17 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ReportGroupEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
-                .like(params.get("id") != null && params.get("id") != "", "id", (String) params.get("id"))
-                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
+                .like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"));
+
+        if(StringUtils.isNotEmpty((CharSequence) params.get("reportId"))){
+            List<ReportGroupReportRelaEntity> groupReportRelaList = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id", Integer.parseInt((String) params.get("reportId"))));
+             List reportGroupId = new ArrayList();
+            for(ReportGroupReportRelaEntity item : groupReportRelaList){
+                reportGroupId = Collections.singletonList(item.getReportGroupId());
+            }
+            entityWrapper.in("id",reportGroupId);
+        }
+
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
             entityWrapper.andNew(
                     "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
