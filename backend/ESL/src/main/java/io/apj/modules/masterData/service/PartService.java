@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
+
 /**
  * 部品
  *
@@ -46,5 +48,11 @@ public interface PartService extends IService<PartEntity> {
 	 * @return
 	 */
 	void updatePinAndDataById(PartEntity partEntity);
+	
+	/**
+	 * 导入
+	 * @return 
+	 */
+	ResponseEntity<Object> partImport(Map<String, Object> map); 
 }
 
