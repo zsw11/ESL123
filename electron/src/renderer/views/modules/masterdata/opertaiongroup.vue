@@ -14,9 +14,9 @@
           <el-input v-model="listQuery.usedCount"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'频率'" prop="frequency" >
-          <el-input v-model="listQuery.frequency" clearable></el-input>
-        </el-form-item>
+<!--        <el-form-item :label="'频率'" prop="frequency" >-->
+<!--          <el-input v-model="listQuery.frequency" clearable></el-input>-->
+<!--        </el-form-item>-->
 
 <!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
 <!--          <keyword-search style="width: 100%" v-model="listQuery.deptId" :allowMultiple="true" :searchApi="this.listDept" :allowEmpty="true"></keyword-search>-->
@@ -69,11 +69,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="frequency" label="频率" >
-          <template slot-scope="scope">
-            <span>{{scope.row.frequency }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="frequency" label="频率" >-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.frequency }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column align="center" prop="usedCount" label="手顺数量" >
           <template slot-scope="scope">
