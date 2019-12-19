@@ -258,7 +258,7 @@ public class StaffController extends AbstractController {
 	 * @throws Exception
 	 */
 	@SysLog("导出人员信息")
-	@RequestMapping("/exportExcel")
+	@RequestMapping(value="/exportExcel", produces = "application/json;charset=UTF-8")
 	public R exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传
 		List<String> list = (List<String>) map.get("exportAttributes");

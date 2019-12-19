@@ -1,0 +1,49 @@
+[
+    {
+        "table": "staff",
+        "tableName": "人员信息",
+        "tableAlias": "staff",
+        "fieldList": [
+            {
+                "code": "deptName",
+                "name": "部门名称",
+                "type": "string"
+            },
+            {
+                "code": "userName",
+                "name": "用户名称",
+                "type": "string"
+            },
+            {
+                "code": "code",
+                "name": "编号",
+                "type": "string"
+            },
+            {
+                "code": "name",
+                "name": "名称",
+                "type": "String"
+            },
+            {
+                "code": "mobilephone",
+                "name": "电话",
+                "type": "String"
+            },
+            {
+                "code": "email",
+                "name": "邮箱",
+                "type": "String"
+            },
+            {
+                "code": "employmentDate",
+                "name": "入职日期",
+                "type": "data"
+            },
+            {
+                "code": "status",
+                "name": "状态",
+                "type": "String"
+            }
+        ]
+    }
+]
