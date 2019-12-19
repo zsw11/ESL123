@@ -11,9 +11,9 @@
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'频率'" prop="frequency" >
-          <el-input v-model="listQuery.frequency" clearable></el-input>
-        </el-form-item>
+<!--        <el-form-item :label="'频率'" prop="frequency" >-->
+<!--          <el-input v-model="listQuery.frequency" clearable></el-input>-->
+<!--        </el-form-item>-->
 
 
 <!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
@@ -71,11 +71,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop=" frequency" width="200px" label="频率" >
-          <template slot-scope="scope">
-            <span>{{scope.row. frequency }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop=" frequency" width="200px" label="频率" >-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row. frequency }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column align="center" prop="a0" label="A" width="40" >
           <template slot-scope="scope">
