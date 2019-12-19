@@ -10,23 +10,20 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-        <!--        <el-form-item :label="'机种系列'" prop="" >-->
-        <!--          <keyword-search v-model="" ></keyword-search>-->
-        <!--        </el-form-item>-->
+        <el-form-item :label="'是否通用'" prop="common">
+          <el-select  v-model="listQuery.common">
+            <el-option
+              v-for="item in option"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-        <!--        <el-form-item :label="'机种'" prop="" >-->
-        <!--          <el-select>-->
-        <!--            <el-option>-->
-        <!--            </el-option>-->
-        <!--          </el-select>-->
-        <!--        </el-form-item>-->
-
-        <!--        <el-form-item :label="'仕向'" prop="" >-->
-        <!--          <el-select>-->
-        <!--            <el-option>-->
-        <!--            </el-option>-->
-        <!--          </el-select>-->
-        <!--        </el-form-item>-->
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
 
         <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -145,6 +142,19 @@
         id: null, // 机种id
         title: null,
         dataButton: 'list',
+        value: '',
+        option: [
+          {
+            id: 1,
+            value: true,
+            label: '是'
+          },
+          {
+            id: 0,
+            value: false,
+            label: '否'
+          }
+        ],
         listQuery: {
           name: null,
           common: null,

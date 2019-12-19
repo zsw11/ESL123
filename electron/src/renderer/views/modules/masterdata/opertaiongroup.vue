@@ -10,6 +10,10 @@
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
+
 <!--        <el-form-item :label="'手顺数量'" prop="usedCount" >-->
 <!--          <el-input v-model="listQuery.usedCount"  clearable></el-input>-->
 <!--        </el-form-item>-->
@@ -131,6 +135,7 @@ export default {
       listQuery: {
         id: null,
         code: null,
+        remark: null,
         frequency: null,
         deptId: null,
         usedCount: null,
@@ -216,6 +221,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         code: null,
+        remark: null,
         frequency: null,
         deptId: null,
         usedCount: null,

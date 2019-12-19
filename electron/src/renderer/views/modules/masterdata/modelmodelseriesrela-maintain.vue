@@ -13,16 +13,9 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'名称'" prop="name">
-            <el-input    v-model="dataForm.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
             <keyword-search
-              placeholder="必填"
-              style="width: 100%"
-
+              placeholder="必填" style="width: 100%"
               v-model="dataForm.deptId"
               :allowMultiple="true"
               :searchApi="this.listDept"
@@ -30,19 +23,23 @@
             </keyword-search>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="10">
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'机种系列'" prop="modelSeriesId">
             <keyword-search
               placeholder="必填"
               style="width: 100%"
-
               v-model="dataForm.modelSeriesId"
               :allowMultiple="true"
               :searchApi="this.listModelSeries"
               :allowEmpty="true">
             </keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'机种名称'" prop="name">
+            <el-input    v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">

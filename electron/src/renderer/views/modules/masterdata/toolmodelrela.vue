@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
@@ -8,6 +8,21 @@
 
         <el-form-item :label="'治工具名称'" prop="name" >
           <el-input v-model="listQuery.name" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item :label="'是否通用'" prop="common">
+          <el-select  v-model="listQuery.common">
+            <el-option
+              v-for="item in option"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
         <div style="float: right;margin-right: 4px">
@@ -127,6 +142,19 @@
         id: null, // 机种id
         title: null,
         dataButton: 'list',
+        value: '',
+        option: [
+          {
+            id: 1,
+            value: true,
+            label: '是'
+          },
+          {
+            id: 0,
+            value: false,
+            label: '否'
+          }
+        ],
         listQuery: {
           name: null,
           common: null,

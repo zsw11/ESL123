@@ -103,13 +103,13 @@ const mainRoutes = {
     { path: '/model-workstation/:id(\\d+)/:name', component: _import('modules/masterdata/workstationmodelrela'), name: 'model-workstation', meta: { title: '机种-工位', isTab: true } },
 
     // 机种里的部品关系
-    { path: '/details-partmodelrela/:id(\\d+)', component: _import('modules/masterdata/partmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-部品关系详情', isTab: true } },
+    { path: '/details-partmodelrela/:id(\\d+)', component: _import('modules/masterdata/partmodelrela-maintain'), name: 'details-partmodelrela', meta: { title: '机种-部品关系详情', isTab: true } },
 
     // 机种里的治工具关系
-    { path: '/details-toolmodelrela/:id(\\d+)', component: _import('modules/masterdata/toolmodelrela-maintain'), name: 'details-modelpartrela', meta: { title: '机种-治工具关系详情', isTab: true } },
+    { path: '/details-toolmodelrela/:id(\\d+)', component: _import('modules/masterdata/toolmodelrela-maintain'), name: 'details-toolmodelrela', meta: { title: '机种-治工具关系详情', isTab: true } },
 
     // 机种里的工位关系
-    { path: '/details-workstationmodelrela/:id(\\d+)', component: _import('modules/masterdata/workstationmodelrela-maintain'), name: 'details-modelworkstationrela', meta: { title: '机种-工位关系详情', isTab: true } },
+    { path: '/details-workstationmodelrela/:id(\\d+)', component: _import('modules/masterdata/workstationmodelrela-maintain'), name: 'details-workstationmodelrela', meta: { title: '机种-工位关系详情', isTab: true } },
 
     // 部品里的机种关系
     { path: '/details-modelpartrela/:id(\\d+)', component: _import('modules/masterdata/modelpartrela-maintain'), name: 'details-modelpartrela', meta: { title: '部品-机种关系详情', isTab: true } },

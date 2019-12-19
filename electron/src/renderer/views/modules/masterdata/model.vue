@@ -8,12 +8,12 @@
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
-        class="clearfix model-min-width"
-      >
+        class="clearfix model-min-width">
         <el-form-item :label="'机种名称'" prop="name">
           <el-input class="input" v-model="listQuery.name" clearable>
           </el-input>
         </el-form-item>
+
 
         <el-form-item :label="'部门'" prop="deptId">
           <keyword-search
@@ -42,9 +42,11 @@
           </el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'阶段'" prop="wsTime">-->
-<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
+<!--        <el-form-item :label="'备注'" prop="remark">-->
+<!--          <el-input class="input" v-model="listQuery.remark" clearable>-->
+<!--          </el-input>-->
 <!--        </el-form-item>-->
+
       </el-form>
       <div class="clearfix">
         <div style="float:right;">
@@ -186,8 +188,8 @@ export default {
     return {
       dataButton: "list",
       listQuery: {
-        id: 0,
         name: null,
+        remark: null,
         deptId: null,
         deptName: null,
         modelSeriesId: null,
@@ -342,6 +344,7 @@ export default {
     clearQuery() {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
+        remark: null,
         deptId: null,
         modelSeriesId: null,
         code: null,

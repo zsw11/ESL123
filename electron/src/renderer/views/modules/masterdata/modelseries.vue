@@ -11,15 +11,10 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'机种'" prop="remark" >-->
-<!--          <keyword-search-->
-<!--            v-model="listQuery.name"-->
-<!--            :allowMultiple="true"-->
-<!--            :searchApi="this.listModel"-->
-<!--            :allowEmpty="true"-->
-<!--            clearable>-->
-<!--          </keyword-search>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
+
 
         <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>

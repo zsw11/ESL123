@@ -10,14 +10,17 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'报表'" prop="remark" >
+        <el-form-item :label="'报表'" prop="reportId">
           <keyword-search
-            v-model="listQuery.remark"
-            :allowMultiple="true"
-            :searchApi="this.listReport"
+            v-model="listQuery.reportId"
+            :searchApi="listReport"
             :allowEmpty="true"
-            clearable>
+            :allowMultiple="true">
           </keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
         <div class="search-box">
@@ -64,6 +67,7 @@
           </template>
         </el-table-column>
 
+
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
@@ -104,7 +108,8 @@ export default {
       listQuery: {
         id: null,
         name: null,
-        remark: null
+        remark: null,
+        reportId: null
       },
       listReport,
       dataList: [],
@@ -119,7 +124,8 @@ export default {
         children: [
           { code: 'id', name: '报表', type: 'string', required: true },
           { code: 'name', name: '报表组名称', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: true },
+          { code: 'reportId', name: '报表组', type: 'string', required: true }
         ]
       }],
       complexFilters: []
@@ -157,7 +163,8 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
-        remark: null
+        remark: null,
+        reportId: null
       })
     },
     // 每页数

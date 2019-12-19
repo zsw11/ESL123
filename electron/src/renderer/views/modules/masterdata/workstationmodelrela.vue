@@ -6,7 +6,12 @@
         </div>
           <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
 
-            <el-form-item :label="'工位名称'" prop="name" ><el-input v-model="listQuery.name" clearable></el-input>
+            <el-form-item :label="'工位名称'" prop="name" >
+              <el-input v-model="listQuery.name" clearable></el-input>
+            </el-form-item>
+
+            <el-form-item :label="'备注'" prop="remark" >
+              <el-input v-model="listQuery.remark" clearable></el-input>
             </el-form-item>
 
             <div class="search-box">
