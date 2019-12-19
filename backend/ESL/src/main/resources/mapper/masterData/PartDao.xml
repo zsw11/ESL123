@@ -19,6 +19,7 @@
     <select id="selectpartModel" resultType="io.apj.modules.masterData.vo.ModelVo">
         SELECT
         mpr.id AS mpId,
+        mpr.delete_at,
         M.id AS modelId,
         M.remark as remark,
         M.NAME AS modelName,
@@ -33,7 +34,7 @@
         LEFT JOIN model AS M ON mpr.model_id = M.ID
         LEFT JOIN model_series AS ms ON ms.ID = M.model_series_id
         LEFT JOIN sys_dept AS d ON d.ID = M.dept_id
-        where mpr.part_id = #{id}
+        where mpr.part_id = #{id} AND mpr.delete_at ISNULL
 
         <if test="modelName != null and modelName != ''">
             AND M.name LIKE '%${modelName}%'
@@ -48,7 +49,7 @@
             AND M.code LIKE '%${code}%'
         </if>
         <if test="remark != null and remark != ''">
-            AND M.code LIKE '%${remark}%'
+            AND M.remark LIKE '%${remark}%'
         </if>
 
 

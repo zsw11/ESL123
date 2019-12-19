@@ -18,8 +18,8 @@ import java.util.Map;
  */
 @Mapper
 public interface ModelDao extends BaseMapper<ModelEntity> {
-    List<Map<String,Object>> selectmodelPart(@Param("id") Integer id, Page<Map<String,Object>> page, @Param("name")String name, @Param("remark")String remark,@Param("common") Boolean common);
+    List<Map<String,Object>> selectmodelPart(@Param("id") Integer id, Page<Map<String,Object>> page, @Param("name")String name, @Param("remark")String remark, @Param("common") Boolean common);
 
-    List<Map<String,Object>> selectmodelTool(@Param("id") Integer id, Page<Map<String,Object>> page, @Param("name")String name,@Param("remark")String remark,@Param("common") Boolean common);
+    List<Map<String,Object>> selectmodelTool(@Param("id") Integer id, Page<Map<String,Object>> page, @Param("name")String name,@Param("remark")String remark, @Param("common") Boolean common);
 	
 }

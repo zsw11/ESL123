@@ -34,7 +34,7 @@
         LEFT JOIN model AS M ON mtr.model_id = M.ID
         LEFT JOIN model_series AS ms ON ms.ID = M.model_series_id
         LEFT JOIN sys_dept AS d ON d.ID = M.dept_id
-        where mtr.tool_id = #{id}
+        where mtr.tool_id = #{id} AND mtr.delete_at ISNULL
         <if test="modelName != null and modelName != ''">
             AND M.name LIKE '%${modelName}%'
         </if>

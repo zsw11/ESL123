@@ -98,4 +98,5 @@ public class ModelVo implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	private Boolean common;
 }

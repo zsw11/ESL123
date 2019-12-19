@@ -44,11 +44,10 @@
 			</if>
 		</where>
 		<where>
-			<if test="common != null and common != ''">
-				AND common  = #{common}
+			<if test="common != null and 'true'.toString() == common.toString()">
+				AND common = #{common,jdbcType=BOOLEAN}
 			</if>
 		</where>
-
 		ORDER BY
 		part.update_at DESC
 	</select>
@@ -73,7 +72,7 @@
 		</where>
 		<where>
 			<if test="common != null and common != ''">
-				AND common  = #{common}
+				AND common = #{common}
 			</if>
 		</where>
 		ORDER BY
