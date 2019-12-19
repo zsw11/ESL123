@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.PartService;
 import io.apj.modules.sys.controller.AbstractController;
@@ -125,8 +128,8 @@ public class PartController extends AbstractController {
 			List<ReferenceEntity> referenceEntities = deleteCheckReference("part", ids[i].longValue());
 			if (!referenceEntities.isEmpty()) {
 				for (ReferenceEntity reference : referenceEntities) {
-					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById()
-							+ " 在表：" + reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
+					return RD.INTERNAL_SERVER_ERROR(reference.getByEntity() + "，id=" + reference.getById() + " 在表："
+							+ reference.getMainEntity() + "，id=" + reference.getMainId() + "存在引用关系，不能删除！");
 				}
 			} else {
 				// 删除引用表关系
@@ -144,7 +147,7 @@ public class PartController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SysLog("导出设备信息")
+	@SysLog("导出部件")
 	@RequestMapping(value = "/exportExcel", produces = "application/json;charset=UTF-8")
 	public void exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传
@@ -188,41 +191,10 @@ public class PartController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) {
-		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-		List<PartEntity> partEntityList = new ArrayList<>();
-		for (int i = 0; i < maps.size(); i++) {
-			PartEntity partEntity = new PartEntity();
-			// deviceMap
-			Map<String, Object> deviceMap = new HashMap<>();
-			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
-				String[] keyStrs = key.split("\\.");
-				// 设备
-				if (keyStrs[0].equals("part")) {
-					if (keyStrs[1].equals("common")) {
-						if (value.equals("是")) {
-							deviceMap.put(keyStrs[1], true);
-						} else {
-							deviceMap.put(keyStrs[1], false);
-						}
-						continue;
-					}
-					deviceMap.put(keyStrs[1], value);
-				}
-			}
-			DataUtils.transMap2Bean2(deviceMap, partEntity);
-			ValidatorUtils.validateEntity(partEntity, i);
-			partEntity.setCreateBy(getUserId().intValue());
-			partEntityList.add(partEntity);
-		}
-		try {
-			partService.insertBatch(partEntityList, Constant.importNum);
-		} catch (MybatisPlusException e) {
-			throw new RRException("批量导入失败", 500);
-		}
-		return RD.build().put("code", 200);
+	public ResponseEntity<Object> importExcel(@RequestBody Map<String, Object> map) {
+		map.put("userID", getUserId().intValue());
+		ResponseEntity<Object> responseEntity = partService.partImport(map);
+		return responseEntity;
 	}
 
 }
