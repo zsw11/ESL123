@@ -228,6 +228,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         Integer reportId = (Integer)params.get("reportId");
         switch (reportId) {
             case 1:
+                workBookService.download(params, response);
                 break;
             case 2:
                 break;

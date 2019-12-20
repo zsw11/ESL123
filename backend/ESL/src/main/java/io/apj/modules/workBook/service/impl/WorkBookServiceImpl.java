@@ -3,8 +3,10 @@ package io.apj.modules.workBook.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.RD;
+import io.apj.common.utils.*;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
@@ -12,39 +14,23 @@ import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.modules.report.service.ChangeRecordService;
-
-import io.apj.modules.report.service.StandardTimeService;
-import io.apj.modules.report.service.StandardWorkService;
-import io.apj.modules.report.service.TotalService;
-import io.apj.modules.report.service.TimeContactService;
+import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysDeptService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-
-import io.apj.common.utils.DataUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
 import io.apj.modules.workBook.dao.WorkBookDao;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("workBookService")
 public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity> implements WorkBookService {
@@ -315,5 +301,23 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			item.setDeleteAt(new Date());
 		}
 		this.updateAllColumnBatchById(workBookList);
+	}
+
+	@Override
+	public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+		Integer phaseId = (Integer)params.get("phaseId");
+		Integer modelId = (Integer)params.get("modelId");
+		String stlst = params.get("stlst").toString();
+
+		List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+		List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
+		String fileName = "test";
+		ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+	}
+
+	private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+		EntityWrapper<WorkBookEntity> wrapper = new EntityWrapper<>();
+		wrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		return selectList(wrapper);
 	}
 }

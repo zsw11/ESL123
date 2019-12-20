@@ -6,6 +6,8 @@ import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -40,4 +42,6 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	 * @return
 	 */
 	void deleteByWrapper(Wrapper wrapper);
+
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
