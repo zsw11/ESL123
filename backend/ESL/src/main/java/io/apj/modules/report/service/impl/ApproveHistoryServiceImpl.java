@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportGroupService;
@@ -32,6 +33,8 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
     private ModelService modelService;
     @Autowired
     private PhaseService phaseService;
+    @Autowired
+    private StaffService staffService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -67,7 +70,9 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
             if(entity.getPhaseId()!=null){
                 entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
             }
-
+            if(entity.getNextApproverId()!=null){
+                entity.setNextApproverName(staffService.selectById(entity.getNextApproverId()).getName());
+            }
         }
 
         return new PageUtils(page);

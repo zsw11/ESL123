@@ -85,4 +85,7 @@ public class ApproveHistoryEntity implements Serializable {
 	@TableField(exist = false)
 	private String phaseName;
 
+	@TableField(exist = false)
+	private String nextApproverName;
+
 }

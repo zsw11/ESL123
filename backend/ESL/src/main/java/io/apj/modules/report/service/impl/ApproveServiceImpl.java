@@ -217,6 +217,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         approveHistoryEntity.setOpinion((String) data.get("opinion"));
         approveHistoryEntity.setResult((String) data.get("result"));
         approveHistoryEntity.setReportApproveId(approveEntity.getId());
+        approveHistoryEntity.setNextApproverId(approveEntity.getNextApproverId());
         approveHistoryEntity.setDeptId(approveEntity.getDeptId());
         approveHistoryEntity.setCreateAt(new Date());
         approveHistoryService.insert(approveHistoryEntity);
