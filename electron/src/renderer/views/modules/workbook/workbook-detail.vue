@@ -135,10 +135,12 @@
                 return self.$data.duration || dur
               },
               currentTime (time) {
-                console.log(time, self.$data.currentTime, self.$data.duration)
                 if (time) {
                   if (self.$data.currentTime) {
-                    if (time < self.$data.currentTime) return self.$data.currentTime + time
+                    if (time < self.$data.lastTime) {
+                      self.$data.lastTime = self.$data.currentTime + time
+                      return self.$data.lastTime
+                    }
                     else return time
                   } else {
                     return time
@@ -148,6 +150,7 @@
               setCurrentTime (time) {
                 self.$data.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=${time}&t=${Math.random()}`
                 self.$data.currentTime = time
+                self.$data.lastTime = time
                 return time
               }
             }
