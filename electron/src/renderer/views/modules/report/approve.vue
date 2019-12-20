@@ -50,9 +50,9 @@
         <!--          <el-form-item :label="'审批状态'" prop="status">-->
 <!--            <el-input v-model="listQuery.status" clearable></el-input>-->
 <!--          </el-form-item>-->
-<!--          <el-form-item :label="'审批状态'" prop="status">-->
-<!--            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>-->
-<!--          </el-form-item>-->
+          <el-form-item :label="'审批状态'" prop="status">
+            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>
+          </el-form-item>
           <div class="buttons with-complex">
             <el-button @click="clearQuery()">清 空</el-button>
             <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
@@ -113,23 +113,25 @@
           </template>
         </el-table-column>
 
-<!--        <el-table-column align="center" prop="status" label="审批状态">-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.status }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <el-table-column align="center" prop="status" label="审批状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status">{{ dictItemStatus[scope.row.status].name }}</span>
+          </template>
+        </el-table-column>
 
 
         <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id,scope.row.reportGroupId)">详情</el-button>
             <el-button
+              v-if="userId === scope.row.nextApproverId"
               size="mini"
               type="text"
               @click="approve(scope.row.id,scope.row.reportGroupName,1)">
               通过
             </el-button>
             <el-button
+              v-if="userId === scope.row.nextApproverId"
               id="delete"
               size="mini"
               type="text"
@@ -186,6 +188,7 @@ import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { listStaff } from '@/api/staff'
+import { fetchUserDetail } from '@/api/passport'
 
 export default {
   name: 'reportApproveList',
@@ -194,6 +197,7 @@ export default {
       approveShow: false,
       dataButton: 'list',
       dialogTitle: null,
+      userId: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -300,13 +304,17 @@ export default {
         }
       ],
       complexFilters: [],
-      dictItemSTLST: []
+      dictItemSTLST: [],
+      dictItemStatus: []
     }
   },
   activated () {
     const self = this
     self.getDictByType()
     self.getDataList()
+    fetchUserDetail().then((data)=>{
+      this.userId = data.page.id
+    })
   },
   methods: {
     // 普通查询
@@ -448,6 +456,9 @@ export default {
     getDictByType () {
       listDictItem({ type: 'ST' }).then(({data}) => {
         this.dictItemSTLST = keyBy(data, 'code')
+      })
+      listDictItem({ type: 'Status' }).then(({data}) => {
+        this.dictItemStatus = keyBy(data, 'code')
       })
     }
   }

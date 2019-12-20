@@ -202,13 +202,13 @@ export default {
           { required: true, message: 'STLST不能为空', trigger: 'blur' }
         ],
         modelId: [
-          { type: 'number', message: '机种ID需为数字值' }
+          { required: true, message: '机种不能为空', trigger: 'blur' }
         ],
         destinations: [
           { max: 128, message: '长度超过了128', trigger: 'blur' }
         ],
         phaseId: [
-          { type: 'number', message: '生产阶段ID需为数字值' }
+          { required: true, message: '生产阶段不能为空', trigger: 'blur' }
         ],
         workstationId: [
           { type: 'number', message: '工位ID需为数字值' }

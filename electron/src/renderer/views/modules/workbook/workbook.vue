@@ -178,7 +178,7 @@
     <el-dialog
       customClass="wookbook-dialog"
       width="30%"
-      title="选择生成报表组"
+      title="选择生成报表"
       :visible.sync="createShow">
       <el-form :inline="true" :model="createForm">
         <el-form-item>
