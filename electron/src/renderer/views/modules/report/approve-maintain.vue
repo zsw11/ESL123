@@ -14,14 +14,35 @@
       :size="'mini'"
       label-width="100px"
       style="width: 95%"
+      :disabled="true"
     >
   <el-row>
     <el-col :span="10">
-      <el-form-item :label="'报表组:'+ dataForm.reportGroupName" prop="reportGroupName" label-width="300">
+      <el-form-item :label="'报表组'" prop="reportGroupName" >
+        <el-input v-model="dataForm.reportGroupName"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="10" :offset="2">
-      <el-form-item :label="'审批状态:'+ dataForm.status" prop="status" label-width="300">
+<!--      <el-form-item :label="'审批状态'" prop="status" >-->
+<!--        <dict-select dictType="Status" v-model="dataForm.status" :allowEmpty="true" clearable></dict-select>-->
+<!--      </el-form-item>-->
+      <el-form-item :label="'机种'" prop="modelName">
+        <el-input v-model="dataForm.modelName"></el-input>
+      </el-form-item>
+    </el-col>
+  </el-row>
+
+
+  <el-row>
+    <el-col :span="10">
+      <el-form-item :label="'生产阶段'" prop="phaseName">
+        <el-input  v-model="dataForm.phaseName"></el-input>
+      </el-form-item>
+    </el-col>
+
+    <el-col :span="10" :offset="2">
+      <el-form-item :label="'ST/LST'" prop="stlst">
+        <dict-select dictType="ST" style="width:100%" :disabled="true" v-model="dataForm.stlst"></dict-select>
       </el-form-item>
     </el-col>
   </el-row>
@@ -86,16 +107,17 @@ export default {
   name: 'editReportApprove',
   data () {
     return {
-      reportGroupName: '报表组',
       inited: false,
       reportGroupId: null,
       dataForm: {
-        id: 0,
-        status: '',
-        reportGroupName: '',
+        id: null,
+        status: null,
+        reportGroupName: null,
         deptId: null,
         modelId: null,
         phaseId: null,
+        phaseName: null,
+        modelName: null,
         stlst: null,
         report_group_id: null,
         nextApproverId: null,
@@ -196,6 +218,8 @@ export default {
                 'status',
                 'modelId',
                 'phaseId',
+                'modelName',
+                'phaseName',
                 'stlst',
                 'report_group_id',
                 'nextApproverId',
