@@ -211,7 +211,7 @@ export default {
           { required: true, message: '生产阶段不能为空', trigger: 'blur' }
         ],
         workstationId: [
-          { type: 'number', message: '工位ID需为数字值' }
+          { required: true, message: '工位不能为空', trigger: 'blur' }
         ],
         workName: [
           { max: 128, message: '长度超过了128', trigger: 'blur' }
