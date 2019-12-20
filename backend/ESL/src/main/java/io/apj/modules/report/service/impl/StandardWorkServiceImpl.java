@@ -203,9 +203,9 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         BigDecimal stTotal = BigDecimal.ZERO;
 
         for (StandardWorkItemEntity entity: list) {
-            htTotal = htTotal.add(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600)));
+            htTotal = htTotal.add(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600),5));
             stTotal = stTotal.add(entity.getFirstTime());
-            entity.setHfTime(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600)));
+            entity.setHfTime(entity.getFirstTime().multiply(BigDecimal.valueOf(1000)).divide(BigDecimal.valueOf(3600),5));
         }
         map.put("htTotal", htTotal);
         map.put("stTotal", stTotal);

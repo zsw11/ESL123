@@ -1,6 +1,12 @@
 package io.apj.modules.collection.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -21,6 +27,13 @@ public class StationTimeItemServiceImpl extends ServiceImpl<StationTimeItemDao, 
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<StationTimeItemEntity> getListBySWId(Integer id) {
+        EntityWrapper<StationTimeItemEntity> ew = new EntityWrapper<>();
+        ew.eq("collection_station_time_id",id);
+        return selectList(ew);
     }
 
 }
