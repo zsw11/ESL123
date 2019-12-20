@@ -1569,7 +1569,7 @@ CREATE TABLE collection_revision_history (
   sheet_name varchar(128),
   model_id integer,
   destinations varchar(128),
-  phase_id varchar(128),
+  phase_id integer,
   stlst varchar(128),
   comfirm_by integer,
   in_charge_by integer,
