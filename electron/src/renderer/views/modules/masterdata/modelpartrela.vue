@@ -5,7 +5,6 @@
         <div class="card-title">{{title}}-机种</div>
       </div>
       <el-form
-        :disabled="$route.path.includes('details')"
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
@@ -21,13 +20,7 @@
         </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId">
-          <keyword-search
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId">

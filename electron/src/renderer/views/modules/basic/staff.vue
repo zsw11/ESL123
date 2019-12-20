@@ -35,31 +35,16 @@
               </el-input>
             </el-form-item>
           </el-col>
-<!--          <el-col :span='6'>-->
-<!--            <el-form-item label='性别'-->
-<!--                          prop='gender'>-->
-<!--              <dict-select dictCode='gender'-->
-<!--                           v-model='listQuery.gender'-->
-<!--                           clearable></dict-select>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
         </el-row>
 
         <el-row>
           <el-col :span='6'>
-<!--            <el-form-item label='家庭地址' label-width="120"-->
-<!--                          prop='familyAddress'>-->
-<!--              <el-input v-model='listQuery.familyAddress'-->
-<!--                        clearable></el-input>-->
-<!--            </el-form-item>-->
+            <el-form-item label='中心' prop='centerName'>
+              <el-input v-model='listQuery.centerName' clearable>
+              </el-input>
+            </el-form-item>
           </el-col>
-<!--          <el-col :span='6'>-->
-<!--            <el-form-item label='电话'-->
-<!--                          prop='mobilephone'>-->
-<!--              <el-input v-model='listQuery.mobilephone'-->
-<!--                        clearable></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
+
           <el-col :span='6'>
             <el-form-item label='邮箱' prop='email'>
               <el-input v-model='listQuery.email' clearable>
@@ -72,6 +57,10 @@
               </dict-select>
             </el-form-item>
           </el-col>
+
+        </el-row>
+
+        <el-row>
           <el-col :span='8'>
             <el-form-item label='入职日期'
                           prop='employmentDate'>
@@ -83,19 +72,6 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-row>
-
-<!--          <el-col :span='8'>-->
-<!--            <el-form-item label='生日'-->
-<!--                          prop='birthDate'>-->
-<!--              <el-date-picker v-model='listQuery.birthDate'-->
-<!--                              value-format='yyyy-MM-dd'-->
-<!--                              type='date'-->
-<!--                              placeholder='选择出生日期'></el-date-picker>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
         </el-row>
         <div class='buttons with-complex'>
 <!--          <complex-filter :config="complexFilterConfig"-->
@@ -142,6 +118,13 @@
                          label="部门">
           <template slot-scope="scope">
             <span>{{scope.row.dept.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center"
+                         label="中心">
+          <template slot-scope="scope">
+            <span>{{scope.row.centerName }}</span>
           </template>
         </el-table-column>
 
@@ -400,7 +383,6 @@ export default {
       )
         .then(({ page }) => {
           this.dataList = page.data
-          console.log(this.dataList, 444444)
           this.total = page.totalCount
         })
         .catch(() => {

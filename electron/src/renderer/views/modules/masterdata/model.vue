@@ -16,14 +16,7 @@
 
 
         <el-form-item :label="'部门'" prop="deptId">
-          <keyword-search
-            class="input"
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item :label="'机种系列'" prop="modelSeriesId">
