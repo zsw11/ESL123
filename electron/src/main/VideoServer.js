@@ -78,8 +78,43 @@ export default class VideoServer {
                     .on('end', function () {
                         console.log('Processing finished !');
                     })
+
                 let videoStream = this._ffmpegCommand.pipe();
                 videoStream.pipe(response);
+
+                // const self = this;
+                // setTimeout(() => {
+                //     self.killFfmpegCommand();
+                //     console.log(startTime)
+                //     self._ffmpegCommand = ffmpeg()
+                //         .input(self.videoSourceInfo.videoSourcePath)
+                //         .nativeFramerate()
+                //         .videoCodec(videoCodec)
+                //         .audioCodec(audioCodec)
+                //         .format('mp4')
+                //         .seekInput(7)
+                //         .outputOptions('-movflags', 'frag_keyframe+empty_moov')
+                //         .on('progress', function (progress) {
+                //             console.log('time: ' + progress.timemark);
+                //         })
+                //         .on('error', function (err) {
+                //             console.log('An error occurred: ' + err.message);
+                //         })
+                //         .on('end', function () {
+                //             console.log('Processing finished !');
+                //         })
+                //     let videoStream = self._ffmpegCommand.pipe();
+                //     videoStream.pipe(response);
+                // }, 3000);
+
+                // console.log(startTime)
+                // if (!startTime) {
+                //     let videoStream = this._ffmpegCommand.pipe();
+                //     videoStream.pipe(response);
+                // } else {
+                //     console.log(22222)
+                //     response.status = 200
+                // }
             }).listen(8888);
         }
     }
