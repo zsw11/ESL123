@@ -233,7 +233,6 @@ export default {
       approveShow: false,
       dataButton: 'list',
       approveForm: {
-        reportId: null,
         reportGroupId: null,
         nextApprove: null,
         modelId: null,

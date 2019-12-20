@@ -201,7 +201,6 @@ export default {
     return {
       approveShow: false,
       approveForm: {
-        reportId: null,
         reportGroupId: null,
         nextApprove: null,
         modelId: null,
