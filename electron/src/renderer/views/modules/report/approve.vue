@@ -124,14 +124,12 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id,scope.row.reportGroupId)">详情</el-button>
             <el-button
-              v-if="userId === scope.row.nextApproverId"
               size="mini"
               type="text"
               @click="approve(scope.row.id,scope.row.reportGroupName,1)">
               通过
             </el-button>
             <el-button
-              v-if="userId === scope.row.nextApproverId"
               id="delete"
               size="mini"
               type="text"

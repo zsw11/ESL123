@@ -198,7 +198,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-        if(StringUtils.isNotEmpty((CharSequence) data.get("nextApproverId"))){
+        if(data.get("nextApproverId") == null){
             approveEntity.setStatus("01");
         }else {
             approveEntity.setStatus("02");
