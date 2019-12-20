@@ -14,10 +14,6 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item class="title" :label="'型号'" prop="code">
-          <el-input v-model="listQuery.code">
-          </el-input>
-        </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId">
           <tree-select v-model='listQuery.deptId' :api='listDept' />
@@ -34,9 +30,10 @@
           </keyword-search>
         </el-form-item>
 
-<!--        <el-form-item class="title" :label="'阶段'" prop="wsTime">-->
-<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item class="title" :label="'型号'" prop="code">
+          <el-input v-model="listQuery.code">
+          </el-input>
+        </el-form-item>
       </el-form>
       <div class="clearfix">
         <div style="float:right">
