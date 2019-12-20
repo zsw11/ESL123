@@ -355,8 +355,13 @@
           </el-radio-group>
         </el-form-item>
         <div>
-          <el-form-item :label="'下一审批者'" prop="nextApprove" >
-            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+           <el-form-item :label="'下一审批者'" prop="nextApprove" >
+            <keyword-search
+              v-model="approveForm.nextApprove"
+              :allowMultiple="true"
+              :searchApi="this.listStaff"
+              :allowEmpty="true" clearable>
+            </keyword-search>
           </el-form-item>
         </div>
 
@@ -377,6 +382,7 @@ import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove } from '@/api/reportApprove'
+import { listStaff } from '@/api/staff'
 
 export default {
   name: 'collectionRevisionHistoryList',
@@ -419,6 +425,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listStaff,
       listDict,
       listPhase,
       listModel,

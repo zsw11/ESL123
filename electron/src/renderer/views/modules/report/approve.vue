@@ -160,7 +160,12 @@
         </el-form-item>
 
         <el-form-item :label="'下一审批者'" prop="nextApprove"  label-width="100px">
-          <el-input  v-model="approveForm.nextApprove" autocomplete="off" clearable></el-input>
+          <keyword-search
+            v-model="approveForm.nextApprove"
+            :allowMultiple="true"
+            :searchApi="this.listStaff"
+            :allowEmpty="true" clearable>
+          </keyword-search>
         </el-form-item>
 
       </el-form>
@@ -180,6 +185,7 @@ import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { listStaff } from '@/api/staff'
 
 export default {
   name: 'reportApproveList',
@@ -211,6 +217,7 @@ export default {
         id: null,
         result: null
       },
+      listStaff,
       listDict,
       listDept,
       listReportGroup,

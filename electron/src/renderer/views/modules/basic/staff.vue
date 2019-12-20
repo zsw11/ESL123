@@ -199,7 +199,8 @@
             <el-button v-if="isAuth('basic:staff:delete')"
                        size='mini'
                        type='text'
-                       @click='deleteHandle(scope.row)'>删除</el-button>
+                       @click='deleteHandle(scope.row)'
+                       id="delete"  >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
