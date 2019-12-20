@@ -372,8 +372,8 @@
           </el-radio-group>
         </el-form-item>
         <div>
-          <el-form-item :label="'下一审批者'" prop="nextApprove" >
-            <el-input  v-model="approveForm.nextApprove" clearable>
+          <el-form-item :label="'下一审批者'" prop="nextApproverId" >
+            <el-input  v-model="approveForm.nextApproverId" clearable>
             </el-input>
           </el-form-item>
         </div>
@@ -404,7 +404,7 @@ export default {
       approveShow: false,
       approveForm: {
         reportGroupId: null,
-        nextApprove: null,
+        nextApproverId: null,
         modelId: null,
         phaseId: null,
         stlst: null

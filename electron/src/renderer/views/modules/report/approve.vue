@@ -161,9 +161,9 @@
           <el-input type="textarea" rows="6"  v-model="approveForm.opinion" autocomplete="off" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'下一审批者'" prop="nextApprove"  label-width="100px">
+        <el-form-item :label="'下一审批者'" prop="nextApproverId"  label-width="100px">
           <keyword-search
-            v-model="approveForm.nextApprove"
+            v-model="approveForm.nextApproverId"
             :allowMultiple="true"
             :searchApi="this.listStaff"
             :allowEmpty="true" clearable>
@@ -216,7 +216,7 @@ export default {
         deleteAt: null
       },
       approveForm: {
-        nextApprove: null,
+        nextApproverId: null,
         opinion: null,
         id: null,
         result: null
@@ -424,7 +424,7 @@ export default {
     approve (id, name, flag) {
       this.approveForm.id = null
       this.approveForm.result = null
-      this.approveForm.nextApprove = null
+      this.approveForm.nextApproverId = null
       this.approveForm.opinion = null
       if (flag === 1) {
         this.dialogTitle = '通过-' + name

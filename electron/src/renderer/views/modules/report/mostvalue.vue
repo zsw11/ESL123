@@ -272,9 +272,9 @@
           </el-radio-group>
         </el-form-item>
         <div>
-           <el-form-item :label="'下一审批者'" prop="nextApprove" >
+           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
-              v-model="approveForm.nextApprove"
+              v-model="approveForm.nextApproverId"
               :allowMultiple="true"
               :searchApi="this.listStaff"
               :allowEmpty="true" clearable>
@@ -308,7 +308,7 @@ export default {
       approveShow: false,
       approveForm: {
         reportGroupId: null,
-        nextApprove: null,
+        nextApproverId: null,
         modelId: null,
         phaseId: null,
         stlst: null
