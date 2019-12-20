@@ -10,6 +10,7 @@
 		<result property="name" column="name" />
 		<result property="pinyin" column="pinyin" />
 		<result property="remark" column="remark" />
+		<result property="deptId" column="dept_id" />
 		<result property="createBy" column="create_by" />
 		<result property="createAt" column="create_at" />
 		<result property="updateBy" column="update_by" />

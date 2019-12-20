@@ -750,6 +750,7 @@ CREATE TABLE action (
   id serial PRIMARY KEY,
   name varchar(64),
   pinyin varchar(128),
+  dept_id integer,
   remark varchar(128),
   create_by integer,
   create_at timestamp default now(),
@@ -759,8 +760,10 @@ CREATE TABLE action (
 );
 comment on table action is '关键词';
 Create Unique Index index_action_name_UNQ On action(name);
+CREATE UNIQUE INDEX action_uniq ON action (name,dept_id) WHERE delete_at IS NOT NULL;
 comment on column action.name is '名称';
 comment on column action.pinyin is '拼音';
+comment on column action.dept_id is '部门ID';
 comment on column action.remark is '备注';
 comment on column action.create_by is '创建者ID';
 comment on column action.create_at is '创建时间';
@@ -784,7 +787,7 @@ CREATE TABLE tool (
 );
 comment on table tool is '治工具';
 comment on column tool.name is '名称';
-ALTER TABLE "tool" ADD CONSTRAINT "tool_name_delete_at_key" UNIQUE ("name", "delete_at");
+CREATE UNIQUE INDEX tool_uniq ON tool (name) WHERE delete_at IS NULL;
 comment on column tool.pinyin is '拼音';
 comment on column tool.common is '是否通用';
 comment on column tool.remark is '备注';
@@ -810,7 +813,7 @@ CREATE TABLE part (
 );
 comment on table part is '部品';
 comment on column part.name is '名称';
-ALTER TABLE "part" ADD CONSTRAINT "part_name_delete_at_key" UNIQUE ("name", "delete_at");
+CREATE UNIQUE INDEX part_uniq ON part (name) WHERE delete_at IS NULL;
 comment on column part.pinyin is '拼音';
 comment on column part.common is '是否通用';
 comment on column part.remark is '备注';
@@ -1014,7 +1017,7 @@ CREATE TABLE model (
 );
 comment on table model is '机种';
 comment on column model.model_series_id is '机种系列ID';
-ALTER TABLE "model" ADD CONSTRAINT "model_name_delete_at_key" UNIQUE ("name", "delete_at");
+CREATE UNIQUE INDEX model_uniq ON model (name) WHERE delete_at IS NULL;
 comment on column model.name is '名称';
 comment on column model.pinyin is '拼音';
 comment on column model.dept_id is '部门ID';
@@ -1044,7 +1047,7 @@ CREATE TABLE model_series (
   delete_at timestamp
 );
 comment on table model_series is '机种系列';
-ALTER TABLE "model_series" ADD CONSTRAINT "model_series_name_delete_at_key" UNIQUE ("name", "delete_at");
+CREATE UNIQUE INDEX model_series_uniq ON model_series (name) WHERE delete_at IS NULL;
 comment on column model_series.name is '名称';
 comment on column model_series.pinyin is '拼音';
 comment on column model_series.remark is '备注';
@@ -1069,6 +1072,7 @@ CREATE TABLE dept_action_rela (
 comment on table dept_action_rela is '组织机构关键词关系';
 comment on column dept_action_rela.dept_id is '组织机构ID';
 comment on column dept_action_rela.action_id is '关键词ID';
+CREATE UNIQUE INDEX dept_action_rela_uniq ON dept_action_rela (dept_id,action_id) WHERE delete_at IS NOT NULL;
 comment on column dept_action_rela.create_by is '创建者ID';
 comment on column dept_action_rela.create_at is '创建时间';
 comment on column dept_action_rela.update_by is '更新者ID';
@@ -1111,6 +1115,7 @@ CREATE TABLE model_tool_rela (
 comment on table model_tool_rela is '机种治工具关系';
 comment on column model_tool_rela.model_id is '机种ID';
 comment on column model_tool_rela.tool_id is '治工具ID';
+CREATE UNIQUE INDEX model_tool_rela_uniq ON model_tool_rela (model_id,tool_id) WHERE delete_at IS NOT NULL;
 comment on column model_tool_rela.create_by is '创建者ID';
 comment on column model_tool_rela.create_at is '创建时间';
 comment on column model_tool_rela.update_by is '更新者ID';
@@ -1132,6 +1137,7 @@ CREATE TABLE model_workstation_rela (
 comment on table model_workstation_rela is '机种工位关系表';
 comment on column model_workstation_rela.model_id is '机种ID';
 comment on column model_workstation_rela.workstation_id is '工位ID';
+CREATE UNIQUE INDEX model_workstation_rela_uniq ON model_workstation_rela (model_id,workstation_id) WHERE delete_at IS NOT NULL;
 comment on column model_workstation_rela.create_by is '创建者ID';
 comment on column model_workstation_rela.create_at is '创建时间';
 comment on column model_workstation_rela.update_by is '更新者ID';
@@ -1153,6 +1159,7 @@ CREATE TABLE model_part_rela (
 comment on table model_part_rela is '机种部品关系';
 comment on column model_part_rela.model_id is '机种ID';
 comment on column model_part_rela.part_id is '部品ID';
+CREATE UNIQUE INDEX model_part_rela_uniq ON model_part_rela (model_id,part_id) WHERE delete_at IS NOT NULL;
 comment on column model_part_rela.create_by is '创建者ID';
 comment on column model_part_rela.create_at is '创建时间';
 comment on column model_part_rela.update_by is '更新者ID';
@@ -1174,6 +1181,7 @@ CREATE TABLE report_group_report_rela (
 comment on table report_group_report_rela is '报表组报表关系';
 comment on column report_group_report_rela.report_group_id is '报表组ID';
 comment on column report_group_report_rela.report_id is '报表ID';
+CREATE UNIQUE INDEX report_group_report_rela_uniq ON report_group_report_rela (report_group_id,report_id) WHERE delete_at IS NOT NULL;
 comment on column report_group_report_rela.create_by is '创建者ID';
 comment on column report_group_report_rela.create_at is '创建时间';
 comment on column report_group_report_rela.update_by is '更新者ID';
@@ -1228,6 +1236,7 @@ comment on column measure_group.b2 is 'B2';
 comment on column measure_group.p1 is 'P1';
 comment on column measure_group.a3 is 'A3';
 comment on column measure_group.dept_id is '组织机构ID';
+CREATE UNIQUE INDEX measure_group_uniq ON measure_group (code,dept_id) WHERE delete_at IS NOT NULL;
 comment on column measure_group.used_count is '使用次数统计';
 comment on column measure_group.create_by is '创建者ID';
 comment on column measure_group.create_at is '创建时间';
@@ -1235,7 +1244,7 @@ comment on column measure_group.update_by is '更新者ID';
 comment on column measure_group.update_at is '更新时间';
 comment on column measure_group.delete_at is '删除时间';
 
--- 手顺组合
+-- 手顺及指标值组合
 drop table if exists opertaion_group;
 CREATE TABLE opertaion_group (
   id serial PRIMARY KEY,
@@ -1250,9 +1259,10 @@ CREATE TABLE opertaion_group (
   update_at timestamp default now(),
   delete_at timestamp
 );
-comment on table opertaion_group is '手顺组合';
+comment on table opertaion_group is '手顺及指标值组合';
 comment on column opertaion_group.code is '编码';
 comment on column opertaion_group.dept_id is '组织机构ID';
+CREATE UNIQUE INDEX opertaion_group_uniq ON opertaion_group (code,dept_id) WHERE delete_at IS NOT NULL;
 comment on column opertaion_group.remark is '备注';
 comment on column opertaion_group.used_count is '使用次数统计';
 comment on column opertaion_group.create_by is '创建者ID';
@@ -2268,11 +2278,6 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (74, 72, '新增', NULL, 'basic:dept:create,basic:dept:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:47:51', NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (75, 72, '修改', NULL, 'basic:dept:update,basic:dept:list,basic:dept:info,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:48:28', NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (76, 72, '删除', NULL, 'basic:dept:delete,basic:dept:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 06:48:48', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (77, 1, '字典管理', 'sys/dict', NULL, 1, 'menu', 8, 1, '2017-03-23 22:37:41', 1, '2019-04-26 07:04:43', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (78, 77, '列表', NULL, 'sys:dict:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 07:05:20', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (79, 77, '新增', NULL, 'sys:dict:create,sys:dict:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 07:05:51', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (80, 77, '修改', NULL, 'sys:dict:update,sys:dict:list,sys:dict:info,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 07:06:20', NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (81, 77, '删除', NULL, 'sys:dict:delete,sys:dict:list,', 2, NULL, 1, 1, '2017-03-23 22:37:41', 1, '2019-04-26 07:06:39', NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (82, 31, '字典项', 'sys/dict', NULL, 1, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, '2019-01-03 09:17:09');
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (83, 82, '查看', NULL, 'sys:dict:list,sys:dict:info', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, '2019-01-03 09:17:04');
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (84, 82, '新增', NULL, 'sys:dict:save', 2, NULL, 1, 1, '2017-03-23 22:37:41', NULL, NULL, '2019-01-03 09:17:03');
@@ -2349,12 +2354,12 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (488, 486, '新增', NULL, 'workBook:workbook:create', 2, NULL, 1, NULL, '2019-11-11 13:23:41.509737', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (489, 486, '修改', NULL, 'workBook:workbook:update', 2, NULL, 1, NULL, '2019-11-11 13:23:47.071175', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (490, 486, '删除', NULL, 'workBook:workbook:delete', 2, NULL, 1, NULL, '2019-11-11 13:23:54.024564', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (496, 307, '手顺组合', 'masterdata/opertaiongroup', NULL, 1, 'config', 1, NULL, '2019-11-11 13:27:18.335923', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (496, 307, '手顺及指标值组合', 'masterdata/opertaiongroup', NULL, 1, 'config', 1, NULL, '2019-11-11 13:27:18.335923', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (497, 496, '查看', NULL, 'masterData:opertaiongroup:list,masterData:opertaiongroup:info', 2, NULL, 1, NULL, '2019-11-11 13:27:41.834855', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (498, 496, '新增', NULL, 'masterData:opertaiongroup:create', 2, NULL, 1, NULL, '2019-11-11 13:27:52.906009', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (499, 496, '修改', NULL, 'masterData:opertaiongroup:update', 2, NULL, 1, NULL, '2019-11-11 13:28:03.767979', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (500, 496, '删除', NULL, 'masterData:opertaiongroup:delete', 2, NULL, 1, NULL, '2019-11-11 13:28:13.135872', NULL, NULL, NULL);
-INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (501, 307, '常用指标组合', 'masterdata/measuregroup', NULL, 1, 'config', 1, NULL, '2019-11-11 13:28:30.528337', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (501, 307, '常用指标值组合', 'masterdata/measuregroup', NULL, 1, 'config', 1, NULL, '2019-11-11 13:28:30.528337', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (502, 501, '查看', NULL, 'masterData:measuregroup:list,masterData:measuregroup:info', 2, NULL, 1, NULL, '2019-11-11 13:28:45.473317', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (503, 501, '新增', NULL, 'masterData:measuregroup:create', 2, NULL, 1, NULL, '2019-11-11 13:28:54.230925', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (504, 501, '修改', NULL, 'masterData:measuregroup:update', 2, NULL, 1, NULL, '2019-11-11 13:29:03.722732', NULL, NULL, NULL);
@@ -2819,11 +2824,6 @@ INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (441, 15
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (442, 15, 20);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (443, 15, 21);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (444, 15, 22);
-INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (445, 15, 77);
-INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (446, 15, 78);
-INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (447, 15, 79);
-INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (448, 15, 80);
-INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (449, 15, 81);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (450, 15, 87);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (451, 15, 88);
 INSERT INTO "public"."sys_role_menu"("id", "role_id", "menu_id") VALUES (452, 15, 89);
