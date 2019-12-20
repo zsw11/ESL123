@@ -166,16 +166,17 @@ public class ExportExcelUtils {
 
 	public static void exportExcel(List<String> paths, HttpServletResponse response, String fileName) throws IOException {
 		// 告诉浏览器用什么软件可以打开此文件
-		response.setHeader("content-Type", "application/vnd.ms-excel");
-		// 设置强制下载不打开
-		response.setContentType("application/force-download");
+		response.setContentType("application/vnd.ms-excel");
 		// 下载文件的默认名称
 		response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
 
 		response.setCharacterEncoding("utf-8");
+		response.setHeader("filename",  URLEncoder.encode(fileName, "utf-8") + ".xls");
+		response.setHeader("Access-Control-Expose-Headers", "fileName");
 
 		exportMergedExcel(paths, response.getOutputStream());
 
+//		FileUtil.deleteBatchByFilePaths(paths);
 	}
 
 	private static void exportMergedExcel(List<String> paths, OutputStream out) throws IOException {

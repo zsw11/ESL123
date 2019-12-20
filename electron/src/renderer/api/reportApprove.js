@@ -1,4 +1,5 @@
 import request from '@/utils/httpRequest'
+import { download } from '@/utils/index'
 
 // 获取reportApprove列表
 export function listReportApprove (query) {
@@ -52,6 +53,9 @@ export function downloadReportApprove (data) {
     method: 'post',
     responseType: 'blob',
     data
+  }).then(response => {
+    const filename = response.headers['filename']
+    download(response.data, filename)
   })
 }
 

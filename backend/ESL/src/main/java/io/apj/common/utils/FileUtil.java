@@ -1,14 +1,15 @@
 package io.apj.common.utils;
 
+import cn.hutool.core.io.IORuntimeException;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import cn.hutool.core.io.IORuntimeException;
 
 public class FileUtil {
 	public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
@@ -61,6 +62,15 @@ public class FileUtil {
 			params.put("status", 500);
 			params.put("msg", e.toString());
 			return params;
+		}
+	}
+
+	public static void deleteBatchByFilePaths(List<String> paths) {
+		for (String path : paths) {
+			File file = new File(path);
+			if (file.exists()) {
+				file.delete();
+			}
 		}
 	}
 }
