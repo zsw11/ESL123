@@ -125,7 +125,7 @@ export default {
         name: '机种系列',
         children: [
           { code: 'name', name: '机种系列名称', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: false }
         ]
       }],
       complexFilters: [],
