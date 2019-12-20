@@ -1,5 +1,6 @@
 package io.apj.modules.collection.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -10,7 +11,7 @@ import lombok.Data;
 
 /**
  * Collection - 工位时间表子表
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-11-26 13:31:29
@@ -37,6 +38,7 @@ public class StationTimeItemEntity implements Serializable {
 	 * 工位名称
 	 */
 	private String stationName;
+
 	/**
 	 * 作业名
 	 */
@@ -65,5 +67,14 @@ public class StationTimeItemEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	@TableField(exist = false)
+	private String subName;
+
+	@TableField(exist = false)
+	private String per;
+
+	@TableField(exist = false)
+	private BigDecimal hour;
 
 }
