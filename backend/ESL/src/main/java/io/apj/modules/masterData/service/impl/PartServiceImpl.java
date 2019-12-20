@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
+import io.apj.common.exception.RRException;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.PageUtils;
@@ -34,126 +35,97 @@ import java.util.*;
 
 @Service("partService")
 public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements PartService {
-    @Autowired
-    private ModelPartRelaService modelPartRelaService;
-    @Autowired
-    private ModelService modelService;
-    @Autowired
-    private ModelSeriesService modelSeriesService;
-    @Autowired
-    private SysDeptService deptService;
-
-    @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at")
-                .eq(params.get("common") != null && params.get("common") != "", "common", Boolean.parseBoolean((String) params.get("common")) )
-                .like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
-                .orderBy("update_at",false);
-        if (params.get("name") != null && params.get("name") != "") {
-            params.put("name", ((String) params.get("name")).replace('*', '%'));
-            entityWrapper.andNew(
-                    "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
-        }
-        Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
-
-        return new PageUtils(page);
-    }
-
-    @Override
-    public PageUtils partModeRelaList(Integer id, Map<String, Object> params) {
-        Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
-        String modelName = (String) params.get("name");
-        String code = (String) params.get("code");
-        String remark = (String) params.get("remark");
-        int modelSeriesId = 0;
-        int deptId = 0;
-        if((String) params.get("modelSeriesId")!=null && (String) params.get("modelSeriesId")!=""){
-             modelSeriesId = Integer.parseInt((String) params.get("modelSeriesId"));
-        }
-        if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
-            deptId = Integer.parseInt((String) params.get("deptId"));
-        }
-        return new PageUtils(page.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId, code, remark)));
-
-    }
-
-    @Override
-    public void deleteList(List<PartEntity> partList) {
-        for(PartEntity item : partList){
-            item.setDeleteAt(new Date());
-        }
-        if(partList.size()>0){
-            this.updateAllColumnBatchById(partList);
-        }
-
-    }
-
-    @Override
-    public void deleteByIds(Collection<? extends Serializable> ids) {
-        List<PartEntity> partEntityList = this.selectBatchIds(ids);
-        for(PartEntity item : partEntityList){
-            item.setDeleteAt(new Date());
-        }
-        if(partEntityList.size()>0){
-            this.updateAllColumnBatchById(partEntityList);
-        }
-
-    }
-
-    @Override
-    public void deleteByWrapper(Wrapper<PartEntity> wrapper) {
-        List<PartEntity> partEntityList = this.selectList(wrapper);
-        for(PartEntity item: partEntityList){
-            item.setDeleteAt(new Date());
-        }
-        if(partEntityList.size()>0){
-            this.updateAllColumnBatchById(partEntityList);
-        }
-    }
-
-    @Override
-    public void updatePinAndDataById(PartEntity part) {
-        part.setPinyin(PinyinUtil.getPinYin(part.getName()));
-        part.setUpdateAt(new Date());
-        this.updateById(part);
-    }
-
-//	@Override
-//	public PageUtils queryPage(Map<String, Object> params) {
-//		EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
-//		entityWrapper.isNull("delete_at").orderBy("update_at", false);
-//		if (params.get("name") != null && params.get("name") != "") {
-//			params.put("name", ((String) params.get("name")).replace('*', '%'));
-//			entityWrapper.andNew(
-//					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
-//		}
-//		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
-//
-//		return new PageUtils(page);
-//	}
-
-//	@Override
-//	public PageUtils partModeRelaList(Integer id, Map<String, Object> params) {
-//		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
-//				Integer.parseInt(params.get("limit").toString()));
-//		String modelName = (String) params.get("name");
-//		String code = (String) params.get("code");
-//		int modelSeriesId = 0;
-//		int deptId = 0;
-//		if ((String) params.get("modelSeriesId") != null && (String) params.get("modelSeriesId") != "") {
-//			modelSeriesId = Integer.parseInt((String) params.get("modelSeriesId"));
-//		}
-//		if ((String) params.get("deptId") != null && (String) params.get("deptId") != "") {
-//			deptId = Integer.parseInt((String) params.get("deptId"));
-//		}
-//		return new PageUtils(
-//				page.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId, code)));
-//
-//	}
+	@Autowired
+	private ModelPartRelaService modelPartRelaService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private ModelSeriesService modelSeriesService;
+	@Autowired
+	private SysDeptService deptService;
 
 	@Override
-	@Transactional
+	public PageUtils queryPage(Map<String, Object> params) {
+		EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.isNull("delete_at")
+				.eq(params.get("common") != null && params.get("common") != "", "common",
+						Boolean.parseBoolean((String) params.get("common")))
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"))
+				.orderBy("update_at", false);
+		if (params.get("name") != null && params.get("name") != "") {
+			params.put("name", ((String) params.get("name")).replace('*', '%'));
+			entityWrapper.andNew(
+					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+		}
+		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
+
+		return new PageUtils(page);
+	}
+
+	@Override
+	public PageUtils partModeRelaList(Integer id, Map<String, Object> params) {
+		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
+				Integer.parseInt(params.get("limit").toString()));
+		String modelName = (String) params.get("name");
+		String code = (String) params.get("code");
+		String remark = (String) params.get("remark");
+		int modelSeriesId = 0;
+		int deptId = 0;
+		if ((String) params.get("modelSeriesId") != null && (String) params.get("modelSeriesId") != "") {
+			modelSeriesId = Integer.parseInt((String) params.get("modelSeriesId"));
+		}
+		if ((String) params.get("deptId") != null && (String) params.get("deptId") != "") {
+			deptId = Integer.parseInt((String) params.get("deptId"));
+		}
+		return new PageUtils(page
+				.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId, code, remark)));
+
+	}
+
+	@Override
+	public void deleteList(List<PartEntity> partList) {
+		for (PartEntity item : partList) {
+			item.setDeleteAt(new Date());
+		}
+		if (partList.size() > 0) {
+			this.updateAllColumnBatchById(partList);
+		}
+
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<PartEntity> partEntityList = this.selectBatchIds(ids);
+		for (PartEntity item : partEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (partEntityList.size() > 0) {
+			this.updateAllColumnBatchById(partEntityList);
+		}
+
+	}
+
+	@Override
+	public void deleteByWrapper(Wrapper<PartEntity> wrapper) {
+		List<PartEntity> partEntityList = this.selectList(wrapper);
+		for (PartEntity item : partEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (partEntityList.size() > 0) {
+			this.updateAllColumnBatchById(partEntityList);
+		}
+	}
+
+	@Override
+	public void updatePinAndDataById(PartEntity part) {
+		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
+		part.setUpdateAt(new Date());
+		this.updateById(part);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Object> partImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<PartEntity> partEntityList = new ArrayList<>();
@@ -186,6 +158,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 			}
 			DataUtils.transMap2Bean2(partMap, partEntity);
 			ValidatorUtils.validateEntity(partEntity, i);
+			partEntity.setPinyin(PinyinUtil.getPinYin(partEntity.getName()));
 			partEntity.setCreateBy((Integer) map.get("userID"));
 			partEntityList.add(partEntity);
 		}
@@ -200,7 +173,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 		}
 		Map<String, Integer> partIDAndNameMap = new HashMap<String, Integer>();
 		EntityWrapper<PartEntity> partWrapper = new EntityWrapper<>();
-		partWrapper.in("name", modelNameList).isNull("delete_at");
+		partWrapper.in("name", partNameList).isNull("delete_at");
 		List<PartEntity> partList = this.selectList(partWrapper);
 		for (PartEntity item : partList) {
 			partIDAndNameMap.put(item.getName(), item.getId());
@@ -217,7 +190,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 					if (modelIDAndNameMap.get(value) != null) {
 						modelPartRela.setModelId(modelIDAndNameMap.get(value));
 					} else {
-						if (notExistModelName.contains((String) value)) {
+						if (!notExistModelName.contains((String) value)) {
 							notExistModelName.add((String) value);
 						}
 					}
@@ -227,8 +200,9 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 			}
 			modelPartRelaList.add(modelPartRela);
 		}
+		modelPartRelaService.insertBatch(modelPartRelaList);
 		if (notExistModelName.size() > 0) {
-			return RD.FORBIDDEN("DATA_NOT_EXIST", "机种" + notExistModelName.toString() + "不存在，请添加机种后再导入相关的数据");
+			throw new RRException("机种" + notExistModelName.toString() + "不存在，请添加机种后再导入相关的数据");
 		}
 		Map<String, Integer> data = new HashMap<String, Integer>();
 		data.put("code", 200);

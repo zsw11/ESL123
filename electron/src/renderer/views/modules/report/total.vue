@@ -395,6 +395,7 @@ import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove } from '@/api/reportApprove'
+import { listStaff } from '@/api/staff'
 
 export default {
   name: 'reportTotalList',
@@ -402,7 +403,6 @@ export default {
     return {
       approveShow: false,
       approveForm: {
-        reportId: null,
         reportGroupId: null,
         nextApprove: null,
         modelId: null,
@@ -439,6 +439,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listStaff,
       listDict,
       listPhase,
       listModel,
