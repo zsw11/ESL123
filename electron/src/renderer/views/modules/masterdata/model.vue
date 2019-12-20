@@ -16,14 +16,7 @@
 
 
         <el-form-item :label="'部门'" prop="deptId">
-          <keyword-search
-            class="input"
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item :label="'机种系列'" prop="modelSeriesId">
@@ -216,23 +209,13 @@ export default {
           children: [
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
-            {
-              code: "modelSeriesName",
-              name: "机种系列",
-              type: "string",
-              required: true
-            },
-            { code: "code", name: "型号", type: "string", required: true },
-            { code: "wsTime", name: "WS Date", type: "string", required: true },
-            { code: "esTime", name: "ES Date", type: "string", required: true },
-            {
-              code: "ampTime",
-              name: "AMP Date",
-              type: "string",
-              required: true
-            },
-            { code: "mpTime", name: "MP Date", type: "string", required: true },
-            { code: "remark", name: "备注", type: "string", required: true }
+            {code: "modelSeriesName", name: "机种系列", type: "string", required: true},
+            { code: "code", name: "型号", type: "string", required: false },
+            { code: "wsTime", name: "WS Date", type: "string", required: false },
+            { code: "esTime", name: "ES Date", type: "string", required: false },
+            { code: "ampTime", name: "AMP Date", type: "string", required: false },
+            { code: "mpTime", name: "MP Date", type: "string", required: false },
+            { code: "remark", name: "备注", type: "string", required: false }
           ]
         }
       ],

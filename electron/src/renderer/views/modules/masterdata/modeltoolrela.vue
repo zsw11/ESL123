@@ -10,19 +10,9 @@
           <el-input  v-model="listQuery.name"  clearable></el-input>
         </el-form-item>
 
-        <el-form-item class="title" :label="'型号'" prop="code" >
-          <el-input v-model="listQuery.code"></el-input>
-        </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId" >
-          <keyword-search
-            class="input"
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
@@ -37,9 +27,10 @@
         </el-form-item>
 
 
-<!--        <el-form-item class="title" :label="'阶段'" prop="wsTime" >-->
-<!--          <el-input class="input" v-model="listQuery.wsTime"  clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item class="title" :label="'型号'" prop="code" >
+          <el-input v-model="listQuery.code"></el-input>
+        </el-form-item>
+
       </el-form>
       <div class="clearfix">
         <div style="float:right;">
@@ -181,7 +172,6 @@
         title: null,
         dataButton: 'list',
         listQuery: {
-          id: null,
           deptId: null,
           name: null,
           modelSeriesId: null,
@@ -246,7 +236,8 @@
             page: this.pageNo,
             limit: this.pageSize,
             id: this.id
-          }
+          },
+          this.listQuery
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount

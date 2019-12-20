@@ -118,7 +118,7 @@ import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 import { Message } from 'element-ui'
 
-const defaultExport = ['part.name', 'part.common', 'part.remark']
+const defaultExport = ['part.name', 'part.remark', 'model.name']
 
 export default {
   name: 'partList',
@@ -158,15 +158,21 @@ export default {
         name: '部品',
         children: [
           { code: 'name', name: '部品名称', type: 'string', required: true },
-          { code: 'common', name: '是否通用', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: false },
+        ]
+      },
+      {
+        code: 'model',
+        name: '机种',
+        children: [
+          { code: 'name', name: '部品名称', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
       // 导出字段
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段，固定不可变
-      importAttributes: [ 'part.name', 'part.common', 'part.remark' ]
+      importAttributes: [ 'part.name', 'part.remark', 'model.name' ]
     }
   },
   activated () {
@@ -183,7 +189,7 @@ export default {
             attributes: this.importAttributes,
             plain: true
           }),
-          sampleDatas: [[ '部品名', '是', '测试用' ]]
+          sampleDatas: [[ '部品名', '无', '机种1' ]]
         }],
         importApi: partImport,
         importSuccessCb: () => { this.getDataList() }

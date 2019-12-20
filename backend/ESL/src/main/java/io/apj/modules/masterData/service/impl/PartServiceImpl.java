@@ -118,15 +118,6 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
         part.setUpdateAt(new Date());
         this.updateById(part);
     }
-//=======
-//	@Autowired
-//	private ModelPartRelaService modelPartRelaService;
-//	@Autowired
-//	private ModelService modelService;
-//	@Autowired
-//	private ModelSeriesService modelSeriesService;
-//	@Autowired
-//	private SysDeptService deptService;
 
 //	@Override
 //	public PageUtils queryPage(Map<String, Object> params) {
@@ -159,47 +150,6 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 //		return new PageUtils(
 //				page.setRecords(this.baseMapper.selectpartModel(id, page, modelName, deptId, modelSeriesId, code)));
 //
-//	}
-
-//	@Override
-//	public void deleteList(List<PartEntity> partList) {
-//		for (PartEntity item : partList) {
-//			item.setDeleteAt(new Date());
-//		}
-//		if (partList.size() > 0) {
-//			this.updateAllColumnBatchById(partList);
-//		}
-//
-//	}
-//
-//	@Override
-//	public void deleteByIds(Collection<? extends Serializable> ids) {
-//		List<PartEntity> partEntityList = this.selectBatchIds(ids);
-//		for (PartEntity item : partEntityList) {
-//			item.setDeleteAt(new Date());
-//		}
-//		if (partEntityList.size() > 0) {
-//			this.updateAllColumnBatchById(partEntityList);
-//		}
-//
-//	}
-//
-//	@Override
-//	public void deleteByWrapper(Wrapper<PartEntity> wrapper) {
-//		List<PartEntity> partEntityList = this.selectList(wrapper);
-//		for (PartEntity item : partEntityList) {
-//			item.setDeleteAt(new Date());
-//		}
-//		if (partEntityList.size() > 0) {
-//			this.updateAllColumnBatchById(partEntityList);
-//		}
-//	}
-//
-//	@Override
-//	public void updatePinAndDataById(PartEntity part) {
-//		part.setPinyin(PinyinUtil.getPinYin(part.getName()));
-//		part.setUpdateAt(new Date());
-//		this.updateById(part);
 //	}
 
 	@Override
