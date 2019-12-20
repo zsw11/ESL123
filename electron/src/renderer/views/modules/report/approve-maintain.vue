@@ -102,7 +102,7 @@ import {
   downloadReportApprove
 } from '@/api/reportApprove'
 import { fetchReportDetail } from '@/api/reportGroup'
-import { download } from '@/utils/index'
+
 export default {
   name: 'editReportApprove',
   data () {
@@ -272,8 +272,7 @@ export default {
         reportId: id
       }
       downloadReportApprove(data).then(response => {
-        console.log(response)
-        download(response)
+        
       });
     }
   }

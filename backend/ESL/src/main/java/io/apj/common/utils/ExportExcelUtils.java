@@ -6,7 +6,9 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
+import org.hibernate.validator.internal.xml.binding.BeanType;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.Color;
 import java.io.*;
@@ -15,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
+ *
  * @author samchen
  * @date 20181213
  *
@@ -24,7 +26,7 @@ public class ExportExcelUtils {
 
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param response
 	 * @param fileName
 	 * @param data
@@ -164,18 +166,26 @@ public class ExportExcelUtils {
 		style.setBorderColor(BorderSide.BOTTOM, color);
 	}
 
+	/**
+	 * 复制sheet
+	 * @param paths
+	 * @param response
+	 * @param fileName
+	 * @throws IOException
+	 */
 	public static void exportExcel(List<String> paths, HttpServletResponse response, String fileName) throws IOException {
 		// 告诉浏览器用什么软件可以打开此文件
-		response.setHeader("content-Type", "application/vnd.ms-excel");
-		// 设置强制下载不打开
-		response.setContentType("application/force-download");
+		response.setContentType("application/vnd.ms-excel");
 		// 下载文件的默认名称
 		response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
 
 		response.setCharacterEncoding("utf-8");
+		response.setHeader("filename",  URLEncoder.encode(fileName, "utf-8") + ".xls");
+		response.setHeader("Access-Control-Expose-Headers", "fileName");
 
 		exportMergedExcel(paths, response.getOutputStream());
 
+//		FileUtil.deleteBatchByFilePaths(paths);
 	}
 
 	private static void exportMergedExcel(List<String> paths, OutputStream out) throws IOException {
@@ -295,6 +305,17 @@ public class ExportExcelUtils {
 			HSSFRow oldRow = (HSSFRow) rowIt.next();
 			HSSFRow newRow = toSheet.createRow(oldRow.getRowNum());
 			copyRow(wb, oldRow, newRow);
+		}
+		//读取图片
+		for (HSSFShape shape : fromSheet.getDrawingPatriarch().getChildren()) {
+			if (shape instanceof HSSFPicture) {
+				HSSFPicture pic = (HSSFPicture) shape;
+				int pictureIndex = pic.getPictureIndex();
+				HSSFClientAnchor anchor = pic.getPreferredSize();
+				HSSFPatriarch patriarch = toSheet.createDrawingPatriarch();
+				int index = wb.addPicture(pic.getPictureData().getData(), 2);
+				patriarch.createPicture(anchor,pictureIndex);
+			}
 		}
 	}
 
