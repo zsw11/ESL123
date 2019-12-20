@@ -39,7 +39,7 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             List<ReportGroupReportRelaEntity> groupReportRelaList = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_id", Integer.parseInt((String) params.get("reportId"))));
              List reportGroupId = new ArrayList();
             for(ReportGroupReportRelaEntity item : groupReportRelaList){
-                reportGroupId = Collections.singletonList(item.getReportGroupId());
+                reportGroupId.add(item.getReportGroupId());
             }
             entityWrapper.in("id",reportGroupId);
         }
