@@ -71,4 +71,7 @@ public class MostValueItemEntity implements Serializable {
 	@TableField(exist = false)
 	private BigDecimal timeSt;
 
+	@TableField(exist = false)
+	private BigDecimal totalHours;
+
 }
