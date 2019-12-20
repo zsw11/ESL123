@@ -30,8 +30,13 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<PhaseEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false).like(params.get("keyword") != null && params.get("keyword") != "", "name",
+		entityWrapper.isNull("delete_at")
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
+				.orderBy("update_at",false).like(params.get("keyword") != null && params.get("keyword") != "", "name",
 				(String) params.get("keyword"));
+		if(StringUtils.isNotEmpty((CharSequence) params.get("continuePhaseId"))){
+			entityWrapper.eq("continue_phase_id",Integer.parseInt((String) params.get("continuePhaseId")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");

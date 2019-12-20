@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface StationTimeItemService extends IService<StationTimeItemEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<StationTimeItemEntity> getListBySWId(Integer id);
 }
 

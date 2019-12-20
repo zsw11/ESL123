@@ -53,7 +53,10 @@
 
         <el-table-column align="center" prop="approveOperation" label="审批结果" >
           <template slot-scope="scope">
-            <span>{{ dictItemApproveOpininon[scope.row.approveOperation].name }}</span>
+            <span
+              v-if="dictItemApproveOpininon[scope.row.approveOperation]">
+              {{ dictItemApproveOpininon[scope.row.approveOperation].name }}
+            </span>
           </template>
         </el-table-column>
 

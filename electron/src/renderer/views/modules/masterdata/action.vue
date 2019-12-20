@@ -10,6 +10,10 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
+
 
         <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
@@ -182,6 +186,7 @@
       clearQuery () {
         this.listQuery = Object.assign(this.listQuery, {
           name: null,
+          remark: null,
           createBy: null,
           createAt: null,
           updateBy: null,

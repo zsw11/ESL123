@@ -41,7 +41,7 @@ public class OpertaionGroupEntity implements Serializable {
 	@TableField(exist = false)
 	private Integer count;
 	/**
-	 * 频度
+	 * 频率
 	 */
 	private Integer frequency;
 	/**

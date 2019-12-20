@@ -1,7 +1,6 @@
 package io.apj.modules.workBook.controller;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import io.apj.modules.workBook.service.WorkOperationsService;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 
@@ -92,6 +90,21 @@ public class WorkBookController extends AbstractController {
 		workBookService.updateWorkBook((Map<String, Object>) workBook);
 
 		return RD.build();
+	}
+
+	/**
+	 * 复制
+	 *
+	 * @return
+	 */
+	@RequestMapping("/copy")
+//	@RequiresPermissions("workBook:workbook:update")
+	public ResponseEntity<Object> copy(@RequestBody WorkBookEntity workBook) {
+		int workBookId = workBook.getId();
+		workBook.setId(null);
+		WorkBookEntity workBookEntity = workBookService.copyWorkBook(workBook,workBookId);
+
+		return RD.ok(workBookEntity);
 	}
 
 	/**

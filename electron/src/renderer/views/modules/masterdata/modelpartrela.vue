@@ -5,7 +5,6 @@
         <div class="card-title">{{title}}-机种</div>
       </div>
       <el-form
-        :disabled="$route.path.includes('details')"
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
@@ -15,19 +14,9 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item class="title" :label="'型号'" prop="code">
-          <el-input v-model="listQuery.code">
-          </el-input>
-        </el-form-item>
 
         <el-form-item class="title" :label="'部门'" prop="deptId">
-          <keyword-search
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId">
@@ -41,9 +30,10 @@
           </keyword-search>
         </el-form-item>
 
-<!--        <el-form-item class="title" :label="'阶段'" prop="wsTime">-->
-<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item class="title" :label="'型号'" prop="code">
+          <el-input v-model="listQuery.code">
+          </el-input>
+        </el-form-item>
       </el-form>
       <div class="clearfix">
         <div style="float:right">

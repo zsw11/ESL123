@@ -20,6 +20,6 @@ import java.util.Map;
 public interface ToolDao extends BaseMapper<ToolEntity> {
     List<Map<String,Object>> selecttoolModel(@Param("id") Integer id, Page<Map<String,Object>> page,
                                              @Param("modelName")String modelName, @Param("deptId")Integer deptId,
-                                             @Param("modelSeriesId")Integer modelSeriesId, @Param("code")String code);
+                                             @Param("modelSeriesId")Integer modelSeriesId, @Param("code")String code,@Param("remark")String remark);
 	
 }

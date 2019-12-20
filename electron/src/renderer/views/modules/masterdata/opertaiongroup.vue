@@ -10,9 +10,13 @@
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'手顺数量'" prop="usedCount" >
-          <el-input v-model="listQuery.usedCount"  clearable></el-input>
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
+
+<!--        <el-form-item :label="'手顺数量'" prop="usedCount" >-->
+<!--          <el-input v-model="listQuery.usedCount"  clearable></el-input>-->
+<!--        </el-form-item>-->
 
 <!--        <el-form-item :label="'频率'" prop="frequency" >-->
 <!--          <el-input v-model="listQuery.frequency" clearable></el-input>-->
@@ -75,11 +79,11 @@
 <!--          </template>-->
 <!--        </el-table-column>-->
 
-        <el-table-column align="center" prop="usedCount" label="手顺数量" >
-          <template slot-scope="scope">
-            <span>{{scope.row.count }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column align="center" prop="usedCount" label="手顺数量" >-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{scope.row.count }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
@@ -131,6 +135,7 @@ export default {
       listQuery: {
         id: null,
         code: null,
+        remark: null,
         frequency: null,
         deptId: null,
         usedCount: null,
@@ -216,6 +221,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         code: null,
+        remark: null,
         frequency: null,
         deptId: null,
         usedCount: null,

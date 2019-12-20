@@ -13,7 +13,7 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'作业名'" prop="workName">
+          <el-form-item :label="'分析表名称'" prop="workName">
             <el-input v-model="dataForm.workName"></el-input>
           </el-form-item>
         </el-col>
@@ -79,6 +79,14 @@
             </keyword-search>
           </el-form-item>
         </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'制表日期'" prop="makedAt">
+            <el-date-picker
+              style="width: 100%"
+              v-model="dataForm.makedAt">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
       </el-row>
 
 
@@ -91,10 +99,7 @@
 <!--            <el-input-number v-model="dataForm.makerId" ></el-input-number>-->
 <!--          </el-form-item>-->
 
-<!--          <el-form-item :label="'制表日期'" prop="makedAt">-->
-<!--            <el-date-picker v-model="dataForm.makedAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">-->
-<!--        </el-date-picker>-->
-<!--          </el-form-item>-->
+
 
 <!--          <el-form-item :label="'沿用来源ID'" prop="continueFromId">-->
 <!--            <el-input-number v-model="dataForm.continueFromId" ></el-input-number>-->
@@ -143,7 +148,7 @@
 
     <span class="dialog-footer">
       <el-button v-if="!$route.path.includes('copy')" type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button v-if="$route.path.includes('copy')"  type="primary">复   制</el-button>
+      <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复   制</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
     </span>
   </el-card>
@@ -151,7 +156,7 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchWorkBook, createWorkBook, updateWorkBook } from '@/api/workBook'
+import { fetchWorkBook, createWorkBook, updateWorkBook, copyWorkBook } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -277,10 +282,10 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchWorkBook(this.dataForm.id).then(({data}) => {
+        fetchWorkBook(this.dataForm.id).then((data) => {
           Object.assign(
             this.dataForm,
-            pick(data, [
+            pick(data.workBook, [
               'deptId',
               'stlst',
               'modelId',
@@ -327,6 +332,21 @@ export default {
           })
         }
       })
+    },
+    // 复制
+    copyWBook(){
+      console.log(this.dataForm)
+      copyWorkBook(this.dataForm).then((data)=>{
+        if(data.status === 200){
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: this.cancleFormSubmit
+          })
+        }
+      })
+
     }
   }
 }

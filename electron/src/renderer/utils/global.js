@@ -34,7 +34,7 @@ export const defaultRow = {
   m0: null,
   x0: null,
   i0: null,
-  tool: '',
+  tool: '*0',
   a2: null,
   b2: null,
   p1: null,

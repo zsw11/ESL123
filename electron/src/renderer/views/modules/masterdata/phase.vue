@@ -9,6 +9,18 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'沿用阶段'" prop="continuePhaseId">
+            <keyword-search
+              v-model="listQuery.continuePhaseId"
+              :searchApi="listPhase"
+              :allowEmpty="true"
+              :allowMultiple="true">
+            </keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
         <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
           <el-button @click="clearQuery()">清   空</el-button>
@@ -109,6 +121,7 @@ export default {
         continuePhaseId: null,
         remark: null
       },
+      listPhase,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

@@ -3,30 +3,22 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.modules.masterData.entity.ModelPartRelaEntity;
-import io.apj.modules.masterData.entity.ModelToolRelaEntity;
-import io.apj.modules.masterData.entity.ModelWorkstationRelaEntity;
-import io.apj.modules.masterData.entity.PartEntity;
-import io.apj.modules.masterData.entity.WorkstationEntity;
-import io.apj.modules.masterData.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ModelDao;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.ModelWorkstationRelaEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.sys.service.SysDeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.*;
 
 @Service("modelService")
 public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> implements ModelService {
@@ -91,37 +83,23 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name)));
+		String remark = (String) params.get("remark");
+		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name,remark,common)));
 
 	}
-
-//		EntityWrapper<ModelPartRelaEntity> relaEntityWrapper = new EntityWrapper<ModelPartRelaEntity>();
-//		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
-//		Page<ModelPartRelaEntity> page = modelPartRelaService
-//				.selectPage(new Query<ModelPartRelaEntity>(params).getPage(), relaEntityWrapper);
-//		for (ModelPartRelaEntity item : page.getRecords()) {
-//			item.setPartEntity(partService.selectById(item.getPartId()));
-//		}
-//		return new PageUtils(page);
-//	}
 
 	@Override
 	public PageUtils modelToolRelaList(int id, Map<String, Object> params) {
 		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name)));
+		String remark = (String) params.get("remark");
+		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name,remark,common)));
 
 	}
-//		EntityWrapper<ModelToolRelaEntity> relaEntityWrapper = new EntityWrapper<ModelToolRelaEntity>();
-//		relaEntityWrapper.eq("model_id", id).isNull("delete_at");
-//		Page<ModelToolRelaEntity> page = modelToolRelaService
-//				.selectPage(new Query<ModelToolRelaEntity>(params).getPage(), relaEntityWrapper);
-//		for (ModelToolRelaEntity item : page.getRecords()) {
-//			item.setToolEntity(toolService.selectById(item.getToolId()));
-//		}
-//		return new PageUtils(page);
-//	}
+
 
 	@Override
 	public void deleteList(List<ModelEntity> modelEntityList) {
@@ -176,7 +154,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		}
 		workStationIDs.add(0);
 		EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").in("id", workStationIDs);
+		entityWrapper.isNull("delete_at").in("id", workStationIDs)
+		.like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"name  like '%" + params.get("name") + "%'" + " or pinyin  like '%" + params.get("name") + "%'");

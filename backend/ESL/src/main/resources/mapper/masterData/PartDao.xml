@@ -3,7 +3,7 @@
 
 <mapper namespace="io.apj.modules.masterData.dao.PartDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.apj.modules.masterData.entity.PartEntity" id="partMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -19,10 +19,12 @@
     <select id="selectpartModel" resultType="io.apj.modules.masterData.vo.ModelVo">
         SELECT
         mpr.id AS mpId,
+        mpr.delete_at,
         M.id AS modelId,
+        M.remark as remark,
         M.NAME AS modelName,
         d.NAME deptName,
-        d."id" depeId,
+        d."id" deptId,
         ms."id" modelSeriesId,
         ms.NAME modelSeriesName,
         M.code,M.mp_time,M.es_time,M.ws_time,M.amp_time
@@ -32,21 +34,24 @@
         LEFT JOIN model AS M ON mpr.model_id = M.ID
         LEFT JOIN model_series AS ms ON ms.ID = M.model_series_id
         LEFT JOIN sys_dept AS d ON d.ID = M.dept_id
-        where mpr.part_id = #{id}
+        where mpr.part_id = #{id} AND mpr.delete_at ISNULL
 
-            <if test="modelName != null and modelName != ''">
-                AND M.name LIKE '%${modelName}%'
-            </if>
-            <if test="modelSeriesId != null and modelSeriesId != ''">
-                AND ms.id = #{modelSeriesId}
-            </if>
-            <if test="deptId != null and deptId != ''">
-                AND d.id = #{deptId}
-            </if>
-            <if test="code != null and code != ''">
-                AND   M.code LIKE '%${code}%'
-            </if>
-       
+        <if test="modelName != null and modelName != ''">
+            AND M.name LIKE '%${modelName}%'
+        </if>
+        <if test="modelSeriesId != null and modelSeriesId != ''">
+            AND ms.id = #{modelSeriesId}
+        </if>
+        <if test="deptId != null and deptId != ''">
+            AND d.id = #{deptId}
+        </if>
+        <if test="code != null and code != ''">
+            AND M.code LIKE '%${code}%'
+        </if>
+        <if test="remark != null and remark != ''">
+            AND M.remark LIKE '%${remark}%'
+        </if>
+
 
         ORDER BY
         mpr.update_at DESC

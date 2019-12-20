@@ -48,7 +48,8 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at", false);
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"));
 		if (params.get("code") != null && params.get("code") != "") {
 			entityWrapper.like("code", (String) params.get("code"));
 		}

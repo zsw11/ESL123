@@ -27,6 +27,15 @@ export function fetchWorkBook (id) {
   })
 }
 
+// 复制分析表
+export function copyWorkBook (data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/copy'),
+    method: 'post',
+    data
+  })
+}
+
 // 获取分析表详情
 export function fetchWorkBookWithOperations (id) {
   return request({

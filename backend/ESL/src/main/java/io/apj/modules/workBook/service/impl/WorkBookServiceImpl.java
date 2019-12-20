@@ -3,8 +3,6 @@ package io.apj.modules.workBook.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.*;
 import io.apj.modules.collection.service.CompareService;
@@ -16,14 +14,21 @@ import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysDeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.modules.workBook.dao.WorkBookDao;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +69,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private RevisionHistoryService revisionHistoryService;
 	@Autowired
 	private TotalService totalService;
+	@Autowired
+	private WorkOperationsService workOperationsService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -72,7 +79,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
-						(String) params.get("workName"));
+						(String) params.get("workName"))
+				.like(params.get("destinations") != null && params.get("destinations") != "", "destinations",
+						(String) params.get("destinations"));
 
 		Map<String,Object> map = (Map) JSON.parse((String) params.get("makedAt"));
 		if(map!=null){
@@ -106,7 +115,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
 			}
 			if (entity.getWorkstationId() != null) {
-				entity.setWorkName(workstationService.selectById(entity.getWorkstationId()).getName());
+				entity.setWorkstationName(workstationService.selectById(entity.getWorkstationId()).getName());
 			}
 
 		}
@@ -291,6 +300,21 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			workOperationsList.add(workOperations);
 		}
 		workOperationService.insertBatch(workOperationsList);
+	}
+
+	@Override
+	@Transactional
+	public WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId) {
+		workBookService.insert(workBook);
+		int newId = workBook.getId();
+		List<WorkOperationsEntity> workOperationsEntityList =  workOperationsService.selectList(new EntityWrapper<WorkOperationsEntity>().eq("work_book_id",workBookId));
+		for(WorkOperationsEntity item : workOperationsEntityList){
+			item.setWorkBookId(newId);
+		}
+		if(!workOperationsEntityList.isEmpty()){
+			workOperationService.insertBatch(workOperationsEntityList);
+		}
+		return workBook;
 	}
 
 	@Override

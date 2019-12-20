@@ -53,6 +53,7 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
 				.like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
 						(String) params.get("keyWord"));
@@ -131,6 +132,7 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		modelIDs.add(0);
 		EntityWrapper<ModelEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").in("id", modelIDs)
+				.like(params.get("remark") != null && params.get("remark") != "", "remark", (String) params.get("remark"))
 		.like(params.get("code") != null && params.get("code") != "", "code", (String) params.get("code"));
 
 		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {

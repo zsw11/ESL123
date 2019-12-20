@@ -8,22 +8,15 @@
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
-        class="clearfix model-min-width"
-      >
+        class="clearfix model-min-width">
         <el-form-item :label="'机种名称'" prop="name">
           <el-input class="input" v-model="listQuery.name" clearable>
           </el-input>
         </el-form-item>
 
+
         <el-form-item :label="'部门'" prop="deptId">
-          <keyword-search
-            class="input"
-            v-model="listQuery.deptId"
-            :allowMultiple="true"
-            :searchApi="this.listDept"
-            :allowEmpty="true"
-            clearable>
-          </keyword-search>
+          <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
         <el-form-item :label="'机种系列'" prop="modelSeriesId">
@@ -42,9 +35,11 @@
           </el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'阶段'" prop="wsTime">-->
-<!--          <el-input class="input" v-model="listQuery.wsTime" clearable></el-input>-->
+<!--        <el-form-item :label="'备注'" prop="remark">-->
+<!--          <el-input class="input" v-model="listQuery.remark" clearable>-->
+<!--          </el-input>-->
 <!--        </el-form-item>-->
+
       </el-form>
       <div class="clearfix">
         <div style="float:right;">
@@ -186,8 +181,8 @@ export default {
     return {
       dataButton: "list",
       listQuery: {
-        id: 0,
         name: null,
+        remark: null,
         deptId: null,
         deptName: null,
         modelSeriesId: null,
@@ -214,23 +209,13 @@ export default {
           children: [
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
-            {
-              code: "modelSeriesName",
-              name: "机种系列",
-              type: "string",
-              required: true
-            },
-            { code: "code", name: "型号", type: "string", required: true },
-            { code: "wsTime", name: "WS Date", type: "string", required: true },
-            { code: "esTime", name: "ES Date", type: "string", required: true },
-            {
-              code: "ampTime",
-              name: "AMP Date",
-              type: "string",
-              required: true
-            },
-            { code: "mpTime", name: "MP Date", type: "string", required: true },
-            { code: "remark", name: "备注", type: "string", required: true }
+            {code: "modelSeriesName", name: "机种系列", type: "string", required: true},
+            { code: "code", name: "型号", type: "string", required: false },
+            { code: "wsTime", name: "WS Date", type: "string", required: false },
+            { code: "esTime", name: "ES Date", type: "string", required: false },
+            { code: "ampTime", name: "AMP Date", type: "string", required: false },
+            { code: "mpTime", name: "MP Date", type: "string", required: false },
+            { code: "remark", name: "备注", type: "string", required: false }
           ]
         }
       ],
@@ -342,6 +327,7 @@ export default {
     clearQuery() {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
+        remark: null,
         deptId: null,
         modelSeriesId: null,
         code: null,

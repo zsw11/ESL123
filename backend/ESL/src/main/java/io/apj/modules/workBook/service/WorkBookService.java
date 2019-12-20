@@ -35,6 +35,8 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	void updateAll(Map<String, Object> params);
 
+	WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId);
+
 	/**
 	 * 根据Wrapper条件删除所有符合条件的记录
 	 * 

@@ -1,19 +1,29 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
 import io.apj.modules.collection.service.StationTimeItemService;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.StandardTimeEntity;
+import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.entity.StandardWorkEntity;
+import io.apj.modules.report.entity.StandardWorkItemEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +34,7 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.StationTimeDao;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.service.StationTimeService;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -124,18 +135,79 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
             stationTimeEntity.setSheetName(work.getWorkstationName()+" "+work.getWorkName() );
             insert(stationTimeEntity);
         }
-        StationTimeItemEntity stationTimeItem = new StationTimeItemEntity();
+        EntityWrapper<StationTimeItemEntity>  ew = new EntityWrapper<>();
+        ew.eq("station_name",work.getWorkstationName());
+        StationTimeItemEntity stationTimeItem = StationTimeItemService.selectOne(ew);
         stationTimeItem.setWorkName(work.getWorkName());
         stationTimeItem.setCollectionStationTimeId(stationTimeEntity.getId());
         stationTimeItem.setSub(workstationService.wookStationIdIsSub(work.getWorkstationId()));
         stationTimeItem.setStationName(work.getWorkstationName());
-        stationTimeItem.setLstValue(work.getSecondConvert());
-        StationTimeItemService.insert(stationTimeItem);
+        stationTimeItem.setLstValue(work.getSecondConvert().multiply(stationTimeItem.getLstValue()));
+        StationTimeItemService.insertOrUpdate(stationTimeItem);
     }
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         // TODO
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        StationTimeEntity stationTimeEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        Map<String, Object> map = new HashMap<>();
+        if(stationTimeEntity!=null){
+            id = stationTimeEntity.getId();
+            map.put("remark", stationTimeEntity.getRemark());
+        }
+        List<StationTimeItemEntity> list = StationTimeItemService.getListBySWId(id);
+        ModelEntity model = modelService.selectById(modelId);
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+
+        generateTotalData(list, map);
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        String templateFileName = PathUtil.getExcelTemplatePath("collection_station_time_template");
+        //String fileName1 = path+"src/main/resources/static/exportTemplates/collection_station_time.xls";
+        OutputStream out = response.getOutputStream();
+        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("station_time").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        excelWriter.fill(list, fillConfig, writeSheet);
+        String fileName = "工位时间表";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.finish();
+    }
+
+    private void generateTotalData(List<StationTimeItemEntity> list, Map<String, Object> map) {
+        BigDecimal htTotal = BigDecimal.ZERO;
+        BigDecimal mtTotal = BigDecimal.ZERO;
+        BigDecimal mhTotal = BigDecimal.ZERO;
+        BigDecimal totalTotal = BigDecimal.ZERO;
+        BigDecimal Sample1Total = BigDecimal.ZERO;
+        BigDecimal SampleSizeTotal = BigDecimal.ZERO;
+        BigDecimal convTotal = BigDecimal.ZERO;
+        for (StationTimeItemEntity entity: list) {
+            mtTotal =  mtTotal.add(entity.getLstValue());
+        }
+        if(list.size()>0){
+            map.put("totalPer", "100%");
+        }else{
+            map.put("totalPer", "");
+            return;
+        }
+        for (StationTimeItemEntity entity: list) {
+            entity.setSubName(entity.getSub()==true?"SUB":"MAIN");
+            entity.setHour(entity.getLstValue().divide(BigDecimal.valueOf(60),5));
+            BigDecimal per = entity.getLstValue().multiply(BigDecimal.valueOf(100));//;
+            entity.setPer(per.divide(mtTotal,5)+" %");
+        }
+        map.put("totalMin",mtTotal );
+        map.put("totalH", mtTotal.divide(BigDecimal.valueOf(60),5));
     }
 
 }

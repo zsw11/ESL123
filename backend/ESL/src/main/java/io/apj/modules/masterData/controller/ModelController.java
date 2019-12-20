@@ -89,11 +89,13 @@ public class ModelController extends AbstractController {
 
 		return RD.ok(page);
 	}
+
 	/**
 	 * 机种工位关系表list
 	 */
 	@RequestMapping("/workStationDetail/{id}")
-	public ResponseEntity<Object> workStationDetail(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
+	public ResponseEntity<Object> workStationDetail(@PathVariable("id") Integer id,
+			@RequestParam Map<String, Object> params) {
 		PageUtils page = modelService.modelWorkStationList(id, params);
 
 		return RD.ok(page);
@@ -171,7 +173,7 @@ public class ModelController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SysLog("导出设备信息")
+	@SysLog("导出机种信息")
 	@RequestMapping(value = "/exportExcel", produces = "application/json;charset=UTF-8")
 	public void exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传
@@ -237,12 +239,13 @@ public class ModelController extends AbstractController {
 		for (ModelSeriesEntity item : modelSeriesSList) {
 			modelSeriesMap.put(item.getName(), item.getId());
 		}
+		List<String> notExistmodelSeriesNameList = new ArrayList<String>();
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<ModelEntity> modelEntities = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ModelEntity modelEntity = new ModelEntity();
 			Map<String, Object> buildMap = maps.get(i);
-			buildMap.put("modelSeriesId", buildMap.get("modelSeriesName"));
+			buildMap.put("model.modelSeriesId", buildMap.get("model.modelSeriesName"));
 			// 日期强转
 			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 			if (StringUtils.isNotEmpty((CharSequence) buildMap.get("model.wsTime"))) {
@@ -282,6 +285,11 @@ public class ModelController extends AbstractController {
 						continue;
 					}
 					if (keyStrs[1].equals("modelSeriesId")) {
+						if (modelSeriesMap.get(value) == null) {
+							if (notExistmodelSeriesNameList.size() < 5) {
+								notExistmodelSeriesNameList.add((String) value);
+							}
+						}
 						modelMap.put(keyStrs[1], modelSeriesMap.get(value));
 						continue;
 					}
@@ -295,6 +303,9 @@ public class ModelController extends AbstractController {
 			ValidatorUtils.validateEntity(modelEntity, i);
 			modelEntity.setCreateBy(getUserId().intValue());
 			modelEntities.add(modelEntity);
+		}
+		if (notExistmodelSeriesNameList.size() > 0) {
+			throw new RRException("机种系列" + notExistmodelSeriesNameList.toString() + "不存在，请添加机种系列后后再导入相关的数据");
 		}
 		try {
 			modelService.insertBatch(modelEntities, Constant.importNum);

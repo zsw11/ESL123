@@ -10,23 +10,22 @@
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'机种系列'" prop="" >-->
-<!--          <keyword-search v-model="" ></keyword-search>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'是否通用'" prop="common">
+          <el-select  v-model="listQuery.common">
+            <el-option
+              v-for="item in option"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-<!--        <el-form-item :label="'机种'" prop="" >-->
-<!--          <el-select>-->
-<!--            <el-option>-->
-<!--            </el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'备注'" prop="remark" >
+          <el-input v-model="listQuery.remark" clearable></el-input>
+        </el-form-item>
 
-<!--        <el-form-item :label="'仕向'" prop="" >-->
-<!--          <el-select>-->
-<!--            <el-option>-->
-<!--            </el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+
 
         <div class="search-box">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
@@ -119,7 +118,7 @@ import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 import { Message } from 'element-ui'
 
-const defaultExport = ['part.name', 'part.common', 'part.remark']
+const defaultExport = ['part.name', 'part.remark', 'model.name']
 
 export default {
   name: 'partList',
@@ -130,6 +129,19 @@ export default {
   data () {
     return {
       dataButton: 'list',
+      value: '',
+      option: [
+        {
+          id: 1,
+          value: true,
+          label: '是'
+        },
+        {
+          id: 0,
+          value: false,
+          label: '否'
+        }
+      ],
       listQuery: {
         name: null,
         common: null,
@@ -146,15 +158,21 @@ export default {
         name: '部品',
         children: [
           { code: 'name', name: '部品名称', type: 'string', required: true },
-          { code: 'common', name: '是否通用', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: false },
+        ]
+      },
+      {
+        code: 'model',
+        name: '机种',
+        children: [
+          { code: 'name', name: '部品名称', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
       // 导出字段
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段，固定不可变
-      importAttributes: [ 'part.name', 'part.common', 'part.remark' ]
+      importAttributes: [ 'part.name', 'part.remark', 'model.name' ]
     }
   },
   activated () {
@@ -171,7 +189,7 @@ export default {
             attributes: this.importAttributes,
             plain: true
           }),
-          sampleDatas: [[ '部品名', '是', '测试用' ]]
+          sampleDatas: [[ '部品名', '无', '机种1' ]]
         }],
         importApi: partImport,
         importSuccessCb: () => { this.getDataList() }

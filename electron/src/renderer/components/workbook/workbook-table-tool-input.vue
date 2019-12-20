@@ -18,13 +18,14 @@ export default {
       if (/^[flcmtrs]\d{1,2}$/i.test(e.target.value) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 'f'].includes(e.key)) {
         e.preventDefault()
         this.$emit('jump', e.key)
-      } else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[flcmtrs0-9]$/.test(e.key)) {
-        this.$message.error('请输入flcmtrs或者数字')
-        e.preventDefault()
-      } else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[flcmtrs]\d{0,2}$/i.test(e.target.value + e.key)) {
-        this.$message.error('格式不正确')
+      } else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[*flcmtrs0-9]$/.test(e.key)) {
+        this.$message.error('请输入*flcmtrs或者数字')
         e.preventDefault()
       }
+      //  else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[flcmtrs]\d{0,2}$/i.test(e.target.value + e.key)) {
+      //   this.$message.error('格式不正确')
+      //   e.preventDefault()
+      // }
     }
   }
 }

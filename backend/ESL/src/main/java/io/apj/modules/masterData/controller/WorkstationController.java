@@ -130,7 +130,7 @@ public class WorkstationController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SysLog("导出设备信息")
+	@SysLog("导出工位")
 	@RequestMapping(value = "/exportExcel", produces = "application/json;charset=UTF-8")
 	public void exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传

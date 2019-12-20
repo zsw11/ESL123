@@ -11,8 +11,7 @@
       label-position="right"
       :size="'mini'"
       label-width="100px"
-      style="width: 95%"
-    >
+      style="width: 95%">
 <!--      <el-form-item :label="'组织机构ID'" prop="deptId">-->
 <!--        <el-input-number v-model="dataForm.deptId"></el-input-number>-->
 <!--      </el-form-item>-->
@@ -38,7 +37,13 @@
       <el-row>
         <el-col :span="10">
           <el-form-item :label="'ST/LST'" prop="stlst">
-            <dict-select :disabled="true" style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select></el-form-item>
+            <dict-select
+              :disabled="true"
+              style="width: 100%"
+              dictType="ST"
+              v-model="dataForm.stlst">
+            </dict-select>
+          </el-form-item>
         </el-col>
 
         <el-col :span="10" :offset="2">
@@ -53,10 +58,8 @@
           <el-form-item :label="'发行日'" prop="monthResult">
             <el-date-picker
               style="width: 100%"
-              v-model="dataForm.monthResult"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            ></el-date-picker>
+              v-model="dataForm.monthResult">
+            </el-date-picker>
           </el-form-item>
         </el-col>
 
