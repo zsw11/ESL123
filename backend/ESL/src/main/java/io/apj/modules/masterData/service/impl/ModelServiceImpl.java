@@ -1,6 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.alibaba.druid.sql.visitor.functions.Isnull;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -84,7 +85,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
 		String remark = (String) params.get("remark");
-		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		Integer common = null;
+		if(params.get("common")!=null){
+			common = Integer.parseInt((String) params.get("common"));
+		}
 		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name,remark,common)));
 
 	}
@@ -95,7 +99,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 				Integer.parseInt(params.get("limit").toString()));
 		String name = (String) params.get("name");
 		String remark = (String) params.get("remark");
-		Boolean common = Boolean.parseBoolean((String) params.get("common"));
+		Integer common = null;
+		if(params.get("common")!=null){
+			common = Integer.parseInt((String) params.get("common"));
+		}
 		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name,remark,common)));
 
 	}
