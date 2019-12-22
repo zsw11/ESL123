@@ -175,9 +175,7 @@ export default {
           frequency: 'f'
         }
         // 判断模式
-        const mode = measureMode[modeMeasureFields.find(f => {
-          return ![ null, undefined, '' ].includes(row[f])
-        })]
+        const mode = this.getMode(row)
         if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
           this.$refs.workbookTable.setActiveCell(row, tmpField)
           this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
@@ -189,18 +187,23 @@ export default {
     canEdit ({ row, column }) {
       if (!modeMeasureFields.includes(column.property)) return true
       // 判断模式
-      const mode = measureMode[modeMeasureFields.find(f => {
+      const mode = this.getMode(row)
+      console.log('mode', mode)
+      return !mode || mode === measureMode[column.property]
+    },
+    // 获取模式
+    getMode (row) {
+      return measureMode[modeMeasureFields.find(f => {
+        console.log(f)
+        if (f === 'tool') return ![ null, undefined, '', '*0' ].includes(row[f])
         return ![ null, undefined, '' ].includes(row[f])
       })]
-      return !mode || mode === measureMode[column.property]
     },
     selectedChanged (val) {
       // 补0操作
       // 判断模式
       if (this.lastSelected) {
-        const mode = measureMode[modeMeasureFields.find(f => {
-          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
-        })]
+        const mode = this.getMode(this.lastSelected.row)
         if (mode &&
           measureMode[this.lastSelected.column.property] === mode &&
           (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
