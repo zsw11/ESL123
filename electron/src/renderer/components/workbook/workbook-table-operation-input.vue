@@ -59,14 +59,15 @@ export default {
     }
   },
   watch: {
-    '$attrs.value' (v) {
+    '$attrs.value' (v, o) {
       if (v === '[') {
         this.addToSelection(']', false)
         this.debounceSuggest('part')
       } else if (v === '"') {
-        this.addToSelection('"', false)
-        this.debounceSuggest('tool')
-      } else if (v.length === 1) {
+        if (!o) {
+          this.debounceSuggest('tool')
+        }
+      } else if (v.length === 1 && !/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(v)) {
         this.debounceSuggest('action', v)
       }
     }
@@ -234,7 +235,8 @@ export default {
             return true
           } else {
             const beginStr = this.getInputBegin()
-            if (!/[`~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
+            console.log(beginStr + e.key, /[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key))
+            if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
               // 操作关键字
               this.debounceSuggest('action', beginStr + e.key)
             } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
