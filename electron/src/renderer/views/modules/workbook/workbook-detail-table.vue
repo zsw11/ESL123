@@ -15,7 +15,7 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @selected-changed="selectedChanged"
       @edit-actived="editActived">
-      <vxe-table-column type="index" width="50" title="No."></vxe-table-column>
+      <vxe-table-column type="index" field="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" min-width="240"></operation-column>
       <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { pick, clone, round } from 'lodash'
+import { pick, clone, round, findIndex } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
@@ -156,8 +156,8 @@ export default {
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
-      console.log(jumpFields, column.property)
-      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
+      // 手顺列不跳转
+      if (column.property !== 'operation' && jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
         this.jump(row, column.property, e.key) // field是operation
         e.preventDefault()
         return false
@@ -188,13 +188,11 @@ export default {
       if (!modeMeasureFields.includes(column.property)) return true
       // 判断模式
       const mode = this.getMode(row)
-      console.log('mode', mode)
       return !mode || mode === measureMode[column.property]
     },
     // 获取模式
     getMode (row) {
       return measureMode[modeMeasureFields.find(f => {
-        console.log(f)
         if (f === 'tool') return ![ null, undefined, '', '*0' ].includes(row[f])
         return ![ null, undefined, '' ].includes(row[f])
       })]
@@ -329,7 +327,12 @@ export default {
     // 删除行
     async delete() {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
-        this.$refs.workbookTable.remove(this.lastSelected.row)
+        const fullData = this.$refs.workbookTable.getTableData().fullData
+        const rowIndex = findIndex(fullData, this.lastSelected.row)
+        const nextRow = fullData[rowIndex + 1]
+        this.$refs.workbookTable.remove(this.lastSelected.row).then(() => {
+          this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+        })
       }
     },
     // 增加行
