@@ -75,6 +75,7 @@ import {
   measureColumns0,
   measureColumns1,
   measureFields,
+  generalMeasureFields,
   defaultRow,
   defaultFields,
   modeMeasureFields,
@@ -199,29 +200,41 @@ export default {
     },
     selectedChanged (val) {
       // 补0操作
-      // 判断模式
       if (this.lastSelected) {
-        const mode = this.getMode(this.lastSelected.row)
-        if (mode &&
-          measureMode[this.lastSelected.column.property] === mode &&
-          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
-        ) {
-          // 因为都是设置0，不用管是否频率
-          // let v = 0
-          // for (const f of modeCheckZeroFields[mode]) {
-          //   if (this.lastSelected.row[f]) {
-          //     v = this.lastSelected.row[f]
-          //     break
-          //   }
-          // }
-          // if (v) {
-          //   for (const f of modeCheckZeroFields[mode]) {
-          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
-          //   }
-          // }
-          for (const f of modeSetZeroFields[mode]) {
-            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+        console.log(0, generalMeasureFields, this.lastSelected.column.property)
+        if (generalMeasureFields.includes(this.lastSelected.column.property)) {
+          if (!generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) return
+          // 通用列
+          if (val.row !== this.lastSelected.row || !generalMeasureFields.includes(val.column.property)) {
+            for (const f of generalMeasureFields) {
+              if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+            }
           }
+        } else {
+          // 判断模式
+          const mode = this.getMode(this.lastSelected.row)
+          if (mode &&
+            measureMode[this.lastSelected.column.property] === mode &&
+            (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+          ) {
+            // 因为都是设置0，不用管是否频率
+            // let v = 0
+            // for (const f of modeCheckZeroFields[mode]) {
+            //   if (this.lastSelected.row[f]) {
+            //     v = this.lastSelected.row[f]
+            //     break
+            //   }
+            // }
+            // if (v) {
+            //   for (const f of modeCheckZeroFields[mode]) {
+            //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+            //   }
+            // }
+            for (const f of modeSetZeroFields[mode]) {
+              if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+            }
+          }
+
         }
       }
       this.lastSelected = val

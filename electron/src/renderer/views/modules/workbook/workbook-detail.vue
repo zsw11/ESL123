@@ -222,16 +222,22 @@
       },
       save () {
         if (this.$refs.workbookTable) {
-          updateAll(this.workbook.id, {
-            workBook: pick(this.workbook, ['id']),
-            workOperations: this.$refs.workbookTable.getFullData()
-          }).then(res => {
-            console.log(res)
-            this.$message({
-              message: '保存成功',
-              type: 'success',
-              duration: 1500,
-              onClose: this.cancleFormSubmit
+          this.$confirm(`确定保存分析表?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            updateAll(this.workbook.id, {
+              workBook: pick(this.workbook, ['id']),
+              workOperations: this.$refs.workbookTable.getFullData()
+            }).then(res => {
+              console.log(res)
+              this.$message({
+                message: '保存成功',
+                type: 'success',
+                duration: 1500,
+                onClose: this.cancleFormSubmit
+              })
             })
           })
         }
@@ -281,6 +287,10 @@
                 }
                 case ']': {
                   self.nexTag()
+                  break
+                }
+                case 's': {
+                  self.save()
                   break
                 }
                 case 'q': {

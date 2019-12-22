@@ -43,6 +43,7 @@ export const defaultRow = {
 }
 export const measureFields = [ ...measureColumns0.map(c => c.field), 'tool', ...measureColumns1.map(c => c.field) ]
 export const defaultFields = Object.keys(defaultRow)
+export const generalMeasureFields = measureColumns0.slice(0, 3).map(c => c.field)
 export const commonMeasureFields = measureColumns0.slice(3, 6).map(c => c.field)
 export const limitMeasureFields = measureColumns0.slice(6, 9).map(c => c.field)
 export const toolMeasureFields = [ ...measureColumns0.slice(9, 13).map(c => c.field), 'tool', ...measureColumns1.slice(0, 3).map(c => c.field) ]
@@ -75,6 +76,7 @@ export default {
   measureFields,
   defaultRow,
   defaultFields,
+  generalMeasureFields,
   commonMeasureFields,
   limitMeasureFields,
   toolMeasureFields,
