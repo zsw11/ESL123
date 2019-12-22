@@ -8,10 +8,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.DateUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.collection.dao.MostValueDao;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.MostValueItemEntity;
@@ -28,14 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
+import java.util.function.Function;
 
 
 @Service("mostValueService")
@@ -136,33 +131,73 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
         generateTotalData(list, map);
 
+        String sheetName = entity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("collection_most_value");
+
         OutputStream out = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+//        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "Most_Value";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        int lastRow = 2 + list.size();
+        int firstRow = 3;
+        excelWriter.merge(firstRow, lastRow, 0, 0);
+        excelWriter.merge(firstRow, lastRow, 7, 7);
+        Map<Integer, Function<MostValueItemEntity, Object>> options = new HashMap<>();
+        options.put(1, MostValueItemEntity::getType);
+        options.put(2, MostValueItemEntity::getWorkName);
+        options.put(5, MostValueItemEntity::getWorkName);
+        options.put(6, MostValueItemEntity::getType);
+        ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+//        String fileName = "Most_Value";
+//        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
     }
 
     private void generateTotalData(List<MostValueItemEntity> list, Map<String, Object> map) {
         BigDecimal timeStTotal = BigDecimal.ZERO;
         BigDecimal timeTotal = BigDecimal.ZERO;
-
+        Map<String, BigDecimal> totalHMap = new HashMap<>();
         for (MostValueItemEntity entity: list) {
             timeTotal = timeTotal.add(entity.getTotal());
             BigDecimal timeSt = entity.getTotal().multiply(new BigDecimal(60));
             timeTotal = timeTotal.add(timeSt);
             entity.setTimeSt(timeSt);
+            String type = entity.getType();
+            BigDecimal totalH = totalHMap.get(type);
+            if (totalH == null) {
+                totalHMap.put(type, timeTotal);
+            } else {
+                totalHMap.put(type, totalH.add(timeTotal));
+            }
         }
+
+        generateTotalHoursForEachOfList(list, totalHMap);
+
         BigDecimal totalAll = timeTotal.divide(new BigDecimal(60),3,BigDecimal.ROUND_HALF_UP);
         map.put("timeStTotal", timeStTotal);
         map.put("timeTotal", timeTotal);
         map.put("totalAll", totalAll);
 
+    }
+
+    private void generateTotalHoursForEachOfList(List<MostValueItemEntity> list, Map<String, BigDecimal> totalHMap) {
+        for (String key : totalHMap.keySet()) {
+            BigDecimal totalH = totalHMap.get(key);
+            totalH = totalH.divide(new BigDecimal(60),3,BigDecimal.ROUND_HALF_UP);
+            totalHMap.put(key, totalH);
+        }
+
+        for (MostValueItemEntity entity: list) {
+            String type = entity.getType();
+            BigDecimal totalH = totalHMap.get(type);
+            entity.setTotalHours(totalH);
+        }
     }
 
     private MostValueEntity generateMostValue(WorkBookEntity workBook) {

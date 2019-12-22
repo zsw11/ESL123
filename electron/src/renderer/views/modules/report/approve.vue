@@ -50,9 +50,9 @@
         <!--          <el-form-item :label="'审批状态'" prop="status">-->
 <!--            <el-input v-model="listQuery.status" clearable></el-input>-->
 <!--          </el-form-item>-->
-<!--          <el-form-item :label="'审批状态'" prop="status">-->
-<!--            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>-->
-<!--          </el-form-item>-->
+          <el-form-item :label="'审批状态'" prop="status">
+            <dict-select dictType="Status" v-model="listQuery.status" :allowEmpty="true" clearable></dict-select>
+          </el-form-item>
           <div class="buttons with-complex">
             <el-button @click="clearQuery()">清 空</el-button>
             <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
@@ -113,11 +113,11 @@
           </template>
         </el-table-column>
 
-<!--        <el-table-column align="center" prop="status" label="审批状态">-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.status }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <el-table-column align="center" prop="status" label="审批状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status">{{ dictItemStatus[scope.row.status].name }}</span>
+          </template>
+        </el-table-column>
 
 
         <el-table-column align="center" :label="'操作'" class-name="small-padding fixed-width">
@@ -159,8 +159,13 @@
           <el-input type="textarea" rows="6"  v-model="approveForm.opinion" autocomplete="off" clearable></el-input>
         </el-form-item>
 
-        <el-form-item :label="'下一审批者'" prop="nextApprove"  label-width="100px">
-          <el-input  v-model="approveForm.nextApprove" autocomplete="off" clearable></el-input>
+        <el-form-item :label="'下一审批者'" prop="nextApproverId"  label-width="100px">
+          <keyword-search
+            v-model="approveForm.nextApproverId"
+            :allowMultiple="true"
+            :searchApi="this.listStaff"
+            :allowEmpty="true" clearable>
+          </keyword-search>
         </el-form-item>
 
       </el-form>
@@ -180,6 +185,8 @@ import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { listStaff } from '@/api/staff'
+import { fetchUserDetail } from '@/api/passport'
 
 export default {
   name: 'reportApproveList',
@@ -188,6 +195,7 @@ export default {
       approveShow: false,
       dataButton: 'list',
       dialogTitle: null,
+      userId: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -206,11 +214,12 @@ export default {
         deleteAt: null
       },
       approveForm: {
-        nextApprove: null,
+        nextApproverId: null,
         opinion: null,
         id: null,
         result: null
       },
+      listStaff,
       listDict,
       listDept,
       listReportGroup,
@@ -293,13 +302,17 @@ export default {
         }
       ],
       complexFilters: [],
-      dictItemSTLST: []
+      dictItemSTLST: [],
+      dictItemStatus: []
     }
   },
   activated () {
     const self = this
     self.getDictByType()
     self.getDataList()
+    fetchUserDetail().then((data)=>{
+      this.userId = data.page.id
+    })
   },
   methods: {
     // 普通查询
@@ -409,7 +422,7 @@ export default {
     approve (id, name, flag) {
       this.approveForm.id = null
       this.approveForm.result = null
-      this.approveForm.nextApprove = null
+      this.approveForm.nextApproverId = null
       this.approveForm.opinion = null
       if (flag === 1) {
         this.dialogTitle = '通过-' + name
@@ -441,6 +454,9 @@ export default {
     getDictByType () {
       listDictItem({ type: 'ST' }).then(({data}) => {
         this.dictItemSTLST = keyBy(data, 'code')
+      })
+      listDictItem({ type: 'Status' }).then(({data}) => {
+        this.dictItemStatus = keyBy(data, 'code')
       })
     }
   }

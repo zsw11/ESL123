@@ -146,12 +146,12 @@
         option: [
           {
             id: 1,
-            value: true,
+            value: 0,
             label: '是'
           },
           {
             id: 0,
-            value: false,
+            value: 1,
             label: '否'
           }
         ],

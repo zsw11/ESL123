@@ -178,7 +178,7 @@
     <el-dialog
       customClass="wookbook-dialog"
       width="30%"
-      title="选择生成报表组"
+      title="选择生成报表"
       :visible.sync="createShow">
       <el-form :inline="true" :model="createForm">
         <el-form-item>
@@ -229,18 +229,18 @@ export default {
       isIndeterminate: true,
       checkAll: false,
       reportGroup: [
-        {
-          name: '分析表报表',
-          id: 1
-        },
-        {
-          name: '人机联合表',
-          id: 2
-        },
-        {
-          name: 'Collection-工位时间表',
-          id: 3
-        },
+        // {
+        //   name: '分析表报表',
+        //   id: 1
+        // },
+        // {
+        //   name: '人机联合表',
+        //   id: 2
+        // },
+        // {
+        //   name: 'Collection-工位时间表',
+        //   id: 3
+        // },
         {
           name: 'Collection-Compare表',
           id: 4
@@ -249,26 +249,26 @@ export default {
           name: 'Collection-MOST Value表',
           id: 5
         },
-        {
-          name: 'Collection-Revision History表',
-          id: 6
-        },
-        {
-          name: 'Report-Total表',
-          id: 7
-        },
-        {
-          name: 'Report-拖机Total表',
-          id: 8
-        },
-        {
-          name: 'Report-时间联络表',
-          id: 9
-        },
-        {
-          name: 'Process List表',
-          id: 10
-        },
+        // {
+        //   name: 'Collection-Revision History表',
+        //   id: 6
+        // },
+        // {
+        //   name: 'Report-Total表',
+        //   id: 7
+        // },
+        // {
+        //   name: 'Report-拖机Total表',
+        //   id: 8
+        // },
+        // {
+        //   name: 'Report-时间联络表',
+        //   id: 9
+        // },
+        // {
+        //   name: 'Process List表',
+        //   id: 10
+        // },
         {
           name: '标准时间表',
           id: 11
@@ -277,10 +277,10 @@ export default {
           name: '标准工数表',
           id: 12
         },
-        {
-          name: '履历表',
-          id: 13
-        }
+        // {
+        //   name: '履历表',
+        //   id: 13
+        // }
       ],
       arr: [],
       createForm: {

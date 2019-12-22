@@ -1,26 +1,23 @@
 package io.apj.common.utils;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
+import org.hibernate.validator.internal.xml.binding.BeanType;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.Color;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
-
 /**
- * 
+ *
  * @author samchen
  * @date 20181213
  *
@@ -29,7 +26,7 @@ public class ExportExcelUtils {
 
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param response
 	 * @param fileName
 	 * @param data
@@ -167,6 +164,159 @@ public class ExportExcelUtils {
 		style.setBorderColor(BorderSide.LEFT, color);
 		style.setBorderColor(BorderSide.RIGHT, color);
 		style.setBorderColor(BorderSide.BOTTOM, color);
+	}
+
+	/**
+	 * 复制sheet
+	 * @param paths
+	 * @param response
+	 * @param fileName
+	 * @throws IOException
+	 */
+	public static void exportExcel(List<String> paths, HttpServletResponse response, String fileName) throws IOException {
+		// 告诉浏览器用什么软件可以打开此文件
+		response.setContentType("application/vnd.ms-excel");
+		// 下载文件的默认名称
+		response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
+
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("filename",  URLEncoder.encode(fileName, "utf-8") + ".xls");
+		response.setHeader("Access-Control-Expose-Headers", "fileName");
+
+		exportMergedExcel(paths, response.getOutputStream());
+
+//		FileUtil.deleteBatchByFilePaths(paths);
+	}
+
+	private static void exportMergedExcel(List<String> paths, OutputStream out) throws IOException {
+		HSSFWorkbook newExcelCreat = new HSSFWorkbook();
+		try {
+
+			for (String fromExcelName : paths) {
+				InputStream in = new FileInputStream(fromExcelName);
+				String sheetName = fromExcelName.substring(fromExcelName.lastIndexOf(File.separator) + 1, fromExcelName.lastIndexOf("."));
+				HSSFWorkbook fromExcel = new HSSFWorkbook(in);
+				int length = fromExcel.getNumberOfSheets();
+				if(length<=1){       //长度为1时
+					HSSFSheet oldSheet = fromExcel.getSheetAt(0);
+					HSSFSheet newSheet = newExcelCreat.createSheet(sheetName);
+					copySheet(newExcelCreat, oldSheet, newSheet);
+				}else{
+					for (int i = 0; i < length; i++) {// 遍历每个sheet
+						HSSFSheet oldSheet = fromExcel.getSheetAt(i);
+						HSSFSheet newSheet = newExcelCreat.createSheet(oldSheet.getSheetName());
+						copySheet(newExcelCreat, oldSheet, newSheet);
+					}
+				}
+			}
+			newExcelCreat.write(out);
+		} finally {
+			out.close();
+		}
+	}
+
+	public static void copyCellStyle(HSSFCellStyle fromStyle, HSSFCellStyle toStyle) {
+
+		toStyle.cloneStyleFrom(fromStyle);
+	}
+
+	/**
+	 * 合并单元格
+	 * @param fromSheet
+	 * @param toSheet
+	 */
+	public static void mergeSheetAllRegion(HSSFSheet fromSheet, HSSFSheet toSheet) {
+		int num = fromSheet.getNumMergedRegions();
+		CellRangeAddress cellR = null;
+		for (int i = 0; i < num; i++) {
+			cellR = fromSheet.getMergedRegion(i);
+			toSheet.addMergedRegion(cellR);
+		}
+	}
+
+	/**
+	 * 行复制功能
+	 * @param wb
+	 * @param oldRow
+	 * @param toRow
+	 */
+	public static void copyRow(HSSFWorkbook wb, HSSFRow oldRow, HSSFRow toRow) {
+		toRow.setHeight(oldRow.getHeight());
+		for (Iterator cellIt = oldRow.cellIterator(); cellIt.hasNext();) {
+			HSSFCell tmpCell = (HSSFCell) cellIt.next();
+			HSSFCell newCell = toRow.createCell(tmpCell.getColumnIndex());
+			copyCell(wb, tmpCell, newCell);
+		}
+	}
+
+	/**
+	 * 复制单元格
+	 * @param wb
+	 * @param fromCell
+	 * @param toCell
+	 */
+	public static void copyCell(HSSFWorkbook wb, HSSFCell fromCell, HSSFCell toCell) {
+		HSSFCellStyle newstyle = wb.createCellStyle();
+		copyCellStyle(fromCell.getCellStyle(), newstyle);
+		//  toCell.setEncoding(fromCell.getStringCelllValue());
+		// 样式
+		toCell.setCellStyle(newstyle);
+		if (fromCell.getCellComment() != null) {
+			toCell.setCellComment(fromCell.getCellComment());
+		}
+		// 不同数据类型处理
+		int fromCellType = fromCell.getCellType();
+		toCell.setCellType(fromCellType);
+		if (fromCellType == XSSFCell.CELL_TYPE_NUMERIC) {
+			if (DateUtil.isCellDateFormatted(fromCell)) {
+				toCell.setCellValue(fromCell.getDateCellValue());
+			} else {
+				toCell.setCellValue(fromCell.getNumericCellValue());
+			}
+		} else if (fromCellType == XSSFCell.CELL_TYPE_STRING) {
+			toCell.setCellValue(fromCell.getRichStringCellValue());
+		} else if (fromCellType == XSSFCell.CELL_TYPE_BLANK) {
+			// nothing21
+		} else if (fromCellType == XSSFCell.CELL_TYPE_BOOLEAN) {
+			toCell.setCellValue(fromCell.getBooleanCellValue());
+		} else if (fromCellType == XSSFCell.CELL_TYPE_ERROR) {
+			toCell.setCellErrorValue(fromCell.getErrorCellValue());
+		} else if (fromCellType == XSSFCell.CELL_TYPE_FORMULA) {
+			toCell.setCellFormula(fromCell.getCellFormula());
+		} else { // nothing29
+		}
+
+	}
+
+	/**
+	 * Sheet复制
+	 * @param wb
+	 * @param fromSheet
+	 * @param toSheet
+	 */
+	public static void copySheet(HSSFWorkbook wb, HSSFSheet fromSheet, HSSFSheet toSheet) {
+		mergeSheetAllRegion(fromSheet, toSheet);
+		// 设置列宽
+		int length = fromSheet.getRow(fromSheet.getFirstRowNum()).getLastCellNum();
+		for (int i = 0; i <= length; i++) {
+			toSheet.setColumnWidth(i, fromSheet.getColumnWidth(i));
+		}
+		for (Iterator rowIt = fromSheet.rowIterator(); rowIt.hasNext();) {
+			HSSFRow oldRow = (HSSFRow) rowIt.next();
+			HSSFRow newRow = toSheet.createRow(oldRow.getRowNum());
+			copyRow(wb, oldRow, newRow);
+		}
+		//读取图片
+		for (HSSFShape shape : fromSheet.getDrawingPatriarch().getChildren()) {
+			if (shape instanceof HSSFPicture) {
+				HSSFPicture pic = (HSSFPicture) shape;
+				int pictureIndex = pic.getPictureIndex();
+				HSSFClientAnchor anchor = pic.getPreferredSize();
+				HSSFPatriarch patriarch = toSheet.createDrawingPatriarch();
+				int index = wb.addPicture(pic.getPictureData().getData(), 2);
+				patriarch.createPicture(anchor,pictureIndex);
+			}
+		}
 	}
 
 }

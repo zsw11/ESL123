@@ -10,7 +10,6 @@
 		<result property="deptId" column="dept_id" />
 		<result property="type" column="type" />
 		<result property="sourceType" column="source_type" />
-		<result property="processId" column="process_id" />
 		<result property="sourceId" column="source_id" />
 		<result property="toStaffId" column="to_staff_id" />
 		<result property="title" column="title" />

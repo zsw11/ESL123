@@ -44,6 +44,9 @@ http.interceptors.response.use(response => {
       })
     }
   }
+  if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=utf-8') {
+    return response
+  }
   return response.data
 }, error => {
   switch (error.response.status) {

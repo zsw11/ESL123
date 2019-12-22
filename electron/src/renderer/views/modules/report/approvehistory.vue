@@ -46,7 +46,7 @@
             </keyword-search>
           </el-form-item>
 
-          <el-form-item :label="'下一审批者'" prop="nextApproveId">
+          <el-form-item :label="'下一审批者'" prop="nextApproverId">
             <el-input v-model="listQuery.nextApproverId" clearable></el-input>
           </el-form-item>
 
@@ -107,9 +107,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="nextApproveName" label="下一审批者">
+        <el-table-column align="center" prop="nextApproverName" label="下一审批者">
           <template slot-scope="scope">
-            <span>{{scope.row.nextApproveName }}</span>
+            <span>{{scope.row.nextApproverName }}</span>
           </template>
         </el-table-column>
 

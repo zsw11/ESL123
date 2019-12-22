@@ -51,7 +51,6 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("gender")), "gender", params.get("gender"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("mobilephone")), "mobilephone",
 						(String) params.get("mobilephone"))
-				.eq(StringUtils.isNotEmpty((CharSequence) params.get("deptId")), "dept_id", params.get("deptId"))
 				.eq(StringUtils.isNotEmpty((CharSequence) params.get("status")), "status", params.get("status"))
 				.like(StringUtils.isNotEmpty((CharSequence) params.get("email")), "email", (String) params.get("email"))
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
@@ -59,6 +58,9 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 //			Long serviceOrderDeptId = Long.valueOf(params.get("serviceOrderDeptId").toString());
 //			entityWrapper.eq("dept_id", serviceOrderDeptId);
 //		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
+			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("keyword"))) {
 			String name = (String) params.get("keyword");
 			name = name.replace("'", "");
@@ -75,9 +77,8 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 			entity.setPerms(sysUserService.getDeptAllPerms(entity.getDeptId(), "basic:staff:"));
 			SysDeptEntity dept = sysDeptService.selectById(entity.getDeptId());
 			entity.setDept(dept);
-			JobEntity job = jobService.selectById(entity.getJobId());
-			entity.setJob(job);
-
+//			JobEntity job = jobService.selectById(entity.getJobId());
+//			entity.setJob(job);
 		}
 
 		return new PageUtils(page);

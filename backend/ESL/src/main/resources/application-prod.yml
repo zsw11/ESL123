@@ -5,7 +5,7 @@ spring:
         driverClassName: org.postgresql.Driver
         druid:
             first:
-                url: jdbc:postgresql://117.48.230.8:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+                url: jdbc:postgresql://117.48.230.8:5432/esl_dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: postgres
                 password: ly0713
             second:

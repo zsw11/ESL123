@@ -173,8 +173,13 @@
           </el-radio-group>
         </el-form-item>
         <div>
-          <el-form-item :label="'下一审批者'" prop="nextApprove" >
-            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+          <el-form-item :label="'下一审批者'" prop="nextApproverId" >
+            <keyword-search
+              v-model="approveForm.nextApproverId"
+              :allowMultiple="true"
+              :searchApi="this.listStaff"
+              :allowEmpty="true" clearable>
+            </keyword-search>
           </el-form-item>
         </div>
       </el-form>
@@ -194,6 +199,7 @@ import { fetchReportGroup } from '@/api/report'
 import { createReportApprove } from '@/api/reportApprove'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { listStaff } from '@/api/staff'
 
 export default {
   name: 'reportChangeRecordList',
@@ -201,13 +207,13 @@ export default {
     return {
       approveShow: false,
       approveForm: {
-        reportId: null,
         reportGroupId: null,
-        nextApprove: null,
+        nextApproverId: null,
         modelId: null,
         phaseId: null,
         stlst: null
       },
+      listStaff,
       reportGroup: [],
       dataButton: 'list',
       listQuery: {

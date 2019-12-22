@@ -1,3 +1,4 @@
+import { listStaff } from '@/api/staff'
 <template>
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
@@ -337,8 +338,13 @@
           </el-radio-group>
         </el-form-item>
         <div>
-          <el-form-item :label="'下一审批者'" prop="nextApprove" >
-            <el-input  v-model="approveForm.nextApprove" clearable></el-input>
+           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
+            <keyword-search
+              v-model="approveForm.nextApproverId"
+              :allowMultiple="true"
+              :searchApi="this.listStaff"
+              :allowEmpty="true" clearable>
+            </keyword-search>
           </el-form-item>
         </div>
 
@@ -359,6 +365,7 @@ import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove } from '@/api/reportApprove'
+import { listStaff } from '@/api/staff'
 
 export default {
   name: 'reportStandardWorkList',
@@ -366,9 +373,8 @@ export default {
     return {
       approveShow: false,
       approveForm: {
-        reportId: null,
         reportGroupId: null,
-        nextApprove: null,
+        nextApproverId: null,
         modelId: null,
         phaseId: null,
         stlst: null
@@ -400,6 +406,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listStaff,
       listDict,
       listPhase,
       listModel,

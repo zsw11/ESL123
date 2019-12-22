@@ -198,7 +198,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-        if(StringUtils.isNotEmpty((CharSequence) data.get("nextApproverId"))){
+        if(data.get("nextApproverId") == null){
             approveEntity.setStatus("01");
         }else {
             approveEntity.setStatus("02");
@@ -217,6 +217,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         approveHistoryEntity.setOpinion((String) data.get("opinion"));
         approveHistoryEntity.setResult((String) data.get("result"));
         approveHistoryEntity.setReportApproveId(approveEntity.getId());
+        approveHistoryEntity.setNextApproverId(approveEntity.getNextApproverId());
         approveHistoryEntity.setDeptId(approveEntity.getDeptId());
         approveHistoryEntity.setCreateAt(new Date());
         approveHistoryService.insert(approveHistoryEntity);
@@ -228,6 +229,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         Integer reportId = (Integer)params.get("reportId");
         switch (reportId) {
             case 1:
+                workBookService.download(params, response);
                 break;
             case 2:
                 break;
