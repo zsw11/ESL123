@@ -1,9 +1,9 @@
 <template>
   <div class="workbook-detail-page" :class="workbookPercent">
     <div class="header">
-      <el-button icon="el-icon-back" @click="goBack">返回</el-button>
-      <el-button icon="el-icon-upload" @click="save">保存</el-button>
-      <el-button icon="el-icon-open" @click="openVideo">打开</el-button>
+      <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
+      <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
+      <el-button type="primary" icon="el-icon-open" @click="openVideo">打开</el-button>
     </div>
 
     <div class="video-player-box">
@@ -126,6 +126,7 @@
           controlBar: {
             fullscreenToggle: false
           },
+          markers: [],
           middleware (player) {
             player.on('seeked', (e) => {
               console.log('seeked', player.currentTime(), e)
@@ -190,6 +191,25 @@
       this.handleShortcut()
     },
     methods: {
+      // ========================================
+      //                视频播放
+      // ========================================
+      // 打标签
+      tag () {
+        if (this.$refs.videoPlayer) {
+          if (this.playerOptions.markers.length === 5) {
+            this.playerOptions.markers.unshift()
+          }
+          this.playerOptions.markers.push(this.$refs.videoPlayer.player.currentTime())
+        }
+      },
+      prevTag () {
+      },
+      nexTag () {
+      },
+      // ========================================
+      //                分析表录入
+      // ========================================
       event (e) {
         // if (this.currentTime) {
         //   console.log(this.currentTime)
@@ -249,6 +269,18 @@
                 }
                 case 'i': {
                   self.addStandardBook()
+                  break
+                }
+                case 't': {
+                  self.tag()
+                  break
+                }
+                case '[': {
+                  self.prevTag()
+                  break
+                }
+                case ']': {
+                  self.nexTag()
                   break
                 }
                 case 'q': {
@@ -323,6 +355,24 @@
 .workbook-detail-page {
   height: 100%;
   overflow: hidden;
+
+  .header {
+    background-color: rgba(0, 0, 0, .5);
+    height: 28px;
+    .el-button+.el-button{
+      margin-left: 5px;
+    }
+    .el-button--mini {
+      padding: 4px 10px;
+      height: 22px;
+      line-height: 22px;
+      background-color: transparent;
+      border: 0;
+      &:hover {
+        color: rgba(255, 255, 255, .2);
+      }
+    }
+  }
 
   .video-player-box{
     width: 100vw;
