@@ -114,7 +114,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['tool.name', 'tool.common', 'tool.remark']
+const defaultExport = ['tool.name', 'tool.remark', 'model.name']
 
 export default {
   name: 'toolList',
@@ -154,15 +154,21 @@ export default {
         name: '治工具信息',
         children: [
           { code: 'name', name: '治工具名称', type: 'string', required: true },
-          { code: 'common', name: '是否通用', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: false }
+        ]
+      },
+      {
+        code: 'model',
+        name: '机种',
+        children: [
+          { code: 'name', name: '机种名称', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
       // 导出字段
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段，固定不可变
-      importAttributes: [ 'tool.name', 'tool.common', 'tool.remark' ]
+      importAttributes: [ 'tool.name', 'tool.remark', 'model.name' ]
     }
   },
   activated () {
@@ -179,7 +185,7 @@ export default {
             attributes: this.importAttributes,
             plain: true
           }),
-          sampleDatas: [[ '治工具', '是', '测试用' ]]
+          sampleDatas: [[ '治工具', '是', '机种1' ]]
         }],
         importApi: toolImport,
         importSuccessCb: () => { this.getDataList() }
