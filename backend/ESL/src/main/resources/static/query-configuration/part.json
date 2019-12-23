@@ -10,19 +10,14 @@
                 "type": "string"
             },
             {
-                "code": "common",
-                "name": "是否通用",
-                "type": "string"
-            },
-            {
                 "code": "remark",
                 "name": "备注",
                 "type": "string"
             },
             {
-                "code": "createAt",
-                "name": "创建时间",
-                "type": "date"
+                "code": "name",
+                "name": "机种名称",
+                "type": "string"
             }
         ]
     }
