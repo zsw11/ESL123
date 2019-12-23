@@ -1309,7 +1309,6 @@ comment on table operation_group_operation is '手顺';
 comment on column operation_group_operation.operation_group_id is '手顺组合ID';
 comment on column operation_group_operation.seq_number is '序号';
 comment on column operation_group_operation.operation is '手顺';
-Create Unique Index index_operation_group_operation_UNQ On operation_group_operation(operation);
 comment on column operation_group_operation.pinyin is '拼音';
 comment on column operation_group_operation.measures is '指标';
 comment on column operation_group_operation.frequency is '频度';
