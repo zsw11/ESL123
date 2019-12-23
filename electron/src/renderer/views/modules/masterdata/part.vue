@@ -165,7 +165,7 @@ export default {
         code: 'model',
         name: '机种',
         children: [
-          { code: 'name', name: '部品名称', type: 'string', required: true },
+          { code: 'name', name: '机种名称', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
