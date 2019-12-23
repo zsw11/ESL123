@@ -760,7 +760,7 @@ CREATE TABLE action (
 );
 comment on table action is '关键词';
 Create Unique Index index_action_name_UNQ On action(name);
-CREATE UNIQUE INDEX action_uniq ON action (name,dept_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX action_uniq ON action (name,dept_id) WHERE delete_at IS NULL;
 comment on column action.name is '名称';
 comment on column action.pinyin is '拼音';
 comment on column action.dept_id is '部门ID';
@@ -1072,7 +1072,7 @@ CREATE TABLE dept_action_rela (
 comment on table dept_action_rela is '组织机构关键词关系';
 comment on column dept_action_rela.dept_id is '组织机构ID';
 comment on column dept_action_rela.action_id is '关键词ID';
-CREATE UNIQUE INDEX dept_action_rela_uniq ON dept_action_rela (dept_id,action_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX dept_action_rela_uniq ON dept_action_rela (dept_id,action_id) WHERE delete_at IS NULL;
 comment on column dept_action_rela.create_by is '创建者ID';
 comment on column dept_action_rela.create_at is '创建时间';
 comment on column dept_action_rela.update_by is '更新者ID';
@@ -1115,7 +1115,7 @@ CREATE TABLE model_tool_rela (
 comment on table model_tool_rela is '机种治工具关系';
 comment on column model_tool_rela.model_id is '机种ID';
 comment on column model_tool_rela.tool_id is '治工具ID';
-CREATE UNIQUE INDEX model_tool_rela_uniq ON model_tool_rela (model_id,tool_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX model_tool_rela_uniq ON model_tool_rela (model_id,tool_id) WHERE delete_at IS NULL;
 comment on column model_tool_rela.create_by is '创建者ID';
 comment on column model_tool_rela.create_at is '创建时间';
 comment on column model_tool_rela.update_by is '更新者ID';
@@ -1137,7 +1137,7 @@ CREATE TABLE model_workstation_rela (
 comment on table model_workstation_rela is '机种工位关系表';
 comment on column model_workstation_rela.model_id is '机种ID';
 comment on column model_workstation_rela.workstation_id is '工位ID';
-CREATE UNIQUE INDEX model_workstation_rela_uniq ON model_workstation_rela (model_id,workstation_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX model_workstation_rela_uniq ON model_workstation_rela (model_id,workstation_id) WHERE delete_at IS NULL;
 comment on column model_workstation_rela.create_by is '创建者ID';
 comment on column model_workstation_rela.create_at is '创建时间';
 comment on column model_workstation_rela.update_by is '更新者ID';
@@ -1159,7 +1159,7 @@ CREATE TABLE model_part_rela (
 comment on table model_part_rela is '机种部品关系';
 comment on column model_part_rela.model_id is '机种ID';
 comment on column model_part_rela.part_id is '部品ID';
-CREATE UNIQUE INDEX model_part_rela_uniq ON model_part_rela (model_id,part_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX model_part_rela_uniq ON model_part_rela (model_id,part_id) WHERE delete_at IS NULL;
 comment on column model_part_rela.create_by is '创建者ID';
 comment on column model_part_rela.create_at is '创建时间';
 comment on column model_part_rela.update_by is '更新者ID';
@@ -1181,7 +1181,7 @@ CREATE TABLE report_group_report_rela (
 comment on table report_group_report_rela is '报表组报表关系';
 comment on column report_group_report_rela.report_group_id is '报表组ID';
 comment on column report_group_report_rela.report_id is '报表ID';
-CREATE UNIQUE INDEX report_group_report_rela_uniq ON report_group_report_rela (report_group_id,report_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX report_group_report_rela_uniq ON report_group_report_rela (report_group_id,report_id) WHERE delete_at IS NULL;
 comment on column report_group_report_rela.create_by is '创建者ID';
 comment on column report_group_report_rela.create_at is '创建时间';
 comment on column report_group_report_rela.update_by is '更新者ID';
@@ -1236,7 +1236,7 @@ comment on column measure_group.b2 is 'B2';
 comment on column measure_group.p1 is 'P1';
 comment on column measure_group.a3 is 'A3';
 comment on column measure_group.dept_id is '组织机构ID';
-CREATE UNIQUE INDEX measure_group_uniq ON measure_group (code,dept_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX measure_group_uniq ON measure_group (code,dept_id) WHERE delete_at IS NULL;
 comment on column measure_group.used_count is '使用次数统计';
 comment on column measure_group.create_by is '创建者ID';
 comment on column measure_group.create_at is '创建时间';
@@ -1262,7 +1262,7 @@ CREATE TABLE opertaion_group (
 comment on table opertaion_group is '手顺及指标值组合';
 comment on column opertaion_group.code is '编码';
 comment on column opertaion_group.dept_id is '组织机构ID';
-CREATE UNIQUE INDEX opertaion_group_uniq ON opertaion_group (code,dept_id) WHERE delete_at IS NOT NULL;
+CREATE UNIQUE INDEX opertaion_group_uniq ON opertaion_group (code,dept_id) WHERE delete_at IS NULL;
 comment on column opertaion_group.remark is '备注';
 comment on column opertaion_group.used_count is '使用次数统计';
 comment on column opertaion_group.create_by is '创建者ID';
