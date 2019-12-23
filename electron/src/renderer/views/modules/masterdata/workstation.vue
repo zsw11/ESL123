@@ -97,7 +97,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['workstation.name', 'workstation.remark']
+const defaultExport = ['workstation.name', 'workstation.remark', 'model.name']
 
 export default {
   name: 'workstationList',
@@ -122,15 +122,22 @@ export default {
         code: 'workstation',
         name: '工位',
         children: [
-          { code: 'name', name: '名称', type: 'string', required: true },
+          { code: 'name', name: '工位名称', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: true }
+        ]
+      },
+       {
+        code: 'model',
+        name: '机种',
+        children: [
+          { code: 'name', name: '机种名称', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
        // 导出字段
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段，固定不可变
-      importAttributes: [ 'workstation.name', 'workstation.remark' ]
+      importAttributes: [ 'workstation.name', 'workstation.remark','model.name' ]
     }
   },
   activated () {
@@ -147,7 +154,7 @@ export default {
             attributes: this.importAttributes,
             plain: true
           }),
-          sampleDatas: [[ '工位名', '测试用' ]]
+          sampleDatas: [[ '工位名', '测试用','机种1' ]]
         }],
         importApi: workstationImport,
         importSuccessCb: () => { this.getDataList() }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.masterData.entity.ActionEntity;
 import io.apj.modules.masterData.entity.ToolEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -23,6 +24,8 @@ public interface ToolService extends IService<ToolEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils toolModeRelaList(Integer id, Map<String, Object> params);
+
+    ResponseEntity<Object> toolImport(Map<String, Object> map);
 
     /**
      * 软删除实体对象

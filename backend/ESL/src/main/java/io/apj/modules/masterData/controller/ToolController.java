@@ -183,42 +183,10 @@ public class ToolController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) {
-		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-		List<ToolEntity> toolEntityList = new ArrayList<>();
-		for (int i = 0; i < maps.size(); i++) {
-			ToolEntity toolEntity = new ToolEntity();
-			// deviceMap,接受每一行数据
-			Map<String, Object> deviceMap = new HashMap<>();
-			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
-				String[] keyStrs = key.split("\\.");
-				// 设备
-				if (keyStrs[0].equals("tool")) {
-					if (keyStrs[1].equals("common")) {
-						if (value.equals("是")) {
-							deviceMap.put(keyStrs[1], true);
-						} else {
-							deviceMap.put(keyStrs[1], false);
-						}
-						continue;
-					}
-					deviceMap.put(keyStrs[1], value);
-				}
-			}
-			// map转javabean
-			DataUtils.transMap2Bean2(deviceMap, toolEntity);
-			ValidatorUtils.validateEntity(toolEntity, i);
-			toolEntity.setCreateBy(getUserId().intValue());
-			toolEntityList.add(toolEntity);
-		}
-		try {
-			toolService.insertBatch(toolEntityList, Constant.importNum);
-		} catch (MybatisPlusException e) {
-			throw new RRException("批量导入失败", 500);
-		}
-		return RD.build().put("code", 200);
+	public ResponseEntity<Object> importExcel(@RequestBody Map<String, Object> map) {
+		map.put("userID", getUserId().intValue());
+		ResponseEntity<Object> responseEntity = toolService.toolImport(map);
+		return responseEntity;
 	}
 
 }

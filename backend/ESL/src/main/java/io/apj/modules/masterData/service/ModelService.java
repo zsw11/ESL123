@@ -22,6 +22,12 @@ public interface ModelService extends IService<ModelEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
 
+	/**
+	 * 机种系列下的机种
+	 * @param id
+	 * @param params
+	 * @return
+	 */
 	PageUtils selectBySeriesId(int id, Map<String, Object> params);
 
 	PageUtils modelPartRelaList(int id, Map<String, Object> params);
