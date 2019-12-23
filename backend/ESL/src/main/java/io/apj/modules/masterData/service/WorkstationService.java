@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.masterData.entity.ActionEntity;
 import io.apj.modules.masterData.entity.WorkstationEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -52,4 +53,9 @@ public interface WorkstationService extends IService<WorkstationEntity> {
 	 * @return
 	 */
 	PageUtils modelDetailList(Integer id, Map<String, Object> params);
+	/**
+	 * 导入
+	 * @return
+	 */
+	ResponseEntity<Object> workstationImport(Map<String, Object> map);
 }

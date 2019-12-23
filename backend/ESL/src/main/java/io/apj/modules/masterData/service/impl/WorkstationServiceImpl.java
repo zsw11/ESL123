@@ -4,14 +4,15 @@ import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.ModelWorkstationRelaEntity;
-import io.apj.modules.masterData.entity.PartEntity;
-import io.apj.modules.masterData.entity.WorkstationTypeEntity;
+import io.apj.common.exception.RRException;
+import io.apj.common.utils.*;
+import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.WorkstationTypeService;
 import io.apj.modules.sys.service.SysDeptService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -25,14 +26,12 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.WorkstationDao;
-import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.ModelWorkstationRelaService;
 import io.apj.modules.masterData.service.WorkstationService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("workstationService")
 public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, WorkstationEntity>
@@ -152,6 +151,92 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 			entity.setModelWorkStationRelaId(relaIdMap.get(entity.getId()));
 		}
 		return new PageUtils(page);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<Object> workstationImport(Map<String, Object> map) {
+		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		List<WorkstationEntity> workstationEntityList = new ArrayList<>();
+		List<String> modelNameList = new ArrayList<>();
+		List<String> workStationNameList = new ArrayList<String>();
+		List<ModelWorkstationRelaEntity> modelWorkstationRelaEntityList = new ArrayList<>();
+		// 遍历所有导入数据，插入工位
+		for (int i = 0; i < maps.size(); i++) {
+			WorkstationEntity workstationEntity = new WorkstationEntity();
+			Map<String, Object> WorkstationMap = new HashMap<>();
+			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				String[] keyStrs = key.split("\\.");
+				if (keyStrs[0].equals("workstation")) {
+					if (keyStrs[1].equals("name")) {
+						if (!workStationNameList.contains(value)) {
+							workStationNameList.add((String) value);
+						}
+					}
+					WorkstationMap.put(keyStrs[1], value);
+				}
+				if (keyStrs[0].equals("model")) {
+					if (keyStrs[1].equals("name")) {
+						if (!modelNameList.contains(value)) {
+							modelNameList.add((String) value);
+						}
+					}
+				}
+			}
+			DataUtils.transMap2Bean2(WorkstationMap, workstationEntity);
+			ValidatorUtils.validateEntity(workstationEntity, i);
+			workstationEntity.setPinyin(PinyinUtil.getPinYin(workstationEntity.getName()));
+			workstationEntity.setCreateBy((Integer) map.get("userID"));
+			workstationEntityList.add(workstationEntity);
+		}
+		this.insertBatch(workstationEntityList, Constant.importNum);
+		// 遍历所有本次导入所用到的机种
+		Map<String, Integer> modelIDAndNameMap = new HashMap<String, Integer>();
+		EntityWrapper<ModelEntity> modelWrapper = new EntityWrapper<>();
+		modelWrapper.in("name", modelNameList).isNull("delete_at");
+		List<ModelEntity> modelList = modelService.selectList(modelWrapper);
+		for (ModelEntity item : modelList) {
+			modelIDAndNameMap.put(item.getName(), item.getId());
+		}
+		Map<String, Integer> WorkstationIDAndNameMap = new HashMap<String, Integer>();
+		EntityWrapper<WorkstationEntity> WorkstationWrapper = new EntityWrapper<>();
+		WorkstationWrapper.in("name", workStationNameList).isNull("delete_at");
+		List<WorkstationEntity> workstationEntityList1 = this.selectList(WorkstationWrapper);
+		for (WorkstationEntity item : workstationEntityList1) {
+			WorkstationIDAndNameMap.put(item.getName(), item.getId());
+		}
+		// 存储不存在的机种名称
+		List<String> notExistModelName = new ArrayList<String>();
+		// 关系表列表
+		for (int i = 0; i < maps.size(); i++) {
+			ModelWorkstationRelaEntity modelWorkstationRelaEntity = new ModelWorkstationRelaEntity();
+			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (key.equals("model.name")) {
+					if (modelIDAndNameMap.get(value) != null) {
+						modelWorkstationRelaEntity.setModelId(modelIDAndNameMap.get(value));
+					} else {
+						if (!notExistModelName.contains((String) value)) {
+							notExistModelName.add((String) value);
+						}
+					}
+				} else if (key.equals("workstation.name")) {
+					modelWorkstationRelaEntity.setWorkstationId(WorkstationIDAndNameMap.get(value));
+				}
+			}
+			modelWorkstationRelaEntityList.add(modelWorkstationRelaEntity);
+		}
+		modelWorkstationRelaService.insertBatch(modelWorkstationRelaEntityList);
+		if (notExistModelName.size() > 0) {
+			throw new RRException("机种" + notExistModelName.toString() + "不存在，请添加机种后再导入相关的数据");
+		}
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		data.put("code", 200);
+		return RD.success(data);
+
 	}
 
 }
