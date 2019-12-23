@@ -33,26 +33,21 @@
         JOIN ( SELECT id AS pmid, "part_id" AS partid FROM "model_part_rela" WHERE
         "model_id" = #{ id } ) T ON T.partid =
         part."id"
-        <where>
-            <if test="name != null and name != ''">
-                AND name LIKE '%${name}%'
-            </if>
-        </where>
-        <where>
-            <if test="remark != null and remark != ''">
-                AND remark LIKE '%${remark}%'
-            </if>
-        </where>
-		<where>
-			<if test="common==0">
-				AND common = true
-			</if>
-		</where>
-		<where>
-			<if test="common==1">
-				AND common = false
-			</if>
-		</where>
+
+        <if test="name != null and name != ''">
+            AND name LIKE '%${name}%'
+        </if>
+
+        <if test="remark != null and remark != ''">
+            AND remark LIKE '%${remark}%'
+        </if>
+
+        <if test="common==0">
+            AND common = true
+        </if>
+        <if test="common==1">
+            AND common = false
+        </if>
         ORDER BY
         part.update_at DESC
     </select>
@@ -65,26 +60,21 @@
         tool
         JOIN ( SELECT ID AS tmId, "tool_id" AS toolid FROM "model_tool_rela" WHERE
         "model_id" = #{ id } ) T ON T.toolid = tool."id"
-        <where>
-            <if test="name != null and name != ''">
-                AND name LIKE '%${name}%'
-            </if>
-        </where>
-        <where>
-            <if test="remark != null and remark != ''">
-                AND remark LIKE '%${remark}%'
-            </if>
-        </where>
-        <where>
-            <if test="common==0">
-                AND common = true
-            </if>
-        </where>
-        <where>
-            <if test="common==1">
-                AND common = false
-            </if>
-        </where>
+
+        <if test="name != null and name != ''">
+            AND name LIKE '%${name}%'
+        </if>
+
+        <if test="remark != null and remark != ''">
+            AND remark LIKE '%${remark}%'
+        </if>
+
+        <if test="common==0">
+            AND common = true
+        </if>
+        <if test="common==1">
+            AND common = false
+        </if>
 
         ORDER BY
         tool.update_at DESC

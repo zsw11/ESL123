@@ -734,7 +734,6 @@ CREATE TABLE approve_opininon (
   delete_at timestamp
 );
 comment on table approve_opininon is '常用审批意见';
-Create Unique Index index_approve_opininon_UNQ On approve_opininon(approve_operation);
 comment on column approve_opininon.approve_operation is '审批操作';
 comment on column approve_opininon.pinyin is '拼音';
 comment on column approve_opininon.opininon is '审批意见';
