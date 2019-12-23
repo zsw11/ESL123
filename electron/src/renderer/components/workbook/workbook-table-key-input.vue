@@ -121,24 +121,13 @@ export default {
           break
         }
         // 选定
+        case 'Tab':
         case 'Enter': {
           if (this.popoverVisible && this.activeSugguestionIndex !== null) {
             e.preventDefault()
             e.stopPropagation()
             this.selectSuggestion(this.suggestions[this.activeSugguestionIndex])
           }
-          // // 直接回车
-          // const self = this
-          // this.suggest(this.getInputBegin(), true).then(() => {
-          //   e.preventDefault()
-          //   e.stopPropagation()
-          //   if (self.suggestions.length === 1) {
-          //     console.log(111, self.suggestions[0])
-          //     self.$emit('input', '')
-          //     self.$emit('select', self.suggestions[0])
-          //     self.endSuggest()
-          //   }
-          // })
           break
         }
         default: {
