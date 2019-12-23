@@ -3,7 +3,8 @@
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
       <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
-      <el-button type="primary" icon="el-icon-open" @click="openVideo">打开</el-button>
+      <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
+      <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
     </div>
 
     <div class="video-player-box">
@@ -244,6 +245,9 @@
       },
       openVideo () {
         ipcRenderer.send('openVideo')
+      },
+      closeVideo () {
+        this.playerOptions.sources[0].src = ''
       },
       init () {
         const self = this
