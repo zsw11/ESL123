@@ -34,11 +34,15 @@ export const defaultRow = {
   m0: null,
   x0: null,
   i0: null,
-  tool: '*0',
   a2: null,
   b2: null,
   p1: null,
   a3: null,
+  tool: '*0',
+  a4: null,
+  b3: null,
+  p2: null,
+  a5: 0,
   frequency: null
 }
 export const measureFields = [ ...measureColumns0.map(c => c.field), 'tool', ...measureColumns1.map(c => c.field) ]

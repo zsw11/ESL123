@@ -33,7 +33,8 @@ function onVideoFileSeleted (videoFilePath) {
       httpServer.createServer()
       if (httpServer) {
         console.log('createVideoServer success')
-        mainWindow.webContents.send('openVideo', checkResult.duration)
+        // mainWindow.webContents.send('openVideo', JSON.stringify({ duration: checkResult.duration, videoPath: videoFilePath }))
+        mainWindow.webContents.send('openVideo', checkResult.duration, videoFilePath)
       }
     }
     if (!checkResult.videoCodecSupport || !checkResult.audioCodecSupport) {
@@ -45,7 +46,7 @@ function onVideoFileSeleted (videoFilePath) {
       httpServer.createServer()
       if (httpServer) {
         console.log('createVideoServer success')
-        mainWindow.webContents.send('openVideo', checkResult.duration)
+        mainWindow.webContents.send('openVideo', checkResult.duration, videoFilePath)
       }
     }
   }).catch((err) => {

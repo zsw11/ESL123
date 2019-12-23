@@ -5,6 +5,7 @@
       <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
+      <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
 
     <div class="video-player-box">
@@ -112,6 +113,7 @@
         addedOperation: null,
         time: 0,
         duration: null,
+        videoPath: '',
         currentTime: null,
         playerOptions: {
           // videojs options
@@ -122,7 +124,7 @@
           playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: [{
             type: 'video/mp4',
-            src: 'http://127.0.0.1:8888?startTime=0'
+            src: ''
           }],
           controlBar: {
             fullscreenToggle: false
@@ -160,6 +162,11 @@
         }
       }
     },
+    computed: {
+      videoName () {
+        return /([^/\\]*)$/.exec(this.videoPath)[1]
+      }
+    },
     watch: {
       currentWorkbook (workName) {
         const workbook = this.workbooks.find(wb => wb.workName === workName)
@@ -178,8 +185,9 @@
       this.init()
       this.handleShortcut()
       const self = this
-      ipcRenderer.on('openVideo', function (event, duration) {
+      ipcRenderer.on('openVideo', function (event, duration, videoPath) {
         self.duration = parseFloat(duration)
+        self.videoPath = videoPath
         Object.assign(self.playerOptions, {
           sources: [{
             type: 'video/mp4',
@@ -187,6 +195,9 @@
           }],
         })
       })
+    },
+    deactivated () {
+      this.closeVideo()
     },
     destroyed () {
       this.handleShortcut()
@@ -385,6 +396,14 @@
       &:hover {
         color: rgba(255, 255, 255, .2);
       }
+    }
+    .video-name {
+      color: white;
+      font-size: 14px;
+      height: 28px;
+      line-height: 28px;
+      float: right;
+      margin-right: 10px;
     }
   }
 
