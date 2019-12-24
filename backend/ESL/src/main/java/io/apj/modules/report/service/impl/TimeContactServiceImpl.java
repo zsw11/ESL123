@@ -1,19 +1,25 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
-import io.apj.modules.report.entity.ChangeRecordEntity;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.entity.StandardWorkEntity;
+import io.apj.modules.report.entity.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +28,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TimeContactDao;
-import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.report.service.TimeContactService;
+import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -109,6 +115,56 @@ public class TimeContactServiceImpl
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         // TODo
+        Integer phaseId = (Integer)params.get("phaseId");
+        Integer modelId = (Integer)params.get("modelId");
+        String stlst = params.get("stlst").toString();
+
+        EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("phase_id",phaseId).eq("stlst",stlst).eq("model_id",modelId);
+        TimeContactEntity timeContactEntity = selectOne(entityWrapper);
+        Integer id = 0;
+        Map<String, Object> map = new HashMap<>();
+        if(timeContactEntity!=null){
+            map.put("revNo",timeContactEntity.getRevNo());
+            map.put("allCountSub",timeContactEntity.getAllCountSub());
+            map.put("allCountMain",timeContactEntity.getAllCountMain());
+            map.put("allCountPrinting",timeContactEntity.getAllCountPrinting());
+            map.put("allCountExternalInspection",timeContactEntity.getAllCountExternalInspection());
+            map.put("allCountPacking",timeContactEntity.getAllCountPacking());
+            map.put("towingLastVersionSub",timeContactEntity.getTowingLastVersionSub());
+            map.put("towingLastVersionMain",timeContactEntity.getTowingLastVersionMain());
+            map.put("towingLastVersionPrinting",timeContactEntity.getTowingLastVersionPrinting());
+            map.put("towingLastVersionExternalInspection",timeContactEntity.getTowingLastVersionExternalInspection());
+            map.put("towingLastVersionPacking",timeContactEntity.getTowingLastVersionPacking());
+            map.put("operationStandardNo",timeContactEntity.getOperationStandardNo());
+            map.put("operationInstruction",timeContactEntity.getOperationInstruction());
+            map.put("exceptionOperation",timeContactEntity.getExceptionOperation());
+            map.put("remarkVersionCopmare",timeContactEntity.getTowingLastVersionPrinting());
+            map.put("remarkSub",timeContactEntity.getTowingLastVersionExternalInspection());
+            map.put("remarkMain",timeContactEntity.getTowingLastVersionPacking());
+            map.put("remarkPrinting",timeContactEntity.getTowingLastVersionPrinting());
+            map.put("remarkExternalInspection",timeContactEntity.getTowingLastVersionExternalInspection());
+            map.put("remarkPacking",timeContactEntity.getTowingLastVersionPacking());
+        }
+        ModelEntity model = modelService.selectById(modelId);
+        map.put("modelName", model.getName());
+        map.put("modelType", model.getCode());
+
+
+        // TODO 添加调用模版方法及生成目标excel文件方法
+        String path =ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String templateFileName = PathUtil.getExcelTemplatePath("report_time_contact_template");
+        //String fileName1 = PathUtil.getExcelTemplatePath("report_time_contact");
+        OutputStream out = response.getOutputStream();
+        // ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("report_time_contact").build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(map, writeSheet);
+        //excelWriter.fill(list, fillConfig, writeSheet); 变更内容
+        String fileName = "report_time_contact";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.finish();
     }
 
     private TimeContactEntity generateStandardTime(WorkBookEntity workBook) {
