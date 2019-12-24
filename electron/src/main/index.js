@@ -2,7 +2,7 @@
 
 import {videoSupport} from './ffmpeg-helper'
 import VideoServer from './VideoServer'
-const { app, BrowserWindow, Menu, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, globalShortcut } = require('electron')
 const electron = require('electron')
 const dialog = require('electron').dialog
 
@@ -71,6 +71,9 @@ function createWindow () {
     height: 563,
     useContentSize: true,
     width: 1000
+    // webPreferences: {
+    //   webSecurity: false
+    // }
   })
 
   mainWindow.loadURL(winURL, {
@@ -102,7 +105,14 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    mainWindow.webContents.isDevToolsOpened()
+      ? mainWindow.webContents.closeDevTools()
+      : mainWindow.webContents.openDevTools()
+  })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
