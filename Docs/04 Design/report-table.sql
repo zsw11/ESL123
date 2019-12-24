@@ -681,3 +681,63 @@ comment on column report_approve_history.create_at is '创建时间';
 comment on column report_approve_history.update_by is '更新者ID';
 comment on column report_approve_history.update_at is '更新时间';
 comment on column report_approve_history.delete_at is '删除时间';
+
+
+
+-- Report - 人机联合表
+drop table if exists report_man_machine_combination;
+CREATE TABLE report_man_machine_combination (
+  id serial PRIMARY KEY,
+  dept_id integer,
+  title varchar(128),
+  sheet_name varchar(128),
+  model_id integer,
+  phase_id integer,
+  stlst integer,
+  month_result timestamp,
+  destinations varchar(128),
+  mt decimal(10, 2),
+  enter decimal(10, 2),
+  selectNum varchar(2),
+  comfirm_by integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table report_total is 'Report - Total表';
+comment on column report_man_machine_combination.dept_id is '组织机构ID';
+comment on column report_man_machine_combination.title is '标题';
+comment on column report_man_machine_combination.sheet_name is 'Sheet名称';
+comment on column report_man_machine_combination.model_id is '机种ID';
+comment on column report_man_machine_combination.month_result is '发行日';
+comment on column report_man_machine_combination.destinations is '仕向';
+comment on column report_man_machine_combination.mt is 'MT 分析表totalRemark';
+comment on column report_man_machine_combination.enter is '输入数值';
+comment on column report_man_machine_combination.selectNum is '选择（N2-N6）';
+comment on column report_man_machine_combination.create_by is '创建者ID';
+comment on column report_man_machine_combination.create_at is '创建时间';
+comment on column report_man_machine_combination.update_by is '更新者ID';
+comment on column report_man_machine_combination.update_at is '更新时间';
+comment on column report_man_machine_combination.delete_at is '删除时间';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
