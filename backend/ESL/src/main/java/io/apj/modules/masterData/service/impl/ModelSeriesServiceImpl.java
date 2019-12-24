@@ -34,7 +34,7 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 						(String) params.get("remark"))
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
 						(String) params.get("keyWord"))
-				.orderBy("update_at", true);
+				.orderBy("update_at", false);
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");

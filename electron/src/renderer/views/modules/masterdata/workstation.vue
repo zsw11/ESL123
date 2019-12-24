@@ -123,7 +123,7 @@ export default {
         name: '工位',
         children: [
           { code: 'name', name: '工位名称', type: 'string', required: true },
-          { code: 'remark', name: '备注', type: 'string', required: true }
+          { code: 'remark', name: '备注', type: 'string', required: false }
         ]
       },
        {

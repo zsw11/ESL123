@@ -191,7 +191,11 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 			workstationEntity.setCreateBy((Integer) map.get("userID"));
 			workstationEntityList.add(workstationEntity);
 		}
-		this.insertBatch(workstationEntityList, Constant.importNum);
+		try {
+			this.insertBatch(workstationEntityList, Constant.importNum);
+		} catch (Exception e) {
+			throw new RRException("工位导入失败，请检查工位是否重复");
+		}
 		// 遍历所有本次导入所用到的机种
 		Map<String, Integer> modelIDAndNameMap = new HashMap<String, Integer>();
 		EntityWrapper<ModelEntity> modelWrapper = new EntityWrapper<>();

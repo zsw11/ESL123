@@ -162,7 +162,11 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 			partEntity.setCreateBy((Integer) map.get("userID"));
 			partEntityList.add(partEntity);
 		}
-		this.insertBatch(partEntityList, Constant.importNum);
+		try {
+			this.insertBatch(partEntityList, Constant.importNum);
+		} catch (Exception e) {
+			throw new RRException("部件导入失败，请检查部件是否重复");
+		}
 		// 遍历所有本次导入所用到的机种
 		Map<String, Integer> modelIDAndNameMap = new HashMap<String, Integer>();
 		EntityWrapper<ModelEntity> modelWrapper = new EntityWrapper<>();

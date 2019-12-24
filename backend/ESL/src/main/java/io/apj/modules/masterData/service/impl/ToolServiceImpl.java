@@ -106,7 +106,11 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 			toolEntity.setCreateBy((Integer) map.get("userID"));
 			toolEntityList.add(toolEntity);
 		}
-		this.insertBatch(toolEntityList, Constant.importNum);
+		try {
+			this.insertBatch(toolEntityList, Constant.importNum);
+		} catch (Exception e) {
+			throw new RRException("治工具导入失败，请检查治工具是否重复");
+		}
 		// 遍历所有本次导入所用到的机种
 		Map<String, Integer> modelIDAndNameMap = new HashMap<String, Integer>();
 		EntityWrapper<ModelEntity> modelWrapper = new EntityWrapper<>();

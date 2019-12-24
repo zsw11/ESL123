@@ -2215,17 +2215,29 @@ select setval('sys_dept_id_seq',9);
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO sys_dict VALUES (4, '01', '在职', '在职', 1, false, 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dict VALUES (5, '02', '离职', '离职', 2, false, 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dict VALUES (6, '03', '试用', '试用', 3, false, 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dict VALUES (72, '01', '男', '男', 1, false, 22, 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dict VALUES (73, '02', '女', '女', 2, false, 22, 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (2, '01', '审批中', '审批中', 1, 'f', 1, 1, '2019-11-25 09:19:55.110518', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (3, '02', '已审批', '已审批', 2, 'f', 1, 1, '2019-11-25 09:20:20.18776', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, '01', '在职', '在职', 1, 'f', 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (5, '02', '离职', '离职', 2, 'f', 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (6, '03', '试用', '试用', 3, 'f', 2, 1, '2018-12-21 10:21:00', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (7, '03', '未审批', '未审批', 3, 'f', 1, 1, '2019-12-18 13:35:44.38026', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (8, '01', '通过', NULL, 1, 'f', 4, 6, '2019-12-18 16:00:24.474', NULL, '2019-12-18 16:00:24.474', NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (9, '02', '拒绝', NULL, 2, 'f', 4, 6, '2019-12-18 16:00:39.968', NULL, '2019-12-18 16:00:39.968', NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (11, '02', 'ST', 'ST', 1, 'f', 3, 1, '2019-11-28 15:24:19', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (22, '01', 'LST', 'LST', 2, 'f', 3, 1, '2019-11-28 15:26:10.714288', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (72, '01', '男', '男', 1, 'f', 22, 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict"("id", "code", "name", "remark", "sort", "if_lock", "dict_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (73, '02', '女', '女', 2, 'f', 22, 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+select setval('sys_dict_id_seq',74);
 
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
-INSERT INTO sys_dict_type VALUES (2, 'WorkingStatus', '在职状态', '在职状态', true, 1, '2018-12-20 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
-INSERT INTO sys_dict_type VALUES (22, 'Gender', '性别', '性别', true, 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict_type"("id", "type", "name", "remark", "if_lock", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'Status', '审批状态', '审批状态', 't', 1, '2019-11-25 09:21:00.011549', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict_type"("id", "type", "name", "remark", "if_lock", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (3, 'ST', 'ST/LST', 'ST/LST', 't', 1, '2019-11-28 15:22:09', NULL, NULL, NULL);
+INSERT INTO "public"."sys_dict_type"("id", "type", "name", "remark", "if_lock", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (4, 'Result', 'approveResult', '审批结果', 't', 6, '2019-12-18 15:59:35.538', 6, '2019-12-18 16:00:01.027', NULL);
+INSERT INTO "public"."sys_dict_type"("id", "type", "name", "remark", "if_lock", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (2, 'WorkingStatus', '在职状态', '在职状态', 't', 1, '2018-12-20 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+INSERT INTO "public"."sys_dict_type"("id", "type", "name", "remark", "if_lock", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (22, 'Gender', '性别', '性别', 't', 1, '2018-12-27 13:55:40', NULL, NULL, '1970-01-01 00:00:00');
+select setval('sys_dict_type_id_seq',23);
 
 
 -- ----------------------------
@@ -3238,6 +3250,7 @@ INSERT INTO "public"."model_series"("id", "name", "pinyin", "remark", "create_by
 INSERT INTO "public"."model_series"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (15, 'TM-NR', 'TM-NR', NULL, 1, '2019-12-16 00:38:54.903655', NULL, NULL, NULL);
 INSERT INTO "public"."model_series"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (16, 'Latvia', 'Latvia', NULL, 1, '2019-12-16 00:38:59.051497', NULL, NULL, NULL);
 INSERT INTO "public"."model_series"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (17, 'MOSSO', 'MOSSO', NULL, 1, '2019-12-16 00:39:03.077822', NULL, NULL, NULL);
+update model_series set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('model_series_id_seq',18);
 
 INSERT INTO "public"."workstation"("id", "name", "pinyin", "remark", "workstation_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'S1', NULL, '以Varius76-4 ES1阶段数据为参考', 0, 1, '2019-12-16 00:55:23.447992', NULL, NULL, NULL);
@@ -3302,6 +3315,7 @@ INSERT INTO "public"."workstation"("id", "name", "pinyin", "remark", "workstatio
 INSERT INTO "public"."workstation"("id", "name", "pinyin", "remark", "workstation_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (60, '制品堆码+出机单+扫描', NULL, '', 0, 1, '2019-12-16 00:55:23.447992', NULL, NULL, NULL);
 INSERT INTO "public"."workstation"("id", "name", "pinyin", "remark", "workstation_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (61, 'Label印刷', NULL, '', 0, 1, '2019-12-16 00:55:23.447992', NULL, NULL, NULL);
 INSERT INTO "public"."workstation"("id", "name", "pinyin", "remark", "workstation_type_id", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (62, 'Mosso/DUCT PUMP UNIT 4 CH74', NULL, NULL, 0, 1, '2019-12-16 00:55:23.447992', NULL, NULL, NULL);
+update workstation set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('workstation_id_seq',62);
 
 INSERT INTO "public"."part"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'E-ring,4,f/uc-3c', '', 't', '以Varius76-4 ES1阶段S1工位数据为参考', 1, '2019-12-16 01:02:07.24992', NULL, '2019-12-19 17:48:35.047765', NULL);
@@ -3832,6 +3846,7 @@ INSERT INTO "public"."part"("id", "name", "pinyin", "common", "remark", "create_
 INSERT INTO "public"."part"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (526, 'CONNECTOR,RELAY,3P', '', 't', '', 1, '2019-12-16 01:09:32.224371', NULL, '2019-12-19 17:48:35.680504', NULL);
 INSERT INTO "public"."part"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (527, 'HARNESS,CHOKE', '', 't', '', 1, '2019-12-16 01:09:32.224371', NULL, '2019-12-19 17:48:35.68138', NULL);
 INSERT INTO "public"."part"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (528, 'HARNESS,IES,4,CH74', '', 't', '', 1, '2019-12-16 01:09:32.224371', NULL, '2019-12-19 17:48:35.682141', NULL);
+update part set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('part_id_seq',529);
 
 INSERT INTO "public"."tool"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (343, 'IS板金Cam Bolt位置決定治具', NULL, 'f', '治具', 1, '2019-12-16 01:18:27.163927', NULL, NULL, NULL);
@@ -4080,6 +4095,7 @@ INSERT INTO "public"."tool"("id", "name", "pinyin", "common", "remark", "create_
 INSERT INTO "public"."tool"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (586, '激光熔着设备', NULL, 't', NULL, 1, '2019-12-16 01:18:27.163927', NULL, NULL, NULL);
 INSERT INTO "public"."tool"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (587, '熔着设备', NULL, 't', NULL, 1, '2019-12-16 01:18:27.163927', NULL, NULL, NULL);
 INSERT INTO "public"."tool"("id", "name", "pinyin", "common", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (588, '测试设备', NULL, 't', NULL, 1, '2019-12-16 01:18:27.163927', NULL, NULL, NULL);
+update tool set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('tool_id_seq',686);
 
 INSERT INTO "public"."action"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'Take and keep', 'Take and keep', NULL, 11, '2019-12-04 18:57:13.082144', NULL, NULL, NULL);
@@ -4145,4 +4161,5 @@ INSERT INTO "public"."action"("id", "name", "pinyin", "remark", "create_by", "cr
 INSERT INTO "public"."action"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (61, '抓住…', 'zhuazhu', NULL, 11, '2019-12-04 18:57:13.082144', NULL, NULL, NULL);
 INSERT INTO "public"."action"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (62, '放…到物料盒', 'fangdaowuliaohe', NULL, 11, '2019-12-04 18:57:13.082144', NULL, NULL, NULL);
 INSERT INTO "public"."action"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (63, '拧松…', 'ningsong', NULL, 11, '2019-12-04 18:57:13.082144', NULL, NULL, NULL);
+update action set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('action_id_seq',64);
