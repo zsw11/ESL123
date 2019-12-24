@@ -3218,6 +3218,7 @@ INSERT INTO "public"."model"("id", "model_series_id", "name", "pinyin", "dept_id
 INSERT INTO "public"."model"("id", "model_series_id", "name", "pinyin", "dept_id", "code", "ws_time", "es_time", "amp_time", "mp_time", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (813, 16, '机种1', NULL, 5, 'H919,H921', NULL, '2019-07-05', NULL, '2019-11-29', '', 1, '2019-12-16 00:01:26.067239', NULL, NULL, NULL);
 INSERT INTO "public"."model"("id", "model_series_id", "name", "pinyin", "dept_id", "code", "ws_time", "es_time", "amp_time", "mp_time", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (814, 16, '机种2', NULL, 5, 'H922,H956', NULL, '2019-07-05', NULL, '2019-11-29', '', 1, '2019-12-16 00:01:39.770459', NULL, NULL, NULL);
 INSERT INTO "public"."model"("id", "model_series_id", "name", "pinyin", "dept_id", "code", "ws_time", "es_time", "amp_time", "mp_time", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (815, 17, 'DUCT PUMP,UNIT,4,CH74', NULL, 6, '1816975-**', NULL, NULL, NULL, NULL, NULL, NULL, '2019-12-16 00:06:59.024882', NULL, NULL, NULL);
+update model set update_at ='2019-12-17 09:12:36' where update_at is null;
 select setval('model_id_seq',816);
 
 INSERT INTO "public"."model_series"("id", "name", "pinyin", "remark", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (1, 'BSH-AD', 'BSH-AD', NULL, 1, '2019-12-16 00:37:50.423605', NULL, NULL, NULL);

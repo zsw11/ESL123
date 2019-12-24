@@ -221,6 +221,7 @@ export default {
           break
         }
         // 选定
+        case 'Tab':
         case 'Enter': {
           if (this.popoverVisible && this.activeSugguestionIndex !== null) {
             e.preventDefault()
