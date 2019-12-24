@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.masterData.entity.ModelEntity;
@@ -14,10 +15,7 @@ import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.report.entity.ApproveEntity;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.entity.TimeContactEntity;
-import io.apj.modules.report.entity.TotalItemEntity;
+import io.apj.modules.report.entity.*;
 import io.apj.modules.report.service.TotalItemService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +35,6 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TotalDao;
-import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.TotalService;
 import org.springframework.util.ClassUtils;
 
@@ -164,9 +162,12 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
         Map<String, Object> map = new HashMap<>();
         if(totalEntity!=null){
             id = totalEntity.getId();
+            map.put("monthResult",totalEntity.getMonthResult());
+            map.put("destinations",totalEntity.getDestinations());
         }
         List<TotalItemEntity> list = totalItemService.getListBySWId(id);
         ModelEntity model = modelService.selectById(modelId);
+        generateTotalData(list, map);
         map.put("modelName", model.getName());
         map.put("modelType", model.getCode());
 
@@ -174,18 +175,41 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
         // TODO 添加调用模版方法及生成目标excel文件方法
         System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
         String path =ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        String templateFileName = path+"exportTemplates/collection_revision_history_template.xls";
-        String fileName1 = path+"exportTemplates/collection_revision_history.xls";
+        String templateFileName = PathUtil.getExcelTemplatePath("report_total_template");
+        String fileName1 = path+"exportTemplates/report_total_template.xls";
         OutputStream out = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        //    ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("collection_revision_history").build();
+        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("report_total_template").build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "Revision_History";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        String fileName = "report_total_template";
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
     }
+
+    private void generateTotalData(List<TotalItemEntity> list, Map<String, Object> map) {
+        BigDecimal htTotal = BigDecimal.ZERO;
+        BigDecimal mtTotal = BigDecimal.ZERO;
+        BigDecimal mhTotal = BigDecimal.ZERO;
+        BigDecimal totalTotal = BigDecimal.ZERO;
+        BigDecimal Sample1Total = BigDecimal.ZERO;
+        BigDecimal SampleSizeTotal = BigDecimal.ZERO;
+        BigDecimal convTotal = BigDecimal.ZERO;
+
+        for (TotalItemEntity entity: list) {
+
+        }
+
+        map.put("htTotal", htTotal);
+        map.put("mtTotal", mtTotal);
+        map.put("mhTotal", mhTotal);
+        map.put("totalTotal", totalTotal);
+        map.put("Sample1Total", Sample1Total);
+        map.put("SampleSizeTotal", SampleSizeTotal);
+        map.put("convTotal", convTotal);
+    }
+
 
 }
