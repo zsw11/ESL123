@@ -693,7 +693,7 @@ CREATE TABLE report_man_machine_combination (
   sheet_name varchar(128),
   model_id integer,
   phase_id integer,
-  stlst integer,
+  stlst varchar(128),
   month_result timestamp,
   destinations varchar(128),
   mt decimal(10, 2),
@@ -706,7 +706,7 @@ CREATE TABLE report_man_machine_combination (
   update_at timestamp default now(),
   delete_at timestamp
 );
-comment on table report_total is 'Report - Total表';
+comment on table report_total is '人机联合表';
 comment on column report_man_machine_combination.dept_id is '组织机构ID';
 comment on column report_man_machine_combination.title is '标题';
 comment on column report_man_machine_combination.sheet_name is 'Sheet名称';

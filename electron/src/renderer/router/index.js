@@ -247,7 +247,11 @@ const mainRoutes = {
 
     // 工位时间表
     { path: '/add-stationtime', component: _import('modules/report/stationtime-maintain'), name: 'add-stationtime', meta: { title: '新增工位时间表', isTab: true } },
-    { path: '/edit-stationtime/:id(\\d+)', component: _import('modules/report/stationtime-maintain'), name: 'edit-stationtime', meta: { title: '编辑工位时间表', isTab: true } }
+    { path: '/edit-stationtime/:id(\\d+)', component: _import('modules/report/stationtime-maintain'), name: 'edit-stationtime', meta: { title: '编辑工位时间表', isTab: true } },
+
+    // 人机联合表
+    { path: '/add-manmachinecombination', component: _import('modules/report/manmachinecombination-maintain'), name: 'add-manmachinecombination', meta: { title: '新增人机联合表', isTab: true } },
+    { path: '/edit-manmachinecombination/:id(\\d+)', component: _import('modules/report/manmachinecombination-maintain'), name: 'edit-manmachinecombination', meta: { title: '编辑人机联合表', isTab: true } }
 
   ],
   beforeEnter (to, from, next) {
