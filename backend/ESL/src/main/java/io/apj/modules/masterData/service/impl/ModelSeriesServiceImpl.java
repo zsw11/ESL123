@@ -29,10 +29,12 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ModelSeriesEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false)
-				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"))
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
-				(String) params.get("keyWord"));
+						(String) params.get("keyWord"))
+				.orderBy("update_at", true);
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
@@ -44,10 +46,10 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 
 	@Override
 	public void deleteList(List<ModelSeriesEntity> modelSeriesEntityList) {
-		for(ModelSeriesEntity item : modelSeriesEntityList){
+		for (ModelSeriesEntity item : modelSeriesEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(modelSeriesEntityList.size()>0){
+		if (modelSeriesEntityList.size() > 0) {
 			this.updateAllColumnBatchById(modelSeriesEntityList);
 		}
 
@@ -56,10 +58,10 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 	@Override
 	public void deleteByIds(Collection<? extends Serializable> ids) {
 		List<ModelSeriesEntity> modelSeriesEntityList = this.selectBatchIds(ids);
-		for(ModelSeriesEntity item : modelSeriesEntityList){
+		for (ModelSeriesEntity item : modelSeriesEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(modelSeriesEntityList.size()>0){
+		if (modelSeriesEntityList.size() > 0) {
 			this.updateAllColumnBatchById(modelSeriesEntityList);
 		}
 	}
@@ -67,10 +69,10 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 	@Override
 	public void deleteByWrapper(Wrapper<ModelSeriesEntity> wrapper) {
 		List<ModelSeriesEntity> modelSeriesEntityList = this.selectList(wrapper);
-		for(ModelSeriesEntity item: modelSeriesEntityList){
+		for (ModelSeriesEntity item : modelSeriesEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(modelSeriesEntityList.size()>0){
+		if (modelSeriesEntityList.size() > 0) {
 			this.updateAllColumnBatchById(modelSeriesEntityList);
 		}
 	}
