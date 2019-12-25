@@ -21,6 +21,10 @@ public interface WorkOperationsService extends IService<WorkOperationsEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
 
+	/**
+	 * 通过条件软删除
+	 * @param wrapper
+	 */
 	void deletebyWrapper(Wrapper<WorkOperationsEntity> wrapper);
 
     List<String> getWorkBookFilePaths(List<WorkBookEntity> workBookEntities) throws IOException;

@@ -1,7 +1,6 @@
 package io.apj.modules.workBook.controller;
 
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,13 +132,15 @@ public class WorkBookController extends AbstractController {
 
 	/**
 	 * 删除
+	 * @return
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("workBook:workbook:delete")
-	public R delete(@RequestBody Integer[] ids) {
-		workBookService.deleteBatchIds(Arrays.asList(ids));
+	public ResponseEntity<Object> delete(@RequestBody Integer[] ids) {
+		workBookService.deleteBookByIds(ids);
 
-		return R.ok();
+		return RD.ok(RD.build());
+
 	}
 
 	/**

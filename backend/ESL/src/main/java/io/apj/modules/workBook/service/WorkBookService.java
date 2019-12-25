@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -35,15 +37,23 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	void updateAll(Map<String, Object> params);
 
+	void deleteBookByIds(Integer[] id);
+
 	WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId);
 
 	/**
-	 * 根据Wrapper条件删除所有符合条件的记录
+	 * 根据Wrapper条件软删除所有符合条件的记录
 	 * 
 	 * @param wrapper
 	 * @return
 	 */
 	void deleteByWrapper(Wrapper wrapper);
+
+	/**
+	 * 通过ids软删除
+	 * @param ids
+	 */
+	void deleteByIds(Collection<? extends Serializable> ids);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }

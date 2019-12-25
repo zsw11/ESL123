@@ -11,6 +11,7 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -75,6 +77,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 						(String) params.get("keyWord"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
 						(String) params.get("workName"))
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"))
 				.like(params.get("destinations") != null && params.get("destinations") != "", "destinations",
 						(String) params.get("destinations"));
 
@@ -112,7 +116,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			if (entity.getWorkstationId() != null) {
 				entity.setWorkstationName(workstationService.selectById(entity.getWorkstationId()).getName());
 			}
-
+			entity.setAlter(false);
 		}
 		return new PageUtils(page);
 
@@ -295,6 +299,26 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			workOperationsList.add(workOperations);
 		}
 		workOperationService.insertBatch(workOperationsList);
+	}
+
+	@Override
+	@Transactional
+	public void deleteBookByIds(Integer[] ids) {
+		workBookService.deleteByIds(Arrays.asList(ids));
+		workOperationService.deletebyWrapper(new EntityWrapper<WorkOperationsEntity>().in("work_book_id",ids));
+
+	}
+
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<WorkBookEntity> workBookEntityList = this.selectBatchIds(ids);
+		for (WorkBookEntity item : workBookEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (workBookEntityList.size() > 0) {
+			this.updateAllColumnBatchById(workBookEntityList);
+		}
+
 	}
 
 	@Override

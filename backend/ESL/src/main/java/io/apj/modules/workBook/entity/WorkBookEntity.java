@@ -55,7 +55,7 @@ public class WorkBookEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private List<WorkOperationsEntity> workOperationsList;
-	/*
+	/**
 	 * 工位名称
 	 */
 	@TableField(exist = false)
@@ -142,5 +142,10 @@ public class WorkBookEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	/**
+	 * 是否修订
+	 */
+	@TableField(exist = false)
+	private boolean isAlter;
 
 }
