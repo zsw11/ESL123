@@ -29,8 +29,7 @@ const mainRoutes = {
   path: '/',
   component: _import('main'),
   name: 'main',
-  // redirect: { name: 'home' },
-  redirect: { path: '/workbook-detail/50' },
+  redirect: { name: 'home' },
   meta: { title: '主入口整体布局' },
   children: [
     // 通过meta对象设置路由展示方式

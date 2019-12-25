@@ -100,11 +100,9 @@ function createWindow () {
       filters: [
         {name: 'Movies', extensions: ['mpg', 'wmv', 'avi', 'mp4', 'mts']}
       ]
-    }, (result) => {
-      console.log(result)
-
-      if (result && mainWindow && result.length > 0) {
-        onVideoFileSeleted(result[0])
+    }).then(result => {
+      if (result && mainWindow && result.filePaths.length > 0) {
+        onVideoFileSeleted(result.filePaths[0])
       }
     })
   })
