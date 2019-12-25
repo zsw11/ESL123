@@ -116,7 +116,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			if (entity.getWorkstationId() != null) {
 				entity.setWorkstationName(workstationService.selectById(entity.getWorkstationId()).getName());
 			}
-			entity.setAlter(false);
 		}
 		return new PageUtils(page);
 

@@ -5,11 +5,6 @@
         "tableAlias": "action",
         "fieldList": [
             {
-                "code": "id",
-                "name": "ID",
-                "type": "string"
-            },
-            {
                 "code": "name",
                 "name": "关键词名称",
                 "type": "string"

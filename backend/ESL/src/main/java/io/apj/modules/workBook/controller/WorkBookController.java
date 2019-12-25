@@ -73,6 +73,7 @@ public class WorkBookController extends AbstractController {
 	@RequiresPermissions("workBook:workbook:create")
 	public R save(@RequestBody WorkBookEntity workBook) {
 		workBook.setDeptId(getUserDeptId().intValue());
+		workBook.setIfAlter(false);
 		workBookService.insert(workBook);
 
 		return R.ok();

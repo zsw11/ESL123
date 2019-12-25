@@ -2,9 +2,6 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
-import com.google.gson.JsonElement;
-
-import cn.hutool.Hutool;
 import cn.hutool.core.util.PinyinUtil;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
@@ -14,6 +11,7 @@ import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -151,6 +149,19 @@ public class ActionController extends AbstractController {
 		// 导出
 		String datetime = DateUtils.format(new Date(), "YYMMddHHmm");
 		ExportExcelUtils.exportExcel(response, datetime + "关键字.xlsx", data);
+	}
+	/**
+	 * 导入
+	 *
+	 * @param map
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@RequestMapping("/import")
+	public RD importExcel(@RequestBody Map<String, Object> map) {
+		map.put("userID", getUserId().intValue());
+		actionService.actionImport(map);
+		return RD.build().put("code", 200);
 	}
 
 }

@@ -23,6 +23,11 @@ public interface MeasureGroupService extends IService<MeasureGroupEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     /**
+     * 导入
+     */
+    void measureGroupImport(Map<String,Object> map);
+
+    /**
      * 软删除实体对象
      * @param measureGroupEntityList
      */

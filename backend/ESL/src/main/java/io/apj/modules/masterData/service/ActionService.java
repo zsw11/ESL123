@@ -3,7 +3,9 @@ package io.apj.modules.masterData.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ActionEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -20,6 +22,8 @@ import java.util.Map;
 public interface ActionService extends IService<ActionEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void actionImport(Map<String, Object> map);
 
     /**
      * 软删除实体对象

@@ -10,6 +10,7 @@ import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,6 +134,16 @@ public class MeasureGroupController extends AbstractController {
         // 导出
         String datetime = DateUtils.format(new Date(), "YYMMddHHmm");
         ExportExcelUtils.exportExcel(response, datetime + "常用指标.xlsx", data);
+    }
+    /**
+     * 导入
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @RequestMapping("/import")
+    public RD importExcel(@RequestBody Map<String, Object> map) {
+        map.put("userID", getUserId().intValue());
+        measureGroupService.measureGroupImport(map);
+        return RD.build().put("code", 200);
     }
 
 }
