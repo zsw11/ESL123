@@ -45,7 +45,7 @@
           <el-button type="primary" @click="paste">粘贴</el-button>
         </el-tooltip> -->
         <el-autocomplete
-          class="inline-input"
+          class="inline-input operation-group"
           v-model="addedOperation"
           :fetch-suggestions="getOperationGroups"
           placeholder="手顺组合"
@@ -526,6 +526,17 @@
       }
       .el-button--mini {
         padding: 4px 10px;
+      }
+      .el-autocomplete {
+        &.operation-group {
+          width: 100px;
+        }
+        .el-input {
+          .el-input__inner {
+            height: 22px;
+            line-height: 22px;
+          }
+        }
       }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),
