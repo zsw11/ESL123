@@ -121,7 +121,7 @@ public class WorkBookEntity implements Serializable {
 	/**
 	 * 备注
 	 */
-	private String remark;
+	private String remarks;
 	/**
 	 * 创建者ID
 	 */
@@ -145,7 +145,7 @@ public class WorkBookEntity implements Serializable {
 	/**
 	 * 是否修订
 	 */
-	@TableField(exist = false)
-	private boolean isAlter;
+	private boolean ifAlter;
+
 
 }

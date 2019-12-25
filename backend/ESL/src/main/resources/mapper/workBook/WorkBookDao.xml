@@ -15,12 +15,13 @@
         <result property="workName" column="work_name"/>
         <result property="versionNumber" column="version_number"/>
         <result property="makerId" column="maker_id"/>
+        <result property="ifAlter" column="if_alter"/>
         <result property="makedAt" column="maked_at"/>
         <result property="continueFromId" column="continue_from_id"/>
         <result property="timeValue" column="time_value"/>
         <result property="tmu" column="tmu"/>
         <result property="secondConvert" column="second_convert"/>
-        <result property="remark" column="remark"/>
+        <result property="remarks" column="remarks"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

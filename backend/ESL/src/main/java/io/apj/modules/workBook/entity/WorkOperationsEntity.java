@@ -82,6 +82,10 @@ public class WorkOperationsEntity implements Serializable {
 	 */
 	private Date deleteAt;
 	/**
+	 * 修订类型
+	 */
+	private boolean alterType;
+	/**
 	 * 类型
 	 */
 	private String type;
