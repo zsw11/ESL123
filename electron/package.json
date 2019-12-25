@@ -1,6 +1,6 @@
 {
   "name": "most",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "Freedom <furuihe@gmail.com>",
   "description": "MOST",
   "license": null,
@@ -27,6 +27,10 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "publish" : {
+      "provider": "generic",
+      "url": "http://127.0.0.1:8080/"
+    },
     "dmg": {
       "contents": [
         {
@@ -46,7 +50,11 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": "nsis",
+      "verifyUpdateCodeSignature": false,
+      "certificateFile": "./certs/win-cert.pfx",
+      "certificatePassword": ""
     },
     "linux": {
       "icon": "build/icons"
@@ -58,6 +66,7 @@
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "dayjs": "^1.7.8",
+    "electron-updater": "^4.2.0",
     "element-china-area-data": "^4.1.1",
     "element-ui": "2.4.11",
     "file-saver": "^2.0.2",

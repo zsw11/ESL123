@@ -5,6 +5,7 @@ import VideoServer from './VideoServer'
 const { app, BrowserWindow, Menu, ipcMain, globalShortcut } = require('electron')
 const electron = require('electron')
 const dialog = require('electron').dialog
+const { autoUpdater } = require('electron-updater')
 
 /**
  * Set `__static` path to static files in production
@@ -112,6 +113,7 @@ app.on('ready', () => {
       ? mainWindow.webContents.closeDevTools()
       : mainWindow.webContents.openDevTools()
   })
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 app.on('window-all-closed', () => {
