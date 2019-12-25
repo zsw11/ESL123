@@ -20,13 +20,15 @@ public class ExcelUtils {
                 if (StringUtils.equals(previous, current) && lastRow != startRow + items.size() - 2) {
                     lastRow++;
                     continue;
-                } else {
-                    lastRow++;
                 }
                 if (lastRow == firstRow) {
                     lastRow++;
                     firstRow++;
                     continue;
+                }
+
+                if (StringUtils.equals(previous, current) && lastRow == startRow + items.size() - 2) {
+                    lastRow++;
                 }
 
                 excelWriter.merge(firstRow, lastRow, cellNum, cellNum);
