@@ -1,6 +1,6 @@
 {
   "name": "most",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "author": "Freedom <furuihe@gmail.com>",
   "description": "MOST",
   "license": null,
@@ -27,7 +27,7 @@
     "files": [
       "dist/electron/**/*"
     ],
-    "publish" : {
+    "publish": {
       "provider": "generic",
       "url": "http://127.0.0.1:8080/"
     },
@@ -66,6 +66,7 @@
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "dayjs": "^1.7.8",
+    "electron-log": "^4.0.1",
     "electron-updater": "^4.2.0",
     "element-china-area-data": "^4.1.1",
     "element-ui": "2.4.11",
@@ -107,7 +108,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.4",
+    "electron": "7.1.2",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",

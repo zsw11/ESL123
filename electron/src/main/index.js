@@ -6,12 +6,15 @@ const { app, BrowserWindow, Menu, ipcMain, globalShortcut } = require('electron'
 const electron = require('electron')
 const dialog = require('electron').dialog
 const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
 
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
+  log.transports.file.level = 'info'
+  Object.assign(console, log.functions)
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
@@ -71,10 +74,11 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000
-    // webPreferences: {
+    width: 1000,
+    webPreferences: {
+      nodeIntegration: true
     //   webSecurity: false
-    // }
+    }
   })
 
   mainWindow.loadURL(winURL, {
