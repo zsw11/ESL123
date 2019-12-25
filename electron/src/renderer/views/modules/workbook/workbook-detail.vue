@@ -81,7 +81,7 @@
   import { pick } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations, updateAll } from '@/api/workbook'
+  import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import { ipcRenderer } from 'electron'
