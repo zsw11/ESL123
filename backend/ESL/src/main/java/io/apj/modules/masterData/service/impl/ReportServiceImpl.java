@@ -82,7 +82,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
             String name = (String) params.get("keyWord");
             name = name.replace(",", "");
-            entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
+            entityWrapper.andNew("name  like '%" + name + "%'"
                     + " or pinyin  like '%" + name + "%'");
 
         }
