@@ -1,0 +1,119 @@
+[
+    {
+        "table": "measureGroup",
+        "tableName": "常用指标组合",
+        "tableAlias": "measureGroup",
+        "fieldList": [
+            {
+                "code": "code",
+                "name": "常用指标组合编码",
+                "type": "int"
+            },
+            {
+                "code": "a0",
+                "name": "a0",
+                "type": "int"
+            },
+            {
+                "code": "b0",
+                "name": "b0",
+                "type": "int"
+            },
+            {
+                "code": "g0",
+                "name": "g0",
+                "type": "int"
+            },
+            {
+                "code": "a1",
+                "name": "a1",
+                "type": "int"
+            },
+            {
+                "code": "b1",
+                "name": "b1",
+                "type": "int"
+            },
+            {
+                "code": "p0",
+                "name": "p0",
+                "type": "int"
+            },
+            {
+                "code": "m0",
+                "name": "m0",
+                "type": "int"
+            },
+            {
+                "code": "x0",
+                "name": "x0",
+                "type": "int"
+            },
+            {
+                "code": "i0",
+                "name": "i0",
+                "type": "int"
+            },
+            {
+                "code": "a2",
+                "name": "a2",
+                "type": "int"
+            },
+            {
+                "code": "b2",
+                "name": "b2",
+                "type": "int"
+            },
+            {
+                "code": "p1",
+                "name": "p1",
+                "type": "int"
+            },
+            {
+                "code": "a3",
+                "name": "a3",
+                "type": "int"
+            },
+            {
+                "code": "tool",
+                "name": "tool",
+                "type": "int"
+            },
+            {
+                "code": "a4",
+                "name": "a4",
+                "type": "int"
+            },
+            {
+                "code": "b3",
+                "name": "b3",
+                "type": "int"
+            },
+            {
+                "code": "p2",
+                "name": "p2",
+                "type": "int"
+            },
+            {
+                "code": "a5",
+                "name": "a5",
+                "type": "int"
+            },
+            {
+                "code": "frequency",
+                "name": "频度",
+                "type": "int"
+            },
+            {
+                "code": "deptId",
+                "name": "所属组织机构",
+                "type": "int"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]
