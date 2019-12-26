@@ -196,7 +196,7 @@ export default {
   border-bottom-left-radius: 30px;
   img {
     width: 45%;
-    height: 11%;
+    height: 13%;
   }
 }
 .title {

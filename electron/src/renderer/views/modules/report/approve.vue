@@ -124,14 +124,14 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id,scope.row.reportGroupId)">详情</el-button>
             <el-button
-              v-if="userId === scope.row.nextApproverId"
+              v-if="$store.state.user.id === scope.row.nextApproverId"
               size="mini"
               type="text"
               @click="approve(scope.row.id,scope.row.reportGroupName,1)">
               通过
             </el-button>
             <el-button
-              v-if="userId === scope.row.nextApproverId"
+              v-if="$store.state.user.id === scope.row.nextApproverId"
               id="delete"
               size="mini"
               type="text"
@@ -191,7 +191,6 @@ import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { listStaff } from '@/api/staff'
 import { fetchUserDetail } from '@/api/passport'
-import  getters  from '@/store/getters'
 
 export default {
   name: 'reportApproveList',
@@ -200,7 +199,6 @@ export default {
       approveShow: false,
       dataButton: 'list',
       dialogTitle: null,
-      userId: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -315,11 +313,6 @@ export default {
     const self = this
     self.getDictByType()
     self.getDataList()
-    // let user = this.$store.commit('SetId')
-    // console.log(this.$store.state.user.id,this.$store.state.user, 1111111111111111111)
-    fetchUserDetail().then((data)=>{
-      this.userId = data.page.id
-    })
   },
   methods: {
     // 普通查询

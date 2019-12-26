@@ -147,7 +147,6 @@
         </el-table-column>
 
 
-
         <el-table-column align="center" prop="makedAt" label="制表日期" >
           <template slot-scope="scope">
             <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
@@ -155,12 +154,13 @@
         </el-table-column>
 
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="280" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
+            <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -219,6 +219,8 @@ import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
+import { fetchUserDetail } from '@/api/passport'
+
 export default {
   name: 'workBookList',
   data () {
@@ -228,6 +230,7 @@ export default {
       createShow: false,
       isIndeterminate: true,
       checkAll: false,
+      userId: null,
       reportGroup: [
         {
           name: '分析表报表',
