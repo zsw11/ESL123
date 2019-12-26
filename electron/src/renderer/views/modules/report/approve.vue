@@ -124,12 +124,14 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id,scope.row.reportGroupId)">详情</el-button>
             <el-button
+              v-if="$store.state.user.id === scope.row.nextApproverId"
               size="mini"
               type="text"
               @click="approve(scope.row.id,scope.row.reportGroupName,1)">
               通过
             </el-button>
             <el-button
+              v-if="$store.state.user.id === scope.row.nextApproverId"
               id="delete"
               size="mini"
               type="text"
@@ -164,7 +166,9 @@
             v-model="approveForm.nextApproverId"
             :allowMultiple="true"
             :searchApi="this.listStaff"
-            :allowEmpty="true" clearable>
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable>
           </keyword-search>
         </el-form-item>
 
@@ -195,7 +199,6 @@ export default {
       approveShow: false,
       dataButton: 'list',
       dialogTitle: null,
-      userId: null,
       listQuery: {
         id: null,
         deptId: null,
@@ -310,9 +313,6 @@ export default {
     const self = this
     self.getDictByType()
     self.getDataList()
-    fetchUserDetail().then((data)=>{
-      this.userId = data.page.id
-    })
   },
   methods: {
     // 普通查询

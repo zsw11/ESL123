@@ -1,12 +1,6 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -14,6 +8,10 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.StandardTimeItemDao;
 import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.service.StandardTimeItemService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Service("standardTimeItemService")
@@ -29,11 +27,17 @@ public class StandardTimeItemServiceImpl extends ServiceImpl<StandardTimeItemDao
     }
 
     @Override
-    public void generateStandardTimeItem(WorkBookEntity workBook, Integer standardTimeId) {
-        StandardTimeItemEntity entity = baseMapper.generateDataByWorkBook(workBook.getId());
-        entity.setReportStandardTimeId(standardTimeId);
-        entity.setTimeSample1(entity.getTimeTotal());
-        insert(entity);
+    public void generateStandardTimeItem(List<Integer> workBookIds, Integer standardTimeId) {
+        List<StandardTimeItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+        if (list.size() < 1) {
+            return;
+        }
+        for (StandardTimeItemEntity entity : list) {
+            entity.setReportStandardTimeId(standardTimeId);
+            entity.setTimeSample1(entity.getTimeTotal());
+        }
+
+        insertOrUpdateBatch(list);
     }
 
     @Override

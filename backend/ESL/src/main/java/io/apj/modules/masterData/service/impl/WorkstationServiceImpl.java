@@ -53,12 +53,12 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		EntityWrapper<WorkstationEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
-				.like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
+//				.like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"))
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "name",
 						(String) params.get("keyWord"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
 		Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
 

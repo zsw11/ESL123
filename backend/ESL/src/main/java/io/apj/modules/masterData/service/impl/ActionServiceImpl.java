@@ -35,7 +35,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
 			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
 
 		Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
@@ -57,7 +57,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-				if (keyStrs[0].equals("tool")) {
+				if (keyStrs[0].equals("action")) {
 					if (keyStrs[1].equals("common")) {
 						if(value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);

@@ -8,7 +8,6 @@ import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.MostValueItemDao;
 import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.MostValueItemService;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,10 +27,16 @@ public class MostValueItemServiceImpl extends ServiceImpl<MostValueItemDao, Most
     }
 
     @Override
-    public void generateMostValue(WorkBookEntity workBook, Integer recordId) {
-        MostValueItemEntity entity = baseMapper.generateDataByWorkBook(workBook.getId());
-        entity.setCollectionMostValueId(recordId);
-        insert(entity);
+    public void generateMostValueItem(List<Integer> workBookIds, Integer recordId) {
+        List<MostValueItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+        if (list.size() < 1) {
+            return;
+        }
+        for (MostValueItemEntity entity : list) {
+            entity.setCollectionMostValueId(recordId);
+        }
+
+        insertOrUpdateBatch(list);
     }
 
     @Override

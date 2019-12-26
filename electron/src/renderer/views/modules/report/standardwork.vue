@@ -340,11 +340,13 @@ import { listStaff } from '@/api/staff'
         <div>
            <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
-              v-model="approveForm.nextApproverId"
-              :allowMultiple="true"
-              :searchApi="this.listStaff"
-              :allowEmpty="true" clearable>
-            </keyword-search>
+            v-model="approveForm.nextApproverId"
+            :allowMultiple="true"
+            :searchApi="this.listStaff"
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable>
+          </keyword-search>
           </el-form-item>
         </div>
 

@@ -20,16 +20,25 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
+        <result property="workBookId" column="work_book_id"/>
     </resultMap>
 
     <select id="generateDataByWorkBook" resultMap="standardTimeItemMap">
         select a.*, ceiling((floor(a.most_ht * 1.06) + a.most_mt + a.most_mh) / 10) * 10 as time_total
         from (
-          select wb.workstation_id as process_no, wb.work_name as process_name, sum(wo.time_value) as most_ht, 0 as most_mt, 0 as most_mh
+        select wb.workstation_id as process_no, wb.work_name as process_name, sum(wo.time_value) as most_ht, 0 as most_mt, 0 as most_mh,
+        wb.id as work_book_id, r.id
             from work_book wb
             join work_operations wo on wb.id = wo.work_book_id
-            where wb.id = #{workBookId}
-            group by process_no, process_name
+            left join report_standard_time_item r on wb.id = r.work_book_id
+            where 1 = 1
+            <if test="workBookIds != null and workBookIds.size() > 0">
+                and wb.id in
+                <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+            group by process_no, process_name, wb.id, r.id
         ) a
     </select>
 

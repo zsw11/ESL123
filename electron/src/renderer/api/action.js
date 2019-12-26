@@ -55,3 +55,12 @@ export function ActionExport (data) {
     responseType: 'blob'
   })
 }
+
+// 导入
+export function ActionImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/action/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}

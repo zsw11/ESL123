@@ -308,7 +308,7 @@
       // 删除数据
       deleteHandle (row) {
         var ids = row ? [row.mtId] : this.dataListSelections.map(item => {
-          return item.id
+          return item.mtId
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
           confirmButtonText: '确定',

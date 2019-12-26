@@ -1,0 +1,159 @@
+[
+    {
+        "table": "workOperation",
+        "tableName": "分析表明细",
+        "tableAlias": "workOperation",
+        "fieldList": [
+            {
+                "code": "seqNumber",
+                "name": "序号",
+                "type": "int"
+            },
+            {
+                "code": "workBookId",
+                "name": "分析表ID",
+                "type": "int"
+            },
+            {
+                "code": "version",
+                "name": "版本信息",
+                "type": "String"
+            },
+            {
+                "code": "operation",
+                "name": "手顺",
+                "type": "String"
+            },
+            {
+                "code": "frequency",
+                "name": "频度",
+                "type": "Integer"
+            },
+            {
+                "code": "timeValue",
+                "name": "时间值",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "tmu",
+                "name": "TMU",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "secondConvert",
+                "name": "秒换算",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "secondConvert",
+                "name": "秒换算",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "String"
+            },
+            {
+                "code": "type",
+                "name": "类型",
+                "type": "String"
+            },
+            {
+                "code": "a0",
+                "name": "a0",
+                "type": "int"
+            },
+            {
+                "code": "b0",
+                "name": "b0",
+                "type": "int"
+            },
+            {
+                "code": "g0",
+                "name": "g0",
+                "type": "int"
+            },
+            {
+                "code": "a1",
+                "name": "a1",
+                "type": "int"
+            },
+            {
+                "code": "b1",
+                "name": "b1",
+                "type": "int"
+            },
+            {
+                "code": "p0",
+                "name": "p0",
+                "type": "int"
+            },
+            {
+                "code": "m0",
+                "name": "m0",
+                "type": "int"
+            },
+            {
+                "code": "x0",
+                "name": "x0",
+                "type": "int"
+            },
+            {
+                "code": "i0",
+                "name": "i0",
+                "type": "int"
+            },
+            {
+                "code": "a2",
+                "name": "a2",
+                "type": "int"
+            },
+            {
+                "code": "b2",
+                "name": "b2",
+                "type": "int"
+            },
+            {
+                "code": "p1",
+                "name": "p1",
+                "type": "int"
+            },
+            {
+                "code": "a3",
+                "name": "a3",
+                "type": "int"
+            },
+            {
+                "code": "tool",
+                "name": "tool",
+                "type": "int"
+            },
+            {
+                "code": "a4",
+                "name": "a4",
+                "type": "int"
+            },
+            {
+                "code": "b3",
+                "name": "b3",
+                "type": "int"
+            },
+            {
+                "code": "p2",
+                "name": "p2",
+                "type": "int"
+            },
+            {
+                "code": "a5",
+                "name": "a5",
+                "type": "int"
+            },
+            {
+                "code": "createAt",
+                "name": "创建时间",
+                "type": "date"
+            }
+        ]
+    }
+]

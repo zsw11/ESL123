@@ -54,6 +54,10 @@ public class StaffEntity implements Serializable {
 	 */
 	private String jobNumber;
 	/**
+	 * 中心
+	 */
+	private String centerName;
+	/**
 	 * 部门
 	 */
 	@TableField(exist = false)
