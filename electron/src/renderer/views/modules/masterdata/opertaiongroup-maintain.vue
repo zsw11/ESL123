@@ -42,6 +42,7 @@
         <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
         <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
         <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
+        <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
       </vxe-grid>
 
       <el-row :gutter="10">
