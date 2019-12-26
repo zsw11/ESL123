@@ -57,7 +57,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-				if (keyStrs[0].equals("tool")) {
+				if (keyStrs[0].equals("action")) {
 					if (keyStrs[1].equals("common")) {
 						if(value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);
