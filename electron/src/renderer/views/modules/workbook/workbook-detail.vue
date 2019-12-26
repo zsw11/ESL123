@@ -78,7 +78,7 @@
 </template>
 
 <script>
-  import { pick } from 'lodash'
+  import { pick, debounce } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import { listOperationGroup } from '@/api/operationGroup'
   import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
@@ -118,6 +118,8 @@
         videoPath: '',
         currentTime: null,
         markers: [],
+        prevCount: 0,
+        nextCount: 0,
         playerOptions: {
           // videojs options
           muted: false,
@@ -158,6 +160,8 @@
                 self.$data.playerOptions.sources[0].src = `http://127.0.0.1:8888?startTime=${time}&t=${Math.random()}`
                 self.$data.currentTime = time
                 self.$data.lastTime = time
+                self.prevCount = 0
+                self.nextCount = 0
                 return time
               }
             }
@@ -168,6 +172,15 @@
     computed: {
       videoName () {
         return /([^/\\]*)$/.exec(this.videoPath)[1]
+      },
+      sortedMarkers () {
+        return this.markers.sort()
+      },
+      debouncePrevTag () {
+        return debounce(this.prevTag, 300)
+      },
+      debounceNextTag () {
+        return debounce(this.nextTag, 300)
       }
     },
     watch: {
@@ -191,6 +204,7 @@
       ipcRenderer.on('openVideo', function (event, duration, videoPath) {
         self.duration = parseFloat(duration)
         self.videoPath = videoPath
+        self.clearTags()
         Object.assign(self.playerOptions, {
           sources: [{
             type: 'video/mp4',
@@ -212,11 +226,15 @@
       // 打标签
       tag () {
         if (this.$refs.videoPlayer) {
-          if (this.markers.length === 5) {
-            this.markers.unshift()
+          if (this.markers.length >= 5) {
+            this.markers.shift()
           }
           this.markers.push(this.$refs.videoPlayer.player.currentTime())
-          console.log(this.markers)
+          this.setTags()
+        }
+      },
+      setTags () {
+        if (this.$refs.videoPlayer) {
           this.$refs.videoPlayer.player.markers.reset(this.markers.map((m, i) => {
             return {
               time: m,
@@ -226,13 +244,53 @@
         }
       },
       prevTag () {
+        if (this.$refs.videoPlayer) {
+          const currentTime = this.$refs.videoPlayer.player.currentTime()
+          let offset = -1
+          for (let i = this.sortedMarkers.length - 1; i >= 0; i--) {
+            // 寻找第一个点
+            if (offset < 0) {
+              if (this.sortedMarkers[i] + 0.5 < currentTime) {
+                offset = i
+                if (--this.prevCount === 0) break
+                else continue
+              }
+            } else if (--this.prevCount === 0) {
+              offset = i
+              break
+            }
+          }
+          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
+        }
       },
-      nexTag () {
+      nextTag () {
+        if (this.$refs.videoPlayer) {
+          const currentTime = this.$refs.videoPlayer.player.currentTime()
+          let offset = -1
+          for (let i = 0; i < this.sortedMarkers.length; i++) {
+            // 寻找第一个点
+            if (offset < 0) {
+              if (this.sortedMarkers[i] > currentTime) {
+                offset = i
+                if (--this.nextCount === 0) break
+                else continue
+              }
+            } else if (--this.nextCount === 0) {
+              offset = i
+              break
+            }
+          }
+          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
+        }
+      },
+      clearTags () {
+        this.markers.splice(0)
       },
       // ========================================
       //                分析表录入
       // ========================================
       event (e) {
+        this.setTags()
         // if (this.currentTime) {
         //   console.log(this.currentTime)
         //   this.$refs.videoPlayer.player.currentTime(this.currentTime)
@@ -269,6 +327,7 @@
       },
       closeVideo () {
         this.playerOptions.sources[0].src = ''
+        this.clearTags()
       },
       init () {
         const self = this
@@ -307,11 +366,13 @@
                   break
                 }
                 case '[': {
-                  self.prevTag()
+                  self.prevCount++
+                  self.debouncePrevTag()
                   break
                 }
                 case ']': {
-                  self.nexTag()
+                  self.nextCount++
+                  self.debounceNextTag()
                   break
                 }
                 case 's': {
