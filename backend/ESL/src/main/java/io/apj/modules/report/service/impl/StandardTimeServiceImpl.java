@@ -23,6 +23,7 @@ import io.apj.modules.report.entity.StandardTimeItemEntity;
 import io.apj.modules.report.service.StandardTimeItemService;
 import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,8 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     private StandardTimeService standardTimeService;
     @Autowired
     private ReportService  reportService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -108,9 +111,9 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     }
 
     @Override
-    public void generateReportData(WorkBookEntity workBook) {
-        StandardTimeEntity entity = generateStandardTime(workBook);
-        standardTimeItemService.generateStandardTimeItem(workBook, entity.getId());
+    public void generateReportData(List<Integer> workBookIds) {
+        StandardTimeEntity entity = generateStandardTime(workBookIds.get(0));
+        standardTimeItemService.generateStandardTimeItem(workBookIds, entity.getId());
     }
 
     @Override
@@ -172,7 +175,8 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         map.put("convTotal", convTotal);
     }
 
-    private StandardTimeEntity generateStandardTime(WorkBookEntity workBook) {
+    private StandardTimeEntity generateStandardTime(Integer workBookId) {
+        WorkBookEntity workBook = workBookService.selectById(workBookId);
         Integer phaseId = workBook.getPhaseId();
         Integer modelId = workBook.getModelId();
         String stlst = workBook.getStlst();

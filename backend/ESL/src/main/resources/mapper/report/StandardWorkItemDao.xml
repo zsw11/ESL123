@@ -19,5 +19,17 @@
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
 
-
+    <select id="generateDataByWorkBook" resultMap="mostValueItemMap">
+        select wb.second_convert as first_time, wb.second_convert as second_time, wb.second_convert as third_time,
+        wb.work_name as process_name, wb.workstation_id as process_no, wb.id as work_book_id, r.id
+        from work_book wb
+        left join report_standard_work_item r on wb.id = r.work_book_id
+        where 1 = 1
+        <if test="workBookIds != null and workBookIds.size() > 0">
+            and wb.id in
+            <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 </mapper>

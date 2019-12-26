@@ -6,24 +6,29 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
-import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.common.utils.Query;
+import io.apj.modules.collection.dao.RevisionHistoryDao;
+import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
+import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.collection.entity.StationTimeEntity;
-import io.apj.modules.collection.service.RevisionHistoryItemService;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.report.entity.ChangeRecordEntity;
-import io.apj.modules.report.entity.ChangeRecordItemEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
@@ -32,16 +37,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.collection.dao.RevisionHistoryDao;
-import io.apj.modules.collection.entity.RevisionHistoryEntity;
-import io.apj.modules.collection.service.RevisionHistoryService;
-import org.springframework.util.ClassUtils;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 @Service("revisionHistoryService")
@@ -57,6 +52,8 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
     @Autowired
     private RevisionHistoryItemService revisionHistoryItemService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -131,7 +128,9 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     }
 
     @Override
-    public void generateReportData(WorkBookEntity work) {
+    public void generateReportData(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        WorkBookEntity work = workBooks.get(0);
         EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
                 .eq("phase_id",work.getPhaseId());

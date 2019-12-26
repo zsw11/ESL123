@@ -11,7 +11,6 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
-import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
@@ -197,6 +196,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	public void createReports(Map<String, Object> params) {
 		ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
 		Integer workId = (Integer) params.get("workId");
+		List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
+		if (workBookIds == null || workBookIds.size() < 1) {
+			return;
+		}
 		WorkBookEntity workBookEntity = selectById(workId);
 		reportList.forEach(e -> {
 			switch (e) {
@@ -206,17 +209,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				break;
 			case 3:
 				// 工位时间报表
-				stationTimeService.generateReportData(workBookEntity);
+				stationTimeService.generateReportData(workBookIds);
 				break;
 			case 4:
-				compareService.generateReportData(workBookEntity);
+				compareService.generateReportData(workBookIds);
 				break;
 			case 5:
-				mostValueService.generateReportData(workBookEntity);
+				mostValueService.generateReportData(workBookIds);
 				break;
 			case 6:
 				// Collection-Revision History表
-				revisionHistoryService.generateReportData(workBookEntity);
+				revisionHistoryService.generateReportData(workBookIds);
 				break;
 			case 7:
 				totalService.generateReportData(workBookEntity);
@@ -224,20 +227,20 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			case 8:
 				break;
 			case 9:
-				timeContactService.generateReportData(workBookEntity);
+				timeContactService.generateReportData(workBookIds);
 				break;
 			case 10:
 				break;
 			case 11:
-				standardTimeService.generateReportData(workBookEntity);
+				standardTimeService.generateReportData(workBookIds);
 				break;
 			case 12:
 				// 标准工数表
-				standardWorkService.generateReportData(workBookEntity);
+				standardWorkService.generateReportData(workBookIds);
 				break;
 			case 13:
 				// 履历表
-				changeRecordService.generateReportData(workBookEntity);
+				changeRecordService.generateReportData(workBookIds);
 				break;
 			}
 
@@ -355,6 +358,35 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
 		String fileName = "test";
 		ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+	}
+
+	@Override
+	public List<WorkBookEntity> filterUniquePhaseAndModelAndStlstOfWorkBooks(List<WorkBookEntity> workBooks) {
+		Map<String, WorkBookEntity> map = new HashMap<>();
+		for (WorkBookEntity entity : workBooks) {
+			Integer phaseId = entity.getPhaseId();
+			Integer modelId = entity.getModelId();
+			String stlst = entity.getStlst();
+			String key = phaseId + modelId + stlst;
+			if (map.get(key) != null) {
+				continue;
+			}
+			map.put(key, entity);
+		}
+		return new ArrayList<WorkBookEntity>(map.values()) ;
+	}
+
+	@Override
+	public List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId, String stlst, Integer phaseId) {
+		String filter = modelId + stlst + phaseId;
+		List<Integer> result = new ArrayList<>();
+		for (WorkBookEntity entity : workBooks) {
+			String target = entity.getModelId() + entity.getStlst() + entity.getPhaseId();
+			if (org.apache.commons.lang3.StringUtils.equals(filter, target)) {
+				result.add(entity.getId());
+			}
+		}
+		return result;
 	}
 
 	private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {

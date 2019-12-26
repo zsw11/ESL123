@@ -3,11 +3,11 @@ package io.apj.modules.collection.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +21,7 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
 
     PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
-    void generateReportData(WorkBookEntity workBookEntity);
+    void generateReportData(List<Integer> workBookIds);
 
     void updateEntity(RevisionHistoryEntity revisionHistory);
 

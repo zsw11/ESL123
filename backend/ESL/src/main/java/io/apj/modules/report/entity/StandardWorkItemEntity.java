@@ -3,15 +3,14 @@ package io.apj.modules.report.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
-import lombok.experimental.FieldNameConstants;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- * 标准时间表子表
+ * 标准工数表
  *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
