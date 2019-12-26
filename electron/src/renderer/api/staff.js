@@ -53,3 +53,13 @@ export function staffAdvancedSearch (data) {
     data: request.adornData(data)
   })
 }
+
+// 导出
+export function staffExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/staff/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
+  })
+}
