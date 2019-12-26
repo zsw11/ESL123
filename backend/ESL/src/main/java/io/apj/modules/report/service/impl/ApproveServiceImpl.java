@@ -75,6 +75,9 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Autowired
     private ApproveHistoryService approveHistoryService;
 
+    @Autowired
+    private ReportManMachineCombinationService reportManMachineCombinationService;
+
 
 
     @Override
@@ -232,9 +235,10 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                 workBookService.download(params, response);
                 break;
             case 2:
+                //人机联合
+                reportManMachineCombinationService.download(params, response);
                 break;
             case 3:
-
                 stationTimeService.download(params, response);
                 break;
             case 4:

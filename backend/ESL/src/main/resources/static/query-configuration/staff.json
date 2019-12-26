@@ -10,8 +10,13 @@
                 "type": "string"
             },
             {
-                "code": "userName",
-                "name": "用户名称",
+                "code": "centerName",
+                "name": "中心",
+                "type": "string"
+            },
+            {
+                "code": "jobNumber",
+                "name": "工号",
                 "type": "string"
             },
             {

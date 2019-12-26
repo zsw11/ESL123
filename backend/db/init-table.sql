@@ -390,6 +390,7 @@ CREATE TABLE basic_staff (
   code varchar(64)  NOT NULL,
   name varchar(64)  NOT NULL,
   pinyin varchar(128),
+  center_name varchar(128),
   gender varchar(20),
   mobilephone varchar(16),
   status varchar(20),

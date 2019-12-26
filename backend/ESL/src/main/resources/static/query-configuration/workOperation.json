@@ -1,13 +1,63 @@
 [
     {
-        "table": "measureGroup",
-        "tableName": "常用指标组合",
-        "tableAlias": "measureGroup",
+        "table": "workOperation",
+        "tableName": "分析表明细",
+        "tableAlias": "workOperation",
         "fieldList": [
             {
-                "code": "code",
-                "name": "常用指标组合编码",
+                "code": "seqNumber",
+                "name": "序号",
                 "type": "int"
+            },
+            {
+                "code": "workBookId",
+                "name": "分析表ID",
+                "type": "int"
+            },
+            {
+                "code": "version",
+                "name": "版本信息",
+                "type": "String"
+            },
+            {
+                "code": "operation",
+                "name": "手顺",
+                "type": "String"
+            },
+            {
+                "code": "frequency",
+                "name": "频度",
+                "type": "Integer"
+            },
+            {
+                "code": "timeValue",
+                "name": "时间值",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "tmu",
+                "name": "TMU",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "secondConvert",
+                "name": "秒换算",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "secondConvert",
+                "name": "秒换算",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "String"
+            },
+            {
+                "code": "type",
+                "name": "类型",
+                "type": "String"
             },
             {
                 "code": "a0",
@@ -97,16 +147,6 @@
             {
                 "code": "a5",
                 "name": "a5",
-                "type": "int"
-            },
-            {
-                "code": "frequency",
-                "name": "频度",
-                "type": "int"
-            },
-            {
-                "code": "deptId",
-                "name": "所属组织机构",
                 "type": "int"
             },
             {

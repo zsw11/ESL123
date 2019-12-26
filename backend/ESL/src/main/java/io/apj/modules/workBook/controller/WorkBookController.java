@@ -74,6 +74,7 @@ public class WorkBookController extends AbstractController {
 	public R save(@RequestBody WorkBookEntity workBook) {
 		workBook.setDeptId(getUserDeptId().intValue());
 		workBook.setIfAlter(false);
+		workBook.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBook);
 
 		return R.ok();
