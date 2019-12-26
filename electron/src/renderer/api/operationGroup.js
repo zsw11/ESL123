@@ -55,3 +55,12 @@ export function OperationGroupExport (data) {
     responseType: 'blob'
   })
 }
+
+// 导入
+export function OperationGroupImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/opertaiongroup/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}

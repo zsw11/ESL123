@@ -31,6 +31,9 @@
             type="primary"
             plain>导 出
           </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button
             type="danger"
             @click="deleteHandle()"
@@ -90,16 +93,18 @@
 </template>
 
 <script>
-  import {listAction, deleteAction, ActionExport} from '@/api/action'
+  import {listAction, deleteAction, ActionExport, ActionImport} from '@/api/action'
   import {filterAttributes} from '@/utils'
   import {cloneDeep} from 'lodash'
   import ExportData from '@/components/export-data'
+  import ImportData from "@/components/import-data";
 
   const defaultExport = ['action.name', 'action.remark']
   export default {
     name: 'actionList',
     components: {
-      ExportData
+      ExportData,
+      ImportData
     },
     data () {
       return {
@@ -130,7 +135,12 @@
         }],
         complexFilters: [],
         // 导出字段
-        exportAttributes: cloneDeep(defaultExport)
+        exportAttributes: cloneDeep(defaultExport),
+        // 导入字段，固定不可变
+        importAttributes: [
+          "action.name",
+          "action.remark"
+        ]
       }
     },
     activated () {
@@ -138,6 +148,25 @@
       self.getDataList()
     },
     computed: {
+      importConfig() {
+        return {
+          attributes: [
+            {
+              code: this.attributes[0].code,
+              name: this.attributes[0].name,
+              children: filterAttributes(this.attributes, {
+                attributes: this.importAttributes,
+                plain: true
+              }),
+              sampleDatas: [["关键词名称1", "备注"]]
+            }
+          ],
+          importApi: ActionImport,
+          importSuccessCb: () => {
+            this.getDataList();
+          }
+        };
+      },
       exportConfig () {
         return {
           attributes: filterAttributes(this.attributes, 'isExport'),
