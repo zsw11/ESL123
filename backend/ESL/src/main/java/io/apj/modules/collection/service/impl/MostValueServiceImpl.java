@@ -21,6 +21,7 @@ import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
 
 
 @Service("mostValueService")
@@ -45,6 +45,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
     private MostValueService mostValueService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -105,9 +107,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
     }
 
     @Override
-    public void generateReportData(WorkBookEntity workBook) {
-        MostValueEntity entity = generateMostValue(workBook);
-        mostValueItemService.generateMostValue(workBook, entity.getId());
+    public void generateReportData(List<Integer> workBookIds) {
+        MostValueEntity entity = generateMostValue(workBookIds.get(0));
+        mostValueItemService.generateMostValueItem(workBookIds, entity.getId());
     }
 
     @Override
@@ -197,7 +199,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         }
     }
 
-    private MostValueEntity generateMostValue(WorkBookEntity workBook) {
+    private MostValueEntity generateMostValue(Integer workBookId) {
+        WorkBookEntity workBook = workBookService.selectById(workBookId);
         Integer phaseId = workBook.getPhaseId();
         Integer modelId = workBook.getModelId();
         String stlst = workBook.getStlst();

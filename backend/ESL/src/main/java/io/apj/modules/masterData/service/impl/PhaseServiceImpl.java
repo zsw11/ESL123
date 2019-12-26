@@ -39,7 +39,7 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+					"UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
 		}
 		Page<PhaseEntity> page = this.selectPage(new Query<PhaseEntity>(params).getPage(), entityWrapper);
 

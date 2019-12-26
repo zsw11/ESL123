@@ -43,6 +43,9 @@
             type="primary"
             plain>导   出
           </export-data>
+          <import-data
+            :config="importConfig">
+          </import-data>
           <el-button
             type="danger"
             @click="deleteHandle()"
@@ -185,9 +188,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="deptName"  width="200px" label="所属组织机构" >
+        <el-table-column align="center" prop="frequency" label="Fre." width="80">
           <template slot-scope="scope">
-            <span>{{scope.row.deptName }}</span>
+            <span>{{scope.row.frequency }}</span>
           </template>
         </el-table-column>
 
@@ -215,14 +218,15 @@
 </template>
 
 <script>
-import { listMeasureGroup, deleteMeasureGroup, MeasureGroupExport } from '@/api/measureGroup'
+import { listMeasureGroup, deleteMeasureGroup, MeasureGroupExport, MeasureGroupImport } from '@/api/measureGroup'
 import { listDept } from '@/api/dept'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
+import ImportData from "@/components/import-data";
+
 const defaultExport = [
   'measureGroup.code',
-  'measureGroup.frequency',
   'measureGroup.a0',
   'measureGroup.b0',
   'measureGroup.g0',
@@ -241,12 +245,13 @@ const defaultExport = [
   'measureGroup.b3',
   'measureGroup.p2',
   'measureGroup.a5',
-  'measureGroup.deptId'
+  'measureGroup.frequency'
 ]
 export default {
   name: 'measureGroupList',
   components: {
-    ExportData
+    ExportData,
+    ImportData
   },
   data () {
     return {
@@ -254,7 +259,6 @@ export default {
       listQuery: {
         id: null,
         code: null,
-        frequency: null,
         a0: null,
         b0: null,
         g0: null,
@@ -273,14 +277,10 @@ export default {
         b3: null,
         p2: null,
         a5: null,
+        frequency: null,
         deptId: null,
         deptName: null,
         usedCount: null,
-        createBy: null,
-        createAt: null,
-        updateBy: null,
-        updateAt: null,
-        deleteAt: null
       },
       listDept,
       dataList: [],
@@ -294,7 +294,6 @@ export default {
         name: '常用指标组合',
         children: [
           { code: 'code', name: '编码', type: 'string', required: true },
-          { code: 'frequency', name: '频率', type: 'string', required: true },
           { code: 'a0', name: 'A0', type: 'string', required: true },
           { code: 'b0', name: 'B0', type: 'string', required: true },
           { code: 'g0', name: 'G0', type: 'string', required: true },
@@ -313,12 +312,35 @@ export default {
           { code: 'b3', name: 'B3', type: 'string', required: true },
           { code: 'p2', name: 'P2', type: 'string', required: true },
           { code: 'a5', name: 'A5', type: 'string', required: true },
-          { code: 'deptId', name: '组织机构ID', type: 'string', required: true }
+          { code: 'frequency', name: 'Fre.', type: 'string', required: true },
         ]
       }],
       complexFilters: [],
       // 导出字段
-      exportAttributes: cloneDeep(defaultExport)
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段，固定不可变
+      importAttributes: [
+        'measureGroup.code',
+        'measureGroup.a0',
+        'measureGroup.b0',
+        'measureGroup.g0',
+        'measureGroup.a1',
+        'measureGroup.b1',
+        'measureGroup.p0',
+        'measureGroup.m0',
+        'measureGroup.x0',
+        'measureGroup.i0',
+        'measureGroup.a2',
+        'measureGroup.b2',
+        'measureGroup.p1',
+        'measureGroup.a3',
+        'measureGroup.tool',
+        'measureGroup.a4',
+        'measureGroup.b3',
+        'measureGroup.p2',
+        'measureGroup.a5',
+        'measureGroup.frequency'
+      ]
     }
   },
   activated () {
@@ -326,6 +348,25 @@ export default {
     self.getDataList()
   },
   computed: {
+    importConfig() {
+      return {
+        attributes: [
+          {
+            code: this.attributes[0].code,
+            name: this.attributes[0].name,
+            children: filterAttributes(this.attributes, {
+              attributes: this.importAttributes,
+              plain: true
+            }),
+            sampleDatas: [["code007", "1", "1", "1", "1", "1", "1", "1", "1"]]
+          }
+        ],
+        importApi: MeasureGroupImport,
+        importSuccessCb: () => {
+          this.getDataList();
+        }
+      };
+    },
     exportConfig () {
       return {
         attributes: filterAttributes(this.attributes, 'isExport'),

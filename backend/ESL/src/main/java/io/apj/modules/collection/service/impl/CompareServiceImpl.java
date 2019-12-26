@@ -14,18 +14,15 @@ import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.CompareDao;
 import io.apj.modules.collection.entity.CompareEntity;
-import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.CompareItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.entity.PhaseEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +36,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.collection.dao.CompareDao;
-import io.apj.modules.collection.entity.CompareEntity;
-import io.apj.modules.collection.service.CompareService;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 @Service("compareService")
@@ -127,9 +115,9 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
     }
 
     @Override
-    public void generateReportData(WorkBookEntity workBook) {
-        CompareEntity entity = generateStandardTime(workBook);
-        compareItemService.generateCompareItem(workBook, entity.getId());
+    public void generateReportData(List<Integer> workBookIds) {
+        CompareEntity entity = generateCompare(workBookIds.get(0));
+        compareItemService.generateCompareItem(workBookIds, entity);
     }
 
     @Override
@@ -201,7 +189,8 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
         map.put("minuteDifferenceTotal", minuteDifferenceTotal);
     }
 
-    private CompareEntity generateStandardTime(WorkBookEntity workBook) {
+    private CompareEntity generateCompare(Integer workBookId) {
+        WorkBookEntity workBook = workBookService.selectById(workBookId);
         Integer phaseId = workBook.getPhaseId();
         Integer modelId = workBook.getModelId();
         String stlst = workBook.getStlst();

@@ -19,5 +19,7 @@ public interface StationTimeItemService extends IService<StationTimeItemEntity> 
     PageUtils queryPage(Map<String, Object> params);
 
     List<StationTimeItemEntity> getListBySWId(Integer id);
+
+    void generateStationTimeItem(List<Integer> workBookIds, Integer stationTimeId);
 }
 

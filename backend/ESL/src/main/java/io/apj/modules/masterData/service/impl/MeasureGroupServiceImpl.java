@@ -38,9 +38,10 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<MeasureGroupEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at", false).like(
-				params.get("code") != null && params.get("code") != "", "UPPER(code)",
-				params.get("code").toString().toUpperCase());
+		entityWrapper.isNull("delete_at").orderBy("update_at", false);
+		if(params.get("code") != null && params.get("code") != ""){
+			entityWrapper.like("UPPER(code)",params.get("code").toString().toUpperCase());
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
 			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
 		}

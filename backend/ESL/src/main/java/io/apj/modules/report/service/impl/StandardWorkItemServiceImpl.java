@@ -1,11 +1,6 @@
 package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
@@ -13,6 +8,11 @@ import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.StandardWorkItemDao;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
 import io.apj.modules.report.service.StandardWorkItemService;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("standardWorkItemService")
@@ -34,6 +34,19 @@ public class StandardWorkItemServiceImpl extends ServiceImpl<StandardWorkItemDao
         ew.eq("report_standard_work_id",id);
         list = selectList(ew);
         return list;
+    }
+
+    @Override
+    public void generateStandardWorkItem(List<Integer> workBookIds, Integer standardWorkId) {
+        List<StandardWorkItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+        if (list.size() < 1) {
+            return;
+        }
+        for (StandardWorkItemEntity entity : list) {
+            entity.setReportStandardWorkId(standardWorkId);
+        }
+
+        insertOrUpdateBatch(list);
     }
 
 }

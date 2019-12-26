@@ -73,17 +73,16 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         entityWrapper.isNull("delete_at").orderBy("update_at",false)
                 .like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
                 .like(params.get("formCode") != null && params.get("formCode") != "", "form_code",
-                        (String) params.get("formCode"))
-                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
+                        (String) params.get("formCode"));
+//                .like(params.get("name") != null && params.get("name") != "", "name", (String) params.get("name"));
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
             entityWrapper.andNew(
-                    "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+                    "UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
             String name = (String) params.get("keyWord");
             name = name.replace(",", "");
-            entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
-                    + " or pinyin  like '%" + name + "%'");
+            entityWrapper.andNew("UPPER(name)  like '%" + name.toUpperCase() + "%'" + " or UPPER(pinyin)  like '%" + name.toUpperCase() + "%'");
 
         }
 

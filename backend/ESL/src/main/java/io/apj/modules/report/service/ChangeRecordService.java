@@ -3,10 +3,10 @@ package io.apj.modules.report.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ChangeRecordEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +27,7 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
      */
     PageUtils selectListTest(Map<String, Object> params);
 
-    void generateReportData(WorkBookEntity workBookEntity);
+    void generateReportData(List<Integer> workBookIds);
 
     void updateEntity(ChangeRecordEntity changeRecord);
 

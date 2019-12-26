@@ -57,7 +57,12 @@
               </dict-select>
             </el-form-item>
           </el-col>
-
+          <el-col :span="6">
+            <el-form-item :label="'工号'" prop="jobNumber">
+              <el-input v-model="listQuery.jobNumber" clearable>
+              </el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row>
@@ -79,8 +84,7 @@
 <!--                          :type="dataButton==='complex' ? 'primary' : ''"-->
 <!--                          class='complex-button'>高级搜索</complex-filter>-->
           <el-button @click='clearQuery()'>清 空</el-button>
-          <el-button @click='getDataList(1)'
-                     :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click='getDataList(1)' :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
         </div>
       </el-form>
     </el-card>
@@ -89,19 +93,17 @@
            class='clearfix'>
         <div class='card-title'>员工信息</div>
         <div class='buttons'>
-          <!-- <el-button v-if="isAuth('basic:staff:create')" -->
-          <el-button
-                    type='primary'
-                     @click='addOrUpdateHandle()'>新增</el-button>
-          <display-attributes :config='displayConfig'
-                              type='primary'
-                              plain
-                              @confirm="doDataSearch()">显示字段</display-attributes>
-          <!-- <el-button v-if="isAuth('basic:staff:delete')" -->
+          <el-button type='primary' @click='addOrUpdateHandle()'>新增</el-button>
+          <display-attributes
+            :config='displayConfig'
+            type='primary'
+            plain
+            @confirm="doDataSearch()">显示字段</display-attributes>
+          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
             <el-button
-                     type='danger'
-                     @click='deleteHandle()'
-                     :disabled='dataListSelections.length <= 0'>批量删除</el-button>
+              type='danger'
+              @click='deleteHandle()'
+              :disabled='dataListSelections.length <= 0'>批量删除</el-button>
         </div>
       </div>
       <el-table :data="dataList"
@@ -210,14 +212,15 @@
                      :page-sizes='[10, 20, 50, 100]'
                      :page-size='pageSize'
                      :total='total'
-                     layout='total, sizes, prev, pager, next, jumper'></el-pagination>
+                     layout='total, sizes, prev, pager, next, jumper'>
+      </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
 import { keyBy, cloneDeep } from 'lodash'
-import { listStaff, deleteStaff, staffAdvancedSearch } from '@/api/staff'
+import { listStaff, deleteStaff, staffAdvancedSearch, staffExport } from '@/api/staff'
 import { listDept } from '@/api/dept'
 import { filterAttributes } from '@/utils'
 import ExportData from '@/components/export-data'
@@ -227,9 +230,10 @@ import DisplayAttributes from '@/components/display-attributes'
 import DictSelect from '@/components/dict-select'
 const defaultDisplay = [
   'staff.deptId',
+  'staff.centerName',
+  'staff.jobNumber',
   'staff.code',
   'staff.name',
-  'staff.gender',
   'staff.mobilephone',
   'staff.email',
   'staff.status',
@@ -238,6 +242,17 @@ const defaultDisplay = [
   return { code: a, display: true }
 })
 
+const defaultExport = [
+  'staff.deptId',
+  'staff.centerName',
+  'staff.jobNumber',
+  'staff.code',
+  'staff.name',
+  'staff.mobilephone',
+  'staff.email',
+  'staff.status',
+  'staff.employmentDate'
+]
 export default {
   name: 'staffList',
   components: {
@@ -252,9 +267,10 @@ export default {
       dataButton: 'list',
       listQuery: {
         deptId: null,
+        centerName: null,
+        jobNumber: null,
         code: null,
         name: null,
-        gender: null,
         birthDate: null,
         mobilephone: null,
         email: null,
@@ -283,39 +299,24 @@ export default {
           code: 'staff',
           name: '人员信息',
           children: [
-            { code: 'deptId', name: '部门ID', type: 'string', required: true },
+            { code: 'deptId', name: '部门', type: 'string', required: true },
+            { code: 'centerName', name: '中心', type: 'string', required: true },
+            { code: 'jobNumber', name: '工号', type: 'string', required: true },
             { code: 'code', name: '编码', type: 'string', required: true },
             { code: 'name', name: '姓名', type: 'string', required: true },
-            { code: 'gender', name: '性别', type: 'string', required: true },
-            { code: 'birthDate', name: '生日', type: 'string', required: true },
-            {
-              code: 'mobilephone',
-              name: '电话',
-              type: 'string',
-              required: true
-            },
+            { code: 'mobilephone', name: '电话', type: 'string', required: true},
             { code: 'email', name: '邮箱', type: 'string', required: true },
-            {
-              code: 'familyAddress',
-              name: '家庭地址',
-              type: 'string',
-              required: true
-            },
             { code: 'status', name: '状态', type: 'string', required: true },
-            {
-              code: 'employmentDate',
-              name: '入职日期',
-              type: 'string',
-              required: true
-            }
+            { code: 'employmentDate', name: '入职日期', type: 'string', required: true}
           ]
         }
       ],
       complexFilters: [],
-      exportAttributes: [],
       displayAttributes:
         cloneDeep(this.$store.getters.displaySetting.staff) || defaultDisplay,
       importAttributes: [],
+      // 导出字段
+      exportAttributes: cloneDeep(defaultExport),
       listDept
     }
   },
@@ -357,6 +358,39 @@ export default {
         attributes: filterAttributes(this.attributes, 'isComplexFilter'),
         complexFilters: this.complexFilters
       }
+    },
+    exportConfig() {
+      return {
+        attributes: filterAttributes(this.attributes, "isExport"),
+        exportApi: staffExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch("user/SetAExport", {
+            page: "staff",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport);
+          this.$store.dispatch("user/SetAExport", {
+            page: "staff",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        }
+      };
     }
   },
   activated () {
@@ -398,9 +432,10 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
+        centerName: null,
+        jobNumber: null,
         code: null,
         name: null,
-        gender: null,
         birthDate: null,
         mobilephone: null,
         email: null,

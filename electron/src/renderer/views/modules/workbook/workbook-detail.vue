@@ -45,7 +45,7 @@
           <el-button type="primary" @click="paste">粘贴</el-button>
         </el-tooltip> -->
         <el-autocomplete
-          class="inline-input"
+          class="inline-input operation-group"
           v-model="addedOperation"
           :fetch-suggestions="getOperationGroups"
           placeholder="手顺组合"
@@ -84,6 +84,8 @@
   import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
+  import markers from 'videojs-markers-plugin'
+  import 'videojs-markers-plugin/dist/videojs.markers.plugin.min.css'
   import { ipcRenderer } from 'electron'
 
   const workbookPercents = [
@@ -115,6 +117,7 @@
         duration: null,
         videoPath: '',
         currentTime: null,
+        markers: [],
         playerOptions: {
           // videojs options
           muted: false,
@@ -129,7 +132,7 @@
           controlBar: {
             fullscreenToggle: false
           },
-          markers: [],
+          plugins: { markers },
           middleware (player) {
             player.on('seeked', (e) => {
               console.log('seeked', player.currentTime(), e)
@@ -209,10 +212,17 @@
       // 打标签
       tag () {
         if (this.$refs.videoPlayer) {
-          if (this.playerOptions.markers.length === 5) {
-            this.playerOptions.markers.unshift()
+          if (this.markers.length === 5) {
+            this.markers.unshift()
           }
-          this.playerOptions.markers.push(this.$refs.videoPlayer.player.currentTime())
+          this.markers.push(this.$refs.videoPlayer.player.currentTime())
+          console.log(this.markers)
+          this.$refs.videoPlayer.player.markers.reset(this.markers.map((m, i) => {
+            return {
+              time: m,
+              text: i
+            }
+          }))
         }
       },
       prevTag () {
@@ -424,6 +434,15 @@
       left: calc(50vw - 1.5em);
       top: calc(35vh - 0.8em)
     }
+    .vjs-marker {
+      top: -30px;
+      width: 20px !important;
+      height: 30px;
+      background-color: transparent !important;
+      background-image: url("~@/assets/img/pin.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
     // .control-bar {
     //   position: absolute;
     //   left: 0;
@@ -526,6 +545,17 @@
       }
       .el-button--mini {
         padding: 4px 10px;
+      }
+      .el-autocomplete {
+        &.operation-group {
+          width: 100px;
+        }
+        .el-input {
+          .el-input__inner {
+            height: 22px;
+            line-height: 22px;
+          }
+        }
       }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),

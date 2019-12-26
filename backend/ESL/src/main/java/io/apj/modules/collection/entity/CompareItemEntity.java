@@ -75,6 +75,8 @@ public class CompareItemEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	private Integer workBookId;
+
 	@TableField(exist = false)
 	private BigDecimal secondDifference;
 

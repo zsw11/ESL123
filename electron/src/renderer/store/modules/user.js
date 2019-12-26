@@ -5,7 +5,7 @@ import md5 from 'blueimp-md5'
 export default {
   namespaced: true,
   state: {
-    id: 0,
+    id: null,
     name: '',
     department: '',
     token: getToken(),

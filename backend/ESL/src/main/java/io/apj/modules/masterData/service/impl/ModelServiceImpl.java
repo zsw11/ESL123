@@ -52,13 +52,13 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
         if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
             String name = (String) params.get("keyWord");
             name = name.replace(",", "");
-            entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
+            entityWrapper.andNew("name  like '%" + name + "%'"
                     + " or pinyin  like '%" + name + "%'");
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
             String name = (String) params.get("name");
             name = name.replace(",", "");
-            entityWrapper.andNew("name  like '%" + name + "%'" + " or pinyin  like '%" + name + "%'");
+            entityWrapper.andNew("UPPER(name)  like '%" + name.toUpperCase() + "%'" + " or UPPER(pinyin)  like '%" + name.toUpperCase() + "%'");
         }
         Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
         for (ModelEntity entity : page.getRecords()) {

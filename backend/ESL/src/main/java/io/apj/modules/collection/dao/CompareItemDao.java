@@ -1,9 +1,10 @@
 package io.apj.modules.collection.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import io.apj.modules.collection.entity.CompareItemEntity;
 import org.apache.ibatis.annotations.Mapper;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,5 @@ import java.util.Map;
 @Mapper
 public interface CompareItemDao extends BaseMapper<CompareItemEntity> {
 
-    CompareItemEntity generateDataByWorkBook(Map<String, Object> params);
+    List<CompareItemEntity> generateDataByWorkBook(Map<String, Object> params);
 }

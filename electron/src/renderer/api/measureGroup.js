@@ -55,3 +55,12 @@ export function MeasureGroupExport (data) {
     responseType: 'blob'
   })
 }
+
+// 导入
+export function MeasureGroupImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/measuregroup/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}

@@ -47,7 +47,7 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
 
         if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
             entityWrapper.andNew(
-                    "pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+                    "UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
             String name = (String) params.get("keyWord");

@@ -11,6 +11,7 @@
 		<result property="deptId" column="dept_id" />
 		<result property="userId" column="user_id" />
 		<result property="code" column="code" />
+		<result property="centerName" column="center_name" />
 		<result property="name" column="name" />
 		<result property="pinyin" column="pinyin" />
 		<result property="gender" column="gender" />

@@ -147,7 +147,6 @@
         </el-table-column>
 
 
-
         <el-table-column align="center" prop="makedAt" label="制表日期" >
           <template slot-scope="scope">
             <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
@@ -155,12 +154,13 @@
         </el-table-column>
 
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="280" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">版本修订</el-button>
+            <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
             <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
+            <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
@@ -219,6 +219,8 @@ import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
+import { fetchUserDetail } from '@/api/passport'
+
 export default {
   name: 'workBookList',
   data () {
@@ -228,19 +230,20 @@ export default {
       createShow: false,
       isIndeterminate: true,
       checkAll: false,
+      userId: null,
       reportGroup: [
-        // {
-        //   name: '分析表报表',
-        //   id: 1
-        // },
-        // {
-        //   name: '人机联合表',
-        //   id: 2
-        // },
-        // {
-        //   name: 'Collection-工位时间表',
-        //   id: 3
-        // },
+        {
+          name: '分析表报表',
+          id: 1
+        },
+        {
+          name: '人机联合表',
+          id: 2
+        },
+        {
+          name: 'Collection-工位时间表',
+          id: 3
+        },
         {
           name: 'Collection-Compare表',
           id: 4
@@ -249,26 +252,26 @@ export default {
           name: 'Collection-MOST Value表',
           id: 5
         },
-        // {
-        //   name: 'Collection-Revision History表',
-        //   id: 6
-        // },
-        // {
-        //   name: 'Report-Total表',
-        //   id: 7
-        // },
-        // {
-        //   name: 'Report-拖机Total表',
-        //   id: 8
-        // },
-        // {
-        //   name: 'Report-时间联络表',
-        //   id: 9
-        // },
-        // {
-        //   name: 'Process List表',
-        //   id: 10
-        // },
+        {
+          name: 'Collection-Revision History表',
+          id: 6
+        },
+        {
+          name: 'Report-Total表',
+          id: 7
+        },
+        {
+          name: 'Report-拖机Total表',
+          id: 8
+        },
+        {
+          name: 'Report-时间联络表',
+          id: 9
+        },
+        {
+          name: 'Process List表',
+          id: 10
+        },
         {
           name: '标准时间表',
           id: 11
@@ -277,10 +280,10 @@ export default {
           name: '标准工数表',
           id: 12
         },
-        // {
-        //   name: '履历表',
-        //   id: 13
-        // }
+        {
+          name: '履历表',
+          id: 13
+        }
       ],
       arr: [],
       createForm: {
@@ -428,6 +431,12 @@ export default {
         this.$router.push( { path: `/copy-workbook/${id}`} )
       })
     },
+    // 版本修订
+    updateFar (id) {
+      this.$nextTick(() => {
+        this.$router.push( { path: `/update-workbook/${id}`} )
+      })
+    },
     // 删除数据
     deleteHandle (row) {
       var ids = row ? [row.id] : this.dataListSelections.map(item => {
@@ -483,6 +492,7 @@ export default {
        createReports(Object.assign(
         {
           workId: this.id,
+          workBookIds: [this.id],
           reports: this.createForm.id
         }
       )).then(({page}) => {

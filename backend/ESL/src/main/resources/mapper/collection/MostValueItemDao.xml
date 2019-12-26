@@ -16,17 +16,25 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
+        <result property="workBookId" column="work_book_id"/>
     </resultMap>
 
     <select id="generateDataByWorkBook" resultMap="mostValueItemMap">
         select wt."name" as type, wb.model_id, wb.phase_id, wb.stlst,  wb.work_name as unit_name, w."name" as work_name,
-         sum(wo.second_convert) * 1.06 / 60 as total
+         sum(wo.second_convert) * 1.06 / 60 as total, wb.id as work_book_id, m.id
         from work_book wb
         join work_operations wo on wb.id = wo.work_book_id
         join workstation w on wb.workstation_id = w.id
         join workstation_type wt on w.workstation_type_id = wt.id
-        where wb.id = #{workBookId}
-        group by wt."name", wb.model_id, wb.phase_id, wb.stlst,  wb.work_name, w."name"
+        left join collection_most_value_item m on m.work_book_id = wb.id
+        where 1 = 1
+        <if test="workBookIds != null and workBookIds.size() > 0">
+            and wb.id in
+            <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">
+                #{item}
+            </foreach>
+        </if>
+        group by wt."name", wb.model_id, wb.phase_id, wb.stlst,  wb.work_name, w."name", wb.id, m.id
     </select>
 
 </mapper>

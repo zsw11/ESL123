@@ -390,6 +390,7 @@ CREATE TABLE basic_staff (
   code varchar(64)  NOT NULL,
   name varchar(64)  NOT NULL,
   pinyin varchar(128),
+  center_name varchar(128),
   gender varchar(20),
   mobilephone varchar(16),
   status varchar(20),
@@ -1187,6 +1188,28 @@ comment on column report_group_report_rela.update_by is '更新者ID';
 comment on column report_group_report_rela.update_at is '更新时间';
 comment on column report_group_report_rela.delete_at is '删除时间';
 
+-- 报表和部门关系
+drop table if exists report_dept_rela;
+CREATE TABLE report_dept_rela (
+  id serial PRIMARY KEY,
+  report_id integer,
+  dept_id integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table report_dept_rela is '报表部门关系';
+comment on column report_dept_rela.report_id is '报表ID';
+comment on column report_dept_rela.dept_id is '部门ID';
+CREATE UNIQUE INDEX report_dept_rela_uniq ON report_dept_rela (report_id,dept_id) WHERE delete_at IS NULL;
+comment on column report_dept_rela.create_by is '创建者ID';
+comment on column report_dept_rela.create_at is '创建时间';
+comment on column report_dept_rela.update_by is '更新者ID';
+comment on column report_dept_rela.update_at is '更新时间';
+comment on column report_dept_rela.delete_at is '删除时间';
+
 -- 常用指标组合
 drop table if exists measure_group;
 CREATE TABLE measure_group (
@@ -1489,7 +1512,8 @@ CREATE TABLE collection_station_time_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table collection_station_time_item is 'Collection - 工位时间表子表';
 comment on column collection_station_time_item.collection_station_time_id is '工作时间表ID';
@@ -1547,7 +1571,8 @@ CREATE TABLE collection_most_value_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table collection_most_value_item is 'Collection - MOST Value 表';
 comment on column collection_most_value_item.collection_most_value_id is 'Most Value表ID';
@@ -1698,7 +1723,8 @@ CREATE TABLE collection_compare_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table collection_compare_item is 'Collection - Compare表子表';
 comment on column collection_compare_item.collection_compare_id is 'compare表ID';
@@ -1790,7 +1816,8 @@ CREATE TABLE report_total_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table report_total_item is 'Report - Total表子表';
 comment on column report_total_item.report_total_id is 'Total表ID';
@@ -1933,7 +1960,8 @@ CREATE TABLE report_standard_time_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table report_standard_time_item is '标准时间表子表';
 comment on column report_standard_time_item.report_standard_time_id is '标准时间表ID';
@@ -2011,7 +2039,8 @@ CREATE TABLE report_standard_work_item (
   create_at timestamp default now(),
   update_by integer,
   update_at timestamp default now(),
-  delete_at timestamp
+  delete_at timestamp,
+  work_book_id integer
 );
 comment on table report_standard_work_item is '标准时间表子表';
 comment on column report_standard_work_item.report_standard_work_id is '标准工数表ID';
@@ -2147,6 +2176,56 @@ comment on column report_approve_history.create_at is '创建时间';
 comment on column report_approve_history.update_by is '更新者ID';
 comment on column report_approve_history.update_at is '更新时间';
 comment on column report_approve_history.delete_at is '删除时间';
+
+
+-- Report - 人机联合表
+drop table if exists report_man_machine_combination;
+CREATE TABLE report_man_machine_combination (
+  id serial PRIMARY KEY,
+  dept_id integer,
+  title varchar(128),
+  sheet_name varchar(128),
+  model_id integer,
+  phase_id integer,
+  stlst integer,
+  month_result timestamp,
+  destinations varchar(128),
+  mt decimal(10, 2),
+  enter decimal(10, 2),
+  selectNum varchar(2),
+  comfirm_by integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp,
+  delete_at timestamp
+);
+comment on table report_total is 'Report - Total表';
+comment on column report_man_machine_combination.dept_id is '组织机构ID';
+comment on column report_man_machine_combination.title is '标题';
+comment on column report_man_machine_combination.sheet_name is 'Sheet名称';
+comment on column report_man_machine_combination.model_id is '机种ID';
+comment on column report_man_machine_combination.month_result is '发行日';
+comment on column report_man_machine_combination.destinations is '仕向';
+comment on column report_man_machine_combination.mt is 'MT 分析表totalRemark';
+comment on column report_man_machine_combination.enter is '输入数值';
+comment on column report_man_machine_combination.selectNum is '选择（N2-N6）';
+comment on column report_man_machine_combination.create_by is '创建者ID';
+comment on column report_man_machine_combination.create_at is '创建时间';
+comment on column report_man_machine_combination.update_by is '更新者ID';
+comment on column report_man_machine_combination.update_at is '更新时间';
+comment on column report_man_machine_combination.delete_at is '删除时间';
+
+-- 人机联合数据表
+drop table if exists ashcraft_table;
+CREATE TABLE ashcraft_table (
+  id serial PRIMARY KEY,
+  p decimal(10, 2),
+  ou decimal(10, 2),
+  mu decimal(10, 2),
+  sa decimal(10, 2),
+  n varchar(10)
+);
 
 -- ----------------------------
 -- Records of basic_staff
