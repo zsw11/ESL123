@@ -492,6 +492,7 @@ export default {
        createReports(Object.assign(
         {
           workId: this.id,
+          workBookIds: [this.id],
           reports: this.createForm.id
         }
       )).then(({page}) => {

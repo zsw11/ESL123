@@ -193,7 +193,7 @@ export function isCtrlKeys (e) {
   return ['Backspace', 'Delete', 'Shift', 'Alt', 'Meta', 'Control'].includes(e.key)
 }
 
-export function download (data) {
+export function download (data, filename) {
   if (!data) {
     return
   }
@@ -201,7 +201,7 @@ export function download (data) {
   let link = document.createElement('a')
   link.style.display = 'none'
   link.href = url
-  link.setAttribute('download', 'excel.xls')
+  link.setAttribute('download', filename)
 
   document.body.appendChild(link)
   link.click()
