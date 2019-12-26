@@ -302,7 +302,7 @@
       // 删除数据
       deleteHandle (row) {
         var ids = row ? [row.modelWorkStationRelaId] : this.dataListSelections.map(item => {
-          return item.id
+          return item.modelWorkStationRelaId
         })
         this.$confirm('此操作将删除数据, 是否继续?', '提示', {
           confirmButtonText: '确定',

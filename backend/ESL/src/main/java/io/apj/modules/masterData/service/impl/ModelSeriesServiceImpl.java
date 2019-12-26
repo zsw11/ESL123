@@ -37,7 +37,7 @@ public class ModelSeriesServiceImpl extends ServiceImpl<ModelSeriesDao, ModelSer
 				.orderBy("update_at", false);
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+					"UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
 		}
 		Page<ModelSeriesEntity> page = this.selectPage(new Query<ModelSeriesEntity>(params).getPage(), entityWrapper);
 

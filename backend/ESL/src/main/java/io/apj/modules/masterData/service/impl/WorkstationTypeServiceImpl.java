@@ -32,7 +32,7 @@ public class WorkstationTypeServiceImpl extends ServiceImpl<WorkstationTypeDao, 
 				(String) params.get("remark"));
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
-					"pinyin like '%" + params.get("name") + "%' " + "or name like '%" + params.get("name") + "%'");
+					"UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
 		}
 		Page<WorkstationTypeEntity> page = this.selectPage(new Query<WorkstationTypeEntity>(params).getPage(),
 				entityWrapper);

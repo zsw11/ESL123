@@ -36,7 +36,7 @@
         <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
         <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
         <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-<!--        <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>-->
+        <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
         <!-- <vxe-table-column title="TimeValue" width="65">
           <template slot-scope="scope">
             {{getTimeValue(scope)}}
@@ -113,7 +113,8 @@ export default {
         a4: null,
         b3: null,
         p2: null,
-        a5: null
+        a5: null,
+        frequency: null
       },
       listDept,
       dataRules: {
@@ -164,7 +165,7 @@ export default {
           Object.assign(
             this.dataForm,
             pick(data, [ 'code', 'a0', 'b0', 'g0', 'a1', 'b1', 'p0', 'm0', 'x0', 'i0',
-                          'a2', 'b2', 'p1', 'a3','tool', 'a4', 'b3', 'p2', 'a5'  ])
+                          'a2', 'b2', 'p1', 'a3','tool', 'a4', 'b3', 'p2', 'a5', 'frequency' ])
           )
         }).finally(() => {
           this.inited = true

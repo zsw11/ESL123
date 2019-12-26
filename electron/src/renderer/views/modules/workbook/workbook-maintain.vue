@@ -19,13 +19,7 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <keyword-search
-              style="width: 100%"
-              v-model="dataForm.deptId"
-              :allowMultiple="true"
-              :searchApi="this.listDept"
-              :allowEmpty="true">
-            </keyword-search>
+            <tree-select style="width: 100%" v-model='dataForm.deptId' :api='listDept' />
           </el-form-item>
         </el-col>
       </el-row>
@@ -147,8 +141,9 @@
     </el-form>
 
     <span class="dialog-footer">
-      <el-button v-if="!$route.path.includes('copy')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="$route.path.includes('add')" type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复   制</el-button>
+      <el-button v-if="$route.path.includes('update')"  type="primary" @click="copyWBook()">修 订</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
     </span>
   </el-card>
@@ -188,7 +183,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        ifAlter: false
       },
       listDept,
       listPhase,
@@ -274,6 +270,7 @@ export default {
   },
   methods: {
     init () {
+      console.log(this.$route)
       this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
@@ -308,6 +305,7 @@ export default {
       } else {
         this.inited = true
       }
+      this.dataForm.ifAlter = this.$route.name === 'update-workbook'
     },
     // 取消信息
     cancleFormSubmit () {
@@ -335,7 +333,7 @@ export default {
     },
     // 复制
     copyWBook(){
-      console.log(this.dataForm)
+      console.log(this.dataForm, 11111111111111)
       copyWorkBook(this.dataForm).then((data)=>{
         if(data.status === 200){
           this.$message({

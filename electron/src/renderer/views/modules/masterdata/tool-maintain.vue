@@ -89,7 +89,9 @@ export default {
         name: [
           { required: true, message: '名称不能为空', trigger: 'blur' }
         ],
-
+        common: [
+          { required: true, message: '是否通用不能为空', trigger: 'blur' }
+        ],
         remark: [
           { max: 512, message: '长度超过了512', trigger: 'blur' }
         ],

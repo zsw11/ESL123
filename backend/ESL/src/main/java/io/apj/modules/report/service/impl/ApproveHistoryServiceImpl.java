@@ -2,6 +2,7 @@ package io.apj.modules.report.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.modules.basic.entity.StaffEntity;
 import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
@@ -71,7 +72,9 @@ public class ApproveHistoryServiceImpl extends ServiceImpl<ApproveHistoryDao, Ap
                 entity.setPhaseName(phaseService.selectById(entity.getPhaseId()).getName());
             }
             if(entity.getNextApproverId()!=null){
-                entity.setNextApproverName(staffService.selectById(entity.getNextApproverId()).getName());
+                StaffEntity staffEntity = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", entity.getNextApproverId()));
+                Long id =staffEntity.getId();
+                entity.setNextApproverName(staffService.selectById(id).getName());
             }
         }
 
