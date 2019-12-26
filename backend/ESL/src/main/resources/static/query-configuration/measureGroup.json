@@ -101,7 +101,7 @@
             },
             {
                 "code": "frequency",
-                "name": "频度",
+                "name": "Fre.",
                 "type": "int"
             },
             {
