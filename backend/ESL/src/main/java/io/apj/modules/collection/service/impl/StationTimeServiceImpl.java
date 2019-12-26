@@ -137,7 +137,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
         }
         EntityWrapper<StationTimeItemEntity>  ew = new EntityWrapper<>();
         ew.eq("station_name",work.getWorkstationName());
-        StationTimeItemEntity stationTimeItem = StationTimeItemService.selectOne(ew);
+        StationTimeItemEntity stationTimeItem = StationTimeItemService.selectOne(ew)==null?new StationTimeItemEntity():StationTimeItemService.selectOne(ew);
         stationTimeItem.setWorkName(work.getWorkName());
         stationTimeItem.setCollectionStationTimeId(stationTimeEntity.getId());
         stationTimeItem.setSub(workstationService.wookStationIdIsSub(work.getWorkstationId()));
