@@ -137,16 +137,15 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 
         OutputStream out = response.getOutputStream();
         ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
-//        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
         WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
 
-        int lastRow = 2 + list.size();
-        int firstRow = 3;
+        int lastRow = 4 + list.size();
+        int firstRow = 5;
         excelWriter.merge(firstRow, lastRow, 0, 0);
-        excelWriter.merge(firstRow, lastRow, 7, 7);
+        excelWriter.merge(firstRow, lastRow, 7, 8);
         Map<Integer, Function<MostValueItemEntity, Object>> options = new HashMap<>();
         options.put(1, MostValueItemEntity::getType);
         options.put(2, MostValueItemEntity::getWorkName);
@@ -155,8 +154,6 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
         excelWriter.finish();
         ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
-//        String fileName = "Most_Value";
-//        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
     }
 
     private void generateTotalData(List<MostValueItemEntity> list, Map<String, Object> map) {

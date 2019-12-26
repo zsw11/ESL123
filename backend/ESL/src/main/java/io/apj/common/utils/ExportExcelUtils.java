@@ -274,7 +274,7 @@ public class ExportExcelUtils {
 				toCell.setCellValue(fromCell.getNumericCellValue());
 			}
 		} else if (fromCellType == XSSFCell.CELL_TYPE_STRING) {
-			toCell.setCellValue(fromCell.getRichStringCellValue());
+			toCell.setCellValue(fromCell.getStringCellValue());
 		} else if (fromCellType == XSSFCell.CELL_TYPE_BLANK) {
 			// nothing21
 		} else if (fromCellType == XSSFCell.CELL_TYPE_BOOLEAN) {
