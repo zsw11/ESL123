@@ -14,6 +14,7 @@ import io.apj.modules.report.entity.AshcraftTableEntity;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
 import io.apj.modules.report.service.AshcraftTableService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,6 +108,25 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         String fileName = "标准工数表";
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
+    }
+
+    @Override
+    public void generateReportData(WorkBookEntity work) {
+        EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                .eq("phase_id",work.getPhaseId());
+        List<ReportManMachineCombinationEntity> list = selectList(entityWrapper);
+        ReportManMachineCombinationEntity reportManMachineCombinationEntity = new ReportManMachineCombinationEntity();
+        if(list.size()>0){
+            reportManMachineCombinationEntity = list.get(0);
+        }else{
+            reportManMachineCombinationEntity.setModelId(work.getModelId());
+            reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
+            reportManMachineCombinationEntity.setStlst(work.getStlst());
+            reportManMachineCombinationEntity.setDeptId(work.getDeptId());
+            insert(reportManMachineCombinationEntity);
+        }
+
     }
 
     private void generateTotalData(Map<String, Object> map)throws IOException {

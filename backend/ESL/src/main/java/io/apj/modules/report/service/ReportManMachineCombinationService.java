@@ -3,6 +3,7 @@ package io.apj.modules.report.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,5 +21,7 @@ public interface ReportManMachineCombinationService extends IService<ReportManMa
     PageUtils queryPage(Map<String, Object> params);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+
+    void generateReportData(WorkBookEntity workBookEntity);
 }
 

@@ -69,6 +69,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Autowired
 	private WorkOperationsService workOperationsService;
 
+	@Autowired
+	private ReportManMachineCombinationService reportManMachineCombinationService;
+
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
@@ -203,6 +206,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			case 1:
 				break;
 			case 2:
+				reportManMachineCombinationService.generateReportData(workBookEntity);
 				break;
 			case 3:
 				// 工位时间报表
