@@ -6,6 +6,7 @@
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
+      <el-button type="primary" icon="el-icon-info" @click="showInfo"></el-button>
     </div>
 
     <div class="video-player-box">
@@ -74,12 +75,15 @@
         </el-tabs>
       </div>
     </div>
+
+    <info-dialog ref="infoDialog" :workbook="workbook"></info-dialog>
   </div>
 </template>
 
 <script>
   import { pick, debounce } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
+  import InfoDialog from './workbook-detail-info-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
   import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
@@ -99,6 +103,7 @@
   export default {
     name: 'WorkbookDetail',
     components: {
+      InfoDialog,
       WorkbookTable,
       videoPlayer
     },
@@ -221,85 +226,13 @@
     },
     methods: {
       // ========================================
-      //                视频播放
+      //                分析表
       // ========================================
-      // 打标签
-      tag () {
-        if (this.$refs.videoPlayer) {
-          if (this.markers.length >= 5) {
-            this.markers.shift()
-          }
-          this.markers.push(this.$refs.videoPlayer.player.currentTime())
-          this.setTags()
-        }
-      },
-      setTags () {
-        if (this.$refs.videoPlayer) {
-          this.$refs.videoPlayer.player.markers.reset(this.markers.map((m, i) => {
-            return {
-              time: m,
-              text: i
-            }
-          }))
-        }
-      },
-      prevTag () {
-        if (this.$refs.videoPlayer) {
-          const currentTime = this.$refs.videoPlayer.player.currentTime()
-          let offset = -1
-          for (let i = this.sortedMarkers.length - 1; i >= 0; i--) {
-            // 寻找第一个点
-            if (offset < 0) {
-              if (this.sortedMarkers[i] + 0.5 < currentTime) {
-                offset = i
-                if (--this.prevCount === 0) break
-                else continue
-              }
-            } else if (--this.prevCount === 0) {
-              offset = i
-              break
-            }
-          }
-          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
-        }
-      },
-      nextTag () {
-        if (this.$refs.videoPlayer) {
-          const currentTime = this.$refs.videoPlayer.player.currentTime()
-          let offset = -1
-          for (let i = 0; i < this.sortedMarkers.length; i++) {
-            // 寻找第一个点
-            if (offset < 0) {
-              if (this.sortedMarkers[i] > currentTime) {
-                offset = i
-                if (--this.nextCount === 0) break
-                else continue
-              }
-            } else if (--this.nextCount === 0) {
-              offset = i
-              break
-            }
-          }
-          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
-        }
-      },
-      clearTags () {
-        this.markers.splice(0)
-      },
-      // ========================================
-      //                分析表录入
-      // ========================================
-      event (e) {
-        this.setTags()
-        // if (this.currentTime) {
-        //   console.log(this.currentTime)
-        //   this.$refs.videoPlayer.player.currentTime(this.currentTime)
-        //   this.currentTime = undefined
-        // }
-      },
+      // 退回上一页
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
       },
+      // 保存
       save () {
         if (this.$refs.workbookTable) {
           this.$confirm(`确定保存分析表?`, '提示', {
@@ -322,12 +255,9 @@
           })
         }
       },
-      openVideo () {
-        ipcRenderer.send('openVideo')
-      },
-      closeVideo () {
-        this.playerOptions.sources[0].src = ''
-        this.clearTags()
+      // 显示分析表信息
+      showInfo () {
+        if (this.$refs.infoDialog) this.$refs.infoDialog.show()
       },
       init () {
         const self = this
@@ -413,6 +343,96 @@
         }
         this.$refs.workbookTable.loadData(this.workbookData[workName])
       },
+      // ========================================
+      //                视频播放
+      // ========================================
+      // 打开视频
+      openVideo () {
+        ipcRenderer.send('openVideo')
+      },
+      // 关闭视频
+      closeVideo () {
+        this.playerOptions.sources[0].src = ''
+        this.clearTags()
+      },
+      // 设置标签
+      setTags () {
+        if (this.$refs.videoPlayer) {
+          this.$refs.videoPlayer.player.markers.reset(this.markers.map((m, i) => {
+            return {
+              time: m,
+              text: i
+            }
+          }))
+        }
+      },
+      // 清空标签
+      clearTags () {
+        this.markers.splice(0)
+      },
+      // 打标签
+      tag () {
+        if (this.$refs.videoPlayer) {
+          if (this.markers.length >= 5) {
+            this.markers.shift()
+          }
+          this.markers.push(this.$refs.videoPlayer.player.currentTime())
+          this.setTags()
+        }
+      },
+      // 上一个标签
+      prevTag () {
+        if (this.$refs.videoPlayer) {
+          const currentTime = this.$refs.videoPlayer.player.currentTime()
+          let offset = -1
+          for (let i = this.sortedMarkers.length - 1; i >= 0; i--) {
+            // 寻找第一个点
+            if (offset < 0) {
+              if (this.sortedMarkers[i] + 0.5 < currentTime) {
+                offset = i
+                if (--this.prevCount === 0) break
+                else continue
+              }
+            } else if (--this.prevCount === 0) {
+              offset = i
+              break
+            }
+          }
+          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
+        }
+      },
+      // 下一个标签
+      nextTag () {
+        if (this.$refs.videoPlayer) {
+          const currentTime = this.$refs.videoPlayer.player.currentTime()
+          let offset = -1
+          for (let i = 0; i < this.sortedMarkers.length; i++) {
+            // 寻找第一个点
+            if (offset < 0) {
+              if (this.sortedMarkers[i] > currentTime) {
+                offset = i
+                if (--this.nextCount === 0) break
+                else continue
+              }
+            } else if (--this.nextCount === 0) {
+              offset = i
+              break
+            }
+          }
+          offset >= 0 && this.$refs.videoPlayer.player.currentTime(this.sortedMarkers[offset]);
+        }
+      },
+      event (e) {
+        this.setTags()
+        // if (this.currentTime) {
+        //   console.log(this.currentTime)
+        //   this.$refs.videoPlayer.player.currentTime(this.currentTime)
+        //   this.currentTime = undefined
+        // }
+      },
+      // ========================================
+      //                分析表录入
+      // ========================================
       copy () {
         this.$refs.workbookTable.copy()
       },
