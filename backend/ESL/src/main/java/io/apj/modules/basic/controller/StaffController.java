@@ -61,8 +61,8 @@ public class StaffController extends AbstractController {
 	private Resource staffData;
 	@Autowired
 	private JobService jobService;
-	@Value("classpath:static/query-configuration/areaData.json")
-	private Resource areaData;
+//	@Value("classpath:static/query-configuration/areaData.json")
+//	private Resource areaData;
 
 	/**
 	 * 列表
@@ -289,9 +289,9 @@ public class StaffController extends AbstractController {
 		}
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dictMap = sysDictService.getDictDetail();
-		String jsonStr = IOUtils.toString(areaData.getInputStream(), Charset.forName("UTF-8"));
-		Gson gson = new Gson();
-		JsonObject areaDataFilter = gson.fromJson(jsonStr, JsonObject.class);
+//		String jsonStr = IOUtils.toString(areaData.getInputStream(), Charset.forName("UTF-8"));
+//		Gson gson = new Gson();
+//		JsonObject areaDataFilter = gson.fromJson(jsonStr, JsonObject.class);
 		for (StaffEntity item : staffEntities) {
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("staff", item, dictMap);
