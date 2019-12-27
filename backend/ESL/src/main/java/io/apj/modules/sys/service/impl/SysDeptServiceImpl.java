@@ -41,7 +41,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 	private SysUserService sysUserService;
 
 	@Override
-	@DataFilter(subDept = true, user = false)
+	@DataFilter(subDept = true, user = false, deptId = "id")
 	public List<SysDeptEntity> queryList(Map<String, Object> params) {
 		EntityWrapper<SysDeptEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper
@@ -100,6 +100,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 	}
 
 	@Override
+	@DataFilter(subDept = true, user = false, deptId = "id")
 	public List<SysDeptEntity> queryListByDeptCode(Map<String, Object> params) {
 
 		SysDeptEntity dept = this.selectOne(new EntityWrapper<SysDeptEntity>()
@@ -129,7 +130,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 	}
 
 	@Override
-	@DataFilter(subDept = true, user = false)
+	@DataFilter(subDept = true, user = false, deptId = "id")
 	public List<SysDeptEntity> queryListByName(Map<String, Object> params) {
 		List<Long> deptIds = new ArrayList<>();
 		EntityWrapper<SysDeptEntity> entityWrapper = new EntityWrapper<>();
