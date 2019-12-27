@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.service.ModelService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,8 @@ import io.apj.common.utils.R;
 public class WorkBookController extends AbstractController {
 	@Autowired
 	private WorkBookService workBookService;
+	@Autowired
+    private ModelService modelService;
 
 	/**
 	 * 列表
@@ -52,7 +56,8 @@ public class WorkBookController extends AbstractController {
 	@RequiresPermissions("workBook:workbook:info")
 	public R info(@PathVariable("id") Integer id) {
 		WorkBookEntity workBook = workBookService.selectById(id);
-
+        ModelEntity modelEntity = modelService.selectById(workBook.getModelId());
+        workBook.setModelEntity(modelEntity);
 		return R.ok().put("workBook", workBook);
 	}
 
