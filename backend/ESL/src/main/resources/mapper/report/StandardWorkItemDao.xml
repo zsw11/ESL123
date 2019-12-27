@@ -19,7 +19,7 @@
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
 
-    <select id="generateDataByWorkBook" resultMap="mostValueItemMap">
+    <select id="generateDataByWorkBook" resultMap="standardWorkItemMap">
         select wb.second_convert as first_time, wb.second_convert as second_time, wb.second_convert as third_time,
         wb.work_name as process_name, wb.workstation_id as process_no, wb.id as work_book_id, r.id
         from work_book wb
