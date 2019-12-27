@@ -53,28 +53,9 @@
           </el-form-item>
         </el-col>
       </el-row>
-
       <el-row>
         <el-col :span="9">
-          <el-form-item :label="'工号'"
-                        prop="jobNumber">
-            <el-input v-model="dataForm.jobNumber"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="9"
-                :offset="2">
-          <el-form-item label="性别"
-                        prop="gender">
-            <dict-select
-              style="width: 100%"
-              dictType="Gender"
-              v-model="dataForm.gender"></dict-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="9">
-          <el-form-item :label="'电话'"
+          <el-form-item :label="'手机号'"
                         prop="mobilephone">
             <el-input v-model="dataForm.mobilephone"></el-input>
           </el-form-item>
@@ -87,7 +68,14 @@
           </el-form-item>
         </el-col>
       </el-row>
-
+      <el-row>
+        <el-col :span="9">
+          <el-form-item :label="'工号'"
+                        prop="jobNumber">
+            <el-input v-model="dataForm.jobNumber"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col :span="20">
           <el-form-item label="备注"
@@ -169,11 +157,11 @@ export default {
         ],
         gender: [{ max: 10, message: '长度超过了10', trigger: 'blur' }],
         birthDate: [{ max: 10, message: '长度超过了10', trigger: 'blur' }],
-        email: [
-          { validator: validateEmail, trigger: 'blur' }
-        ],
+        // email: [
+        //   { validator: validateEmail, trigger: 'blur' }
+        // ],
         mobilephone: [
-          { validator: validateMobile, trigger: 'blur' }
+          { max: 4, message: '长度超过了4', trigger: 'blur' }
         ],
         familyProvince: [{ max: 8, message: '长度超过了8', trigger: 'blur' }],
         familyCity: [{ max: 8, message: '长度超过了8', trigger: 'blur' }],
