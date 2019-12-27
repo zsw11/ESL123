@@ -8,10 +8,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.collection.dao.StationTimeDao;
+import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
 import io.apj.modules.collection.service.StationTimeItemService;
@@ -28,13 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 
 @Service("stationTimeService")
@@ -175,18 +173,24 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 
         generateTotalData(list, map);
         // TODO 添加调用模版方法及生成目标excel文件方法
+        String sheetName = stationTimeEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("collection_station_time_template");
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/collection_station_time.xls";
-        OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("station_time").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "工位时间表";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
+
+        int lastRow = 1 + list.size();
+        int firstRow = 2;
+        Map<Integer, Function<StationTimeItemEntity, Object>> options = new HashMap<>();
+        options.put(0, StationTimeItemEntity::getSub);
+        options.put(1, StationTimeItemEntity::getStationName);
+        ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
+
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<StationTimeItemEntity> list, Map<String, Object> map) {

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -29,15 +30,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("standardWorkService")
@@ -182,24 +181,23 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         ModelEntity model = modelService.selectById(modelId);
         map.put("modelName", model.getName());
         map.put("modelType", model.getCode());
-        //map.put("unit", standardWorkEntity.getUnit());
 
         generateTotalData(list, map);
         // TODO 添加调用模版方法及生成目标excel文件方法
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
-        System.out.println(path);
+        String sheetName = standardWorkEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("report_standard_work_template");
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_standard_work.xls";
+
         OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("standardWork").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        //ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "标准工数表";
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<StandardWorkItemEntity> list, Map<String, Object> map) {

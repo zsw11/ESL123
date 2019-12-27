@@ -7,7 +7,8 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.*;
+import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.masterData.entity.ModelEntity;
@@ -21,19 +22,17 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TotalDao;
 import io.apj.modules.report.service.TotalService;
 import org.springframework.util.ClassUtils;
@@ -173,20 +172,24 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 
 
         // TODO 添加调用模版方法及生成目标excel文件方法
-        System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
-        String path =ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String sheetName = totalEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("report_total_template");
-        String fileName1 = path+"exportTemplates/report_total_template.xls";
-        OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
         WriteSheet writeSheet = EasyExcel.writerSheet("report_total_template").build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "report_total_template";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+
+        int lastRow = 13 + list.size();
+        int firstRow = 14;
+        Map<Integer, Function<TotalItemEntity, Object>> options = new HashMap<>();
+        options.put(0, TotalItemEntity::getWorkName);
+        ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
+
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<TotalItemEntity> list, Map<String, Object> map) {

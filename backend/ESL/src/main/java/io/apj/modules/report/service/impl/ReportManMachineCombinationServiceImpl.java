@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -21,12 +22,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +93,8 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         map.put("modelType", model.getCode());
 
         // TODO 添加调用模版方法及生成目标excel文件方法
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        String sheetName = reportManMachineCombinationEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         BigDecimal P = (BigDecimal) map.get("P");
         String templateFileName = "";
         if(P.compareTo(BigDecimal.valueOf(0.79))>0){
@@ -98,17 +102,12 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         }else {
             templateFileName = PathUtil.getExcelTemplatePath("man_machine_joint_template1");
         }
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_standard_work.xls";
-        OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("standardWork").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
-        excelWriter.fill(map, writeSheet);
-        //excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "标准工数表";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.fill(map,fillConfig, writeSheet);
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     @Override
