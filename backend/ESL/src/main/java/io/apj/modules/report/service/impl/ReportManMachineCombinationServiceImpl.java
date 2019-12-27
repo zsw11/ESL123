@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -137,8 +138,8 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
 
         BigDecimal HT1 = coefficient.multiply((BigDecimal) map.get("enter"));
         BigDecimal HT = HT1.subtract(BigDecimal.valueOf(0.1), new MathContext(0))
-                .multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(10),2);
-        BigDecimal P1 = HT.divide((BigDecimal)map.get("mt"),3);
+                .multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(10),2, RoundingMode.HALF_UP);
+        BigDecimal P1 = HT.divide((BigDecimal)map.get("mt"),3,RoundingMode.HALF_UP);
         BigDecimal P = P1.add( BigDecimal.valueOf(0.005));
         ew.lt("p",P).isNotNull("ou").isNotNull("sa").isNotNull("mu");
         ew.setSqlSelect("max(p) as p, ou, sa, mu");
@@ -150,9 +151,9 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         map.put("P",P);
         if(P.compareTo(BigDecimal.valueOf(0.79))>0){
             //P>0.79
-            BigDecimal  rWorkTime = HT.multiply(coefficient).divide(BigDecimal.valueOf(0.95),4);
+            BigDecimal  rWorkTime = HT.multiply(coefficient).divide(BigDecimal.valueOf(0.95),0,RoundingMode.HALF_UP);
             BigDecimal  STime = rWorkTime.multiply(coefficient);
-            BigDecimal  STime1 = STime.divide(BigDecimal.valueOf(10),0).multiply(BigDecimal.valueOf(10));
+            BigDecimal  STime1 = STime.divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(10));
             BigDecimal  N2Time = STime1.multiply(BigDecimal.valueOf(0.06));
             map.put("rWorkTime",rWorkTime);
             map.put("STime",STime);
@@ -167,12 +168,12 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
             BigDecimal tableNum = BigDecimal.valueOf(Double.valueOf((String)map.get("tableNum")));
             BigDecimal mt = (BigDecimal)map.get("mt");
             BigDecimal  i = HT.add(mt).multiply(ashcraftTableEntity.getSa())
-                    .divide(BigDecimal.valueOf(100));
+                    .divide(BigDecimal.valueOf(100),0,RoundingMode.HALF_UP);
             //map.get("tableNum") => 2 3 4 5 6
-            BigDecimal rWorkTime = HT.add(mt).add(i).divide(tableNum);
-            BigDecimal sTime =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),0);
-            BigDecimal sTime1 = rWorkTime.multiply(coefficient);
-            BigDecimal rdValues =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(10),0)
+            BigDecimal rWorkTime = HT.add(mt).add(i).divide(tableNum,RoundingMode.HALF_UP);
+            BigDecimal sTime =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),0,RoundingMode.HALF_UP);
+            BigDecimal sTime1 = rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),2,RoundingMode.HALF_UP);
+            BigDecimal rdValues =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(10));
             map.put("i",i);
             map.put("rWorkTime",rWorkTime);
