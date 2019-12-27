@@ -110,14 +110,19 @@
     data () {
       const self = this
       return {
+        // 界面
         workbookPercents,
         workbookPercent: 'half',
+        // 数据
         workbook: {},
         workbookData: {},
         workbooks: [],
         currentWorkbook: null,
+        saveInterval: null,
+        // 操作
         listener: null,
         addedOperation: null,
+        // 视频
         time: 0,
         duration: null,
         videoPath: '',
@@ -218,10 +223,19 @@
         })
       })
     },
+    activated () {
+      if (this.workbook) this.intervalSave()
+      this.addShortcut()
+    },
     deactivated () {
       this.closeVideo()
+      this.removeShortcut()
+      clearInterval(this.saveInterval)
+      this.saveInterval = null
     },
     destroyed () {
+      clearInterval(this.saveInterval)
+      this.saveInterval = null
       this.removeShortcut()
     },
     methods: {
@@ -232,43 +246,53 @@
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
       },
+      // 定时保存
+      intervalSave () {
+        const self = this
+        if (!self.saveInterval) {
+          self.saveInterval = setInterval(() => {
+            self.doSave()
+          }, 1000 * 20);
+        }
+      },
       // 保存
-      save () {
+      async doSave () {
+        const fullData = this.$refs.workbookTable.getFullData()
+        // fullData[0].alterType = 'edit'
+        // fullData[0].alterInfo =  [
+        //   {
+        //     filed: 'operation',
+        //     alterType: 'edit',
+        //     origin: 'AAA',
+        //     display: 'html'
+        //   },
+        //   {
+        //     filed: 'a0',
+        //     alterType: 'delete'
+        //   },
+        //   {
+        //     filed: 'a3',
+        //     alterType: 'new'
+        //   }
+        // ]
+        await updateAll(this.workbook.id, {
+          workBook: pick(this.workbook, ['id']),
+          workOperations: fullData
+        })
+      },
+      async save () {
         if (this.$refs.workbookTable) {
           this.$confirm(`确定保存分析表?`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
-            const fullData = this.$refs.workbookTable.getFullData()
-            // fullData[0].alterType = 'edit'
-            // fullData[0].alterInfo =  [
-            //   {
-            //     filed: 'operation',
-            //     alterType: 'edit',
-            //     origin: 'AAA',
-            //     display: 'html'
-            //   },
-            //   {
-            //     filed: 'a0',
-            //     alterType: 'delete'
-            //   },
-            //   {
-            //     filed: 'a3',
-            //     alterType: 'new'
-            //   }
-            // ]
-            updateAll(this.workbook.id, {
-              workBook: pick(this.workbook, ['id']),
-              workOperations: fullData
-            }).then(res => {
-              console.log(res)
-              this.$message({
-                message: '保存成功',
-                type: 'success',
-                duration: 1500,
-                onClose: this.cancleFormSubmit
-              })
+          }).then(async () => {
+            await this.doSave()
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
             })
           })
         }
@@ -285,7 +309,8 @@
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
           self.workbookData[workBook.workName] = workBook.workOperationsList
-          this.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
+          self.intervalSave()
+          self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
       },
       // 快捷键
@@ -355,6 +380,7 @@
       removeShortcut () {
         if (this.listener) {
           document.removeEventListener('keydown', this.listener)
+          this.listener = null
           console.log('Remove Listener')
         }
       },
