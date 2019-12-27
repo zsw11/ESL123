@@ -167,7 +167,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
@@ -208,7 +208,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
 
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<TotalItemEntity> list, Map<String, Object> map) {

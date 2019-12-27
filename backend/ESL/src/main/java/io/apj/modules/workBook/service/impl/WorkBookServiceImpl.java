@@ -358,7 +358,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	}
 
 	@Override
-	public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
 		Integer phaseId = (Integer)params.get("phaseId");
 		Integer modelId = (Integer)params.get("modelId");
 		String stlst = params.get("stlst").toString();
@@ -367,6 +367,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
 		String fileName = "test";
 		ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+		return workBookFilePaths;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
 import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
@@ -21,10 +22,12 @@ import io.apj.modules.report.service.StandardTimeItemService;
 import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -118,7 +121,7 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
         String stlst = params.get("stlst").toString();
@@ -148,7 +151,7 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<StandardTimeItemEntity> list, Map<String, Object> map) {

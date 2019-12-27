@@ -1,6 +1,5 @@
 package io.apj.modules.report.service.impl;
 
-import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -172,7 +171,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
@@ -207,7 +206,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
         excelWriter.fill(list, fillConfig, writeSheet);
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<StandardWorkItemEntity> list, Map<String, Object> map) {

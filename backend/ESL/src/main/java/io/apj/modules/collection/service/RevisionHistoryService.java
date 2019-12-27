@@ -1,10 +1,12 @@
 package io.apj.modules.collection.service;
 
 import com.baomidou.mybatisplus.service.IService;
+
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -25,7 +27,7 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
 
     void updateEntity(RevisionHistoryEntity revisionHistory);
 
-    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+    List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
     /**
      * 是否还可以提交审批

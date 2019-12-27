@@ -2,7 +2,6 @@ package io.apj.modules.collection.service.impl;
 
 import io.apj.common.utils.DateUtils;
 import io.apj.common.utils.ExcelUtils;
-import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -135,7 +134,7 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
         String stlst = params.get("stlst").toString();
@@ -167,14 +166,17 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 
         int lastRow = 2 + list.size();
         int firstRow = 3;
-        excelWriter.merge(firstRow, lastRow, 0, 0);
+        if (lastRow != firstRow) {
+            
+            excelWriter.merge(firstRow, lastRow, 0, 0);
+        }
         Map<Integer, Function<CompareItemEntity, Object>> options = new HashMap<>();
         options.put(1, CompareItemEntity::getSecondColumnName);
         options.put(2, CompareItemEntity::getWorkName);
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
 
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<CompareItemEntity> list, Map<String, Object> map) {

@@ -136,6 +136,7 @@
             <el-button
               size="mini"
               type="text"
+              @click="down(scope.row)"
             >下载</el-button>
             <el-button
               size="mini"
@@ -198,7 +199,7 @@ import { listReportChangeRecord, deleteReportChangeRecord } from '@/api/reportCh
 import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
-import { createReportApprove } from '@/api/reportApprove'
+import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { listStaff } from '@/api/staff'
@@ -513,6 +514,17 @@ export default {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/edit-changerecord/${id}` : '/add-changerecord' })
       })
+    },
+    down(row){
+      let data ={
+        modelId: row.modelId,
+        phaseId: row.phaseId,
+        stlst: row.stlst,
+        reportId: 13
+      }
+      downloadReportApprove(data).then(response => {
+        
+      });
     }
   }
 }

@@ -1,16 +1,10 @@
 package io.apj.modules.collection.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.*;
+import io.apj.common.utils.ExcelUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.StationTimeDao;
-import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
 import io.apj.modules.collection.service.StationTimeItemService;
@@ -24,16 +18,30 @@ import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.function.Function;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("stationTimeService")
@@ -153,7 +161,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         // TODO
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
@@ -191,8 +199,8 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
         options.put(0, StationTimeItemEntity::getSub);
         options.put(1, StationTimeItemEntity::getStationName);
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
-
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<StationTimeItemEntity> list, Map<String, Object> map) {
