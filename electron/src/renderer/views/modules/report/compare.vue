@@ -277,6 +277,7 @@
             <el-button
               size="mini"
               type="text"
+              @click="down(scope.row)"
             >下载</el-button>
             <el-button
               size="mini"
@@ -342,7 +343,7 @@ import { listModel } from '@/api/model'
 import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
-import { createReportApprove } from '@/api/reportApprove'
+import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
 import { listStaff } from '@/api/staff'
 
 export default {
@@ -665,6 +666,17 @@ export default {
       listDictItem({ type: 'ST' }).then(({data}) => {
         this.dictItemSTLST = keyBy(data, 'code')
       })
+    },
+    down(row){
+      let data ={
+        modelId: row.modelId,
+        phaseId: row.phaseId,
+        stlst: row.stlst,
+        reportId: 4
+      }
+      downloadReportApprove(data).then(response => {
+        
+      });
     }
   }
 }

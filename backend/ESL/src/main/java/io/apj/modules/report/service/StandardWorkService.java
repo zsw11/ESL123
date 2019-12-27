@@ -1,10 +1,12 @@
 package io.apj.modules.report.service;
 
 import com.baomidou.mybatisplus.service.IService;
+
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.StandardWorkEntity;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -23,7 +25,7 @@ public interface StandardWorkService extends IService<StandardWorkEntity> {
 
     void generateReportData(List<Integer> workBookIds);
 
-    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+    List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
     /**
      * 是否还可以提交审批

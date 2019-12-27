@@ -2,6 +2,8 @@ package io.apj.modules.sys.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -73,6 +75,7 @@ public class SysLoginController extends AbstractController {
 //	@PostMapping("/sys/login")
 	@PutMapping("/api/v1/passport/login")
 	public ResponseEntity<Object> login(@RequestBody SysLoginForm form) throws IOException {
+		Map<String, Object> map = new HashMap<String, Object>();
 		if (form.getApo()) {
 			Boolean flag = false;
 			try {
@@ -85,6 +88,10 @@ public class SysLoginController extends AbstractController {
 			if (flag) {
 				SysUserEntity user = sysUserService.queryByUserName(form.getUsername().toUpperCase());
 				if (user != null) {
+					// 初始化用户数据权限
+					map.put("userId", user.getId());
+					// 调用切面dataFilterCut
+					sysUserTokenService.initUserDF(map);
 					return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
 				}
 				return RD.UNAUTHORIZED("USER_NOT_EXIST", "APO登录失败，请联系管理员");
@@ -110,7 +117,11 @@ public class SysLoginController extends AbstractController {
 			// 账号锁定
 			if (user.getStatus() == 0)
 				return RD.UNAUTHORIZED("USER_LOCK", "账号已被锁定");
-
+			
+			// 初始化用户数据权限
+			map.put("userId", user.getId());
+			// 调用切面dataFilterCut
+			sysUserTokenService.initUserDF(map);
 			return RD.ok(SysUserEntityVo.makeVoToken(user, sysUserTokenService.createTokenRD(user.getId())));
 		}
 	}

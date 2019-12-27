@@ -1,10 +1,12 @@
 package io.apj.modules.report.service;
 
 import com.baomidou.mybatisplus.service.IService;
+
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ChangeRecordEntity;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,6 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
 
     void updateEntity(ChangeRecordEntity changeRecord);
 
-    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+    List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 }
 

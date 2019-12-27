@@ -1,15 +1,5 @@
 package io.apj.modules.report.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -28,9 +18,6 @@ import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,6 +29,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("changeRecordService")
@@ -169,7 +168,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         //TODO
         Integer phaseId =  Integer.valueOf(params.get("phaseId").toString());
         Integer modelId = Integer.valueOf(params.get("modelId").toString());
@@ -195,16 +194,13 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         String sheetName = changeRecordEntity.getSheetName();
         String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
 
-        OutputStream out = response.getOutputStream();
         ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
-        //ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
         WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
         excelWriter.finish();
-        out.flush();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<ChangeRecordItemEntity> list, Map<String, Object> map) {

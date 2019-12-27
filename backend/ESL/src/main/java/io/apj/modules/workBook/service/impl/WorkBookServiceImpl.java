@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.*;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
@@ -72,6 +74,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private ReportManMachineCombinationService reportManMachineCombinationService;
 
 	@Override
+	@DataFilter(subDept = true, user = true)
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
@@ -103,7 +106,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
 			entityWrapper.eq("workstation_id", Integer.parseInt((String) params.get("workstationId")));
 		}
-
+		entityWrapper.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 		Page<WorkBookEntity> page = this.selectPage(new Query<WorkBookEntity>(params).getPage(), entityWrapper);
 		for (WorkBookEntity entity : page.getRecords()) {
 			if (entity.getDeptId() != null) {
@@ -362,7 +365,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	}
 
 	@Override
-	public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
 		Integer phaseId = (Integer)params.get("phaseId");
 		Integer modelId = (Integer)params.get("modelId");
 		String stlst = params.get("stlst").toString();
@@ -371,6 +374,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
 		String fileName = "test";
 		ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+		return workBookFilePaths;
 	}
 
 	@Override

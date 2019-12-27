@@ -204,7 +204,7 @@
     },
     created () {
       this.init()
-      this.handleShortcut()
+      this.addShortcut()
       const self = this
       ipcRenderer.on('openVideo', function (event, duration, videoPath) {
         self.duration = parseFloat(duration)
@@ -222,7 +222,7 @@
       this.closeVideo()
     },
     destroyed () {
-      this.handleShortcut()
+      this.removeShortcut()
     },
     methods: {
       // ========================================
@@ -270,12 +270,9 @@
         })
       },
       // 快捷键
-      handleShortcut () {
+      addShortcut () {
         const self = this
-        if (this.listener) {
-          document.removeEventListener('keydown', this.listener)
-          console.log('Remove Listener')
-        } else {
+        if (!this.listener) {
           this.listener = function (e) {
             if (e.ctrlKey) {
               switch (e.key) {
@@ -334,6 +331,12 @@
           }
           document.addEventListener('keydown', this.listener)
           console.log('Add Listener')
+        }
+      },
+      removeShortcut () {
+        if (this.listener) {
+          document.removeEventListener('keydown', this.listener)
+          console.log('Remove Listener')
         }
       },
       // 更新workbook数据
