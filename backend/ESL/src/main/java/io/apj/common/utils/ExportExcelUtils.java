@@ -309,7 +309,7 @@ public class ExportExcelUtils {
 			if (shape instanceof HSSFPicture) {
 				HSSFPicture pic = (HSSFPicture) shape;
 				int pictureIndex = pic.getPictureIndex();
-				HSSFClientAnchor anchor = pic.getPreferredSize();
+				HSSFClientAnchor anchor = pic.getClientAnchor();//pic.getPreferredSize();
 				HSSFPatriarch patriarch = toSheet.createDrawingPatriarch();
 				int index = wb.addPicture(pic.getPictureData().getData(), 2);
 				patriarch.createPicture(anchor,pictureIndex);
