@@ -114,7 +114,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['tool.name', 'tool.remark', 'model.name']
+const defaultExport = ['tool.name', 'tool.common','tool.remark']
 
 export default {
   name: 'toolList',
@@ -154,6 +154,7 @@ export default {
         name: '治工具信息',
         children: [
           { code: 'name', name: '治工具名称', type: 'string', required: true },
+          { code: 'common', name: '是否通用', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: false }
         ]
       },

@@ -118,7 +118,7 @@ import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 import { Message } from 'element-ui'
 
-const defaultExport = ['part.name', 'part.remark', 'model.name']
+const defaultExport = ['part.name', 'part.common','part.remark']
 
 export default {
   name: 'partList',
@@ -158,6 +158,7 @@ export default {
         name: '部品',
         children: [
           { code: 'name', name: '部品名称', type: 'string', required: true },
+          { code: 'common', name: '是否通用', type: 'string', required: true },
           { code: 'remark', name: '备注', type: 'string', required: false },
         ]
       },
