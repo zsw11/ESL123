@@ -161,7 +161,8 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">录入</el-button>
+            <el-button  type="text" size="small" @click="editWorkbook(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
             <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
@@ -575,10 +576,16 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-    // 新增 / 修改
+    // 录入
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/workbook-detail/${id}` : '/add-workbook' })
+      })
+    },
+    // 编辑
+    editWorkbook(id) {
+      this.$nextTick(() => {
+        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook' })
       })
     },
     // 复制
