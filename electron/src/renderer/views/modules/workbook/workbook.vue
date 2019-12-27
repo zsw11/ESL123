@@ -11,9 +11,10 @@
         class="clearfix" style="min-width: 1000px">
         <div class="wookbook-min-width">
 
-          <el-form-item :label="'分析表名称'" prop="workName" >
+          <el-form-item :label="'作业名'" prop="workName" >
             <el-input v-model="listQuery.workName" clearable></el-input>
           </el-form-item>
+
 
           <el-form-item :label="'部门'" prop="deptId" >
             <tree-select v-model='listQuery.deptId' :api='listDept' />
@@ -48,6 +49,7 @@
               </keyword-search>
           </el-form-item>
 
+
           <el-form-item :label="'工位'" prop="workstationId" >
             <keyword-search
               clearable
@@ -58,7 +60,9 @@
             </keyword-search>
           </el-form-item>
 
-
+          <el-form-item :label="'版本号'" prop="versionNumber" >
+            <el-input v-model="listQuery.versionNumber" clearable></el-input>
+          </el-form-item>
 
 <!--          <el-form-item :label="'制表人'" prop="makerId" >-->
 <!--            <el-input v-model="listQuery.makerId"  clearable></el-input>-->
@@ -89,6 +93,8 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
+          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
+          <import-data :config="importConfig"></import-data>
           <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
         </div>
       </div>
@@ -105,9 +111,15 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="workName" label="分析表名称" >
+        <el-table-column align="center" prop="workName" label="作业名" >
           <template slot-scope="scope">
             <span>{{scope.row.workName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="versionNumber" label="版本号" >
+          <template slot-scope="scope">
+            <span>{{scope.row.versionNumber }}</span>
           </template>
         </el-table-column>
 
@@ -155,11 +167,12 @@
         </el-table-column>
 
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="280" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">录入</el-button>
+            <el-button  type="text" size="small" @click="editWorkbook(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
             <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
@@ -214,16 +227,53 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, WorkBookImport, WorkBookExport } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
-import { fetchUserDetail } from '@/api/passport'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+
+const defaultExport = [
+  "workOperations.seqNumber",
+  "workOperations.h",
+  "workOperations.operation",
+  "workOperations.key",
+  "workOperations.a0",
+  "workOperations.b0",
+  "workOperations.g0",
+  "workOperations.a1",
+  "workOperations.b1",
+  "workOperations.p0",
+  "workOperations.m0",
+  "workOperations.x0",
+  "workOperations.i0",
+  "workOperations.a2",
+  "workOperations.b2",
+  "workOperations.p1",
+  "workOperations.a3",
+  "workOperations.tool",
+  "workOperations.a4",
+  "workOperations.b3",
+  "workOperations.p2",
+  "workOperations.a5",
+  "workOperations.frequency",
+  "workOperations.timeValue",
+  "workOperations.tmu",
+  "workOperations.secondConvert",
+  "workOperations.remark"
+];
 
 export default {
-  name: 'workBookList',
+  name: 'workbookList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       flag: true,
@@ -325,23 +375,89 @@ export default {
       total: 0,
       dataListLoading: false,
       dataListSelections: [],
-      attributes: [{
-        code: 'workBook',
-        name: '分析表'
-        // children: [
-        //   { code: 'id', name: '分析表名称', type: 'string', required: true },
-        //   { code: 'deptId', name: '部门', type: 'string', required: true },
-        //   { code: 'STLST', name: 'LST/ST', type: 'string', required: true },
-        //   { code: 'modelId', name: '机种', type: 'string', required: true },
-        //   { code: 'phaseId', name: '生产阶段', type: 'string', required: true },
-        //   { code: 'destinations', name: '仕向', type: 'string', required: true },
-        //   { code: 'workstationId', name: '工位', type: 'string', required: true },
-        //   { code: 'makedAt', name: '制表日期', type: 'string', required: true }
-        // ]
-      }],
+      attributes: [
+      //   {
+      //   code: 'workbook',
+      //   name: '分析表',
+      //   children: [
+      //     {code: 'workName', name: '作业名', type: 'string', required: true},
+      //     {code: 'deptId', name: '部门', type: 'string', required: true},
+      //     {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+      //     {code: 'modelId', name: '机种', type: 'string', required: true},
+      //     {code: 'phaseId', name: '生产阶段', type: 'string', required: true},
+      //     {code: 'destinations', name: '仕向', type: 'string', required: true},
+      //     {code: 'workstationId', name: '工位', type: 'string', required: true},
+      //     {code: 'makedAt', name: '制表日期', type: 'string', required: true}
+      //   ]
+      // },
+        {
+          code: 'workOperations',
+          name: '分析表明细',
+          children: [
+            {code: 'seqNumber', name: 'NO.', type: 'string', required: true},
+            {code: 'h', name: 'H', type: 'string', required: true},
+            {code: 'operation', name: 'Work Method', type: 'string', required: true},
+            {code: 'key', name: 'Key', type: 'string', required: true},
+            {code: 'a0', name: 'A', type: 'string', required: true},
+            {code: 'b0', name: 'b', type: 'string', required: true},
+            {code: 'g0', name: 'G', type: 'string', required: true},
+            {code: 'a1', name: 'A', type: 'string', required: true},
+            {code: 'b1', name: 'B', type: 'string', required: true},
+            {code: 'p0', name: 'P', type: 'string', required: true},
+            {code: 'm0', name: 'M', type: 'string', required: true},
+            {code: 'x0', name: 'X', type: 'string', required: true},
+            {code: 'i0', name: 'I', type: 'string', required: true},
+            {code: 'a2', name: 'A', type: 'string', required: true},
+            {code: 'b2', name: 'B', type: 'string', required: true},
+            {code: 'p1', name: 'P', type: 'string', required: true},
+            {code: 'a3', name: 'A', type: 'string', required: true},
+            {code: 'tool', name: 'Tool', type: 'string', required: true},
+            {code: 'a4', name: 'A', type: 'string', required: true},
+            {code: 'b3', name: 'B', type: 'string', required: true},
+            {code: 'p2', name: 'P', type: 'string', required: true},
+            {code: 'a5', name: 'A', type: 'string', required: true},
+            {code: 'frequency', name: 'Fre.', type: 'string', required: true},
+            {code: 'timeValue', name: 'TimeValue.', type: 'string', required: true},
+            {code: 'tmu', name: 'TMU', type: 'string', required: true},
+            {code: 'secondConvert', name: 'Sec./comV', type: 'string', required: true},
+            {code: 'remark', name: 'Remark', type: 'string', required: true}
+          ]
+        }],
       complexFilters: [],
       dictItemSTLST: [],
       id: '',
+      // 导出
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段固定不可变
+      importAttributes: [
+        "workOperations.seqNumber",
+        "workOperations.h",
+        "workOperations.operation",
+        "workOperations.key",
+        "workOperations.a0",
+        "workOperations.b0",
+        "workOperations.g0",
+        "workOperations.a1",
+        "workOperations.b1",
+        "workOperations.p0",
+        "workOperations.m0",
+        "workOperations.x0",
+        "workOperations.i0",
+        "workOperations.a2",
+        "workOperations.b2",
+        "workOperations.p1",
+        "workOperations.a3",
+        "workOperations.tool",
+        "workOperations.a4",
+        "workOperations.b3",
+        "workOperations.p2",
+        "workOperations.a5",
+        "workOperations.frequency",
+        "workOperations.timeValue",
+        "workOperations.tmu",
+        "workOperations.secondConvert",
+        "workOperations.remark"
+      ],
       selectedWorkBookIds: []
     }
   },
@@ -351,6 +467,61 @@ export default {
     self.listQuery.makedAt = null
     self.getDictByType()
     self.getDataList()
+  },
+  computed: {
+    importConfig() {
+      return {
+        attributes: [
+          {
+            code: this.attributes[0].code,
+            name: this.attributes[0].name,
+            children: filterAttributes(this.attributes, {
+              attributes: this.importAttributes,
+              plain: true
+            }),
+            sampleDatas: [["10", "66", "test", "key", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+              "1", "1", "0","1","34","98","160","4.5",""]]
+          }
+        ],
+        importApi: WorkBookImport,
+        importSuccessCb: () => {
+          this.getDataList();
+        }
+      };
+    },
+    exportConfig() {
+      return {
+        attributes: filterAttributes(this.attributes, "isExport"),
+        exportApi: WorkBookExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch("user/SetAExport", {
+            page: "workbook",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport);
+          this.$store.dispatch("user/SetAExport", {
+            page: "workbook",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        }
+      };
+    }
   },
   methods: {
     // 普通查询
@@ -387,14 +558,15 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
-        STLST: null,
+        stlst: null,
         modelId: null,
         destinations: null,
         phaseId: null,
         workstationId: null,
         createAt: null,
         makedAt: null,
-        workName: null
+        workName: null,
+        versionNumber: null
       })
       this.tableAt = null
     },
@@ -421,10 +593,16 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-    // 新增 / 修改
+    // 录入
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/workbook-detail/${id}` : '/add-workbook' })
+      })
+    },
+    // 编辑
+    editWorkbook(id) {
+      this.$nextTick(() => {
+        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook' })
       })
     },
     // 复制

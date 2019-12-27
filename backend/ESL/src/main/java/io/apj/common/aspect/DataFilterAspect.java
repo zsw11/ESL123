@@ -163,7 +163,7 @@ public class DataFilterAspect {
 //		}
 
 		// 获取人员信息
-		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("id", user.getId()));
+		StaffEntity staff = staffService.selectOne(new EntityWrapper<StaffEntity>().eq("user_id", user.getId()));
 
 		// 用户子部门ID列表
 		if (dataFilter.subDept() && staff != null) {

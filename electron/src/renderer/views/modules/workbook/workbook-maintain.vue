@@ -13,25 +13,34 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'分析表名称'" prop="workName">
-            <el-input v-model="dataForm.workName"></el-input>
+          <el-form-item :label="'作业名'" prop="workName">
+            <el-input :disabled="$route.path.includes('update')" v-model="dataForm.workName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <tree-select style="width: 100%" v-model='dataForm.deptId' :api='listDept' />
+            <tree-select
+              :disabled="$route.path.includes('update')"
+              style="width: 100%"
+              v-model='dataForm.deptId' :api='listDept' />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="stlst">
-            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select>
+            <dict-select
+              :disabled="$route.path.includes('update')"
+              style="width: 100%"
+              dictType="ST"
+              v-model="dataForm.stlst">
+            </dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.phaseId"
               :allowMultiple="true"
@@ -45,17 +54,22 @@
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.modelId"
               :allowMultiple="true"
               :searchApi="this.listModel"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultModel">
             </keyword-search>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
         <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="dataForm.destinations"></el-input>
+            <el-input
+              :disabled="$route.path.includes('update')"
+              v-model="dataForm.destinations">
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -65,6 +79,7 @@
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.workstationId"
               :allowMultiple="true"
@@ -76,6 +91,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item :label="'制表日期'" prop="makedAt">
             <el-date-picker
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.makedAt">
             </el-date-picker>
@@ -84,10 +100,13 @@
       </el-row>
 
 
-
-<!--          <el-form-item :label="'版本号'" prop="versionNumber">-->
-<!--            <el-input v-model="dataForm.versionNumber"></el-input>-->
-<!--          </el-form-item>-->
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'版本号'" prop="versionNumber">
+            <el-input :disabled="false" v-model="dataForm.versionNumber"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
 <!--          <el-form-item :label="'制表人ID'" prop="makerId">-->
 <!--            <el-input-number v-model="dataForm.makerId" ></el-input-number>-->
@@ -141,7 +160,7 @@
     </el-form>
 
     <span class="dialog-footer">
-      <el-button v-if="$route.path.includes('add')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="$route.path.includes('add') || $route.path.includes('edit')" type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复   制</el-button>
       <el-button v-if="$route.path.includes('update')"  type="primary" @click="copyWBook()">修 订</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
@@ -186,6 +205,7 @@ export default {
         deleteAt: null,
         ifAlter: false
       },
+      defaultModel:[],
       listDept,
       listPhase,
       listModel,
@@ -210,10 +230,10 @@ export default {
           { required: true, message: '工位不能为空', trigger: 'blur' }
         ],
         workName: [
-          { max: 128, message: '长度超过了128', trigger: 'blur' }
+          { required: true, message: '作业名不能为空', trigger: 'blur' }
         ],
         versionNumber: [
-          { max: 32, message: '长度超过了32', trigger: 'blur' }
+          { required: true, message: '版本号不能为空', trigger: 'blur' }
         ],
         makerId: [
           { type: 'number', message: '制表人ID需为数字值' }
@@ -270,7 +290,7 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route)
+      this.defalitModel = [],
       this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
@@ -299,6 +319,7 @@ export default {
               'secondConvert',
               'remark' ])
           )
+          this.defaultModel.push(data.workBook.modelEntity)
         }).finally(() => {
           this.inited = true
         })

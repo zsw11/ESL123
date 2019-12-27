@@ -106,7 +106,7 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("workBook:workbook:update")
 	public RD update(@RequestBody WorkBookEntity workBook) {
-		workBookService.updateWorkBook((Map<String, Object>) workBook);
+		workBookService.updateById(workBook);
 
 		return RD.build();
 	}
@@ -120,7 +120,7 @@ public class WorkBookController extends AbstractController {
 //	@RequiresPermissions("workBook:workbook:update")
 	public ResponseEntity<Object> copy(@RequestBody WorkBookEntity workBook) {
 		int workBookId = workBook.getId();
-		workBook.setId(null);
+		workBook.setCreateBy(getUserId().intValue());
 		WorkBookEntity workBookEntity = workBookService.copyWorkBook(workBook,workBookId);
 
 		return RD.ok(workBookEntity);

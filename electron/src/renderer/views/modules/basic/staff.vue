@@ -8,65 +8,55 @@
       <el-form :inline='true'
                :model='listQuery'
                @keyup.enter.native='getDataList()'>
-        <el-row>
-          <el-col :span='6'>
+
             <el-form-item label='部门'
                           prop='deptId'>
               <tree-select v-model='listQuery.deptId'
                            :api='listDept' />
             </el-form-item>
-          </el-col>
-          <el-col :span='6'>
+
             <el-form-item label='编号' prop='code'>
               <el-input v-model='listQuery.code' clearable>
               </el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span='6'>
+
             <el-form-item label='姓名'
                           prop='name'>
               <el-input v-model='listQuery.name'
                         clearable></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span='6'>
-            <el-form-item label='电话' prop='mobilephone'>
+
+            <el-form-item label='座机号' prop='mobilephone'>
               <el-input v-model='listQuery.mobilephone' clearable>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col :span='6'>
+
+
             <el-form-item label='中心' prop='centerName'>
               <el-input v-model='listQuery.centerName' clearable>
               </el-input>
             </el-form-item>
-          </el-col>
 
-          <el-col :span='6'>
+
+
             <el-form-item label='邮箱' prop='email'>
               <el-input v-model='listQuery.email' clearable>
               </el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="6">
+
             <el-form-item :label="'状态'" prop="status">
               <dict-select dictCode="workStatus" v-model="listQuery.status" clearable>
               </dict-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="6">
+
             <el-form-item :label="'工号'" prop="jobNumber">
               <el-input v-model="listQuery.jobNumber" clearable>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col :span='8'>
+
+
             <el-form-item label='入职日期'
                           prop='employmentDate'>
               <el-date-picker
@@ -76,8 +66,7 @@
                 placeholder='选择入职日期'>
               </el-date-picker>
             </el-form-item>
-          </el-col>
-        </el-row>
+
         <div class='buttons with-complex'>
 <!--          <complex-filter :config="complexFilterConfig"-->
 <!--                          @confirm="doComplexSearch(1)"-->
@@ -156,7 +145,7 @@
 
 
         <el-table-column align='center'
-                         label='电话'
+                         label='座机号'
                          v-if="displayAttributesMap['staff.mobilephone'].display">
           <template slot-scope='scope'>
             <span>{{scope.row.mobilephone }}</span>
@@ -304,7 +293,7 @@ export default {
             { code: 'jobNumber', name: '工号', type: 'string', required: true },
             { code: 'code', name: '编码', type: 'string', required: true },
             { code: 'name', name: '姓名', type: 'string', required: true },
-            { code: 'mobilephone', name: '电话', type: 'string', required: true},
+            { code: 'mobilephone', name: '座机号', type: 'string', required: true},
             { code: 'email', name: '邮箱', type: 'string', required: true },
             { code: 'status', name: '状态', type: 'string', required: true },
             { code: 'employmentDate', name: '入职日期', type: 'string', required: true}
