@@ -465,7 +465,7 @@ export default {
               attributes: this.importAttributes,
               plain: true
             }),
-            sampleDatas: [[ "66", "test", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+            sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
               "1", "1", "0","1","34",""]]
           }
         ],
