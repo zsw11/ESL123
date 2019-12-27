@@ -162,6 +162,11 @@ public class ToolController extends AbstractController {
 		for (ToolEntity item : ToolEntities) {
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("tool", item, dict);
+			if(arr.get("tool.common")=="true"){
+				arr.put("tool.common","是");
+			}else if(arr.get("tool.common")=="false"){
+				arr.put("tool.common","否");
+			}
 			dataList.add(arr);
 		}
 		// 返回excel数据

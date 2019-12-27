@@ -170,6 +170,11 @@ public class PartController extends AbstractController {
 		for (PartEntity item : partEntities) {
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("part", item, dict);
+			if(arr.get("part.common")=="true"){
+				arr.put("part.common","是");
+			}else if(arr.get("part.common")=="false"){
+				arr.put("part.common","否");
+			}
 			dataList.add(arr);
 		}
 		// 返回excel数据
