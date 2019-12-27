@@ -299,8 +299,7 @@ export default {
     },
     // 插入手顺组合
     async addOperationGroup (group) {
-      this.currentCell = this.getCurrentCell()
-      if (!this.currentCell) {
+      if (!this.lastSelected) {
         this.$message({
           message: '请选择插入位置！'
         })
@@ -308,7 +307,7 @@ export default {
       }
       const rst = await fetchOperationGroup(group.id)
       if (rst.data && rst.data.operations) {
-        await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields), this.currentCell.row))
+        await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields)), this.lastSelected.row)
       }
     },
     // 选择指标组合
