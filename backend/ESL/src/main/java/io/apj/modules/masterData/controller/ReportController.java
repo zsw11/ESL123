@@ -1,22 +1,26 @@
 package io.apj.modules.masterData.controller;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.service.ApproveService;
+import io.apj.modules.report.service.ReportDeptRelaService;
 import io.apj.modules.sys.controller.AbstractController;
+import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.service.SysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 报表
@@ -31,9 +35,9 @@ public class ReportController extends AbstractController {
 	@Autowired
 	private ReportService reportService;
 	@Autowired
-	private ReportGroupReportRelaService reportGroupReportRelaService;
+	private ReportDeptRelaService reportDeptRelaService;
 	@Autowired
-	private ApproveService approveService;
+	private SysDeptService sysDeptService;
 
 	/**
 	 * 列表
@@ -55,8 +59,16 @@ public class ReportController extends AbstractController {
 	@RequiresPermissions("masterData:report:info")
 	public RD info(@PathVariable("id") Integer id) {
 		ReportEntity report = reportService.selectById(id);
-
-		return RD.build().put("data", report);
+		Map<String,Object> map = new HashMap<>();
+		List<SysDeptEntity> deptEntityList = new LinkedList<>();
+		List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(new EntityWrapper<ReportDeptRelaEntity>().eq("report_id", id));
+		for(ReportDeptRelaEntity item : reportDeptRelaEntityList){
+			SysDeptEntity deptEntity = sysDeptService.selectById(item.getDeptId());
+			deptEntityList.add(deptEntity);
+		}
+		map.put("report",report);
+		map.put("SysDeptEntity",deptEntityList);
+		return RD.build().put("data", map);
 	}
 	/**
 	 * 报表属于哪些报表组并过滤
@@ -73,11 +85,23 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/create")
 	@RequiresPermissions("masterData:report:create")
-	public RD save(@RequestBody ReportEntity report) {
+	@Transactional
+	public RD save(@RequestParam Map<String, Object> map) {
+		ReportEntity report = (ReportEntity) map.get("report");
 		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
 		report.setCreateBy(getUserId().intValue());
+		List<Integer> deptIds = (List<Integer>) map.get("deptIds");
+		Integer reportId = report.getId();
+		if(deptIds.size()>0){
+			for(Integer i : deptIds){
+				ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
+				reportDeptRelaEntity.setDeptId(i);
+				reportDeptRelaEntity.setCreateBy(getUserId().intValue());
+				reportDeptRelaEntity.setReportId(reportId);
+				reportDeptRelaService.insert(reportDeptRelaEntity);
+			}
+		}
 		reportService.insert(report);
-
 		return RD.build().put("code", 200);
 	}
 

@@ -8,13 +8,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.DateUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.collection.dao.CompareDao;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.CompareItemEntity;
+import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.masterData.entity.ModelEntity;
@@ -29,13 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 
 @Service("compareService")
@@ -142,16 +139,25 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
         map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
         generateTotalData(list, map);
 
+        String sheetName = entity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("collection_compare");
-        OutputStream out = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "Most_Value_Compare";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+
+        int lastRow = 2 + list.size();
+        int firstRow = 3;
+        excelWriter.merge(firstRow, lastRow, 0, 0);
+        Map<Integer, Function<CompareItemEntity, Object>> options = new HashMap<>();
+        options.put(1, CompareItemEntity::getSecondColumnName);
+        options.put(2, CompareItemEntity::getWorkName);
+        ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
+
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<CompareItemEntity> list, Map<String, Object> map) {

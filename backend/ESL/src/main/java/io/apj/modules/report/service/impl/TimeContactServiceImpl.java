@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -26,12 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("timeContactService")
@@ -154,19 +153,16 @@ public class TimeContactServiceImpl
 
 
         // TODO 添加调用模版方法及生成目标excel文件方法
-        String path =ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String sheetName = timeContactEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("report_time_contact_template");
-        //String fileName1 = PathUtil.getExcelTemplatePath("report_time_contact");
-        OutputStream out = response.getOutputStream();
-        // ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("report_time_contact").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         //excelWriter.fill(list, fillConfig, writeSheet); 变更内容
-        String fileName = "report_time_contact";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private List<TimeContactEntity> generateStandardTime(List<Integer> workBookIds) {

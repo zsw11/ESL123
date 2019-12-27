@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -21,11 +22,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +93,8 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         map.put("modelType", model.getCode());
 
         // TODO 添加调用模版方法及生成目标excel文件方法
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        String sheetName = reportManMachineCombinationEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         BigDecimal P = (BigDecimal) map.get("P");
         String templateFileName = "";
         if(P.compareTo(BigDecimal.valueOf(0.79))>0){
@@ -97,17 +102,12 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         }else {
             templateFileName = PathUtil.getExcelTemplatePath("man_machine_joint_template1");
         }
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_standard_work.xls";
-        OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("standardWork").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
-        excelWriter.fill(map, writeSheet);
-        //excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "标准工数表";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+        excelWriter.fill(map,fillConfig, writeSheet);
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     @Override
@@ -137,8 +137,8 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
 
         BigDecimal HT1 = coefficient.multiply((BigDecimal) map.get("enter"));
         BigDecimal HT = HT1.subtract(BigDecimal.valueOf(0.1), new MathContext(0))
-                .multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(10),2);
-        BigDecimal P1 = HT.divide((BigDecimal)map.get("mt"),3);
+                .multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(10),2, RoundingMode.HALF_UP);
+        BigDecimal P1 = HT.divide((BigDecimal)map.get("mt"),3,RoundingMode.HALF_UP);
         BigDecimal P = P1.add( BigDecimal.valueOf(0.005));
         ew.lt("p",P).isNotNull("ou").isNotNull("sa").isNotNull("mu");
         ew.setSqlSelect("max(p) as p, ou, sa, mu");
@@ -150,9 +150,9 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
         map.put("P",P);
         if(P.compareTo(BigDecimal.valueOf(0.79))>0){
             //P>0.79
-            BigDecimal  rWorkTime = HT.multiply(coefficient).divide(BigDecimal.valueOf(0.95),4);
+            BigDecimal  rWorkTime = HT.multiply(coefficient).divide(BigDecimal.valueOf(0.95),0,RoundingMode.HALF_UP);
             BigDecimal  STime = rWorkTime.multiply(coefficient);
-            BigDecimal  STime1 = STime.divide(BigDecimal.valueOf(10),0).multiply(BigDecimal.valueOf(10));
+            BigDecimal  STime1 = STime.divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(10));
             BigDecimal  N2Time = STime1.multiply(BigDecimal.valueOf(0.06));
             map.put("rWorkTime",rWorkTime);
             map.put("STime",STime);
@@ -167,12 +167,12 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
             BigDecimal tableNum = BigDecimal.valueOf(Double.valueOf((String)map.get("tableNum")));
             BigDecimal mt = (BigDecimal)map.get("mt");
             BigDecimal  i = HT.add(mt).multiply(ashcraftTableEntity.getSa())
-                    .divide(BigDecimal.valueOf(100));
+                    .divide(BigDecimal.valueOf(100),0,RoundingMode.HALF_UP);
             //map.get("tableNum") => 2 3 4 5 6
-            BigDecimal rWorkTime = HT.add(mt).add(i).divide(tableNum);
-            BigDecimal sTime =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),0);
-            BigDecimal sTime1 = rWorkTime.multiply(coefficient);
-            BigDecimal rdValues =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(10),0)
+            BigDecimal rWorkTime = HT.add(mt).add(i).divide(tableNum,RoundingMode.HALF_UP);
+            BigDecimal sTime =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),0,RoundingMode.HALF_UP);
+            BigDecimal sTime1 = rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(1),2,RoundingMode.HALF_UP);
+            BigDecimal rdValues =  rWorkTime.multiply(coefficient).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(10));
             map.put("i",i);
             map.put("rWorkTime",rWorkTime);

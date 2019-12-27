@@ -2,7 +2,7 @@
   <el-dialog class="workbook-detail-info-dialog"
     :title="'分析表信息'"
     :close-on-click-modal="false"
-    width="40%"
+    width="60%"
     :visible.sync="visible">
 
     <el-form
@@ -11,6 +11,7 @@
       label-position="right"
       :size="'mini'"
       label-width="100px">
+
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'分析表名称'" prop="workName">
@@ -23,39 +24,29 @@
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="stlst">
-            <dict-display dictType="ST" v-model="workbook.stlst"></dict-display>
+            <dict-display dictCode="ST" :code="workbook.stlst"></dict-display>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
-            <keyword-search
-              style="width: 100%"
-              v-model="workbook.phaseId"
-              :allowMultiple="true"
-              :searchApi="this.listPhase"
-              :allowEmpty="true">
-            </keyword-search>
+            <span>{{(workbook.phase || {}).name}}</span>
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
-            <keyword-search
-              style="width: 100%"
-              v-model="workbook.modelId"
-              :allowMultiple="true"
-              :searchApi="this.listModel"
-              :allowEmpty="true">
-            </keyword-search>
+            <span>{{(workbook.model || {}).name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-        <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="workbook.destinations"></el-input>
+          <el-form-item :label="'仕向'" prop="destinations">
+            <span>{{workbook.workName}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -64,21 +55,12 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
-            <keyword-search
-              style="width: 100%"
-              v-model="workbook.workstationId"
-              :allowMultiple="true"
-              :searchApi="this.listWorkstation"
-              :allowEmpty="true">
-            </keyword-search>
+            <span>{{(workbook.workstation || {}).name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'制表日期'" prop="makedAt">
-            <el-date-picker
-              style="width: 100%"
-              v-model="workbook.makedAt">
-            </el-date-picker>
+            <span>{{workbook.makedAt | format('YYYY-MM-DD HH:mm')}}</span>
           </el-form-item>
         </el-col>
       </el-row>

@@ -447,8 +447,8 @@ export default {
     down(){
       let data ={
         modelId: 457,
-        phaseId: 2,
-        stlst: "02",
+        phaseId: 1,
+        stlst: "01",
         reportId: 2
       }
       downloadReportApprove(data).then(response => {

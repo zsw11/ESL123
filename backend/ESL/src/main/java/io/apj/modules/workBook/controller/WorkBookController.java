@@ -7,7 +7,12 @@ import java.util.Map;
 
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.service.SysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +42,12 @@ public class WorkBookController extends AbstractController {
 	private WorkBookService workBookService;
 	@Autowired
     private ModelService modelService;
+	@Autowired
+	private PhaseService phaseService;
+	@Autowired
+	private SysDeptService sysDeptService;
+	@Autowired
+	private WorkstationService workstationService;
 
 	/**
 	 * 列表
@@ -56,8 +67,10 @@ public class WorkBookController extends AbstractController {
 	@RequiresPermissions("workBook:workbook:info")
 	public R info(@PathVariable("id") Integer id) {
 		WorkBookEntity workBook = workBookService.selectById(id);
-        ModelEntity modelEntity = modelService.selectById(workBook.getModelId());
-        workBook.setModelEntity(modelEntity);
+        workBook.setModelEntity(modelService.selectById(workBook.getModelId()));
+		workBook.setPhaseEntity(phaseService.selectById(workBook.getPhaseId()));
+		workBook.setSysDeptEntity(sysDeptService.selectById(workBook.getDeptId()));
+		workBook.setWorkstationEntity(workstationService.selectById(workBook.getWorkstationId()));
 		return R.ok().put("workBook", workBook);
 	}
 
