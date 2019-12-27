@@ -19,5 +19,7 @@ public interface StandardWorkItemService extends IService<StandardWorkItemEntity
     PageUtils queryPage(Map<String, Object> params);
 
     List<StandardWorkItemEntity> getListBySWId(Integer id);
+
+    void generateStandardWorkItem(List<Integer> workBookIds, Integer standardWorkId);
 }
 

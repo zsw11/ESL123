@@ -68,6 +68,8 @@ public class MostValueItemEntity implements Serializable {
 	 */
 	private String unitName;
 
+	private Integer workBookId;
+
 	@TableField(exist = false)
 	private BigDecimal timeSt;
 

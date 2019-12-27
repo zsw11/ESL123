@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.CompareItemDao;
+import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.CompareItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -29,20 +29,25 @@ public class CompareItemServiceImpl extends ServiceImpl<CompareItemDao, CompareI
     }
 
     @Override
-    public void generateCompareItem(WorkBookEntity workBook, Integer compareId) {
-        Integer phaseId = workBook.getPhaseId();
-        Integer modelId = workBook.getModelId();
-        String stlst = workBook.getStlst();
-        Integer workBookId = workBook.getId();
+    public void generateCompareItem(List<Integer> workBookIds, CompareEntity entity) {
+        Integer phaseId = entity.getPhaseId();
+        Integer modelId = entity.getModelId();
+        String stlst = entity.getStlst();
+        Integer compareId = entity.getId();
         Map<String, Object> params = new HashMap<>();
         params.put("phaseId", phaseId);
         params.put("modelId", modelId);
         params.put("stlst", stlst);
-        params.put("workBookId", workBookId);
+        params.put("workBookIds", workBookIds);
 
-        CompareItemEntity entity = baseMapper.generateDataByWorkBook(params);
-        entity.setCollectionCompareId(compareId);
-        insert(entity);
+        List<CompareItemEntity> list = baseMapper.generateDataByWorkBook(params);
+        if (list.size() < 1) {
+            return;
+        }
+        for (CompareItemEntity item : list) {
+            item.setCollectionCompareId(compareId);
+        }
+        insertOrUpdateBatch(list);
     }
 
     @Override

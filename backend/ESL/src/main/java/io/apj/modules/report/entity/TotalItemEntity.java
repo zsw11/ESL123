@@ -2,11 +2,11 @@ package io.apj.modules.report.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Report - Total表子表
@@ -118,4 +118,5 @@ public class TotalItemEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	private Integer workBookId;
 }

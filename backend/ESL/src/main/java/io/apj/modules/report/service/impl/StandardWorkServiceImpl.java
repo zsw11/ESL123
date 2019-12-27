@@ -6,23 +6,29 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.entity.StandardTimeItemEntity;
+import io.apj.modules.report.dao.StandardWorkDao;
+import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
-import io.apj.modules.report.entity.TotalEntity;
 import io.apj.modules.report.service.StandardWorkItemService;
+import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -32,16 +38,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.StandardWorkDao;
-import io.apj.modules.report.entity.StandardWorkEntity;
-import io.apj.modules.report.service.StandardWorkService;
-import org.springframework.util.ClassUtils;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 @Service("standardWorkService")
@@ -56,6 +52,8 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
     private  StandardWorkItemService standardWorkItemService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -129,10 +127,24 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 
     /**
      * report 加数据
-     * @param work
      */
     @Override
-    public void generateReportData(WorkBookEntity work) {
+    public void generateReportData(List<Integer> workBookIds) {
+        StandardWorkEntity entity = generateStandardWork(workBookIds.get(0));
+        standardWorkItemService.generateStandardWorkItem(workBookIds, entity.getId());
+//        StandardWorkItemEntity standardWorkItem = new StandardWorkItemEntity();
+//        standardWorkItem.setReportStandardWorkId(standardWorkEntity.getId());
+//        standardWorkItem.setSecondTime(work.getSecondConvert());
+//        standardWorkItem.setFirstTime(work.getSecondConvert());
+//        standardWorkItem.setThirdTime(work.getSecondConvert());
+//        standardWorkItem.setProcessNo(work.getWorkstationId());
+//        standardWorkItem.setProcessName(work.getWorkName());
+//        standardWorkItemService.insert(standardWorkItem);
+
+    }
+
+    private StandardWorkEntity generateStandardWork(Integer workBookId) {
+        WorkBookEntity work = workBookService.selectById(workBookId);
         EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
                 .eq("phase_id",work.getPhaseId());
@@ -147,15 +159,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
             standardWorkEntity.setDeptId(work.getDeptId());
             insert(standardWorkEntity);
         }
-        StandardWorkItemEntity standardWorkItem = new StandardWorkItemEntity();
-        standardWorkItem.setReportStandardWorkId(standardWorkEntity.getId());
-        standardWorkItem.setSecondTime(work.getSecondConvert());
-        standardWorkItem.setFirstTime(work.getSecondConvert());
-        standardWorkItem.setThirdTime(work.getSecondConvert());
-        standardWorkItem.setProcessNo(work.getWorkstationId());
-        standardWorkItem.setProcessName(work.getWorkName());
-        standardWorkItemService.insert(standardWorkItem);
-
+        return standardWorkEntity;
     }
 
     @Override

@@ -5,33 +5,33 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
-import io.apj.modules.report.entity.*;
+import io.apj.modules.report.dao.TimeContactDao;
+import io.apj.modules.report.entity.TimeContactEntity;
+import io.apj.modules.report.service.TimeContactService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.TimeContactDao;
-import io.apj.modules.report.service.TimeContactService;
 import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("timeContactService")
@@ -45,6 +45,8 @@ public class TimeContactServiceImpl
     private TimeContactService timeContactService;
     @Autowired
     private ReportServiceImpl reportServiceimpl;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -108,8 +110,8 @@ public class TimeContactServiceImpl
     }
 
     @Override
-    public void generateReportData(WorkBookEntity workBookEntity) {
-        TimeContactEntity entity = generateStandardTime(workBookEntity);
+    public void generateReportData(List<Integer> workBookIds) {
+        List<TimeContactEntity> list = generateStandardTime(workBookIds);
     }
 
     @Override
@@ -167,22 +169,29 @@ public class TimeContactServiceImpl
         excelWriter.finish();
     }
 
-    private TimeContactEntity generateStandardTime(WorkBookEntity workBook) {
-        Integer phaseId = workBook.getPhaseId();
-        Integer modelId = workBook.getModelId();
-        String stlst = workBook.getStlst();
-        TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-        if (entity == null) {
-            entity = new TimeContactEntity();
-            entity.setModelId(modelId);
-            entity.setPhaseId(phaseId);
-            entity.setStlst(stlst);
-            entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("时间联络表");
-            entity.setSheetName("时间联络表");
-            insert(entity);
+    private List<TimeContactEntity> generateStandardTime(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<TimeContactEntity> list = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity workBook : filteredWorkBooks) {
+
+            Integer phaseId = workBook.getPhaseId();
+            Integer modelId = workBook.getModelId();
+            String stlst = workBook.getStlst();
+            TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+            if (entity == null) {
+                entity = new TimeContactEntity();
+                entity.setModelId(modelId);
+                entity.setPhaseId(phaseId);
+                entity.setStlst(stlst);
+                entity.setDeptId(workBook.getDeptId());
+                entity.setTitle("时间联络表");
+                entity.setSheetName("时间联络表");
+                insert(entity);
+            }
+            list.add(entity);
         }
-        return entity;
+        return list;
     }
 
     private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {

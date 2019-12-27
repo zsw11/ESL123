@@ -3,7 +3,6 @@ package io.apj.modules.collection.service;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.MostValueItemEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ public interface MostValueItemService extends IService<MostValueItemEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    void generateMostValue(WorkBookEntity workBook, Integer recordId);
+    void generateMostValueItem(List<Integer> workBookIds, Integer recordId);
 
     List<MostValueItemEntity> selectByMostValueId(Integer entityId);
 

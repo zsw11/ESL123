@@ -5,38 +5,36 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.modules.collection.entity.StationTimeItemEntity;
-import io.apj.modules.collection.service.StationTimeItemService;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PhaseEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.*;
-import io.apj.modules.report.entity.StandardTimeEntity;
-import io.apj.modules.report.entity.StandardTimeItemEntity;
-import io.apj.modules.report.entity.StandardWorkEntity;
-import io.apj.modules.report.entity.StandardWorkItemEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.StationTimeDao;
 import io.apj.modules.collection.entity.StationTimeEntity;
+import io.apj.modules.collection.entity.StationTimeItemEntity;
+import io.apj.modules.collection.service.StationTimeItemService;
 import io.apj.modules.collection.service.StationTimeService;
-import org.springframework.util.ClassUtils;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("stationTimeService")
@@ -46,7 +44,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     @Autowired
     private ModelService modelService;
     @Autowired
-    private StationTimeItemService StationTimeItemService;
+    private StationTimeItemService stationTimeItemService;
     @Autowired
     private StationTimeService stationTimeService;
     @Autowired
@@ -54,7 +52,8 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 
     @Autowired
     private WorkstationService workstationService;
-
+    @Autowired
+    private WorkBookService workBookService;
 
 
     @Override
@@ -118,32 +117,39 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
     }
 
     @Override
-    public void generateReportData(WorkBookEntity work) {
-        EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<StationTimeEntity> list = selectList(entityWrapper);
-        StationTimeEntity stationTimeEntity = new StationTimeEntity();
-        if(list.size()>0){
-            stationTimeEntity = list.get(0);
-        }else{
-            stationTimeEntity.setModelId(work.getModelId());
-            stationTimeEntity.setPhaseId(work.getPhaseId());
-            stationTimeEntity.setStlst(work.getStlst());
-            stationTimeEntity.setDeptId(work.getDeptId());
-            stationTimeEntity.setDestinations(work.getDestinations());
-            stationTimeEntity.setSheetName(work.getWorkstationName()+" "+work.getWorkName() );
-            insert(stationTimeEntity);
+    public void generateReportData(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<StationTimeEntity> list = generateStationTime(filteredWorkBooks);
+        for (StationTimeEntity entity : list) {
+            List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+            stationTimeItemService.generateStationTimeItem(filteredWorkBookIds, entity.getId());
         }
-        EntityWrapper<StationTimeItemEntity>  ew = new EntityWrapper<>();
-        ew.eq("station_name",work.getWorkstationName());
-        StationTimeItemEntity stationTimeItem = StationTimeItemService.selectOne(ew);
-        stationTimeItem.setWorkName(work.getWorkName());
-        stationTimeItem.setCollectionStationTimeId(stationTimeEntity.getId());
-        stationTimeItem.setSub(workstationService.wookStationIdIsSub(work.getWorkstationId()));
-        stationTimeItem.setStationName(work.getWorkstationName());
-        stationTimeItem.setLstValue(work.getSecondConvert().multiply(stationTimeItem.getLstValue()));
-        StationTimeItemService.insertOrUpdate(stationTimeItem);
+    }
+
+    private List<StationTimeEntity> generateStationTime(List<WorkBookEntity> workBooks) {
+        List<StationTimeEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+
+            EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                    .eq("phase_id",work.getPhaseId());
+            List<StationTimeEntity> list = selectList(entityWrapper);
+            StationTimeEntity stationTimeEntity = new StationTimeEntity();
+            if(list.size()>0){
+                stationTimeEntity = list.get(0);
+            }else{
+                stationTimeEntity.setModelId(work.getModelId());
+                stationTimeEntity.setPhaseId(work.getPhaseId());
+                stationTimeEntity.setStlst(work.getStlst());
+                stationTimeEntity.setDeptId(work.getDeptId());
+                stationTimeEntity.setDestinations(work.getDestinations());
+                stationTimeEntity.setSheetName(work.getWorkstationName()+" "+work.getWorkName() );
+                insert(stationTimeEntity);
+            }
+            list.add(stationTimeEntity);
+        }
+        return results;
     }
 
     @Override
@@ -162,7 +168,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
             id = stationTimeEntity.getId();
             map.put("remark", stationTimeEntity.getRemark());
         }
-        List<StationTimeItemEntity> list = StationTimeItemService.getListBySWId(id);
+        List<StationTimeItemEntity> list = stationTimeItemService.getListBySWId(id);
         ModelEntity model = modelService.selectById(modelId);
         map.put("modelName", model.getName());
         map.put("modelType", model.getCode());

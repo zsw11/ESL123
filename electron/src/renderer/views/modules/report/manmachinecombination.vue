@@ -147,7 +147,7 @@
 
         <el-table-column align="center" prop="STLST" label="ST/LST" >
           <template slot-scope="scope">
-            <span>{{scope.row.STLST }}</span>
+            <span>{{scope.row.stlst }}</span>
           </template>
         </el-table-column>
 
@@ -177,7 +177,7 @@
 
         <el-table-column align="center" prop="selectNum" label="选择（N2-N6" >
           <template slot-scope="scope">
-            <span>{{scope.row.selectNum }}</span>
+            <span>{{scope.row.selectnum }}</span>
           </template>
         </el-table-column>
 
@@ -233,6 +233,11 @@
           <template slot-scope="scope">
             <el-button v-if="isAuth('report:reportmanmachinecombination:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
             <el-button v-if="isAuth('report:reportmanmachinecombination:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="down"
+            >下载</el-button>
           </template>
         </el-table-column>
 
@@ -253,6 +258,13 @@
 
 <script>
 import { listReportManMachineCombination, deleteReportManMachineCombination } from '@/api/manMachineCombination'
+import {
+  fetchReportApprove,
+  createReportApprove,
+  updateReportApprove,
+  downloadReportApprove
+} from '@/api/reportApprove'
+
 export default {
   name: 'reportManMachineCombinationList',
   data () {
@@ -350,9 +362,9 @@ export default {
           limit: this.pageSize,
         },
         this.listQuery
-      )).then(({data, total}) => {
-        this.dataList = data
-        this.total = total
+      )).then((data) => {
+          this.dataList = data.page.data
+          this.total = data.page.totalCount
       }).catch(() => {
         this.dataList = []
         this.total = 0
@@ -408,7 +420,7 @@ export default {
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-reportmanmachinecombination/${id}` : '/add-reportmanmachinecombination' })
+        this.$router.push({ path: id ? `/edit-manmachinecombination/${id}` : '/add-manmachinecombination' })
       })
     },
     // 删除数据
@@ -432,6 +444,17 @@ export default {
         })
       })
     },
+    down(){
+      let data ={
+        modelId: 457,
+        phaseId: 2,
+        stlst: "02",
+        reportId: 2
+      }
+      downloadReportApprove(data).then(response => {
+        
+      });
+    }
   }
 }
 </script>

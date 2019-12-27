@@ -5,40 +5,32 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.report.entity.*;
-import io.apj.modules.report.service.ChangeRecordItemService;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
 import io.apj.modules.report.dao.ChangeRecordDao;
+import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.apj.modules.report.entity.ChangeRecordItemEntity;
+import io.apj.modules.report.service.ChangeRecordItemService;
 import io.apj.modules.report.service.ChangeRecordService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +48,8 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     private ReportServiceImpl reportServiceimpl;
     @Autowired
     private ChangeRecordItemService changeRecordItemService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -117,7 +111,10 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         return page;
     }
 
-    public void generateReportData(WorkBookEntity work) {
+    @Override
+    public void generateReportData(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        WorkBookEntity work = workBooks.get(0);
         EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
                 .eq("phase_id",work.getPhaseId());

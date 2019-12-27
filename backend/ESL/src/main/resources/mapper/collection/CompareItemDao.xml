@@ -18,6 +18,7 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
+        <result property="workBookId" column="work_book_id"/>
     </resultMap>
 
     <select id="generateDataByWorkBook" resultMap="compareItemMap">
@@ -28,12 +29,20 @@
             join  work_operations ws on wk.id = ws.work_book_id
             where wk.id = (
             select id from work_book
-            where model_id= #{modelId} and stlst=#{stlst} and phase_id != #{phaseId} order by create_at desc limit 1)) as last_value
+            where model_id= #{modelId} and stlst=#{stlst} and phase_id != #{phaseId} order by create_at desc limit 1)) as last_value,
+        wb.id as work_book_id, c.id
         from work_book wb
         join work_operations wo on wb.id = wo.work_book_id
         join workstation w on wb.workstation_id = w.id
         join workstation_type wt on w.workstation_type_id = wt.id
-         where wb.id = #{workBookId}
-        group by wt."name", w."name", wb.work_name
+        left join collection_compare_item c on wb.id = c.work_book_id
+        where 1 = 1
+        <if test="workBookIds != null and workBookIds.size() > 0">
+            and wb.id in
+            <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">
+                #{item}
+            </foreach>
+        </if>
+        group by wt."name", w."name", wb.work_name, wb.id, c.id
     </select>
 </mapper>

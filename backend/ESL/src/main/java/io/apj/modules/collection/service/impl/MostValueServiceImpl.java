@@ -21,6 +21,7 @@ import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
     private MostValueService mostValueService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -105,9 +108,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
     }
 
     @Override
-    public void generateReportData(WorkBookEntity workBook) {
-        MostValueEntity entity = generateMostValue(workBook);
-        mostValueItemService.generateMostValue(workBook, entity.getId());
+    public void generateReportData(List<Integer> workBookIds) {
+        MostValueEntity entity = generateMostValue(workBookIds.get(0));
+        mostValueItemService.generateMostValueItem(workBookIds, entity.getId());
     }
 
     @Override
@@ -137,16 +140,15 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 
         OutputStream out = response.getOutputStream();
         ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
-//        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
         WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
 
-        int lastRow = 2 + list.size();
-        int firstRow = 3;
+        int lastRow = 4 + list.size();
+        int firstRow = 5;
         excelWriter.merge(firstRow, lastRow, 0, 0);
-        excelWriter.merge(firstRow, lastRow, 7, 7);
+        excelWriter.merge(firstRow, lastRow, 7, 8);
         Map<Integer, Function<MostValueItemEntity, Object>> options = new HashMap<>();
         options.put(1, MostValueItemEntity::getType);
         options.put(2, MostValueItemEntity::getWorkName);
@@ -155,8 +157,6 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
         excelWriter.finish();
         ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
-//        String fileName = "Most_Value";
-//        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
     }
 
     private void generateTotalData(List<MostValueItemEntity> list, Map<String, Object> map) {
@@ -200,7 +200,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         }
     }
 
-    private MostValueEntity generateMostValue(WorkBookEntity workBook) {
+    private MostValueEntity generateMostValue(Integer workBookId) {
+        WorkBookEntity workBook = workBookService.selectById(workBookId);
         Integer phaseId = workBook.getPhaseId();
         Integer modelId = workBook.getModelId();
         String stlst = workBook.getStlst();

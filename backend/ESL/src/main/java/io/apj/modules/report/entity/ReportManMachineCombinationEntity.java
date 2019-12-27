@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * ${comments}
- * 
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
  * @date 2019-12-24 16:26:43
@@ -48,7 +48,7 @@ public class ReportManMachineCombinationEntity implements Serializable {
 	/**
 	 * $column.comments
 	 */
-	private Integer stlst;
+	private String stlst;
 	/**
 	 * 发行日
 	 */

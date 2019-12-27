@@ -3,11 +3,11 @@ package io.apj.modules.report.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 标准时间表子表
@@ -82,6 +82,8 @@ public class StandardTimeItemEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+
+	private Integer workBookId;
 
 	@TableField(exist = false)
 	private BigDecimal conv;

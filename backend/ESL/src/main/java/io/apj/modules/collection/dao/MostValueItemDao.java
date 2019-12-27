@@ -3,6 +3,9 @@ package io.apj.modules.collection.dao;
 import io.apj.modules.collection.entity.MostValueItemEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Collection - MOST Value 表
@@ -13,6 +16,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface MostValueItemDao extends BaseMapper<MostValueItemEntity> {
-    MostValueItemEntity generateDataByWorkBook(Integer workBookId);
+    List<MostValueItemEntity> generateDataByWorkBook(@Param("workBookIds") List<Integer> workBookIds);
 
 }
