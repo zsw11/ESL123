@@ -1,5 +1,15 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -18,28 +28,20 @@ import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
-
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("changeRecordService")
@@ -188,25 +190,21 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
         map.put("modelType", model.getCode());
         generateTotalData(list, map);
         // TODO 添加调用模版方法及生成目标excel文件方法
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
-        System.out.println(path);
-        path = path.split("target")[0];
+
         String templateFileName = PathUtil.getExcelTemplatePath("report_change_record_template");
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/report_change_record.xls";
-        String fileName = "test";
+        String sheetName = changeRecordEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
 
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment;filename=" + new String((fileName).getBytes(), "ISO-8859-1") + ".xls");
         OutputStream out = response.getOutputStream();
-
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("report_change_record").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+        //ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
         excelWriter.finish();
         out.flush();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<ChangeRecordItemEntity> list, Map<String, Object> map) {

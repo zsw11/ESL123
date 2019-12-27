@@ -1,5 +1,6 @@
 package io.apj.modules.collection.service.impl;
 
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -18,11 +19,12 @@ import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -180,7 +181,6 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
-        //TODO
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
         String stlst = params.get("stlst").toString();
@@ -205,22 +205,19 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
         // TODO 添加调用模版方法及生成目标excel文件方法
 
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath().split("target")[0];
+        String sheetName = revisionHistoryEntity.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("collection_revision_history_template");
-        System.out.println(templateFileName);
-        //String fileName1 = path+"src/main/resources/static/exportTemplates/collection_revision_history.xls";
-        OutputStream out = response.getOutputStream();
-        //ExcelWriter excelWriter = EasyExcel.write(fileName1).withTemplate(templateFileName).build();
 
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
 
-        WriteSheet writeSheet = EasyExcel.writerSheet("collection_revision_history").build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "Revision_History";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xls");
+
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
 }

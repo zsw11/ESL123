@@ -8,12 +8,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import io.apj.common.utils.DateUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
-import io.apj.modules.collection.entity.CompareEntity;
+import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -26,20 +21,15 @@ import io.apj.modules.report.service.StandardTimeItemService;
 import io.apj.modules.report.service.StandardTimeService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("standardTimeService")
@@ -144,16 +134,21 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         map.put("unit", standardTime.getUnit());
         map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
         generateTotalData(list, map);
+
+        String sheetName = standardTime.getSheetName();
+        String fileName = PathUtil.getResourcesPath() + File.separator + sheetName + ".xls";
         String templateFileName = PathUtil.getExcelTemplatePath("standard_time_template");
+
+
         OutputStream out = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet("test").build();
+        ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+       // ExcelWriter excelWriter = EasyExcel.write(out).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
         FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
         excelWriter.fill(map, writeSheet);
         excelWriter.fill(list, fillConfig, writeSheet);
-        String fileName = "标准时间表";
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         excelWriter.finish();
+        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
     private void generateTotalData(List<StandardTimeItemEntity> list, Map<String, Object> map) {

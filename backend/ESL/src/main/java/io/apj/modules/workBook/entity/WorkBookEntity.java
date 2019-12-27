@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.PhaseEntity;
 import io.apj.modules.masterData.entity.WorkstationEntity;
 
 import java.math.BigDecimal;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import io.apj.modules.sys.entity.SysDeptEntity;
 import lombok.Data;
 
 /**
@@ -45,6 +48,14 @@ public class WorkBookEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private String ModelName;
+	@TableField(exist = false)
+	private ModelEntity modelEntity;
+	@TableField(exist = false)
+	private PhaseEntity phaseEntity;
+	@TableField(exist = false)
+	private SysDeptEntity sysDeptEntity;
+	@TableField(exist = false)
+	private WorkstationEntity workstationEntity;
 	/*
 	 * Phase名称
 	 */

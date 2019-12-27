@@ -8,77 +8,80 @@
       </div>
     </div>
     <el-form :rules="dataRules" ref="dataForm" :model="dataForm" label-position="right" :size="'mini'" label-width="100px" style='width: 95%'>
+          
+      <el-row>
+        <el-col :span="10">
           <el-form-item :label="'组织机构ID'" prop="deptId">
             <el-input-number v-model="dataForm.deptId" ></el-input-number>
           </el-form-item>
-
+        </el-col>
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'标题'" prop="title">
             <el-input v-model="dataForm.title"></el-input>
           </el-form-item>
+        </el-col>
+      </el-row>
 
+      <el-row>
+        <el-col :span="10">
           <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'生产阶段ID'" prop="phaseId">
+            <el-input-number v-model="dataForm.phaseId" ></el-input-number>
+          </el-form-item>           
+        </el-col>
+      </el-row>
 
+      <el-row>
+        <el-col :span="10">
           <el-form-item :label="'机种ID'" prop="modelId">
             <el-input-number v-model="dataForm.modelId" ></el-input-number>
           </el-form-item>
-
-          <el-form-item :label="'生产阶段ID'" prop="phaseId">
-            <el-input-number v-model="dataForm.phaseId" ></el-input-number>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'ST/LST'" prop="stlst">
+            <el-input v-model="dataForm.stlst"></el-input>
           </el-form-item>
+        </el-col>
+      </el-row>
 
-          <el-form-item :label="'ST/LST'" prop="STLST">
-            <el-input v-model="dataForm.STLST"></el-input>
-          </el-form-item>
-
-          <el-form-item :label="'发行日'" prop="month_result">
-            <el-date-picker v-model="dataForm.month_result" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'发行日'">
+            <el-date-picker v-model="dataForm.monthResult" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
+          </el-form-item>         
+        </el-col>
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'仕向'" prop="destinations">
             <el-input v-model="dataForm.destinations"></el-input>
           </el-form-item>
-
-          <el-form-item :label="'MT 分析表totalRemark'" prop="mt">
-            <el-input-number v-model="dataForm.mt" ></el-input-number>
-          </el-form-item>
-
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="10">
           <el-form-item :label="'输入数值'" prop="enter">
             <el-input-number v-model="dataForm.enter" ></el-input-number>
           </el-form-item>
-
-          <el-form-item :label="'选择（N2-N6'" prop="selectNum">
-            <el-input v-model="dataForm.selectNum"></el-input>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item :label="'选择（N2-N6'" prop="selectnum">
+            <el-select  v-model="dataForm.selectnum">
+              <el-option value=2>2</el-option>
+              <el-option value=3>3</el-option>
+              <el-option value=4>4</el-option>
+              <el-option value=5>5</el-option>
+              <el-option value=6>6</el-option>
+            </el-select>
           </el-form-item>
+        </el-col>
+      </el-row>
 
-          <el-form-item :label="'承认ID'" prop="comfirm_by">
-            <el-input-number v-model="dataForm.comfirm_by" ></el-input-number>
-          </el-form-item>
 
-          <el-form-item :label="'创建者ID'" prop="createBy">
-            <el-input-number v-model="dataForm.createBy" ></el-input-number>
-          </el-form-item>
 
-          <el-form-item :label="'创建时间'" prop="createAt">
-            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'更新者ID'" prop="updateBy">
-            <el-input-number v-model="dataForm.updateBy" ></el-input-number>
-          </el-form-item>
-
-          <el-form-item :label="'更新时间'" prop="updateAt">
-            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
-
-          <el-form-item :label="'删除时间'" prop="deleteAt">
-            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-        </el-date-picker>
-          </el-form-item>
 
 
     </el-form>
@@ -105,18 +108,18 @@ export default {
         sheetName: null,        
         modelId: null,        
         phaseId: null,        
-        STLST: null,        
-        month_result: null,        
+        stlst: null,        
+        monthResult: null,        
         destinations: null,        
         mt: null,        
         enter: null,        
-        selectNum: null,        
-        comfirm_by: null,        
-        createBy: null,        
-        createAt: null,        
-        updateBy: null,        
-        updateAt: null,        
-        deleteAt: null,
+        selectnum: null,        
+        //comfirm_by: null,        
+        //createBy: null,        
+        //createAt: null,        
+        //updateBy: null,        
+        //updateAt: null,        
+        //deleteAt: null,
       },
       dataRules: {
         deptId: [
@@ -134,10 +137,9 @@ export default {
         phaseId: [
           { type: 'number', message: '生产阶段ID需为数字值' }
         ],
-        STLST: [
+        stlst: [
           { max: 128, message: '长度超过了128', trigger: 'blur' }
         ],
-
         destinations: [
           { max: 128, message: '长度超过了128', trigger: 'blur' }
         ],
@@ -147,7 +149,7 @@ export default {
         enter: [
           { type: 'number', max: 100000000, message: '输入数值需为8位数字值' }
         ],
-        selectNum: [
+        selectnum: [
           { max: 2, message: '长度超过了2', trigger: 'blur' }
         ],
         comfirm_by: [
@@ -156,12 +158,9 @@ export default {
         createBy: [
           { type: 'number', message: '创建者ID需为数字值' }
         ],
-
         updateBy: [
           { type: 'number', message: '更新者ID需为数字值' }
         ],
-
-
       },
     }
   },
@@ -200,10 +199,10 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
             if (this.dataForm.id) {
-        fetchReportManMachineCombination(this.dataForm.id).then(({data}) => {
+        fetchReportManMachineCombination(this.dataForm.id).then((data) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'deptId', 'title', 'sheetName', 'modelId', 'phaseId', 'STLST', 'month_result', 'destinations', 'mt', 'enter', 'selectNum', 'comfirm_by', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt', ])
+            pick(data.reportManMachineCombination, [ 'deptId', 'title', 'sheetName', 'modelId', 'phaseId', 'stlst', 'monthResult', 'destinations', 'mt', 'enter', 'selectnum' ])
           )
         }).finally(() => {
           this.inited = true
@@ -215,7 +214,7 @@ export default {
     // 取消信息
     cancleFormSubmit () {
       this.$store.dispatch('common/closeActiveTab')
-      this.$router.push({ name: 'report-reportmanmachinecombination' })
+      this.$router.push({ name: 'report-manmachinecombination' })
       this.$destroy()
     },
     // 表单提交
