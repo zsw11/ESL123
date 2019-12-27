@@ -18,6 +18,7 @@ import io.apj.modules.collection.service.StationTimeItemService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
@@ -144,10 +145,11 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
                 stationTimeEntity.setStlst(work.getStlst());
                 stationTimeEntity.setDeptId(work.getDeptId());
                 stationTimeEntity.setDestinations(work.getDestinations());
-                stationTimeEntity.setSheetName(work.getWorkstationName()+" "+work.getWorkName() );
+                WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
+                stationTimeEntity.setSheetName(workstation.getName()+" "+work.getWorkName() );
                 insert(stationTimeEntity);
             }
-            list.add(stationTimeEntity);
+            results.add(stationTimeEntity);
         }
         return results;
     }

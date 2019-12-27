@@ -89,6 +89,7 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
+          <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
         </div>
       </div>
       <el-table
@@ -340,7 +341,8 @@ export default {
       }],
       complexFilters: [],
       dictItemSTLST: [],
-      id: ''
+      id: '',
+      selectedWorkBookIds: []
     }
   },
   activated () {
@@ -486,13 +488,14 @@ export default {
     createReport (row) {
       this.createShow = true
       this.id = row.id
+      this.selectedWorkBookIds = [row.id]
     },
     // 确定生成报表
     createReportOK (row) {
        createReports(Object.assign(
         {
           workId: this.id,
-          workBookIds: [this.id],
+          workBookIds: this.selectedWorkBookIds,
           reports: this.createForm.id
         }
       )).then(({page}) => {
@@ -506,6 +509,12 @@ export default {
       }).finally(() => {
         //this.dataListLoading = false
       })
+    },
+    createReportFromSelected () {
+      this.createShow = true
+      this.selectedWorkBookIds = this.dataListSelections.map(item => {
+        return item.id
+      });
     }
   }
 }

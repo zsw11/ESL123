@@ -1,14 +1,16 @@
 package io.apj.modules.report.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.TotalEntity;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import com.baomidou.mybatisplus.service.IService;
 
 /**
  * Report - Total表
@@ -21,7 +23,7 @@ public interface TotalService extends IService<TotalEntity> {
 
     PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
-    void generateReportData(WorkBookEntity workBookEntity);
+    void generateReportData(List<Integer> workBookIds);
 
     void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 

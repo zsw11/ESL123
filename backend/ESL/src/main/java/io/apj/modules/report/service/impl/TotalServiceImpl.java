@@ -1,44 +1,47 @@
 package io.apj.modules.report.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
-import io.apj.modules.collection.entity.RevisionHistoryEntity;
-import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.report.entity.*;
+import io.apj.modules.report.dao.TotalDao;
+import io.apj.modules.report.entity.TotalEntity;
+import io.apj.modules.report.entity.TotalItemEntity;
 import io.apj.modules.report.service.TotalItemService;
+import io.apj.modules.report.service.TotalService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import io.apj.modules.workBook.service.WorkBookService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.TotalDao;
-import io.apj.modules.report.service.TotalService;
-import org.springframework.util.ClassUtils;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("totalService")
@@ -54,6 +57,8 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 
     @Autowired
     private TotalItemService totalItemService;
+    @Autowired
+    private WorkBookService workBookService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -126,26 +131,36 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
     }
 
     @Override
-    public void generateReportData(WorkBookEntity work) {
-        EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<TotalEntity> list = selectList(entityWrapper);
-        TotalEntity totalEntity = new TotalEntity();
-        if(list.size()>0){
-            totalEntity = list.get(0);
-        }else{
-            //TODO 有未设置
-            totalEntity.setModelId(work.getModelId());
-            totalEntity.setPhaseId(work.getPhaseId());
-            totalEntity.setStlst(work.getStlst());
-            totalEntity.setDeptId(work.getDeptId());
-            totalEntity.setDestinations(work.getDestinations());
-            totalEntity.setSheetName(work.getWorkstationName()+" "+ work.getWorkName());
-            totalEntity.setSheetName("sheetName");
-            totalEntity.setDestinations(work.getDestinations());
-            insert(totalEntity);
+    public void generateReportData(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<TotalEntity> list = generateTotal(filteredWorkBooks);
+    }
+
+    private List<TotalEntity> generateTotal(List<WorkBookEntity> workBooks) {
+        List<TotalEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+            EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                    .eq("phase_id",work.getPhaseId());
+            List<TotalEntity> list = selectList(entityWrapper);
+            TotalEntity totalEntity = new TotalEntity();
+            if(list.size()>0){
+                totalEntity = list.get(0);
+            }else{
+                //TODO 有未设置
+                totalEntity.setModelId(work.getModelId());
+                totalEntity.setPhaseId(work.getPhaseId());
+                totalEntity.setStlst(work.getStlst());
+                totalEntity.setDeptId(work.getDeptId());
+                totalEntity.setDestinations(work.getDestinations());
+                totalEntity.setSheetName("total");
+                totalEntity.setDestinations(work.getDestinations());
+                insert(totalEntity);
+            }
+            results.add(totalEntity);
         }
+        return results;
     }
 
     @Override

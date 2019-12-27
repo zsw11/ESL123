@@ -198,27 +198,28 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public void createReports(Map<String, Object> params) {
 		ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
-		Integer workId = (Integer) params.get("workId");
 		List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
 		if (workBookIds == null || workBookIds.size() < 1) {
 			return;
 		}
-		WorkBookEntity workBookEntity = selectById(workId);
 		reportList.forEach(e -> {
 			switch (e) {
 			case 1:
 				break;
 			case 2:
-				reportManMachineCombinationService.generateReportData(workBookEntity);
+			    // 人机联合表
+				reportManMachineCombinationService.generateReportData(workBookIds);
 				break;
 			case 3:
 				// 工位时间报表
 				stationTimeService.generateReportData(workBookIds);
 				break;
 			case 4:
+			    //Compare表
 				compareService.generateReportData(workBookIds);
 				break;
 			case 5:
+			    //MOST Value表
 				mostValueService.generateReportData(workBookIds);
 				break;
 			case 6:
@@ -226,16 +227,20 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				revisionHistoryService.generateReportData(workBookIds);
 				break;
 			case 7:
-				totalService.generateReportData(workBookEntity);
+			    //   Total表
+				totalService.generateReportData(workBookIds);
 				break;
 			case 8:
 				break;
 			case 9:
+			    //时间联络表
 				timeContactService.generateReportData(workBookIds);
 				break;
 			case 10:
+			    //Process List表
 				break;
 			case 11:
+			    //标准时间表
 				standardTimeService.generateReportData(workBookIds);
 				break;
 			case 12:
