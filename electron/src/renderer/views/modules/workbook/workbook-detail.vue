@@ -5,8 +5,8 @@
       <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
+      <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
-      <el-button type="primary" icon="el-icon-info" @click="showInfo"></el-button>
     </div>
 
     <div class="video-player-box">
@@ -495,6 +495,9 @@
       line-height: 28px;
       float: right;
       margin-right: 10px;
+    }
+    .info-button {
+      float: right;
     }
   }
 
