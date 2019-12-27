@@ -272,6 +272,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public WorkBookEntity detailWithOperations(Integer id) {
 		WorkBookEntity workBook = this.selectById(id);
+		workBook.setModelName(modelService.selectById(workBook.getModelId()).getName());
+		workBook.setDeptName(deptService.selectById(workBook.getDeptId()).getName());
+		workBook.setPhaseName(phaseService.selectById(workBook.getPhaseId()).getName());
+		workBook.setWorkstationName(workstationService.selectById(workBook.getWorkstationId()).getName());
 		EntityWrapper<WorkOperationsEntity> workOperationsWrapper = new EntityWrapper<>();
 		workOperationsWrapper.eq("work_book_id", id).isNull("delete_at");
 		List<WorkOperationsEntity> workOperationsList = workOperationService.selectList(workOperationsWrapper);

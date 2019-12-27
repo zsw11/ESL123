@@ -84,7 +84,7 @@ public class WorkOperationsEntity implements Serializable {
 	/**
 	 * 修订类型
 	 */
-	private boolean alterType;
+	private String alterType;
 	private String alterInfo;
 	/**
 	 * 类型
