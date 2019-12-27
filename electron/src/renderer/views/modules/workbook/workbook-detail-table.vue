@@ -13,8 +13,7 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
-      @selected-changed="selectedChanged"
-      @edit-actived="editActived">
+      @selected-changed="selectedChanged">
       <vxe-table-column type="index" field="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" min-width="240"></operation-column>
@@ -65,7 +64,7 @@
 </template>
 
 <script>
-import { pick, clone, round, findIndex } from 'lodash'
+import { pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
@@ -101,8 +100,6 @@ export default {
       WMethod: '',
       add: true,
       lastSelected: undefined,
-      lastEditCell: null,
-      currentCell: null,
       standardBookDialog: {
         visible: false,
         formData: {
@@ -120,12 +117,9 @@ export default {
   created () {
   },
   methods: {
-    // 创建新行数据
-    createNewRow (type) {
-      const newRow = this.$refs.workbookTable.createRow(defaultRow)
-      if (type) newRow.type = type
-      return newRow
-    },
+    // ========================================
+    //                数据显示
+    // ========================================
     // 加载数据
     loadData (data) {
       // 增加100行方便操作
@@ -133,8 +127,7 @@ export default {
         data.push(this.createNewRow())
       }
       this.$refs.workbookTable.loadData(data)
-      this.lastEditCell = undefined
-      this.currentCell = undefined
+      this.logChange()
     },
     // 计算列
     getTimeValue ({ row }) {
@@ -154,6 +147,20 @@ export default {
     // 计算列
     getSecConv (scope) {
       return round(this.getTimeValue(scope) * 0.06, 2)
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = this.getMode(row)
+      return !mode || mode === measureMode[column.property]
+    },
+    // 获取模式
+    getMode (row) {
+      return measureMode[modeMeasureFields.find(f => {
+        if (f === 'tool') return ![ null, undefined, '', '*0' ].includes(row[f])
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
     },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
@@ -184,20 +191,9 @@ export default {
         }
       }
     },
-    // 是否允许编辑
-    canEdit ({ row, column }) {
-      if (!modeMeasureFields.includes(column.property)) return true
-      // 判断模式
-      const mode = this.getMode(row)
-      return !mode || mode === measureMode[column.property]
-    },
-    // 获取模式
-    getMode (row) {
-      return measureMode[modeMeasureFields.find(f => {
-        if (f === 'tool') return ![ null, undefined, '', '*0' ].includes(row[f])
-        return ![ null, undefined, '' ].includes(row[f])
-      })]
-    },
+    // ========================================
+    //                行操作
+    // ========================================
     selectedChanged (val) {
       // 补0操作
       if (this.lastSelected) {
@@ -239,13 +235,11 @@ export default {
       }
       this.lastSelected = val
     },
-    // 单元格开始编辑
-    editActived (cell) {
-      this.lastEditCell = cell
-    },
-    // 获取当前行数据
-    getCurrentCell () {
-      return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+    // 创建新行数据
+    createNewRow (type) {
+      const newRow = this.$refs.workbookTable.createRow(defaultRow)
+      if (type) newRow.type = type
+      return newRow
     },
     // 添加标准书对话框
     async addStandardBook () {
@@ -296,6 +290,7 @@ export default {
           ), this.lastSelected.row)
         }
         await this.$refs.workbookTable.refreshData()
+        this.logChange()
         // 插入标准书名
         await this.$refs.workbookTable.setActiveCell(rst.row, 'version')
         this.standardBookDialog.visible = false
@@ -313,6 +308,7 @@ export default {
       if (rst.data && rst.data.operations) {
         await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields)), this.lastSelected.row)
         await this.$refs.workbookTable.refreshData()
+        this.logChange()
       }
     },
     // 选择指标组合
@@ -330,7 +326,7 @@ export default {
     // 缓存
     copy () {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
-        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
+        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
       }
     },
     // 粘贴
@@ -340,6 +336,7 @@ export default {
         if (!copyContent) return
         await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
         await this.$refs.workbookTable.refreshData()
+        this.logChange()
       }
     },
     // 删除行
@@ -348,17 +345,19 @@ export default {
         const fullData = this.$refs.workbookTable.getTableData().fullData
         const rowIndex = findIndex(fullData, this.lastSelected.row)
         const nextRow = fullData[rowIndex + 1]
-        this.$refs.workbookTable.remove(this.lastSelected.row).then(() => {
-          this.$refs.workbookTable.setSelectCell(nextRow, 'index')
-        })
+        await this.$refs.workbookTable.remove(this.lastSelected.row)
+        await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+        await this.$refs.workbookTable.refreshData()
+        this.logChange()
       }
     },
     // 增加行
     async addRow() {
-      const currentRow = (this.getCurrentCell() || this.lastSelected || {}).row
+      const currentRow = this.lastSelected.row
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(this.createNewRow(), currentRow)
       await this.$refs.workbookTable.refreshData()
+      this.logChange()
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
@@ -366,12 +365,21 @@ export default {
       }
       return -1
     },
+    // 获取完整数据
     getFullData () {
       if (this.$refs.workbookTable) {
         const fullData = this.$refs.workbookTable.getTableData().fullData
         const lastRowIndex = this.getLastRowIndex(fullData)
         return fullData.slice(0, lastRowIndex + 1)
       }
+    },
+    // 缓存数据
+    async cacheData () {
+      await this.$store.dispatch('workbook/cache', this.getFullData())
+    },
+    // 记录数据变更
+    async logChange () {
+      // await this.$store.dispatch('workbook/pushHistory', cloneDeep(this.getFullData()))
     }
   }
 }

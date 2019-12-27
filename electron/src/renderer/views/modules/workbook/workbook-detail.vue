@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import { pick, debounce } from 'lodash'
+  import { pick, omit, debounce } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import InfoDialog from './workbook-detail-info-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
@@ -285,6 +285,7 @@
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
           self.workbookData[workBook.workName] = workBook.workOperationsList
+          this.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
       },
       // 快捷键
