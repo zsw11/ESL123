@@ -55,7 +55,7 @@
       </el-row>
       <el-row>
         <el-col :span="9">
-          <el-form-item :label="'手机号'"
+          <el-form-item :label="'座机号'"
                         prop="mobilephone">
             <el-input v-model="dataForm.mobilephone"></el-input>
           </el-form-item>

@@ -74,10 +74,30 @@ export function deleteWorkBook (id) {
   })
 }
 
+// 生成报表
 export function createReports (data) {
   return request({
     url: request.adornUrl('/api/v1/workbook/createReport'),
     method: 'post',
     data: data
+  })
+}
+
+// 导入
+export function WorkBookImport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/workbook/import`),
+    method: 'post',
+    data: request.adornData(data)
+  })
+}
+
+// 导出
+export function WorkBookExport (data) {
+  return request({
+    url: request.adornUrl(`/api/v1/workbook/exportExcel`),
+    method: 'post',
+    data: request.adornData(data),
+    responseType: 'blob'
   })
 }

@@ -89,6 +89,8 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
+<!--          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>-->
+<!--          <import-data :config="importConfig"></import-data>-->
           <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
         </div>
       </div>
@@ -214,16 +216,54 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, WorkBookImport, WorkBookExport } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
-import { fetchUserDetail } from '@/api/passport'
+import { filterAttributes } from '@/utils'
+import { cloneDeep } from 'lodash'
+import ExportData from '@/components/export-data'
+import ImportData from '@/components/import-data'
+
+const defaultExport = [
+  "workOperations.seqNumber",
+  "workOperations.workBookId",
+  "workOperations.version",
+  "workOperations.operation",
+  "workOperations.phaseId",
+  "workOperations.frequency",
+  "workOperations.timeValue",
+  "workOperations.tmu",
+  "workOperations.remark",
+  "workOperations.type",
+  "workOperations.a0",
+  "workOperations.b0",
+  "workOperations.g0",
+  "workOperations.a1",
+  "workOperations.b1",
+  "workOperations.p0",
+  "workOperations.m0",
+  "workOperations.x0",
+  "workOperations.i0",
+  "workOperations.a2",
+  "workOperations.b2",
+  "workOperations.p1",
+  "workOperations.a3",
+  "workOperations.tool",
+  "workOperations.a4",
+  "workOperations.b3",
+  "workOperations.p2",
+  "workOperations.a5"
+];
 
 export default {
-  name: 'workBookList',
+  name: 'workbookList',
+  components: {
+    ExportData,
+    ImportData
+  },
   data () {
     return {
       flag: true,
@@ -326,22 +366,82 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       attributes: [{
-        code: 'workBook',
-        name: '分析表'
-        // children: [
-        //   { code: 'id', name: '分析表名称', type: 'string', required: true },
-        //   { code: 'deptId', name: '部门', type: 'string', required: true },
-        //   { code: 'STLST', name: 'LST/ST', type: 'string', required: true },
-        //   { code: 'modelId', name: '机种', type: 'string', required: true },
-        //   { code: 'phaseId', name: '生产阶段', type: 'string', required: true },
-        //   { code: 'destinations', name: '仕向', type: 'string', required: true },
-        //   { code: 'workstationId', name: '工位', type: 'string', required: true },
-        //   { code: 'makedAt', name: '制表日期', type: 'string', required: true }
-        // ]
-      }],
+        code: 'workbook',
+        name: '分析表',
+        children: [
+          {code: 'workName', name: '分析表名称', type: 'string', required: true},
+          {code: 'deptId', name: '部门', type: 'string', required: true},
+          {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+          {code: 'modelId', name: '机种', type: 'string', required: true},
+          {code: 'phaseId', name: '生产阶段', type: 'string', required: true},
+          {code: 'destinations', name: '仕向', type: 'string', required: true},
+          {code: 'workstationId', name: '工位', type: 'string', required: true},
+          {code: 'makedAt', name: '制表日期', type: 'string', required: true}
+        ]
+      },
+        {
+          code: 'workOperations',
+          name: '分析表明细',
+          children: [
+            {code: 'seqNumber', name: '序号', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+            {code: 'stlst', name: 'LST/ST', type: 'string', required: true}
+          ]
+        }],
       complexFilters: [],
       dictItemSTLST: [],
       id: '',
+      // 导出
+      exportAttributes: cloneDeep(defaultExport),
+      // 导入字段固定不可变
+      importAttributes: [
+        "workOperations.seqNumber",
+        "workOperations.workBookId",
+        "workOperations.version",
+        "workOperations.operation",
+        "workOperations.phaseId",
+        "workOperations.frequency",
+        "workOperations.timeValue",
+        "workOperations.tmu",
+        "workOperations.remark",
+        "workOperations.type",
+        "workOperations.a0",
+        "workOperations.b0",
+        "workOperations.g0",
+        "workOperations.a1",
+        "workOperations.b1",
+        "workOperations.p0",
+        "workOperations.m0",
+        "workOperations.x0",
+        "workOperations.i0",
+        "workOperations.a2",
+        "workOperations.b2",
+        "workOperations.p1",
+        "workOperations.a3",
+        "workOperations.tool",
+        "workOperations.a4",
+        "workOperations.b3",
+        "workOperations.p2",
+        "workOperations.a5"
+      ],
       selectedWorkBookIds: []
     }
   },
@@ -351,6 +451,60 @@ export default {
     self.listQuery.makedAt = null
     self.getDictByType()
     self.getDataList()
+  },
+  computed: {
+    importConfig() {
+      return {
+        attributes: [
+          {
+            code: this.attributes[0].code,
+            name: this.attributes[0].name,
+            children: filterAttributes(this.attributes, {
+              attributes: this.importAttributes,
+              plain: true
+            }),
+            sampleDatas: [["分析表1", "部门1", "机种1", "01", "阶段1", "shi1", "工位1", ""]]
+          }
+        ],
+        importApi: WorkBookImport,
+        importSuccessCb: () => {
+          this.getDataList();
+        }
+      };
+    },
+    exportConfig() {
+      return {
+        attributes: filterAttributes(this.attributes, "isExport"),
+        exportApi: WorkBookExport,
+        filterType: this.dataButton,
+        filters: this.listQuery,
+        complexFilters: this.complexFilters,
+        exportAttributes: this.exportAttributes,
+        saveSetting: () => {
+          this.$store.dispatch("user/SetAExport", {
+            page: "workbook",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        },
+        reset: () => {
+          this.exportAttributes = cloneDeep(defaultExport);
+          this.$store.dispatch("user/SetAExport", {
+            page: "workbook",
+            display: this.exportAttributes
+          });
+          this.$message({
+            message: "设置成功",
+            type: "success",
+            duration: 1000
+          });
+        }
+      };
+    }
   },
   methods: {
     // 普通查询
@@ -387,7 +541,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
-        STLST: null,
+        stlst: null,
         modelId: null,
         destinations: null,
         phaseId: null,

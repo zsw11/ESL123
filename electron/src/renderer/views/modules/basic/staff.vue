@@ -30,7 +30,7 @@
             </el-form-item>
           </el-col>
           <el-col :span='6'>
-            <el-form-item label='电话' prop='mobilephone'>
+            <el-form-item label='座机号' prop='mobilephone'>
               <el-input v-model='listQuery.mobilephone' clearable>
               </el-input>
             </el-form-item>
@@ -156,7 +156,7 @@
 
 
         <el-table-column align='center'
-                         label='电话'
+                         label='座机号'
                          v-if="displayAttributesMap['staff.mobilephone'].display">
           <template slot-scope='scope'>
             <span>{{scope.row.mobilephone }}</span>
@@ -304,7 +304,7 @@ export default {
             { code: 'jobNumber', name: '工号', type: 'string', required: true },
             { code: 'code', name: '编码', type: 'string', required: true },
             { code: 'name', name: '姓名', type: 'string', required: true },
-            { code: 'mobilephone', name: '电话', type: 'string', required: true},
+            { code: 'mobilephone', name: '座机号', type: 'string', required: true},
             { code: 'email', name: '邮箱', type: 'string', required: true },
             { code: 'status', name: '状态', type: 'string', required: true },
             { code: 'employmentDate', name: '入职日期', type: 'string', required: true}

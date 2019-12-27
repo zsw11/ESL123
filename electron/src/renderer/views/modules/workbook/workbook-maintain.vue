@@ -49,7 +49,8 @@
               v-model="dataForm.modelId"
               :allowMultiple="true"
               :searchApi="this.listModel"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultModel">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -186,6 +187,7 @@ export default {
         deleteAt: null,
         ifAlter: false
       },
+      defaultModel:[],
       listDept,
       listPhase,
       listModel,
@@ -270,7 +272,7 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route)
+      this.defalitModel = [],
       this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
@@ -299,6 +301,7 @@ export default {
               'secondConvert',
               'remark' ])
           )
+          this.defaultModel.push(data.workBook.modelEntity)
         }).finally(() => {
           this.inited = true
         })
