@@ -86,7 +86,7 @@ export function createReports (data) {
 // 导入
 export function WorkBookImport (data) {
   return request({
-    url: request.adornUrl(`/api/v1/workbook/import`),
+    url: request.adornUrl(`/api/v1/workoperations/import`),
     method: 'post',
     data: request.adornData(data)
   })
@@ -95,7 +95,7 @@ export function WorkBookImport (data) {
 // 导出
 export function WorkBookExport (data) {
   return request({
-    url: request.adornUrl(`/api/v1/workbook/exportExcel`),
+    url: request.adornUrl(`/api/v1/workoperations/exportExcel`),
     method: 'post',
     data: request.adornData(data),
     responseType: 'blob'

@@ -239,10 +239,8 @@ import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
 const defaultExport = [
-  "workOperations.seqNumber",
-  "workOperations.h",
+  "workOperations.versionNumber",
   "workOperations.operation",
-  "workOperations.key",
   "workOperations.a0",
   "workOperations.b0",
   "workOperations.g0",
@@ -262,9 +260,6 @@ const defaultExport = [
   "workOperations.p2",
   "workOperations.a5",
   "workOperations.frequency",
-  "workOperations.timeValue",
-  "workOperations.tmu",
-  "workOperations.secondConvert",
   "workOperations.remark"
 ];
 
@@ -394,10 +389,8 @@ export default {
           code: 'workOperations',
           name: '分析表明细',
           children: [
-            {code: 'seqNumber', name: 'NO.', type: 'string', required: true},
-            {code: 'h', name: 'H', type: 'string', required: true},
+            {code: 'versionNumber', name: 'H', type: 'string', required: true},
             {code: 'operation', name: 'Work Method', type: 'string', required: true},
-            {code: 'key', name: 'Key', type: 'string', required: true},
             {code: 'a0', name: 'A', type: 'string', required: true},
             {code: 'b0', name: 'b', type: 'string', required: true},
             {code: 'g0', name: 'G', type: 'string', required: true},
@@ -417,10 +410,8 @@ export default {
             {code: 'p2', name: 'P', type: 'string', required: true},
             {code: 'a5', name: 'A', type: 'string', required: true},
             {code: 'frequency', name: 'Fre.', type: 'string', required: true},
-            {code: 'timeValue', name: 'TimeValue.', type: 'string', required: true},
-            {code: 'tmu', name: 'TMU', type: 'string', required: true},
-            {code: 'secondConvert', name: 'Sec./comV', type: 'string', required: true},
-            {code: 'remark', name: 'Remark', type: 'string', required: true}
+            {code: 'remark', name: 'Remark.', type: 'string', required: true}
+
           ]
         }],
       complexFilters: [],
@@ -430,10 +421,8 @@ export default {
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段固定不可变
       importAttributes: [
-        "workOperations.seqNumber",
-        "workOperations.h",
+        "workOperations.versionNumber",
         "workOperations.operation",
-        "workOperations.key",
         "workOperations.a0",
         "workOperations.b0",
         "workOperations.g0",
@@ -453,9 +442,6 @@ export default {
         "workOperations.p2",
         "workOperations.a5",
         "workOperations.frequency",
-        "workOperations.timeValue",
-        "workOperations.tmu",
-        "workOperations.secondConvert",
         "workOperations.remark"
       ],
       selectedWorkBookIds: []
@@ -479,8 +465,8 @@ export default {
               attributes: this.importAttributes,
               plain: true
             }),
-            sampleDatas: [["10", "66", "test", "key", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
-              "1", "1", "0","1","34","98","160","4.5",""]]
+            sampleDatas: [[ "66", "test", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+              "1", "1", "0","1","34",""]]
           }
         ],
         importApi: WorkBookImport,
