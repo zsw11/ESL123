@@ -13,25 +13,34 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'分析表名称'" prop="workName">
-            <el-input v-model="dataForm.workName"></el-input>
+          <el-form-item :label="'作业名'" prop="workName">
+            <el-input :disabled="$route.path.includes('update')" v-model="dataForm.workName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <tree-select style="width: 100%" v-model='dataForm.deptId' :api='listDept' />
+            <tree-select
+              :disabled="$route.path.includes('update')"
+              style="width: 100%"
+              v-model='dataForm.deptId' :api='listDept' />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="stlst">
-            <dict-select style="width: 100%" dictType="ST" v-model="dataForm.stlst"></dict-select>
+            <dict-select
+              :disabled="$route.path.includes('update')"
+              style="width: 100%"
+              dictType="ST"
+              v-model="dataForm.stlst">
+            </dict-select>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.phaseId"
               :allowMultiple="true"
@@ -45,6 +54,7 @@
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.modelId"
               :allowMultiple="true"
@@ -56,7 +66,10 @@
         </el-col>
         <el-col :span="10" :offset="2">
         <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="dataForm.destinations"></el-input>
+            <el-input
+              :disabled="$route.path.includes('update')"
+              v-model="dataForm.destinations">
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -66,6 +79,7 @@
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
             <keyword-search
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.workstationId"
               :allowMultiple="true"
@@ -77,6 +91,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item :label="'制表日期'" prop="makedAt">
             <el-date-picker
+              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.makedAt">
             </el-date-picker>
@@ -85,10 +100,13 @@
       </el-row>
 
 
-
-<!--          <el-form-item :label="'版本号'" prop="versionNumber">-->
-<!--            <el-input v-model="dataForm.versionNumber"></el-input>-->
-<!--          </el-form-item>-->
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'版本号'" prop="versionNumber">
+            <el-input :disabled="false" v-model="dataForm.versionNumber"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
 <!--          <el-form-item :label="'制表人ID'" prop="makerId">-->
 <!--            <el-input-number v-model="dataForm.makerId" ></el-input-number>-->

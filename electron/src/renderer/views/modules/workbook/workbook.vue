@@ -11,9 +11,10 @@
         class="clearfix" style="min-width: 1000px">
         <div class="wookbook-min-width">
 
-          <el-form-item :label="'分析表名称'" prop="workName" >
+          <el-form-item :label="'作业名'" prop="workName" >
             <el-input v-model="listQuery.workName" clearable></el-input>
           </el-form-item>
+
 
           <el-form-item :label="'部门'" prop="deptId" >
             <tree-select v-model='listQuery.deptId' :api='listDept' />
@@ -48,6 +49,7 @@
               </keyword-search>
           </el-form-item>
 
+
           <el-form-item :label="'工位'" prop="workstationId" >
             <keyword-search
               clearable
@@ -58,7 +60,9 @@
             </keyword-search>
           </el-form-item>
 
-
+          <el-form-item :label="'版本号'" prop="versionNumber" >
+            <el-input v-model="listQuery.versionNumber" clearable></el-input>
+          </el-form-item>
 
 <!--          <el-form-item :label="'制表人'" prop="makerId" >-->
 <!--            <el-input v-model="listQuery.makerId"  clearable></el-input>-->
@@ -107,9 +111,15 @@
           width="50">
         </el-table-column>
 
-        <el-table-column align="center" prop="workName" label="分析表名称" >
+        <el-table-column align="center" prop="workName" label="作业名" >
           <template slot-scope="scope">
             <span>{{scope.row.workName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="versionNumber" label="版本号" >
+          <template slot-scope="scope">
+            <span>{{scope.row.versionNumber }}</span>
           </template>
         </el-table-column>
 
@@ -370,7 +380,7 @@ export default {
         code: 'workbook',
         name: '分析表',
         children: [
-          {code: 'workName', name: '分析表名称', type: 'string', required: true},
+          {code: 'workName', name: '作业名', type: 'string', required: true},
           {code: 'deptId', name: '部门', type: 'string', required: true},
           {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
           {code: 'modelId', name: '机种', type: 'string', required: true},
@@ -549,7 +559,8 @@ export default {
         workstationId: null,
         createAt: null,
         makedAt: null,
-        workName: null
+        workName: null,
+        versionNumber: null
       })
       this.tableAt = null
     },
