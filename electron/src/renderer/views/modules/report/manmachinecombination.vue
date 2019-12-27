@@ -420,7 +420,7 @@ export default {
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-reportmanmachinecombination/${id}` : '/add-reportmanmachinecombination' })
+        this.$router.push({ path: id ? `/edit-manmachinecombination/${id}` : '/add-manmachinecombination' })
       })
     },
     // 删除数据

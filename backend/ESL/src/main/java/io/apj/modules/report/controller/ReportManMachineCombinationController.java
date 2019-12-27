@@ -47,7 +47,7 @@ public class ReportManMachineCombinationController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("report:reportmanmachinecombination:info")
+    //@RequiresPermissions("report:reportmanmachinecombination:info")
     public R info(@PathVariable("id") Integer id){
 		ReportManMachineCombinationEntity reportManMachineCombination = reportManMachineCombinationService.selectById(id);
 

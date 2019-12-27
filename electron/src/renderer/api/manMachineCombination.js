@@ -12,18 +12,18 @@ export function listReportManMachineCombination (query) {
 // 创建人机联合表
 export function createReportManMachineCombination (data) {
   return request({
-    url: request.adornUrl('/api/v1/reportmanmachinecombination/create'),
+    url: request.adornUrl('/api/v1/reportmanmachinecombination/save'),
     method: 'post',
     data
   })
 }
 
 // 获取人机联合表详情
-export function fetchReportManMachineCombination (params) {
+export function fetchReportManMachineCombination (id) {
   return request({
-    url: request.adornUrl('/api/v1/reportmanmachinecombination/detail'),
+    url: request.adornUrl(`/api/v1/reportmanmachinecombination/info/${id}`),
     method: 'get',
-    params: typeof params === 'object' ? request.adornParams(params) : { id: params }
+    params: request.adornParams()
   })
 }
 
