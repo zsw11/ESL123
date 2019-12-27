@@ -230,10 +230,10 @@ export default {
           { required: true, message: '工位不能为空', trigger: 'blur' }
         ],
         workName: [
-          { max: 128, message: '长度超过了128', trigger: 'blur' }
+          { required: true, message: '作业名不能为空', trigger: 'blur' }
         ],
         versionNumber: [
-          { max: 32, message: '长度超过了32', trigger: 'blur' }
+          { required: true, message: '版本号不能为空', trigger: 'blur' }
         ],
         makerId: [
           { type: 'number', message: '制表人ID需为数字值' }
