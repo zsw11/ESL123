@@ -122,7 +122,7 @@ export default {
   methods: {
     // 创建新行数据
     createNewRow (type) {
-      const newRow = clone(defaultRow)
+      const newRow = this.$refs.workbookTable.createRow(defaultRow)
       if (type) newRow.type = type
       return newRow
     },
@@ -259,11 +259,14 @@ export default {
       }
       // 获取联想数据
       const tmpData = { name: null, code: null }
-      const { fullData: tableData } = this.$refs.workbookTable.getTableData()
-      let currentRowIndex = this.$refs.workbookTable.getRowIndex(this.lastSelected.row)
+      const { fullData } = this.$refs.workbookTable.getTableData()
+      const currentRowIndex = findIndex(fullData, this.lastSelected.row)
       for (let i = currentRowIndex; i >= 0; i--) {
-        if (tableData[i].type === 'c') tmpData.code = tableData[i].operation
-        if (tableData[i + 1] && tableData[i + 1].type === 'n') tmpData.name = tableData[i + 1].operation
+        if (fullData[i].type === 'c') {
+          tmpData.code = fullData[i].operation
+          if (fullData[i + 1] && fullData[i + 1].type === 'n') tmpData.name = fullData[i + 1].operation
+          break
+        }
       }
       // 弹出对话框
       this.standardBookDialog.visible = true
@@ -292,6 +295,7 @@ export default {
             { operation: this.standardBookDialog.formData.name }
           ), this.lastSelected.row)
         }
+        await this.$refs.workbookTable.refreshData()
         // 插入标准书名
         await this.$refs.workbookTable.setActiveCell(rst.row, 'version')
         this.standardBookDialog.visible = false
@@ -308,6 +312,7 @@ export default {
       const rst = await fetchOperationGroup(group.id)
       if (rst.data && rst.data.operations) {
         await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields)), this.lastSelected.row)
+        await this.$refs.workbookTable.refreshData()
       }
     },
     // 选择指标组合
@@ -334,6 +339,7 @@ export default {
         const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
         if (!copyContent) return
         await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
+        await this.$refs.workbookTable.refreshData()
       }
     },
     // 删除行
@@ -352,6 +358,7 @@ export default {
       const currentRow = (this.getCurrentCell() || this.lastSelected || {}).row
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(this.createNewRow(), currentRow)
+      await this.$refs.workbookTable.refreshData()
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
