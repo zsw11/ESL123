@@ -54,8 +54,7 @@
         <div class="buttons">
           <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
           <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
-          <import-data :config="importConfig">
-          </import-data>
+          <import-data :config="importConfig"></import-data>
           <el-button
             type="danger"
             @click="deleteHandle()"
@@ -209,7 +208,7 @@ export default {
           children: [
             { code: "name", name: "机种名称", type: "string", required: true },
             { code: "deptName", name: "部门", type: "string", required: true },
-            {code: "modelSeriesName", name: "机种系列", type: "string", required: true},
+            { code: "modelSeriesName", name: "机种系列", type: "string", required: true},
             { code: "code", name: "型号", type: "string", required: false },
             { code: "wsTime", name: "WS Date", type: "string", required: false },
             { code: "esTime", name: "ES Date", type: "string", required: false },
@@ -335,7 +334,6 @@ export default {
         esTime: null,
         ampTime: null,
         mpTime: null,
-        remark: null,
         createBy: null,
         createAt: null,
         updateBy: null,

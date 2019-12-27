@@ -1,14 +1,11 @@
 package io.apj.modules.collection.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.*;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.ExcelUtils;
+import io.apj.common.utils.ExportExcelUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.MostValueDao;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.MostValueItemEntity;
@@ -22,16 +19,32 @@ import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("mostValueService")
@@ -109,8 +122,14 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 
     @Override
     public void generateReportData(List<Integer> workBookIds) {
-        MostValueEntity entity = generateMostValue(workBookIds.get(0));
-        mostValueItemService.generateMostValueItem(workBookIds, entity.getId());
+        
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<MostValueEntity> list = generateMostValue(filteredWorkBooks);
+        for (MostValueEntity entity : list) {
+            List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+            mostValueItemService.generateMostValueItem(filteredWorkBookIds, entity.getId());
+        }
     }
 
     @Override
@@ -200,24 +219,28 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         }
     }
 
-    private MostValueEntity generateMostValue(Integer workBookId) {
-        WorkBookEntity workBook = workBookService.selectById(workBookId);
-        Integer phaseId = workBook.getPhaseId();
-        Integer modelId = workBook.getModelId();
-        String stlst = workBook.getStlst();
-        MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-        if (entity == null) {
-            entity = new MostValueEntity();
-            entity.setModelId(modelId);
-            entity.setPhaseId(phaseId);
-            entity.setStlst(stlst);
-            entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("Most Value");
-            entity.setSheetName("Most Value");
-            entity.setFirstColumnName("Most Value");
-            insert(entity);
+    private List<MostValueEntity>  generateMostValue(List<WorkBookEntity> workBooks) {
+        List<MostValueEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity workBook : workBooks) {
+            
+            Integer phaseId = workBook.getPhaseId();
+            Integer modelId = workBook.getModelId();
+            String stlst = workBook.getStlst();
+            MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+            if (entity == null) {
+                entity = new MostValueEntity();
+                entity.setModelId(modelId);
+                entity.setPhaseId(phaseId);
+                entity.setStlst(stlst);
+                entity.setDeptId(workBook.getDeptId());
+                entity.setTitle("Most Value");
+                entity.setSheetName("Most Value");
+                entity.setFirstColumnName("Most Value");
+                insert(entity);
+            }
+            results.add(entity);
         }
-        return entity;
+        return results;
     }
 
     private MostValueEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {

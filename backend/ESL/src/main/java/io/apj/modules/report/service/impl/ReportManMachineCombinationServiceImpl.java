@@ -1,48 +1,46 @@
 package io.apj.modules.report.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.ExportExcelUtils;
+import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.report.dao.ReportManMachineCombinationDao;
 import io.apj.modules.report.entity.AshcraftTableEntity;
-import io.apj.modules.report.entity.StandardWorkEntity;
-import io.apj.modules.report.entity.StandardWorkItemEntity;
+import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
 import io.apj.modules.report.service.AshcraftTableService;
+import io.apj.modules.report.service.ReportManMachineCombinationService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.ReportManMachineCombinationDao;
-import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
-import io.apj.modules.report.service.ReportManMachineCombinationService;
-import org.springframework.util.ClassUtils;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 @Service("reportManMachineCombinationService")
@@ -59,7 +57,9 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
 
     @Autowired
     private AshcraftTableService ashcraftTableService;
-
+    @Autowired
+    private WorkBookService workBookService;
+    
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         Page<ReportManMachineCombinationEntity> page = this.selectPage(
@@ -111,22 +111,33 @@ public class ReportManMachineCombinationServiceImpl extends ServiceImpl<ReportMa
     }
 
     @Override
-    public void generateReportData(WorkBookEntity work) {
-        EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<ReportManMachineCombinationEntity> list = selectList(entityWrapper);
-        ReportManMachineCombinationEntity reportManMachineCombinationEntity = new ReportManMachineCombinationEntity();
-        if(list.size()>0){
-            reportManMachineCombinationEntity = list.get(0);
-        }else{
-            reportManMachineCombinationEntity.setModelId(work.getModelId());
-            reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
-            reportManMachineCombinationEntity.setStlst(work.getStlst());
-            reportManMachineCombinationEntity.setDeptId(work.getDeptId());
-            insert(reportManMachineCombinationEntity);
-        }
+    public void generateReportData(List<Integer> workBookIds) {
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<ReportManMachineCombinationEntity> list = generateReportManMachineCombination(filteredWorkBooks);
+    }
 
+    private List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks) {
+        List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+            EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                    .eq("phase_id",work.getPhaseId());
+            List<ReportManMachineCombinationEntity> list = selectList(entityWrapper);
+            ReportManMachineCombinationEntity reportManMachineCombinationEntity = new ReportManMachineCombinationEntity();
+            if(list.size()>0){
+                reportManMachineCombinationEntity = list.get(0);
+            }else{
+                reportManMachineCombinationEntity.setModelId(work.getModelId());
+                reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
+                reportManMachineCombinationEntity.setStlst(work.getStlst());
+                reportManMachineCombinationEntity.setDeptId(work.getDeptId());
+                insert(reportManMachineCombinationEntity);
+            }
+            results.add(reportManMachineCombinationEntity);
+        }
+         
+        return results;
     }
 
     private void generateTotalData(Map<String, Object> map)throws IOException {

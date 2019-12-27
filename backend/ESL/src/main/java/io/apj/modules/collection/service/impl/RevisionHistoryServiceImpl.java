@@ -1,14 +1,5 @@
 package io.apj.modules.collection.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
@@ -20,22 +11,39 @@ import io.apj.modules.collection.service.RevisionHistoryItemService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("revisionHistoryService")
@@ -53,6 +61,8 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     private RevisionHistoryItemService revisionHistoryItemService;
     @Autowired
     private WorkBookService workBookService;
+    @Autowired
+    private WorkstationService workstationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -129,26 +139,36 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
     @Override
     public void generateReportData(List<Integer> workBookIds) {
         List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-        WorkBookEntity work = workBooks.get(0);
-        EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<RevisionHistoryEntity> list = selectList(entityWrapper);
-        RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
-        if(list.size()>0){
-            revisionHistoryEntity = list.get(0);
-        }else{
-            //TODO 有未设置
-            revisionHistoryEntity.setModelId(work.getModelId());
-            revisionHistoryEntity.setPhaseId(work.getPhaseId());
-            revisionHistoryEntity.setStlst(work.getStlst());
-            revisionHistoryEntity.setDeptId(work.getDeptId());
-            revisionHistoryEntity.setDestinations(work.getDestinations());
-            revisionHistoryEntity.setSheetName(work.getWorkstationName()+" "+ work.getWorkName());
-            revisionHistoryEntity.setSheetName("sheetName");
-            revisionHistoryEntity.setDestinations(work.getDestinations());
-            insert(revisionHistoryEntity);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks);
+        
+    }
+
+    private List<RevisionHistoryEntity> generateRevisionHistory(List<WorkBookEntity> workBooks) {
+        List<RevisionHistoryEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+            EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                    .eq("phase_id",work.getPhaseId());
+            List<RevisionHistoryEntity> list = selectList(entityWrapper);
+            RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
+            if(list.size()>0){
+                revisionHistoryEntity = list.get(0);
+            }else{
+                //TODO 有未设置
+                revisionHistoryEntity.setModelId(work.getModelId());
+                revisionHistoryEntity.setPhaseId(work.getPhaseId());
+                revisionHistoryEntity.setStlst(work.getStlst());
+                revisionHistoryEntity.setDeptId(work.getDeptId());
+                revisionHistoryEntity.setDestinations(work.getDestinations());
+                WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
+                revisionHistoryEntity.setSheetName(workstation.getName()+" "+work.getWorkName() );
+                revisionHistoryEntity.setDestinations(work.getDestinations());
+                insert(revisionHistoryEntity);
+            }
+            results.add(revisionHistoryEntity);
         }
+        return results;
     }
 
     @Override
@@ -161,7 +181,6 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
-        //TODO
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
         String stlst = params.get("stlst").toString();

@@ -1,13 +1,5 @@
 package io.apj.modules.report.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
@@ -22,15 +14,28 @@ import io.apj.modules.report.entity.TimeContactEntity;
 import io.apj.modules.report.service.TimeContactService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("timeContactService")
@@ -110,7 +115,10 @@ public class TimeContactServiceImpl
 
     @Override
     public void generateReportData(List<Integer> workBookIds) {
-        List<TimeContactEntity> list = generateStandardTime(workBookIds);
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        
+        List<TimeContactEntity> list = generateStandardTime(filteredWorkBooks);
     }
 
     @Override
@@ -165,11 +173,9 @@ public class TimeContactServiceImpl
         ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
     }
 
-    private List<TimeContactEntity> generateStandardTime(List<Integer> workBookIds) {
-        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-        List<TimeContactEntity> list = new ArrayList<>(workBooks.size());
-        for (WorkBookEntity workBook : filteredWorkBooks) {
+    private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks) {
+        List<TimeContactEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity workBook : workBooks) {
 
             Integer phaseId = workBook.getPhaseId();
             Integer modelId = workBook.getModelId();
@@ -185,9 +191,9 @@ public class TimeContactServiceImpl
                 entity.setSheetName("时间联络表");
                 insert(entity);
             }
-            list.add(entity);
+            results.add(entity);
         }
-        return list;
+        return results;
     }
 
     private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {

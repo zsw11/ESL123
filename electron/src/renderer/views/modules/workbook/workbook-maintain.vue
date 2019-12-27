@@ -49,7 +49,8 @@
               v-model="dataForm.modelId"
               :allowMultiple="true"
               :searchApi="this.listModel"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultModel">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -141,7 +142,7 @@
     </el-form>
 
     <span class="dialog-footer">
-      <el-button v-if="$route.path.includes('add')" type="primary" @click="dataFormSubmit()">保   存</el-button>
+      <el-button v-if="$route.path.includes('add') || $route.path.includes('edit')" type="primary" @click="dataFormSubmit()">保   存</el-button>
       <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复   制</el-button>
       <el-button v-if="$route.path.includes('update')"  type="primary" @click="copyWBook()">修 订</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
@@ -186,6 +187,7 @@ export default {
         deleteAt: null,
         ifAlter: false
       },
+      defaultModel:[],
       listDept,
       listPhase,
       listModel,
@@ -270,7 +272,7 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route)
+      this.defalitModel = [],
       this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
@@ -299,6 +301,7 @@ export default {
               'secondConvert',
               'remark' ])
           )
+          this.defaultModel.push(data.workBook.modelEntity)
         }).finally(() => {
           this.inited = true
         })

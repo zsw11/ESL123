@@ -8,14 +8,17 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
 import io.apj.modules.report.dao.ChangeRecordDao;
 import io.apj.modules.report.entity.ChangeRecordEntity;
@@ -24,19 +27,21 @@ import io.apj.modules.report.service.ChangeRecordItemService;
 import io.apj.modules.report.service.ChangeRecordService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service("changeRecordService")
@@ -53,6 +58,8 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     private ChangeRecordItemService changeRecordItemService;
     @Autowired
     private WorkBookService workBookService;
+    @Autowired
+    private WorkstationService workstationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -117,24 +124,35 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
     @Override
     public void generateReportData(List<Integer> workBookIds) {
         List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-        WorkBookEntity work = workBooks.get(0);
-        EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<ChangeRecordEntity> list = selectList(entityWrapper);
-        ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
-        if(list.size()>0){
-            changeRecordEntity = list.get(0);
-        }else{
-            //TODO factory  title model_type 未设置
-            changeRecordEntity.setModelId(work.getModelId());
-            changeRecordEntity.setPhaseId(work.getPhaseId());
-            changeRecordEntity.setStlst(work.getStlst());
-            changeRecordEntity.setDeptId(work.getDeptId());
-            changeRecordEntity.setDestinations(work.getDestinations());
-            changeRecordEntity.setSheetName(work.getWorkstationName()+" "+ work.getWorkName());
-            insert(changeRecordEntity);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<ChangeRecordEntity> list = generateChangeRecord(filteredWorkBooks);
+        
+    }
+
+    private List<ChangeRecordEntity> generateChangeRecord(List<WorkBookEntity> workBooks) {
+        List<ChangeRecordEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+            EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+                    .eq("phase_id",work.getPhaseId());
+            List<ChangeRecordEntity> list = selectList(entityWrapper);
+            ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
+            if(list.size()>0){
+                changeRecordEntity = list.get(0);
+            }else{
+                //TODO factory  title model_type 未设置
+                changeRecordEntity.setModelId(work.getModelId());
+                changeRecordEntity.setPhaseId(work.getPhaseId());
+                changeRecordEntity.setStlst(work.getStlst());
+                changeRecordEntity.setDeptId(work.getDeptId());
+                changeRecordEntity.setDestinations(work.getDestinations());
+                WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
+                changeRecordEntity.setSheetName(workstation.getName()+" "+work.getWorkName() );
+                insert(changeRecordEntity);
+            }
+            results.add(changeRecordEntity);
         }
+        return results;
     }
 
     @Override

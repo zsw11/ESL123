@@ -107,8 +107,14 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 
     @Override
     public void generateReportData(List<Integer> workBookIds) {
-        StandardTimeEntity entity = generateStandardTime(workBookIds.get(0));
-        standardTimeItemService.generateStandardTimeItem(workBookIds, entity.getId());
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        
+        List<StandardTimeEntity> list = generateStandardTime(filteredWorkBooks);
+        for (StandardTimeEntity entity : list) {
+            List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+            standardTimeItemService.generateStandardTimeItem(filteredWorkBookIds, entity.getId());
+        }
     }
 
     @Override
@@ -175,25 +181,29 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
         map.put("convTotal", convTotal);
     }
 
-    private StandardTimeEntity generateStandardTime(Integer workBookId) {
-        WorkBookEntity workBook = workBookService.selectById(workBookId);
-        Integer phaseId = workBook.getPhaseId();
-        Integer modelId = workBook.getModelId();
-        String stlst = workBook.getStlst();
-        StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-        if (entity == null) {
-            entity = new StandardTimeEntity();
-            entity.setModelId(modelId);
-            entity.setPhaseId(phaseId);
-            entity.setStlst(stlst);
-            entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("标准时间表");
-            entity.setSheetName("标准时间表");
-            entity.setModelType(modelService.selectById(entity.getModelId()).getCode());
-            entity.setUnit("1/1000 min");
-            insert(entity);
+    private List<StandardTimeEntity> generateStandardTime(List<WorkBookEntity> workBooks) {
+        List<StandardTimeEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity workBook : workBooks) {
+            
+            Integer phaseId = workBook.getPhaseId();
+            Integer modelId = workBook.getModelId();
+            String stlst = workBook.getStlst();
+            StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+            if (entity == null) {
+                entity = new StandardTimeEntity();
+                entity.setModelId(modelId);
+                entity.setPhaseId(phaseId);
+                entity.setStlst(stlst);
+                entity.setDeptId(workBook.getDeptId());
+                entity.setTitle("标准时间表");
+                entity.setSheetName("标准时间表");
+                entity.setModelType(modelService.selectById(entity.getModelId()).getCode());
+                entity.setUnit("1/1000 min");
+                insert(entity);
+            }
+            results.add(entity);
         }
-        return entity;
+        return results;
     }
 
     private StandardTimeEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {

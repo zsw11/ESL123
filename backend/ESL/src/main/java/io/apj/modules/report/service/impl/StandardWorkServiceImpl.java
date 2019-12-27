@@ -1,14 +1,5 @@
 package io.apj.modules.report.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
@@ -25,18 +16,34 @@ import io.apj.modules.report.service.StandardWorkItemService;
 import io.apj.modules.report.service.StandardWorkService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("standardWorkService")
@@ -129,36 +136,39 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
      */
     @Override
     public void generateReportData(List<Integer> workBookIds) {
-        StandardWorkEntity entity = generateStandardWork(workBookIds.get(0));
-        standardWorkItemService.generateStandardWorkItem(workBookIds, entity.getId());
-//        StandardWorkItemEntity standardWorkItem = new StandardWorkItemEntity();
-//        standardWorkItem.setReportStandardWorkId(standardWorkEntity.getId());
-//        standardWorkItem.setSecondTime(work.getSecondConvert());
-//        standardWorkItem.setFirstTime(work.getSecondConvert());
-//        standardWorkItem.setThirdTime(work.getSecondConvert());
-//        standardWorkItem.setProcessNo(work.getWorkstationId());
-//        standardWorkItem.setProcessName(work.getWorkName());
-//        standardWorkItemService.insert(standardWorkItem);
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+       
+        List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
+        for (StandardWorkEntity entity : list) {
+            List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+            standardWorkItemService.generateStandardWorkItem(filteredWorkBookIds, entity.getId());
+        }
 
     }
 
-    private StandardWorkEntity generateStandardWork(Integer workBookId) {
-        WorkBookEntity work = workBookService.selectById(workBookId);
-        EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
-                .eq("phase_id",work.getPhaseId());
-        List<StandardWorkEntity> list = selectList(entityWrapper);
-        StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
-        if(list.size()>0){
-            standardWorkEntity = list.get(0);
-        }else{
-            standardWorkEntity.setModelId(work.getModelId());
-            standardWorkEntity.setPhaseId(work.getPhaseId());
-            standardWorkEntity.setStlst(work.getStlst());
-            standardWorkEntity.setDeptId(work.getDeptId());
-            insert(standardWorkEntity);
+    private List<StandardWorkEntity> generateStandardWork(List<WorkBookEntity> workBooks) {
+        List<StandardWorkEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity work : workBooks) {
+            
+            EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("stlst",work.getStlst()).eq("model_id",work.getModelId())
+            .eq("phase_id",work.getPhaseId());
+            List<StandardWorkEntity> list = selectList(entityWrapper);
+            StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
+            if(list.size()>0){
+                standardWorkEntity = list.get(0);
+            }else{
+                standardWorkEntity.setModelId(work.getModelId());
+                standardWorkEntity.setPhaseId(work.getPhaseId());
+                standardWorkEntity.setStlst(work.getStlst());
+                standardWorkEntity.setDeptId(work.getDeptId());
+                insert(standardWorkEntity);
+            }
+            results.add(standardWorkEntity);
         }
-        return standardWorkEntity;
+        
+        return results;
     }
 
     @Override

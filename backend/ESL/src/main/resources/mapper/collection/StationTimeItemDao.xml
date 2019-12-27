@@ -26,6 +26,7 @@
         join workstation ws on wb.workstation_id = ws.id
         join workstation_type wt on ws.workstation_type_id = wt.id
         left join collection_station_time_item c on wb.id = c.work_book_id
+        where 1=1
         <if test="workBookIds != null and workBookIds.size() > 0">
             and wb.id in
             <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">

@@ -1,18 +1,14 @@
 package io.apj.modules.collection.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import io.apj.common.utils.*;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.ExcelUtils;
+import io.apj.common.utils.ExportExcelUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.PathUtil;
+import io.apj.common.utils.Query;
 import io.apj.modules.collection.dao.CompareDao;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.CompareItemEntity;
-import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.masterData.entity.ModelEntity;
@@ -23,16 +19,31 @@ import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.function.Function;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 
 @Service("compareService")
@@ -113,8 +124,14 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 
     @Override
     public void generateReportData(List<Integer> workBookIds) {
-        CompareEntity entity = generateCompare(workBookIds.get(0));
-        compareItemService.generateCompareItem(workBookIds, entity);
+        
+        List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
+        List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+        List<CompareEntity> list = generateCompare(filteredWorkBooks);
+        for (CompareEntity entity : list) {
+            List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+            compareItemService.generateCompareItem(filteredWorkBookIds, entity);
+        }
     }
 
     @Override
@@ -195,31 +212,35 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
         map.put("minuteDifferenceTotal", minuteDifferenceTotal);
     }
 
-    private CompareEntity generateCompare(Integer workBookId) {
-        WorkBookEntity workBook = workBookService.selectById(workBookId);
-        Integer phaseId = workBook.getPhaseId();
-        Integer modelId = workBook.getModelId();
-        String stlst = workBook.getStlst();
-        CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-        if (entity == null) {
-            entity = new CompareEntity();
-            entity.setModelId(modelId);
-            entity.setPhaseId(phaseId);
-            entity.setStlst(stlst);
-            entity.setDeptId(workBook.getDeptId());
-            entity.setTitle("Compare表");
-            entity.setSheetName("Compare表");
-            entity.setDestinations("仕向");
-            entity.setFirstColumnName("LFP-PD内作");
-
-            WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId);
-            if (lastWookBook != null) {
-                entity.setLastVersionName(lastWookBook.getVersionNumber());
+    private List<CompareEntity> generateCompare(List<WorkBookEntity> workBooks) {
+        List<CompareEntity> results = new ArrayList<>(workBooks.size());
+        for (WorkBookEntity workBook : workBooks) {
+            
+            Integer phaseId = workBook.getPhaseId();
+            Integer modelId = workBook.getModelId();
+            String stlst = workBook.getStlst();
+            CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+            if (entity == null) {
+                entity = new CompareEntity();
+                entity.setModelId(modelId);
+                entity.setPhaseId(phaseId);
+                entity.setStlst(stlst);
+                entity.setDeptId(workBook.getDeptId());
+                entity.setTitle("Compare表");
+                entity.setSheetName("Compare表");
+                entity.setDestinations("仕向");
+                entity.setFirstColumnName("LFP-PD内作");
+                
+                WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId);
+                if (lastWookBook != null) {
+                    entity.setLastVersionName(lastWookBook.getVersionNumber());
+                }
+                entity.setCurrentVersionName(workBook.getVersionNumber());
+                insert(entity);
             }
-            entity.setCurrentVersionName(workBook.getVersionNumber());
-            insert(entity);
+            results.add(entity);
         }
-        return entity;
+        return results;
     }
 
     private CompareEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
