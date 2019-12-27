@@ -72,6 +72,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private ReportManMachineCombinationService reportManMachineCombinationService;
 
 	@Override
+	@DataFilter(subDept = true, user = true)
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
@@ -103,7 +104,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
 			entityWrapper.eq("workstation_id", Integer.parseInt((String) params.get("workstationId")));
 		}
-
+		entityWrapper.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 		Page<WorkBookEntity> page = this.selectPage(new Query<WorkBookEntity>(params).getPage(), entityWrapper);
 		for (WorkBookEntity entity : page.getRecords()) {
 			if (entity.getDeptId() != null) {
