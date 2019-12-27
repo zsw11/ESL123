@@ -74,6 +74,7 @@ public class ModelController extends AbstractController {
 	@RequiresPermissions("masterData:model:info")
 	public RD info(@PathVariable("id") Integer id) {
 		ModelEntity model = modelService.selectById(id);
+		model.setModelSeriesEntity(modelSeriesService.selectById(model.getModelSeriesId()));
 
 		return RD.build().put("data", model);
 	}
