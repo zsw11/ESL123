@@ -1,5 +1,7 @@
 package io.apj.modules.sys.service;
 
+import java.util.Map;
+
 import com.baomidou.mybatisplus.service.IService;
 
 import io.apj.common.utils.R;
@@ -31,5 +33,11 @@ public interface SysUserTokenService extends IService<SysUserTokenEntity> {
 	 * @param userId  用户ID
 	 */
 	void logout(long userId);
+	
+	
+	/**
+	 * 登录时初始化用户数据权限
+	 */
+	void initUserDF(Map<String, Object> params);
 
 }

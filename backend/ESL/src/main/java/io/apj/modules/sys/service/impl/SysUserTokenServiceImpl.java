@@ -1,11 +1,13 @@
 package io.apj.modules.sys.service.impl;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
+import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.R;
 import io.apj.modules.sys.dao.SysUserTokenDao;
 import io.apj.modules.sys.entity.SysUserTokenEntity;
@@ -97,5 +99,11 @@ public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenDao, SysUse
 		}
 
 		return token;
+	}
+	
+	@Override
+	@DataFilter(tableAlias = "init", subDept = true, user = false)
+	public void initUserDF(Map<String, Object> params) {
+		System.out.println("登录时初始化用户数据权限");
 	}
 }
