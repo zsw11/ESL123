@@ -240,9 +240,27 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            const fullData = this.$refs.workbookTable.getFullData()
+            // fullData[0].alterType = 'edit'
+            // fullData[0].alterInfo =  [
+            //   {
+            //     filed: 'operation',
+            //     alterType: 'edit',
+            //     origin: 'AAA',
+            //     display: 'html'
+            //   },
+            //   {
+            //     filed: 'a0',
+            //     alterType: 'delete'
+            //   },
+            //   {
+            //     filed: 'a3',
+            //     alterType: 'new'
+            //   }
+            // ]
             updateAll(this.workbook.id, {
               workBook: pick(this.workbook, ['id']),
-              workOperations: this.$refs.workbookTable.getFullData()
+              workOperations: fullData
             }).then(res => {
               console.log(res)
               this.$message({
