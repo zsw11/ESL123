@@ -320,7 +320,9 @@
               @click="edit(scope.row.id)">编辑</el-button>
             <el-button
               size="mini"
-              type="text">下载</el-button>
+              type="text"
+              @click="down(scope.row)"
+            >下载</el-button>
             <el-button
               size="mini"
               type="text"
@@ -383,7 +385,7 @@ import { listPhase } from '@/api/phase'
 import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
-import { createReportApprove } from '@/api/reportApprove'
+import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
 import { listStaff } from '@/api/staff'
 
 export default {
@@ -762,6 +764,17 @@ export default {
       this.$nextTick(() => {
         this.$router.push({ path: id ? `/edit-revisionhistory/${id}` : '/add-revisionhistory' })
       })
+    },
+    down(row){
+      let data ={
+        modelId: row.modelId,
+        phaseId: row.phaseId,
+        stlst: row.stlst,
+        reportId: 6
+      }
+      downloadReportApprove(data).then(response => {
+        
+      });
     }
   }
 }

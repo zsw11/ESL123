@@ -138,10 +138,6 @@ public class ApproveController extends AbstractController {
     @RequestMapping("/download")
 //    @RequiresPermissions("report:approve:list")
     public void download(@RequestBody Map<String, Object> params, HttpServletResponse response) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding("utf-8");
-
         approveService.download(params, response);
-
     }
 }

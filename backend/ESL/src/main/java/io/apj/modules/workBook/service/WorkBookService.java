@@ -2,11 +2,14 @@ package io.apj.modules.workBook.service;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
+
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -55,7 +58,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	 */
 	void deleteByIds(Collection<? extends Serializable> ids);
 
-    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+	List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
 	List<WorkBookEntity> filterUniquePhaseAndModelAndStlstOfWorkBooks(List<WorkBookEntity> workBooks);
 

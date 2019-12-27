@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.apj.modules.sys.entity.SysDictTypeEntity;
+import io.apj.modules.sys.service.SysDictTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,8 @@ import io.apj.common.utils.RD;
 public class SysDictController extends AbstractController {
 	@Autowired
 	private SysDictService sysDictService;
+	@Autowired
+	private SysDictTypeService sysDictTypeService;
 
 	/**
 	 * 列表
@@ -66,6 +71,15 @@ public class SysDictController extends AbstractController {
 		SysDictEntity sysDict = sysDictService.selectById(id);
 		return RD.ok(sysDict);
 	}
+
+	@GetMapping("/detailbycode")
+//	@RequiresPermissions("sys:dict:info")
+	public RD detailbycode(@RequestParam String dictCode, @RequestParam String code) {
+		long dictTypeId = sysDictTypeService.selectOne(new EntityWrapper<SysDictTypeEntity>().eq("type",dictCode)).getId();
+		SysDictEntity sysDictEntity = sysDictService.selectOne(new EntityWrapper<SysDictEntity>().eq("dict_type_id",dictTypeId).eq("code",code));
+		return RD.build().put("sysDictEntity",sysDictEntity);
+	}
+
 
 	/**
 	 * 保存

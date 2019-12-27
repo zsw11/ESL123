@@ -1,6 +1,5 @@
 package io.apj.modules.report.service.impl;
 
-import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -122,7 +121,7 @@ public class TimeContactServiceImpl
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         // TODo
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
@@ -170,7 +169,7 @@ public class TimeContactServiceImpl
         excelWriter.fill(map, writeSheet);
         //excelWriter.fill(list, fillConfig, writeSheet); 变更内容
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks) {

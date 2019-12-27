@@ -179,7 +179,7 @@ public class ExportExcelUtils {
 
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("filename",  URLEncoder.encode(fileName, "utf-8") + ".xls");
-		response.setHeader("Access-Control-Expose-Headers", "fileName");
+		response.setHeader("Access-Control-Expose-Headers", "filename");
 
 		exportMergedExcel(paths, response.getOutputStream());
 
@@ -309,7 +309,7 @@ public class ExportExcelUtils {
 			if (shape instanceof HSSFPicture) {
 				HSSFPicture pic = (HSSFPicture) shape;
 				int pictureIndex = pic.getPictureIndex();
-				HSSFClientAnchor anchor = pic.getPreferredSize();
+				HSSFClientAnchor anchor = pic.getClientAnchor();//pic.getPreferredSize();
 				HSSFPatriarch patriarch = toSheet.createDrawingPatriarch();
 				int index = wb.addPicture(pic.getPictureData().getData(), 2);
 				patriarch.createPicture(anchor,pictureIndex);

@@ -1,62 +1,17 @@
 [
     {
-        "table": "workOperation",
+        "table": "workOperations",
         "tableName": "分析表明细",
-        "tableAlias": "workOperation",
+        "tableAlias": "workOperations",
         "fieldList": [
             {
-                "code": "seqNumber",
-                "name": "序号",
-                "type": "int"
-            },
-            {
-                "code": "workBookId",
-                "name": "分析表ID",
-                "type": "int"
-            },
-            {
-                "code": "version",
+                "code": "versionNumber",
                 "name": "版本信息",
                 "type": "String"
             },
             {
                 "code": "operation",
                 "name": "手顺",
-                "type": "String"
-            },
-            {
-                "code": "frequency",
-                "name": "频度",
-                "type": "Integer"
-            },
-            {
-                "code": "timeValue",
-                "name": "时间值",
-                "type": "BigDecimal"
-            },
-            {
-                "code": "tmu",
-                "name": "TMU",
-                "type": "BigDecimal"
-            },
-            {
-                "code": "secondConvert",
-                "name": "秒换算",
-                "type": "BigDecimal"
-            },
-            {
-                "code": "secondConvert",
-                "name": "秒换算",
-                "type": "BigDecimal"
-            },
-            {
-                "code": "remark",
-                "name": "备注",
-                "type": "String"
-            },
-            {
-                "code": "type",
-                "name": "类型",
                 "type": "String"
             },
             {
@@ -148,6 +103,16 @@
                 "code": "a5",
                 "name": "a5",
                 "type": "int"
+            },
+            {
+                "code": "frequency",
+                "name": "频度",
+                "type": "Integer"
+            },
+            {
+                "code": "remark",
+                "name": "备注",
+                "type": "String"
             },
             {
                 "code": "createAt",

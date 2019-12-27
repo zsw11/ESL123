@@ -63,7 +63,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 				Object value = entry.getValue();
 				String[] keyStrs = key.split("\\.");
 				// 设备
-				if (keyStrs[0].equals("workOperation")) {
+				if (keyStrs[0].equals("workOperations")) {
 					if (keyStrs[1].equals("common")) {
 						if(value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);
@@ -108,11 +108,11 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		HashMap<String, String> dict = sysDictService.getDictDetail();
 		for (WorkOperationsEntity item : workOperationsEntityList) {
 			// 处理数据源
-			Map<String, Object> arr = DataUtils.dataChange("workOperation", item, dict);
+			Map<String, Object> arr = DataUtils.dataChange("workOperations", item, dict);
 			dataList.add(arr);
 		}
 		// 返回excel格式数据
-		Map<String, Object> param = DataUtils.rtlExcelData(list, "workOperation", dataList);
+		Map<String, Object> param = DataUtils.rtlExcelData(list, "workOperations", dataList);
 		ExcelData data = new ExcelData();
 		data.setTitles((List<String>) param.get("titles"));
 		data.setRows((List<List<Object>>) param.get("rows"));

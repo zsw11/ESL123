@@ -93,8 +93,8 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
-<!--          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>-->
-<!--          <import-data :config="importConfig"></import-data>-->
+          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
+          <import-data :config="importConfig"></import-data>
           <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
         </div>
       </div>
@@ -167,7 +167,7 @@
         </el-table-column>
 
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="280" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
@@ -239,16 +239,8 @@ import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
 const defaultExport = [
-  "workOperations.seqNumber",
-  "workOperations.workBookId",
-  "workOperations.version",
+  "workOperations.versionNumber",
   "workOperations.operation",
-  "workOperations.phaseId",
-  "workOperations.frequency",
-  "workOperations.timeValue",
-  "workOperations.tmu",
-  "workOperations.remark",
-  "workOperations.type",
   "workOperations.a0",
   "workOperations.b0",
   "workOperations.g0",
@@ -266,7 +258,9 @@ const defaultExport = [
   "workOperations.a4",
   "workOperations.b3",
   "workOperations.p2",
-  "workOperations.a5"
+  "workOperations.a5",
+  "workOperations.frequency",
+  "workOperations.remark"
 ];
 
 export default {
@@ -376,45 +370,48 @@ export default {
       total: 0,
       dataListLoading: false,
       dataListSelections: [],
-      attributes: [{
-        code: 'workbook',
-        name: '分析表',
-        children: [
-          {code: 'workName', name: '作业名', type: 'string', required: true},
-          {code: 'deptId', name: '部门', type: 'string', required: true},
-          {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-          {code: 'modelId', name: '机种', type: 'string', required: true},
-          {code: 'phaseId', name: '生产阶段', type: 'string', required: true},
-          {code: 'destinations', name: '仕向', type: 'string', required: true},
-          {code: 'workstationId', name: '工位', type: 'string', required: true},
-          {code: 'makedAt', name: '制表日期', type: 'string', required: true}
-        ]
-      },
+      attributes: [
+      //   {
+      //   code: 'workbook',
+      //   name: '分析表',
+      //   children: [
+      //     {code: 'workName', name: '作业名', type: 'string', required: true},
+      //     {code: 'deptId', name: '部门', type: 'string', required: true},
+      //     {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
+      //     {code: 'modelId', name: '机种', type: 'string', required: true},
+      //     {code: 'phaseId', name: '生产阶段', type: 'string', required: true},
+      //     {code: 'destinations', name: '仕向', type: 'string', required: true},
+      //     {code: 'workstationId', name: '工位', type: 'string', required: true},
+      //     {code: 'makedAt', name: '制表日期', type: 'string', required: true}
+      //   ]
+      // },
         {
           code: 'workOperations',
           name: '分析表明细',
           children: [
-            {code: 'seqNumber', name: '序号', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true},
-            {code: 'stlst', name: 'LST/ST', type: 'string', required: true}
+            {code: 'versionNumber', name: 'H', type: 'string', required: true},
+            {code: 'operation', name: 'Work Method', type: 'string', required: true},
+            {code: 'a0', name: 'A', type: 'string', required: true},
+            {code: 'b0', name: 'b', type: 'string', required: true},
+            {code: 'g0', name: 'G', type: 'string', required: true},
+            {code: 'a1', name: 'A', type: 'string', required: true},
+            {code: 'b1', name: 'B', type: 'string', required: true},
+            {code: 'p0', name: 'P', type: 'string', required: true},
+            {code: 'm0', name: 'M', type: 'string', required: true},
+            {code: 'x0', name: 'X', type: 'string', required: true},
+            {code: 'i0', name: 'I', type: 'string', required: true},
+            {code: 'a2', name: 'A', type: 'string', required: true},
+            {code: 'b2', name: 'B', type: 'string', required: true},
+            {code: 'p1', name: 'P', type: 'string', required: true},
+            {code: 'a3', name: 'A', type: 'string', required: true},
+            {code: 'tool', name: 'Tool', type: 'string', required: true},
+            {code: 'a4', name: 'A', type: 'string', required: true},
+            {code: 'b3', name: 'B', type: 'string', required: true},
+            {code: 'p2', name: 'P', type: 'string', required: true},
+            {code: 'a5', name: 'A', type: 'string', required: true},
+            {code: 'frequency', name: 'Fre.', type: 'string', required: true},
+            {code: 'remark', name: 'Remark.', type: 'string', required: true}
+
           ]
         }],
       complexFilters: [],
@@ -424,16 +421,8 @@ export default {
       exportAttributes: cloneDeep(defaultExport),
       // 导入字段固定不可变
       importAttributes: [
-        "workOperations.seqNumber",
-        "workOperations.workBookId",
-        "workOperations.version",
+        "workOperations.versionNumber",
         "workOperations.operation",
-        "workOperations.phaseId",
-        "workOperations.frequency",
-        "workOperations.timeValue",
-        "workOperations.tmu",
-        "workOperations.remark",
-        "workOperations.type",
         "workOperations.a0",
         "workOperations.b0",
         "workOperations.g0",
@@ -451,7 +440,9 @@ export default {
         "workOperations.a4",
         "workOperations.b3",
         "workOperations.p2",
-        "workOperations.a5"
+        "workOperations.a5",
+        "workOperations.frequency",
+        "workOperations.remark"
       ],
       selectedWorkBookIds: []
     }
@@ -474,7 +465,8 @@ export default {
               attributes: this.importAttributes,
               plain: true
             }),
-            sampleDatas: [["分析表1", "部门1", "机种1", "01", "阶段1", "shi1", "工位1", ""]]
+            sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+              "1", "1", "0","1","34",""]]
           }
         ],
         importApi: WorkBookImport,

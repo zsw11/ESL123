@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.common.utils.RD;
@@ -23,14 +25,18 @@ import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -230,50 +236,52 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response)  throws IOException {
         Integer reportId = (Integer)params.get("reportId");
+        List<String> filePaths = null;
+        String fileName = "test";
         switch (reportId) {
             case 1:
-                workBookService.download(params, response);
+                filePaths = workBookService.download(params, response);
                 break;
             case 2:
                 //人机联合
-                reportManMachineCombinationService.download(params, response);
+                filePaths = reportManMachineCombinationService.download(params, response);
                 break;
             case 3:
-                stationTimeService.download(params, response);
+                filePaths = stationTimeService.download(params, response);
                 break;
             case 4:
-                compareService.download(params, response);
+                filePaths = compareService.download(params, response);
                 break;
             case 5:
-                mostValueService.download(params, response);
+                filePaths = mostValueService.download(params, response);
                 break;
             case 6:
                 // Collection-Revision History表
-                revisionHistoryService.download(params, response);
+                filePaths = revisionHistoryService.download(params, response);
                 break;
             case 7:
-                totalService.download(params, response);
+                filePaths = totalService.download(params, response);
                 break;
             case 8:
                 break;
             case 9:
-                timeContactService.download(params, response);
+                filePaths = timeContactService.download(params, response);
                 break;
             case 10:
                 break;
             case 11:
-                standardTimeService.download(params, response);
+                filePaths = standardTimeService.download(params, response);
                 break;
             case 12:
                 // 标准工数表
-                standardWorkService.download(params, response);
+                filePaths = standardWorkService.download(params, response);
                 break;
             case 13:
                 // 履历表
-                changeRecordService.download(params, response);
+                filePaths = changeRecordService.download(params, response);
                 break;
         }
-
+        ExportExcelUtils.exportExcel(filePaths, response, fileName);
 
     }
 

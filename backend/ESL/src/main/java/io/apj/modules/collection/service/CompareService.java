@@ -1,10 +1,12 @@
 package io.apj.modules.collection.service;
 
 import com.baomidou.mybatisplus.service.IService;
+
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.collection.entity.CompareEntity;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,7 @@ public interface CompareService extends IService<CompareEntity> {
 
     void generateReportData(List<Integer> workBookIds);
 
-    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+    List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
     /**
      * 是否还可以提交审批

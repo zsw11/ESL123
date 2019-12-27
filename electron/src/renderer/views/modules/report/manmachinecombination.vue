@@ -236,7 +236,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="down"
+              @click="down(scope.row)"
             >下载</el-button>
           </template>
         </el-table-column>
@@ -444,11 +444,11 @@ export default {
         })
       })
     },
-    down(){
+    down(row){
       let data ={
-        modelId: 457,
-        phaseId: 1,
-        stlst: "01",
+        modelId: row.modelId,
+        phaseId: row.phaseId,
+        stlst: row.stlst,
         reportId: 2
       }
       downloadReportApprove(data).then(response => {

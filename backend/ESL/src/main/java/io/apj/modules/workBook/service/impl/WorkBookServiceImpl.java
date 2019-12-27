@@ -275,6 +275,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public WorkBookEntity detailWithOperations(Integer id) {
 		WorkBookEntity workBook = this.selectById(id);
+		workBook.setModelEntity(modelService.selectById(workBook.getModelId()));
+		workBook.setSysDeptEntity(deptService.selectById(workBook.getDeptId()));
+		workBook.setPhaseEntity(phaseService.selectById(workBook.getPhaseId()));
+		workBook.setWorkstationEntity(workstationService.selectById(workBook.getWorkstationId()));
 		EntityWrapper<WorkOperationsEntity> workOperationsWrapper = new EntityWrapper<>();
 		workOperationsWrapper.eq("work_book_id", id).isNull("delete_at");
 		List<WorkOperationsEntity> workOperationsList = workOperationService.selectList(workOperationsWrapper);
@@ -361,7 +365,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	}
 
 	@Override
-	public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
 		Integer phaseId = (Integer)params.get("phaseId");
 		Integer modelId = (Integer)params.get("modelId");
 		String stlst = params.get("stlst").toString();
@@ -370,6 +374,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
 		String fileName = "test";
 		ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+		return workBookFilePaths;
 	}
 
 	@Override

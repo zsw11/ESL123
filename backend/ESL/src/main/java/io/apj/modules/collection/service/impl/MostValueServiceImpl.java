@@ -2,7 +2,6 @@ package io.apj.modules.collection.service.impl;
 
 import io.apj.common.utils.DateUtils;
 import io.apj.common.utils.ExcelUtils;
-import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
@@ -133,7 +132,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         Integer phaseId = (Integer)params.get("phaseId");
         Integer modelId = (Integer)params.get("modelId");
         String stlst = params.get("stlst").toString();
@@ -166,8 +165,11 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 
         int lastRow = 4 + list.size();
         int firstRow = 5;
-        excelWriter.merge(firstRow, lastRow, 0, 0);
-        excelWriter.merge(firstRow, lastRow, 7, 8);
+        if (lastRow != firstRow) {
+            
+            excelWriter.merge(firstRow, lastRow, 0, 0);
+            excelWriter.merge(firstRow, lastRow, 7, 8);
+        }
         Map<Integer, Function<MostValueItemEntity, Object>> options = new HashMap<>();
         options.put(1, MostValueItemEntity::getType);
         options.put(2, MostValueItemEntity::getWorkName);
@@ -175,7 +177,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
         options.put(6, MostValueItemEntity::getType);
         ExcelUtils.mergeCell(options, list, excelWriter, firstRow);
         excelWriter.finish();
-        ExportExcelUtils.exportExcel(Arrays.asList(fileName), response, sheetName);
+        return Arrays.asList(fileName);
     }
 
     private void generateTotalData(List<MostValueItemEntity> list, Map<String, Object> map) {

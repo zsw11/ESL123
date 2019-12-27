@@ -67,7 +67,7 @@ export function fetchDictItem (id) {
 // 获取字典项详情
 export function fetchDictItemByCode (dictCode, code) {
   return request({
-    url: request.adornUrl('/api/v1/dictitem/detailbycode'),
+    url: request.adornUrl('/api/v1/dict/detailbycode'),
     method: 'get',
     params: { dictCode, code }
   })
