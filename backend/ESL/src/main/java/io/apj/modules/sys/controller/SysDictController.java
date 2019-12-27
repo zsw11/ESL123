@@ -76,8 +76,8 @@ public class SysDictController extends AbstractController {
 //	@RequiresPermissions("sys:dict:info")
 	public RD detailbycode(@RequestParam String dictCode, @RequestParam String code) {
 		long dictTypeId = sysDictTypeService.selectOne(new EntityWrapper<SysDictTypeEntity>().eq("type",dictCode)).getId();
-		String dictName = sysDictService.selectOne(new EntityWrapper<SysDictEntity>().eq("dict_type_id",dictTypeId).eq("code",code)).getName();
-		return RD.build().put("dictName",dictName);
+		SysDictEntity sysDictEntity = sysDictService.selectOne(new EntityWrapper<SysDictEntity>().eq("dict_type_id",dictTypeId).eq("code",code));
+		return RD.build().put("sysDictEntity",sysDictEntity);
 	}
 
 

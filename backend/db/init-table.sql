@@ -1368,6 +1368,7 @@ CREATE TABLE work_book (
   delete_at timestamp
 );
 comment on table work_book is '分析表';
+CREATE UNIQUE INDEX work_book_uniq ON work_book (STLST,model_id,destinations,phase_id,workstation_id,work_name,version_number) WHERE delete_at IS NULL;
 comment on column work_book.dept_id is '组织机构ID';
 comment on column work_book.STLST is 'ST/LST';
 comment on column work_book.model_id is '机种ID';
@@ -1398,7 +1399,7 @@ CREATE TABLE work_operations (
   version varchar(64),
   operation varchar(256),
   type varchar(16),
-  alter_type boolean,
+  alter_type varchar(256),
   alter_info varchar(512),
   a0 integer,
   b0 integer,
