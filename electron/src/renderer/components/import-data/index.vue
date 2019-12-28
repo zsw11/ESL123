@@ -94,7 +94,8 @@ export default {
         visible: false,
         reading: false,
         importData: [],
-        importSubData: []
+        importSubData: [],
+        filterId: null
       },
       dictMaps: {}
     }
@@ -155,6 +156,7 @@ export default {
     }
   },
   created () {
+    this.filterId = this.config.filterId
     this.attributes.forEach(a => {
       switch (a.type) {
         case 'boolean': {
@@ -270,6 +272,7 @@ export default {
         let p
         if (this.subAttributes.length) {
           p = this.config.importApi({
+            filterId: this.filterId,
             data: {
               [this.config.attributes[0].importAttr]: this.mapData(),
               ...this.importDialog.importSubData
@@ -277,6 +280,7 @@ export default {
           })
         } else {
           p = this.config.importApi({
+            filterId: this.filterId,
             data: this.mapData()
           })
         }

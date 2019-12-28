@@ -313,6 +313,7 @@
       // 导入
       importConfig() {
         return {
+          filterId: this.$route.params.id,
           attributes: [
             {
               code: this.attributes[0].code,
@@ -322,7 +323,7 @@
                 plain: true
               }),
               sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
-                "1", "1", "0","1","34",""]]
+                "1", "1", "0","1","34",""]],
             }
           ],
           importApi: WorkBookImport,
@@ -337,6 +338,7 @@
           exportApi: WorkBookExport,
           filterType: this.dataButton,
           filters: this.listQuery,
+          filterId: this.$route.params.id,
           complexFilters: this.complexFilters,
           exportAttributes: this.exportAttributes,
           saveSetting: () => {

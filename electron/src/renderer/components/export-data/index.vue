@@ -93,6 +93,7 @@ export default {
         this.exportLimit === 'all' ? {
           filterType: 'all',
           filters: null,
+          filterId: null,
           complexFilters: null
         } : undefined
       )).then(response => {
