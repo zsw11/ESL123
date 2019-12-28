@@ -311,7 +311,7 @@ public class ModelController extends AbstractController {
 		try {
 			modelService.insertBatch(modelEntities, Constant.importNum);
 		} catch (MybatisPlusException e) {
-			throw new RRException("批量导入失败", 500);
+			throw new RRException("机种导入失败，请检查机种是否重复", 500);
 		}
 		return RD.build().put("code", 200);
 	}

@@ -45,7 +45,9 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		Page<WorkOperationsEntity> page = this.selectPage(new Query<WorkOperationsEntity>(params).getPage());
+		EntityWrapper<WorkOperationsEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.isNull("delete_at").orderBy("update_at", false);
+		Page<WorkOperationsEntity> page = this.selectPage(new Query<WorkOperationsEntity>(params).getPage(),entityWrapper);
 
 		return new PageUtils(page);
 	}
@@ -80,6 +82,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 //			DataUtils.transMap2Bean2(deviceMap, workOperationsEntity);
 			ValidatorUtils.validateEntity(workOperationsEntity, i);
 			workOperationsEntity.setCreateBy((Integer) map.get("userID"));
+			workOperationsEntity.setWorkBookId(Integer.parseInt((String) map.get("filterId")));
 			operationsEntityList.add(workOperationsEntity);
 		}
 		try {
@@ -96,6 +99,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		List<String> list = (List<String>) map.get("exportAttributes");
 		// 查询类型
 		String type = map.get("filterType").toString();
+		Integer workBookId = Integer.parseInt((String) map.get("filterId"));
 		// 普通查询
 		Map<String, Object> params = (Map<String, Object>) map.get("filters");
 		if (null == params) {
@@ -105,10 +109,18 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		params.put("limit", "9999999");
 		PageUtils pageUtils = workOperationsService.queryPage(params);
 		List<WorkOperationsEntity> workOperationsEntityList = (List<WorkOperationsEntity>) pageUtils.getData();
+		List<WorkOperationsEntity> workOperationsEntityListFilter = new ArrayList<>();
+		for(WorkOperationsEntity item : workOperationsEntityList){
+			if(item.getWorkBookId()!=null){
+				if(item.getWorkBookId()==workBookId){
+					workOperationsEntityListFilter.add(item);
+				}
+			}
+		}
 		// 处理数据源
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dict = sysDictService.getDictDetail();
-		for (WorkOperationsEntity item : workOperationsEntityList) {
+		for (WorkOperationsEntity item : workOperationsEntityListFilter) {
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("workOperations", item, dict);
 			dataList.add(arr);

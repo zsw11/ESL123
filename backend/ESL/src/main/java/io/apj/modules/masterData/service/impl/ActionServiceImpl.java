@@ -77,7 +77,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		try {
 			actionService.insertBatch(actionEntityList, Constant.importNum);
 		} catch (MybatisPlusException e) {
-			throw new RRException("批量导入失败", 500);
+			throw new RRException("关键词导入失败，请检查关键词是否重复", 500);
 		}
 	}
 

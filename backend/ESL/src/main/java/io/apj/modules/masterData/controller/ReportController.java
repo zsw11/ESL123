@@ -59,16 +59,14 @@ public class ReportController extends AbstractController {
 	@RequiresPermissions("masterData:report:info")
 	public RD info(@PathVariable("id") Integer id) {
 		ReportEntity report = reportService.selectById(id);
-		Map<String,Object> map = new HashMap<>();
 		List<SysDeptEntity> deptEntityList = new LinkedList<>();
 		List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(new EntityWrapper<ReportDeptRelaEntity>().eq("report_id", id));
 		for(ReportDeptRelaEntity item : reportDeptRelaEntityList){
 			SysDeptEntity deptEntity = sysDeptService.selectById(item.getDeptId());
 			deptEntityList.add(deptEntity);
 		}
-		map.put("report",report);
-		map.put("SysDeptEntity",deptEntityList);
-		return RD.build().put("data", map);
+		report.setDeptEntityList(deptEntityList);
+		return RD.build().put("data", report);
 	}
 	/**
 	 * 报表属于哪些报表组并过滤

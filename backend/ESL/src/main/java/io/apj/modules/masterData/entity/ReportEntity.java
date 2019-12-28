@@ -1,10 +1,13 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -64,4 +67,9 @@ public class ReportEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	/**
+	 * report
+	 */
+	@TableField(exist = false)
+	private List deptEntityList;
 }

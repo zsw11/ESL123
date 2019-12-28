@@ -92,7 +92,7 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         try {
             measureGroupService.insertBatch(measureGroupEntityList, Constant.importNum);
         } catch (MybatisPlusException e) {
-            throw new RRException("批量导入失败", 500);
+            throw new RRException("常用指标导入失败，请检查关键词是否重复", 500);
         }
 
     }
