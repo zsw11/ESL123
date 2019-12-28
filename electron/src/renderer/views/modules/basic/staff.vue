@@ -33,8 +33,8 @@
 
 
 
-            <el-form-item label='中心' prop='centerName'>
-              <el-input v-model='listQuery.centerName' clearable>
+            <el-form-item label='中心' prop='center'>
+              <el-input v-model='listQuery.center' clearable>
               </el-input>
             </el-form-item>
 
@@ -115,7 +115,7 @@
         <el-table-column align="center"
                          label="中心">
           <template slot-scope="scope">
-            <span>{{scope.row.centerName }}</span>
+            <span>{{scope.row.center }}</span>
           </template>
         </el-table-column>
 
@@ -219,7 +219,7 @@ import DisplayAttributes from '@/components/display-attributes'
 import DictSelect from '@/components/dict-select'
 const defaultDisplay = [
   'staff.deptId',
-  'staff.centerName',
+  'staff.center',
   'staff.jobNumber',
   'staff.code',
   'staff.name',
@@ -233,7 +233,7 @@ const defaultDisplay = [
 
 const defaultExport = [
   'staff.deptId',
-  'staff.centerName',
+  'staff.center',
   'staff.jobNumber',
   'staff.code',
   'staff.name',
@@ -256,7 +256,7 @@ export default {
       dataButton: 'list',
       listQuery: {
         deptId: null,
-        centerName: null,
+        center: null,
         jobNumber: null,
         code: null,
         name: null,
@@ -289,7 +289,7 @@ export default {
           name: '人员信息',
           children: [
             { code: 'deptId', name: '部门', type: 'string', required: true },
-            { code: 'centerName', name: '中心', type: 'string', required: true },
+            { code: 'center', name: '中心', type: 'string', required: true },
             { code: 'jobNumber', name: '工号', type: 'string', required: true },
             { code: 'code', name: '编码', type: 'string', required: true },
             { code: 'name', name: '姓名', type: 'string', required: true },
@@ -421,7 +421,7 @@ export default {
     clearQuery () {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
-        centerName: null,
+        center: null,
         jobNumber: null,
         code: null,
         name: null,

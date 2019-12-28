@@ -75,6 +75,13 @@
             <el-input v-model="dataForm.jobNumber"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="9"
+                :offset="2">
+          <el-form-item :label="'中心'"
+                        prop="center">
+            <el-input v-model="dataForm.center"></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="20">
@@ -146,7 +153,8 @@ export default {
         employmentDate: null,
         remark: null,
         userId: null,
-        jobNumber: null
+        jobNumber: null,
+        center: null
       },
       dataRules: {
         deptId: [{ required: true, type: 'number', message: '部门是必选项' }],
@@ -235,7 +243,8 @@ export default {
                 'email',
                 'employmentDate',
                 'remark',
-                'userId'
+                'userId',
+                'center'
               ])
             )
           })
