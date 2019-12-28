@@ -85,7 +85,7 @@
   import WorkbookTable from './workbook-detail-table.vue'
   import InfoDialog from './workbook-detail-info-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
+  import { fetchWorkBookWithOperations } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import markers from 'videojs-markers-plugin'
@@ -274,34 +274,13 @@
       async doCache () {
         if (this.$refs.workbookTable) this.$refs.workbookTable.cache()
       },
-      // 保存
-      doSave () {
-        const fullData = this.$refs.workbookTable.getFullData()
-        // fullData[0].alterType = 'edit'
-        // fullData[0].alterInfo =  [
-        //   {
-        //     filed: 'operation',
-        //     alterType: 'edit',
-        //     origin: 'AAA',
-        //     display: 'html'
-        //   },
-        //   {
-        //     filed: 'a0',
-        //     alterType: 'delete'
-        //   },
-        //   {
-        //     filed: 'a3',
-        //     alterType: 'new'
-        //   }
-        // ]
-        return updateAll(this.workbook.id, {
-          workBook: pick(this.workbook, ['id']),
-          workOperations: fullData
-        }).then(() => {
+      // 保存，判断是否在线
+      doSave (workbook,isForce) {
+        this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
           if (this.isOffline) {
             this.$message({
               message: '当前处于在线状态',
-              type: 'error',
+              type: 'success',
               duration: 1500,
               onClose: this.cancleFormSubmit
             })
@@ -320,6 +299,7 @@
           throw e
         })
       },
+      // 保存按钮
       async save () {
         if (this.$refs.workbookTable) {
           this.$confirm(`确定保存分析表?`, '提示', {
@@ -327,7 +307,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(async () => {
-            await this.doSave().then(() => {
+            await this.doSave(true).then(() => {
               this.$message({
                 message: '保存成功',
                 type: 'success',

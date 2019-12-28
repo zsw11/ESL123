@@ -1,4 +1,5 @@
-import { setCache } from '@/utils/auth'
+import { setCache, removeCache } from '@/utils/auth'
+import day from 'dayjs'
 
 export default {
   namespaced: true,
@@ -29,13 +30,6 @@ export default {
     },
     Redo (state) {
       if (state.currentOffset <= state.workbookHistory.length - 1) state.currentOffset++
-    },
-    Cache (state, data) {
-      setCache({
-        workbook: state.currentWorkbook,
-        data
-      })
-      console.log(Date(), 'cached')
     }
   },
   actions: {
@@ -51,8 +45,16 @@ export default {
     redo ({ commit }) {
       commit('Redo')
     },
-    cache ({ commit }, data) {
-      commit('Cache', data)
+    cache ({ state }, data) {
+      setCache({
+        workbook: state.currentWorkbook,
+        data
+      })
+      console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Cache')
+    },
+    clearCache () {
+      removeCache()
+      console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Clear cache')
     }
   }
 }

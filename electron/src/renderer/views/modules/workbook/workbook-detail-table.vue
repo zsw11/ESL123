@@ -64,8 +64,10 @@
 </template>
 
 <script>
+import day from 'dayjs'
 import { pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
+import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
@@ -199,7 +201,7 @@ export default {
     selectedChanged (val) {
       if (this.lastSelected) {
         // 补0操作
-        console.log(0, generalMeasureFields, this.lastSelected.column.property)
+        // console.log(0, generalMeasureFields, this.lastSelected.column.property)
         if (generalMeasureFields.includes(this.lastSelected.column.property)) {
           if (!generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) return
           // 通用列
@@ -390,6 +392,40 @@ export default {
       if (this.hasUnchacheData) {
         await this.$store.dispatch('workbook/cache', this.getFullData())
         this.hasUnchacheData = false
+      }
+    },
+    // 保存
+    save (workbook, isForce) {
+      if (this.hasUnsavedData || isForce) {
+        const fullData = this.getFullData()
+        // fullData[0].alterType = 'edit'
+        // fullData[0].alterInfo =  [
+        //   {
+        //     filed: 'operation',
+        //     alterType: 'edit',
+        //     origin: 'AAA',
+        //     display: 'html'
+        //   },
+        //   {
+        //     filed: 'a0',
+        //     alterType: 'delete'
+        //   },
+        //   {
+        //     filed: 'a3',
+        //     alterType: 'new'
+        //   }
+        // ]
+        return updateAll(workbook.id, {
+          workBook: pick(workbook, ['id']),
+          workOperations: fullData
+        }).then(() => {
+          console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Cache')
+          this.hasUnsavedData = false
+          this.$store.dispatch('workbook/clearCache')
+          this.hasUnchacheData = false
+        })
+      } else {
+        return Promise.resolve()
       }
     }
   }

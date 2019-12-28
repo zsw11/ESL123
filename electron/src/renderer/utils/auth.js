@@ -25,3 +25,6 @@ export function getCache () {
 export function setCache (cache) {
   return localStorage.setItem(CacheKey, JSON.stringify(cache))
 }
+export function removeCache () {
+  return localStorage.removeItem(CacheKey)
+}
