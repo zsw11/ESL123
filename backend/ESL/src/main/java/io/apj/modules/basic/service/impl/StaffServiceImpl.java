@@ -77,6 +77,20 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 			entity.setPerms(sysUserService.getDeptAllPerms(entity.getDeptId(), "basic:staff:"));
 			SysDeptEntity dept = sysDeptService.selectById(entity.getDeptId());
 			entity.setDept(dept);
+			String centerN = null;
+			Long ESLID =  sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("name","ESL")).getId();
+			SysDeptEntity sysDeptEntity = sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("id", entity.getDeptId()));
+			List<SysDeptEntity> sysDeptEntityList = sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().eq("parent_id", ESLID));
+			for(SysDeptEntity item : sysDeptEntityList){
+				if(item.getId()==sysDeptEntity.getParentId()){
+					centerN=item.getName();
+				}else if(item.getId()==sysDeptEntity.getId()){
+					centerN=item.getName();
+				}else if(ESLID==sysDeptEntity.getId()){
+					centerN="ESL";
+				}
+			}
+			entity.setCenter(centerN);
 //			JobEntity job = jobService.selectById(entity.getJobId());
 //			entity.setJob(job);
 		}

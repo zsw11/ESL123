@@ -9,9 +9,11 @@ import io.apj.common.validator.group.AddGroup;
 import io.apj.common.validator.group.UpdateGroup;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,6 +25,7 @@ import javax.validation.constraints.NotNull;
  *
  * @date 2018-12-10 17:12:16
  */
+@Data
 @TableName("basic_staff")
 public class StaffEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -54,9 +57,14 @@ public class StaffEntity implements Serializable {
 	 */
 	private String jobNumber;
 	/**
-	 * 中心
+	 * 中心名称
 	 */
 	private String centerName;
+	/**
+	 * 中心
+	 */
+	@TableField(exist = false)
+	private String center;
 	/**
 	 * 部门
 	 */

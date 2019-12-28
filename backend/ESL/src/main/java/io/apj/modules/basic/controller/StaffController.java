@@ -61,6 +61,8 @@ public class StaffController extends AbstractController {
 	private Resource staffData;
 	@Autowired
 	private JobService jobService;
+	@Autowired
+	private SysDeptService sysDeptService;
 //	@Value("classpath:static/query-configuration/areaData.json")
 //	private Resource areaData;
 
@@ -154,6 +156,7 @@ public class StaffController extends AbstractController {
 			staff.setUpdateAt(new Date());
 			staff.setUpdateBy(getUserId());
 			staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
+
 			staffService.update(staff);
 			// 更新引用表,ifUpdate仅需一次，否则最终只会存在最后一条
 			insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
