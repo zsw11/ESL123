@@ -252,7 +252,7 @@
         if (!self.saveInterval) {
           self.saveInterval = setInterval(() => {
             self.doSave()
-          }, 1000 * 20);
+          }, this.customConfig.AutoSaveInterval);
         }
       },
       // 保存
