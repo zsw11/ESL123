@@ -1,6 +1,6 @@
 <template>
   <el-dropdown size="small" @command="handleClick">
-    <el-button type="primary" plain @click="handleImport">
+    <el-button  @click="handleImport">
       导   入<i class="el-icon-arrow-down el-icon--right"></i>
     </el-button>
     <el-dropdown-menu slot="dropdown">
@@ -68,7 +68,7 @@
       </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="importDialog.visible = false">取 消</el-button>
-        <el-button type="primary" @click="doImport">确 定</el-button>
+        <el-button @click="doImport">确 定</el-button>
       </div>
     </el-dialog>
   </el-dropdown>

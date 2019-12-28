@@ -45,7 +45,8 @@
               v-model="dataForm.phaseId"
               :allowMultiple="true"
               :searchApi="this.listPhase"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultPhase">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -84,7 +85,8 @@
               v-model="dataForm.workstationId"
               :allowMultiple="true"
               :searchApi="this.listWorkstation"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultWorkstation">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -108,54 +110,6 @@
         </el-col>
       </el-row>
 
-<!--          <el-form-item :label="'制表人ID'" prop="makerId">-->
-<!--            <el-input-number v-model="dataForm.makerId" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-
-
-<!--          <el-form-item :label="'沿用来源ID'" prop="continueFromId">-->
-<!--            <el-input-number v-model="dataForm.continueFromId" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'时间值'" prop="timeValue">-->
-<!--            <el-input-number v-model="dataForm.timeValue" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'TMU'" prop="TMU">-->
-<!--            <el-input-number v-model="dataForm.TMU" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'秒换算'" prop="secondConvert">-->
-<!--            <el-input-number v-model="dataForm.secondConvert" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'备注'" prop="remark">-->
-<!--            <el-input v-model="dataForm.remark"></el-input>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'创建者ID'" prop="createBy">-->
-<!--            <el-input-number v-model="dataForm.createBy" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'创建时间'" prop="createAt">-->
-<!--            <el-date-picker v-model="dataForm.createAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">-->
-<!--        </el-date-picker>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'更新者ID'" prop="updateBy">-->
-<!--            <el-input-number v-model="dataForm.updateBy" ></el-input-number>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'更新时间'" prop="updateAt">-->
-<!--            <el-date-picker v-model="dataForm.updateAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">-->
-<!--        </el-date-picker>-->
-<!--          </el-form-item>-->
-
-<!--          <el-form-item :label="'删除时间'" prop="deleteAt">-->
-<!--            <el-date-picker v-model="dataForm.deleteAt" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">-->
-<!--        </el-date-picker>-->
-<!--          </el-form-item>-->
 
     </el-form>
 
@@ -175,6 +129,7 @@ import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
+
 export default {
   name: 'editWorkBook',
   data () {
@@ -206,6 +161,9 @@ export default {
         ifAlter: false
       },
       defaultModel:[],
+      defaultWorkstation:[],
+      defaultDept:[],
+      defaultPhase:[],
       listDept,
       listPhase,
       listModel,
@@ -234,6 +192,9 @@ export default {
         ],
         versionNumber: [
           { required: true, message: '版本号不能为空', trigger: 'blur' }
+        ],
+        destinations: [
+          { required: true, message: '仕向不能为空', trigger: 'blur' }
         ],
         makerId: [
           { type: 'number', message: '制表人ID需为数字值' }
@@ -290,7 +251,6 @@ export default {
   },
   methods: {
     init () {
-      this.defalitModel = [],
       this.title = this.$route.meta.title
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
@@ -319,7 +279,11 @@ export default {
               'secondConvert',
               'remark' ])
           )
-          this.defaultModel.push(data.workBook.modelEntity)
+          this.defaultModel = [data.workBook.modelEntity]
+          this.defaultWorkstation = [data.workBook.workstationEntity]
+          // console.log(this.defaultWorkstation)
+          this.defaultPhase = [data.workBook.phaseEntity]
+          this.defaultDept = [data.workBook.sysDeptEntity]
         }).finally(() => {
           this.inited = true
         })

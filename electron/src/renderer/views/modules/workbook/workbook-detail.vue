@@ -5,6 +5,8 @@
       <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
+      <export-data :config="exportConfig">导 出</export-data>
+      <import-data :config="importConfig"></import-data>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
@@ -91,6 +93,36 @@
   import markers from 'videojs-markers-plugin'
   import 'videojs-markers-plugin/dist/videojs.markers.plugin.min.css'
   import { ipcRenderer } from 'electron'
+  import { filterAttributes } from '@/utils'
+  import { cloneDeep } from 'lodash'
+  import ExportData from '@/components/export-data'
+  import ImportData from '@/components/import-data'
+  import { WorkBookImport, WorkBookExport } from '@/api/workBook'
+
+  const defaultExport = [
+    "workOperations.versionNumber",
+    "workOperations.operation",
+    "workOperations.a0",
+    "workOperations.b0",
+    "workOperations.g0",
+    "workOperations.a1",
+    "workOperations.b1",
+    "workOperations.p0",
+    "workOperations.m0",
+    "workOperations.x0",
+    "workOperations.i0",
+    "workOperations.a2",
+    "workOperations.b2",
+    "workOperations.p1",
+    "workOperations.a3",
+    "workOperations.tool",
+    "workOperations.a4",
+    "workOperations.b3",
+    "workOperations.p2",
+    "workOperations.a5",
+    "workOperations.frequency",
+    "workOperations.remark"
+  ];
 
   const workbookPercents = [
     { id: 'hide', name: 'Hide' },
@@ -105,7 +137,9 @@
     components: {
       InfoDialog,
       WorkbookTable,
-      videoPlayer
+      videoPlayer,
+      ExportData,
+      ImportData
     },
     data () {
       const self = this
@@ -121,6 +155,62 @@
         currentWorkbook: null,
         saveInterval: null,
         cacheInterval: null,
+        attributes: [
+          {
+            code: 'workOperations',
+            name: '分析表明细',
+            children: [
+              {code: 'versionNumber', name: 'H', type: 'string', required: true},
+              {code: 'operation', name: 'Work Method', type: 'string', required: true},
+              {code: 'a0', name: 'A', type: 'string', required: true},
+              {code: 'b0', name: 'b', type: 'string', required: true},
+              {code: 'g0', name: 'G', type: 'string', required: true},
+              {code: 'a1', name: 'A', type: 'string', required: true},
+              {code: 'b1', name: 'B', type: 'string', required: true},
+              {code: 'p0', name: 'P', type: 'string', required: true},
+              {code: 'm0', name: 'M', type: 'string', required: true},
+              {code: 'x0', name: 'X', type: 'string', required: true},
+              {code: 'i0', name: 'I', type: 'string', required: true},
+              {code: 'a2', name: 'A', type: 'string', required: true},
+              {code: 'b2', name: 'B', type: 'string', required: true},
+              {code: 'p1', name: 'P', type: 'string', required: true},
+              {code: 'a3', name: 'A', type: 'string', required: true},
+              {code: 'tool', name: 'Tool', type: 'string', required: true},
+              {code: 'a4', name: 'A', type: 'string', required: true},
+              {code: 'b3', name: 'B', type: 'string', required: true},
+              {code: 'p2', name: 'P', type: 'string', required: true},
+              {code: 'a5', name: 'A', type: 'string', required: true},
+              {code: 'frequency', name: 'Fre.', type: 'string', required: true},
+              {code: 'remark', name: 'Remark.', type: 'string', required: true}
+            ]
+          }],
+        // 导出
+        exportAttributes: cloneDeep(defaultExport),
+        // 导入字段固定不可变
+        importAttributes: [
+          "workOperations.versionNumber",
+          "workOperations.operation",
+          "workOperations.a0",
+          "workOperations.b0",
+          "workOperations.g0",
+          "workOperations.a1",
+          "workOperations.b1",
+          "workOperations.p0",
+          "workOperations.m0",
+          "workOperations.x0",
+          "workOperations.i0",
+          "workOperations.a2",
+          "workOperations.b2",
+          "workOperations.p1",
+          "workOperations.a3",
+          "workOperations.tool",
+          "workOperations.a4",
+          "workOperations.b3",
+          "workOperations.p2",
+          "workOperations.a5",
+          "workOperations.frequency",
+          "workOperations.remark"
+        ],
         // 操作
         listener: null,
         addedOperation: null,
@@ -193,6 +283,60 @@
       },
       debounceNextTag () {
         return debounce(this.nextTag, 300)
+      },
+      // 导入
+      importConfig() {
+        return {
+          attributes: [
+            {
+              code: this.attributes[0].code,
+              name: this.attributes[0].name,
+              children: filterAttributes(this.attributes, {
+                attributes: this.importAttributes,
+                plain: true
+              }),
+              sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+                "1", "1", "0","1","34",""]]
+            }
+          ],
+          importApi: WorkBookImport,
+          importSuccessCb: () => {
+          }
+        };
+      },
+      // 导出
+      exportConfig() {
+        return {
+          attributes: filterAttributes(this.attributes, "isExport"),
+          exportApi: WorkBookExport,
+          filterType: this.dataButton,
+          filters: this.listQuery,
+          complexFilters: this.complexFilters,
+          exportAttributes: this.exportAttributes,
+          saveSetting: () => {
+            this.$store.dispatch("user/SetAExport", {
+              page: "workbook",
+              display: this.exportAttributes
+            });
+            this.$message({
+              message: "设置成功",
+              type: "success",
+              duration: 1000
+            });
+          },
+          reset: () => {
+            this.exportAttributes = cloneDeep(defaultExport);
+            this.$store.dispatch("user/SetAExport", {
+              page: "workbook",
+              display: this.exportAttributes
+            });
+            this.$message({
+              message: "设置成功",
+              type: "success",
+              duration: 1000
+            });
+          }
+        };
       }
     },
     watch: {
