@@ -1,3 +1,5 @@
+import { setCache } from '@/utils/auth'
+
 export default {
   namespaced: true,
   state: {
@@ -27,6 +29,13 @@ export default {
     },
     Redo (state) {
       if (state.currentOffset <= state.workbookHistory.length - 1) state.currentOffset++
+    },
+    Cache (state, data) {
+      setCache({
+        workbook: state.currentWorkbook,
+        data
+      })
+      console.log(Date(), 'cached')
     }
   },
   actions: {
@@ -43,7 +52,7 @@ export default {
       commit('Redo')
     },
     cache ({ commit }, data) {
-
+      commit('Cache', data)
     }
   }
 }

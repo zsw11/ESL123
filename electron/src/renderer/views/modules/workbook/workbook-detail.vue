@@ -1,8 +1,8 @@
 <template>
-  <div class="workbook-detail-page" :class="workbookPercent">
+  <div class="workbook-detail-page" :class="[ workbookPercent, isOffline ? 'offline' : '' ]">
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
-      <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
+      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
@@ -111,6 +111,7 @@
       const self = this
       return {
         // 界面
+        isOffline: false,
         workbookPercents,
         workbookPercent: 'half',
         // 数据
@@ -119,6 +120,7 @@
         workbooks: [],
         currentWorkbook: null,
         saveInterval: null,
+        cacheInterval: null,
         // 操作
         listener: null,
         addedOperation: null,
@@ -225,26 +227,40 @@
     },
     activated () {
       if (this.workbook) this.intervalSave()
+      if (this.workbook) this.intervalCache()
       this.addShortcut()
     },
     deactivated () {
       this.closeVideo()
       this.removeShortcut()
-      clearInterval(this.saveInterval)
-      this.saveInterval = null
+      this.clearInterval('saveInterval')
+      this.clearInterval('cacheInterval')
     },
     destroyed () {
-      clearInterval(this.saveInterval)
-      this.saveInterval = null
+      this.clearInterval('saveInterval')
+      this.clearInterval('cacheInterval')
       this.removeShortcut()
     },
     methods: {
       // ========================================
       //                分析表
       // ========================================
+      clearInterval (intervalName) {
+        clearInterval(this[intervalName])
+        this[intervalName] = null
+      },
       // 退回上一页
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      },
+      // 定时缓存
+      intervalCache () {
+        const self = this
+        if (!self.cacheInterval) {
+          self.cacheInterval = setInterval(() => {
+            self.doCache()
+          }, this.customConfig.AutoCacheInterval);
+        }
       },
       // 定时保存
       intervalSave () {
@@ -255,8 +271,11 @@
           }, this.customConfig.AutoSaveInterval);
         }
       },
+      async doCache () {
+        if (this.$refs.workbookTable) this.$refs.workbookTable.cache()
+      },
       // 保存
-      async doSave () {
+      doSave () {
         const fullData = this.$refs.workbookTable.getFullData()
         // fullData[0].alterType = 'edit'
         // fullData[0].alterInfo =  [
@@ -275,9 +294,30 @@
         //     alterType: 'new'
         //   }
         // ]
-        await updateAll(this.workbook.id, {
+        return updateAll(this.workbook.id, {
           workBook: pick(this.workbook, ['id']),
           workOperations: fullData
+        }).then(() => {
+          if (this.isOffline) {
+            this.$message({
+              message: '当前处于在线状态',
+              type: 'error',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          }
+          this.isOffline = false
+        }).catch(e => {
+          if (!this.isOffline) {
+            this.$message({
+              message: '当前处于离线状态',
+              type: 'error',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          }
+          this.isOffline = true
+          throw e
         })
       },
       async save () {
@@ -287,12 +327,17 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(async () => {
-            await this.doSave()
-            this.$message({
-              message: '保存成功',
-              type: 'success',
-              duration: 1500,
-              onClose: this.cancleFormSubmit
+            await this.doSave().then(() => {
+              this.$message({
+                message: '保存成功',
+                type: 'success',
+                duration: 1500,
+                onClose: this.cancleFormSubmit
+              })
+              // 重置自动保存
+              clearInterval(this.saveInterval)
+              this.saveInterval = null
+              this.intervalSave()
             })
           })
         }
@@ -309,6 +354,7 @@
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
           self.workbookData[workBook.workName] = workBook.workOperationsList
+          self.intervalCache()
           self.intervalSave()
           self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
@@ -519,6 +565,12 @@
 .workbook-detail-page {
   height: 100%;
   overflow: hidden;
+
+  &.offline {
+    .save-button {
+      color: orange;
+    }
+  }
 
   .header {
     background-color: rgba(0, 0, 0, .5);
