@@ -1,6 +1,7 @@
 package io.apj.modules.masterData.service.impl;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -12,6 +13,7 @@ import io.apj.common.validator.ValidatorUtils;
 import io.apj.modules.masterData.entity.ActionEntity;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.sys.service.SysDeptService;
+import io.apj.modules.workBook.entity.WorkBookEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +83,8 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
                     deviceMap.put(keyStrs[1], value);
                 }
             }
-            DataUtils.transMap2Bean2(deviceMap, measureGroupEntity);
+            measureGroupEntity = JSON.parseObject(JSON.toJSONString(deviceMap), MeasureGroupEntity.class);
+//            DataUtils.transMap2Bean2(deviceMap, measureGroupEntity);
             ValidatorUtils.validateEntity(measureGroupEntity, i);
             measureGroupEntity.setCreateBy((Integer) map.get("userID"));
             measureGroupEntityList.add(measureGroupEntity);

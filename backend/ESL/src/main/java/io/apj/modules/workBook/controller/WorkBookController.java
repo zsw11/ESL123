@@ -1,10 +1,15 @@
 package io.apj.modules.workBook.controller;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.PhaseEntity;
@@ -13,6 +18,7 @@ import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.service.SysDeptService;
+import net.sf.json.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +77,8 @@ public class WorkBookController extends AbstractController {
 		workBook.setPhaseEntity(phaseService.selectById(workBook.getPhaseId()));
 		workBook.setSysDeptEntity(sysDeptService.selectById(workBook.getDeptId()));
 		workBook.setWorkstationEntity(workstationService.selectById(workBook.getWorkstationId()));
+//		JSONObject jsonRemarks = JSONObject.fromObject(workBook.getRemarks());
+//		workBook.setRemarks(jsonRemarks);
 		return R.ok().put("workBook", workBook);
 	}
 
@@ -89,11 +97,22 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/create")
 	@RequiresPermissions("workBook:workbook:create")
-	public R save(@RequestBody WorkBookEntity workBook) {
-		workBook.setDeptId(getUserDeptId().intValue());
-		workBook.setIfAlter(false);
-		workBook.setCreateBy(getUserId().intValue());
-		workBookService.insert(workBook);
+	public R save(@RequestBody Map<String,Object> map) {
+		JSONArray jsonArray = null;
+		try
+		{
+			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		WorkBookEntity workBookEntity;
+		map.put("remarks",jsonArray.toString());
+		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
+		workBookEntity.setDeptId(getUserDeptId().intValue());
+		workBookEntity.setIfAlter(false);
+		workBookEntity.setCreateBy(getUserId().intValue());
+		workBookService.insert(workBookEntity);
 
 		return R.ok();
 	}
@@ -105,9 +124,20 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("workBook:workbook:update")
-	public RD update(@RequestBody WorkBookEntity workBook) {
-		workBookService.updateById(workBook);
-
+	public RD update(@RequestBody Map<String,Object> map) {
+		JSONArray jsonArray = null;
+		try
+		{
+			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		WorkBookEntity workBookEntity =  new WorkBookEntity();
+		map.put("remarks",jsonArray.toString());
+		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
+//		DataUtils.transMap2Bean2(map, workBookEntity);
+		workBookService.updateById(workBookEntity);
 		return RD.build();
 	}
 

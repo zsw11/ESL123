@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -75,7 +76,8 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 					deviceMap.put(keyStrs[1], value);
 				}
 			}
-			DataUtils.transMap2Bean2(deviceMap, workOperationsEntity);
+			workOperationsEntity  = JSON.parseObject(JSON.toJSONString(deviceMap), WorkOperationsEntity.class);
+//			DataUtils.transMap2Bean2(deviceMap, workOperationsEntity);
 			ValidatorUtils.validateEntity(workOperationsEntity, i);
 			workOperationsEntity.setCreateBy((Integer) map.get("userID"));
 			operationsEntityList.add(workOperationsEntity);
@@ -83,7 +85,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		try {
 			workOperationsService.insertBatch(operationsEntityList, Constant.importNum);
 		} catch (MybatisPlusException e) {
-			throw new RRException("批量导入失败", 500);
+			throw new RRException("分析表明细有重复，请检查后再导入", 500);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package io.apj.modules.workBook.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -306,13 +307,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		// 遍历子表数组，批量插入
 		List<WorkOperationsEntity> workOperationsList = new ArrayList<>();
 		List<Map<String, Object>> workOperationsMapList = (List<Map<String, Object>>) params.get("workOperations");
+		JSONArray alterInfoJson = null;
 		for (int i = 0; i < workOperationsMapList.size(); i++) {
 			WorkOperationsEntity workOperations = new WorkOperationsEntity();
 			if (workOperationsMapList.get(i).get("frequency") != "" && workOperationsMapList.get(i).get("frequency") != null) {
 				workOperationsMapList.get(i).put("frequency",
 						Integer.parseInt(workOperationsMapList.get(i).get("frequency").toString()));
+				alterInfoJson =new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
+				workOperationsMapList.get(i).put("alterInfo",alterInfoJson.toString());
 			}
-			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
+			workOperations  = JSON.parseObject(JSON.toJSONString(workOperationsMapList.get(i)), WorkOperationsEntity.class);
+//			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
 			workOperations.setWorkBookId(workBook.getId());
 			workOperationsList.add(workOperations);
 		}
