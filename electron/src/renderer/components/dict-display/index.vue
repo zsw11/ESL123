@@ -28,8 +28,8 @@ export default {
   methods: {
     updateName () {
       if (this.dictCode) {
-        fetchDictItemByCode(this.dictCode, this.code).then(({data}) => {
-          this.dictName = (data || {}).name
+        fetchDictItemByCode(this.dictCode, this.code).then(({sysDictEntity}) => {
+          this.dictName = (sysDictEntity || {}).name
         })
       }
     }

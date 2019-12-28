@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
-            <span>{{(workbook.dept || {}).name}}</span>
+            <span>{{(workbook.sysDeptEntity || {}).name}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -33,7 +33,7 @@
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
-            <span>{{(workbook.phase || {}).name}}</span>
+            <span>{{(workbook.phaseEntity || {}).name}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -41,7 +41,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
-            <span>{{(workbook.model || {}).name}}</span>
+            <span>{{(workbook.modelEntity || {}).name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -55,7 +55,7 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
-            <span>{{(workbook.workstation || {}).name}}</span>
+            <span>{{(workbook.workstationEntity || {}).name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">

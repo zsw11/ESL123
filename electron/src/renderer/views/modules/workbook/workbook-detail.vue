@@ -5,8 +5,8 @@
       <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
-      <export-data :config="exportConfig">导 出</export-data>
-      <import-data :config="importConfig"></import-data>
+      <export-data type="primary" :config="exportConfig">导 出</export-data>
+      <!-- <import-data type="primary" :config="importConfig"></import-data> -->
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
