@@ -7,6 +7,7 @@
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <export-data type="primary" :config="exportConfig">导 出</export-data>
       <!-- <import-data type="primary" :config="importConfig"></import-data> -->
+      <span class="work-name">{{workbook.workName}}</span>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
@@ -739,6 +740,18 @@
       &:hover {
         color: rgba(255, 255, 255, .2);
       }
+    }
+    .work-name {
+      position: absolute;
+      left: 50%;
+      margin-left: -10%;
+      width: 20%;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
     }
     .video-name {
       color: white;
