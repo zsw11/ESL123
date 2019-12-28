@@ -37,7 +37,8 @@
           {{getSecConv(scope)}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75"></vxe-table-column>
+      <vxe-table-column field="remark1" title="Remark1" width="75" :formatter="({ cellValue })=>cellValue?round(cellValue*100/6, -1):undefined" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书"
@@ -115,7 +116,9 @@ export default {
             { required: true, message: '请填写标准书名称', trigger: 'blur' }
           ]
         }
-      }
+      },
+      // 其他
+      round
     }
   },
   created () {
@@ -142,7 +145,9 @@ export default {
         if (row[f] < 0) fre -= row[f]
       })
       const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
-      return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
+      const frequency = row['frequency'] || 0
+      // console.log(base, fre, frequency, toolValue)
+      return (base + fre * frequency) * 6 + toolValue * frequency * 6
     },
     // 计算列
     getTmu (scope) {
