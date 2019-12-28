@@ -25,7 +25,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="hide">取消</el-button>
-        <el-button type="primary" @click="confirm()" :disabled="exporting" :loading="exporting">导出</el-button>
+        <el-button @click="confirm()" :disabled="exporting" :loading="exporting">导出</el-button>
       </span>
     </el-dialog>
   </span>

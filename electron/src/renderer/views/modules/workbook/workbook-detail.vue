@@ -1,10 +1,12 @@
 <template>
-  <div class="workbook-detail-page" :class="workbookPercent">
+  <div class="workbook-detail-page" :class="[ workbookPercent, isOffline ? 'offline' : '' ]">
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
-      <el-button type="primary" icon="el-icon-upload" @click="save">保存</el-button>
+      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
+      <export-data :config="exportConfig">导 出</export-data>
+      <import-data :config="importConfig"></import-data>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
@@ -85,12 +87,42 @@
   import WorkbookTable from './workbook-detail-table.vue'
   import InfoDialog from './workbook-detail-info-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
+  import { fetchWorkBookWithOperations } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import markers from 'videojs-markers-plugin'
   import 'videojs-markers-plugin/dist/videojs.markers.plugin.min.css'
   import { ipcRenderer } from 'electron'
+  import { filterAttributes } from '@/utils'
+  import { cloneDeep } from 'lodash'
+  import ExportData from '@/components/export-data'
+  import ImportData from '@/components/import-data'
+  import { WorkBookImport, WorkBookExport } from '@/api/workBook'
+
+  const defaultExport = [
+    "workOperations.versionNumber",
+    "workOperations.operation",
+    "workOperations.a0",
+    "workOperations.b0",
+    "workOperations.g0",
+    "workOperations.a1",
+    "workOperations.b1",
+    "workOperations.p0",
+    "workOperations.m0",
+    "workOperations.x0",
+    "workOperations.i0",
+    "workOperations.a2",
+    "workOperations.b2",
+    "workOperations.p1",
+    "workOperations.a3",
+    "workOperations.tool",
+    "workOperations.a4",
+    "workOperations.b3",
+    "workOperations.p2",
+    "workOperations.a5",
+    "workOperations.frequency",
+    "workOperations.remark"
+  ];
 
   const workbookPercents = [
     { id: 'hide', name: 'Hide' },
@@ -105,12 +137,15 @@
     components: {
       InfoDialog,
       WorkbookTable,
-      videoPlayer
+      videoPlayer,
+      ExportData,
+      ImportData
     },
     data () {
       const self = this
       return {
         // 界面
+        isOffline: false,
         workbookPercents,
         workbookPercent: 'half',
         // 数据
@@ -119,6 +154,63 @@
         workbooks: [],
         currentWorkbook: null,
         saveInterval: null,
+        cacheInterval: null,
+        attributes: [
+          {
+            code: 'workOperations',
+            name: '分析表明细',
+            children: [
+              {code: 'versionNumber', name: 'H', type: 'string', required: true},
+              {code: 'operation', name: 'Work Method', type: 'string', required: true},
+              {code: 'a0', name: 'A', type: 'string', required: true},
+              {code: 'b0', name: 'b', type: 'string', required: true},
+              {code: 'g0', name: 'G', type: 'string', required: true},
+              {code: 'a1', name: 'A', type: 'string', required: true},
+              {code: 'b1', name: 'B', type: 'string', required: true},
+              {code: 'p0', name: 'P', type: 'string', required: true},
+              {code: 'm0', name: 'M', type: 'string', required: true},
+              {code: 'x0', name: 'X', type: 'string', required: true},
+              {code: 'i0', name: 'I', type: 'string', required: true},
+              {code: 'a2', name: 'A', type: 'string', required: true},
+              {code: 'b2', name: 'B', type: 'string', required: true},
+              {code: 'p1', name: 'P', type: 'string', required: true},
+              {code: 'a3', name: 'A', type: 'string', required: true},
+              {code: 'tool', name: 'Tool', type: 'string', required: true},
+              {code: 'a4', name: 'A', type: 'string', required: true},
+              {code: 'b3', name: 'B', type: 'string', required: true},
+              {code: 'p2', name: 'P', type: 'string', required: true},
+              {code: 'a5', name: 'A', type: 'string', required: true},
+              {code: 'frequency', name: 'Fre.', type: 'string', required: true},
+              {code: 'remark', name: 'Remark.', type: 'string', required: true}
+            ]
+          }],
+        // 导出
+        exportAttributes: cloneDeep(defaultExport),
+        // 导入字段固定不可变
+        importAttributes: [
+          "workOperations.versionNumber",
+          "workOperations.operation",
+          "workOperations.a0",
+          "workOperations.b0",
+          "workOperations.g0",
+          "workOperations.a1",
+          "workOperations.b1",
+          "workOperations.p0",
+          "workOperations.m0",
+          "workOperations.x0",
+          "workOperations.i0",
+          "workOperations.a2",
+          "workOperations.b2",
+          "workOperations.p1",
+          "workOperations.a3",
+          "workOperations.tool",
+          "workOperations.a4",
+          "workOperations.b3",
+          "workOperations.p2",
+          "workOperations.a5",
+          "workOperations.frequency",
+          "workOperations.remark"
+        ],
         // 操作
         listener: null,
         addedOperation: null,
@@ -191,6 +283,60 @@
       },
       debounceNextTag () {
         return debounce(this.nextTag, 300)
+      },
+      // 导入
+      importConfig() {
+        return {
+          attributes: [
+            {
+              code: this.attributes[0].code,
+              name: this.attributes[0].name,
+              children: filterAttributes(this.attributes, {
+                attributes: this.importAttributes,
+                plain: true
+              }),
+              sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
+                "1", "1", "0","1","34",""]]
+            }
+          ],
+          importApi: WorkBookImport,
+          importSuccessCb: () => {
+          }
+        };
+      },
+      // 导出
+      exportConfig() {
+        return {
+          attributes: filterAttributes(this.attributes, "isExport"),
+          exportApi: WorkBookExport,
+          filterType: this.dataButton,
+          filters: this.listQuery,
+          complexFilters: this.complexFilters,
+          exportAttributes: this.exportAttributes,
+          saveSetting: () => {
+            this.$store.dispatch("user/SetAExport", {
+              page: "workbook",
+              display: this.exportAttributes
+            });
+            this.$message({
+              message: "设置成功",
+              type: "success",
+              duration: 1000
+            });
+          },
+          reset: () => {
+            this.exportAttributes = cloneDeep(defaultExport);
+            this.$store.dispatch("user/SetAExport", {
+              page: "workbook",
+              display: this.exportAttributes
+            });
+            this.$message({
+              message: "设置成功",
+              type: "success",
+              duration: 1000
+            });
+          }
+        };
       }
     },
     watch: {
@@ -225,26 +371,40 @@
     },
     activated () {
       if (this.workbook) this.intervalSave()
+      if (this.workbook) this.intervalCache()
       this.addShortcut()
     },
     deactivated () {
       this.closeVideo()
       this.removeShortcut()
-      clearInterval(this.saveInterval)
-      this.saveInterval = null
+      this.clearInterval('saveInterval')
+      this.clearInterval('cacheInterval')
     },
     destroyed () {
-      clearInterval(this.saveInterval)
-      this.saveInterval = null
+      this.clearInterval('saveInterval')
+      this.clearInterval('cacheInterval')
       this.removeShortcut()
     },
     methods: {
       // ========================================
       //                分析表
       // ========================================
+      clearInterval (intervalName) {
+        clearInterval(this[intervalName])
+        this[intervalName] = null
+      },
       // 退回上一页
       goBack () {
         fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      },
+      // 定时缓存
+      intervalCache () {
+        const self = this
+        if (!self.cacheInterval) {
+          self.cacheInterval = setInterval(() => {
+            self.doCache()
+          }, this.customConfig.AutoCacheInterval);
+        }
       },
       // 定时保存
       intervalSave () {
@@ -255,31 +415,35 @@
           }, this.customConfig.AutoSaveInterval);
         }
       },
-      // 保存
-      async doSave () {
-        const fullData = this.$refs.workbookTable.getFullData()
-        // fullData[0].alterType = 'edit'
-        // fullData[0].alterInfo =  [
-        //   {
-        //     filed: 'operation',
-        //     alterType: 'edit',
-        //     origin: 'AAA',
-        //     display: 'html'
-        //   },
-        //   {
-        //     filed: 'a0',
-        //     alterType: 'delete'
-        //   },
-        //   {
-        //     filed: 'a3',
-        //     alterType: 'new'
-        //   }
-        // ]
-        await updateAll(this.workbook.id, {
-          workBook: pick(this.workbook, ['id']),
-          workOperations: fullData
+      async doCache () {
+        if (this.$refs.workbookTable) this.$refs.workbookTable.cache()
+      },
+      // 保存，判断是否在线
+      doSave (workbook,isForce) {
+        this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
+          if (this.isOffline) {
+            this.$message({
+              message: '当前处于在线状态',
+              type: 'success',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          }
+          this.isOffline = false
+        }).catch(e => {
+          if (!this.isOffline) {
+            this.$message({
+              message: '当前处于离线状态',
+              type: 'error',
+              duration: 1500,
+              onClose: this.cancleFormSubmit
+            })
+          }
+          this.isOffline = true
+          throw e
         })
       },
+      // 保存按钮
       async save () {
         if (this.$refs.workbookTable) {
           this.$confirm(`确定保存分析表?`, '提示', {
@@ -287,12 +451,17 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(async () => {
-            await this.doSave()
-            this.$message({
-              message: '保存成功',
-              type: 'success',
-              duration: 1500,
-              onClose: this.cancleFormSubmit
+            await this.doSave(true).then(() => {
+              this.$message({
+                message: '保存成功',
+                type: 'success',
+                duration: 1500,
+                onClose: this.cancleFormSubmit
+              })
+              // 重置自动保存
+              clearInterval(this.saveInterval)
+              this.saveInterval = null
+              this.intervalSave()
             })
           })
         }
@@ -309,6 +478,7 @@
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
           self.workbookData[workBook.workName] = workBook.workOperationsList
+          self.intervalCache()
           self.intervalSave()
           self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
@@ -519,6 +689,12 @@
 .workbook-detail-page {
   height: 100%;
   overflow: hidden;
+
+  &.offline {
+    .save-button {
+      color: orange;
+    }
+  }
 
   .header {
     background-color: rgba(0, 0, 0, .5);

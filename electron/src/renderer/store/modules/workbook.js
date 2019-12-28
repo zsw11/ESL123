@@ -1,3 +1,6 @@
+import { setCache, removeCache } from '@/utils/auth'
+import day from 'dayjs'
+
 export default {
   namespaced: true,
   state: {
@@ -42,8 +45,16 @@ export default {
     redo ({ commit }) {
       commit('Redo')
     },
-    cache ({ commit }, data) {
-
+    cache ({ state }, data) {
+      setCache({
+        workbook: state.currentWorkbook,
+        data
+      })
+      console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Cache')
+    },
+    clearCache () {
+      removeCache()
+      console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Clear cache')
     }
   }
 }

@@ -93,9 +93,8 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
-          <export-data :config="exportConfig" type="primary" plain>导 出</export-data>
-          <import-data :config="importConfig"></import-data>
           <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -227,48 +226,16 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports, WorkBookImport, WorkBookExport } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
-import { filterAttributes } from '@/utils'
-import { cloneDeep } from 'lodash'
-import ExportData from '@/components/export-data'
-import ImportData from '@/components/import-data'
 
-const defaultExport = [
-  "workOperations.versionNumber",
-  "workOperations.operation",
-  "workOperations.a0",
-  "workOperations.b0",
-  "workOperations.g0",
-  "workOperations.a1",
-  "workOperations.b1",
-  "workOperations.p0",
-  "workOperations.m0",
-  "workOperations.x0",
-  "workOperations.i0",
-  "workOperations.a2",
-  "workOperations.b2",
-  "workOperations.p1",
-  "workOperations.a3",
-  "workOperations.tool",
-  "workOperations.a4",
-  "workOperations.b3",
-  "workOperations.p2",
-  "workOperations.a5",
-  "workOperations.frequency",
-  "workOperations.remark"
-];
 
 export default {
   name: 'workbookList',
-  components: {
-    ExportData,
-    ImportData
-  },
   data () {
     return {
       flag: true,
@@ -385,65 +352,10 @@ export default {
       //     {code: 'makedAt', name: '制表日期', type: 'string', required: true}
       //   ]
       // },
-        {
-          code: 'workOperations',
-          name: '分析表明细',
-          children: [
-            {code: 'versionNumber', name: 'H', type: 'string', required: true},
-            {code: 'operation', name: 'Work Method', type: 'string', required: true},
-            {code: 'a0', name: 'A', type: 'string', required: true},
-            {code: 'b0', name: 'b', type: 'string', required: true},
-            {code: 'g0', name: 'G', type: 'string', required: true},
-            {code: 'a1', name: 'A', type: 'string', required: true},
-            {code: 'b1', name: 'B', type: 'string', required: true},
-            {code: 'p0', name: 'P', type: 'string', required: true},
-            {code: 'm0', name: 'M', type: 'string', required: true},
-            {code: 'x0', name: 'X', type: 'string', required: true},
-            {code: 'i0', name: 'I', type: 'string', required: true},
-            {code: 'a2', name: 'A', type: 'string', required: true},
-            {code: 'b2', name: 'B', type: 'string', required: true},
-            {code: 'p1', name: 'P', type: 'string', required: true},
-            {code: 'a3', name: 'A', type: 'string', required: true},
-            {code: 'tool', name: 'Tool', type: 'string', required: true},
-            {code: 'a4', name: 'A', type: 'string', required: true},
-            {code: 'b3', name: 'B', type: 'string', required: true},
-            {code: 'p2', name: 'P', type: 'string', required: true},
-            {code: 'a5', name: 'A', type: 'string', required: true},
-            {code: 'frequency', name: 'Fre.', type: 'string', required: true},
-            {code: 'remark', name: 'Remark.', type: 'string', required: true}
-
-          ]
-        }],
+      ],
       complexFilters: [],
       dictItemSTLST: [],
       id: '',
-      // 导出
-      exportAttributes: cloneDeep(defaultExport),
-      // 导入字段固定不可变
-      importAttributes: [
-        "workOperations.versionNumber",
-        "workOperations.operation",
-        "workOperations.a0",
-        "workOperations.b0",
-        "workOperations.g0",
-        "workOperations.a1",
-        "workOperations.b1",
-        "workOperations.p0",
-        "workOperations.m0",
-        "workOperations.x0",
-        "workOperations.i0",
-        "workOperations.a2",
-        "workOperations.b2",
-        "workOperations.p1",
-        "workOperations.a3",
-        "workOperations.tool",
-        "workOperations.a4",
-        "workOperations.b3",
-        "workOperations.p2",
-        "workOperations.a5",
-        "workOperations.frequency",
-        "workOperations.remark"
-      ],
       selectedWorkBookIds: []
     }
   },
@@ -453,61 +365,6 @@ export default {
     self.listQuery.makedAt = null
     self.getDictByType()
     self.getDataList()
-  },
-  computed: {
-    importConfig() {
-      return {
-        attributes: [
-          {
-            code: this.attributes[0].code,
-            name: this.attributes[0].name,
-            children: filterAttributes(this.attributes, {
-              attributes: this.importAttributes,
-              plain: true
-            }),
-            sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
-              "1", "1", "0","1","34",""]]
-          }
-        ],
-        importApi: WorkBookImport,
-        importSuccessCb: () => {
-          this.getDataList();
-        }
-      };
-    },
-    exportConfig() {
-      return {
-        attributes: filterAttributes(this.attributes, "isExport"),
-        exportApi: WorkBookExport,
-        filterType: this.dataButton,
-        filters: this.listQuery,
-        complexFilters: this.complexFilters,
-        exportAttributes: this.exportAttributes,
-        saveSetting: () => {
-          this.$store.dispatch("user/SetAExport", {
-            page: "workbook",
-            display: this.exportAttributes
-          });
-          this.$message({
-            message: "设置成功",
-            type: "success",
-            duration: 1000
-          });
-        },
-        reset: () => {
-          this.exportAttributes = cloneDeep(defaultExport);
-          this.$store.dispatch("user/SetAExport", {
-            page: "workbook",
-            display: this.exportAttributes
-          });
-          this.$message({
-            message: "设置成功",
-            type: "success",
-            duration: 1000
-          });
-        }
-      };
-    }
   },
   methods: {
     // 普通查询
@@ -605,24 +462,38 @@ export default {
     },
     // 删除数据
     deleteHandle (row) {
+      let flag = true
       var ids = row ? [row.id] : this.dataListSelections.map(item => {
-        return item.id
+        if(item.createBy === this.$store.state.user.id){
+          return item.id
+        } else {
+         flag = false
+        }
       })
-      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteWorkBook(ids).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
+      if(flag){
+        this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteWorkBook(ids).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getDataList()
           })
-          this.getDataList()
         })
-      })
+      } else {
+        this.$message({
+          message: '请选择权限内的数据删除',
+          type: 'warning',
+          duration: 2000,
+        })
+        this.getDataList()
+      }
     },
     // 字典表
     getDictByType () {

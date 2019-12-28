@@ -49,6 +49,9 @@ http.interceptors.response.use(response => {
   }
   return response.data
 }, error => {
+  if (!error.response) {
+    return Promise.reject(error)
+  }
   switch (error.response.status) {
     case 401: {
       clearLoginInfo()

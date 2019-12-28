@@ -64,8 +64,10 @@
 </template>
 
 <script>
+import day from 'dayjs'
 import { pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
+import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
@@ -100,6 +102,8 @@ export default {
       WMethod: '',
       add: true,
       lastSelected: undefined,
+      hasUnchacheData: false,
+      hasUnsavedData: false,
       standardBookDialog: {
         visible: false,
         formData: {
@@ -195,9 +199,9 @@ export default {
     //                行操作
     // ========================================
     selectedChanged (val) {
-      // 补0操作
       if (this.lastSelected) {
-        console.log(0, generalMeasureFields, this.lastSelected.column.property)
+        // 补0操作
+        // console.log(0, generalMeasureFields, this.lastSelected.column.property)
         if (generalMeasureFields.includes(this.lastSelected.column.property)) {
           if (!generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) return
           // 通用列
@@ -230,7 +234,12 @@ export default {
               if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
             }
           }
+        }
 
+        // 判断是否变更
+        if (val.row !== this.lastSelected.row && this.$refs.workbookTable.isUpdateByRow(this.lastSelected.row)) {
+          this.hasUnchacheData = true
+          this.$refs.workbookTable.refreshData()
         }
       }
       this.lastSelected = val
@@ -289,8 +298,7 @@ export default {
             { operation: this.standardBookDialog.formData.name }
           ), this.lastSelected.row)
         }
-        await this.$refs.workbookTable.refreshData()
-        this.logChange()
+        await this.dataChanged()
         // 插入标准书名
         await this.$refs.workbookTable.setActiveCell(rst.row, 'version')
         this.standardBookDialog.visible = false
@@ -307,8 +315,7 @@ export default {
       const rst = await fetchOperationGroup(group.id)
       if (rst.data && rst.data.operations) {
         await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields)), this.lastSelected.row)
-        await this.$refs.workbookTable.refreshData()
-        this.logChange()
+        await this.dataChanged()
       }
     },
     // 选择指标组合
@@ -335,8 +342,7 @@ export default {
         const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
         if (!copyContent) return
         await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
-        await this.$refs.workbookTable.refreshData()
-        this.logChange()
+        await this.dataChanged()
       }
     },
     // 删除行
@@ -347,8 +353,7 @@ export default {
         const nextRow = fullData[rowIndex + 1]
         await this.$refs.workbookTable.remove(this.lastSelected.row)
         await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
-        await this.$refs.workbookTable.refreshData()
-        this.logChange()
+        await this.dataChanged()
       }
     },
     // 增加行
@@ -356,8 +361,7 @@ export default {
       const currentRow = this.lastSelected.row
       if (!currentRow || currentRow.$rowIndex === -1) return
       await this.$refs.workbookTable.insertAt(this.createNewRow(), currentRow)
-      await this.$refs.workbookTable.refreshData()
-      this.logChange()
+      await this.dataChanged()
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
@@ -373,13 +377,56 @@ export default {
         return fullData.slice(0, lastRowIndex + 1)
       }
     },
-    // 缓存数据
-    async cacheData () {
-      await this.$store.dispatch('workbook/cache', this.getFullData())
+    // 数据有变更
+    async dataChanged () {
+      this.hasUnchacheData = true
+      this.hasUnsavedData = true
+      await this.$refs.workbookTable.refreshData()
+      this.logChange()
     },
     // 记录数据变更
     async logChange () {
       // await this.$store.dispatch('workbook/pushHistory', cloneDeep(this.getFullData()))
+    },
+    async cache () {
+      if (this.hasUnchacheData) {
+        await this.$store.dispatch('workbook/cache', this.getFullData())
+        this.hasUnchacheData = false
+      }
+    },
+    // 保存
+    save (workbook, isForce) {
+      if (this.hasUnsavedData || isForce) {
+        const fullData = this.getFullData()
+        // fullData[0].alterType = 'edit'
+        // fullData[0].alterInfo =  [
+        //   {
+        //     filed: 'operation',
+        //     alterType: 'edit',
+        //     origin: 'AAA',
+        //     display: 'html'
+        //   },
+        //   {
+        //     filed: 'a0',
+        //     alterType: 'delete'
+        //   },
+        //   {
+        //     filed: 'a3',
+        //     alterType: 'new'
+        //   }
+        // ]
+        return updateAll(workbook.id, {
+          workBook: pick(workbook, ['id']),
+          workOperations: fullData
+        }).then(() => {
+          console.log(day().format('YYYY-MM-DD HH:mm:ss'), 'Cache')
+          this.hasUnsavedData = false
+          this.$store.dispatch('workbook/clearCache')
+          this.hasUnchacheData = false
+        })
+      } else {
+        return Promise.resolve()
+      }
     }
   }
 }
