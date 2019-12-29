@@ -55,6 +55,7 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
+        <span class="workbook-title">{{workbook.ifAlter? '修订':''}}</span>
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -622,7 +623,7 @@
         if (!this.workbookData[workName]) {
           this.workbookData[workName] = []
         }
-        this.$refs.workbookTable.loadData(this.workbookData[workName])
+        this.$refs.workbookTable.loadData(this.workbook, this.workbookData[workName])
       },
       // ========================================
       //                视频播放
@@ -939,6 +940,18 @@
             line-height: 22px;
           }
         }
+      }
+      .workbook-title {
+        position: absolute;
+        left: 50%;
+        margin-left: -10%;
+        width: 20%;
+        color: blue;
+        font-size: 18px;
+        font-weight: bold;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
       }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),
