@@ -135,6 +135,7 @@ export default {
       this.$refs.workbookTable.loadData(data)
       this.logChange()
     },
+    // 行的class，主要用于修订
     getRowClass ({ row }) {
       let rowClassStr = ''
       if (this.mode === 'alter' && ['delete', 'new'].includes(row.alterType)) {
@@ -143,6 +144,7 @@ export default {
       if (row.type === 'c') console.log(row.alterType, rowClassStr)
       return rowClassStr
     },
+    // 单元格的class，主要用于修订
     getCellClass ({ row, column }) {
       let cellClassStr = ''
       if (row.alterType === 'edit' && row.alterInfo && row.alterInfo[column.property]) {
@@ -227,8 +229,8 @@ export default {
         // 补0操作
         // console.log(0, generalMeasureFields, this.lastSelected.column.property)
         if (generalMeasureFields.includes(this.lastSelected.column.property)) {
-          if (generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) {
-            // 通用列
+          // 通用列
+          if (generalMeasureFields.find(f => ![ null, undefined, '' ].includes(this.lastSelected.row[f]))) {
             if (val.row !== this.lastSelected.row || !generalMeasureFields.includes(val.column.property)) {
               for (const f of generalMeasureFields) {
                 if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
@@ -395,6 +397,17 @@ export default {
     cleanRow (row) {
       return pick(row, defaultFields)
     },
+    // 增加行
+    async addRow() {
+      const currentRow = this.lastSelected.row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      const newRow = this.createNewRow(undefined, this.workbook.ifAlter)
+      if (this.workbook.ifAlter) {
+        newRow.alterType = 'new'
+      }
+      await this.$refs.workbookTable.insertAt(newRow, currentRow)
+      await this.dataChanged()
+    },
     // 缓存
     copy () {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
@@ -428,17 +441,6 @@ export default {
         }
         await this.dataChanged()
       }
-    },
-    // 增加行
-    async addRow() {
-      const currentRow = this.lastSelected.row
-      if (!currentRow || currentRow.$rowIndex === -1) return
-      const newRow = this.createNewRow(undefined, this.workbook.ifAlter)
-      if (this.workbook.ifAlter) {
-        newRow.alterType = 'new'
-      }
-      await this.$refs.workbookTable.insertAt(newRow, currentRow)
-      await this.dataChanged()
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
