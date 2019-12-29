@@ -66,7 +66,7 @@
 
 <script>
 import day from 'dayjs'
-import { pick, clone, round, findIndex, cloneDeep } from 'lodash'
+import { omit, pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
@@ -203,6 +203,10 @@ export default {
     // ========================================
     //                行操作
     // ========================================
+    isRowChanged (row1, row2) {
+      if (!row1 || !row2) return false
+      return !!defaultFields.find(f => !(row1[f] === row2[f]))
+    },
     selectedChanged (val) {
       if (this.lastSelected) {
         // 补0操作
@@ -242,9 +246,16 @@ export default {
         }
 
         // 判断是否变更
-        if (val.row !== this.lastSelected.row && this.$refs.workbookTable.isUpdateByRow(this.lastSelected.row)) {
-          this.hasUnchacheData = true
-          this.$refs.workbookTable.refreshData()
+        console.log(val.row !== this.lastSelected.row, this.isRowChanged(this.lastSelected.row, this.lastSelectedRow))
+        // 换行
+        if (val.row !== this.lastSelected.row) {
+          // 行值变更
+          if (this.isRowChanged(this.lastSelected.row, this.lastSelectedRow)) {
+            this.hasUnchacheData = true
+            this.$refs.workbookTable.refreshData()
+          }
+          // 记录行值
+          this.lastSelectedRow = cloneDeep(omit(val.row, ['_XID']))
         }
       }
       this.lastSelected = val

@@ -422,9 +422,43 @@
         clearInterval(this[intervalName])
         this[intervalName] = null
       },
+      doGoBack () {
+        try {
+          fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook', replace: true }) : this.$router.back(-1)
+        } catch (e) {
+          this.$router.push({ name: 'home' })
+        }
+      },
       // 退回上一页
-      goBack () {
-        fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      async goBack () {
+        const self = this
+        if (this.$refs.workbookTable) {
+          this.$confirm(`检测到未保存的内容，是否在离开页面前保存修改?`, '确认信息', {
+            distinguishCancelAndClose: true,
+            confirmButtonText: '保存',
+            cancelButtonText: '放弃修改',
+            type: 'warning'
+          }).then(async () => {
+            await self.doSave(true).then(() => {
+              self.$message({
+                message: '保存成功',
+                type: 'success',
+                duration: 1500,
+                onClose: self.cancleFormSubmit
+              })
+              // 重置自动保存
+              clearInterval(self.saveInterval)
+              self.saveInterval = null
+              self.intervalSave()
+              self.doGoBack()
+            })
+          }).catch(action => {
+            console.log(111, action)
+            if (action === 'cancel') self.doGoBack()
+          })
+        } else {
+          this.doGoBack()
+        }
       },
       // 定时缓存
       intervalCache () {
@@ -449,7 +483,7 @@
       },
       // 保存，判断是否在线
       doSave (workbook,isForce) {
-        this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
+        return this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
           if (this.isOffline) {
             this.$message({
               message: '当前处于在线状态',
