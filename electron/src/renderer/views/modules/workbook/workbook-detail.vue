@@ -432,7 +432,7 @@
       // 退回上一页
       async goBack () {
         const self = this
-        if (this.$refs.workbookTable) {
+        if (this.$refs.workbookTable && this.$refs.workbookTable.hasUnsavedData) {
           this.$confirm(`检测到未保存的内容，是否在离开页面前保存修改?`, '确认信息', {
             distinguishCancelAndClose: true,
             confirmButtonText: '保存',

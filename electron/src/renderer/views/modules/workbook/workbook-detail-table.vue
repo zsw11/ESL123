@@ -251,8 +251,7 @@ export default {
         if (val.row !== this.lastSelected.row) {
           // 行值变更
           if (this.isRowChanged(this.lastSelected.row, this.lastSelectedRow)) {
-            this.hasUnchacheData = true
-            this.$refs.workbookTable.refreshData()
+            this.dataChanged()
           }
           // 记录行值
           this.lastSelectedRow = cloneDeep(omit(val.row, ['_XID']))
@@ -262,7 +261,7 @@ export default {
     },
     // 创建新行数据
     createNewRow (type) {
-      const newRow = this.$refs.workbookTable.createRow(defaultRow)
+      const newRow = cloneDeep(defaultRow)
       if (type) newRow.type = type
       return newRow
     },
@@ -412,7 +411,8 @@ export default {
     },
     // 保存
     save (workbook, isForce) {
-      if (this.hasUnsavedData || isForce) {
+      console.log('this.hasUnsavedData || !!isForce', this.hasUnsavedData, !!isForce)
+      if (this.hasUnsavedData || !!isForce) {
         const fullData = this.getFullData()
         // fullData[0].alterType = 'edit'
         // fullData[0].alterInfo =  [
