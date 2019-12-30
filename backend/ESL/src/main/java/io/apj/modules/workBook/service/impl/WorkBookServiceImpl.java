@@ -81,6 +81,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
+				.like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
 						(String) params.get("workName"))
 				.like(params.get("remark") != null && params.get("remark") != "", "remark",
@@ -276,6 +277,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public WorkBookEntity detailWithOperations(Integer id) {
 		WorkBookEntity workBook = this.selectById(id);
+		workBook.setMakedAt(new Date());
 		workBook.setModelEntity(modelService.selectById(workBook.getModelId()));
 		workBook.setSysDeptEntity(deptService.selectById(workBook.getDeptId()));
 		workBook.setPhaseEntity(phaseService.selectById(workBook.getPhaseId()));

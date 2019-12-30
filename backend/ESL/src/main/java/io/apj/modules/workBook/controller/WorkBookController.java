@@ -1,10 +1,7 @@
 package io.apj.modules.workBook.controller;
 
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -89,6 +86,7 @@ public class WorkBookController extends AbstractController {
 	@RequiresPermissions("workBook:workbook:info")
 	public R detailWithOperations(@PathVariable("id") Integer id) {
 		WorkBookEntity workBook = workBookService.detailWithOperations(id);
+		workBook.setMakerId(getUserId().intValue());
 		return R.ok().put("workBook", workBook);
 	}
 
@@ -111,6 +109,8 @@ public class WorkBookController extends AbstractController {
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 		workBookEntity.setDeptId(getUserDeptId().intValue());
 		workBookEntity.setIfAlter(false);
+		workBookEntity.setMakerId(getUserId().intValue());
+		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
 
@@ -137,6 +137,8 @@ public class WorkBookController extends AbstractController {
 		map.put("remarks",jsonArray.toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
+		workBookEntity.setMakerId(getUserId().intValue());
+		workBookEntity.setMakedAt(new Date());
 		workBookService.updateById(workBookEntity);
 		return RD.build();
 	}
@@ -151,6 +153,8 @@ public class WorkBookController extends AbstractController {
 	public ResponseEntity<Object> copy(@RequestBody WorkBookEntity workBook) {
 		int workBookId = workBook.getId();
 		workBook.setCreateBy(getUserId().intValue());
+		workBook.setMakedAt(new Date());
+		workBook.setMakerId(getUserId().intValue());
 		WorkBookEntity workBookEntity = workBookService.copyWorkBook(workBook,workBookId);
 
 		return RD.ok(workBookEntity);

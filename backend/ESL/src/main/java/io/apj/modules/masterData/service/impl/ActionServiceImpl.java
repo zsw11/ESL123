@@ -4,11 +4,10 @@ import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
-import io.apj.modules.masterData.entity.ModelSeriesEntity;
-import io.apj.modules.masterData.entity.ToolEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,8 +44,13 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 
 	@Override
 	@Transactional
-	public void actionImport(Map<String, Object> map) {
+	public ResponseEntity<Object> actionImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("action.name"))){
+				return RD.INTERNAL_SERVER_ERROR("导入时关键词名称为空，请检查关键词名称是否为空");
+			}
+		}
 		List<ActionEntity> actionEntityList = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ActionEntity actionEntity = new ActionEntity();
@@ -72,6 +76,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 			DataUtils.transMap2Bean2(deviceMap, actionEntity);
 			ValidatorUtils.validateEntity(actionEntity, i);
 			actionEntity.setCreateBy((Integer) map.get("userID"));
+			actionEntity.setDeptId((Integer) map.get("deptId"));
 			actionEntityList.add(actionEntity);
 		}
 		try {
@@ -79,6 +84,9 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 		} catch (MybatisPlusException e) {
 			throw new RRException("关键词导入失败，请检查关键词是否重复", 500);
 		}
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		data.put("code", 200);
+		return RD.success(data);
 	}
 
 	@Override

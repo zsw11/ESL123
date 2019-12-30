@@ -128,6 +128,11 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Object> partImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("part.name"))){
+				return RD.INTERNAL_SERVER_ERROR("导入部品时名称为空，请检查部品名称是否为空");
+			}
+		}
 		List<PartEntity> partEntityList = new ArrayList<>();
 		List<String> modelNameList = new ArrayList<>();
 		List<String> partNameList = new ArrayList<String>();

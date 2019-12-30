@@ -3,9 +3,9 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
-import com.google.gson.JsonElement;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
@@ -178,8 +178,13 @@ public class ModelSeriesController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) {
+	public ResponseEntity<Object> importExcel(@RequestBody Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("modelSeries.name"))){
+				return RD.INTERNAL_SERVER_ERROR("导入时机种系列名称为空，请检查机种系列是否为空");
+			}
+		}
 		List<ModelSeriesEntity> modelSeriesEntityList = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ModelSeriesEntity ModelSeriesEntity = new ModelSeriesEntity();
@@ -212,7 +217,9 @@ public class ModelSeriesController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException("机种系列导入失败，请检查机种系列是否重复", 500);
 		}
-		return RD.build().put("code", 200);
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		data.put("code", 200);
+		return RD.success(data);
 	}
 
 }
