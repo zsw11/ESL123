@@ -88,18 +88,6 @@ public class ReportController extends AbstractController {
 		ReportEntity report = (ReportEntity) map.get("report");
 		report.setPinyin(PinyinUtil.getPinYin(report.getName()));
 		report.setCreateBy(getUserId().intValue());
-		List<Integer> deptIds = (List<Integer>) map.get("deptIds");
-		Integer reportId = report.getId();
-		if(deptIds.size()>0){
-			for(Integer i : deptIds){
-				ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
-				reportDeptRelaEntity.setDeptId(i);
-				reportDeptRelaEntity.setCreateBy(getUserId().intValue());
-				reportDeptRelaEntity.setReportId(reportId);
-				reportDeptRelaService.insert(reportDeptRelaEntity);
-			}
-		}
-		reportService.insert(report);
 		return RD.build().put("code", 200);
 	}
 
@@ -108,9 +96,20 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:report:update")
-	public RD update(@RequestBody ReportEntity report) {
+	public RD update(@RequestBody Map<String, Object> map) {
+        ReportEntity report = (ReportEntity) map.get("report");
 		reportService.updatePinAndDataById(report);
-
+        List<Integer> deptIds = (List<Integer>) map.get("deptEntityList");
+        Integer reportId = report.getId();
+        if(deptIds.size()>0){
+            for(Integer i : deptIds){
+                ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
+                reportDeptRelaEntity.setDeptId(i);
+                reportDeptRelaEntity.setCreateBy(getUserId().intValue());
+                reportDeptRelaEntity.setReportId(reportId);
+                reportDeptRelaService.insert(reportDeptRelaEntity);
+            }
+        }
 		return RD.build().put("code", 200);
 	}
 

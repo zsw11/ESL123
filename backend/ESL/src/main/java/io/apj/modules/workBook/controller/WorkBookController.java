@@ -1,35 +1,26 @@
 package io.apj.modules.workBook.controller;
 
-import java.text.ParseException;
-import java.util.*;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
-import io.apj.common.utils.DataUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PhaseEntity;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
-import net.sf.json.JSONObject;
+import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.modules.sys.controller.AbstractController;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import io.apj.modules.workBook.service.WorkBookService;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * 分析表
@@ -51,6 +42,7 @@ public class WorkBookController extends AbstractController {
 	private SysDeptService sysDeptService;
 	@Autowired
 	private WorkstationService workstationService;
+
 
 	/**
 	 * 列表
@@ -208,6 +200,19 @@ public class WorkBookController extends AbstractController {
 	public R createReport(@RequestBody Map<String, Object> params) {
 		workBookService.createReports(params);
 		return R.ok();
+	}
+
+	/**
+	 * 部门报表
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/deptreport/{id}")
+	// @RequiresPermissions("workBook:workbook:createReport")
+	public ResponseEntity<Object> dpetReport(@PathVariable Integer id) {
+		List<ReportEntity> reportEntityList = workBookService.deptReports(id);
+		return RD.success(reportEntityList);
 	}
 
 }

@@ -14,9 +14,12 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.dao.WorkBookDao;
@@ -73,6 +76,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private ReportManMachineCombinationService reportManMachineCombinationService;
+	@Autowired
+	private ReportDeptRelaService reportDeptRelaService;
+	@Autowired
+	private ReportService reportService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -334,6 +341,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		workBookService.deleteByIds(Arrays.asList(ids));
 		workOperationService.deletebyWrapper(new EntityWrapper<WorkOperationsEntity>().in("work_book_id", ids));
 
+	}
+
+	@Override
+	@Transactional
+	public List<ReportEntity> deptReports(Integer id) {
+		List<ReportEntity> reportEntityList = new LinkedList<>();
+		List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(new EntityWrapper<ReportDeptRelaEntity>().eq("deptId", id));
+		reportDeptRelaEntityList.forEach(item->{
+			reportEntityList.add(reportService.selectById(item.getReportId()));
+		});
+		return reportEntityList;
 	}
 
 	@Override
