@@ -20,8 +20,8 @@
             <tree-select v-model='listQuery.deptId' :api='listDept' />
           </el-form-item>
 
-          <el-form-item :label="'ST/LST'" prop="STLST" >
-            <dict-select dictType="ST" v-model="listQuery.STLST" :allowEmpty="true"></dict-select>
+          <el-form-item :label="'ST/LST'" prop="stlst" >
+            <dict-select dictType="ST" v-model="listQuery.stlst" :allowEmpty="true"></dict-select>
           </el-form-item>
 
           <el-form-item :label="'机种'" prop="modelId" >
@@ -93,8 +93,8 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
-          <el-button  type="primary" @click="createReportFromSelected()">批量生成报表</el-button>
-          <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button  type="primary" @click="createReportFromSelected()" :disabled="dataListSelections.length <= 0">批量生成报表</el-button>
+          <el-button type="danger" @click="deleteHandle()" :disabled="deleteFlag">批量删除</el-button>
         </div>
       </div>
       <el-table
@@ -244,6 +244,7 @@ export default {
       isIndeterminate: true,
       checkAll: false,
       userId: null,
+      deleteFlag: true,
       reportGroup: [
         {
           name: '分析表报表',
@@ -369,6 +370,7 @@ export default {
   methods: {
     // 普通查询
     getDataList (pageNo) {
+      this.deleteFlag = true
       if(this.tableAt){
         let result = {
           createAtStart: this.tableAt[0],
@@ -435,6 +437,21 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+      let flag = false
+      if(val.length > 0){
+        this.dataListSelections.forEach((item)=>{
+          if(item.createBy !== this.$store.state.user.id){
+            flag = true
+          }
+        })
+        if (!flag){
+          this.deleteFlag = false
+        } else {
+          this.deleteFlag = true
+        }
+      } else {
+        this.deleteFlag = true
+      }
     },
     // 录入
     addOrUpdateHandle (id) {
