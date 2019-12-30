@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import io.apj.common.annotation.DataFilter;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
@@ -25,31 +27,33 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("measureGroupService")
 public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, MeasureGroupEntity>
-        implements MeasureGroupService {
-    @Autowired
-    private SysDeptService deptService;
-    @Autowired
-    private MeasureGroupService measureGroupService;
+		implements MeasureGroupService {
+	@Autowired
+	private SysDeptService deptService;
+	@Autowired
+	private MeasureGroupService measureGroupService;
 
-    @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        EntityWrapper<MeasureGroupEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at", false);
-        if (params.get("code") != null && params.get("code") != "") {
-            entityWrapper.like("UPPER(code)", params.get("code").toString().toUpperCase());
-        }
-        if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
-            entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
-        }
-        Page<MeasureGroupEntity> page = this.selectPage(new Query<MeasureGroupEntity>(params).getPage(), entityWrapper);
-        for (MeasureGroupEntity entity : page.getRecords()) {
-            if (entity.getDeptId() != null) {
-                entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
-            }
-        }
+	@Override
+	@DataFilter(subDept = true, user = true, deptId = "dept_id")
+	public PageUtils queryPage(Map<String, Object> params) {
+		EntityWrapper<MeasureGroupEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
+		if (params.get("code") != null && params.get("code") != "") {
+			entityWrapper.like("UPPER(code)", params.get("code").toString().toUpperCase());
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
+			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
+		}
+		Page<MeasureGroupEntity> page = this.selectPage(new Query<MeasureGroupEntity>(params).getPage(), entityWrapper);
+		for (MeasureGroupEntity entity : page.getRecords()) {
+			if (entity.getDeptId() != null) {
+				entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
+			}
+		}
 
-        return new PageUtils(page);
-    }
+		return new PageUtils(page);
+	}
 
     @Override
     @Transactional
@@ -98,43 +102,43 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
         return RD.success(data);
     }
 
-    @Override
-    public void deleteList(List<MeasureGroupEntity> measureGroupEntityList) {
-        for (MeasureGroupEntity item : measureGroupEntityList) {
-            item.setDeleteAt(new Date());
-        }
-        if (measureGroupEntityList.size() > 0) {
-            this.updateAllColumnBatchById(measureGroupEntityList);
-        }
+	@Override
+	public void deleteList(List<MeasureGroupEntity> measureGroupEntityList) {
+		for (MeasureGroupEntity item : measureGroupEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (measureGroupEntityList.size() > 0) {
+			this.updateAllColumnBatchById(measureGroupEntityList);
+		}
 
-    }
+	}
 
-    @Override
-    public void deleteByIds(Collection<? extends Serializable> ids) {
-        List<MeasureGroupEntity> measureGroupEntityList = this.selectBatchIds(ids);
-        for (MeasureGroupEntity item : measureGroupEntityList) {
-            item.setDeleteAt(new Date());
-        }
-        if (measureGroupEntityList.size() > 0) {
-            this.updateAllColumnBatchById(measureGroupEntityList);
-        }
-    }
+	@Override
+	public void deleteByIds(Collection<? extends Serializable> ids) {
+		List<MeasureGroupEntity> measureGroupEntityList = this.selectBatchIds(ids);
+		for (MeasureGroupEntity item : measureGroupEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (measureGroupEntityList.size() > 0) {
+			this.updateAllColumnBatchById(measureGroupEntityList);
+		}
+	}
 
-    @Override
-    public void deleteByWrapper(Wrapper<MeasureGroupEntity> wrapper) {
-        List<MeasureGroupEntity> measureGroupEntityList = this.selectList(wrapper);
-        for (MeasureGroupEntity item : measureGroupEntityList) {
-            item.setDeleteAt(new Date());
-        }
-        if (measureGroupEntityList.size() > 0) {
-            this.updateAllColumnBatchById(measureGroupEntityList);
-        }
-    }
+	@Override
+	public void deleteByWrapper(Wrapper<MeasureGroupEntity> wrapper) {
+		List<MeasureGroupEntity> measureGroupEntityList = this.selectList(wrapper);
+		for (MeasureGroupEntity item : measureGroupEntityList) {
+			item.setDeleteAt(new Date());
+		}
+		if (measureGroupEntityList.size() > 0) {
+			this.updateAllColumnBatchById(measureGroupEntityList);
+		}
+	}
 
-    @Override
-    public void updatePinAndDataById(MeasureGroupEntity measureGroupEntity) {
-        measureGroupEntity.setUpdateAt(new Date());
-        this.updateById(measureGroupEntity);
-    }
+	@Override
+	public void updatePinAndDataById(MeasureGroupEntity measureGroupEntity) {
+		measureGroupEntity.setUpdateAt(new Date());
+		this.updateById(measureGroupEntity);
+	}
 
 }

@@ -43,7 +43,8 @@ export const defaultRow = {
   b3: null,
   p2: null,
   a5: 0,
-  frequency: null
+  frequency: null,
+  remark2: null
 }
 export const measureFields = [ ...measureColumns0.map(c => c.field), 'tool', ...measureColumns1.map(c => c.field) ]
 export const defaultFields = Object.keys(defaultRow)

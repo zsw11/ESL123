@@ -9,6 +9,8 @@
       ref="workbookTable"
       align="center"
       height="100%"
+      :row-class-name="getRowClass"
+      :cell-class-name="getCellClass"
       :auto-resize="true"
       :mouse-config="{selected: true}"
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
@@ -37,7 +39,8 @@
           {{getSecConv(scope)}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="remark" title="Remark" width="75"></vxe-table-column>
+      <vxe-table-column field="remark1" title="Remark1" width="75" :formatter="({ cellValue })=>cellValue?round(cellValue*100/6, -1):undefined" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书"
@@ -65,7 +68,7 @@
 
 <script>
 import day from 'dayjs'
-import { pick, clone, round, findIndex, cloneDeep } from 'lodash'
+import { omit, pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
@@ -93,14 +96,9 @@ export default {
   components: { MeasureColumn, KeyColumn, OperationColumn, ToolColumn },
   data () {
     return {
+      workbook: null,
       measureColumns0,
       measureColumns1,
-      // workM: false, // 手顺
-      rowIndex: 0,
-      id: 0, // 当前工位分析表的索引
-      len: 10,
-      WMethod: '',
-      add: true,
       lastSelected: undefined,
       hasUnchacheData: false,
       hasUnsavedData: false,
@@ -115,7 +113,9 @@ export default {
             { required: true, message: '请填写标准书名称', trigger: 'blur' }
           ]
         }
-      }
+      },
+      // 其他
+      round
     }
   },
   created () {
@@ -125,13 +125,32 @@ export default {
     //                数据显示
     // ========================================
     // 加载数据
-    loadData (data) {
+    loadData (workbook, data) {
+      this.workbook = workbook
+      this.mode = workbook.ifAlter ? 'alter' : 'normal'
       // 增加100行方便操作
       for (let i = 0; i < 100; i++) {
         data.push(this.createNewRow())
       }
       this.$refs.workbookTable.loadData(data)
       this.logChange()
+    },
+    // 行的class，主要用于修订
+    getRowClass ({ row }) {
+      let rowClassStr = ''
+      if (this.mode === 'alter' && ['delete', 'new'].includes(row.alterType)) {
+        rowClassStr += ` ${row.alterType}-row`
+      }
+      if (row.type === 'c') console.log(row.alterType, rowClassStr)
+      return rowClassStr
+    },
+    // 单元格的class，主要用于修订
+    getCellClass ({ row, column }) {
+      let cellClassStr = ''
+      if (row.alterType === 'edit' && row.alterInfo && row.alterInfo[column.property]) {
+        cellClassStr += ' edited-cell'
+      }
+      return cellClassStr
     },
     // 计算列
     getTimeValue ({ row }) {
@@ -142,7 +161,9 @@ export default {
         if (row[f] < 0) fre -= row[f]
       })
       const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
-      return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
+      const frequency = row['frequency'] || 0
+      // console.log(base, fre, frequency, toolValue)
+      return (base + fre * frequency) * 6 + toolValue * frequency * 6
     },
     // 计算列
     getTmu (scope) {
@@ -154,6 +175,7 @@ export default {
     },
     // 是否允许编辑
     canEdit ({ row, column }) {
+      if (this.workbook.ifAlter && row.alterType === 'delete') return false
       if (!modeMeasureFields.includes(column.property)) return true
       // 判断模式
       const mode = this.getMode(row)
@@ -198,16 +220,21 @@ export default {
     // ========================================
     //                行操作
     // ========================================
+    isRowChanged (row1, row2) {
+      if (!row1 || !row2) return false
+      return !!defaultFields.find(f => !(row1[f] === row2[f]))
+    },
     selectedChanged (val) {
       if (this.lastSelected) {
         // 补0操作
         // console.log(0, generalMeasureFields, this.lastSelected.column.property)
         if (generalMeasureFields.includes(this.lastSelected.column.property)) {
-          if (!generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) return
           // 通用列
-          if (val.row !== this.lastSelected.row || !generalMeasureFields.includes(val.column.property)) {
-            for (const f of generalMeasureFields) {
-              if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+          if (generalMeasureFields.find(f => ![ null, undefined, '' ].includes(this.lastSelected.row[f]))) {
+            if (val.row !== this.lastSelected.row || !generalMeasureFields.includes(val.column.property)) {
+              for (const f of generalMeasureFields) {
+                if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+              }
             }
           }
         } else {
@@ -237,17 +264,53 @@ export default {
         }
 
         // 判断是否变更
-        if (val.row !== this.lastSelected.row && this.$refs.workbookTable.isUpdateByRow(this.lastSelected.row)) {
-          this.hasUnchacheData = true
-          this.$refs.workbookTable.refreshData()
+        console.log(val.row !== this.lastSelected.row, this.isRowChanged(this.lastSelected.row, this.lastSelectedRow))
+        // 换行
+        if (val.row !== this.lastSelected.row) {
+          if (this.workbook.ifAlter) {
+            if (!this.lastSelected.row || !this.lastSelectedRow) return false
+            // 编辑新建行，不需单独处理
+            if (['new', 'delete'].includes(this.lastSelectedRow.alterType)) {
+              this.dataChanged()
+            } else {
+              let dataChanged = false
+              defaultFields.forEach(f => {
+                if (!(this.lastSelected.row[f] === this.lastSelectedRow[f])) {
+                  dataChanged = true
+                  if (!this.lastSelected.row.alterType) this.lastSelected.row.alterType = 'edit'
+                  if (!this.lastSelected.row.alterInfo) this.lastSelected.row.alterInfo = {}
+                  if (!this.lastSelected.row.alterInfo[f]) {
+                    this.lastSelected.row.alterInfo[f] = {
+                      filed: f,
+                      alterType: 'edit',
+                      origin: 'AAA'
+                    }
+                  }
+                }
+              })
+              if (dataChanged) this.dataChanged()
+            }
+          } else {
+            // 行值变更
+            if (this.isRowChanged(this.lastSelected.row, this.lastSelectedRow)) {
+              this.dataChanged()
+            }
+          }
+          // 记录行值
+          this.lastSelectedRow = cloneDeep(omit(val.row, ['_XID']))
         }
+      } else {
+        // 记录行值
+        this.lastSelectedRow = cloneDeep(omit(val.row, ['_XID']))
       }
       this.lastSelected = val
     },
     // 创建新行数据
-    createNewRow (type) {
-      const newRow = this.$refs.workbookTable.createRow(defaultRow)
+    createNewRow (type, ifAlter) {
+      const newRow = cloneDeep(defaultRow)
       if (type) newRow.type = type
+      if (ifAlter) newRow.alterType = 'new'
+      // console.log(newRow)
       return newRow
     },
     // 添加标准书对话框
@@ -285,21 +348,22 @@ export default {
         // 插入标准书编号
         if (this.standardBookDialog.formData.code) {
           rst = await this.$refs.workbookTable.insertAt(Object.assign(
-            this.createNewRow('c'),
+            this.createNewRow('c', this.workbook.ifAlter),
             { operation: this.standardBookDialog.formData.code }
           ), this.lastSelected.row)
           await this.$refs.workbookTable.insertAt(Object.assign(
-            this.createNewRow('n'),
+            this.createNewRow('n', this.workbook.ifAlter),
             { operation: this.standardBookDialog.formData.name }
           ), this.lastSelected.row)
         } else {
           rst = await this.$refs.workbookTable.insertAt(Object.assign(
-            this.createNewRow('n'),
+            this.createNewRow('n', this.workbook.ifAlter),
             { operation: this.standardBookDialog.formData.name }
           ), this.lastSelected.row)
         }
         await this.dataChanged()
         // 插入标准书名
+        // console.log(rst.row)
         await this.$refs.workbookTable.setActiveCell(rst.row, 'version')
         this.standardBookDialog.visible = false
       })
@@ -314,7 +378,10 @@ export default {
       }
       const rst = await fetchOperationGroup(group.id)
       if (rst.data && rst.data.operations) {
-        await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => pick(o, defaultFields)), this.lastSelected.row)
+        await this.$refs.workbookTable.insertAt(rst.data.operations.map(o => Object.assign(
+          pick(o, defaultFields),
+          { alterType: 'new' }
+        )), this.lastSelected.row)
         await this.dataChanged()
       }
     },
@@ -330,6 +397,17 @@ export default {
     cleanRow (row) {
       return pick(row, defaultFields)
     },
+    // 增加行
+    async addRow() {
+      const currentRow = this.lastSelected.row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      const newRow = this.createNewRow(undefined, this.workbook.ifAlter)
+      if (this.workbook.ifAlter) {
+        newRow.alterType = 'new'
+      }
+      await this.$refs.workbookTable.insertAt(newRow, currentRow)
+      await this.dataChanged()
+    },
     // 缓存
     copy () {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
@@ -341,27 +419,28 @@ export default {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
         const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
         if (!copyContent) return
+        if (this.workbook.ifAlter) {
+          copyContent.alterType = 'new'
+        }
         await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
         await this.dataChanged()
       }
     },
     // 删除行
-    async delete() {
+    async delete () {
       if (this.lastSelected && this.lastSelected.column.type==='index') {
         const fullData = this.$refs.workbookTable.getTableData().fullData
         const rowIndex = findIndex(fullData, this.lastSelected.row)
         const nextRow = fullData[rowIndex + 1]
-        await this.$refs.workbookTable.remove(this.lastSelected.row)
-        await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+        if (this.workbook.ifAlter && this.lastSelected.row.alterType !== 'new') {
+          this.lastSelected.row.alterType = 'delete'
+          await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+        } else {
+          await this.$refs.workbookTable.remove(this.lastSelected.row)
+          await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+        }
         await this.dataChanged()
       }
-    },
-    // 增加行
-    async addRow() {
-      const currentRow = this.lastSelected.row
-      if (!currentRow || currentRow.$rowIndex === -1) return
-      await this.$refs.workbookTable.insertAt(this.createNewRow(), currentRow)
-      await this.dataChanged()
     },
     getLastRowIndex (data) {
       for (let i = data.length - 1; i >= 0; i--) {
@@ -396,7 +475,8 @@ export default {
     },
     // 保存
     save (workbook, isForce) {
-      if (this.hasUnsavedData || isForce) {
+      console.log('this.hasUnsavedData || !!isForce', this.hasUnsavedData, !!isForce)
+      if (this.hasUnsavedData || !!isForce) {
         const fullData = this.getFullData()
         // fullData[0].alterType = 'edit'
         // fullData[0].alterInfo =  [
@@ -433,12 +513,30 @@ export default {
 </script>
 
 <style lang="scss">
-.more {
-  margin-left: 160px;
-  width: 80px;
-  height: 100px;
-  background-color: #FAFAFA;
-  border-radius: 5px;
-  border: 1px solid #f2f2f2;
+.workbook-table {
+  .vxe-table {
+    .new-row,
+    .delete-row {
+      color: red;
+      .sdn .vxe-cell, .sdc .vxe-cell {
+        color: red;
+      }
+    }
+    .edited-cell  {
+      .vxe-cell,
+      &.sdn .vxe-cell,
+      &.sdc .vxe-cell {
+        color: red
+      }
+    }
+  }
 }
+// .more {
+//   margin-left: 160px;
+//   width: 80px;
+//   height: 100px;
+//   background-color: #FAFAFA;
+//   border-radius: 5px;
+//   border: 1px solid #f2f2f2;
+// }
 </style>

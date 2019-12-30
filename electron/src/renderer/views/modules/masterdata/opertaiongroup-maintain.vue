@@ -36,13 +36,28 @@
         :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit }"
         :edit-config="$route.name==='details-opertaiongroup' ? {} : {trigger: 'dblclick', mode: 'cell', activeMethod: canEdit}"
         @selected-changed="selectedChanged">
-        <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+        <vxe-table-column type="index" field="index" width="50" title="No."></vxe-table-column>
         <operation-column key="operationColumn" min-width="240"></operation-column>
         <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
         <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
-        <vxe-table-column field="tool" title="Tool" header-class-name="bg-table-color1" class-name="bg-table-color1" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+        <tool-column @jump="jump"></tool-column>
         <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
         <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-table-column title="TimeValue" width="65">
+          <template slot-scope="scope">
+            {{getTimeValue(scope)}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmu" title="TMU" width="50">
+          <template slot-scope="scope">
+            {{getTmu(scope)}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="scv" title="Sec./comV" width="80">
+          <template slot-scope="scope">
+            {{getSecConv(scope)}}
+          </template>
+        </vxe-table-column>
       </vxe-grid>
 
       <el-row :gutter="10">
@@ -69,13 +84,14 @@
 </template>
 
 <script>
-import { pick, clone } from 'lodash'
+import { pick, clone, round, findIndex } from 'lodash'
 import { fetchOperationGroup, createOperationGroup, updateOperationGroup } from '@/api/operationGroup'
 import WorkbookTable from '../workbook/workbook-detail-table.vue'
 import {
   measureColumns0,
   measureColumns1,
   measureFields,
+  generalMeasureFields,
   defaultRow,
   defaultFields,
   modeMeasureFields,
@@ -89,6 +105,7 @@ import {
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
+import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
 
 export default {
   name: 'editOperationGroup',
@@ -96,7 +113,8 @@ export default {
     WorkbookTable,
     MeasureColumn,
     OperationColumn,
-    KeyColumn
+    KeyColumn,
+    ToolColumn
   },
   data () {
     return {
@@ -173,34 +191,84 @@ export default {
         this.inited = true
       }
     },
-    // // 计算列
-    // getTimeValue ({ row }) {
-    //   let base = 0
-    //   let fre = 0
-    //   allNumericMeasureField.forEach(f => {
-    //     if (row[f] > 0) base += row[f]
-    //     if (row[f] < 0) fre -= row[f]
-    //   })
-    //   const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
-    //   return (base + fre * row['frequency']) * 6 + toolValue * (row['frequency'] || 1) * 6
-    // },
-    // // 计算列
-    // getTmu (scope) {
-    //   return this.getTimeValue(scope) / 6 * 10
-    // },
-    // // 计算列
-    // getSecConv (scope) {
-    //   return round(this.getTimeValue(scope) * 0.06, 2)
-    // },
+    // ========================================
+    //                数据显示
+    // ========================================
+    // 加载数据
+    loadData (data) {
+      this.$nextTick(() => {
+        this.$refs.workbookTable.loadData(data)
+        this.lastEditCell = undefined
+        this.currentCell = undefined
+        // 增加10行方便操作
+        for (let i = 0; i < 10; i++) {
+          this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
+        }
+      })
+    },
+    // 计算列
+    getTimeValue ({ row }) {
+      let base = 0
+      let fre = 0
+      allNumericMeasureField.forEach(f => {
+        if (row[f] > 0) base += row[f]
+        if (row[f] < 0) fre -= row[f]
+      })
+      const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
+      const frequency = row['frequency'] || 0
+      // console.log(base, fre, frequency, toolValue)
+      return (base + fre * frequency) * 6 + toolValue * frequency * 6
+    },
+    // 计算列
+    getTmu (scope) {
+      return this.getTimeValue(scope) / 6 * 10
+    },
+    // 计算列
+    getSecConv (scope) {
+      return round(this.getTimeValue(scope) * 0.06, 2)
+    },
+    // 是否允许编辑
+    canEdit ({ row, column }) {
+      if (!modeMeasureFields.includes(column.property)) return true
+      // 判断模式
+      const mode = this.getMode(row)
+      return !mode || mode === measureMode[column.property]
+    },
+    // 获取模式
+    getMode (row) {
+      return measureMode[modeMeasureFields.find(f => {
+        if (f === 'tool') return ![ null, undefined, '', '*0' ].includes(row[f])
+        return ![ null, undefined, '' ].includes(row[f])
+      })]
+    },
     // 选中单元格并输入时的处理
     keyboardEdit ({ row, column, cell }, e) {
       console.log(jumpFields, column.property)
-      if (jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
+      if (column.property !== 'operation' && jumpFields.includes(column.property) && ['a', 'b', 'g', 'p', 'm', 'x', 'i', 'w', 't', 'f'].includes(e.key)) {
         this.jump(row, column.property, e.key) // field是operation
         e.preventDefault()
         return false
       }
       return true
+    },
+    // 调到指定位置
+    jump (row, field, to) {
+      const offset = jumpFields.indexOf(field)
+      for (let i = 1; i <= jumpFields.length; i++) {
+        const tmpField = jumpFields[(offset + i) % jumpFields.length]
+        const fieldMap = {
+          operation: 'w',
+          tool: 't',
+          frequency: 'f'
+        }
+        // 判断模式
+        const mode = this.getMode(row)
+        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
+          this.$refs.workbookTable.setActiveCell(row, tmpField)
+          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
+          return
+        }
+      }
     },
     // 快捷键
     handleShortcut () {
@@ -224,6 +292,10 @@ export default {
                 self.addRow()
                 break
               }
+              case '-': {
+                self.delete()
+                break
+              }
             }
           }
           if (e.key === 'Delete') {
@@ -234,117 +306,55 @@ export default {
         console.log('Add Listener')
       }
     },
+    // ========================================
+    //                行操作
+    // ========================================
+    selectedChanged (val) {
+      // 补0操作
+      if (this.lastSelected) {
+        if (generalMeasureFields.includes(this.lastSelected.column.property)) {
+          if (generalMeasureFields.find(f => ![ null, undefined, '' ].includes(val.row[f]))) {
+            // 通用列
+            if (val.row !== this.lastSelected.row || !generalMeasureFields.includes(val.column.property)) {
+              for (const f of generalMeasureFields) {
+                if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+              }
+            }
+          }
+        } else {
+          // 判断模式
+          const mode = this.getMode(this.lastSelected.row)
+          if (mode &&
+            measureMode[this.lastSelected.column.property] === mode &&
+            (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
+          ) {
+            // 因为都是设置0，不用管是否频率
+            // let v = 0
+            // for (const f of modeCheckZeroFields[mode]) {
+            //   if (this.lastSelected.row[f]) {
+            //     v = this.lastSelected.row[f]
+            //     break
+            //   }
+            // }
+            // if (v) {
+            //   for (const f of modeCheckZeroFields[mode]) {
+            //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+            //   }
+            // }
+            for (const f of modeSetZeroFields[mode]) {
+              if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
+            }
+          }
+        }
+      }
+      this.lastSelected = val
+    },
     // 创建新行数据
     createNewRow (type) {
       const newRow = clone(defaultRow)
       if (type) newRow.type = type
       console.log(newRow)
       return newRow
-    },
-    // 加载数据
-    loadData (data) {
-      this.$nextTick(() => {
-        this.$refs.workbookTable.loadData(data)
-        this.lastEditCell = undefined
-        this.currentCell = undefined
-        // 增加10行方便操作
-        for (let i = 0; i < 10; i++) {
-          this.$refs.workbookTable.insertAt(this.createNewRow(), -1)
-        }
-      })
-    },
-    // 调到指定位置
-    jump (row, field, to) {
-      const offset = jumpFields.indexOf(field)
-      for (let i = 1; i <= jumpFields.length; i++) {
-        const tmpField = jumpFields[(offset + i) % jumpFields.length]
-        const fieldMap = {
-          operation: 'w',
-          tool: 't',
-          frequency: 'f'
-        }
-        // 判断模式
-        const mode = measureMode[modeMeasureFields.find(f => {
-          return ![ null, undefined, '' ].includes(row[f])
-        })]
-        if ((!modeMeasureFields.includes(tmpField) || !mode || mode === measureMode[tmpField]) && (fieldMap[tmpField] || tmpField).includes(to)) {
-          this.$refs.workbookTable.setActiveCell(row, tmpField)
-          this.selectedChanged({ row, column: this.$refs.workbookTable.getColumnByField(tmpField) })
-          return
-        }
-      }
-    },
-    // 删除行
-    async delete() {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        this.$refs.workbookTable.remove(this.lastSelected.row)
-      }
-    },
-    // 是否允许编辑
-    canEdit ({ row, column }) {
-      if (!modeMeasureFields.includes(column.property)) return true
-      // 判断模式
-      const mode = measureMode[modeMeasureFields.find(f => {
-        return ![ null, undefined, '' ].includes(row[f])
-      })]
-      return !mode || mode === measureMode[column.property]
-    },
-    // 获取当前行数据
-    getCurrentCell () {
-      return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
-    },
-    // 清理行，只保留有效属性
-    cleanRow (row) {
-      return pick(row, defaultFields)
-    },
-    // 缓存
-    copy () {
-      localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow((this.getCurrentCell() || {}).row)))
-    },
-    // 粘贴
-    async paste (event) {
-      const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
-      if (!copyContent) return
-      const currentRow = (this.getCurrentCell() || {}).row
-      if (!currentRow || currentRow.$rowIndex === -1) return
-      await this.$refs.workbookTable.insertAt(copyContent, currentRow)
-    },
-    // 删除行
-    async delete() {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        this.$refs.workbookTable.remove(this.lastSelected.row)
-      }
-    },
-    selectedChanged (val) {
-      // 补0操作
-      // 判断模式
-      if (this.lastSelected) {
-        const mode = measureMode[modeMeasureFields.find(f => {
-          return ![ null, undefined, '' ].includes(this.lastSelected.row[f])
-        })]
-        if (mode &&
-          measureMode[this.lastSelected.column.property] === mode &&
-          (val.row !== this.lastSelected.row || !modeFields[mode].includes(val.column.property))
-        ) {
-          // 因为都是设置0，不用管是否频率
-          // let v = 0
-          // for (const f of modeCheckZeroFields[mode]) {
-          //   if (this.lastSelected.row[f]) {
-          //     v = this.lastSelected.row[f]
-          //     break
-          //   }
-          // }
-          // if (v) {
-          //   for (const f of modeCheckZeroFields[mode]) {
-          //     if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
-          //   }
-          // }
-          for (const f of modeSetZeroFields[mode]) {
-            if (!this.lastSelected.row[f]) this.lastSelected.row[f] = 0
-          }
-        }
-      }
-      this.lastSelected = val
     },
     // 选择指标组合
     selctMeasureGroup (mg, row) {
@@ -353,6 +363,45 @@ export default {
         pick(mg, measureFields)
       )
       this.$refs.workbookTable.setActiveCell(row, 'tool')
+    },
+    // 清理行，只保留有效属性
+    cleanRow (row) {
+      return pick(row, defaultFields)
+    },
+    // 获取当前行数据
+    getCurrentCell () {
+      return this.$refs.workbookTable.getMouseSelecteds() || this.lastEditCell
+    },
+    // 增加行
+    async addRow() {
+      const currentRow = this.lastSelected.row
+      if (!currentRow || currentRow.$rowIndex === -1) return
+      const newRow = this.createNewRow(undefined)
+      await this.$refs.workbookTable.insertAt(newRow, currentRow)
+    },
+    // 缓存
+    copy () {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
+      }
+    },
+    // 粘贴
+    async paste (event) {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
+        if (!copyContent) return
+        await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
+      }
+    },
+    // 删除行
+    async delete() {
+      if (this.lastSelected && this.lastSelected.column.type==='index') {
+        const fullData = this.$refs.workbookTable.getTableData().fullData
+        const rowIndex = findIndex(fullData, this.lastSelected.row)
+        const nextRow = fullData[rowIndex + 1]
+        await this.$refs.workbookTable.remove(this.lastSelected.row)
+        await this.$refs.workbookTable.setSelectCell(nextRow, 'index')
+      }
     },
     // 取消信息
     cancleFormSubmit () {

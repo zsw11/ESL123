@@ -5,8 +5,9 @@
       <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
-      <export-data :config="exportConfig">导 出</export-data>
-      <import-data :config="importConfig"></import-data>
+      <export-data type="primary" :config="exportConfig">导 出</export-data>
+      <!-- <import-data type="primary" :config="importConfig"></import-data> -->
+      <span class="work-name">{{workbook.workName}}</span>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
     </div>
@@ -54,6 +55,7 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
+        <span class="workbook-title">{{workbook.ifAlter? '修订':''}}</span>
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -421,9 +423,43 @@
         clearInterval(this[intervalName])
         this[intervalName] = null
       },
+      doGoBack () {
+        try {
+          fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook', replace: true }) : this.$router.back(-1)
+        } catch (e) {
+          this.$router.push({ name: 'home' })
+        }
+      },
       // 退回上一页
-      goBack () {
-        fromRoute.fullPath === '/' ? this.$router.push({ name: 'workbook-workbook' }) : this.$router.back(-1)
+      async goBack () {
+        const self = this
+        if (this.$refs.workbookTable && this.$refs.workbookTable.hasUnsavedData) {
+          this.$confirm(`检测到未保存的内容，是否在离开页面前保存修改?`, '确认信息', {
+            distinguishCancelAndClose: true,
+            confirmButtonText: '保存',
+            cancelButtonText: '放弃修改',
+            type: 'warning'
+          }).then(async () => {
+            await self.doSave(true).then(() => {
+              self.$message({
+                message: '保存成功',
+                type: 'success',
+                duration: 1500,
+                onClose: self.cancleFormSubmit
+              })
+              // 重置自动保存
+              clearInterval(self.saveInterval)
+              self.saveInterval = null
+              self.intervalSave()
+              self.doGoBack()
+            })
+          }).catch(action => {
+            console.log(111, action)
+            if (action === 'cancel') self.doGoBack()
+          })
+        } else {
+          this.doGoBack()
+        }
       },
       // 定时缓存
       intervalCache () {
@@ -448,7 +484,7 @@
       },
       // 保存，判断是否在线
       doSave (workbook,isForce) {
-        this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
+        return this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
           if (this.isOffline) {
             this.$message({
               message: '当前处于在线状态',
@@ -587,7 +623,7 @@
         if (!this.workbookData[workName]) {
           this.workbookData[workName] = []
         }
-        this.$refs.workbookTable.loadData(this.workbookData[workName])
+        this.$refs.workbookTable.loadData(this.workbook, this.workbookData[workName])
       },
       // ========================================
       //                视频播放
@@ -739,6 +775,18 @@
       &:hover {
         color: rgba(255, 255, 255, .2);
       }
+    }
+    .work-name {
+      position: absolute;
+      left: 50%;
+      margin-left: -10%;
+      width: 20%;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
     }
     .video-name {
       color: white;
@@ -892,6 +940,18 @@
             line-height: 22px;
           }
         }
+      }
+      .workbook-title {
+        position: absolute;
+        left: 50%;
+        margin-left: -10%;
+        width: 20%;
+        color: blue;
+        font-size: 18px;
+        font-weight: bold;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
       }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),
