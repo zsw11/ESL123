@@ -25,10 +25,22 @@
         </el-col>
       </el-row>
       <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'部门'" prop="deptEntityList">
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.deptEntityList"
+              :allowMultiple="true"
+              :searchApi="this.listDept"
+              :allowEmpty="true">
+            </keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
         <el-col :span="22">
           <el-form-item style="display: block":label="'备注'" prop="remark">
             <el-input
-
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -51,6 +63,7 @@
 <script>
 import { pick } from 'lodash'
 import { fetchReport, createReport, updateReport, listReport } from '@/api/report'
+import {  listDept } from '@/api/dept'
 export default {
   name: 'editReport',
   data () {
@@ -60,10 +73,12 @@ export default {
       inited: false,
       dataForm: {
         id: 0,
+        deptEntityList: null,
         name: null,
         formCode: null,
         remark: null
       },
+      listDept,
       listReport,
       dataRules: {
         name: [
