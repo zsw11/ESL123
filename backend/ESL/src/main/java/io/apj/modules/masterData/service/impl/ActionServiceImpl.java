@@ -4,6 +4,8 @@ import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+
+import io.apj.common.annotation.DataFilter;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
@@ -25,17 +27,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("actionService")
 public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> implements ActionService {
-    @Autowired
+	@Autowired
 	private ActionService actionService;
+
 	@Override
+	@DataFilter(subDept = true, user = true, deptId = "dept_id")
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.isNull("delete_at").orderBy("update_at",false)
-				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"));
+		entityWrapper.isNull("delete_at").orderBy("update_at", false)
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"))
+				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
-			entityWrapper.andNew(
-					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
+			entityWrapper.andNew("UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' "
+					+ "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
 
 		Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
@@ -59,7 +65,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 				// 设备
 				if (keyStrs[0].equals("action")) {
 					if (keyStrs[1].equals("common")) {
-						if(value.equals("是")) {
+						if (value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);
 						} else {
 							deviceMap.put(keyStrs[1], false);
@@ -83,10 +89,10 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 
 	@Override
 	public void deleteList(List<ActionEntity> actionEntityList) {
-		for(ActionEntity item : actionEntityList){
+		for (ActionEntity item : actionEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(actionEntityList.size()>0){
+		if (actionEntityList.size() > 0) {
 			this.updateAllColumnBatchById(actionEntityList);
 		}
 
@@ -95,10 +101,10 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 	@Override
 	public void deleteByIds(Collection<? extends Serializable> ids) {
 		List<ActionEntity> actionEntityList = this.selectBatchIds(ids);
-		for(ActionEntity item : actionEntityList){
+		for (ActionEntity item : actionEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(actionEntityList.size()>0){
+		if (actionEntityList.size() > 0) {
 			this.updateAllColumnBatchById(actionEntityList);
 		}
 	}
@@ -106,10 +112,10 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
 	@Override
 	public void deleteByWrapper(Wrapper<ActionEntity> wrapper) {
 		List<ActionEntity> actionEntityList = this.selectList(wrapper);
-		for(ActionEntity item: actionEntityList){
+		for (ActionEntity item : actionEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(actionEntityList.size()>0){
+		if (actionEntityList.size() > 0) {
 			this.updateAllColumnBatchById(actionEntityList);
 		}
 	}
