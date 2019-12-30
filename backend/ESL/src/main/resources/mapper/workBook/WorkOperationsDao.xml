@@ -35,6 +35,7 @@
         <result property="tmu" column="tmu"/>
         <result property="secondConvert" column="second_convert"/>
         <result property="remark" column="remark"/>
+        <result property="remark1" column="remark1"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

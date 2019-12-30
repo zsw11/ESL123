@@ -759,7 +759,6 @@ CREATE TABLE action (
   delete_at timestamp
 );
 comment on table action is '关键词';
-Create Unique Index index_action_name_UNQ On action(name);
 CREATE UNIQUE INDEX action_uniq ON action (name,dept_id) WHERE delete_at IS NULL;
 comment on column action.name is '名称';
 comment on column action.pinyin is '拼音';
@@ -1345,14 +1344,14 @@ comment on column operation_group_operation.delete_at is '删除时间';
 drop table if exists work_book;
 CREATE TABLE work_book (
   id serial PRIMARY KEY,
-  dept_id integer,
-  STLST varchar(8),
-  model_id integer,
-  destinations varchar(128),
-  phase_id integer,
-  workstation_id integer,
-  work_name varchar(128),
-  version_number varchar(32),
+  dept_id integer not null,
+  STLST varchar(8) not null,
+  model_id integer not null,
+  destinations varchar(128) not null,
+  phase_id integer not null,
+  workstation_id integer not null,
+  work_name varchar(128) not null,
+  version_number varchar(32) not null,
   maker_id integer,
   if_alter boolean,
   maked_at timestamp,
@@ -1424,6 +1423,7 @@ CREATE TABLE work_operations (
   TMU decimal(18, 5),
   second_convert decimal(18, 5),
   remark varchar(512),
+  remark1 integer,
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
