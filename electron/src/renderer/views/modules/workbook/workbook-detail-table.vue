@@ -279,9 +279,8 @@ export default {
                   dataChanged = true
                   if (!this.lastSelected.row.alterType) this.lastSelected.row.alterType = 'edit'
                   if (!this.lastSelected.row.alterInfo) this.lastSelected.row.alterInfo = {}
-                  if (!this.lastSelected.row.alterInfo[f]) {
+                  if (!this.lastSelected.row.alterInfo.find(i => i.field === f)) {
                     this.lastSelected.row.alterInfo[f] = {
-                      filed: f,
                       alterType: 'edit',
                       origin: 'AAA'
                     }

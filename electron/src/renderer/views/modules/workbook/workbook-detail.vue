@@ -547,6 +547,7 @@
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
           self.workbookData[workBook.workName] = workBook.workOperationsList
+          workBook.workOperationsList.forEach(o => o.alterInfo = o.alterInfo ? JSON.parse(o.alterInfo) : o.alterInfo)
           self.intervalCache()
           self.intervalSave()
           self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
