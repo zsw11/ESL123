@@ -65,8 +65,11 @@ public class ReportController extends AbstractController {
 			SysDeptEntity deptEntity = sysDeptService.selectById(item.getDeptId());
 			deptEntityList.add(deptEntity);
 		}
-		report.setDeptEntityList(deptEntityList);
-		return RD.build().put("data", report);
+		Map<String,Object> data = new HashMap<>();
+		data.put("report",report);
+		data.put("deptEntityList",deptEntityList);
+//		report.setDeptEntityList(deptEntityList);
+		return RD.build().put("data", data);
 	}
 	/**
 	 * 报表属于哪些报表组并过滤

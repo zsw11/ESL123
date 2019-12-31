@@ -21,6 +21,7 @@ import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.service.*;
+import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.dao.WorkBookDao;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -80,6 +81,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	private ReportDeptRelaService reportDeptRelaService;
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private SysConfigService sysConfigService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -352,6 +355,25 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			reportEntityList.add(reportService.selectById(item.getReportId()));
 		});
 		return reportEntityList;
+	}
+
+	@Override
+	@Transactional
+	public void selectLock() {
+		EntityWrapper<WorkBookEntity> ew = new EntityWrapper<>();
+		ew.isNull("delete_at").isNotNull("lock_at").isNotNull("lock_by");
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(ew);
+		for(WorkBookEntity item: workBookEntityList){
+			Long lockTime = item.getLockAt().getTime();
+			Long nowTime = new Date().getTime();
+			Long time = lockTime + Long.parseLong(sysConfigService.getValue("LockTime"));
+			if(nowTime > time){
+				item.setLockAt(null);
+				item.setLockBy(null);
+				workBookService.updateById(item);
+			}
+		}
+
 	}
 
 	@Override

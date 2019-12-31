@@ -45,6 +45,8 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	List<ReportEntity> deptReports(Integer id);
 
+	void selectLock();
+
 	WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId);
 
 	/**

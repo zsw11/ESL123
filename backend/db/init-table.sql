@@ -1355,6 +1355,8 @@ CREATE TABLE work_book (
   maker_id integer,
   if_alter boolean,
   maked_at timestamp,
+  lock_at timestamp,
+  lock_by integer,
   continue_from_id integer,
   time_value decimal(18, 5),
   TMU decimal(18, 5),

@@ -212,7 +212,29 @@ public class WorkBookController extends AbstractController {
 	// @RequiresPermissions("workBook:workbook:createReport")
 	public ResponseEntity<Object> dpetReport(@PathVariable Integer id) {
 		List<ReportEntity> reportEntityList = workBookService.deptReports(id);
+		for(ReportEntity item : reportEntityList){
+			item.setDeptId(getUserDeptId().intValue());
+		}
 		return RD.success(reportEntityList);
+	}
+	/**
+	 * 判断锁定以及重新设置锁定时间
+	 */
+	@RequestMapping("/lock/{id}")
+	public ResponseEntity<Object> lock(@PathVariable("id") Integer id) {
+		WorkBookEntity workBookEntity = workBookService.selectById(id);
+		Integer lockId = workBookEntity.getLockBy();
+		if(lockId == null){
+			workBookEntity.setLockBy(getUserId().intValue());
+			workBookEntity.setLockAt(new Date());
+			workBookService.updateById(workBookEntity);
+		}else if(lockId == getUserId().intValue()){
+			workBookEntity.setLockAt(new Date());
+			workBookService.updateById(workBookEntity);
+		}else {
+			return RD.INTERNAL_SERVER_ERROR("有人正在编辑");
+		}
+		return RD.success(workBookEntity);
 	}
 
 }

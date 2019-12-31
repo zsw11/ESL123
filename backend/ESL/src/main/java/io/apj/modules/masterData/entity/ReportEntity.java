@@ -73,4 +73,6 @@ public class ReportEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private List<SysDeptEntity> deptEntityList;
+	@TableField(exist = false)
+	private Integer deptId;
 }
