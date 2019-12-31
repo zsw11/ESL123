@@ -97,7 +97,9 @@ public class WorkBookController extends AbstractController {
 //			e.printStackTrace();
 //		}
 		WorkBookEntity workBookEntity;
-		map.put("remarks",map.get("remarks").toString());
+		if(map.get("remarks").toString()!=null){
+			map.put("remarks",map.get("remarks").toString());
+		}
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 		workBookEntity.setDeptId(getUserDeptId().intValue());
 		workBookEntity.setIfAlter(false);
@@ -126,7 +128,7 @@ public class WorkBookController extends AbstractController {
 //			e.printStackTrace();
 //		}
 		WorkBookEntity workBookEntity =  new WorkBookEntity();
-		map.put("remarks",map.get("remarks").toString());
+			map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
 		workBookEntity.setMakerId(getUserId().intValue());
@@ -240,8 +242,10 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/unlock")
 	public ResponseEntity<Object> unlock(@RequestParam Integer id) {
 		WorkBookEntity workBookEntity = workBookService.selectById(id);
-		workBookEntity.setLockBy(null);
-		workBookEntity.setLockAt(null);
+		if(workBookEntity.getLockBy().equals(getUserId().intValue())){
+			workBookEntity.setLockBy(null);
+			workBookEntity.setLockAt(null);
+		}
 		workBookService.updateById(workBookEntity);
 		return RD.success(workBookEntity);
 	}
