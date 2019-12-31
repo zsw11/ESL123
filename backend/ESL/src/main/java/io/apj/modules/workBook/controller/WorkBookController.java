@@ -245,9 +245,12 @@ public class WorkBookController extends AbstractController {
 		if(workBookEntity.getLockBy().equals(getUserId().intValue())){
 			workBookEntity.setLockBy(null);
 			workBookEntity.setLockAt(null);
+			workBookService.updateById(workBookEntity);
+			return RD.success(workBookEntity);
+		}else {
+			return RD.INTERNAL_SERVER_ERROR("解锁失败");
 		}
-		workBookService.updateById(workBookEntity);
-		return RD.success(workBookEntity);
+
 	}
 
 }
