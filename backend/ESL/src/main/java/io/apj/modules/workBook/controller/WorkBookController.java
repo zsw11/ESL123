@@ -220,8 +220,8 @@ public class WorkBookController extends AbstractController {
 	/**
 	 * 判断锁定以及重新设置锁定时间
 	 */
-	@RequestMapping("/lock/{id}")
-	public ResponseEntity<Object> lock(@PathVariable Integer id) {
+	@RequestMapping("/lock")
+	public ResponseEntity<Object> lock(@RequestParam Integer id) {
 		WorkBookEntity workBookEntity = workBookService.selectById(id);
 		Integer lockId = workBookEntity.getLockBy();
 		if(lockId == null){
@@ -237,8 +237,8 @@ public class WorkBookController extends AbstractController {
 		return RD.success(workBookEntity);
 	}
 
-	@RequestMapping("/unlock/{id}")
-	public ResponseEntity<Object> unlock(@PathVariable Integer id) {
+	@RequestMapping("/unlock")
+	public ResponseEntity<Object> unlock(@RequestParam Integer id) {
 		WorkBookEntity workBookEntity = workBookService.selectById(id);
 		workBookEntity.setLockBy(null);
 		workBookEntity.setLockAt(null);
