@@ -88,16 +88,16 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/create")
 	@RequiresPermissions("workBook:workbook:create")
 	public R save(@RequestBody Map<String,Object> map) {
-		JSONArray jsonArray = null;
-		try
-		{
-			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+//		JSONArray jsonArray = null;
+//		try
+//		{
+//			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
+//		} catch (JSONException e)
+//		{
+//			e.printStackTrace();
+//		}
 		WorkBookEntity workBookEntity;
-		map.put("remarks",jsonArray.toString());
+		map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 		workBookEntity.setDeptId(getUserDeptId().intValue());
 		workBookEntity.setIfAlter(false);
@@ -117,16 +117,16 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("workBook:workbook:update")
 	public RD update(@RequestBody Map<String,Object> map) {
-		JSONArray jsonArray = null;
-		try
-		{
-			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+//		JSONArray jsonArray = null;
+//		try
+//		{
+//			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
+//		} catch (JSONException e)
+//		{
+//			e.printStackTrace();
+//		}
 		WorkBookEntity workBookEntity =  new WorkBookEntity();
-		map.put("remarks",jsonArray.toString());
+		map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
 		workBookEntity.setMakerId(getUserId().intValue());
