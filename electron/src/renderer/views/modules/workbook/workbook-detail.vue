@@ -89,7 +89,7 @@
   import WorkbookTable from './workbook-detail-table.vue'
   import InfoDialog from './workbook-detail-info-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
-  import { fetchWorkBookWithOperations } from '@/api/workBook'
+  import { fetchWorkBookWithOperations, WorkBookImport, WorkBookExport, lock, unlock } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import markers from 'videojs-markers-plugin'
@@ -99,7 +99,6 @@
   import { cloneDeep } from 'lodash'
   import ExportData from '@/components/export-data'
   import ImportData from '@/components/import-data'
-  import { WorkBookImport, WorkBookExport } from '@/api/workBook'
 
   const defaultExport = [
     "workOperations.versionNumber",
@@ -537,6 +536,12 @@
       init () {
         const self = this
         // 获取分析表详情
+        console.log(lock)
+        lock(this.$route.params.id).then(res => {
+          console.log(res)
+        }).catch(e => {
+          console.log(e)
+        })
         fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]

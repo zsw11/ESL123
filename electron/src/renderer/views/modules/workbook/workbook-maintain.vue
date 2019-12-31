@@ -301,7 +301,7 @@ export default {
     // 表单提交
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
-        // this.dataForm.remarks = ['test', 'aaaa']
+        this.dataForm.remarks = ['test', 'aaaa']
         if (valid) {
           (this.dataForm.id
             ? updateWorkBook(this.dataForm.id, this.dataForm)

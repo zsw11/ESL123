@@ -65,6 +65,24 @@ export function updateAll (id, data) {
   })
 }
 
+// 修改分析表
+export function lock (id) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/lock'),
+    method: 'put',
+    params: { id }
+  })
+}
+
+// 修改分析表
+export function unlock (id) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/unlock'),
+    method: 'put',
+    params: { id }
+  })
+}
+
 // 删除分析表
 export function deleteWorkBook (id) {
   return request({
