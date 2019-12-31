@@ -55,7 +55,8 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
-        <span class="workbook-title">{{workbook.ifAlter? '修订':''}}</span>
+        <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}{{workbook.ifAlter}}</span>
+        <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks"></el-button>
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -81,6 +82,7 @@
     </div>
 
     <info-dialog ref="infoDialog" :workbook="workbook"></info-dialog>
+    <remarks-dialog ref="remarksDialog" :workbook="workbook"></remarks-dialog>
   </div>
 </template>
 
@@ -88,6 +90,7 @@
   import { pick, omit, debounce } from 'lodash'
   import WorkbookTable from './workbook-detail-table.vue'
   import InfoDialog from './workbook-detail-info-dialog.vue'
+  import RemarksDialog from './workbook-detail-remarks-dialog.vue'
   import { listOperationGroup } from '@/api/operationGroup'
   import { fetchWorkBookWithOperations, WorkBookImport, WorkBookExport, lock, unlock } from '@/api/workBook'
   import 'video.js/dist/video-js.css'
@@ -137,6 +140,7 @@
     name: 'WorkbookDetail',
     components: {
       InfoDialog,
+      RemarksDialog,
       WorkbookTable,
       videoPlayer,
       ExportData,
@@ -146,16 +150,18 @@
       const self = this
       return {
         // 界面
+        lockStatus: 'init',
         isOffline: false,
         workbookPercents,
         workbookPercent: 'half',
         // 数据
-        workbook: {},
+        workbook: { id: this.$route.params.id },
         workbookData: {},
         workbooks: [],
         currentWorkbook: null,
         saveInterval: null,
         cacheInterval: null,
+        lockInterval: null,
         dataButton: 'list',
         complexFilters: [],
         listQuery: {
@@ -399,17 +405,21 @@
       })
     },
     activated () {
+      if (this.workbook) this.intervalLock()
       if (this.workbook) this.intervalSave()
       if (this.workbook) this.intervalCache()
       this.addShortcut()
     },
     deactivated () {
+      this.unlock()
       this.closeVideo()
       this.removeShortcut()
+      this.clearInterval('lockInterval')
       this.clearInterval('saveInterval')
       this.clearInterval('cacheInterval')
     },
     destroyed () {
+      this.unlock()
       this.clearInterval('saveInterval')
       this.clearInterval('cacheInterval')
       this.removeShortcut()
@@ -458,6 +468,16 @@
           })
         } else {
           this.doGoBack()
+        }
+      },
+      // 定时请求锁
+      intervalLock () {
+        const self = this
+        self.lock()
+        if (!self.cacheInterval) {
+          self.lockInterval = setInterval(() => {
+            self.lock()
+          }, this.customConfig.LockInterval);
         }
       },
       // 定时缓存
@@ -533,15 +553,13 @@
       showInfo () {
         if (this.$refs.infoDialog) this.$refs.infoDialog.show()
       },
+      // 编辑备注
+      showRemarks () {
+        if (this.$refs.remarksDialog) this.$refs.remarksDialog.show()
+      },
       init () {
         const self = this
         // 获取分析表详情
-        console.log(lock)
-        lock(this.$route.params.id).then(res => {
-          console.log(res)
-        }).catch(e => {
-          console.log(e)
-        })
         fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
@@ -552,6 +570,22 @@
           self.intervalSave()
           self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
+      },
+      lock () {
+        if (this.$route.query.readonly || this.lockStatus === 'fail') {
+          self.clearInterval('lockInterval')
+          return
+        }
+        lock(this.$route.params.id).then(res => {
+          this.lockStatus = 'locked'
+        }).catch(e => {
+          if (e.status === 403) {
+            this.lockStatus = 'fail'
+          }
+        })
+      },
+      unlock () {
+        unlock(this.workbook.id)
       },
       // 快捷键
       addShortcut () {

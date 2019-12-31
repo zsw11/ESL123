@@ -92,7 +92,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">分析表</div>
         <div class="buttons">
-          <el-button  type="primary" @click="addOrUpdateHandle()">新增分析表</el-button>
+          <el-button  type="primary" @click="addWorkbook()">新增分析表</el-button>
           <el-button  type="primary" @click="createReportFromSelected()" :disabled="dataListSelections.length <= 0">批量生成报表</el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="deleteFlag">批量删除</el-button>
         </div>
@@ -170,7 +170,9 @@
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
-            <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">录入</el-button>
+            <el-button  type="text" size="small" @click="record(scope.row.id, scope.row.lockBy && scope.row.lockBy !== $store.state.user.id)">
+              {{scope.row.lockBy && scope.row.lockBy !== $store.state.user.id ? '查看' : '录入'}}
+            </el-button>
             <el-button  type="text" size="small" @click="editWorkbook(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
             <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
@@ -454,15 +456,20 @@ export default {
       }
     },
     // 录入
-    addOrUpdateHandle (id) {
+    addWorkbook (id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/workbook-detail/${id}` : '/add-workbook' })
+        this.$router.push({ path: '/add-workbook' })
+      })
+    },
+    record (id, readonly) {
+      this.$nextTick(() => {
+        this.$router.push({ path: `/workbook-detail/${id}`, query: { readonly } })
       })
     },
     // 编辑
     editWorkbook(id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook' })
+        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook', query: { readonly } })
       })
     },
     // 复制
