@@ -157,6 +157,11 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Object> workstationImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("workstation.name"))){
+				return RD.INTERNAL_SERVER_ERROR("导入时工位名称名称为空，请检查工位名称是否为空");
+			}
+		}
 		List<WorkstationEntity> workstationEntityList = new ArrayList<>();
 		List<String> modelNameList = new ArrayList<>();
 		List<String> workStationNameList = new ArrayList<String>();

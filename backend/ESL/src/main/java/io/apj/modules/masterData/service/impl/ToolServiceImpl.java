@@ -3,6 +3,7 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
@@ -72,6 +73,11 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Object> toolImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("tool.name")) ){
+				return RD.INTERNAL_SERVER_ERROR("导入治工具时名称为空，请检查治工具名称是否为空");
+			}
+		}
 		List<ToolEntity> toolEntityList = new ArrayList<>();
 		List<String> modelNameList = new ArrayList<>();
 		List<String> toolNameList = new ArrayList<String>();

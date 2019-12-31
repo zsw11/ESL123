@@ -1,38 +1,26 @@
 package io.apj.modules.workBook.controller;
 
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
-import io.apj.common.utils.DataUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PhaseEntity;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
-import net.sf.json.JSONObject;
+import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.service.WorkBookService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.apj.modules.sys.controller.AbstractController;
-import io.apj.modules.workBook.entity.WorkBookEntity;
-import io.apj.modules.workBook.service.WorkBookService;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.R;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * 分析表
@@ -54,6 +42,7 @@ public class WorkBookController extends AbstractController {
 	private SysDeptService sysDeptService;
 	@Autowired
 	private WorkstationService workstationService;
+
 
 	/**
 	 * 列表
@@ -89,6 +78,7 @@ public class WorkBookController extends AbstractController {
 	@RequiresPermissions("workBook:workbook:info")
 	public R detailWithOperations(@PathVariable("id") Integer id) {
 		WorkBookEntity workBook = workBookService.detailWithOperations(id);
+		workBook.setMakerId(getUserId().intValue());
 		return R.ok().put("workBook", workBook);
 	}
 
@@ -111,6 +101,8 @@ public class WorkBookController extends AbstractController {
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 		workBookEntity.setDeptId(getUserDeptId().intValue());
 		workBookEntity.setIfAlter(false);
+		workBookEntity.setMakerId(getUserId().intValue());
+		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
 
@@ -137,6 +129,8 @@ public class WorkBookController extends AbstractController {
 		map.put("remarks",jsonArray.toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
+		workBookEntity.setMakerId(getUserId().intValue());
+		workBookEntity.setMakedAt(new Date());
 		workBookService.updateById(workBookEntity);
 		return RD.build();
 	}
@@ -151,6 +145,8 @@ public class WorkBookController extends AbstractController {
 	public ResponseEntity<Object> copy(@RequestBody WorkBookEntity workBook) {
 		int workBookId = workBook.getId();
 		workBook.setCreateBy(getUserId().intValue());
+		workBook.setMakedAt(new Date());
+		workBook.setMakerId(getUserId().intValue());
 		WorkBookEntity workBookEntity = workBookService.copyWorkBook(workBook,workBookId);
 
 		return RD.ok(workBookEntity);
@@ -204,6 +200,50 @@ public class WorkBookController extends AbstractController {
 	public R createReport(@RequestBody Map<String, Object> params) {
 		workBookService.createReports(params);
 		return R.ok();
+	}
+
+	/**
+	 * 部门报表
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/deptreport/{id}")
+	// @RequiresPermissions("workBook:workbook:createReport")
+	public ResponseEntity<Object> dpetReport(@PathVariable Integer id) {
+		List<ReportEntity> reportEntityList = workBookService.deptReports(id);
+		for(ReportEntity item : reportEntityList){
+			item.setDeptId(getUserDeptId().intValue());
+		}
+		return RD.success(reportEntityList);
+	}
+	/**
+	 * 判断锁定以及重新设置锁定时间
+	 */
+	@RequestMapping("/lock/{id}")
+	public ResponseEntity<Object> lock(@PathVariable Integer id) {
+		WorkBookEntity workBookEntity = workBookService.selectById(id);
+		Integer lockId = workBookEntity.getLockBy();
+		if(lockId == null){
+			workBookEntity.setLockBy(getUserId().intValue());
+			workBookEntity.setLockAt(new Date());
+			workBookService.updateById(workBookEntity);
+		}else if(lockId == getUserId().intValue()){
+			workBookEntity.setLockAt(new Date());
+			workBookService.updateById(workBookEntity);
+		}else {
+			return RD.INTERNAL_SERVER_ERROR("有人正在编辑");
+		}
+		return RD.success(workBookEntity);
+	}
+
+	@RequestMapping("/unlock/{id}")
+	public ResponseEntity<Object> unlock(@PathVariable Integer id) {
+		WorkBookEntity workBookEntity = workBookService.selectById(id);
+		workBookEntity.setLockBy(null);
+		workBookEntity.setLockAt(null);
+		workBookService.updateById(workBookEntity);
+		return RD.success(workBookEntity);
 	}
 
 }

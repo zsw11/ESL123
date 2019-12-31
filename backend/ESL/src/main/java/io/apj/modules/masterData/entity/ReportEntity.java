@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import io.apj.modules.sys.entity.SysDeptEntity;
 import lombok.Data;
 
 /**
@@ -71,5 +72,7 @@ public class ReportEntity implements Serializable {
 	 * report
 	 */
 	@TableField(exist = false)
-	private List deptEntityList;
+	private List<SysDeptEntity> deptEntityList;
+	@TableField(exist = false)
+	private Integer deptId;
 }

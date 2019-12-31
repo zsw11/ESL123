@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 
 import io.apj.common.utils.PageUtils;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,10 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	void updateAll(Map<String, Object> params);
 
 	void deleteBookByIds(Integer[] id);
+
+	List<ReportEntity> deptReports(Integer id);
+
+	void selectLock();
 
 	WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId);
 

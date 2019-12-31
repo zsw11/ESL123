@@ -225,7 +225,7 @@ public class ModelController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) throws ParseException {
+	public ResponseEntity<Object> importExcel(@RequestBody Map<String, Object> map) throws ParseException {
 		EntityWrapper<SysDeptEntity> deptWrapper = new EntityWrapper<>();
 		deptWrapper.isNull("delete_at");
 		List<SysDeptEntity> deptList = sysDeptService.selectList(deptWrapper);
@@ -242,6 +242,11 @@ public class ModelController extends AbstractController {
 		}
 		List<String> notExistmodelSeriesNameList = new ArrayList<String>();
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for(Map<String, Object> i:maps ){
+			if(StringUtils.isEmpty((CharSequence) i.get("model.name"))){
+				return RD.INTERNAL_SERVER_ERROR("导入时机种名称为空，请检查机种名称是否为空");
+			}
+		}
 		List<ModelEntity> modelEntities = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
 			ModelEntity modelEntity = new ModelEntity();
@@ -300,7 +305,7 @@ public class ModelController extends AbstractController {
 			// map 转javabean
 			DataUtils.transMap2Bean2(modelMap, modelEntity);
 			modelEntity.setPinyin(PinyinUtil.getPinYin(modelEntity.getName()));
-			modelEntity.setDeptId(getUserId().intValue());
+			modelEntity.setDeptId(getUserDeptId().intValue());
 			ValidatorUtils.validateEntity(modelEntity, i);
 			modelEntity.setCreateBy(getUserId().intValue());
 			modelEntities.add(modelEntity);
@@ -313,7 +318,9 @@ public class ModelController extends AbstractController {
 		} catch (MybatisPlusException e) {
 			throw new RRException("机种导入失败，请检查机种是否重复", 500);
 		}
-		return RD.build().put("code", 200);
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		data.put("code", 200);
+		return RD.success(data);
 	}
 
 }

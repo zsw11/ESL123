@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 import cn.hutool.core.util.PinyinUtil;
+import io.apj.common.annotation.DataFilter;
+import io.apj.common.utils.Constant;
 import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
@@ -46,14 +48,17 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	private SysDeptService deptService;
 
 	@Override
+	@DataFilter(subDept = true, user = true, deptId = "dept_id")
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<OpertaionGroupEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
-				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"));
-		if(params.get("code") != null && params.get("code") != ""){
-			entityWrapper.like("UPPER(code)",params.get("code").toString().toUpperCase());
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"))
+				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
+		if (params.get("code") != null && params.get("code") != "") {
+			entityWrapper.like("UPPER(code)", params.get("code").toString().toUpperCase());
 		}
-		if(StringUtils.isNotEmpty((CharSequence) params.get("frequency"))){
+		if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
 			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("usedCount"))) {
@@ -129,10 +134,10 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 
 	@Override
 	public void deleteList(List<OpertaionGroupEntity> opertaionGroupEntityList) {
-		for(OpertaionGroupEntity item : opertaionGroupEntityList){
+		for (OpertaionGroupEntity item : opertaionGroupEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(opertaionGroupEntityList.size()>0){
+		if (opertaionGroupEntityList.size() > 0) {
 			this.updateAllColumnBatchById(opertaionGroupEntityList);
 		}
 
@@ -141,10 +146,10 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	@Override
 	public void deleteByIds(Collection<? extends Serializable> ids) {
 		List<OpertaionGroupEntity> opertaionGroupEntityList = this.selectBatchIds(ids);
-		for(OpertaionGroupEntity item : opertaionGroupEntityList){
+		for (OpertaionGroupEntity item : opertaionGroupEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(opertaionGroupEntityList.size()>0){
+		if (opertaionGroupEntityList.size() > 0) {
 			this.updateAllColumnBatchById(opertaionGroupEntityList);
 		}
 	}
@@ -152,10 +157,10 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	@Override
 	public void deleteByWrapper(Wrapper<OpertaionGroupEntity> wrapper) {
 		List<OpertaionGroupEntity> opertaionGroupEntityList = this.selectList(wrapper);
-		for(OpertaionGroupEntity item: opertaionGroupEntityList){
+		for (OpertaionGroupEntity item : opertaionGroupEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(opertaionGroupEntityList.size()>0){
+		if (opertaionGroupEntityList.size() > 0) {
 			this.updateAllColumnBatchById(opertaionGroupEntityList);
 		}
 	}

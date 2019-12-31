@@ -14,10 +14,14 @@ import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.service.*;
+import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.dao.WorkBookDao;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -73,27 +77,35 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Autowired
 	private ReportManMachineCombinationService reportManMachineCombinationService;
+	@Autowired
+	private ReportDeptRelaService reportDeptRelaService;
+	@Autowired
+	private ReportService reportService;
+	@Autowired
+	private SysConfigService sysConfigService;
 
 	@Override
-	@DataFilter(subDept = true, user = true)
+	@DataFilter(subDept = true, user = true, deptId = "dept_id")
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.like(params.get("keyWord") != null && params.get("keyWord") != "", "destinations",
 						(String) params.get("keyWord"))
+				.like(params.get("stlst") != null && params.get("stlst") != "", "stlst", (String) params.get("stlst"))
 				.like(params.get("workName") != null && params.get("workName") != "", "work_name",
 						(String) params.get("workName"))
 				.like(params.get("remark") != null && params.get("remark") != "", "remark",
 						(String) params.get("remark"))
 				.like(params.get("destinations") != null && params.get("destinations") != "", "destinations",
-						(String) params.get("destinations"));
+						(String) params.get("destinations"))
+				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 
-		Map<String,Object> map = (Map) JSON.parse((String) params.get("makedAt"));
-		if(map!=null){
+		Map<String, Object> map = (Map) JSON.parse((String) params.get("makedAt"));
+		if (map != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date start = format.parse((String) map.get("createAtStart"));
 			Date stop = format.parse((String) map.get("createAtStop"));
-			entityWrapper.between("maked_at",start,stop);
+			entityWrapper.between("maked_at", start, stop);
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
 			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
@@ -107,7 +119,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
 			entityWrapper.eq("workstation_id", Integer.parseInt((String) params.get("workstationId")));
 		}
-		entityWrapper.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 		Page<WorkBookEntity> page = this.selectPage(new Query<WorkBookEntity>(params).getPage(), entityWrapper);
 		for (WorkBookEntity entity : page.getRecords()) {
 			if (entity.getDeptId() != null) {
@@ -211,7 +222,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			case 1:
 				break;
 			case 2:
-			    // 人机联合表
+				// 人机联合表
 				reportManMachineCombinationService.generateReportData(workBookIds);
 				break;
 			case 3:
@@ -219,11 +230,11 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				stationTimeService.generateReportData(workBookIds);
 				break;
 			case 4:
-			    //Compare表
+				// Compare表
 				compareService.generateReportData(workBookIds);
 				break;
 			case 5:
-			    //MOST Value表
+				// MOST Value表
 				mostValueService.generateReportData(workBookIds);
 				break;
 			case 6:
@@ -231,20 +242,20 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 				revisionHistoryService.generateReportData(workBookIds);
 				break;
 			case 7:
-			    //   Total表
+				// Total表
 				totalService.generateReportData(workBookIds);
 				break;
 			case 8:
 				break;
 			case 9:
-			    //时间联络表
+				// 时间联络表
 				timeContactService.generateReportData(workBookIds);
 				break;
 			case 10:
-			    //Process List表
+				// Process List表
 				break;
 			case 11:
-			    //标准时间表
+				// 标准时间表
 				standardTimeService.generateReportData(workBookIds);
 				break;
 			case 12:
@@ -276,6 +287,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Override
 	public WorkBookEntity detailWithOperations(Integer id) {
 		WorkBookEntity workBook = this.selectById(id);
+		workBook.setMakedAt(new Date());
 		workBook.setModelEntity(modelService.selectById(workBook.getModelId()));
 		workBook.setSysDeptEntity(deptService.selectById(workBook.getDeptId()));
 		workBook.setPhaseEntity(phaseService.selectById(workBook.getPhaseId()));
@@ -310,13 +322,15 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 		JSONArray alterInfoJson = null;
 		for (int i = 0; i < workOperationsMapList.size(); i++) {
 			WorkOperationsEntity workOperations = new WorkOperationsEntity();
-			if (workOperationsMapList.get(i).get("frequency") != "" && workOperationsMapList.get(i).get("frequency") != null) {
+			if (workOperationsMapList.get(i).get("frequency") != ""
+					&& workOperationsMapList.get(i).get("frequency") != null) {
 				workOperationsMapList.get(i).put("frequency",
 						Integer.parseInt(workOperationsMapList.get(i).get("frequency").toString()));
-				alterInfoJson =new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
-				workOperationsMapList.get(i).put("alterInfo",alterInfoJson.toString());
+				alterInfoJson = new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
+				workOperationsMapList.get(i).put("alterInfo", alterInfoJson.toString());
 			}
-			workOperations  = JSON.parseObject(JSON.toJSONString(workOperationsMapList.get(i)), WorkOperationsEntity.class);
+			workOperations = JSON.parseObject(JSON.toJSONString(workOperationsMapList.get(i)),
+					WorkOperationsEntity.class);
 //			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
 			workOperations.setWorkBookId(workBook.getId());
 			workOperationsList.add(workOperations);
@@ -328,7 +342,37 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	@Transactional
 	public void deleteBookByIds(Integer[] ids) {
 		workBookService.deleteByIds(Arrays.asList(ids));
-		workOperationService.deletebyWrapper(new EntityWrapper<WorkOperationsEntity>().in("work_book_id",ids));
+		workOperationService.deletebyWrapper(new EntityWrapper<WorkOperationsEntity>().in("work_book_id", ids));
+
+	}
+
+	@Override
+	@Transactional
+	public List<ReportEntity> deptReports(Integer id) {
+		List<ReportEntity> reportEntityList = new LinkedList<>();
+		List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(new EntityWrapper<ReportDeptRelaEntity>().eq("deptId", id));
+		reportDeptRelaEntityList.forEach(item->{
+			reportEntityList.add(reportService.selectById(item.getReportId()));
+		});
+		return reportEntityList;
+	}
+
+	@Override
+	@Transactional
+	public void selectLock() {
+		EntityWrapper<WorkBookEntity> ew = new EntityWrapper<>();
+		ew.isNull("delete_at").isNotNull("lock_at").isNotNull("lock_by");
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(ew);
+		for(WorkBookEntity item: workBookEntityList){
+			Long lockTime = item.getLockAt().getTime();
+			Long nowTime = new Date().getTime();
+			Long time = lockTime + Long.parseLong(sysConfigService.getValue("LockTime"));
+			if(nowTime > time){
+				item.setLockAt(null);
+				item.setLockBy(null);
+				workBookService.updateById(item);
+			}
+		}
 
 	}
 
@@ -349,11 +393,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 	public WorkBookEntity copyWorkBook(WorkBookEntity workBook, Integer workBookId) {
 		workBookService.insert(workBook);
 		int newId = workBook.getId();
-		List<WorkOperationsEntity> workOperationsEntityList =  workOperationsService.selectList(new EntityWrapper<WorkOperationsEntity>().eq("work_book_id",workBookId));
-		for(WorkOperationsEntity item : workOperationsEntityList){
+		List<WorkOperationsEntity> workOperationsEntityList = workOperationsService
+				.selectList(new EntityWrapper<WorkOperationsEntity>().eq("work_book_id", workBookId));
+		for (WorkOperationsEntity item : workOperationsEntityList) {
 			item.setWorkBookId(newId);
 		}
-		if(!workOperationsEntityList.isEmpty()){
+		if (!workOperationsEntityList.isEmpty()) {
 			workOperationService.insertBatch(workOperationsEntityList);
 		}
 		return workBook;
@@ -371,8 +416,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
 	@Override
 	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
-		Integer phaseId = (Integer)params.get("phaseId");
-		Integer modelId = (Integer)params.get("modelId");
+		Integer phaseId = (Integer) params.get("phaseId");
+		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
 
 		List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId);
@@ -395,11 +440,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 			}
 			map.put(key, entity);
 		}
-		return new ArrayList<WorkBookEntity>(map.values()) ;
+		return new ArrayList<WorkBookEntity>(map.values());
 	}
 
 	@Override
-	public List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId, String stlst, Integer phaseId) {
+	public List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId,
+			String stlst, Integer phaseId) {
 		String filter = modelId + stlst + phaseId;
 		List<Integer> result = new ArrayList<>();
 		for (WorkBookEntity entity : workBooks) {

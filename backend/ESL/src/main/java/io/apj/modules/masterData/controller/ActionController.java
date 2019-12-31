@@ -69,6 +69,7 @@ public class ActionController extends AbstractController {
 	@RequiresPermissions("masterData:action:create")
 	public RD save(@RequestBody ActionEntity action) {
 		action.setCreateBy(getUserId().intValue());
+		action.setDeptId(getUserDeptId().intValue());
 		action.setPinyin(PinyinUtil.getPinYin(action.getName()));
 		actionService.insert(action);
 
@@ -81,6 +82,7 @@ public class ActionController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:action:update")
 	public RD update(@RequestBody ActionEntity action) {
+		action.setDeptId(getUserDeptId().intValue());
 		actionService.updatePinAndDataById(action);
 
 		return RD.build().put("code", 200);
@@ -158,10 +160,11 @@ public class ActionController extends AbstractController {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@RequestMapping("/import")
-	public RD importExcel(@RequestBody Map<String, Object> map) {
+	public ResponseEntity importExcel(@RequestBody Map<String, Object> map) {
 		map.put("userID", getUserId().intValue());
-		actionService.actionImport(map);
-		return RD.build().put("code", 200);
+		map.put("deptId", getUserDeptId().intValue());
+		ResponseEntity responseEntity = actionService.actionImport(map);
+		return responseEntity;
 	}
 
 }

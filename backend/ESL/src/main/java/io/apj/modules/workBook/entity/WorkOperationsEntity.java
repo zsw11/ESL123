@@ -62,6 +62,10 @@ public class WorkOperationsEntity implements Serializable {
 	 */
 	private String remark;
 	/**
+	 * 备注remark1
+	 */
+	private Integer remark1;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

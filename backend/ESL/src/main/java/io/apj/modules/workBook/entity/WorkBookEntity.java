@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import com.baomidou.mybatisplus.enums.FieldStrategy;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.PhaseEntity;
@@ -158,6 +159,16 @@ public class WorkBookEntity implements Serializable {
 	 * 是否修订
 	 */
 	private boolean ifAlter;
+	/**
+	 * Lock at
+	 */
+	@TableField(strategy = FieldStrategy.IGNORED)
+	private Date lockAt;
+	/**
+	 * Lock by
+	 */
+	@TableField(strategy = FieldStrategy.IGNORED)
+	private Integer lockBy;
 
 
 }

@@ -2,7 +2,6 @@ package io.apj.modules.masterData.controller;
 
 import java.util.*;
 
-import com.google.gson.JsonElement;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
 import io.apj.modules.sys.controller.AbstractController;
@@ -137,13 +136,15 @@ public class MeasureGroupController extends AbstractController {
     }
     /**
      * 导入
+     * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/import")
-    public RD importExcel(@RequestBody Map<String, Object> map) {
+    public ResponseEntity importExcel(@RequestBody Map<String, Object> map) {
         map.put("userID", getUserId().intValue());
-        measureGroupService.measureGroupImport(map);
-        return RD.build().put("code", 200);
+        map.put("deptId",getUserDeptId().intValue());
+        ResponseEntity responseEntity = measureGroupService.measureGroupImport(map);
+        return responseEntity;
     }
 
 }
