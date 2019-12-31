@@ -221,7 +221,7 @@ public class WorkBookController extends AbstractController {
 	 * 判断锁定以及重新设置锁定时间
 	 */
 	@RequestMapping("/lock/{id}")
-	public ResponseEntity<Object> lock(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> lock(@PathVariable Integer id) {
 		WorkBookEntity workBookEntity = workBookService.selectById(id);
 		Integer lockId = workBookEntity.getLockBy();
 		if(lockId == null){
@@ -234,6 +234,15 @@ public class WorkBookController extends AbstractController {
 		}else {
 			return RD.INTERNAL_SERVER_ERROR("有人正在编辑");
 		}
+		return RD.success(workBookEntity);
+	}
+
+	@RequestMapping("/unlock/{id}")
+	public ResponseEntity<Object> unlock(@PathVariable Integer id) {
+		WorkBookEntity workBookEntity = workBookService.selectById(id);
+		workBookEntity.setLockBy(null);
+		workBookEntity.setLockAt(null);
+		workBookService.updateById(workBookEntity);
 		return RD.success(workBookEntity);
 	}
 
