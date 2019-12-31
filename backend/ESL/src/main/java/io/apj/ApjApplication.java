@@ -1,6 +1,7 @@
 package io.apj;
 
 import io.apj.datasources.DynamicDataSourceConfig;
+import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.impl.WorkBookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,12 @@ import java.util.TimerTask;
 public class ApjApplication extends SpringBootServletInitializer {
 
 	private static WorkBookService workBookService;
+	private static SysConfigService sysConfigService;
+
 	@Autowired
-	public void  setDataService(WorkBookService workBookService){
+	public void  setDataService(WorkBookService workBookService,SysConfigService sysConfigService){
 		ApjApplication.workBookService = workBookService;
+		ApjApplication.sysConfigService = sysConfigService;
 	}
 
 	public static void main(String[] args) {
@@ -40,7 +44,7 @@ public class ApjApplication extends SpringBootServletInitializer {
 				workBookService.selectLock();
 				// TODO Auto-generated method stub
 			}
-		}, 10000, 30000);
+		}, 10000, Long.parseLong(sysConfigService.getValue("ExecuteTime")));
 	}
 
 	@Override
