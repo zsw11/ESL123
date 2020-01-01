@@ -203,7 +203,7 @@ const mainRoutes = {
     { path: '/add-workbook', component: _import('modules/workbook/workbook-maintain'), name: 'add-workbook', meta: { title: '新增分析表', isTab: true } },
     { path: '/edit-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'edit-workbook', meta: { title: '编辑分析表', isTab: true } },
     { path: '/copy-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'copy-workbook', meta: { title: '复制分析表', isTab: true } },
-    { path: '/update-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'update-workbook', meta: { title: '修订分析表', isTab: true } },
+    { path: '/alter-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'alter-workbook', meta: { title: '修订分析表', isTab: true } },
     { path: '/workbook-detail/:id(\\d+)', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isFull: true } },
 
     // Collection - Compare表

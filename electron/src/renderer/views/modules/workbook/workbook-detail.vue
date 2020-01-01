@@ -55,7 +55,7 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
-        <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}{{workbook.ifAlter}}</span>
+        <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
         <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks"></el-button>
       </div>
 
@@ -557,10 +557,11 @@
       showRemarks () {
         if (this.$refs.remarksDialog) this.$refs.remarksDialog.show()
       },
-      init () {
+      async init () {
         const self = this
         // 获取分析表详情
-        fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
+        await self.lock()
+        await fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
           self.currentWorkbook = workBook.workName
@@ -571,17 +572,15 @@
           self.$store.dispatch('workbook/setCurrentWorkbook', Object.assign({}, omit(workBook, ['workOperationsList'])))
         })
       },
-      lock () {
+      async lock () {
         if (this.$route.query.readonly || this.lockStatus === 'fail') {
           self.clearInterval('lockInterval')
           return
         }
-        lock(this.$route.params.id).then(res => {
+        await lock(this.$route.params.id).then(res => {
           this.lockStatus = 'locked'
         }).catch(e => {
-          if (e.status === 403) {
-            this.lockStatus = 'fail'
-          }
+          this.lockStatus = 'fail'
         })
       },
       unlock () {
@@ -663,7 +662,7 @@
         if (!this.workbookData[workName]) {
           this.workbookData[workName] = []
         }
-        this.$refs.workbookTable.loadData(this.workbook, this.workbookData[workName])
+        this.$refs.workbookTable.loadData(this.workbook, this.workbookData[workName], this.$route.query.readonly || this.lockStatus === 'fail')
       },
       // ========================================
       //                视频播放

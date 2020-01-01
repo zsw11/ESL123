@@ -168,8 +168,8 @@
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button  type="text" size="small" @click="updateFar(scope.row.id)">版本修订</el-button>
-            <el-button  type="text" size="small" @click="copySon(scope.row.id)">复制</el-button>
+            <el-button  type="text" size="small" @click="alter(scope.row.id)">版本修订</el-button>
+            <el-button  type="text" size="small" @click="copy(scope.row.id)">复制</el-button>
             <el-button  type="text" size="small" @click="record(scope.row.id, scope.row.lockBy && scope.row.lockBy !== $store.state.user.id)">
               {{scope.row.lockBy && scope.row.lockBy !== $store.state.user.id ? '查看' : '录入'}}
             </el-button>
@@ -469,19 +469,19 @@ export default {
     // 编辑
     editWorkbook(id) {
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook', query: { readonly } })
+        this.$router.push({ path: id ? `/edit-workbook/${id}` : '/add-workbook' })
       })
     },
     // 复制
-    copySon (id) {
+    copy (id) {
       this.$nextTick(() => {
         this.$router.push( { path: `/copy-workbook/${id}`} )
       })
     },
     // 版本修订
-    updateFar (id) {
+    alter (id) {
       this.$nextTick(() => {
-        this.$router.push( { path: `/update-workbook/${id}`} )
+        this.$router.push( { path: `/alter-workbook/${id}`} )
       })
     },
     // 删除数据

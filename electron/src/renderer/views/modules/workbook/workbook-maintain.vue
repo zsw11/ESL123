@@ -115,8 +115,8 @@
 
     <span class="dialog-footer">
       <el-button v-if="$route.path.includes('add') || $route.path.includes('edit')" type="primary" @click="dataFormSubmit()">保   存</el-button>
-      <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复   制</el-button>
-      <el-button v-if="$route.path.includes('update')"  type="primary" @click="copyWBook()">修 订</el-button>
+      <el-button v-if="$route.path.includes('copy')"  type="primary" @click="copyWBook()">复 制</el-button>
+      <el-button v-if="$route.path.includes('alter')"  type="primary" @click="copyWBook()">修 订</el-button>
       <el-button @click="cancleFormSubmit">取   消</el-button>
     </span>
   </el-card>
@@ -152,7 +152,7 @@ export default {
         timeValue: null,
         TMU: null,
         secondConvert: null,
-        remark: null,
+        remarks: [],
         createBy: null,
         createAt: null,
         updateBy: null,
@@ -202,23 +202,6 @@ export default {
 
         continueFromId: [
           { type: 'number', message: '沿用来源ID需为数字值' }
-        ],
-        timeValue: [
-          { type: 'number', max: 10000000000000, message: '时间值需为13位数字值' }
-        ],
-        TMU: [
-          { type: 'number', max: 10000000000000, message: 'TMU需为13位数字值' }
-        ],
-        secondConvert: [
-          { type: 'number', max: 10000000000000, message: '秒换算需为13位数字值' }
-        ],
-
-        createBy: [
-          { type: 'number', message: '创建者ID需为数字值' }
-        ],
-
-        updateBy: [
-          { type: 'number', message: '更新者ID需为数字值' }
         ]
       }
     }
@@ -277,20 +260,21 @@ export default {
               'timeValue',
               'TMU',
               'secondConvert',
-              'remark' ])
+              'remarks',
+              'ifAlter' ])
           )
           this.defaultModel = [data.workBook.modelEntity]
           this.defaultWorkstation = [data.workBook.workstationEntity]
           // console.log(this.defaultWorkstation)
           this.defaultPhase = [data.workBook.phaseEntity]
           this.defaultDept = [data.workBook.sysDeptEntity]
+          if (this.$route.name === 'alter-workbook') this.dataForm.ifAlter = true
         }).finally(() => {
           this.inited = true
         })
       } else {
         this.inited = true
       }
-      this.dataForm.ifAlter = this.$route.name === 'update-workbook'
     },
     // 取消信息
     cancleFormSubmit () {
@@ -319,7 +303,6 @@ export default {
     },
     // 复制
     copyWBook(){
-      console.log(this.dataForm, 11111111111111)
       copyWorkBook(this.dataForm).then((data)=>{
         if(data.status === 200){
           this.$message({

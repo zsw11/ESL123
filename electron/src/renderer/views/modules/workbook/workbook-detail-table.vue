@@ -97,6 +97,7 @@ export default {
   data () {
     return {
       workbook: null,
+      readonly: false,
       measureColumns0,
       measureColumns1,
       lastSelected: undefined,
@@ -125,8 +126,9 @@ export default {
     //                数据显示
     // ========================================
     // 加载数据
-    loadData (workbook, data) {
+    loadData (workbook, data, readonly) {
       this.workbook = workbook
+      this.readonly = readonly
       this.mode = workbook.ifAlter ? 'alter' : 'normal'
       // 增加100行方便操作
       for (let i = 0; i < 100; i++) {
@@ -175,6 +177,7 @@ export default {
     },
     // 是否允许编辑
     canEdit ({ row, column }) {
+      if (this.readonly) return false
       if (this.workbook.ifAlter && row.alterType === 'delete') return false
       if (!modeMeasureFields.includes(column.property)) return true
       // 判断模式
