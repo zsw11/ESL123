@@ -801,6 +801,9 @@
   &.offline {
     .save-button {
       color: orange;
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
