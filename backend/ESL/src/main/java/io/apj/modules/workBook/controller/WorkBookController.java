@@ -234,7 +234,7 @@ public class WorkBookController extends AbstractController {
 			workBookEntity.setLockAt(new Date());
 			workBookService.updateById(workBookEntity);
 		}else {
-			return RD.INTERNAL_SERVER_ERROR("有人正在编辑");
+			return RD.FORBIDDEN("LOCKED","有人正在编辑");
 		}
 		return RD.success(workBookEntity);
 	}
@@ -248,7 +248,7 @@ public class WorkBookController extends AbstractController {
 			workBookService.updateById(workBookEntity);
 			return RD.success(workBookEntity);
 		}else {
-			return RD.INTERNAL_SERVER_ERROR("解锁失败");
+			return RD.UNAUTHORIZED("LOCKED","解锁失败,权限不够");
 		}
 
 	}
