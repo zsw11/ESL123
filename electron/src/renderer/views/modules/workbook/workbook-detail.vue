@@ -1,8 +1,8 @@
 <template>
-  <div class="workbook-detail-page" :class="[ workbookPercent, isOffline ? 'offline' : '' ]">
+  <div class="workbook-detail-page" :class="[ workbookPercent, isOffline ? 'offline' : '', $route.query.readonly || lockStatus === 'fail' ? 'readonly' : '' ]">
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
-      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save">保存</el-button>
+      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save" :disabled="$route.query.readonly || lockStatus === 'fail'">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <export-data type="primary" :config="exportConfig">导 出</export-data>
@@ -405,6 +405,7 @@
       })
     },
     activated () {
+      this.lockStatus = 'init'
       if (this.workbook) this.intervalLock()
       if (this.workbook) this.intervalSave()
       if (this.workbook) this.intervalCache()
@@ -499,10 +500,12 @@
         }
       },
       async doCache () {
-        if (this.$refs.workbookTable) this.$refs.workbookTable.cache()
+        if (this.readonly) return Promise.reject()
+        if (this.$refs.workbookTable) return this.$refs.workbookTable.cache()
       },
       // 保存，判断是否在线
       doSave (workbook,isForce) {
+        if (this.readonly) return Promise.reject()
         return this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
           if (this.isOffline) {
             this.$message({
@@ -561,6 +564,7 @@
         const self = this
         // 获取分析表详情
         await self.lock()
+        console.log('xxxxx', this.$route.query.readonly, this.lockStatus)
         await fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
@@ -793,6 +797,7 @@
   height: 100%;
   overflow: hidden;
 
+  &.readonly,
   &.offline {
     .save-button {
       color: orange;

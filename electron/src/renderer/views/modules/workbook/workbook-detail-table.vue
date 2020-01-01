@@ -127,6 +127,7 @@ export default {
     // ========================================
     // 加载数据
     loadData (workbook, data, readonly) {
+      console.log('readonly', readonly)
       this.workbook = workbook
       this.readonly = readonly
       this.mode = workbook.ifAlter ? 'alter' : 'normal'
