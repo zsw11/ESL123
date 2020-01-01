@@ -5,20 +5,23 @@
     width="60%"
     :visible.sync="visible">
 
-    <vxe-grid
-      border
-      size="mini"
-      ref="remarksTable"
-      align="left"
-      height="100%"
-      :auto-resize="true"
-      :mouse-config="{selected: true}"
-      :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true }"
-      :edit-config="{trigger: 'dblclick', mode: 'cell' }">>
+    <div class="remarks-table">
+      <vxe-grid
+        border
+        size="mini"
+        ref="remarksTable"
+        align="left"
+        height="100%"
+        :data="tableData"
+        :auto-resize="true"
+        :mouse-config="{selected: true}"
+        :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true }"
+        :edit-config="{trigger: 'dblclick', mode: 'cell' }">>
 
-      <vxe-table-column field="remark" width="50" title="Remarks" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-table-column field="remark" title="Remarks" :edit-render="{name: 'input'}"></vxe-table-column>
 
-    </vxe-grid>
+      </vxe-grid>
+    </div>
 
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="hide()">确定</el-button>
@@ -40,12 +43,23 @@ export default {
   },
   data () {
     return {
+      tableData: []
     }
   },
   methods: {
+    init (remarks) {
+      // this.tableData = [ remarks.map(r => { return { remark: r } }), new Array(10).map(() => { remark: '' }) ]
+      this.tableData = [ ...new Array(10).map(() => { remark: '' }) ]
+      this.show()
+    }
   }
 }
 </script>
 
 <style lang="scss">
+.workbook-detail-remarks-dialog {
+  .remarks-table {
+    height: 400px;
+  }
+}
 </style>

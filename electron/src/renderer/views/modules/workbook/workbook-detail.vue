@@ -56,7 +56,7 @@
           @select="addOperationGroup">
         </el-autocomplete>
         <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
-        <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks"></el-button>
+        <!-- <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button> -->
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -558,13 +558,12 @@
       },
       // 编辑备注
       showRemarks () {
-        if (this.$refs.remarksDialog) this.$refs.remarksDialog.show()
+        if (this.$refs.remarksDialog) this.$refs.remarksDialog.init(this.workbook.remarks)
       },
       async init () {
         const self = this
         // 获取分析表详情
         await self.lock()
-        console.log('xxxxx', this.$route.query.readonly, this.lockStatus)
         await fetchWorkBookWithOperations(this.$route.params.id).then(({ workBook }) => {
           self.workbook = workBook
           self.workbooks = [self.workbook]
@@ -977,6 +976,28 @@
       .el-button--mini {
         padding: 4px 10px;
       }
+      .el-input--mini .el-input__inner {
+        height: 22px;
+        line-height: 22px;
+        background-color: transparent;
+        color: white;
+        border: 0;
+      }
+      &.el-select .el-input .el-select__caret {
+        height: 22px;
+        line-height: 22px;
+        color: white;
+      }
+      .el-button--mini {
+        padding: 4px 10px;
+        height: 22px;
+        line-height: 22px;
+        background-color: transparent;
+        border: 0;
+        &:hover {
+          color: rgba(255, 255, 255, .2);
+        }
+      }
       .el-autocomplete {
         &.operation-group {
           width: 100px;
@@ -985,6 +1006,7 @@
           .el-input__inner {
             height: 22px;
             line-height: 22px;
+            background-color: white;
           }
         }
       }
@@ -999,6 +1021,11 @@
         height: 22px;
         line-height: 22px;
         text-align: center;
+      }
+      .remarks-button {
+        float: right;
+        margin-right: 10px;
+        padding: 0;
       }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),
