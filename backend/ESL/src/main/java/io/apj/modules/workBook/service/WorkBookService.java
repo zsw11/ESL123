@@ -39,7 +39,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	WorkBookEntity detailWithOperations(Integer id);
 
-	void updateAll(Map<String, Object> params);
+	ResponseEntity<Object> updateAll(Map<String, Object> params);
 
 	void deleteBookByIds(Integer[] id);
 
