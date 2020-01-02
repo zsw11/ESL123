@@ -85,8 +85,6 @@ public class StaffController extends AbstractController {
     @RequiresPermissions("basic:staff:info")
     public RD info(@PathVariable("id") Long id) {
         StaffEntity staff = staffService.selectById(id);
-        String centerN = null;
-//		Long ESLID =  sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("name","ESL")).getId();
 		SysDeptEntity sysDeptEntity = sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("id", staff.getDeptId()));
         StaffEntity staffEntity = deptId(sysDeptEntity.getId(),id);
         return RD.build().put("data", staffEntity);
@@ -100,12 +98,10 @@ public class StaffController extends AbstractController {
 	 */
     public StaffEntity deptId(Long deptId, Long id){
 		StaffEntity staff = staffService.selectById(id);
-
 		SysDeptEntity sysDeptEntity = sysDeptService.selectById(deptId);
 		if (sysDeptEntity.getDeptType().equals("bloc")) {
 			staff.setCenter(sysDeptEntity.getName());
             return staff;
-
         }else if (sysDeptEntity.getDeptType().equals("center")) {
             staff.setCenter(sysDeptEntity.getName());
             return staff;

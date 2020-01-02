@@ -1,5 +1,6 @@
 package io.apj.modules.basic.service.impl;
 
+import io.apj.modules.basic.controller.StaffController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,10 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 
 	@Autowired
 	private SysUserService sysUserService;
+	@Autowired
+	private StaffService staffService;
+	@Autowired
+	private StaffController staffController;
 
 	@Override
 	@DataFilter(subDept = true, user = false)
@@ -77,22 +82,10 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 			entity.setPerms(sysUserService.getDeptAllPerms(entity.getDeptId(), "basic:staff:"));
 			SysDeptEntity dept = sysDeptService.selectById(entity.getDeptId());
 			entity.setDept(dept);
-			String centerN = null;
-			Long ESLID =  sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("name","ESL")).getId();
-			SysDeptEntity sysDeptEntity = sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("id", entity.getDeptId()));
-			List<SysDeptEntity> sysDeptEntityList = sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().eq("parent_id", ESLID));
-			for(SysDeptEntity item : sysDeptEntityList){
-				if(item.getId()==sysDeptEntity.getParentId()){
-					centerN=item.getName();
-				}else if(item.getId()==sysDeptEntity.getId()){
-					centerN=item.getName();
-				}else if(ESLID==sysDeptEntity.getId()){
-					centerN="ESL";
-				}
-			}
-			entity.setCenter(centerN);
-//			JobEntity job = jobService.selectById(entity.getJobId());
-//			entity.setJob(job);
+			StaffEntity staff = staffService.selectById(entity.getId());
+			SysDeptEntity sysDeptEntity = sysDeptService.selectOne(new EntityWrapper<SysDeptEntity>().eq("id", staff.getDeptId()));
+			StaffEntity staffEntity = staffController.deptId(sysDeptEntity.getId(),entity.getId());
+			entity.setCenter(staffEntity.getCenter());
 		}
 
 		return new PageUtils(page);
