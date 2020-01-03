@@ -99,22 +99,33 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:report:update")
-	public RD update(@RequestBody Map<String, Object> map) {
-        ReportEntity report = (ReportEntity) map.get("report");
-		reportService.updatePinAndDataById(report);
-        List<Integer> deptIds = (List<Integer>) map.get("deptEntityList");
-        Integer reportId = report.getId();
-        if(deptIds.size()>0){
-            for(Integer i : deptIds){
-                ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
-                reportDeptRelaEntity.setDeptId(i);
-                reportDeptRelaEntity.setCreateBy(getUserId().intValue());
-                reportDeptRelaEntity.setReportId(reportId);
-                reportDeptRelaService.insert(reportDeptRelaEntity);
-            }
-        }
+	public RD update(@RequestBody ReportEntity reportEntity) {
+		reportService.updatePinAndDataById(reportEntity);
 		return RD.build().put("code", 200);
 	}
+//	@RequestMapping("/update")
+//	@Transactional
+//	@RequiresPermissions("masterData:report:update")
+//	public RD update(@RequestBody Map<String, Object> map) {
+//        ReportEntity report = (ReportEntity) map.get("report");
+//		reportService.updatePinAndDataById(report);
+//        List<SysDeptEntity> sysDeptEntityList = (List<SysDeptEntity>) map.get("deptEntityList");
+//        List<Integer> deptIds = new ArrayList<>();
+//		sysDeptEntityList.forEach(item->{
+//			deptIds.add(item.getId().intValue());
+//		});
+//        Integer reportId = report.getId();
+//        if(deptIds.size()>0){
+//            for(Integer i : deptIds){
+//                ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
+//                reportDeptRelaEntity.setDeptId(i);
+//                reportDeptRelaEntity.setCreateBy(getUserId().intValue());
+//                reportDeptRelaEntity.setReportId(reportId);
+//                reportDeptRelaService.insert(reportDeptRelaEntity);
+//            }
+//        }
+//		return RD.build().put("code", 200);
+//	}
 
 	/**
 	 * 删除
