@@ -115,7 +115,16 @@ app.on('ready', () => {
       ? mainWindow.webContents.closeDevTools()
       : mainWindow.webContents.openDevTools()
   })
-  autoUpdater.checkForUpdatesAndNotify()
+
+  autoUpdater.on('error', () => {
+    electron.dialog.showErrorBox('版本更新', '从服务器获取版本更新出错，请稍后重试')
+  })
+
+  autoUpdater.on('update-downloaded', () => {
+    autoUpdater.quitAndInstall()
+  })
+
+  autoUpdater.checkForUpdates()
 })
 
 app.on('window-all-closed', () => {
@@ -129,23 +138,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */

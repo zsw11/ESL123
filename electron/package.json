@@ -1,6 +1,6 @@
 {
   "name": "most",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Freedom <furuihe@gmail.com>",
   "description": "MOST",
   "license": null,
@@ -29,7 +29,7 @@
     ],
     "publish": {
       "provider": "generic",
-      "url": "http://172.16.73.24:8080/static/version"
+      "url": "http://172.16.73.24:8080/esl/static/version"
     },
     "dmg": {
       "contents": [

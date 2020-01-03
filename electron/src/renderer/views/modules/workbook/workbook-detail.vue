@@ -504,7 +504,7 @@
         if (this.$refs.workbookTable) return this.$refs.workbookTable.cache()
       },
       // 保存，判断是否在线
-      doSave (workbook,isForce) {
+      doSave (isForce) {
         if (this.readonly) return Promise.reject()
         return this.$refs.workbookTable.save(this.workbook, isForce).then(() => {
           if (this.isOffline) {
