@@ -116,7 +116,8 @@ app.on('ready', () => {
       : mainWindow.webContents.openDevTools()
   })
 
-  autoUpdater.on('error', () => {
+  autoUpdater.on('error', e => {
+    console.log(e)
     electron.dialog.showErrorBox('版本更新', '从服务器获取版本更新出错，请稍后重试')
   })
 
