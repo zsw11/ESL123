@@ -15,8 +15,8 @@
                 "type": "string"
             },
             {
-                "code": "name",
-                "name": "机种名称",
+                "code": "common",
+                "name": "通用",
                 "type": "string"
             }
         ]

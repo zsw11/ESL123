@@ -97,7 +97,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 
-const defaultExport = ['workstation.name', 'workstation.remark', 'model.name']
+const defaultExport = ['workstation.name', 'workstation.remark']
 
 export default {
   name: 'workstationList',
