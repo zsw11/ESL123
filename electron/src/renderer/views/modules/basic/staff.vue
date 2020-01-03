@@ -218,7 +218,7 @@ import ComplexFilter from '@/components/complex-filter'
 import DisplayAttributes from '@/components/display-attributes'
 import DictSelect from '@/components/dict-select'
 const defaultDisplay = [
-  'staff.deptId',
+  'staff.deptName',
   'staff.center',
   'staff.jobNumber',
   'staff.code',
@@ -232,7 +232,7 @@ const defaultDisplay = [
 })
 
 const defaultExport = [
-  'staff.deptId',
+  'staff.deptName',
   'staff.center',
   'staff.jobNumber',
   'staff.code',
@@ -288,7 +288,7 @@ export default {
           code: 'staff',
           name: '人员信息',
           children: [
-            { code: 'deptId', name: '部门', type: 'string', required: true },
+            { code: 'deptName', name: '部门', type: 'string', required: true },
             { code: 'center', name: '中心', type: 'string', required: true },
             { code: 'jobNumber', name: '工号', type: 'string', required: true },
             { code: 'code', name: '编码', type: 'string', required: true },
@@ -422,6 +422,7 @@ export default {
       this.listQuery = Object.assign(this.listQuery, {
         deptId: null,
         center: null,
+        deptName: null,
         jobNumber: null,
         code: null,
         name: null,

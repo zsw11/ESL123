@@ -71,6 +71,11 @@ public class StaffEntity implements Serializable {
 	@TableField(exist = false)
 	private SysDeptEntity dept;
 	/**
+	 * 部门
+	 */
+	@TableField(exist = false)
+	private String deptName;
+	/**
 	 * 人员编码
 	 */
 	@NotEmpty(message = "人员编码不能为空")
