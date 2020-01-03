@@ -10,7 +10,7 @@
                 "type": "string"
             },
             {
-                "code": "centerName",
+                "code": "center",
                 "name": "中心",
                 "type": "string"
             },

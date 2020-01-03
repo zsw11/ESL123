@@ -29,7 +29,7 @@
           <el-form-item :label="'部门'" prop="deptEntityList">
             <keyword-search
               style="width: 100%"
-              v-model="dataForm.deptEntityList"
+              v-model="deptEntityList"
               :allowMultiple="true"
               :searchApi="this.listDept"
               :allowEmpty="true">
@@ -39,7 +39,7 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="22">
-          <el-form-item style="display: block":label="'备注'" prop="remark">
+          <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
               type="textarea"
               :rows="6"
@@ -71,9 +71,9 @@ export default {
       title: null,
       flag: false,
       inited: false,
+      deptEntityList: null,
       dataForm: {
         id: 0,
-        deptEntityList: null,
         name: null,
         formCode: null,
         remark: null
@@ -142,7 +142,7 @@ export default {
         fetchReport(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
         }).finally(() => {
           this.inited = true

@@ -307,11 +307,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     @Transactional
-    public void updateAll(Map<String, Object> params) {
+    public ResponseEntity<Object> updateAll(Map<String, Object> params) {
         // 更新主表
         WorkBookEntity workBook = new WorkBookEntity();
         DataUtils.transMap2Bean2((Map<String, Object>) params.get("workBook"), workBook);
-
+        Integer lockById = workBookService.selectById(workBook.getId()).getLockBy();
+        if(lockById != params.get("UserId")){
+            return RD.FORBIDDEN("LOCKED","已被别人锁定，无法保存");
+        }
         // 删除原有子表
         workOperationService.deletebyWrapper(
                 new EntityWrapper<WorkOperationsEntity>().eq("work_book_id", workBook.getId()).isNull("delete_at"));
@@ -336,6 +339,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             workOperationsList.add(workOperations);
         }
         workOperationService.insertBatch(workOperationsList);
+        return RD.success(workBook);
     }
 
     @Override

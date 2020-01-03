@@ -66,6 +66,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/resources-img/**", "anon");
+        filterMap.put("/static/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/templates/**", "anon");
         filterMap.put("/activiti/**", "anon");

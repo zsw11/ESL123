@@ -53,6 +53,7 @@
 		<result property="remark" column="remark" />
 		<result property="employmentDate" column="employment_date" />
 		<result property="email" column="email" />
+		<result property="jobNumber" column="job_number" />
 		<result property="createBy" column="create_by" />
 		<result property="createAt" column="create_at" />
 		<result property="updateBy" column="update_by" />

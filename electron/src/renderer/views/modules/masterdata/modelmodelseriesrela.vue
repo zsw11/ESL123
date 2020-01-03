@@ -18,7 +18,7 @@
           <tree-select v-model='listQuery.deptId' :api='listDept' />
         </el-form-item>
 
-        <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
+        <!-- <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <keyword-search
             v-model="listQuery.modelSeriesId"
             :allowMultiple="true"
@@ -26,7 +26,7 @@
             :allowEmpty="true"
             clearable>
           </keyword-search>
-        </el-form-item>
+        </el-form-item> -->
 
 
 <!--        <el-form-item class="title" :label="'阶段'" prop="wsTime" >-->

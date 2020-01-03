@@ -1,8 +1,6 @@
 package io.apj.modules.workBook.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
@@ -118,7 +116,7 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("workBook:workbook:update")
-	public RD update(@RequestBody Map<String,Object> map) {
+	public ResponseEntity<Object> update(@RequestBody Map<String,Object> map) {
 //		JSONArray jsonArray = null;
 //		try
 //		{
@@ -131,10 +129,19 @@ public class WorkBookController extends AbstractController {
 			map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
+		Integer workBookId = (Integer) map.get("id");
+		Integer lockById = workBookService.selectById(workBookId).getLockBy();
 		workBookEntity.setMakerId(getUserId().intValue());
 		workBookEntity.setMakedAt(new Date());
-		workBookService.updateById(workBookEntity);
-		return RD.build();
+		if(lockById == null){
+			workBookService.updateById(workBookEntity);
+		}else if(lockById.equals(getUserId().intValue())){
+			workBookService.updateById(workBookEntity);
+		}else {
+			return RD.FORBIDDEN("LOCKED","已被被人锁定，无法保存");
+		}
+
+		return RD.success(workBookEntity);
 	}
 
 	/**
@@ -171,6 +178,7 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/updateAll")
 	@RequiresPermissions("workBook:workbook:update")
 	public ResponseEntity<Object> updateAll(@RequestBody Map<String, Object> params) {
+		params.put("UserId",getUserId().intValue());
 		workBookService.updateAll(params);
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", "success");
@@ -248,7 +256,7 @@ public class WorkBookController extends AbstractController {
 			workBookService.updateById(workBookEntity);
 			return RD.success(workBookEntity);
 		}else {
-			return RD.UNAUTHORIZED("LOCKED","解锁失败,权限不够");
+			return RD.FORBIDDEN("LOCKED","解锁失败,权限不够");
 		}
 
 	}
