@@ -338,7 +338,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             workOperations.setWorkBookId(workBook.getId());
             workOperationsList.add(workOperations);
         }
-        workOperationService.insertBatch(workOperationsList);
+        if(workOperationsList.size()>0){
+            workOperationService.insertBatch(workOperationsList);
+        }
         return RD.success(workBook);
     }
 
