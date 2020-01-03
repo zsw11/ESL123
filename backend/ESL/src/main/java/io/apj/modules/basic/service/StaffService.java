@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.basic.entity.StaffEntity;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public interface StaffService extends IService<StaffEntity> {
 
-	PageUtils queryPage(Map<String, Object> params);
+	PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
 	/**
 	 * 保存配置信息

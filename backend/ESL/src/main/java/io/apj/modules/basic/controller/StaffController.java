@@ -1,6 +1,7 @@
 package io.apj.modules.basic.controller;
 
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +73,7 @@ public class StaffController extends AbstractController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("basic:staff:list")
-    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) throws ParseException {
         PageUtils page = staffService.queryPage(params);
 
         return RD.ok(page);
