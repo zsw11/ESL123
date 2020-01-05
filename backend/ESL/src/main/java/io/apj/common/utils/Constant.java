@@ -1,5 +1,8 @@
 package io.apj.common.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
 /**
  * 常量
  * 
@@ -7,6 +10,7 @@ package io.apj.common.utils;
  * @email sunlightcs@gmail.com
  * @date 2016年11月15日 下午1:23:52
  */
+@Configuration
 public class Constant {
 	/** 超级管理员ID */
 	public static final int SUPER_ADMIN = 1;
@@ -102,38 +106,21 @@ public class Constant {
 	}
 
 	/**
-	 * 入库单型
-	 */
-	public final static String STOCK_IN_TYPE = "STOCK_IN_TYPE";
-
-	/**
-	 * 出库单型
-	 */
-	public final static String STOCK_OUT_TYPE = "STOCK_OUT_TYPE";
-
-	/**
 	 * 批量导入数量控制
 	 */
 	public final static int importNum = 1000;
-
 	/**
 	 * 系统访问存储图片路径
 	 */
 	public static String READ_PATH = "/home/ubuntu/resources-img/";
+	/**
+	 * Excel 模板存储路径
+	 */
+	public static String TEMPLATE_PATH;
 
-	/**
-	 * 系统文件存放路径
-	 */
-	public static String FILE_PATH = "/home/ubuntu/file/";
-
-	/**
-	 * 系统excel模板文件存放路径
-	 */
-	public static String EXCEL_PATH = "/home/ubuntu/excel/";
-	
-	/**
-	 * 系统html模板文件存放路径
-	 */
-	public static String HTML_PATH = "/home/ubuntu/html/";
+	@Value("${templatePath}")
+	public void setTemplatePath(String path) {
+		Constant.TEMPLATE_PATH = path;
+	}
 
 }

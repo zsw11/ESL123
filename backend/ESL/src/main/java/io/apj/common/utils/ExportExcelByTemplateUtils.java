@@ -37,10 +37,10 @@ public class ExportExcelByTemplateUtils {
 			throws IOException {
 
 		// 下载路径
-		createDir(new File(path != null ? path : Constant.EXCEL_PATH));
+		createDir(new File(path));
 
 		// 根据模板生成新的excel
-		File excelFile = createNewFile(map, file, path != null ? path : Constant.EXCEL_PATH);
+		File excelFile = createNewFile(map, file, path);
 
 		// 浏览器端下载文件
 		downloadFile(response, excelFile);

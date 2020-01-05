@@ -1,4 +1,5 @@
 APOIP: "LDAP://172.16.73.82"
+templatePath: "D:\\Most\\exportTemplates\\"
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
