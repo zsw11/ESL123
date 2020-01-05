@@ -47,7 +47,8 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<WorkOperationsEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at").orderBy("update_at", false);
-		Page<WorkOperationsEntity> page = this.selectPage(new Query<WorkOperationsEntity>(params).getPage(),entityWrapper);
+		Page<WorkOperationsEntity> page = this.selectPage(new Query<WorkOperationsEntity>(params).getPage(),
+				entityWrapper);
 
 		return new PageUtils(page);
 	}
@@ -68,7 +69,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 				// 设备
 				if (keyStrs[0].equals("workOperations")) {
 					if (keyStrs[1].equals("common")) {
-						if(value.equals("是")) {
+						if (value.equals("是")) {
 							deviceMap.put(keyStrs[1], true);
 						} else {
 							deviceMap.put(keyStrs[1], false);
@@ -78,7 +79,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 					deviceMap.put(keyStrs[1], value);
 				}
 			}
-			workOperationsEntity  = JSON.parseObject(JSON.toJSONString(deviceMap), WorkOperationsEntity.class);
+			workOperationsEntity = JSON.parseObject(JSON.toJSONString(deviceMap), WorkOperationsEntity.class);
 //			DataUtils.transMap2Bean2(deviceMap, workOperationsEntity);
 			ValidatorUtils.validateEntity(workOperationsEntity, i);
 			workOperationsEntity.setCreateBy((Integer) map.get("userID"));
@@ -110,9 +111,9 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		PageUtils pageUtils = workOperationsService.queryPage(params);
 		List<WorkOperationsEntity> workOperationsEntityList = (List<WorkOperationsEntity>) pageUtils.getData();
 		List<WorkOperationsEntity> workOperationsEntityListFilter = new ArrayList<>();
-		for(WorkOperationsEntity item : workOperationsEntityList){
-			if(item.getWorkBookId()!=null){
-				if(item.getWorkBookId()==workBookId){
+		for (WorkOperationsEntity item : workOperationsEntityList) {
+			if (item.getWorkBookId() != null) {
+				if (item.getWorkBookId() == workBookId) {
 					workOperationsEntityListFilter.add(item);
 				}
 			}
@@ -163,11 +164,15 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			params.put("workstationName", workstationName);
 
 			generateTotalData(list, params);
-			String templateFileName = PathUtil.getExcelTemplatePath("work_operations");
-			String fileName = PathUtil.getResourcesPath() + File.separator + workName + ".xls";
-			paths.add(fileName);
+			String templateFileName = Constant.TEMPLATE_PATH + "work_operations.xls";
+			String exportFileName = Constant.TEMPLATE_PATH + workName + ".xls";
+			File historyExcel = new File(exportFileName);
+			if (historyExcel.exists()) {
+				historyExcel.delete();
+			}
+			paths.add(exportFileName);
 
-			ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();
+			ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
 			WriteSheet writeSheet = EasyExcel.writerSheet().build();
 			FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
 			excelWriter.fill(params, writeSheet);
@@ -191,7 +196,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			tmuTotal = tmuTotal.add(tmu);
 			secondConvertTotal = secondConvertTotal.add(secondConvert);
 
-			//TODO remark是数字吗?
+			// TODO remark是数字吗?
 
 		}
 		params.put("timeValueTotal", timeValueTotal);
