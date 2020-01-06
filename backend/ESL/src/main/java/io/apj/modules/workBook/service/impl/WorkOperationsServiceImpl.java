@@ -121,6 +121,9 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dict = sysDictService.getDictDetail();
 		for (WorkOperationsEntity item : workOperationsEntityListFilter) {
+//			if(item.getA0()<0){
+//				item.setA0(Math.abs(item.getA0()));
+//			}
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("workOperations", item, dict);
 			dataList.add(arr);
