@@ -5,6 +5,7 @@
     :title="config.title"
     :edit-render="{name: 'input'}"
     :header-class-name="config.bgClassName"
+    :footer-class-name="config.bgClassName"
     :class-name="getCellClass"
     :formatter="abs">
     <template v-slot="scope">{{scope.row[config.field]}}</template>
