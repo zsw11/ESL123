@@ -141,6 +141,9 @@ export default {
     // 行的class，主要用于修订
     getRowClass ({ row }) {
       let rowClassStr = ''
+      if (this.lastSelected && this.lastSelected.row === row && this.lastSelected.column.property === 'index') {
+        rowClassStr += 'selected-row'
+      }
       if (this.mode === 'alter' && ['delete', 'new'].includes(row.alterType)) {
         rowClassStr += ` ${row.alterType}-row`
       }
@@ -524,6 +527,9 @@ export default {
       .sdn .vxe-cell, .sdc .vxe-cell {
         color: red;
       }
+    }
+    .selected-row {
+      background-color: lightblue
     }
     .edited-cell  {
       .vxe-cell,
