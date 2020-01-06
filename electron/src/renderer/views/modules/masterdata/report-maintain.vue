@@ -144,7 +144,9 @@ export default {
             this.dataForm,
             pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
-          this.dataForm.deptEntityList = data.deptEntityList
+          data.deptEntityList.forEach((item)=>{
+            this.dataForm.deptEntityList.push(item.id)
+          })
         }).finally(() => {
           this.inited = true
         })
