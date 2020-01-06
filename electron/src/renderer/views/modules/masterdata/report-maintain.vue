@@ -29,7 +29,7 @@
           <el-form-item :label="'部门'" prop="deptEntityList">
             <keyword-search
               style="width: 100%"
-              v-model="deptEntityList"
+              v-model="dataForm.deptEntityList"
               :allowMultiple="true"
               :searchApi="this.listDept"
               :allowEmpty="true">
@@ -71,7 +71,7 @@ export default {
       title: null,
       flag: false,
       inited: false,
-      deptEntityList: [],
+      // deptEntityList: [],
       dataForm: {
         id: 0,
         name: null,
@@ -99,7 +99,6 @@ export default {
         updateBy: [
           { type: 'number', message: '更新者ID需为数字值' }
         ]
-
       }
     }
   },
@@ -145,7 +144,7 @@ export default {
             this.dataForm,
             pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
-          this.deptEntityList = data.deptEntityList
+          this.dataForm.deptEntityList = data.deptEntityList
         }).finally(() => {
           this.inited = true
         })
@@ -161,7 +160,6 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.dataForm.deptEntityList = this.deptEntityList
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id
