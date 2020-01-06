@@ -18,7 +18,7 @@
           <keyword-search
             class="input"
             v-model="listQuery.modelSeriesId"
-            :allowMultiple="true"
+            
             :searchApi="this.listModelSeries"
             :allowEmpty="true"
             clearable>
@@ -48,7 +48,7 @@
                   机种<keyword-search
                         style="margin-left:10px;"
                         v-model="addWorkstationModelId"
-                        :allowMultiple="true"
+                        
                         :searchApi="this.listModel"
                         :allowEmpty="true"
                         clearable>

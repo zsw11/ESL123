@@ -79,7 +79,7 @@
 <!--          <el-form-item :label="'父工位'" prop="parent">-->
 <!--            <keyword-search-->
 <!--              v-model="addForm.parent"-->
-<!--              :allowMultiple="true"-->
+<!--              -->
 <!--              :searchApi="this.listWorkstationTypeNode"-->
 <!--              :allowEmpty=true clearable>-->
 <!--            </keyword-search>-->

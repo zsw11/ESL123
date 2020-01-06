@@ -11,7 +11,7 @@
           <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
               v-model="listQuery.reportGroupId"
-              :allowMultiple="true"
+              
               :searchApi="this.listReportGroup"
               :allowEmpty="true" clearable>
             </keyword-search>
@@ -20,7 +20,7 @@
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
               v-model="listQuery.modelId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModel"
               :allowEmpty="true" clearable>
             </keyword-search>
@@ -40,7 +40,7 @@
             <keyword-search
               style="width: 100%"
               v-model="listQuery.phaseId"
-              :allowMultiple="true"
+              
               :searchApi="this.listPhase"
               :allowEmpty="true">
             </keyword-search>

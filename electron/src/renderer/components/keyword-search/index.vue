@@ -4,6 +4,7 @@
     :value="value"
     filterable
     remote
+    :multiple="allowMultiple"
     :placeholder="placeholder"
     suffix-icon="el-icon-date"
     :remote-method="debounceSearch"
@@ -44,6 +45,10 @@ export default {
       type: String,
       default: 'name'
     },
+    allowMultiple: {
+      type: Boolean,
+      default: false
+    },
     // 用于设置到value的属性
     valueColumn: {
       type: String,
@@ -80,6 +85,7 @@ export default {
       }
       if (!this.options.length) {
         this.options = this.options.concat(value)
+        // console.log(1111, this.options)
       }
     },
     apiOptions: {

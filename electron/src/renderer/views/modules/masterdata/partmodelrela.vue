@@ -41,7 +41,7 @@
             部品<keyword-search
             style="margin-left:10px;"
             v-model="addModelPartId"
-            :allowMultiple="true"
+            
             :searchApi="this.listPart"
             :allowEmpty="true">
           </keyword-search>

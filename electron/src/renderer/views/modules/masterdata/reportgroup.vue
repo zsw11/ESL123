@@ -15,7 +15,7 @@
             v-model="listQuery.reportId"
             :searchApi="listReport"
             :allowEmpty="true"
-            :allowMultiple="true">
+            >
           </keyword-search>
         </el-form-item>
 

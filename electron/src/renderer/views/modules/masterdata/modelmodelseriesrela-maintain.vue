@@ -23,7 +23,7 @@
               placeholder="必填"
               style="width: 100%"
               v-model="dataForm.modelSeriesId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModelSeries"
               :allowEmpty="true"
               :defaultOptions="defaultModelSeries">
