@@ -22,7 +22,7 @@
             <keyword-search
               style="width: 100%"
               v-model="dataForm.workstationTypeId"
-              :allowMultiple="true"
+              
               :searchApi="this.listWorkstationType"
               :allowEmpty="true">
             </keyword-search>

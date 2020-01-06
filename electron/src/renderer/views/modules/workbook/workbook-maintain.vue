@@ -43,7 +43,6 @@
               :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.phaseId"
-              :allowMultiple="true"
               :searchApi="this.listPhase"
               :allowEmpty="true"
               :defaultOptions="defaultPhase">
@@ -58,7 +57,6 @@
               :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.modelId"
-              :allowMultiple="true"
               :searchApi="this.listModel"
               :allowEmpty="true"
               :defaultOptions="defaultModel">
@@ -83,7 +81,6 @@
               :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.workstationId"
-              :allowMultiple="true"
               :searchApi="this.listWorkstation"
               :allowEmpty="true"
               :defaultOptions="defaultWorkstation">
@@ -249,8 +246,8 @@ export default {
               'deptId',
               'stlst',
               'modelId',
-              'destinations',
               'phaseId',
+              'destinations',
               'workstationId',
               'workName',
               'versionNumber',

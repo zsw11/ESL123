@@ -29,7 +29,7 @@
           <el-form-item :label="'部门'" prop="deptEntityList">
             <keyword-search
               style="width: 100%"
-              v-model="deptEntityList"
+              v-model="dataForm.deptEntityList"
               :allowMultiple="true"
               :searchApi="this.listDept"
               :allowEmpty="true">
@@ -71,12 +71,13 @@ export default {
       title: null,
       flag: false,
       inited: false,
-      deptEntityList: null,
+      // deptEntityList: [],
       dataForm: {
         id: 0,
         name: null,
         formCode: null,
-        remark: null
+        remark: null,
+        deptEntityList: []
       },
       listDept,
       listReport,
@@ -98,7 +99,6 @@ export default {
         updateBy: [
           { type: 'number', message: '更新者ID需为数字值' }
         ]
-
       }
     }
   },
@@ -131,7 +131,7 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-
+      this.dataForm.deptEntityList = []
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -144,6 +144,9 @@ export default {
             this.dataForm,
             pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
+          data.deptEntityList.forEach((item)=>{
+            this.dataForm.deptEntityList.push(item.id)
+          })
         }).finally(() => {
           this.inited = true
         })

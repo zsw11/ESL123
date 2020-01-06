@@ -3,8 +3,10 @@ package io.apj.modules.masterData.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -60,5 +62,13 @@ public interface ReportService extends IService<ReportEntity> {
      * @return
      */
     void updatePinAndDataById(ReportEntity reportEntity);
+
+    /**
+     * 根据部门id查询报表列表
+     * @param deptId
+     * @return
+     */
+    ResponseEntity<Object> listByDeptId(Integer deptId);
+
 }
 

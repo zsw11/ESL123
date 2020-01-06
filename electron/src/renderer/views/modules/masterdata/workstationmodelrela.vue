@@ -30,7 +30,7 @@
                 工位<keyword-search
                     style="margin-left:10px;"
                     v-model="addModelWorkstationId"
-                    :allowMultiple="true"
+                    
                     :searchApi="this.listWorkstation"
                     :allowEmpty="true">
                   </keyword-search>

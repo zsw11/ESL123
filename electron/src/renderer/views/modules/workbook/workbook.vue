@@ -28,7 +28,7 @@
             <keyword-search
               clearable
               v-model="listQuery.modelId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModel"
               :allowEmpty="true">
             </keyword-search>
@@ -43,7 +43,7 @@
                 clearable
                 class="keyword"
                 v-model="listQuery.phaseId"
-                :allowMultiple="true"
+                
                 :searchApi="this.listPhase"
                 :allowEmpty="true">
               </keyword-search>
@@ -54,7 +54,7 @@
             <keyword-search
               clearable
               v-model="listQuery.workstationId"
-              :allowMultiple="true"
+              
               :searchApi="this.listWorkstation"
               :allowEmpty="true">
             </keyword-search>
@@ -193,28 +193,15 @@
     <el-dialog
       customClass="wookbook-dialog"
       width="30%"
-      title="选择生成报表"
+      title="生成报表"
       :visible.sync="createShow">
       <el-form :inline="true" :model="createForm">
         <el-form-item>
 <!--          <el-radio-group v-model="createForm.Id" size="small">-->
 <!--            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>-->
 <!--          </el-radio-group>-->
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange">
-            全选
-          </el-checkbox>
-          <el-checkbox-group v-model="createForm.id">
-            <el-checkbox
-              :label="item.id"
-              v-for="item in reportGroup"
-              :key="item.id"
-              @change="handleCheckedCitiesChange">
-              {{item.name}}
-            </el-checkbox>
-          </el-checkbox-group>
+          <div  v-for="item in reportGroup"
+              :key="item.id">{{item.name}}</div>
         </el-form-item>
 
       </el-form>
@@ -228,7 +215,7 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -247,60 +234,7 @@ export default {
       checkAll: false,
       userId: null,
       deleteFlag: true,
-      reportGroup: [
-        {
-          name: '分析表报表',
-          id: 1
-        },
-        {
-          name: '人机联合表',
-          id: 2
-        },
-        {
-          name: 'Collection-工位时间表',
-          id: 3
-        },
-        {
-          name: 'Collection-Compare表',
-          id: 4
-        },
-        {
-          name: 'Collection-MOST Value表',
-          id: 5
-        },
-        {
-          name: 'Collection-Revision History表',
-          id: 6
-        },
-        {
-          name: 'Report-Total表',
-          id: 7
-        },
-        {
-          name: 'Report-拖机Total表',
-          id: 8
-        },
-        {
-          name: 'Report-时间联络表',
-          id: 9
-        },
-        {
-          name: 'Process List表',
-          id: 10
-        },
-        {
-          name: '标准时间表',
-          id: 11
-        },
-        {
-          name: '标准工数表',
-          id: 12
-        },
-        {
-          name: '履历表',
-          id: 13
-        }
-      ],
+      reportGroup: [],
       arr: [],
       createForm: {
         id: []
@@ -545,9 +479,19 @@ export default {
     },
     // 生成报表
     createReport (row) {
-      this.createShow = true
+      this.createForm.id = []
+      this.reportGroup = []
       this.id = row.id
       this.selectedWorkBookIds = [row.id]
+      fetchDeptReport().then((page)=>{
+        this.reportGroup = page.data
+        this.reportGroup.forEach((item)=>{
+          this.createForm.id.push(item.id)
+        })
+        // console.log(this.createForm.id, 222222222222222222)
+      })
+      //  console.log(this.createForm.id, 111111111111111111)
+      this.createShow = true
     },
     // 确定生成报表
     createReportOK (row) {
@@ -557,7 +501,15 @@ export default {
           workBookIds: this.selectedWorkBookIds,
           reports: this.createForm.id
         }
-      )).then(({page}) => {
+      )).then((page) => {
+        console.log(page, '----------------------------')
+        if(page.msg === 'success'){
+           this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+           })
+        }
         this.createForm.id = []
         this.createShow = false
         //this.dataList = page.data

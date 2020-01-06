@@ -23,7 +23,7 @@
           <keyword-search
             class="input"
             v-model="listQuery.modelSeriesId"
-            :allowMultiple="true"
+            
             :searchApi="this.listModelSeries"
             :allowEmpty="true"
             clearable>

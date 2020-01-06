@@ -22,9 +22,8 @@
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId">
           <keyword-search
             v-model="listQuery.modelSeriesId"
-            :allowMultiple="true"
+            
             :searchApi="this.listModelSeries"
-            labelColunt="name"
             :allowEmpty="true"
             clearable>
           </keyword-search>
@@ -53,7 +52,7 @@
             <keyword-search
               style="margin-left:10px"
               v-model="addPartModelId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModel"
               :allowEmpty="true"
               clearable>

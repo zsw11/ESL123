@@ -68,7 +68,6 @@ public class ReportController extends AbstractController {
 		Map<String,Object> data = new HashMap<>();
 		data.put("report",report);
 		data.put("deptEntityList",deptEntityList);
-//		report.setDeptEntityList(deptEntityList);
 		return RD.build().put("data", data);
 	}
 	/**
@@ -99,33 +98,29 @@ public class ReportController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:report:update")
-	public RD update(@RequestBody ReportEntity reportEntity) {
+	public RD update(@RequestBody Map<String, Object> map) {
+		ReportEntity reportEntity = new ReportEntity();
+		reportEntity.setCreateAt(new Date());
+		reportEntity.setCreateBy(getUserId().intValue());
+		reportEntity.setFormCode((String) map.get("formCode"));
+		reportEntity.setRemark((String) map.get("remark"));
+		reportEntity.setName((String) map.get("name"));
+		reportEntity.setId((Integer) map.get("id"));
 		reportService.updatePinAndDataById(reportEntity);
+        List<Integer> sysDeptEntityList = (List<Integer>) map.get("deptEntityList");
+        Integer reportId = reportEntity.getId();
+        if(sysDeptEntityList.size()>0){
+            for(Integer i : sysDeptEntityList){
+                ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
+                reportDeptRelaEntity.setDeptId(i);
+                reportDeptRelaEntity.setCreateBy(getUserId().intValue());
+                reportDeptRelaEntity.setReportId(reportId);
+                reportDeptRelaService.insert(reportDeptRelaEntity);
+            }
+        }
 		return RD.build().put("code", 200);
+
 	}
-//	@RequestMapping("/update")
-//	@Transactional
-//	@RequiresPermissions("masterData:report:update")
-//	public RD update(@RequestBody Map<String, Object> map) {
-//        ReportEntity report = (ReportEntity) map.get("report");
-//		reportService.updatePinAndDataById(report);
-//        List<SysDeptEntity> sysDeptEntityList = (List<SysDeptEntity>) map.get("deptEntityList");
-//        List<Integer> deptIds = new ArrayList<>();
-//		sysDeptEntityList.forEach(item->{
-//			deptIds.add(item.getId().intValue());
-//		});
-//        Integer reportId = report.getId();
-//        if(deptIds.size()>0){
-//            for(Integer i : deptIds){
-//                ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
-//                reportDeptRelaEntity.setDeptId(i);
-//                reportDeptRelaEntity.setCreateBy(getUserId().intValue());
-//                reportDeptRelaEntity.setReportId(reportId);
-//                reportDeptRelaService.insert(reportDeptRelaEntity);
-//            }
-//        }
-//		return RD.build().put("code", 200);
-//	}
 
 	/**
 	 * 删除
@@ -138,6 +133,16 @@ public class ReportController extends AbstractController {
 		reportService.deleteByIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
+	}
+
+	/**
+	 * 列表查询
+	 * @return
+	 */
+	@RequestMapping(value = "/listByDeptId")
+	public ResponseEntity<Object> ListByDeptId(){
+		Integer deptId=getUserDeptId().intValue();
+		return reportService.listByDeptId(deptId);
 	}
 
 }
