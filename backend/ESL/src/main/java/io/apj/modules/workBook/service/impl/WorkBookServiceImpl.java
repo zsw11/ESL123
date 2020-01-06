@@ -337,6 +337,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                     WorkOperationsEntity.class);
 //			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
             workOperations.setWorkBookId(workBook.getId());
+            workOperations.setMakedAt(new Date());
+            workOperations.setMakerId((Integer) params.get("UserId"));
             workOperationsList.add(workOperations);
         }
         if(workOperationsList.size()>0){

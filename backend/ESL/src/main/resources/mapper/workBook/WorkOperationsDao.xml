@@ -12,6 +12,8 @@
         <result property="type" column="type"/>
         <result property="alterType" column="alter_type"/>
         <result property="alterInfo" column="alter_info"/>
+        <result property="makedAt" column="maked_at"/>
+        <result property="makerId" column="maker_id"/>
         <result property="a0" column="a0"/>
         <result property="b0" column="b0"/>
         <result property="g0" column="g0"/>

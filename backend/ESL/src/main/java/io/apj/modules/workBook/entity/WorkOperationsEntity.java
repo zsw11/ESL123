@@ -1,11 +1,14 @@
 package io.apj.modules.workBook.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -33,6 +36,15 @@ public class WorkOperationsEntity implements Serializable {
 	 * 分析表ID
 	 */
 	private Integer workBookId;
+	/**
+	 * 制表人ID
+	 */
+	private Integer makerId;
+	/**
+	 * 制表日期
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private Date makedAt;
 	/**
 	 * 版本信息
 	 */
@@ -112,4 +124,36 @@ public class WorkOperationsEntity implements Serializable {
 	private Integer b3;
 	private Integer p2;
 	private Integer a5;
+	@TableField(exist = false)
+	private Integer a0null;
+	@TableField(exist = false)
+	private Integer b0null;
+	@TableField(exist = false)
+	private Integer g0null;
+	@TableField(exist = false)
+	private Integer a1null;
+	@TableField(exist = false)
+	private Integer b1null;
+	@TableField(exist = false)
+	private Integer p0null;
+	@TableField(exist = false)
+	private Integer m0null;
+	@TableField(exist = false)
+	private Integer x0null;
+	@TableField(exist = false)
+	private Integer i0null;
+	@TableField(exist = false)
+	private Integer a2null;
+	@TableField(exist = false)
+	private Integer b2null;
+	@TableField(exist = false)
+	private Integer p1null;
+	@TableField(exist = false)
+	private Integer a3null;
+	@TableField(exist = false)
+	private Integer a4null;
+	@TableField(exist = false)
+	private Integer b3null;
+	@TableField(exist = false)
+	private Integer p2null;
 }

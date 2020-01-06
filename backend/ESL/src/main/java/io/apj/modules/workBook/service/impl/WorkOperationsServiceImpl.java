@@ -123,8 +123,54 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		HashMap<String, String> dict = sysDictService.getDictDetail();
 		for (WorkOperationsEntity item : workOperationsEntityListFilter) {
 //			if(item.getA0()<0){
-//				item.setA0(Math.abs(item.getA0()));
+//				item.setA0null(Math.abs(item.getA0()));
 //			}
+//			if(item.getB0()<0){
+//				item.setB0null(Math.abs(item.getB0()));
+//			}
+//			if(item.getP0()<0){
+//				item.setP0null(Math.abs(item.getP0()));
+//			}
+//			if(item.getA1()<0){
+//				item.setA1null(Math.abs(item.getA1()));
+//			}
+//			if(item.getB1()<0){
+//				item.setB1null(Math.abs(item.getB1()));
+//			}
+//			if(item.getP1()<0){
+//				item.setP1null(Math.abs(item.getP1()));
+//			}
+//			if(item.getA2()<0){
+//				item.setP2null(Math.abs(item.getA2()));
+//			}
+//			if(item.getB2()<0){
+//				item.setB2null(Math.abs(item.getB2()));
+//			}
+//			if(item.getP2()<0){
+//				item.setP2null(Math.abs(item.getP2()));
+//			}
+//			if(item.getA3()<0){
+//				item.setA3null(Math.abs(item.getA3()));
+//			}
+//			if(item.getB3()<0){
+//				item.setB3null(Math.abs(item.getB3()));
+//			}
+//			if(item.getG0()<0){
+//				item.setG0null(Math.abs(item.getG0()));
+//			}
+//			if(item.getM0()<0){
+//				item.setM0null(Math.abs(item.getM0()));
+//			}
+//			if(item.getX0()<0){
+//				item.setX0null(Math.abs(item.getX0()));
+//			}
+//			if(item.getI0()<0){
+//				item.setI0null(Math.abs(item.getI0()));
+//			}
+//			if(item.getA4()<0){
+//				item.setA4null(Math.abs(item.getA4()));
+//			}
+
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("workOperations", item, dict);
 			dataList.add(arr);
