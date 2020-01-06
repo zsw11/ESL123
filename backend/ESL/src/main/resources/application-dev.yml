@@ -8,6 +8,10 @@ spring:
         druid:
             first:  #数据源1
                 url: jdbc:postgresql://117.48.230.8:5432/esl_dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+<<<<<<< HEAD
+=======
+#                url: jdbc:postgresql://localhost:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+>>>>>>> aa419677486ba0bdf0c72096298d9223f503b554
                 username: postgres
                 password: ly0713
             second:  #数据源2
