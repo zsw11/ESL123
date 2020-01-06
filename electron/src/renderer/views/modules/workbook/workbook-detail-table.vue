@@ -16,10 +16,10 @@
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @selected-changed="selectedChanged">
-      <vxe-table-column type="index" field="index" width="50" title="No."></vxe-table-column>
-      <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <operation-column key="operationColumn" min-width="240"></operation-column>
-      <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
+      <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
+      <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
+      <operation-column key="operationColumn" fixed="left" min-width="240"></operation-column>
+      <key-column key="keyColumn" fixed="left" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
