@@ -7,6 +7,7 @@
     header-class-name="bg-table-color1"
     class-name="bg-table-color1"
     :edit-render="{name: 'input'}">
+    <template v-slot="scope">{{scope.row.tool}}</template>
     <template v-slot:edit="scope">
       <tool-input
         type="text"

@@ -7,6 +7,7 @@
     :header-class-name="config.bgClassName"
     :class-name="getCellClass"
     :formatter="abs">
+    <template v-slot="scope">{{scope.row[config.field]}}</template>
     <template v-slot:edit="scope">
       <measure-input
         type="text"

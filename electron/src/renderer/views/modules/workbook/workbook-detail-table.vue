@@ -23,7 +23,9 @@
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.frequency}}</template>
+      </vxe-table-column>
       <vxe-table-column title="TimeValue" width="65">
         <template slot-scope="scope">
           {{getTimeValue(scope)}}
@@ -39,8 +41,12 @@
           {{getSecConv(scope)}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="remark1" title="Remark1" width="75" :formatter="({ cellValue })=>cellValue?round(cellValue*100/6, -1):undefined" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark1" title="Remark1" width="75" :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.remark1?round(scope.row.remark1*100/6, -1):undefined}}</template>
+      </vxe-table-column>
+      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.remark}}</template>
+      </vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书"
@@ -521,12 +527,18 @@ export default {
 <style lang="scss">
 .workbook-table {
   .vxe-table {
-    .new-row,
+    .new-row {
+      color: red;
+      .sdn .vxe-cell, .sdc .vxe-cell {
+        color: red;
+      }
+    }
     .delete-row {
       color: red;
       .sdn .vxe-cell, .sdc .vxe-cell {
         color: red;
       }
+      text-decoration:line-through
     }
     .selected-row {
       background-color: lightblue
