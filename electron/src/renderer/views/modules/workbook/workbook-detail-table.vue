@@ -25,7 +25,7 @@
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}">
+      <vxe-table-column field="frequency" title="Fre." class-name="frequency-column" :edit-render="{name: 'input'}">
         <template v-slot="scope">{{scope.row.frequency}}</template>
       </vxe-table-column>
       <vxe-table-column field="tv" title="TimeValue" width="65">
@@ -158,6 +158,9 @@ export default {
         rowClassStr += ` ${row.alterType}-row`
       }
       if (row.type === 'c') console.log(row.alterType, rowClassStr)
+      if (!row.frequency && allNumericMeasureField.find(f => row[f] < 0)) {
+        rowClassStr += ` missing-frequency-row`
+      }
       return rowClassStr
     },
     // 单元格的class，主要用于修订
@@ -610,6 +613,11 @@ export default {
     }
     .selected-row {
       background-color: lightblue
+    }
+    .missing-frequency-row {
+      .frequency-column {
+        background-color: orange;
+      }
     }
     .edited-cell  {
       .vxe-cell,
