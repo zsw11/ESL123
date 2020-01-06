@@ -1,6 +1,8 @@
 package io.apj;
 
 import io.apj.modules.app.utils.JwtUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class JwtTest {
 
     @Test
     public void test() {
+        Logger log = LogManager.getLogger(JwtTest.class);
+        log.debug("logbacktest");
         String token = jwtUtils.generateToken(1);
 
         System.out.println(token);
