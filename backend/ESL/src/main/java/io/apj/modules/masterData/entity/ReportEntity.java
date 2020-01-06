@@ -68,11 +68,7 @@ public class ReportEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-	/**
-	 * report
-	 */
-	@TableField(exist = false)
-	private List<SysDeptEntity> deptEntityList;
+
 	@TableField(exist = false)
 	private Integer deptId;
 }
