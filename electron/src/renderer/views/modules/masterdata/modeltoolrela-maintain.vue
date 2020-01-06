@@ -23,9 +23,10 @@
               placeholder="必填"
               style="width: 100%"
               v-model="dataForm.modelSeriesId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModelSeries"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultModelSeries">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -135,6 +136,7 @@
           updateAt: null,
           deleteAt: null
         },
+        defaultModelSeries:[],
         listModel,
         listDept,
         listModelSeries,
@@ -207,6 +209,7 @@
               this.dataForm,
               pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime', 'remark', 'createBy' ])
             )
+            this.defaultModelSeries = [data.modelSeriesEntity]
           }).finally(() => {
             this.inited = true
           })

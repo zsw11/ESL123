@@ -14,7 +14,7 @@
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
               v-model="listQuery.modelId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModel"
               :allowEmpty="true"
               clearable>
@@ -25,7 +25,7 @@
             <keyword-search
               style="width: 100%"
               v-model="listQuery.phaseId"
-              :allowMultiple="true"
+              
               :searchApi="this.listPhase"
               :allowEmpty="true">
             </keyword-search>
@@ -207,7 +207,7 @@
            <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
             v-model="approveForm.nextApproverId"
-            :allowMultiple="true"
+            
             :searchApi="this.listStaff"
             :allowEmpty="true"
             :valueColumn="'userId'"

@@ -71,12 +71,13 @@ export default {
       title: null,
       flag: false,
       inited: false,
-      deptEntityList: null,
+      deptEntityList: [],
       dataForm: {
         id: 0,
         name: null,
         formCode: null,
-        remark: null
+        remark: null,
+        deptEntityList: []
       },
       listDept,
       listReport,
@@ -131,7 +132,7 @@ export default {
   methods: {
     init () {
       this.title = this.$route.meta.title
-
+      this.dataForm.deptEntityList = []
       this.$store.dispatch('common/updateTabAttrs', {
         name: this.$route.name,
         changed: false
@@ -144,6 +145,7 @@ export default {
             this.dataForm,
             pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
+          this.deptEntityList = data.deptEntityList
         }).finally(() => {
           this.inited = true
         })
@@ -159,6 +161,7 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
+      this.dataForm.deptEntityList = this.deptEntityList
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           (this.dataForm.id

@@ -14,7 +14,7 @@
               v-model="listQuery.continuePhaseId"
               :searchApi="listPhase"
               :allowEmpty="true"
-              :allowMultiple="true">
+              >
             </keyword-search>
         </el-form-item>
 

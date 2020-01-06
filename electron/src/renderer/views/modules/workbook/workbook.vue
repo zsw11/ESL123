@@ -28,7 +28,7 @@
             <keyword-search
               clearable
               v-model="listQuery.modelId"
-              :allowMultiple="true"
+              
               :searchApi="this.listModel"
               :allowEmpty="true">
             </keyword-search>
@@ -43,7 +43,7 @@
                 clearable
                 class="keyword"
                 v-model="listQuery.phaseId"
-                :allowMultiple="true"
+                
                 :searchApi="this.listPhase"
                 :allowEmpty="true">
               </keyword-search>
@@ -54,7 +54,7 @@
             <keyword-search
               clearable
               v-model="listQuery.workstationId"
-              :allowMultiple="true"
+              
               :searchApi="this.listWorkstation"
               :allowEmpty="true">
             </keyword-search>

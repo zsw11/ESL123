@@ -18,7 +18,7 @@
       label-width="100px">
       <el-row :gutter="10">
         <el-col :span="10">
-        <el-form-item :label="'工位名称'" prop="name">
+        <el-form-item :label="'工位类型名'" prop="name">
             <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
@@ -79,7 +79,7 @@
 <!--          <el-form-item :label="'父工位'" prop="parent">-->
 <!--            <keyword-search-->
 <!--              v-model="addForm.parent"-->
-<!--              :allowMultiple="true"-->
+<!--              -->
 <!--              :searchApi="this.listWorkstationTypeNode"-->
 <!--              :allowEmpty=true clearable>-->
 <!--            </keyword-search>-->

@@ -40,7 +40,7 @@
             治工具<keyword-search
             style="margin-left:10px;"
             v-model="addModelToolId"
-            :allowMultiple="true"
+            
             :searchApi="this.listTool"
             :allowEmpty="true">
           </keyword-search>

@@ -53,7 +53,7 @@
           报表 <keyword-search
           style="margin-left:10px;"
           v-model="addreportgroupReportId"
-          :allowMultiple="true"
+          
           :searchApi="this.listReport"
           :allowEmpty="true">
         </keyword-search>
