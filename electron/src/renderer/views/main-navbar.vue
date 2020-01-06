@@ -231,6 +231,7 @@ export default {
   font-size: 24px;
   font-weight: 600;
   line-height: 50px;
+  font-weight: lighter;
   width: calc(100% - 320px);
   display: inline-block;
   text-align: center;
