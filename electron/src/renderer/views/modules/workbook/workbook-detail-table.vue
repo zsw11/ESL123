@@ -19,7 +19,7 @@
       <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
       <operation-column key="operationColumn" fixed="left" min-width="240"></operation-column>
-      <key-column key="keyColumn" fixed="left" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
+      <key-column key="keyColumn" fixed="left" @select="selectMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
@@ -398,11 +398,13 @@ export default {
       }
     },
     // 选择指标组合
-    selctMeasureGroup (mg, row) {
+    selectMeasureGroup (mg, row) {
       Object.assign(
         row,
         pick(mg, measureFields)
       )
+      if (!row.tool) row.tool = '*0'
+      if (!row.a5) row.a5 = 0
       this.$refs.workbookTable.setActiveCell(row, 'tool')
     },
     // 清理行，只保留有效属性
