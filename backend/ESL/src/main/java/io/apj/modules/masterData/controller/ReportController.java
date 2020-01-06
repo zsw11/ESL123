@@ -140,4 +140,14 @@ public class ReportController extends AbstractController {
 		return RD.build().put("code", 200);
 	}
 
+	/**
+	 * 列表查询
+	 * @return
+	 */
+	@RequestMapping(value = "/listByDeptId")
+	public ResponseEntity<Object> ListByDeptId(){
+		Integer deptId=getUserDeptId().intValue();
+		return reportService.listByDeptId(deptId);
+	}
+
 }

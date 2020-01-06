@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
+import io.apj.common.utils.RD;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
@@ -28,6 +29,7 @@ import io.apj.modules.report.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -65,6 +67,9 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     private StandardTimeService standardTimeService;
     @Autowired
     private ReportGroupService reportGroupService;
+
+    @Autowired
+    private ReportDeptRelaService reportDeptRelaService;
 
 
     @Override
@@ -247,6 +252,25 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         reportEntity.setPinyin(PinyinUtil.getPinYin(reportEntity.getName()));
         reportEntity.setUpdateAt(new Date());
         this.updateById(reportEntity);
+    }
+
+    @Override
+    public ResponseEntity<Object> listByDeptId(Integer deptId) {
+        EntityWrapper<ReportDeptRelaEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("dept_id",deptId);
+        List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(wrapper);
+        if(reportDeptRelaEntityList != null && reportDeptRelaEntityList.size() > 0){
+            List<ReportEntity> reportEntityList=new ArrayList<>();
+            for(ReportDeptRelaEntity reportDeptRelaEntity : reportDeptRelaEntityList){
+                Integer reportId = reportDeptRelaEntity.getReportId();
+                ReportEntity reportEntity = selectById(reportId);
+                if(reportEntity != null){
+                    reportEntityList.add(reportEntity);
+                }
+            }
+            return RD.listReturn(reportEntityList,reportEntityList.size());
+        }
+        return null;
     }
 
 }
