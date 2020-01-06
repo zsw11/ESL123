@@ -1,11 +1,12 @@
 APOIP: "LDAP://172.16.73.82"
+#templatePath: "D:\\Most\\exportTemplates\\"
+templatePath: "F:\ProjectDocuments\esl_excel"
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: org.postgresql.Driver
         druid:
             first:  #数据源1
-#                url: jdbc:postgresql://117.48.230.8:5432/esl?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 url: jdbc:postgresql://117.48.230.8:5432/esl_dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
                 username: postgres
                 password: ly0713
