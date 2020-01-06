@@ -25,7 +25,8 @@
               v-model="dataForm.modelSeriesId"
               :allowMultiple="true"
               :searchApi="this.listModelSeries"
-              :allowEmpty="true">
+              :allowEmpty="true"
+              :defaultOptions="defaultModelSeries">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -56,7 +57,6 @@
           <el-form-item  :label="'ES时间'" prop="esTime">
             <el-date-picker
               style="width: 100%"
-
               v-model="dataForm.esTime">
             </el-date-picker>
           </el-form-item>
@@ -67,7 +67,6 @@
           <el-form-item :label="'AMP时间'" prop="ampTime">
             <el-date-picker
               style="width: 100%"
-
               v-model="dataForm.ampTime">
             </el-date-picker>
           </el-form-item>
@@ -135,6 +134,7 @@
           updateAt: null,
           deleteAt: null
         },
+        defaultModelSeries: [],
         listModel,
         listDept,
         listModelSeries,
@@ -206,6 +206,7 @@
               this.dataForm,
               pick(data, [ 'name', 'deptId', 'modelSeriesId', 'code', 'wsTime', 'esTime', 'ampTime', 'mpTime', 'remark' ])
             )
+            this.defaultModelSeries = [data.modelSeriesEntity]
           }).finally(() => {
             this.inited = true
           })
