@@ -11,6 +11,7 @@ import io.apj.common.annotation.DataFilter;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.dao.ActionDao;
 import io.apj.modules.masterData.entity.ActionEntity;
 import io.apj.modules.masterData.service.ActionService;
@@ -26,6 +27,8 @@ import java.util.*;
 public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> implements ActionService {
     @Autowired
     private ActionService actionService;
+    @Autowired
+    private StaffService staffService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -42,6 +45,10 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
         }
 
         Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
+        for(ActionEntity entity : page.getRecords()){
+            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+        }
 
         return new PageUtils(page);
     }

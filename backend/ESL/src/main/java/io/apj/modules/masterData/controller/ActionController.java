@@ -83,6 +83,7 @@ public class ActionController extends AbstractController {
 	@RequiresPermissions("masterData:action:update")
 	public RD update(@RequestBody ActionEntity action) {
 		action.setDeptId(getUserDeptId().intValue());
+		action.setUpdateBy(getUserId().intValue());
 		actionService.updatePinAndDataById(action);
 
 		return RD.build().put("code", 200);

@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -44,6 +45,8 @@ public class PartEntity implements Serializable {
 	 * 创建者ID
 	 */
 	private Integer createBy;
+	@TableField(exist = false)
+	private String createName;
 	/**
 	 * 创建时间
 	 */
@@ -52,6 +55,8 @@ public class PartEntity implements Serializable {
 	 * 更新者ID
 	 */
 	private Integer updateBy;
+	@TableField(exist = false)
+	private String updateName;
 	/**
 	 * 更新时间
 	 */

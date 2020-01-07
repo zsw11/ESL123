@@ -4,6 +4,7 @@ import io.apj.modules.basic.entity.StaffEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 人员信息
@@ -15,7 +16,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StaffDao extends BaseMapper<StaffEntity> {
 
-	List<StaffEntity> executeSql(String sql);
+    @Select("SELECT name from basic_staff WHERE user_id=#{id}")
+    String selectNameByUserId(Integer id);
+
+    List<StaffEntity> executeSql(String sql);
 
 	Integer executeSqlCount(String sql);
 }

@@ -111,6 +111,7 @@ public class PartController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:part:update")
 	public ResponseEntity<Object> update(@RequestBody PartEntity part) {
+		part.setUpdateBy(getUserId().intValue());
 		partService.updatePinAndDataById(part);
 
 		return RD.ok(part);

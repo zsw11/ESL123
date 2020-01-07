@@ -6,14 +6,10 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
 import io.apj.common.exception.RRException;
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.DataUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.Query;
-import io.apj.common.utils.RD;
+import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.dao.PartDao;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelPartRelaEntity;
@@ -22,9 +18,7 @@ import io.apj.modules.masterData.service.ModelPartRelaService;
 import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PartService;
-import io.apj.modules.masterData.vo.ModelVo;
 import io.apj.modules.sys.service.SysDeptService;
-import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,9 +34,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 	@Autowired
 	private ModelService modelService;
 	@Autowired
-	private ModelSeriesService modelSeriesService;
-	@Autowired
-	private SysDeptService deptService;
+	private StaffService staffService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -59,6 +51,10 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
 		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
+		for(PartEntity entity : page.getRecords()){
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+		}
 
 		return new PageUtils(page);
 	}

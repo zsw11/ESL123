@@ -40,6 +40,8 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
 
     @Autowired
     private SysDeptService sysDeptService;
+    @Autowired
+    private StaffDao staffDao;
 
     @Autowired
     private JobService jobService;
@@ -142,6 +144,11 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
         listMap.put("list", list);
         listMap.put("count", count);
         return listMap;
+    }
+
+    @Override
+    public String selectNameByUserId(Integer id) {
+        return staffDao.selectNameByUserId(id);
     }
 
 }
