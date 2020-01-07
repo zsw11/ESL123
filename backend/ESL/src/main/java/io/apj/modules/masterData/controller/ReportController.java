@@ -115,18 +115,10 @@ public class ReportController extends AbstractController {
         Integer reportId = reportEntity.getId();
         if (sysDeptEntityList.size() > 0) {
             List<ReportDeptRelaEntity> entityList1 = reportDeptRelaService.selectList(new EntityWrapper<ReportDeptRelaEntity>().eq("report_id", reportId));
+            //原本的deptids
             List<Integer> deptIds = new ArrayList<>();
-            for(ReportDeptRelaEntity item : entityList1){
+            for (ReportDeptRelaEntity item : entityList1) {
                 deptIds.add(item.getDeptId());
-            }
-            if(deptIds.retainAll(sysDeptEntityList)){
-                List<Integer> differentList = new ArrayList<>();
-                for(Integer id : deptIds){
-                    if(!sysDeptEntityList.contains(id)){
-                        reportDeptRelaService.deleteById(id);
-                    }
-                }
-               return RD.build().put("code", 200);
             }
             for (Integer i : sysDeptEntityList) {
                 ReportDeptRelaEntity reportDeptRelaEntity = new ReportDeptRelaEntity();
@@ -137,15 +129,18 @@ public class ReportController extends AbstractController {
                     reportDeptRelaService.insert(reportDeptRelaEntity);
                 } else {
                     ReportDeptRelaEntity entityList = reportDeptRelaService.selectOne(new EntityWrapper<ReportDeptRelaEntity>().eq("report_id", reportId).eq("dept_id", i));
-//                    reportDeptRelaEntity.setDeptId(entityList.getDeptId());
-//                    reportDeptRelaEntity.setCreateBy(getUserId().intValue());
-//                    reportDeptRelaEntity.setReportId(reportId);
-                    if(entityList!=null){
+                    if (entityList != null) {
                         reportDeptRelaEntity.setId(entityList.getId());
                         reportDeptRelaService.updateAllColumnById(reportDeptRelaEntity);
-                    }else {
+                    } else if (!deptIds.contains(i)) {
                         reportDeptRelaService.insert(reportDeptRelaEntity);
                     }
+                }
+            }
+            for (Integer deptId : deptIds) {
+                if (!sysDeptEntityList.contains(deptId)) {
+                    ReportDeptRelaEntity reportDeptRelaEntity1 = reportDeptRelaService.selectOne(new EntityWrapper<ReportDeptRelaEntity>().eq("dept_id", deptId).eq("report_id", reportId));
+                    reportDeptRelaService.deleteById(reportDeptRelaEntity1);
                 }
             }
 
