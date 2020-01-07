@@ -185,21 +185,27 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		StandardWorkEntity standardWorkEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		List<StandardWorkItemEntity> list = new ArrayList<>();
+		String sheetName=null;
 		if (standardWorkEntity != null) {
 			id = standardWorkEntity.getId();
 			map.put("date", standardWorkEntity.getMonthResult());
+			list = standardWorkItemService.getListBySWId(id);
+			sheetName=standardWorkEntity.getSheetName();
 		}
-		List<StandardWorkItemEntity> list = standardWorkItemService.getListBySWId(id);
 		ModelEntity model = modelService.selectById(modelId);
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
-
-		generateTotalData(list, map);
+		if(model!=null) {
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "report_standard_work_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + standardWorkEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();

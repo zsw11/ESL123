@@ -79,7 +79,7 @@ public class ReportManMachineCombinationServiceImpl
 		EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		ReportManMachineCombinationEntity reportManMachineCombinationEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
 		if (reportManMachineCombinationEntity != null) {
 			id = reportManMachineCombinationEntity.getId();

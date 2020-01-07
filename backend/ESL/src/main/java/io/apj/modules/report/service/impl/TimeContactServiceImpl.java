@@ -132,8 +132,9 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 		EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		TimeContactEntity timeContactEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		String sheetName=null;
 		if (timeContactEntity != null) {
 			map.put("revNo", timeContactEntity.getRevNo());
 			map.put("allCountSub", timeContactEntity.getAllCountSub());
@@ -155,14 +156,17 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			map.put("remarkPrinting", timeContactEntity.getTowingLastVersionPrinting());
 			map.put("remarkExternalInspection", timeContactEntity.getTowingLastVersionExternalInspection());
 			map.put("remarkPacking", timeContactEntity.getTowingLastVersionPacking());
+			sheetName=timeContactEntity.getSheetName();
 		}
 		ModelEntity model = modelService.selectById(modelId);
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
+		if(model!=null) {
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
 
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "report_time_contact_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + timeContactEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();

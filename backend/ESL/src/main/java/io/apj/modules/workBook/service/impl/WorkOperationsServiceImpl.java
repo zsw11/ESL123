@@ -353,11 +353,14 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			String workName = entity.getWorkName();
 			Integer workstationId = entity.getWorkstationId();
 			WorkstationEntity workstation = workstationService.selectById(workstationId);
-			String workstationName = workstation.getName();
-			params.put("workName", workName);
-			params.put("workstationName", workstationName);
-
-			generateTotalData(list, params);
+			if(workstation!=null) {
+				String workstationName = workstation.getName();
+				params.put("workName", workName);
+				params.put("workstationName", workstationName);
+			}
+			if(list!=null&&list.size()>0) {
+				generateTotalData(list, params);
+			}
 			String templateFileName = Constant.TEMPLATE_PATH + "work_operations.xls";
 			String exportFileName = Constant.TEMPLATE_PATH + workName + ".xls";
 			File historyExcel = new File(exportFileName);
@@ -386,9 +389,15 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			BigDecimal tmu = entity.getTmu();
 			BigDecimal secondConvert = entity.getSecondConvert();
 
-			timeValueTotal = timeValueTotal.add(timeValue);
-			tmuTotal = tmuTotal.add(tmu);
-			secondConvertTotal = secondConvertTotal.add(secondConvert);
+			if(timeValue!=null) {
+				timeValueTotal = timeValueTotal.add(timeValue);
+			}
+			if(tmu!=null) {
+				tmuTotal = tmuTotal.add(tmu);
+			}
+			if(secondConvert!=null) {
+				secondConvertTotal = secondConvertTotal.add(secondConvert);
+			}
 
 			// TODO remark是数字吗?
 
