@@ -28,8 +28,8 @@
             <span class="el-dropdown-link user-wrp">
               <img src="~@/assets/img/logo.png" :alt="userName" />
               <span class="user-wrp">
-                <span class="user">{{ userName }}</span>
-                <p class="department">{{department}}</p>
+                <span class="user">{{ userName }}</span><span class="department">{{ department }}</span>
+                <p class="time">{{date}}</p>
               </span>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -59,12 +59,31 @@ export default {
       messageVisible: false,
       messageCount: 0,
       bageValue: null,
-      sendTimeIntervalt: null
+      sendTimeIntervalt: null,
+      date: null
     };
   },
   created() {
-    this.getMessageList();
-    this.sendTime();
+    let self = this
+    let Y, M , D , H , Min
+    self.getMessageList();
+    self.sendTime();
+    // 时间定时器
+    this.timer = setInterval(()=>{
+      let date = new Date()
+      Y = date.getFullYear() + '年'
+      M = date.getMonth() + 1 + '月'
+      D = date.getDate() + '日'
+      H = String(date.getHours()).padStart(2,'0') + ':'
+      Min = String(date.getMinutes()).padStart(2,'0')
+      self.date = Y + M + D + H + Min
+    }, 1000)
+  },
+  beforeDestroy() {
+    // 在Vue实例销毁前，清除定时器
+    if (this.timer) {
+      clearInterval(this.timer) 
+    }
   },
   components: {
     UpdatePassword,
@@ -193,7 +212,7 @@ export default {
 
 <style lang="scss" scoped>
 .site-navbar{
-  min-width: 850px;
+  min-width: 900px;
 }
 .message-menu-item {
   .el-badge {
@@ -205,7 +224,7 @@ export default {
   }
 }
 .user-data{
-  width: 160px;
+  width: 200px;
 }
 .user-wrp{
   display: inline-block;
@@ -214,30 +233,38 @@ export default {
   height: 30px;
 }
 .user{
-  margin: 0;
+  margin-top: -25%;
   padding: 0;
   height: 30%;
-  position: absolute;
-  top: -15%;
 }
+
 .department{
+  height: 30%;
+  margin-top: -25%;
+  margin-left: 10%;
+}
+.time{
   position: absolute;
   margin: 0;
   padding: 0;
   width: auto;
-  top: 40%;
+  top: 50%;
 }
 .sit-navbar-title {
   font-size: 24px;
-  font-weight: 600;
   line-height: 50px;
   font-weight: lighter;
-  width: calc(100% - 320px);
+  width: calc(100% - 350px);
   display: inline-block;
   text-align: center;
+  padding-left: 20px;
 }
 
-@media screen and (max-width: 580px){
+.el-menu.el-menu--horizontal{
+  border: none
+}
+
+@media screen and (max-width: 600px){
   .show-right{
     display: none;
   }
