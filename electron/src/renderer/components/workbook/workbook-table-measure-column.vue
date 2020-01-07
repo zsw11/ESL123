@@ -5,8 +5,9 @@
     :title="config.title"
     :edit-render="{name: 'input'}"
     :header-class-name="config.bgClassName"
-    :class-name="getCellClass"
-    :formatter="abs">
+    :footer-class-name="config.bgClassName"
+    :class-name="getCellClass">
+    <template v-slot="scope">{{abs(scope.row[config.field])}}</template>
     <template v-slot:edit="scope">
       <measure-input
         type="text"
@@ -33,8 +34,8 @@ export default {
     }
   },
   methods: {
-    abs ({ row }) {
-      return /^-?\d+$/.test(row[this.config.field]) ? Math.abs(row[this.config.field]) : row[this.config.field]
+    abs (val) {
+      return /^-?\d+$/.test(val) ? Math.abs(val) : val
     },
     keydown (e, row) {
       this.$emit('keydown', e, row)

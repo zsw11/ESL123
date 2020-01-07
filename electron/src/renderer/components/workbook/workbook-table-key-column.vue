@@ -5,6 +5,7 @@
     title="Key"
     :edit-render="{ name: 'input', immediate: true }"
     v-bind="$attrs">
+    <template v-slot="scope">{{scope.row.key}}</template>
     <template v-slot:edit="{ row }">
       <key-input
         v-model="row.key"

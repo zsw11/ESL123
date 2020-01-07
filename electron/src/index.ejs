@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>most</title>
     <% if (htmlWebpackPlugin.options.nodeModules) { %>
       <!-- Add `node_modules/` to global paths so `require` works properly in development -->
       <script>
@@ -16,8 +15,8 @@
     <% if (!process.browser) { %>
       <script>
         window.SITE_CONFIG = {}
-        <!-- window.SITE_CONFIG['baseUrl'] = 'http://117.48.230.8:8080/esl'; // 10.240.131.42 // 117.48.230.8 // 172.16.73.24 -->
-		window.SITE_CONFIG['baseUrl'] = 'http://localhost:8080/esl'; // 10.240.131.42 // 117.48.230.8 // 172.16.73.24
+        window.SITE_CONFIG['baseUrl'] = 'http://172.16.73.24:8080/esl'; // 10.240.131.42 // 117.48.230.8 // 172.16.73.24
+		    // window.SITE_CONFIG['baseUrl'] = 'http://localhost:8080/esl'; // 10.240.131.42 // 117.48.230.8 // 172.16.73.24
         if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
       </script>
     <% } %>

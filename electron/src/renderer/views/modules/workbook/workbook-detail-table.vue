@@ -9,22 +9,26 @@
       ref="workbookTable"
       align="center"
       height="100%"
+      show-footer
       :row-class-name="getRowClass"
       :cell-class-name="getCellClass"
+      :footer-method="footerMethod"
       :auto-resize="true"
       :mouse-config="{selected: true}"
       :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @selected-changed="selectedChanged">
-      <vxe-table-column type="index" field="index" width="50" title="No."></vxe-table-column>
-      <vxe-table-column field="version" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
-      <operation-column key="operationColumn" min-width="240"></operation-column>
-      <key-column key="keyColumn" @select="selctMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" width="60"></key-column>
+      <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
+      <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
+      <operation-column key="operationColumn" fixed="left" min-width="240"></operation-column>
+      <key-column key="keyColumn" fixed="left" @select="selectMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" footer-class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="frequency" title="Fre." :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column title="TimeValue" width="65">
+      <vxe-table-column field="frequency" title="Fre." class-name="frequency-column" :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.frequency}}</template>
+      </vxe-table-column>
+      <vxe-table-column field="tv" title="TimeValue" width="65">
         <template slot-scope="scope">
           {{getTimeValue(scope)}}
         </template>
@@ -39,8 +43,12 @@
           {{getSecConv(scope)}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="remark1" title="Remark1" width="75" :formatter="({ cellValue })=>cellValue?round(cellValue*100/6, -1):undefined" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="remark1" title="Remark1" width="75" :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.remark1?round(scope.row.remark1*100/6, -1):undefined}}</template>
+      </vxe-table-column>
+      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}">
+        <template v-slot="scope">{{scope.row.remark}}</template>
+      </vxe-table-column>
     </vxe-grid>
 
     <el-dialog title="添加标准书"
@@ -68,6 +76,7 @@
 
 <script>
 import day from 'dayjs'
+import XEUtils from 'xe-utils'
 import { omit, pick, clone, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
@@ -126,7 +135,7 @@ export default {
     //                数据显示
     // ========================================
     // 加载数据
-    loadData (workbook, data, readonly) {
+    async loadData (workbook, data, readonly) {
       console.log('readonly', readonly)
       this.workbook = workbook
       this.readonly = readonly
@@ -135,16 +144,23 @@ export default {
       for (let i = 0; i < 100; i++) {
         data.push(this.createNewRow())
       }
-      this.$refs.workbookTable.loadData(data)
+      await this.$refs.workbookTable.loadData(data)
       this.logChange()
+      await this.$refs.workbookTable.updateFooter()
     },
     // 行的class，主要用于修订
     getRowClass ({ row }) {
       let rowClassStr = ''
+      if (this.lastSelected && this.lastSelected.row === row && this.lastSelected.column.property === 'index') {
+        rowClassStr += 'selected-row'
+      }
       if (this.mode === 'alter' && ['delete', 'new'].includes(row.alterType)) {
         rowClassStr += ` ${row.alterType}-row`
       }
       if (row.type === 'c') console.log(row.alterType, rowClassStr)
+      if (!row.frequency && allNumericMeasureField.find(f => row[f] < 0)) {
+        rowClassStr += ` missing-frequency-row`
+      }
       return rowClassStr
     },
     // 单元格的class，主要用于修订
@@ -175,6 +191,68 @@ export default {
     // 计算列
     getSecConv (scope) {
       return round(this.getTimeValue(scope) * 0.06, 2)
+    },
+    // 表尾合计
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return 'Sum'
+          }
+          // if (['tv', 'tmu', 'scv', 'remark1'].includes(column.property)) {
+          switch (column.property) {
+            case 'tv': {
+              return round(XEUtils.sum(data, row => {
+                return this.getTimeValue({ row })
+              }), 2)
+            }
+            case 'tmu': {
+              return round(XEUtils.sum(data, row => {
+                return this.getTmu({ row })
+              }), 2)
+            }
+            case 'scv': {
+              return round(XEUtils.sum(data, row => {
+                return this.getSecConv({ row })
+              }), 2)
+            }
+            case 'remark1': {
+              return round(XEUtils.sum(data, row => {
+                return row.remark1?round(row.remark1*100/6, -1):undefined
+              }))
+            }
+          }
+          return null
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return 'x1.06'
+          }
+          switch (column.property) {
+            case 'tv': {
+              return round(XEUtils.sum(data, row => {
+                return this.getTimeValue({ row })
+              }) * 1.06, 2)
+            }
+            case 'tmu': {
+              return round(XEUtils.sum(data, row => {
+                return this.getTmu({ row })
+              }) * 1.06, 2)
+            }
+            case 'scv': {
+              return round(XEUtils.sum(data, row => {
+                return this.getSecConv({ row })
+              }) * 1.06, 2)
+            }
+            case 'remark1': {
+              return round(XEUtils.sum(data, row => {
+                return row.remark1?round(row.remark1*100/6, -1):undefined
+              }) * 1.06)
+            }
+          }
+          return null
+        })
+      ]
     },
     // 是否允许编辑
     canEdit ({ row, column }) {
@@ -389,11 +467,13 @@ export default {
       }
     },
     // 选择指标组合
-    selctMeasureGroup (mg, row) {
+    selectMeasureGroup (mg, row) {
       Object.assign(
         row,
         pick(mg, measureFields)
       )
+      if (!row.tool) row.tool = '*0'
+      if (!row.a5) row.a5 = 0
       this.$refs.workbookTable.setActiveCell(row, 'tool')
     },
     // 清理行，只保留有效属性
@@ -518,11 +598,25 @@ export default {
 <style lang="scss">
 .workbook-table {
   .vxe-table {
-    .new-row,
+    .new-row {
+      color: red;
+      .sdn .vxe-cell, .sdc .vxe-cell {
+        color: red;
+      }
+    }
     .delete-row {
       color: red;
       .sdn .vxe-cell, .sdc .vxe-cell {
         color: red;
+      }
+      text-decoration:line-through
+    }
+    .selected-row {
+      background-color: lightblue
+    }
+    .missing-frequency-row {
+      .frequency-column {
+        background-color: orange;
       }
     }
     .edited-cell  {

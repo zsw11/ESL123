@@ -78,7 +78,8 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     //   webSecurity: false
-    }
+    },
+    title: ''
   })
 
   mainWindow.loadURL(winURL, {
