@@ -48,7 +48,7 @@
           <!-- 系统名称 -->
           <div class="main-right">
             <h2>标准时间分析管理系统</h2>
-            <span>Standard time production analysis system</span>
+            <span>Standard time analysis management system</span>
           </div>
         </div>
       </div>
