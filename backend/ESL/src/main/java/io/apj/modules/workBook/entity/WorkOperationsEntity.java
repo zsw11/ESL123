@@ -37,15 +37,6 @@ public class WorkOperationsEntity implements Serializable {
 	 */
 	private Integer workBookId;
 	/**
-	 * 制表人ID
-	 */
-	private Integer makerId;
-	/**
-	 * 制表日期
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	private Date makedAt;
-	/**
 	 * 版本信息
 	 */
 	private String version;
