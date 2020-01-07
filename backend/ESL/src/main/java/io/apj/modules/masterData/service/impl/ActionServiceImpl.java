@@ -43,6 +43,12 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
             entityWrapper.andNew("UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' "
                     + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
         }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+            entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+            entityWrapper.eq("update_By", Integer.parseInt((String) params.get("updateBy")));
+        }
 
         Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
         for(ActionEntity entity : page.getRecords()){
