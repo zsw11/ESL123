@@ -180,22 +180,31 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		TotalEntity totalEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		List<TotalItemEntity> list = new ArrayList<>();
+		String sheetName=null;
 		if (totalEntity != null) {
 			id = totalEntity.getId();
 			map.put("monthResult", totalEntity.getMonthResult());
 			map.put("destinations", totalEntity.getDestinations());
+			list = totalItemService.getListBySWId(id);
+			sheetName=totalEntity.getSheetName();
 		}
-		List<TotalItemEntity> list = totalItemService.getListBySWId(id);
 		ModelEntity model = modelService.selectById(modelId);
-		generateTotalData(list, map);
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
+		if(model!=null) {
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
+		int lastRow = 13;
+		if(list!=null&&list.size()>0){
+			generateTotalData(list, map);
+			lastRow +=list.size();
+		}
 
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "report_total_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + totalEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
@@ -207,7 +216,6 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
 
-		int lastRow = 13 + list.size();
 		int firstRow = 14;
 		Map<Integer, Function<TotalItemEntity, Object>> options = new HashMap<>();
 		options.put(0, TotalItemEntity::getWorkName);

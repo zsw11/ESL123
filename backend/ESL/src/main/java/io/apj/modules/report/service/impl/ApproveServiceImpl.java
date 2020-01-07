@@ -237,47 +237,58 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     public void download(Map<String, Object> params, HttpServletResponse response)  throws IOException {
         Integer reportId = (Integer)params.get("reportId");
         List<String> filePaths = null;
-        String fileName = "test";
+        String fileName = null;
         switch (reportId) {
             case 1:
+                fileName="workBook"+new Date().getTime();
                 filePaths = workBookService.download(params, response);
                 break;
             case 2:
                 //人机联合
+                fileName="reportManMachineCombination"+new Date().getTime();
                 filePaths = reportManMachineCombinationService.download(params, response);
                 break;
             case 3:
+                fileName="stationTime"+new Date().getTime();
                 filePaths = stationTimeService.download(params, response);
                 break;
             case 4:
+                fileName="compare"+new Date().getTime();
                 filePaths = compareService.download(params, response);
                 break;
             case 5:
+                fileName="mostValue"+new Date().getTime();
                 filePaths = mostValueService.download(params, response);
                 break;
             case 6:
                 // Collection-Revision History表
+                fileName="revisionHistory"+new Date().getTime();
                 filePaths = revisionHistoryService.download(params, response);
                 break;
             case 7:
+                fileName="total"+new Date().getTime();
                 filePaths = totalService.download(params, response);
                 break;
             case 8:
                 break;
             case 9:
+                fileName="timeContact"+new Date().getTime();
                 filePaths = timeContactService.download(params, response);
                 break;
             case 10:
                 break;
             case 11:
+                fileName="standardTime"+new Date().getTime();
                 filePaths = standardTimeService.download(params, response);
                 break;
             case 12:
                 // 标准工数表
+                fileName="standardWork"+new Date().getTime();
                 filePaths = standardWorkService.download(params, response);
                 break;
             case 13:
                 // 履历表
+                fileName="changeRecord"+new Date().getTime();
                 filePaths = changeRecordService.download(params, response);
                 break;
         }

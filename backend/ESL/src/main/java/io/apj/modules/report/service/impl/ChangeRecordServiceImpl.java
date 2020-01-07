@@ -182,21 +182,27 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 		EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		ChangeRecordEntity changeRecordEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
+		List<ChangeRecordItemEntity> list = new ArrayList<>();
+		String sheetName=null;
 		if (changeRecordEntity != null) {
 			id = changeRecordEntity.getId();
+			list = changeRecordItemService.getListBySWId(id);
+			sheetName=changeRecordEntity.getSheetName();
 		}
-		List<ChangeRecordItemEntity> list = changeRecordItemService.getListBySWId(id);
 		ModelEntity model = modelService.selectById(modelId);
-
 		Map<String, Object> map = new HashMap<>();
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
-		generateTotalData(list, map);
+		if(model!=null) {
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 
 		String templateFileName = Constant.TEMPLATE_PATH + "report_change_record_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + changeRecordEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();

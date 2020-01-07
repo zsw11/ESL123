@@ -98,6 +98,47 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 	public void workOperationExport(Map<String, Object> map, HttpServletResponse response) throws Exception {
 		// 过滤字段，前端传
 		List<String> list = (List<String>) map.get("exportAttributes");
+		List<String> ListFilter = new ArrayList<>();
+		ListFilter.add("workOperations.No");
+		ListFilter.add(list.get(0));
+		ListFilter.add(list.get(1));
+		ListFilter.add(list.get(2));
+		ListFilter.add("workOperations.a0null");
+		ListFilter.add(list.get(3));
+		ListFilter.add("workOperations.b0null");
+		ListFilter.add(list.get(4));
+		ListFilter.add("workOperations.g0null");
+		ListFilter.add(list.get(5));
+		ListFilter.add("workOperations.a1null");
+		ListFilter.add(list.get(6));
+		ListFilter.add("workOperations.b1null");
+		ListFilter.add(list.get(7));
+		ListFilter.add("workOperations.p0null");
+		ListFilter.add(list.get(8));
+		ListFilter.add("workOperations.m0null");
+		ListFilter.add(list.get(9));
+		ListFilter.add("workOperations.x0null");
+		ListFilter.add(list.get(10));
+		ListFilter.add("workOperations.i0null");
+		ListFilter.add(list.get(11));
+		ListFilter.add("workOperations.a2null");
+		ListFilter.add(list.get(12));
+		ListFilter.add("workOperations.b2null");
+		ListFilter.add(list.get(13));
+		ListFilter.add("workOperations.p1null");
+		ListFilter.add(list.get(14));
+		ListFilter.add("workOperations.a3null");
+		ListFilter.add(list.get(15));
+		ListFilter.add(list.get(16));
+		ListFilter.add("workOperations.a4null");
+		ListFilter.add(list.get(17));
+		ListFilter.add("workOperations.b3null");
+		ListFilter.add(list.get(18));
+		ListFilter.add("workOperations.p2null");
+		ListFilter.add(list.get(19));
+		ListFilter.add(list.get(20));
+		ListFilter.add(list.get(21));
+
 		// 查询类型
 		String type = map.get("filterType").toString();
 		Integer workBookId = Integer.parseInt((String) map.get("filterId"));
@@ -121,62 +162,166 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		// 处理数据源
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dict = sysDictService.getDictDetail();
+		Integer count = 1;
 		for (WorkOperationsEntity item : workOperationsEntityListFilter) {
-//			if(item.getA0()<0){
-//				item.setA0null(Math.abs(item.getA0()));
-//			}
-//			if(item.getB0()<0){
-//				item.setB0null(Math.abs(item.getB0()));
-//			}
-//			if(item.getP0()<0){
-//				item.setP0null(Math.abs(item.getP0()));
-//			}
-//			if(item.getA1()<0){
-//				item.setA1null(Math.abs(item.getA1()));
-//			}
-//			if(item.getB1()<0){
-//				item.setB1null(Math.abs(item.getB1()));
-//			}
-//			if(item.getP1()<0){
-//				item.setP1null(Math.abs(item.getP1()));
-//			}
-//			if(item.getA2()<0){
-//				item.setP2null(Math.abs(item.getA2()));
-//			}
-//			if(item.getB2()<0){
-//				item.setB2null(Math.abs(item.getB2()));
-//			}
-//			if(item.getP2()<0){
-//				item.setP2null(Math.abs(item.getP2()));
-//			}
-//			if(item.getA3()<0){
-//				item.setA3null(Math.abs(item.getA3()));
-//			}
-//			if(item.getB3()<0){
-//				item.setB3null(Math.abs(item.getB3()));
-//			}
-//			if(item.getG0()<0){
-//				item.setG0null(Math.abs(item.getG0()));
-//			}
-//			if(item.getM0()<0){
-//				item.setM0null(Math.abs(item.getM0()));
-//			}
-//			if(item.getX0()<0){
-//				item.setX0null(Math.abs(item.getX0()));
-//			}
-//			if(item.getI0()<0){
-//				item.setI0null(Math.abs(item.getI0()));
-//			}
-//			if(item.getA4()<0){
-//				item.setA4null(Math.abs(item.getA4()));
-//			}
+			item.setNo(count++);
+			if(item.getA0()!=null && item.getA0()<0){
+				if(item.getA0() == -9999){
+					item.setA0null(0);
+					item.setA0(null);
+				}else {
+					item.setA0null(Math.abs(item.getA0()));
+					item.setA0(null);
+				}
+			}
+			if(item.getB0()!=null && item.getB0()<0){
+				if(item.getB0()==-9999){
+					item.setB0(null);
+					item.setA0null(0);
+
+				}else{
+					item.setB0null(Math.abs(item.getB0()));
+					item.setB0(null);
+				}
+			}
+			if(item.getP0()!=null && item.getP0()<0){
+				if(item.getP0()==-9999){
+					item.setP0null(0);
+					item.setP0(null);
+				}else {
+					item.setP0null(Math.abs(item.getP0()));
+					item.setP0(null);
+				}
+
+			}
+			if(item.getA1()!=null && item.getA1()<0){
+				if(item.getA1()==-9999){
+					item.setA1null(0);
+					item.setA1(null);
+				}else {
+					item.setA1null(Math.abs(item.getA1()));
+					item.setA1(null);
+				}
+			}
+			if(item.getB1()!=null && item.getB1()<0){
+				if(item.getB1()==-9999){
+					item.setB1null(0);
+					item.setB1(null);
+				}else {
+					item.setB1null(Math.abs(item.getB1()));
+					item.setB1null(null);
+				}
+			}
+			if(item.getP1()!=null && item.getP1()<0){
+				if(item.getP1()==-9999){
+					item.setP1null(0);
+					item.setP1(null);
+				}else {
+					item.setP1null(Math.abs(item.getP1()));
+					item.setP1(null);
+				}
+			}
+			if(item.getA2()!=null && item.getA2()<0){
+				if(item.getA2()==-9999){
+					item.setA2null(0);
+					item.setA2(null);
+				}else {
+					item.setA2null(Math.abs(item.getA2()));
+					item.setA2(null);
+				}
+			}
+			if(item.getB2()!=null && item.getB2()<0){
+				if(item.getB2()==-9999){
+					item.setB2null(0);
+					item.setB2(null);
+				}else {
+					item.setB2null(Math.abs(item.getB2()));
+					item.setB2(null);
+				}
+
+			}
+			if(item.getP2()!=null && item.getP2()<0){
+				if(item.getP2()==-9999){
+					item.setP2null(0);
+					item.setP2(null);
+				}else {
+					item.setP2null(Math.abs(item.getP2()));
+					item.setP2(null);
+				}
+
+			}
+			if(item.getA3()!=null && item.getA3()<0){
+				if(item.getA3()==-9999){
+					item.setA3null(0);
+					item.setA3(null);
+				}else {
+					item.setA3null(Math.abs(item.getA3()));
+					item.setA3(null);
+				}
+
+			}
+			if(item.getB3()!=null && item.getB3()<0){
+				if(item.getB3()==-9999){
+					item.setB3null(0);
+					item.setB3(null);
+				}else {
+					item.setB3null(Math.abs(item.getB3()));
+					item.setB3(null);
+				}
+
+			}
+			if(item.getG0()!=null && item.getG0()<0){
+				if(item.getG0()==-9999){
+					item.setG0null(0);
+					item.setG0(null);
+				}else {
+					item.setG0null(Math.abs(item.getG0()));
+					item.setG0(null);
+				}
+			}
+			if(item.getM0()!=null && item.getM0()<0){
+				if(item.getM0()==-9999){
+					item.setM0null(0);
+					item.setM0(null);
+				}else {
+					item.setM0null(Math.abs(item.getM0()));
+					item.setM0(null);
+				}
+			}
+			if(item.getX0()!=null && item.getX0()<0){
+				if(item.getX0()==-9999){
+					item.setX0null(0);
+					item.setX0(null);
+				}else{
+					item.setX0null(Math.abs(item.getX0()));
+					item.setX0(null);
+				}
+			}
+			if(item.getI0()!=null && item.getI0()<0){
+				if(item.getI0()==-9999){
+					item.setI0null(0);
+					item.setI0(null);
+				}else {
+					item.setI0null(Math.abs(item.getI0()));
+					item.setI0(null);
+				}
+			}
+			if(item.getA4()!=null && item.getA4()<0){
+				if(item.getA4()==-9999){
+					item.setA4null(0);
+					item.setA4(null);
+				}else {
+					item.setA4null(Math.abs(item.getA4()));
+					item.setA4(null);
+				}
+			}
 
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("workOperations", item, dict);
 			dataList.add(arr);
 		}
 		// 返回excel格式数据
-		Map<String, Object> param = DataUtils.rtlExcelData(list, "workOperations", dataList);
+		Map<String, Object> param = DataUtils.rtlExcelData(ListFilter, "workOperations", dataList);
 		ExcelData data = new ExcelData();
 		data.setTitles((List<String>) param.get("titles"));
 		data.setRows((List<List<Object>>) param.get("rows"));
@@ -208,11 +353,14 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			String workName = entity.getWorkName();
 			Integer workstationId = entity.getWorkstationId();
 			WorkstationEntity workstation = workstationService.selectById(workstationId);
-			String workstationName = workstation.getName();
-			params.put("workName", workName);
-			params.put("workstationName", workstationName);
-
-			generateTotalData(list, params);
+			if(workstation!=null) {
+				String workstationName = workstation.getName();
+				params.put("workName", workName);
+				params.put("workstationName", workstationName);
+			}
+			if(list!=null&&list.size()>0) {
+				generateTotalData(list, params);
+			}
 			String templateFileName = Constant.TEMPLATE_PATH + "work_operations.xls";
 			String exportFileName = Constant.TEMPLATE_PATH + workName + ".xls";
 			File historyExcel = new File(exportFileName);
@@ -241,9 +389,15 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			BigDecimal tmu = entity.getTmu();
 			BigDecimal secondConvert = entity.getSecondConvert();
 
-			timeValueTotal = timeValueTotal.add(timeValue);
-			tmuTotal = tmuTotal.add(tmu);
-			secondConvertTotal = secondConvertTotal.add(secondConvert);
+			if(timeValue!=null) {
+				timeValueTotal = timeValueTotal.add(timeValue);
+			}
+			if(tmu!=null) {
+				tmuTotal = tmuTotal.add(tmu);
+			}
+			if(secondConvert!=null) {
+				secondConvertTotal = secondConvertTotal.add(secondConvert);
+			}
 
 			// TODO remark是数字吗?
 

@@ -131,17 +131,23 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 		String stlst = params.get("stlst").toString();
 
 		StandardTimeEntity standardTime = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-		Integer standardTimeId = standardTime.getId();
-		List<StandardTimeItemEntity> list = standardTimeItemService.selectByStandardTimeId(standardTimeId);
-		ModelEntity model = modelService.selectById(modelId);
-
+		Integer standardTimeId=null;
+		List<StandardTimeItemEntity> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
-		map.put("unit", standardTime.getUnit());
+		if(standardTime!=null) {
+			standardTimeId = standardTime.getId();
+			list = standardTimeItemService.selectByStandardTimeId(standardTimeId);
+			map.put("unit", standardTime.getUnit());
+		}
+		ModelEntity model = modelService.selectById(modelId);
+		if(model!=null){
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
 		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
-		generateTotalData(list, map);
-
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		String templateFileName = Constant.TEMPLATE_PATH + "standard_time_template.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + "标准时间表.xls";
 		File historyExcel = new File(exportFileName);

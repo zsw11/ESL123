@@ -7,6 +7,7 @@ import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.ApproveEntity;
 import io.apj.modules.report.service.*;
 import io.apj.modules.sys.controller.AbstractController;
+import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -137,6 +138,10 @@ public class ApproveController extends AbstractController {
     @RequestMapping("/download")
 //    @RequiresPermissions("report:approve:list")
     public void download(@RequestBody Map<String, Object> params, HttpServletResponse response) throws IOException {
+        Validate.notNull(params.get("reportId"));
+        Validate.notNull(params.get("phaseId"));
+        Validate.notNull(params.get("modelId"));
+        Validate.notNull(params.get("stlst"));
         approveService.download(params, response);
     }
 }

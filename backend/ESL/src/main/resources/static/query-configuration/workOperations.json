@@ -5,6 +5,11 @@
         "tableAlias": "workOperations",
         "fieldList": [
             {
+                "code": "No",
+                "name": "No",
+                "type": "int"
+            },
+            {
                 "code": "versionNumber",
                 "name": "版本信息",
                 "type": "String"
@@ -20,8 +25,18 @@
                 "type": "int"
             },
             {
+                "code": "a0null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "b0",
                 "name": "b0",
+                "type": "int"
+            },
+            {
+                "code": "b0null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -30,8 +45,18 @@
                 "type": "int"
             },
             {
+                "code": "g0null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "a1",
                 "name": "a1",
+                "type": "int"
+            },
+            {
+                "code": "a1null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -40,8 +65,18 @@
                 "type": "int"
             },
             {
+                "code": "b1null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "p0",
                 "name": "p0",
+                "type": "int"
+            },
+            {
+                "code": "p0null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -50,8 +85,18 @@
                 "type": "int"
             },
             {
+                "code": "m0null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "x0",
                 "name": "x0",
+                "type": "int"
+            },
+            {
+                "code": "x0null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -60,8 +105,18 @@
                 "type": "int"
             },
             {
+                "code": "i0null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "a2",
                 "name": "a2",
+                "type": "int"
+            },
+            {
+                "code": "a2null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -70,13 +125,28 @@
                 "type": "int"
             },
             {
+                "code": "b2null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "p1",
                 "name": "p1",
                 "type": "int"
             },
             {
+                "code": "p1null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "a3",
                 "name": "a3",
+                "type": "int"
+            },
+            {
+                "code": "a3null",
+                "name": "",
                 "type": "int"
             },
             {
@@ -90,13 +160,28 @@
                 "type": "int"
             },
             {
+                "code": "a4null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "b3",
                 "name": "b3",
                 "type": "int"
             },
             {
+                "code": "b3null",
+                "name": "",
+                "type": "int"
+            },
+            {
                 "code": "p2",
                 "name": "p2",
+                "type": "int"
+            },
+            {
+                "code": "p2null",
+                "name": "",
                 "type": "int"
             },
             {

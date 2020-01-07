@@ -38,4 +38,6 @@ public interface StaffService extends IService<StaffEntity> {
 	 * 高级查询
 	 */
 	public Map<String, Object> advancedSearch(Map<String, Object> map, JsonArray fieldFilter);
+
+	String selectNameByUserId(Integer id);
 }

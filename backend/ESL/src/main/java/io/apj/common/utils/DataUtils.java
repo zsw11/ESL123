@@ -434,6 +434,8 @@ public class DataUtils {
 			String name = rtlName(fileName, tableAlias, field);
 			if (!name.isEmpty()) {
 				titles.add(name);
+			} else if(name.isEmpty()){
+				titles.add("");
 			} else {
 				titles.add("未配置字段");
 			}

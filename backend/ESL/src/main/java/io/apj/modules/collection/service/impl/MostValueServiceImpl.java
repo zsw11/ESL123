@@ -139,20 +139,27 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		String stlst = params.get("stlst").toString();
 
 		MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-		Integer entityId = entity.getId();
-		List<MostValueItemEntity> list = mostValueItemService.selectByMostValueId(entityId);
-		ModelEntity model = modelService.selectById(modelId);
-		PhaseEntity phase = phaseService.selectById(phaseId);
-
+		List<MostValueItemEntity> list=new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		map.put("modelName", model.getName());
-		map.put("phaseName", phase.getName());
+		if(entity!=null) {
+			Integer entityId = entity.getId();
+			map.put("firstColumnName", entity.getFirstColumnName());
+			list = mostValueItemService.selectByMostValueId(entityId);
+		}
+		ModelEntity model = modelService.selectById(modelId);
+		if(model!=null){
+			map.put("modelName", model.getName());
+		}
+		PhaseEntity phase = phaseService.selectById(phaseId);
+		if(phase!=null) {
+			map.put("phaseName", phase.getName());
+		}
 		map.put("customer", "??");
 		map.put("esl", "??");
-		map.put("firstColumnName", entity.getFirstColumnName());
 		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
-		generateTotalData(list, map);
-
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_most_value.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + entity.getSheetName() + ".xls";
 		File historyExcel = new File(exportFileName);

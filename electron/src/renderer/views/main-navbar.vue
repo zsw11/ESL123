@@ -74,8 +74,8 @@ export default {
       Y = date.getFullYear() + '年'
       M = date.getMonth() + 1 + '月'
       D = date.getDate() + '日'
-      H = date.getHours() + ':'
-      Min = date.getMinutes()
+      H = String(date.getHours()).padStart(2,'0') + ':'
+      Min = String(date.getMinutes()).padStart(2,'0')
       self.date = Y + M + D + H + Min
     }, 1000)
   },
@@ -212,7 +212,7 @@ export default {
 
 <style lang="scss" scoped>
 .site-navbar{
-  min-width: 850px;
+  min-width: 900px;
 }
 .message-menu-item {
   .el-badge {
@@ -252,19 +252,19 @@ export default {
 }
 .sit-navbar-title {
   font-size: 24px;
-  font-weight: 600;
   line-height: 50px;
   font-weight: lighter;
   width: calc(100% - 350px);
   display: inline-block;
   text-align: center;
+  padding-left: 20px;
 }
 
 .el-menu.el-menu--horizontal{
   border: none
 }
 
-@media screen and (max-width: 580px){
+@media screen and (max-width: 600px){
   .show-right{
     display: none;
   }

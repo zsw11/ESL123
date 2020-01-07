@@ -4,7 +4,11 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form 
+      :inline="true" 
+      :model="listQuery" 
+      @keyup.enter.native="getDataList()"
+      class="form-min-width">
 
         <el-form-item :label="'报表组名称'" prop="name" >
           <el-input v-model="listQuery.name" clearable></el-input>
@@ -14,8 +18,7 @@
           <keyword-search
             v-model="listQuery.reportId"
             :searchApi="listReport"
-            :allowEmpty="true"
-            >
+            :allowEmpty="true">
           </keyword-search>
         </el-form-item>
 
@@ -23,11 +26,30 @@
           <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
-        <div class="search-box">
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-          <el-button @click="clearQuery()">清   空</el-button>
-        </div>
+        <el-form-item :label="'作成人'" prop="createBy" >
+          <keyword-search 
+            :searchApi="this.listStaff" 
+            v-model="listQuery.createBy"
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable></keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaff" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable></keyword-search>
+        </el-form-item>
       </el-form>
+      <div class="clearfix">
+        <div class="right">
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click="clearQuery()">清 空</el-button>
+        </div>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
@@ -73,6 +95,29 @@
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="createAt" label="作成时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
@@ -100,6 +145,8 @@
 <script>
 import { listReportGroup, deleteReportGroup } from '@/api/reportGroup'
 import { listReport } from '@/api/report'
+import { listStaff } from '@/api/staff'
+
 export default {
   name: 'reportGroupList',
   data () {
@@ -109,8 +156,14 @@ export default {
         id: null,
         name: null,
         remark: null,
-        reportId: null
+        reportId: null,
+        createBy: null,
+        createAt: null,
+        updateBy: null,
+        updateAt: null,
+        deleteAt: null
       },
+      listStaff,
       listReport,
       dataList: [],
       pageNo: 1,
@@ -164,7 +217,12 @@ export default {
       this.listQuery = Object.assign(this.listQuery, {
         name: null,
         remark: null,
-        reportId: null
+        reportId: null,
+        createBy: null,
+        createAt: null,
+        updateBy: null,
+        updateAt: null,
+        deleteAt: null
       })
     },
     // 每页数

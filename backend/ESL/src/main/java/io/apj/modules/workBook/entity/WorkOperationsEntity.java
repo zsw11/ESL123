@@ -96,6 +96,8 @@ public class WorkOperationsEntity implements Serializable {
 	/**
 	 * 类型
 	 */
+	@TableField(exist = false)
+	private Integer No;
 	private String type;
 	private String tool;
 	private Integer a0;
