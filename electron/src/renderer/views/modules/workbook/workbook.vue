@@ -178,7 +178,7 @@
 
         <el-table-column align="center" prop="makedAt" label="制表日期" width="100">
           <template slot-scope="scope">
-            <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
+            <span :title="scope.row.makedAt">{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
 
