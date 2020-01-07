@@ -261,16 +261,16 @@ export default {
     border-radius: 30px;
     margin-top: 10%;
     margin-left: 15%;
-    font-size: 40px;
+    font-size: 50px;
     font-weight: lighter;
     margin-bottom: 0;
   }
   span {
     margin-top: -25px;
     margin-left: 15%;
-    font-size: 20px;
-    font-family: Dotum;
-    font-weight: lighter;
+    font-size: 25px;
+    // font-family: Dotum;
+    // font-weight: lighter;
   }
 }
 

@@ -1,6 +1,6 @@
 
 <template>
-  <el-card class="with-title">
+  <el-card class="with-title operationgroup-maintain">
     <div slot="header" class="clearfix">
       <div class="card-title">{{title}}</div>
       <div class="buttons">
@@ -30,6 +30,7 @@
         border
         size="mini"
         ref="workbookTable"
+        :row-class-name="getRowClass"
         align="center"
         class="workbook-table"
         :mouse-config="{selected: true}"
@@ -206,6 +207,14 @@ export default {
         }
       })
     },
+    // 行的class，主要用于修订
+    getRowClass ({ row }) {
+      let rowClassStr = ''
+      if (this.lastSelected && this.lastSelected.row === row && this.lastSelected.column.property === 'index') {
+        rowClassStr += 'selected-row'
+      }
+      return rowClassStr
+    },
     // 计算列
     getTimeValue ({ row }) {
       let base = 0
@@ -279,7 +288,7 @@ export default {
       } else {
         this.listener = function (e) {
           if (e.ctrlKey) {
-            switch (e.key) {
+            switch (e.key.toLowerCase()) {
               case 'c': {
                 self.copy()
                 break
@@ -449,3 +458,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.operationgroup-maintain {
+  .vxe-table {
+    .selected-row {
+      background-color: lightblue
+    }
+  }
+}
+</style>

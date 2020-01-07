@@ -595,7 +595,7 @@
         if (!this.listener) {
           this.listener = function (e) {
             if (e.ctrlKey) {
-              switch (e.key) {
+              switch (e.key.toLowerCase()) {
                 case 'c': {
                   self.copy()
                   break
