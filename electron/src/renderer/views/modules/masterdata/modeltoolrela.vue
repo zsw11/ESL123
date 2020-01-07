@@ -4,7 +4,11 @@
       <div slot="header" class="clearfix">
         <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix model-min-width">
+      <el-form 
+        :inline="true" 
+        :model="listQuery" 
+        @keyup.enter.native="getDataList()"  
+        class="clearfix form-min-width">
 
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input  v-model="listQuery.name"  clearable></el-input>
@@ -18,7 +22,6 @@
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <keyword-search
             v-model="listQuery.modelSeriesId"
-            
             :searchApi="this.listModelSeries"
             labelColunt="name"
             :allowEmpty="true"

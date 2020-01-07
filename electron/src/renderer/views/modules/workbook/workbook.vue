@@ -460,16 +460,16 @@ export default {
       })
     },
     // 全选生成报表
-    handleCheckAllChange () {
-      if (this.flag) {
-        this.createForm.id = this.reportGroup.map(item => item.id)
-        this.flag = !this.flag
-      } else {
-        this.createForm.id = []
-        this.flag = !this.flag
-      }
-      this.isIndeterminate = false
-    },
+    // handleCheckAllChange () {
+    //   if (this.flag) {
+    //     this.createForm.id = this.reportGroup.map(item => item.id)
+    //     this.flag = !this.flag
+    //   } else {
+    //     this.createForm.id = []
+    //     this.flag = !this.flag
+    //   }
+    //   this.isIndeterminate = false
+    // },
     // 多选
     handleCheckedCitiesChange () {
       let checkedCount = this.createForm.id.length
@@ -502,7 +502,6 @@ export default {
           reports: this.createForm.id
         }
       )).then((page) => {
-        console.log(page, '----------------------------')
         if(page.msg === 'success'){
            this.$message({
               message: '操作成功',
