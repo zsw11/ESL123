@@ -43,7 +43,6 @@
                 clearable
                 class="keyword"
                 v-model="listQuery.phaseId"
-                
                 :searchApi="this.listPhase"
                 :allowEmpty="true">
               </keyword-search>
@@ -54,7 +53,6 @@
             <keyword-search
               clearable
               v-model="listQuery.workstationId"
-              
               :searchApi="this.listWorkstation"
               :allowEmpty="true">
             </keyword-search>
@@ -64,10 +62,14 @@
             <el-input v-model="listQuery.versionNumber" clearable></el-input>
           </el-form-item>
 
-<!--          <el-form-item :label="'制表人'" prop="makerId" >-->
-<!--            <el-input v-model="listQuery.makerId"  clearable></el-input>-->
-<!--          </el-form-item>-->
-
+         <el-form-item :label="'制表人'" prop="makerId" >
+          <keyword-search 
+            :searchApi="this.listStaff" 
+            v-model="listQuery.makerId"
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable></keyword-search>
+        </el-form-item>
           <el-form-item :label="'制表日期'" prop="tableAt" >
             <el-date-picker
               v-model="tableAt"
@@ -78,6 +80,15 @@
               clearable>
             </el-date-picker>
           </el-form-item>
+
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaff" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            :valueColumn="'userId'"
+            clearable></keyword-search>
+        </el-form-item>
         </div>
 
       </el-form>
@@ -158,13 +169,30 @@
           </template>
         </el-table-column>
 
-
-        <el-table-column align="center" prop="makedAt" label="制表日期" >
+        <el-table-column align="center" prop="makerId" label="制表人" >
           <template slot-scope="scope">
-            <span>{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
+            <span>{{scope.row.makerId }}</span>
           </template>
         </el-table-column>
 
+
+        <el-table-column align="center" prop="makedAt" label="制表日期" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.makedAt">{{scope.row.makedAt | format('YYYY-MM-DD')}}</span>
+          </template>
+        </el-table-column>
+
+         <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
 
       <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
           <template slot-scope="scope">
@@ -197,9 +225,6 @@
       :visible.sync="createShow">
       <el-form :inline="true" :model="createForm">
         <el-form-item>
-<!--          <el-radio-group v-model="createForm.Id" size="small">-->
-<!--            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>-->
-<!--          </el-radio-group>-->
           <div  v-for="item in reportGroup"
               :key="item.id">{{item.name}}</div>
         </el-form-item>
@@ -221,6 +246,7 @@ import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
+import { listStaff } from '@/api/staff'
 
 
 export default {
@@ -263,6 +289,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listStaff,
       listDict,
       listDept,
       listPhase,
@@ -347,7 +374,12 @@ export default {
         createAt: null,
         makedAt: null,
         workName: null,
-        versionNumber: null
+        versionNumber: null,
+        makerId: null,
+        createBy: null,
+        updateBy: null,
+        updateAt: null,
+        deleteAt: null
       })
       this.tableAt = null
     },
@@ -460,16 +492,16 @@ export default {
       })
     },
     // 全选生成报表
-    handleCheckAllChange () {
-      if (this.flag) {
-        this.createForm.id = this.reportGroup.map(item => item.id)
-        this.flag = !this.flag
-      } else {
-        this.createForm.id = []
-        this.flag = !this.flag
-      }
-      this.isIndeterminate = false
-    },
+    // handleCheckAllChange () {
+    //   if (this.flag) {
+    //     this.createForm.id = this.reportGroup.map(item => item.id)
+    //     this.flag = !this.flag
+    //   } else {
+    //     this.createForm.id = []
+    //     this.flag = !this.flag
+    //   }
+    //   this.isIndeterminate = false
+    // },
     // 多选
     handleCheckedCitiesChange () {
       let checkedCount = this.createForm.id.length
@@ -502,7 +534,6 @@ export default {
           reports: this.createForm.id
         }
       )).then((page) => {
-        console.log(page, '----------------------------')
         if(page.msg === 'success'){
            this.$message({
               message: '操作成功',

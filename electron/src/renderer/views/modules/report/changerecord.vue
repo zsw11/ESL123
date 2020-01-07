@@ -177,7 +177,6 @@
           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
             v-model="approveForm.nextApproverId"
-            
             :searchApi="this.listStaff"
             :allowEmpty="true"
             :valueColumn="'userId'"

@@ -374,7 +374,13 @@
         </el-form-item>
         <div>
           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
-            <el-input  v-model="approveForm.nextApproverId" clearable>
+             <keyword-search
+              v-model="approveForm.nextApproverId"
+              :searchApi="this.listStaff"
+              :allowEmpty="true"
+              :valueColumn="'userId'"
+            clearable>
+          </keyword-search>
             </el-input>
           </el-form-item>
         </div>
