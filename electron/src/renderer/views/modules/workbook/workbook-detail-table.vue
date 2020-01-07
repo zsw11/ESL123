@@ -177,6 +177,7 @@ export default {
       let base = 0
       let fre = 0
       allNumericMeasureField.forEach(f => {
+        if (row[f] === -9999) return
         if (row[f] > 0) base += row[f]
         if (row[f] < 0) fre -= row[f]
       })

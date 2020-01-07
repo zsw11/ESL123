@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     abs (val) {
+      if (val === -9999) return 0
       return /^-?\d+$/.test(val) ? Math.abs(val) : val
     },
     keydown (e, row) {
