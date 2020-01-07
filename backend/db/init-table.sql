@@ -1400,8 +1400,6 @@ CREATE TABLE work_operations (
   version varchar(64),
   operation varchar(256),
   type varchar(16),
-  maked_at timestamp,
-  maker_id integer,
   alter_type varchar(256),
   alter_info varchar(512),
   a0 integer,
