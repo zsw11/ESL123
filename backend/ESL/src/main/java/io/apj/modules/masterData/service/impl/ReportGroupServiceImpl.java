@@ -3,6 +3,7 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
@@ -28,6 +29,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     private ReportGroupReportRelaService reportGroupReportRelaService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private StaffService staffService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -64,6 +67,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
                 name += item.getName() + "/";
             }
             entity.setAllReportName(name);
+            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
         }
 
         return new PageUtils(page);

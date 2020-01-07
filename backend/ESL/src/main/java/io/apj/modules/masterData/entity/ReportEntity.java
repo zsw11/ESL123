@@ -52,6 +52,10 @@ public class ReportEntity implements Serializable {
 	 * 创建者ID
 	 */
 	private Integer createBy;
+	@TableField(exist = false)
+	private String updateName;
+	@TableField(exist = false)
+	private String createName;
 	/**
 	 * 创建时间
 	 */

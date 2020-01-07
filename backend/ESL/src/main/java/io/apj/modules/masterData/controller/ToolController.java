@@ -101,6 +101,7 @@ public class ToolController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:tool:update")
 	public RD update(@RequestBody ToolEntity tool) {
+		tool.setUpdateBy(getUserId().intValue());
 		toolService.updatePinAndDataById(tool);
 
 		return RD.build();

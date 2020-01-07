@@ -3,8 +3,10 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.report.entity.ApproveEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -23,6 +25,8 @@ import io.apj.modules.masterData.service.ApproveOpininonService;
 @Service("approveOpininonService")
 public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, ApproveOpininonEntity>
 		implements ApproveOpininonService {
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -35,7 +39,10 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 		}
 		Page<ApproveOpininonEntity> page = this.selectPage(new Query<ApproveOpininonEntity>(params).getPage(),
 				entityWrapper);
-
+		for(ApproveOpininonEntity entity: page.getRecords()){
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+		}
 		return new PageUtils(page);
 	}
 	@Override

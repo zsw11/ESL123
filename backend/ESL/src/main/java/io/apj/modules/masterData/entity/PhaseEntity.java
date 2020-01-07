@@ -42,6 +42,10 @@ public class PhaseEntity implements Serializable {
 	 * 生产阶段
 	 */
 	@TableField(exist = false)
+	private String updateName;
+	@TableField(exist = false)
+	private String createName;
+	@TableField(exist = false)
 	private PhaseEntity phaseEntity;
 	/**
 	 * 备注
