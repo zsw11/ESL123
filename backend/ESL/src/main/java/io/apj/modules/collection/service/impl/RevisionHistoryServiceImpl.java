@@ -191,24 +191,28 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 		EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		RevisionHistoryEntity revisionHistoryEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		List<RevisionHistoryItemEntity> list=new ArrayList<>();
+		String sheetName=null;
 		if (revisionHistoryEntity != null) {
 			id = revisionHistoryEntity.getId();
 			map.put("factory", revisionHistoryEntity.getFactory());
 			map.put("monthResult", revisionHistoryEntity.getMonthResult());
 			map.put("rev_no", revisionHistoryEntity.getRevNo());
 			map.put("destinations", revisionHistoryEntity.getDestinations());
+			list= revisionHistoryItemService.getListBySWId(id);
+			sheetName=revisionHistoryEntity.getSheetName();
 		}
-		List<RevisionHistoryItemEntity> list = revisionHistoryItemService.getListBySWId(id);
 		ModelEntity model = modelService.selectById(modelId);
-		map.put("modelName", model.getName());
-		map.put("modelType", model.getCode());
-
+		if(model!=null) {
+			map.put("modelName", model.getName());
+			map.put("modelType", model.getCode());
+		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_revision_history_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + revisionHistoryEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();

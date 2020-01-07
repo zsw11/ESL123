@@ -144,20 +144,28 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		String stlst = params.get("stlst").toString();
 
 		CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-		Integer entityId = entity.getId();
-		List<CompareItemEntity> list = compareItemService.selectByMostValueId(entityId);
-		ModelEntity model = modelService.selectById(modelId);
-		PhaseEntity phase = phaseService.selectById(phaseId);
-
+		List<CompareItemEntity> list=new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		map.put("modelName", model.getName());
-		map.put("phaseName", phase.getName());
-		map.put("lastVersionName", entity.getLastVersionName());
-		map.put("currentVersionName", entity.getCurrentVersionName());
-		map.put("firstColumnName", entity.getFirstColumnName());
+		if(entity!=null) {
+			Integer entityId = entity.getId();
+			map.put("lastVersionName", entity.getLastVersionName());
+			map.put("currentVersionName", entity.getCurrentVersionName());
+			map.put("firstColumnName", entity.getFirstColumnName());
+			list = compareItemService.selectByMostValueId(entityId);
+		}
+		ModelEntity model = modelService.selectById(modelId);
+		if(model!=null){
+			map.put("modelName", model.getName());
+		}
+		PhaseEntity phase = phaseService.selectById(phaseId);
+		if(phase!=null) {
+			map.put("phaseName", phase.getName());
+		}
 		map.put("customer", "??");
 		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
-		generateTotalData(list, map);
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_compare.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + entity.getSheetName() + ".xls";
 		File historyExcel = new File(exportFileName);

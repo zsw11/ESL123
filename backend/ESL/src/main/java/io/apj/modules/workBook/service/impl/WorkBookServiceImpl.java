@@ -428,9 +428,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         String stlst = params.get("stlst").toString();
 
         List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId);
-        List<String> workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
-        String fileName = "test";
-        ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+        List<String> workBookFilePaths=new ArrayList<>();
+        if(workBookEntities!=null&&workBookEntities.size()>0){
+            workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
+            String fileName = "test";
+            ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+        }
         return workBookFilePaths;
     }
 

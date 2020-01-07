@@ -172,7 +172,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
 		StationTimeEntity stationTimeEntity = selectOne(entityWrapper);
-		Integer id = 0;
+		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
 		if (stationTimeEntity != null) {
 			id = stationTimeEntity.getId();
@@ -182,8 +182,9 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		ModelEntity model = modelService.selectById(modelId);
 		map.put("modelName", model.getName());
 		map.put("modelType", model.getCode());
-
-		generateTotalData(list, map);
+		if(list!=null&&list.size()>0) {
+			generateTotalData(list, map);
+		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_station_time_template.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + stationTimeEntity.getSheetName() + ".xls";
