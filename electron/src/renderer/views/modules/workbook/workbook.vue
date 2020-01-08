@@ -67,7 +67,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.makerId"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
           <el-form-item :label="'制表日期'" prop="tableAt" >
@@ -86,7 +86,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
         </div>
