@@ -67,7 +67,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.makerId"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
           <el-form-item :label="'制表日期'" prop="tableAt" >
@@ -86,7 +86,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
         </div>
@@ -169,9 +169,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="makerId" label="制表人" >
+        <el-table-column align="center" prop="makerName" label="制表人" >
           <template slot-scope="scope">
-            <span>{{scope.row.makerId }}</span>
+            <span>{{scope.row.makerName }}</span>
           </template>
         </el-table-column>
 

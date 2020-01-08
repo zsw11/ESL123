@@ -44,6 +44,12 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 			entityWrapper.andNew(
 					"UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 		Page<PhaseEntity> page = this.selectPage(new Query<PhaseEntity>(params).getPage(), entityWrapper);
 
 		for (PhaseEntity entity : page.getRecords()) {

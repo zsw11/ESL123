@@ -79,6 +79,7 @@ public class MeasureGroupController extends AbstractController {
     @RequestMapping("/update")
     @RequiresPermissions("masterData:measuregroup:update")
     public RD update(@RequestBody MeasureGroupEntity measureGroup){
+        measureGroup.setUpdateBy(getUserId().intValue());
 		measureGroupService.updatePinAndDataById(measureGroup);
 
         return RD.build().put("code", 200);

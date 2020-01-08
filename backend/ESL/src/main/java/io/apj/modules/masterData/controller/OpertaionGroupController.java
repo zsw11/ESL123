@@ -84,6 +84,7 @@ public class OpertaionGroupController extends AbstractController {
 		OpertaionGroupEntity opertaionGroup = new OpertaionGroupEntity();
 		DataUtils.transMap2Bean2((Map<String, Object>) map.get("operationGroup"), opertaionGroup);
 		opertaionGroup.setDeptId(getUserDeptId().intValue());
+		opertaionGroup.setCreateBy(getUserId().intValue());
 		opertaionGroupService.insertOpGroup(map, opertaionGroup);
 		return RD.build();
 	}
@@ -97,6 +98,13 @@ public class OpertaionGroupController extends AbstractController {
 	@RequiresPermissions("masterData:opertaiongroup:update")
 	public RD update(@RequestBody Map<String, Object> map)
 			throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+		Map<String, Object> operationGroup = (Map<String, Object>) map.get("operationGroup");
+//		OpertaionGroupEntity opertaionGroupEntity = new OpertaionGroupEntity();
+//		opertaionGroupEntity.setCode((String) operationGroup.get("code"));
+//		opertaionGroupEntity.setId((Integer) operationGroup.get("id"));
+//		opertaionGroupEntity.setRemark((String) operationGroup.get("remark"));
+		map.put("updateBy",getUserId().intValue());
+//		opertaionGroupEntity.setUpdateBy(getUserId().intValue());
 		opertaionGroupService.UpdataOpertaionGroup(map);
 
 		return RD.build();
