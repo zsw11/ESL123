@@ -169,6 +169,9 @@ public class WorkBookEntity implements Serializable {
 	 */
 	@TableField(strategy = FieldStrategy.IGNORED)
 	private Integer lockBy;
-
+	@TableField(exist = false)
+	private String makerName;
+	@TableField(exist = false)
+	private String updateName;
 
 }

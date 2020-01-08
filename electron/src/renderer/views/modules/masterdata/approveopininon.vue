@@ -80,9 +80,9 @@
         </el-table-column>
 
         
-        <el-table-column align="center" prop="createBy" label="作成人">
+        <el-table-column align="center" prop="createName" label="作成人">
           <template slot-scope="scope">
-            <span>{{scope.row.createBy }}</span>
+            <span>{{scope.row.createName }}</span>
           </template>
         </el-table-column>
         
@@ -92,9 +92,9 @@
           </template>
         </el-table-column>
         
-        <el-table-column align="center" prop="updateBy" label="修改人">
+        <el-table-column align="center" prop="updateName" label="修改人">
           <template slot-scope="scope">
-            <span>{{scope.row.updateBy }}</span>
+            <span>{{scope.row.updateName }}</span>
           </template>
         </el-table-column>
         

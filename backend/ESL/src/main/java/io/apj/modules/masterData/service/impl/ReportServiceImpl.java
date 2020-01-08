@@ -95,10 +95,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         }
 
         Page<ReportEntity> page = this.selectPage(new Query<ReportEntity>(params).getPage(), entityWrapper);
-        for(ReportEntity entity: page.getRecords()){
-            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
-            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
-        }
+//        for(ReportEntity entity: page.getRecords()){
+//            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+//            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+//        }
 
         return new PageUtils(page);
     }

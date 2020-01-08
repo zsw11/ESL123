@@ -169,9 +169,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="makerId" label="制表人" >
+        <el-table-column align="center" prop="makerName" label="制表人" >
           <template slot-scope="scope">
-            <span>{{scope.row.makerId }}</span>
+            <span>{{scope.row.makerName }}</span>
           </template>
         </el-table-column>
 

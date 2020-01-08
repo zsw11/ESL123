@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.*;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
@@ -82,6 +83,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private ReportService reportService;
     @Autowired
     private SysConfigService sysConfigService;
+    @Autowired
+    private StaffService staffService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -118,8 +121,16 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
             entityWrapper.eq("workstation_id", Integer.parseInt((String) params.get("workstationId")));
         }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("makerId"))) {
+            entityWrapper.eq("maker_id", Integer.parseInt((String) params.get("makerId")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+            entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+        }
         Page<WorkBookEntity> page = this.selectPage(new Query<WorkBookEntity>(params).getPage(), entityWrapper);
         for (WorkBookEntity entity : page.getRecords()) {
+            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+            entity.setMakerName(staffService.selectNameByUserId(entity.getCreateBy()));
             if (entity.getDeptId() != null) {
                 entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
             }
