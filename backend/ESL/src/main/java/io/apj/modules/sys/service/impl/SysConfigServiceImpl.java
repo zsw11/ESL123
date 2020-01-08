@@ -48,7 +48,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 
 		Page<SysConfigEntity> page = this.selectPage(new Query<SysConfigEntity>(params).getPage(),
 				new EntityWrapper<SysConfigEntity>().like(StringUtils.isNotBlank(paramKey), "param_key", paramKey)
-						.eq("status", 1));
+						.eq("status", 1).isNull("delete_at"));
 
 		return new PageUtils(page);
 	}
@@ -80,10 +80,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] ids) {
-		for (Long id : ids) {
-			SysConfigEntity config = this.selectById(id);
-			sysConfigRedis.delete(config.getParamKey());
-		}
+//		for (Long id : ids) {
+//			SysConfigEntity config = this.selectById(id);
+//			sysConfigRedis.delete(config.getParamKey());
+//		}
 
 //		this.deleteBatchIds(Arrays.asList(ids));
 		// 逻辑删除
