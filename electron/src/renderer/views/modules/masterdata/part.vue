@@ -31,7 +31,7 @@
 
          <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
             :valueColumn="'userId'"
@@ -40,7 +40,7 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             :valueColumn="'userId'"
@@ -164,7 +164,7 @@ import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
 import { Message } from 'element-ui'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = ['part.name', 'part.common','part.remark']
 
@@ -200,7 +200,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       dataList: [{}],
       pageNo: 1,
       pageSize: 10,

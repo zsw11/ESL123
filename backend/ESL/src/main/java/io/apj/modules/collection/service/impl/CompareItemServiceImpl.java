@@ -43,13 +43,12 @@ public class CompareItemServiceImpl extends ServiceImpl<CompareItemDao, CompareI
         params.put("workBookIds", workBookIds);
 
         List<CompareItemEntity> list = baseMapper.generateDataByWorkBook(params);
-        if (list.size() < 1) {
-            return;
+        if (list!=null&&list.size()>0) {
+            for (CompareItemEntity item : list) {
+                item.setCollectionCompareId(compareId);
+            }
+            insertOrUpdateBatch(list);
         }
-        for (CompareItemEntity item : list) {
-            item.setCollectionCompareId(compareId);
-        }
-        insertOrUpdateBatch(list);
     }
 
     @Override

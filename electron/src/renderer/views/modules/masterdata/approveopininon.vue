@@ -16,7 +16,7 @@
 
           <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -25,7 +25,7 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -131,7 +131,7 @@
 import { listApproveOpininon, deleteApproveOpininon } from '@/api/approveOpininon'
 import { listDict, listDictItem } from '@/api/dict'
 import { keyBy } from 'lodash'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 
 export default {
@@ -156,7 +156,7 @@ export default {
         updateBy: null,
         updateAt: null
       },
-      listStaff,
+      listStaffUser,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

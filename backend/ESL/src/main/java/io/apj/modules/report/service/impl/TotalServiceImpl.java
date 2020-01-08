@@ -139,9 +139,11 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<TotalEntity> list = generateTotal(filteredWorkBooks);
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<TotalEntity> list = generateTotal(filteredWorkBooks);
+		}
 	}
 
 	private List<TotalEntity> generateTotal(List<WorkBookEntity> workBooks) {
@@ -150,11 +152,9 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 			EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
 					work.getPhaseId());
-			List<TotalEntity> list = selectList(entityWrapper);
-			TotalEntity totalEntity = new TotalEntity();
-			if (list.size() > 0) {
-				totalEntity = list.get(0);
-			} else {
+			TotalEntity total = selectOne(entityWrapper);
+			if (total==null) {
+				TotalEntity totalEntity = new TotalEntity();
 				// TODO 有未设置
 				totalEntity.setModelId(work.getModelId());
 				totalEntity.setPhaseId(work.getPhaseId());
@@ -164,8 +164,10 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 				totalEntity.setSheetName("total");
 				totalEntity.setDestinations(work.getDestinations());
 				insert(totalEntity);
+				results.add(totalEntity);
+			}else{
+				results.add(total);
 			}
-			results.add(totalEntity);
 		}
 		return results;
 	}

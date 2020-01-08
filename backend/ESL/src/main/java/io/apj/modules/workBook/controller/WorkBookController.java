@@ -12,6 +12,7 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -208,6 +209,8 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/createReport")
 	// @RequiresPermissions("workBook:workbook:createReport")
 	public R createReport(@RequestBody Map<String, Object> params) {
+		Validate.notNull(params.get("reports"));
+		Validate.notNull(params.get("workBookIds"));
 		workBookService.createReports(params);
 		return R.ok();
 	}

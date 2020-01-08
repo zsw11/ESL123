@@ -29,15 +29,13 @@ public class StandardTimeItemServiceImpl extends ServiceImpl<StandardTimeItemDao
     @Override
     public void generateStandardTimeItem(List<Integer> workBookIds, Integer standardTimeId) {
         List<StandardTimeItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
-        if (list.size() < 1) {
-            return;
+        if (list!=null&&list.size() >0) {
+            for (StandardTimeItemEntity entity : list) {
+                entity.setReportStandardTimeId(standardTimeId);
+                entity.setTimeSample1(entity.getTimeTotal());
+            }
+            insertOrUpdateBatch(list);
         }
-        for (StandardTimeItemEntity entity : list) {
-            entity.setReportStandardTimeId(standardTimeId);
-            entity.setTimeSample1(entity.getTimeTotal());
-        }
-
-        insertOrUpdateBatch(list);
     }
 
     @Override

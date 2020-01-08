@@ -64,7 +64,7 @@
 
          <el-form-item :label="'制表人'" prop="makerId" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.makerId"
             :allowEmpty="true"
             valueColumn="userId"
@@ -83,7 +83,7 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -246,7 +246,7 @@ import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 
 export default {
@@ -289,7 +289,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listDept,
       listPhase,

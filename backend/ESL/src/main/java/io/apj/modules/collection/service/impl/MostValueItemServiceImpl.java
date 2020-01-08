@@ -29,14 +29,12 @@ public class MostValueItemServiceImpl extends ServiceImpl<MostValueItemDao, Most
     @Override
     public void generateMostValueItem(List<Integer> workBookIds, Integer recordId) {
         List<MostValueItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
-        if (list.size() < 1) {
-            return;
+        if (list!=null&&list.size() >0) {
+            for (MostValueItemEntity entity : list) {
+                entity.setCollectionMostValueId(recordId);
+            }
+            insertOrUpdateBatch(list);
         }
-        for (MostValueItemEntity entity : list) {
-            entity.setCollectionMostValueId(recordId);
-        }
-
-        insertOrUpdateBatch(list);
     }
 
     @Override
