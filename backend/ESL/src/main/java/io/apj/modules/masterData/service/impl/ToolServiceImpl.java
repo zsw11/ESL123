@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.*;
 import io.apj.modules.sys.service.SysDeptService;
@@ -33,6 +34,8 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	private ModelSeriesService modelSeriesService;
 	@Autowired
 	private SysDeptService deptService;
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -47,7 +50,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
 		Page<ToolEntity> page = this.selectPage(new Query<ToolEntity>(params).getPage(), entityWrapper);
-
+		for(ToolEntity entity : page.getRecords()){
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+		}
 		return new PageUtils(page);
 	}
 

@@ -89,6 +89,7 @@ public class ReportGroupController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:reportgroup:update")
 	public RD update(@RequestBody ReportGroupEntity reportGroup) {
+		reportGroup.setUpdateBy(getUserId().intValue());
 		reportGroupService.updatePinAndDataById(reportGroup);
 
 		return RD.build().put("code", 200);

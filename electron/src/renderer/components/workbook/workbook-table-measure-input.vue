@@ -23,9 +23,11 @@ export default {
   },
   computed: {
     absValue () {
+      if (this.value === -9999) return 0
       return /^-?\d+$/.test(this.value) ? Math.abs(this.value) : this.value
     },
     isNegative () {
+      console.log(this.value < 0, this.value)
       return this.value < 0
     }
   },
@@ -43,7 +45,12 @@ export default {
         this.$emit('jump', e.key)
       } else if (e.key === '.') {
         e.preventDefault()
-        this.$emit('input', /^-?\d+$/.test(this.absValue) ? (this.isNegative ? 1 : -1) * this.$refs.measureInput.value : this.$refs.measureInput.value)
+        console.log()
+        if ([0, -9999].includes(this.value)) {
+          this.$emit('input', this.value === 0 ? -9999 : 0)
+        } else {
+          this.$emit('input', /^-?\d+$/.test(this.absValue) ? (this.isNegative ? 1 : -1) * this.$refs.measureInput.value : this.$refs.measureInput.value)
+        }
       } else if (/^[a-z`~!@#$%^&*()\-_=+[\]{}\\|;':",/<>?]$/.test(e.key)) {
         this.$message.error('无效字符')
         e.preventDefault()

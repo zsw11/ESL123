@@ -84,6 +84,7 @@ import MeasureColumn from '@/components/workbook/workbook-table-measure-column.v
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
 import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
+import { clipboard } from 'electron'
 import {
   measureColumns0,
   measureColumns1,
@@ -176,6 +177,7 @@ export default {
       let base = 0
       let fre = 0
       allNumericMeasureField.forEach(f => {
+        if (row[f] === -9999) return
         if (row[f] > 0) base += row[f]
         if (row[f] < 0) fre -= row[f]
       })
@@ -493,20 +495,31 @@ export default {
     },
     // 缓存
     copy () {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
+      if (this.lastSelected) {
+        if (this.lastSelected.column.type==='index') {
+          localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
+        } else {
+          localStorage.setItem('MOST-CopyCell', this.lastSelected.row[this.lastSelected.column.property]);
+        }
       }
     },
     // 粘贴
     async paste (event) {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
-        if (!copyContent) return
-        if (this.workbook.ifAlter) {
-          copyContent.alterType = 'new'
+      if (this.lastSelected) {
+        if (this.lastSelected.column.type==='index') {
+          const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
+          if (!copyContent) return
+          if (this.workbook.ifAlter) {
+            copyContent.alterType = 'new'
+          }
+          await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
+          await this.dataChanged()
+        } else {
+          if (!this.canEdit(this.lastSelected)) return
+          const copyContent = localStorage.getItem('MOST-CopyCell')
+          if (!copyContent) return
+          this.lastSelected.row[this.lastSelected.column.property] = copyContent
         }
-        await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
-        await this.dataChanged()
       }
     },
     // 删除行
