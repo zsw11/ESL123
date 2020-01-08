@@ -212,7 +212,7 @@ export default {
 
 <style lang="scss" scoped>
 .site-navbar{
-  min-width: 900px;
+  min-width: 1100px;
 }
 .message-menu-item {
   .el-badge {
@@ -224,7 +224,7 @@ export default {
   }
 }
 .user-data{
-  width: 200px;
+  width: 250px;
 }
 .user-wrp{
   display: inline-block;
@@ -254,10 +254,10 @@ export default {
   font-size: 24px;
   line-height: 50px;
   font-weight: lighter;
-  width: calc(100% - 350px);
+  margin-left: 25%;
   display: inline-block;
   text-align: center;
-  padding-left: 20px;
+
 }
 
 .el-menu.el-menu--horizontal{

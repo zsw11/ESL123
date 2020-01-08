@@ -1,11 +1,12 @@
 <template>
   <vxe-table-column
     ref="measure"
+    width="36"
     :field="config.field"
     :title="config.title"
     :edit-render="{name: 'input'}"
     :header-class-name="config.bgClassName"
-    :footer-class-name="config.bgClassName"
+    :footer-class-name="'footer-inner'"
     :class-name="getCellClass">
     <template v-slot="scope">{{abs(scope.row[config.field])}}</template>
     <template v-slot:edit="scope">
@@ -45,7 +46,10 @@ export default {
       this.$refs.measure.$table.updateStatus(scope)
     },
     getCellClass ({ row }) {
-      return `${this.config.bgClassName || ''} ${row[this.config.field] < 0 ? 'color-red' : ''}`
+      let cl = `measure-column ${this.config.bgClassName || ''}`
+      if (this.config.measureInner) cl += ' measure-inner'
+      if (row[this.config.field] < 0) cl += ' color-red'
+      return cl
     }
   }
 }

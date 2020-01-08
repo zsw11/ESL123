@@ -5,7 +5,7 @@
     title="Tool"
     width="60"
     header-class-name="bg-table-color1"
-    footer-class-name="bg-table-color1"
+    footer-class-name="footer-inner"
     class-name="bg-table-color1"
     :edit-render="{name: 'input'}">
     <template v-slot="scope">{{scope.row.tool}}</template>

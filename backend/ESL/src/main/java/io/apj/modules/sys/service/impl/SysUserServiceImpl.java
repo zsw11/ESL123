@@ -53,7 +53,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	private StaffService staffService;
 
 	@Override
-	@DataFilter(subDept = false, user = true)
+	@DataFilter(subDept = true, user = true)
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<SysUserEntity> entityWrapper = new EntityWrapper<SysUserEntity>();
 		entityWrapper
