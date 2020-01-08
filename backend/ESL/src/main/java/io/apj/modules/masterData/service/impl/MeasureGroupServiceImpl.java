@@ -43,7 +43,9 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
 		entityWrapper.isNull("delete_at").orderBy("update_at", false)
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
 		if (params.get("code") != null && params.get("code") != "") {
-			entityWrapper.like("UPPER(code)", params.get("code").toString().toUpperCase());
+			entityWrapper.like("UPPER(code)", params.get("code").toString().toUpperCase())
+					.orderBy("case when UPPER(code) like '" + ((String) params.get("code")).toUpperCase()
+							+ "%' then 1 else 99 end,UPPER(code)");
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
 			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
@@ -66,52 +68,52 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
 		return new PageUtils(page);
 	}
 
-    @Override
-    @Transactional
-    public ResponseEntity<Object> measureGroupImport(Map<String, Object> map) {
-        List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-        for(Map<String, Object> i:maps ){
-            if(StringUtils.isEmpty((CharSequence) i.get("measureGroup.code"))){
-                return RD.INTERNAL_SERVER_ERROR("导入时code为空，请检查code是否为空");
-            }
-        }
-        List<MeasureGroupEntity> measureGroupEntityList = new ArrayList<>();
-        for (int i = 0; i < maps.size(); i++) {
-            MeasureGroupEntity measureGroupEntity = new MeasureGroupEntity();
-            // deviceMap
-            Map<String, Object> deviceMap = new HashMap<>();
-            for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                String[] keyStrs = key.split("\\.");
-                // 设备
-                if (keyStrs[0].equals("measureGroup")) {
-                    if (keyStrs[1].equals("common")) {
-                        if (value.equals("是")) {
-                            deviceMap.put(keyStrs[1], true);
-                        } else {
-                            deviceMap.put(keyStrs[1], false);
-                        }
-                    }
-                    deviceMap.put(keyStrs[1], value);
-                }
-            }
-            measureGroupEntity = JSON.parseObject(JSON.toJSONString(deviceMap), MeasureGroupEntity.class);
+	@Override
+	@Transactional
+	public ResponseEntity<Object> measureGroupImport(Map<String, Object> map) {
+		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
+		for (Map<String, Object> i : maps) {
+			if (StringUtils.isEmpty((CharSequence) i.get("measureGroup.code"))) {
+				return RD.INTERNAL_SERVER_ERROR("导入时code为空，请检查code是否为空");
+			}
+		}
+		List<MeasureGroupEntity> measureGroupEntityList = new ArrayList<>();
+		for (int i = 0; i < maps.size(); i++) {
+			MeasureGroupEntity measureGroupEntity = new MeasureGroupEntity();
+			// deviceMap
+			Map<String, Object> deviceMap = new HashMap<>();
+			for (Map.Entry<String, Object> entry : maps.get(i).entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				String[] keyStrs = key.split("\\.");
+				// 设备
+				if (keyStrs[0].equals("measureGroup")) {
+					if (keyStrs[1].equals("common")) {
+						if (value.equals("是")) {
+							deviceMap.put(keyStrs[1], true);
+						} else {
+							deviceMap.put(keyStrs[1], false);
+						}
+					}
+					deviceMap.put(keyStrs[1], value);
+				}
+			}
+			measureGroupEntity = JSON.parseObject(JSON.toJSONString(deviceMap), MeasureGroupEntity.class);
 //            DataUtils.transMap2Bean2(deviceMap, measureGroupEntity);
-            ValidatorUtils.validateEntity(measureGroupEntity, i);
-            measureGroupEntity.setCreateBy((Integer) map.get("userID"));
-            measureGroupEntity.setDeptId((Integer) map.get("deptId"));
-            measureGroupEntityList.add(measureGroupEntity);
-        }
-        try {
-            measureGroupService.insertBatch(measureGroupEntityList, Constant.importNum);
-        } catch (MybatisPlusException e) {
-            throw new RRException("常用指标导入失败，请检查常用指标组合编码是否重复", 500);
-        }
-        Map<String, Integer> data = new HashMap<String, Integer>();
-        data.put("code", 200);
-        return RD.success(data);
-    }
+			ValidatorUtils.validateEntity(measureGroupEntity, i);
+			measureGroupEntity.setCreateBy((Integer) map.get("userID"));
+			measureGroupEntity.setDeptId((Integer) map.get("deptId"));
+			measureGroupEntityList.add(measureGroupEntity);
+		}
+		try {
+			measureGroupService.insertBatch(measureGroupEntityList, Constant.importNum);
+		} catch (MybatisPlusException e) {
+			throw new RRException("常用指标导入失败，请检查常用指标组合编码是否重复", 500);
+		}
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		data.put("code", 200);
+		return RD.success(data);
+	}
 
 	@Override
 	public void deleteList(List<MeasureGroupEntity> measureGroupEntityList) {

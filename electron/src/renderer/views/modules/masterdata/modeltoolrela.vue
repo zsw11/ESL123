@@ -222,7 +222,6 @@
     },
     activated () {
       const self = this
-      self.title = self.$route.params.name
       self.id = self.$route.params.id
       self.getDataList()
     },
@@ -244,6 +243,8 @@
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
+          console.log(page.relaName, 22222222222222222222)
         }).catch(() => {
           this.dataList = []
           this.total = 0

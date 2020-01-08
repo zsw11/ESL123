@@ -329,7 +329,7 @@ export default {
     // 治工具机种关系
     toolModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/tool-model/${id}/${name}`})
+        this.$router.push({path: `/tool-model/${id}`})
       })
     },
     // 详情

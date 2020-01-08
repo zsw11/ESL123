@@ -211,7 +211,6 @@ export default {
   },
   activated() {
     const self = this
-    self.title = this.$route.params.name
     self.id = this.$route.params.id
     self.getDataList()
   },
@@ -236,6 +235,7 @@ export default {
         .then(({ page }) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
         })
         .catch(() => {
           this.dataList = []
