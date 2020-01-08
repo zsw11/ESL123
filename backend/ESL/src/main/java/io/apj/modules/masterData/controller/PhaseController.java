@@ -80,6 +80,7 @@ public class PhaseController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:phase:update")
 	public RD update(@RequestBody PhaseEntity phase) {
+		phase.setUpdateBy(getUserId().intValue());
 		phaseService.updatePinAndDataById(phase);
 
 		return RD.build().put("code", 200);

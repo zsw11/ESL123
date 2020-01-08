@@ -3,6 +3,7 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
@@ -28,6 +29,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     private ReportGroupReportRelaService reportGroupReportRelaService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private StaffService staffService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -55,6 +58,12 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             entityWrapper.andNew("name  like '%" + name + "%'" + " or code  like '%" + name + "%'"
                     + " or pinyin  like '%" + name + "%'");
         }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+            entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+        }
+        if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+            entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+        }
         Page<ReportGroupEntity> page = this.selectPage(new Query<ReportGroupEntity>(params).getPage(), entityWrapper);
         for (ReportGroupEntity entity : page.getRecords()) {
             List<ReportEntity> reportEntities = reportGroupReportRelaService
@@ -64,6 +73,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
                 name += item.getName() + "/";
             }
             entity.setAllReportName(name);
+            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
         }
 
         return new PageUtils(page);

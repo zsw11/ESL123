@@ -76,6 +76,7 @@ public class ApproveOpininonController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:approveopininon:update")
 	public RD update(@RequestBody ApproveOpininonEntity approveOpininon) {
+		approveOpininon.setUpdateBy(getUserId().intValue());
 		approveOpininonService.updatePinAndDataById(approveOpininon);
 
 		return RD.build().put("code", 200);

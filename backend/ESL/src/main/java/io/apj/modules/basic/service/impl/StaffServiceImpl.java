@@ -104,6 +104,14 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
     }
 
     @Override
+    public PageUtils queryPageRela(Map<String, Object> params) {
+        Wrapper<StaffEntity> entityWrapper = new EntityWrapper<StaffEntity>().isNull("delete_at").isNotNull("user_id");
+        entityWrapper.orderBy("create_at", false);
+        Page<StaffEntity> page = this.selectPage(new Query<StaffEntity>(params).getPage(), entityWrapper);
+        return new PageUtils(page);
+    }
+
+    @Override
     public void save(StaffEntity staff) {
         this.insert(staff);
     }

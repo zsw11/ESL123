@@ -3,6 +3,7 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.PartEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import io.apj.modules.masterData.service.PhaseService;
 public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> implements PhaseService {
 	@Autowired
 	private PhaseService phaseService;
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -41,10 +44,18 @@ public class PhaseServiceImpl extends ServiceImpl<PhaseDao, PhaseEntity> impleme
 			entityWrapper.andNew(
 					"UPPER(pinyin) like '%" + params.get("name").toString().toUpperCase() + "%' " + "or UPPER(name) like '%" + params.get("name").toString().toUpperCase() + "%'");
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 		Page<PhaseEntity> page = this.selectPage(new Query<PhaseEntity>(params).getPage(), entityWrapper);
 
 		for (PhaseEntity entity : page.getRecords()) {
 			entity.setPhaseEntity(phaseService.selectById(entity.getContinuePhaseId()));
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
 		}
 		return new PageUtils(page);
 	}

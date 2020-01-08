@@ -18,10 +18,13 @@ package io.apj.common.utils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.plugins.Page;
 
+import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.sys.vo.BaseVo;
+import lombok.Data;
 
 /**
  * 分页工具类
@@ -30,6 +33,7 @@ import io.apj.modules.sys.vo.BaseVo;
  * @email sunlightcs@gmail.com
  * @date 2016年11月4日 下午12:59:00
  */
+@Data
 public class PageUtils implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//总记录数
@@ -44,6 +48,7 @@ public class PageUtils implements Serializable {
 //	private List<?> list;
 	//列表数据(data)
 	private List<?> data;
+	private String relaName;
 
 	/**
 	 * 分页
@@ -131,5 +136,8 @@ public class PageUtils implements Serializable {
 
 	public void setData(List<?> data) {
 		this.data = data;
+	}
+
+	public void setRelaMap(String part, PartEntity selectById) {
 	}
 }

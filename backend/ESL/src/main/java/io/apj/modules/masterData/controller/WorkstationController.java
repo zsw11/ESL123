@@ -83,6 +83,7 @@ public class WorkstationController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:workstation:update")
 	public RD update(@RequestBody WorkstationEntity workstation) {
+		workstation.setUpdateBy(getUserId().intValue());
 		workstationService.updatePinAndDataById(workstation);
 
 		return RD.build();

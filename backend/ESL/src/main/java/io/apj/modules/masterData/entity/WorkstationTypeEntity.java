@@ -1,5 +1,6 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -56,4 +57,8 @@ public class WorkstationTypeEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	@TableField(exist = false)
+	private String createName;
+	@TableField(exist = false)
+	private String updateName;
 }

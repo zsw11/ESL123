@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.common.utils.RD;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.RevisionHistoryEntity;
@@ -67,6 +68,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
     private StandardTimeService standardTimeService;
     @Autowired
     private ReportGroupService reportGroupService;
+    @Autowired
+    private StaffService staffService;
 
     @Autowired
     private ReportDeptRelaService reportDeptRelaService;
@@ -92,6 +95,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         }
 
         Page<ReportEntity> page = this.selectPage(new Query<ReportEntity>(params).getPage(), entityWrapper);
+//        for(ReportEntity entity: page.getRecords()){
+//            entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+//            entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+//        }
 
         return new PageUtils(page);
     }

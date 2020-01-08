@@ -1,17 +1,16 @@
 package io.apj.modules.masterData.service.impl;
 
 import cn.hutool.core.util.PinyinUtil;
-import com.alibaba.druid.sql.visitor.functions.Isnull;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
 import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.dao.ModelDao;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ModelWorkstationRelaEntity;
@@ -33,13 +32,15 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	@Autowired
 	private PartService partService;
 	@Autowired
-	private ToolService toolService;
-	@Autowired
 	private ModelToolRelaService modelToolRelaService;
 	@Autowired
 	private ModelWorkstationRelaService modelWorkStationRelaService;
 	@Autowired
 	private WorkstationService workStationService;
+	@Autowired
+	private StaffService staffService;
+	@Autowired
+	private ModelService modelService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -69,6 +70,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for (ModelEntity entity : page.getRecords()) {
 			entity.setModelSeriesEntity(modelSeriesService.selectById(entity.getModelSeriesId()));
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
 		}
 		return new PageUtils(page);
 	}
@@ -84,6 +87,12 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		if (StringUtils.isNotEmpty((CharSequence) params.get("id"))) {
 			entityWrapper.eq("model_series_id", Integer.parseInt((String) params.get("id")));
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("name"))) {
 			entityWrapper.andNew(
 					"name  like '%" + params.get("name") + "%'" + " or pinyin  like '%" + params.get("name") + "%'");
@@ -92,8 +101,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for (ModelEntity entity : page.getRecords()) {
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
 		}
-
-		return new PageUtils(page);
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelSeriesService.selectById(id).getName());
+		return pageUtils;
 	}
 
 	@Override
@@ -106,7 +116,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		if (params.get("common") != null) {
 			common = Integer.parseInt((String) params.get("common"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name, remark, common)));
+		page = page.setRecords(this.baseMapper.selectmodelPart(id, page, name, remark, common));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
@@ -120,7 +133,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		if (params.get("common") != null) {
 			common = Integer.parseInt((String) params.get("common"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name, remark, common)));
+		page = page.setRecords(this.baseMapper.selectmodelTool(id, page, name, remark, common));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
@@ -188,6 +204,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for (WorkstationEntity entity : page.getRecords()) {
 			entity.setModelWorkStationRelaId(relaIdMap.get(entity.getId()));
 		}
-		return new PageUtils(page);
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 	}
 }

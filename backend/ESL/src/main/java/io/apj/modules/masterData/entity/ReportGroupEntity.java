@@ -40,6 +40,10 @@ public class ReportGroupEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private String allReportName;
+	@TableField(exist = false)
+	private String updateName;
+	@TableField(exist = false)
+	private String createName;
 
 	/**
 	 * 备注

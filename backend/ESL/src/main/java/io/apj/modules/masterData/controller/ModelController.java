@@ -136,6 +136,7 @@ public class ModelController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:model:update")
 	public RD update(@RequestBody ModelEntity model) {
+		model.setUpdateBy(getUserId().intValue());
 		modelService.updatePinAndDataById(model);
 		insertTableReference("model", model.getId().longValue(), "modelSeries", model.getModelSeriesId().longValue(),
 				false);

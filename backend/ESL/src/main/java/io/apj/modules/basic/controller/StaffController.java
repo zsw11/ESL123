@@ -80,6 +80,16 @@ public class StaffController extends AbstractController {
     }
 
     /**
+     * 列表rela
+     */
+    @RequestMapping("/listrela")
+    public ResponseEntity<Object> listRela(@RequestParam Map<String, Object> params) throws ParseException {
+        PageUtils page = staffService.queryPageRela(params);
+
+        return RD.ok(page);
+    }
+
+    /**
      * 信息
      */
     @RequestMapping("/detail/{id}")
