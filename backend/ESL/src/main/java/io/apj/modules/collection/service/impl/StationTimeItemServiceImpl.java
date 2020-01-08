@@ -36,14 +36,12 @@ public class StationTimeItemServiceImpl extends ServiceImpl<StationTimeItemDao, 
     @Override
     public void generateStationTimeItem(List<Integer> workBookIds, Integer stationTimeId) {
         List<StationTimeItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
-        if (list.size() < 1) {
-            return;
+        if (list!=null&&list.size()>0){
+            for (StationTimeItemEntity entity : list) {
+                entity.setCollectionStationTimeId(stationTimeId);
+            }
+            insertOrUpdateBatch(list);
         }
-        for (StationTimeItemEntity entity : list) {
-            entity.setCollectionStationTimeId(stationTimeId);
-        }
-
-        insertOrUpdateBatch(list);
     }
 
 }

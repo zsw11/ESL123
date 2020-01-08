@@ -6,6 +6,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.report.dao.ReportManMachineCombinationDao;
 import io.apj.modules.report.entity.AshcraftTableEntity;
@@ -13,6 +14,7 @@ import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
 import io.apj.modules.report.service.AshcraftTableService;
 import io.apj.modules.report.service.ReportManMachineCombinationService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
+import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
 import java.io.File;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import io.apj.modules.workBook.service.WorkOperationsService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +65,8 @@ public class ReportManMachineCombinationServiceImpl
 	private AshcraftTableService ashcraftTableService;
 	@Autowired
 	private WorkBookService workBookService;
+	@Autowired
+	private WorkOperationsService workOperationsService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -117,32 +123,75 @@ public class ReportManMachineCombinationServiceImpl
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<ReportManMachineCombinationEntity> list = generateReportManMachineCombination(filteredWorkBooks);
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			generateReportManMachineCombination(filteredWorkBooks);
+		}
 	}
 
-	private List<ReportManMachineCombinationEntity> generateReportManMachineCombination(
-			List<WorkBookEntity> workBooks) {
+	@Override
+	public void update(ReportManMachineCombinationEntity reportManMachineCombinationEntity) {
+		EntityWrapper<WorkBookEntity> workBookEntityEntityWrapper = new EntityWrapper<>();
+		workBookEntityEntityWrapper.eq("phase_id", reportManMachineCombinationEntity.getPhaseId()).eq("stlst", reportManMachineCombinationEntity.getStlst()).eq("model_id", reportManMachineCombinationEntity.getModelId());
+		WorkBookEntity workBookEntity = workBookService.selectOne(workBookEntityEntityWrapper);
+		if(workBookEntity != null){
+			Integer workBookId = workBookEntity.getId();
+			EntityWrapper<WorkOperationsEntity> workOperationsEntityEntityWrapper=new EntityWrapper<>();
+			workOperationsEntityEntityWrapper.eq("work_book_id",workBookId);
+			List<WorkOperationsEntity> workOperationsEntityList=workOperationsService.selectList(workOperationsEntityEntityWrapper);
+			if(workOperationsEntityList != null && workOperationsEntityList.size() > 0){
+				Integer totalRemark = 0;
+				for(WorkOperationsEntity workOperationsEntity : workOperationsEntityList){
+					Integer remark1 = workOperationsEntity.getRemark1();
+					if(remark1 != null) {
+						Integer processedData = dataDeal(remark1);
+						totalRemark += processedData;
+					}
+				}
+				reportManMachineCombinationEntity.setMt(new BigDecimal(totalRemark));
+			}
+		}
+		updateById(reportManMachineCombinationEntity);
+	}
+
+	//repark1数据处理
+	private Integer dataDeal(Integer initData){
+		DecimalFormat df = new DecimalFormat("0.00");
+		Double data = Double.valueOf(df.format((Double) (initData/10.00)));
+		Double subData = Math.floor(data);
+		Double result=data - subData;
+		Integer processedData = null;
+		if(result > 0){
+			processedData=Integer.parseInt(String.valueOf((subData + 1) * 10));
+		}else{
+			processedData = initData;
+		}
+		return processedData;
+	}
+
+	private List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks) {
 		List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
-			List<ReportManMachineCombinationEntity> list = selectList(entityWrapper);
-			ReportManMachineCombinationEntity reportManMachineCombinationEntity = new ReportManMachineCombinationEntity();
-			if (list.size() > 0) {
-				reportManMachineCombinationEntity = list.get(0);
-			} else {
+			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id", work.getPhaseId());
+			ReportManMachineCombinationEntity reportManMachineCombination = selectOne(entityWrapper);
+			if (reportManMachineCombination==null) {
+				ReportManMachineCombinationEntity reportManMachineCombinationEntity=new ReportManMachineCombinationEntity();
+				Map<String,Object> map = workBookService.dealData(work.getId());
+				if(map != null && map.size() > 0){
+					BigDecimal totalTimeValue = new BigDecimal(map.get("totalTimeValue").toString());
+					reportManMachineCombinationEntity.setMt(totalTimeValue);
+				}
 				reportManMachineCombinationEntity.setModelId(work.getModelId());
 				reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
 				reportManMachineCombinationEntity.setStlst(work.getStlst());
 				reportManMachineCombinationEntity.setDeptId(work.getDeptId());
 				insert(reportManMachineCombinationEntity);
+				results.add(reportManMachineCombinationEntity);
+			}else{
+				results.add(reportManMachineCombination);
 			}
-			results.add(reportManMachineCombinationEntity);
 		}
-
 		return results;
 	}
 

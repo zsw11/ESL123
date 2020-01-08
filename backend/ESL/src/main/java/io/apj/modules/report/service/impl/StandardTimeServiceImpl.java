@@ -113,14 +113,18 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 
-		List<StandardTimeEntity> list = generateStandardTime(filteredWorkBooks);
-		for (StandardTimeEntity entity : list) {
-			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
-			standardTimeItemService.generateStandardTimeItem(filteredWorkBookIds, entity.getId());
+			List<StandardTimeEntity> list = generateStandardTime(filteredWorkBooks);
+			for (StandardTimeEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+				if (filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+					standardTimeItemService.generateStandardTimeItem(filteredWorkBookIds, entity.getId());
+				}
+			}
 		}
 	}
 
@@ -203,18 +207,20 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 			String stlst = workBook.getStlst();
 			StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
 			if (entity == null) {
-				entity = new StandardTimeEntity();
-				entity.setModelId(modelId);
-				entity.setPhaseId(phaseId);
-				entity.setStlst(stlst);
-				entity.setDeptId(workBook.getDeptId());
-				entity.setTitle("标准时间表");
-				entity.setSheetName("标准时间表");
-				entity.setModelType(modelService.selectById(entity.getModelId()).getCode());
-				entity.setUnit("1/1000 min");
-				insert(entity);
+				StandardTimeEntity standardTimeEntity = new StandardTimeEntity();
+				standardTimeEntity.setModelId(modelId);
+				standardTimeEntity.setPhaseId(phaseId);
+				standardTimeEntity.setStlst(stlst);
+				standardTimeEntity.setDeptId(workBook.getDeptId());
+				standardTimeEntity.setTitle("标准时间表");
+				standardTimeEntity.setSheetName("标准时间表");
+				standardTimeEntity.setModelType(modelService.selectById(modelId).getCode());
+				standardTimeEntity.setUnit("1/1000 min");
+				insert(standardTimeEntity);
+				results.add(standardTimeEntity);
+			}else {
+				results.add(entity);
 			}
-			results.add(entity);
 		}
 		return results;
 	}

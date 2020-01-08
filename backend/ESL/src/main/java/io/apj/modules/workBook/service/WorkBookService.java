@@ -69,4 +69,11 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId, String stlst, Integer phaseId);
 
+	/**
+	 * timeValue/mu/secondConvert/remark1数据处理
+	 * @param workBookId
+	 * @return
+	 */
+	Map<String , Object> dealData(Integer workBookId);
+
 }

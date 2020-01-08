@@ -125,15 +125,17 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
-
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<CompareEntity> list = generateCompare(filteredWorkBooks);
-		for (CompareEntity entity : list) {
-			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
-			compareItemService.generateCompareItem(filteredWorkBookIds, entity);
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<CompareEntity> list = generateCompare(filteredWorkBooks);
+			for (CompareEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+				if(filteredWorkBookIds!=null&&filteredWorkBookIds.size()>0) {
+					compareItemService.generateCompareItem(filteredWorkBookIds, entity);
+				}
+			}
 		}
 	}
 
@@ -234,24 +236,26 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 			String stlst = workBook.getStlst();
 			CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
 			if (entity == null) {
-				entity = new CompareEntity();
-				entity.setModelId(modelId);
-				entity.setPhaseId(phaseId);
-				entity.setStlst(stlst);
-				entity.setDeptId(workBook.getDeptId());
-				entity.setTitle("Compare表");
-				entity.setSheetName("Compare表");
-				entity.setDestinations("仕向");
-				entity.setFirstColumnName("LFP-PD内作");
+				CompareEntity compareEntity = new CompareEntity();
+				compareEntity.setModelId(modelId);
+				compareEntity.setPhaseId(phaseId);
+				compareEntity.setStlst(stlst);
+				compareEntity.setDeptId(workBook.getDeptId());
+				compareEntity.setTitle("Compare表");
+				compareEntity.setSheetName("Compare表");
+				compareEntity.setDestinations("仕向");
+				compareEntity.setFirstColumnName("LFP-PD内作");
 
 				WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId);
 				if (lastWookBook != null) {
-					entity.setLastVersionName(lastWookBook.getVersionNumber());
+					compareEntity.setLastVersionName(lastWookBook.getVersionNumber());
 				}
-				entity.setCurrentVersionName(workBook.getVersionNumber());
-				insert(entity);
+				compareEntity.setCurrentVersionName(workBook.getVersionNumber());
+				insert(compareEntity);
+				results.add(compareEntity);
+			}else{
+				results.add(entity);
 			}
-			results.add(entity);
 		}
 		return results;
 	}

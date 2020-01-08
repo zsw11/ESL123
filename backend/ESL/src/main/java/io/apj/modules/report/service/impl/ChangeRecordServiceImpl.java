@@ -126,10 +126,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<ChangeRecordEntity> list = generateChangeRecord(filteredWorkBooks);
-
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<ChangeRecordEntity> list = generateChangeRecord(filteredWorkBooks);
+		}
 	}
 
 	private List<ChangeRecordEntity> generateChangeRecord(List<WorkBookEntity> workBooks) {
@@ -138,11 +139,9 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 			EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
 					work.getPhaseId());
-			List<ChangeRecordEntity> list = selectList(entityWrapper);
-			ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
-			if (list.size() > 0) {
-				changeRecordEntity = list.get(0);
-			} else {
+			ChangeRecordEntity entity = selectOne(entityWrapper);
+			if (entity==null) {
+				ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
 				// TODO factory title model_type 未设置
 				changeRecordEntity.setModelId(work.getModelId());
 				changeRecordEntity.setPhaseId(work.getPhaseId());
@@ -152,8 +151,10 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				changeRecordEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(changeRecordEntity);
+				results.add(changeRecordEntity);
+			}else {
+				results.add(entity);
 			}
-			results.add(changeRecordEntity);
 		}
 		return results;
 	}

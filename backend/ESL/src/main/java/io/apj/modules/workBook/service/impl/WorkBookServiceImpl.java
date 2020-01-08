@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -215,61 +216,59 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     public void createReports(Map<String, Object> params) {
         ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
         List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
-        if (workBookIds == null || workBookIds.size() < 1) {
-            return;
+        if(workBookIds.size()>0&&reportList.size()>0) {
+            reportList.forEach(e -> {
+                switch (e) {
+                    case 1:
+                        break;
+                    case 2:
+                        // 人机联合表
+                        reportManMachineCombinationService.generateReportData(workBookIds);
+                        break;
+                    case 3:
+                        // 工位时间报表
+                        stationTimeService.generateReportData(workBookIds);
+                        break;
+                    case 4:
+                        // Compare表
+                        compareService.generateReportData(workBookIds);
+                        break;
+                    case 5:
+                        // MOST Value表
+                        mostValueService.generateReportData(workBookIds);
+                        break;
+                    case 6:
+                        // Collection-Revision History表
+                        revisionHistoryService.generateReportData(workBookIds);
+                        break;
+                    case 7:
+                        // Total表
+                        totalService.generateReportData(workBookIds);
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        // 时间联络表
+                        timeContactService.generateReportData(workBookIds);
+                        break;
+                    case 10:
+                        // Process List表
+                        break;
+                    case 11:
+                        // 标准时间表
+                        standardTimeService.generateReportData(workBookIds);
+                        break;
+                    case 12:
+                        // 标准工数表
+                        standardWorkService.generateReportData(workBookIds);
+                        break;
+                    case 13:
+                        // 履历表
+                        changeRecordService.generateReportData(workBookIds);
+                        break;
+                }
+            });
         }
-        reportList.forEach(e -> {
-            switch (e) {
-                case 1:
-                    break;
-                case 2:
-                    // 人机联合表
-                    reportManMachineCombinationService.generateReportData(workBookIds);
-                    break;
-                case 3:
-                    // 工位时间报表
-                    stationTimeService.generateReportData(workBookIds);
-                    break;
-                case 4:
-                    // Compare表
-                    compareService.generateReportData(workBookIds);
-                    break;
-                case 5:
-                    // MOST Value表
-                    mostValueService.generateReportData(workBookIds);
-                    break;
-                case 6:
-                    // Collection-Revision History表
-                    revisionHistoryService.generateReportData(workBookIds);
-                    break;
-                case 7:
-                    // Total表
-                    totalService.generateReportData(workBookIds);
-                    break;
-                case 8:
-                    break;
-                case 9:
-                    // 时间联络表
-                    timeContactService.generateReportData(workBookIds);
-                    break;
-                case 10:
-                    // Process List表
-                    break;
-                case 11:
-                    // 标准时间表
-                    standardTimeService.generateReportData(workBookIds);
-                    break;
-                case 12:
-                    // 标准工数表
-                    standardWorkService.generateReportData(workBookIds);
-                    break;
-                case 13:
-                    // 履历表
-                    changeRecordService.generateReportData(workBookIds);
-                    break;
-            }
-
-        });
     }
 
     @Override
@@ -465,6 +464,43 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             }
         }
         return result;
+    }
+
+    @Override
+    public Map<String , Object> dealData(Integer workBookId) {
+        EntityWrapper<WorkOperationsEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("work_book_id" , workBookId);
+        List<WorkOperationsEntity> workOperationsEntityList = workOperationService.selectList(wrapper);
+        if(workOperationsEntityList != null && workOperationsEntityList.size() > 0){
+            Map<String , Object> map = new HashMap<>();
+            BigDecimal totalActuallyTimeValue = new BigDecimal(0);
+            BigDecimal totalActuallyTmu = new BigDecimal(0);
+            BigDecimal totalActuallySecondConvert = new BigDecimal(0);
+            Integer totalRemark1 = 0;
+            for(WorkOperationsEntity workOperationsEntity : workOperationsEntityList){
+                BigDecimal timeValue = workOperationsEntity.getTimeValue();
+                totalActuallyTimeValue.add(timeValue);
+                BigDecimal tmu = workOperationsEntity.getTmu();
+                totalActuallyTmu.add(tmu);
+                BigDecimal secondConvert = workOperationsEntity.getSecondConvert();
+                totalActuallySecondConvert.add(secondConvert);
+                Integer remark1 = workOperationsEntity.getRemark1();
+                totalRemark1 += remark1;
+            }
+            map.put("totalActuallyTimeValue" , totalActuallyTimeValue);
+            map.put("totalActuallyTmu" , totalActuallyTmu);
+            map.put("totalActuallySecondConvert" , totalActuallySecondConvert);
+            map.put("totalRemark1" , totalRemark1);
+            Double averageCapacity = Double.parseDouble(sysConfigService.getValue("AverageCapacity"));
+            BigDecimal totalTimeValue = totalActuallyTimeValue.multiply(new BigDecimal(averageCapacity));
+            BigDecimal totalTmu = totalActuallyTmu.multiply(new BigDecimal(averageCapacity));
+            BigDecimal totalSecondConvert =  totalActuallySecondConvert.multiply(new BigDecimal(averageCapacity));
+            map.put("totalTimeValue" , totalTimeValue);
+            map.put("totalTmu" , totalTmu);
+            map.put("totalSecondConvert" , totalSecondConvert);
+            return map;
+        }
+        return null;
     }
 
     private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
