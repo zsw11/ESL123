@@ -1,6 +1,15 @@
 import request from '@/utils/httpRequest'
 
 // 获取员工信息列表
+export function listStaffUser (query) {
+  return request({
+    url: request.adornUrl('/api/v1/staff/listrela'),
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取员工信息列表
 export function listStaff (query) {
   return request({
     url: request.adornUrl('/api/v1/staff/list'),

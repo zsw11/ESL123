@@ -16,7 +16,7 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -25,7 +25,7 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -137,7 +137,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = ['opertaionGroup.code', 'opertaionGroup.frequency', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
 
@@ -164,7 +164,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       dataList: [],
       pageNo: 1,
       pageSize: 10,
