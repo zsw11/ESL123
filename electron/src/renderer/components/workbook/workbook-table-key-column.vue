@@ -4,6 +4,7 @@
     align="center"
     title="Key"
     :edit-render="{ name: 'input', immediate: true }"
+    footer-class-name="footer-inner"
     v-bind="$attrs">
     <template v-slot="scope">{{scope.row.key}}</template>
     <template v-slot:edit="{ row }">

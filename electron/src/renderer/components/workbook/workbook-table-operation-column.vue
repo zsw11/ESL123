@@ -6,6 +6,7 @@
     title="Work Method"
     :edit-render="{ name: 'input', immediate: true }"
     :class-name="getCellClass"
+    footer-class-name="footer-inner"
     v-bind="$attrs">
     <template v-slot:edit="{ row }">
       <operation-input
