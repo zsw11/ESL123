@@ -20,7 +20,7 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -29,7 +29,7 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -133,7 +133,7 @@
 
 <script>
 import { listWorkstationType, deleteWorkstationType } from '@/api/workstationType'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'workstationTypeList',
@@ -149,7 +149,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

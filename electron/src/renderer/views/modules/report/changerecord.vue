@@ -177,7 +177,7 @@
           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
             v-model="approveForm.nextApproverId"
-            :searchApi="this.listStaff"
+            :searchApi="this.listStaffUser"
             :allowEmpty="true"
             valueColumn="userId"
             clearable>
@@ -201,7 +201,7 @@ import { fetchReportGroup } from '@/api/report'
 import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'reportChangeRecordList',
@@ -215,7 +215,7 @@ export default {
         phaseId: null,
         stlst: null
       },
-      listStaff,
+      listStaffUser,
       reportGroup: [],
       dataButton: 'list',
       listQuery: {
