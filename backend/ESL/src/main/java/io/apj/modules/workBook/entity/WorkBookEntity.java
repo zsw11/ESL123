@@ -113,7 +113,6 @@ public class WorkBookEntity implements Serializable {
 	/**
 	 * 制表日期
 	 */
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date makedAt;
 	/**
 	 * 沿用来源ID

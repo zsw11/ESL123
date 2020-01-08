@@ -140,6 +140,12 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                         reportItemList.add(reportEntity);
                     }
                     break;
+                case "report_man_machine_combination":
+                    List<ReportManMachineCombinationEntity> reportManMachineCombinationEntityList = (List<ReportManMachineCombinationEntity>) reportManMachineCombinationService.selectList(new EntityWrapper<ReportManMachineCombinationEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
+                    if (reportManMachineCombinationEntityList.isEmpty()) {
+                        reportItemList.add(reportEntity);
+                    }
+                    break;
                 case "work_book":
                     List<WorkBookEntity> workBookEntity = (List<WorkBookEntity>) workBookService.selectList(new EntityWrapper<WorkBookEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
                     if (workBookEntity.isEmpty()) {
