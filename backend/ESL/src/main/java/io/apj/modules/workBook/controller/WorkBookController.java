@@ -132,7 +132,7 @@ public class WorkBookController extends AbstractController {
 //		DataUtils.transMap2Bean2(map, workBookEntity);
 		Integer workBookId = (Integer) map.get("id");
 		Integer lockById = workBookService.selectById(workBookId).getLockBy();
-		workBookEntity.setMakerId(getUserId().intValue());
+		workBookEntity.setUpdateBy(getUserId().intValue());
 		workBookEntity.setMakedAt(new Date());
 		if(lockById == null){
 			workBookService.updateById(workBookEntity);
