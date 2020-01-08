@@ -100,6 +100,7 @@ public class ModelSeriesController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:modelseries:update")
 	public RD update(@RequestBody ModelSeriesEntity modelSeries) {
+		modelSeries.setUpdateBy(getUserId().intValue());
 		modelSeriesService.updatePinAndDataById(modelSeries);
 
 		return RD.build().put("code", 200);

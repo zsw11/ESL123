@@ -167,7 +167,7 @@
             
             :searchApi="this.listStaff"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable>
           </keyword-search>
         </el-form-item>

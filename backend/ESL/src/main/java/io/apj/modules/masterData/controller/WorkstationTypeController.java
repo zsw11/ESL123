@@ -74,6 +74,7 @@ public class WorkstationTypeController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("masterData:workstationtype:update")
 	public RD update(@RequestBody WorkstationTypeEntity workstationType) {
+		workstationType.setUpdateBy(getUserId().intValue());
 		workstationTypeService.updatePinAndDataById(workstationType);
 
 		return RD.build();

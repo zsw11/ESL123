@@ -11,6 +11,7 @@ import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.DataUtils;
 import io.apj.common.utils.RD;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
@@ -46,6 +47,8 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	private OperationGroupOperationService operationGroupOperationService;
 	@Autowired
 	private SysDeptService deptService;
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -67,6 +70,12 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		if (StringUtils.isNotEmpty((CharSequence) params.get("deptId"))) {
 			entityWrapper.eq("dept_id", Integer.parseInt((String) params.get("deptId")));
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 
 		Page<OpertaionGroupEntity> page = this.selectPage(new Query<OpertaionGroupEntity>(params).getPage(),
 				entityWrapper);
@@ -75,6 +84,8 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 			operationWrapper.isNull("delete_at").eq("operation_group_id", entity.getId());
 			entity.setCount(operationGroupOperationService.selectCount(operationWrapper));
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
 
 		}
 
@@ -112,6 +123,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) {
 		OpertaionGroupEntity opertaionGroup = new OpertaionGroupEntity();
 		DataUtils.transMap2Bean2((Map<String, Object>) map.get("operationGroup"), opertaionGroup);
+		opertaionGroup.setUpdateBy((Integer) map.get("updateBy"));
 		// 更新主表
 		opertaionGroupService.updatePinAndDataById(opertaionGroup);
 		// 删除原来子表

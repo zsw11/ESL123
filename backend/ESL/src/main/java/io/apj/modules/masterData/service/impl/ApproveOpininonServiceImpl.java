@@ -3,6 +3,7 @@ package io.apj.modules.masterData.service.impl;
 import cn.hutool.core.util.PinyinUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.report.entity.ApproveEntity;
@@ -36,6 +37,12 @@ public class ApproveOpininonServiceImpl extends ServiceImpl<ApproveOpininonDao, 
 		if (params.get("approveOperation") != null && params.get("approveOperation") != "") {
 			entityWrapper.andNew("pinyin like '%" + params.get("approveOperation") + "%' "
 					+ "or approve_operation like '%" + params.get("approveOperation") + "%'");
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
 		}
 		Page<ApproveOpininonEntity> page = this.selectPage(new Query<ApproveOpininonEntity>(params).getPage(),
 				entityWrapper);

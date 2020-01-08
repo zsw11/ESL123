@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.WorkstationTypeService;
 import io.apj.modules.sys.service.SysDeptService;
@@ -47,6 +48,8 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 	private ModelSeriesService modelSeriesService;
 	@Autowired
 	private SysDeptService deptService;
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -60,7 +63,17 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 			entityWrapper.andNew(
 					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 		Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
+		for(WorkstationEntity entity : page.getRecords()){
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+		}
 
 		return new PageUtils(page);
 	}

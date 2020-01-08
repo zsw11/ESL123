@@ -10,6 +10,7 @@ import io.apj.common.annotation.DataFilter;
 import io.apj.common.exception.RRException;
 import io.apj.common.utils.*;
 import io.apj.common.validator.ValidatorUtils;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.sys.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,8 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
 	private SysDeptService deptService;
 	@Autowired
 	private MeasureGroupService measureGroupService;
+	@Autowired
+	private StaffService staffService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -45,11 +48,19 @@ public class MeasureGroupServiceImpl extends ServiceImpl<MeasureGroupDao, Measur
 		if (StringUtils.isNotEmpty((CharSequence) params.get("frequency"))) {
 			entityWrapper.eq("frequency", Integer.parseInt((String) params.get("frequency")));
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
 		Page<MeasureGroupEntity> page = this.selectPage(new Query<MeasureGroupEntity>(params).getPage(), entityWrapper);
 		for (MeasureGroupEntity entity : page.getRecords()) {
 			if (entity.getDeptId() != null) {
 				entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
 			}
+			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
 		}
 
 		return new PageUtils(page);
