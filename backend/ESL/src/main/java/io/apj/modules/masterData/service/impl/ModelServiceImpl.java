@@ -39,6 +39,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 	private WorkstationService workStationService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ModelService modelService;
 
 	@Override
 	@DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -99,8 +101,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for (ModelEntity entity : page.getRecords()) {
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
 		}
-
-		return new PageUtils(page);
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelSeriesService.selectById(id).getName());
+		return pageUtils;
 	}
 
 	@Override
@@ -113,7 +116,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		if (params.get("common") != null) {
 			common = Integer.parseInt((String) params.get("common"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelPart(id, page, name, remark, common)));
+		page = page.setRecords(this.baseMapper.selectmodelPart(id, page, name, remark, common));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
@@ -127,7 +133,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		if (params.get("common") != null) {
 			common = Integer.parseInt((String) params.get("common"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selectmodelTool(id, page, name, remark, common)));
+		page = page.setRecords(this.baseMapper.selectmodelTool(id, page, name, remark, common));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
@@ -195,6 +204,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		for (WorkstationEntity entity : page.getRecords()) {
 			entity.setModelWorkStationRelaId(relaIdMap.get(entity.getId()));
 		}
-		return new PageUtils(page);
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(modelService.selectById(id).getName());
+		return pageUtils;
 	}
 }

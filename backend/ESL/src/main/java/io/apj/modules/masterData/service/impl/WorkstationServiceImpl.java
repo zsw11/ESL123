@@ -50,6 +50,8 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 	private SysDeptService deptService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private WorkstationService workstationService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -163,7 +165,9 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 			entity.setDeptName(deptService.selectById(entity.getDeptId()).getName());
 			entity.setModelWorkStationRelaId(relaIdMap.get(entity.getId()));
 		}
-		return new PageUtils(page);
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(workstationService.selectById(id).getName());
+		return pageUtils;
 	}
 
 	@Override

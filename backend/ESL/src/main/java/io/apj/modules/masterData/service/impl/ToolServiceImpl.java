@@ -36,6 +36,8 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	private SysDeptService deptService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ToolService toolService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -77,7 +79,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
 			deptId = Integer.parseInt((String) params.get("deptId"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code,remark)));
+		page = page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName, deptId, modelSeriesId, code, remark));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(toolService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
