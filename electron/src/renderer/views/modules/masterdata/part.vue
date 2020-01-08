@@ -34,7 +34,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
-            valueColumn="userId"
+            :valueColumn="'userId'"
             clearable></keyword-search>
         </el-form-item>
 
@@ -43,7 +43,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            valueColumn="userId"
+            :valueColumn="'userId'"
             clearable></keyword-search>
         </el-form-item>
       </el-form>
@@ -333,7 +333,7 @@ export default {
     // 部品机种关系
     partModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/part-model/${id}/${name}`})
+        this.$router.push({path: `/part-model/${id}`})
       })
     },
     // 详情

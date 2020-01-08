@@ -48,7 +48,7 @@
             :searchApi="this.listStaff" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            valueColumn="userId"
+            :valueColumn="'userId'"
             clearable></keyword-search>
         </el-form-item>
 
@@ -429,19 +429,19 @@ export default {
     // 机种关联部品
     modelPart(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-part/${id}/${name}` });
+        this.$router.push({ path: `/model-part/${id}` });
       });
     },
     // 机种关联治工具
     modelTool(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-tool/${id}/${name}` });
+        this.$router.push({ path: `/model-tool/${id}` });
       });
     },
     // 机种关联工位
     modelWorkStation(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-workstation/${id}/${name}` });
+        this.$router.push({ path: `/model-workstation/${id}` });
       });
     },
     // 删除数据

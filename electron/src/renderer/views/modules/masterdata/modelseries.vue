@@ -291,7 +291,7 @@ export default {
     // 机种系列与机种
     modelseriesModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/modelseries-model/${id}/${name}`})
+        this.$router.push({path: `/modelseries-model/${id}`})
       })
     },
     // 详情

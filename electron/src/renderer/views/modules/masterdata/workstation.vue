@@ -310,7 +310,7 @@ export default {
     // 工位机种
     workstationModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/workstation-model/${id}/${name}`})
+        this.$router.push({path: `/workstation-model/${id}`})
       })
     },
     // 删除数据
