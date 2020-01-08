@@ -4,34 +4,37 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" class="form-min-width" :model="listQuery" @keyup.enter.native="getDataList()">
 
 
         <el-form-item :label="'常用指标组合编码'" prop="code" >
           <el-input v-model="listQuery.code" clearable></el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'频率'" prop="frequency" >-->
-<!--          <el-input v-model="listQuery.frequency" clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'作成人'" prop="createBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.createBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
 
-
-<!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
-<!--          <keyword-search-->
-<!--            v-model="listQuery.deptId"-->
-<!--            -->
-<!--            :searchApi="this.listDept"-->
-<!--            :allowEmpty="true"-->
-<!--            clearable>-->
-<!--          </keyword-search>-->
-<!--        </el-form-item>-->
-
-
-        <div class="search-box">
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-          <el-button @click="clearQuery()">清   空</el-button>
-        </div>
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
       </el-form>
+      <div class="clearfix">
+        <div class="right">
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click="clearQuery()">清 空</el-button>
+        </div>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
@@ -194,6 +197,30 @@
           </template>
         </el-table-column>
 
+          <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="createAt" label="作成时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+
       <el-table-column align="center" :label="'操作'" fixed="right" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.id)">详情</el-button>
@@ -223,7 +250,9 @@ import { listDept } from '@/api/dept'
 import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
-import ImportData from "@/components/import-data";
+import ImportData from "@/components/import-data"
+import { listStaffUser } from '@/api/staff'
+
 
 const defaultExport = [
   'measureGroup.code',
@@ -281,7 +310,13 @@ export default {
         deptId: null,
         deptName: null,
         usedCount: null,
+        createBy: null,
+        createAt: null,
+        updateBy: null,
+        updateAt: null,
+        deleteAt: null
       },
+      listStaffUser,
       listDept,
       dataList: [],
       pageNo: 1,

@@ -4,7 +4,7 @@
       <div slot="header">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" style="min-width: 971px">
+      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()" class="form-min-width">
 
         <el-form-item :label="'手顺组合编码'" prop="code" >
           <el-input v-model="listQuery.code" clearable></el-input>
@@ -14,26 +14,30 @@
           <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
-<!--        <el-form-item :label="'手顺数量'" prop="usedCount" >-->
-<!--          <el-input v-model="listQuery.usedCount"  clearable></el-input>-->
-<!--        </el-form-item>-->
+        <el-form-item :label="'作成人'" prop="createBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.createBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
 
-<!--        <el-form-item :label="'频率'" prop="frequency" >-->
-<!--          <el-input v-model="listQuery.frequency" clearable></el-input>-->
-<!--        </el-form-item>-->
-
-<!--        <el-form-item :label="'所属组织机构'" prop="deptId" >-->
-<!--          <keyword-search style="width: 100%" v-model="listQuery.deptId"  :searchApi="this.listDept" :allowEmpty="true"></keyword-search>-->
-<!--        </el-form-item>-->
-
-
-
-
-        <div class="search-box">
-          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''" >搜   索</el-button>
-          <el-button @click="clearQuery()">清   空</el-button>
-        </div>
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
       </el-form>
+      <div class="clearfix">
+        <div class="right">
+          <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
+          <el-button @click="clearQuery()">清 空</el-button>
+        </div>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
@@ -73,21 +77,34 @@
           </template>
         </el-table-column>
 
-<!--        <el-table-column align="center" prop="frequency" label="频率" >-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.frequency }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-
-<!--        <el-table-column align="center" prop="usedCount" label="手顺数量" >-->
-<!--          <template slot-scope="scope">-->
-<!--            <span>{{scope.row.count }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
 
         <el-table-column align="center" prop="remark" label="备注" >
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="createAt" label="作成时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
           </template>
         </el-table-column>
 
@@ -120,6 +137,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = ['opertaionGroup.code', 'opertaionGroup.frequency', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
 
@@ -146,6 +164,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
+      listStaffUser,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

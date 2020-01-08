@@ -165,9 +165,9 @@
           <keyword-search
             v-model="approveForm.nextApproverId"
             
-            :searchApi="this.listStaff"
+            :searchApi="this.listStaffUser"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable>
           </keyword-search>
         </el-form-item>
@@ -189,7 +189,7 @@ import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 import { fetchUserDetail } from '@/api/passport'
 
 export default {
@@ -222,7 +222,7 @@ export default {
         id: null,
         result: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listDept,
       listReportGroup,

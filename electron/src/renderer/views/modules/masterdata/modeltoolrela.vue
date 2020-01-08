@@ -4,7 +4,11 @@
       <div slot="header" class="clearfix">
         <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()"  class="clearfix model-min-width">
+      <el-form 
+        :inline="true" 
+        :model="listQuery" 
+        @keyup.enter.native="getDataList()"  
+        class="clearfix form-min-width">
 
         <el-form-item :label="'机种名称'" prop="name" >
           <el-input  v-model="listQuery.name"  clearable></el-input>
@@ -18,7 +22,6 @@
         <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <keyword-search
             v-model="listQuery.modelSeriesId"
-            
             :searchApi="this.listModelSeries"
             labelColunt="name"
             :allowEmpty="true"
@@ -219,7 +222,6 @@
     },
     activated () {
       const self = this
-      self.title = self.$route.params.name
       self.id = self.$route.params.id
       self.getDataList()
     },
@@ -241,6 +243,8 @@
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
+          console.log(page.relaName, 22222222222222222222)
         }).catch(() => {
           this.dataList = []
           this.total = 0

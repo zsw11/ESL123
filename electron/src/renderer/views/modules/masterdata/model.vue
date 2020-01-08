@@ -8,7 +8,7 @@
         :inline="true"
         :model="listQuery"
         @keyup.enter.native="getDataList()"
-        class="clearfix model-min-width">
+        class="clearfix form-min-width">
         <el-form-item :label="'机种名称'" prop="name">
           <el-input class="input" v-model="listQuery.name" clearable>
           </el-input>
@@ -23,7 +23,6 @@
           <keyword-search
             class="input"
             v-model="listQuery.modelSeriesId"
-            
             :searchApi="this.listModelSeries"
             :allowEmpty="true"
             clearable>
@@ -35,6 +34,24 @@
           </el-input>
         </el-form-item>
 
+        <el-form-item :label="'作成人'" prop="createBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.createBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
+
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
+
 <!--        <el-form-item :label="'备注'" prop="remark">-->
 <!--          <el-input class="input" v-model="listQuery.remark" clearable>-->
 <!--          </el-input>-->
@@ -42,7 +59,7 @@
 
       </el-form>
       <div class="clearfix">
-        <div style="float:right;">
+        <div class="right">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
           <el-button @click="clearQuery()">清 空</el-button>
         </div>
@@ -125,6 +142,30 @@
           </template>
         </el-table-column>
 
+        <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="createAt" label="作成时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column align="center" fixed="right" :label="'操作'" width="280">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
@@ -157,6 +198,7 @@ import { filterAttributes } from "@/utils";
 import { cloneDeep } from "lodash";
 import ExportData from "@/components/export-data";
 import ImportData from "@/components/import-data";
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = [
   "model.name",
@@ -189,8 +231,14 @@ export default {
         wsTime: null,
         esTime: null,
         ampTime: null,
-        mpTime: null
+        mpTime: null,
+        createBy: null,
+        createAt: null,
+        updateBy: null,
+        updateAt: null,
+        deleteAt: null
       },
+      listStaffUser,
       listDept,
       listModelSeries,
       listModel,
@@ -381,19 +429,19 @@ export default {
     // 机种关联部品
     modelPart(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-part/${id}/${name}` });
+        this.$router.push({ path: `/model-part/${id}` });
       });
     },
     // 机种关联治工具
     modelTool(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-tool/${id}/${name}` });
+        this.$router.push({ path: `/model-tool/${id}` });
       });
     },
     // 机种关联工位
     modelWorkStation(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-workstation/${id}/${name}` });
+        this.$router.push({ path: `/model-workstation/${id}` });
       });
     },
     // 删除数据
@@ -425,9 +473,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.model-min-width{
-  min-width: 1080px;
-}
 .el-input__inner {
   padding-right: 0;
 }

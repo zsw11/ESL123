@@ -79,7 +79,8 @@ function createWindow () {
       nodeIntegration: true
     //   webSecurity: false
     },
-    title: ''
+    title: '',
+    icon: `${__dirname}/../../icon-sm.ico`
   })
 
   mainWindow.loadURL(winURL, {

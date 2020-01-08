@@ -1,4 +1,4 @@
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 <template>
   <div class="gen-list-page">
     <el-card class="filter-card with-title">
@@ -343,9 +343,9 @@ import { listStaff } from '@/api/staff'
             <keyword-search
             v-model="approveForm.nextApproverId"
             
-            :searchApi="this.listStaff"
+            :searchApi="this.listStaffUser"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable>
           </keyword-search>
           </el-form-item>
@@ -368,7 +368,7 @@ import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'reportStandardWorkList',
@@ -409,7 +409,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listPhase,
       listModel,

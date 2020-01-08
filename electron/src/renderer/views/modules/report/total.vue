@@ -374,7 +374,13 @@
         </el-form-item>
         <div>
           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
-            <el-input  v-model="approveForm.nextApproverId" clearable>
+             <keyword-search
+              v-model="approveForm.nextApproverId"
+              :searchApi="this.listStaffUser"
+              :allowEmpty="true"
+              valueColumn="userId"
+            clearable>
+          </keyword-search>
             </el-input>
           </el-form-item>
         </div>
@@ -396,7 +402,7 @@ import { fetchReportGroup } from '@/api/report'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'reportTotalList',
@@ -440,7 +446,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listPhase,
       listModel,

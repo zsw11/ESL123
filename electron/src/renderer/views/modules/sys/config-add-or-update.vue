@@ -7,15 +7,30 @@
       </div>
     </div>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="参数名" prop="paramKey">
-        <el-input v-model="dataForm.paramKey" placeholder="参数名"></el-input>
-      </el-form-item>
-      <el-form-item label="参数值" prop="paramValue">
-        <el-input v-model="dataForm.paramValue" placeholder="参数值"></el-input>
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="参数名" prop="paramKey">
+            <el-input v-model="dataForm.paramKey" placeholder="参数名"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
+          <el-form-item label="参数值" prop="paramValue">
+            <el-input v-model="dataForm.paramValue" placeholder="参数值"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    <el-row>
+        <el-col :span="22">
+          <el-form-item style="display: block" :label="'备注'" prop="remark">
+            <el-input
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="dataForm.remark">
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <span class="dialog-footer">
       <el-button type="primary" @click="dataFormSubmit()">保   存</el-button>
@@ -54,10 +69,11 @@ export default {
     this.$nextTick(() => {
       this.$refs['dataForm'].resetFields()
       if (this.dataForm.id) {
-        configInfo(this.dataForm.id).then(({data}) => {
+        configInfo(this.dataForm.id).then((data) => {
+          console.log(data)
           Object.assign(
               this.dataForm,
-              pick(data, [ 'paramKey', 'paramValue', 'remark' ])
+              pick(data.page, [ 'paramKey', 'paramValue', 'remark' ])
             )
         })
       }

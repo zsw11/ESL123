@@ -1,10 +1,10 @@
 <template>
   <div class="gen-list-page">
-    <el-card class="filter-card with-title">
+    <el-card class="filter-card with-title clearfix">
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form :inline="true" :model="listQuery" @keyup.enter.native="getDataList()">
+      <el-form :inline="true" class="form-min-width" :model="listQuery" @keyup.enter.native="getDataList()">
 
         <el-form-item :label="'关键词名称'" prop="name">
           <el-input v-model="listQuery.name" clearable></el-input>
@@ -14,12 +14,30 @@
           <el-input v-model="listQuery.remark" clearable></el-input>
         </el-form-item>
 
+        <el-form-item :label="'作成人'" prop="createBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.createBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
 
-        <div class="search-box">
+        <el-form-item :label="'修改人'" prop="updateBy" >
+          <keyword-search 
+            :searchApi="this.listStaffUser" 
+            v-model="listQuery.updateBy"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable></keyword-search>
+        </el-form-item>
+      </el-form>
+      <div class="clearfix">
+        <div class="right">
           <el-button @click="getDataList(1)" :type="dataButton==='list' ? 'primary' : ''">搜 索</el-button>
           <el-button @click="clearQuery()">清 空</el-button>
         </div>
-      </el-form>
+      </div>
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
@@ -68,6 +86,30 @@
         </el-table-column>
 
 
+        <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="createAt" label="作成时间">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column align="center" prop="updateAt" label="修改时间">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column fixed="right" align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="details(scope.row.id)">详情</el-button>
@@ -98,6 +140,7 @@
   import {cloneDeep} from 'lodash'
   import ExportData from '@/components/export-data'
   import ImportData from "@/components/import-data";
+  import { listStaffUser } from '@/api/staff'
 
   const defaultExport = ['action.name', 'action.remark']
   export default {
@@ -119,6 +162,7 @@
           updateAt: null,
           deleteAt: null
         },
+        listStaffUser,
         dataList: [],
         pageNo: 1,
         pageSize: 10,

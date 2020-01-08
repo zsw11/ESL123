@@ -4,7 +4,7 @@
     @keyup.118="copy"
     @keyup.120="paste">
     <vxe-grid
-      border
+      border="true"
       size="mini"
       ref="workbookTable"
       align="center"
@@ -19,7 +19,7 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
       @selected-changed="selectedChanged">
       <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
-      <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}" :footer-class-name="'footer-inner'"></vxe-table-column>
       <operation-column key="operationColumn" fixed="left" min-width="240"></operation-column>
       <key-column key="keyColumn" fixed="left" @select="selectMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" footer-class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
@@ -84,6 +84,7 @@ import MeasureColumn from '@/components/workbook/workbook-table-measure-column.v
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
 import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
+import { clipboard } from 'electron'
 import {
   measureColumns0,
   measureColumns1,
@@ -176,6 +177,7 @@ export default {
       let base = 0
       let fre = 0
       allNumericMeasureField.forEach(f => {
+        if (row[f] === -9999) return
         if (row[f] > 0) base += row[f]
         if (row[f] < 0) fre -= row[f]
       })
@@ -493,20 +495,31 @@ export default {
     },
     // 缓存
     copy () {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
+      if (this.lastSelected) {
+        if (this.lastSelected.column.type==='index') {
+          localStorage.setItem('MOST-CopyContent', JSON.stringify(this.cleanRow(this.lastSelected.row)))
+        } else {
+          localStorage.setItem('MOST-CopyCell', this.lastSelected.row[this.lastSelected.column.property]);
+        }
       }
     },
     // 粘贴
     async paste (event) {
-      if (this.lastSelected && this.lastSelected.column.type==='index') {
-        const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
-        if (!copyContent) return
-        if (this.workbook.ifAlter) {
-          copyContent.alterType = 'new'
+      if (this.lastSelected) {
+        if (this.lastSelected.column.type==='index') {
+          const copyContent = JSON.parse(localStorage.getItem('MOST-CopyContent'))
+          if (!copyContent) return
+          if (this.workbook.ifAlter) {
+            copyContent.alterType = 'new'
+          }
+          await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
+          await this.dataChanged()
+        } else {
+          if (!this.canEdit(this.lastSelected)) return
+          const copyContent = localStorage.getItem('MOST-CopyCell')
+          if (!copyContent) return
+          this.lastSelected.row[this.lastSelected.column.property] = copyContent
         }
-        await this.$refs.workbookTable.insertAt(copyContent, this.lastSelected.row)
-        await this.dataChanged()
       }
     },
     // 删除行
@@ -625,6 +638,33 @@ export default {
       &.sdc .vxe-cell {
         color: red
       }
+    }
+    // 整体样式
+    .vxe-body--row .vxe-body--column {
+      border-color: #333;
+      &.measure-column {
+        border-bottom-style: dotted;
+      }
+      &.measure-inner {
+        border-right: dotted 1px #ff00ff;
+      }
+    }
+    &.t--border .vxe-table--fixed-left-wrapper .vxe-body--column,
+    &.t--border .vxe-header--column {
+      border-color: #333;
+    }
+    &.t--border .vxe-footer--column {
+      border-top: solid 1px #333;
+      border-bottom: 0;
+      border-color: #333;
+      &.footer-inner {
+        border-right-color: transparent;
+      }
+    }
+    .vxe-table--header-wrapper,
+    .fixed-left--wrapper.vxe-table--header-wrapper {
+      border-top: 0;
+      border-bottom: solid 1px #333
     }
   }
 }
