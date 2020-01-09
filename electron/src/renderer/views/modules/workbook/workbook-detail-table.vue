@@ -4,7 +4,7 @@
     @keyup.118="copy"
     @keyup.120="paste">
     <vxe-grid
-      border="true"
+      :border="true"
       size="mini"
       ref="workbookTable"
       align="center"
@@ -170,6 +170,7 @@ export default {
       if (row.alterType === 'edit' && row.alterInfo && row.alterInfo[column.property]) {
         cellClassStr += ' edited-cell'
       }
+      if (row.frequency && ['tv', 'tmu', 'scv'].includes(column.property)) cellClassStr += ' color-red'
       return cellClassStr
     },
     // 计算列
@@ -184,7 +185,7 @@ export default {
       const toolValue = parseInt((row.tool || 'X0').substr(1, 2))
       const frequency = row['frequency'] || 0
       // console.log(base, fre, frequency, toolValue)
-      return (base + fre * frequency) * 6 + toolValue * frequency * 6
+      return (base + fre * frequency) * 6 + toolValue * (frequency || 1) * 6
     },
     // 计算列
     getTmu (scope) {

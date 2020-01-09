@@ -615,7 +615,7 @@
                   self.paste()
                   break
                 }
-                case 'i': {
+                case 'l': {
                   self.addStandardBook()
                   break
                 }
