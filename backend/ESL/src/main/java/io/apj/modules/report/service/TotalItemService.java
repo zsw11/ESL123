@@ -19,5 +19,8 @@ public interface TotalItemService extends IService<TotalItemEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<TotalItemEntity> getListBySWId(Integer id);
+
+    void generateTotalItem(List<Integer> workBookIds, Integer recordId);
+
 }
 

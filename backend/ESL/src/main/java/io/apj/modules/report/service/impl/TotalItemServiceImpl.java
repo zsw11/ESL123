@@ -33,4 +33,15 @@ public class TotalItemServiceImpl extends ServiceImpl<TotalItemDao, TotalItemEnt
         return selectList(ew);
     }
 
+    @Override
+    public void generateTotalItem(List<Integer> workBookIds, Integer recordId) {
+//        List<TotalItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+//        if (list!=null&&list.size() >0) {
+//            for (TotalItemEntity entity : list) {
+//                entity.setReportTotalId(recordId);
+//            }
+//            insertOrUpdateBatch(list);
+//        }
+    }
+
 }

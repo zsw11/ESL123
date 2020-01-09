@@ -143,6 +143,12 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 			List<TotalEntity> list = generateTotal(filteredWorkBooks);
+			for (TotalEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+				if(filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+					totalItemService.generateTotalItem(filteredWorkBookIds, entity.getId());
+				}
+			}
 		}
 	}
 
@@ -179,9 +185,11 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TotalEntity totalEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
