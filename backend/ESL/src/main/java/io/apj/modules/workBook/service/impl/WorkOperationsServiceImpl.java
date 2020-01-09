@@ -177,7 +177,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			if(item.getB0()!=null && item.getB0()<0){
 				if(item.getB0()==-9999){
 					item.setB0(null);
-					item.setA0null(0);
+					item.setB0null(0);
 
 				}else{
 					item.setB0null(Math.abs(item.getB0()));

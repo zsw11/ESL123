@@ -28,19 +28,19 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
       </el-form>
@@ -75,6 +75,11 @@
           header-align="left"
           align="left"
           width="50">
+        </el-table-column>
+
+        <el-table-column
+          label="序号"
+          type="index">
         </el-table-column>
 
         <el-table-column align="center" prop="name" label="报表组名称" >
@@ -145,7 +150,7 @@
 <script>
 import { listReportGroup, deleteReportGroup } from '@/api/reportGroup'
 import { listReport } from '@/api/report'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'reportGroupList',
@@ -163,7 +168,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listReport,
       dataList: [],
       pageNo: 1,

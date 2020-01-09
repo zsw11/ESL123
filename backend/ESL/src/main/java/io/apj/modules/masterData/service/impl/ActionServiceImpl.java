@@ -34,7 +34,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
     public PageUtils queryPage(Map<String, Object> params) {
         EntityWrapper<ActionEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.isNull("delete_at").orderBy("update_at", false)
+        entityWrapper.isNull("delete_at")
                 .like(params.get("remark") != null && params.get("remark") != "", "remark",
                         (String) params.get("remark"))
                 .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER));
@@ -42,6 +42,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
             params.put("name", ((String) params.get("name")).replace('*', '%'));
             entityWrapper.andNew("UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' "
                     + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
+            entityWrapper.orderBy("case when UPPER(name) like '" + ((String) params.get("name")).toUpperCase() + "%' then 1 else 99 end,UPPER(name)");
         }
         if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
             entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
@@ -49,7 +50,7 @@ public class ActionServiceImpl extends ServiceImpl<ActionDao, ActionEntity> impl
         if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
             entityWrapper.eq("update_By", Integer.parseInt((String) params.get("updateBy")));
         }
-
+        entityWrapper.orderBy("update_at", false);
         Page<ActionEntity> page = this.selectPage(new Query<ActionEntity>(params).getPage(), entityWrapper);
         for(ActionEntity entity : page.getRecords()){
             entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));

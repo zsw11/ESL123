@@ -21,19 +21,19 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
       </el-form>
@@ -76,6 +76,11 @@
           header-align="left"
           align="left"
           width="50">
+        </el-table-column>
+
+        <el-table-column
+          label="序号"
+          type="index">
         </el-table-column>
 
         <el-table-column align="center" prop="name" label="机种系列名称" >
@@ -145,7 +150,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import ExportData from '@/components/export-data'
 import ImportData from '@/components/import-data'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = ['modelSeries.name', 'modelSeries.remark']
 export default {
@@ -166,7 +171,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listModel,
       dataList: [],
       pageNo: 1,
@@ -291,7 +296,7 @@ export default {
     // 机种系列与机种
     modelseriesModel (id, name) {
       this.$nextTick(() => {
-        this.$router.push({path: `/modelseries-model/${id}/${name}`})
+        this.$router.push({path: `/modelseries-model/${id}`})
       })
     },
     // 详情

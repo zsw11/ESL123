@@ -88,7 +88,6 @@ public class PartController extends AbstractController {
 	@RequiresPermissions("masterData:part:info")
 	public ResponseEntity<Object> modelInfo(@PathVariable("id") Integer id, @RequestParam Map<String, Object> params) {
 		PageUtils page = partService.partModeRelaList(id, params);
-
 		return RD.ok(page);
 	}
 

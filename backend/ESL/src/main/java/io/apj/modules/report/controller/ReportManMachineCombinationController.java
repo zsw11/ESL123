@@ -3,6 +3,7 @@ package io.apj.modules.report.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,7 +72,7 @@ public class ReportManMachineCombinationController {
     @RequestMapping("/update")
     @RequiresPermissions("report:reportmanmachinecombination:update")
     public R update(@RequestBody ReportManMachineCombinationEntity reportManMachineCombination){
-		reportManMachineCombinationService.updateById(reportManMachineCombination);
+		reportManMachineCombinationService.update(reportManMachineCombination);
 
         return R.ok();
     }

@@ -19,6 +19,8 @@ public interface StaffService extends IService<StaffEntity> {
 
 	PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
+	PageUtils queryPageRela(Map<String, Object> params);
+
 	/**
 	 * 保存配置信息
 	 */

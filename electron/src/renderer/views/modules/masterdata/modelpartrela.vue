@@ -79,6 +79,11 @@
         <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="modelName" label="机种名称">
           <template slot-scope="scope">
             <span>{{scope.row.modelName }}</span>
@@ -211,7 +216,6 @@ export default {
   },
   activated() {
     const self = this
-    self.title = this.$route.params.name
     self.id = this.$route.params.id
     self.getDataList()
   },
@@ -236,6 +240,7 @@ export default {
         .then(({ page }) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
         })
         .catch(() => {
           this.dataList = []

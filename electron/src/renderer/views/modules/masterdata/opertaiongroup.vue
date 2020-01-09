@@ -16,19 +16,19 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
       </el-form>
@@ -69,6 +69,11 @@
           header-align="left"
           align="left"
           width="50">
+        </el-table-column>
+
+        <el-table-column
+          label="序号"
+          type="index">
         </el-table-column>
 
         <el-table-column align="center" prop="code" label="手顺组合编码" >
@@ -137,7 +142,7 @@ import { filterAttributes } from '@/utils'
 import { cloneDeep } from 'lodash'
 import { listDept } from '@/api/dept'
 import ExportData from '@/components/export-data'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = ['opertaionGroup.code', 'opertaionGroup.frequency', 'opertaionGroup.usedCount', 'opertaionGroup.deptId', 'opertaionGroup.remark']
 
@@ -164,7 +169,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       dataList: [],
       pageNo: 1,
       pageSize: 10,

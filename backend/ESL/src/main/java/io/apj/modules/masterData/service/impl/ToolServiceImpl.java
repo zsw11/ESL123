@@ -23,7 +23,6 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.modules.masterData.dao.ToolDao;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service("toolService")
 public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements ToolService {
 	@Autowired
@@ -36,21 +35,34 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	private SysDeptService deptService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ToolService toolService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		EntityWrapper<ToolEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at")
-				.eq(params.get("common") != null && params.get("common") != "", "common", Boolean.parseBoolean((String) params.get("common")))
-				.like(params.get("remark") != null && params.get("remark") != "","remark", (String) params.get("remark"))
-				.orderBy("update_at",false);
+				.eq(params.get("common") != null && params.get("common") != "", "common",
+						Boolean.parseBoolean((String) params.get("common")))
+				.like(params.get("remark") != null && params.get("remark") != "", "remark",
+						(String) params.get("remark"));
 		if (params.get("name") != null && params.get("name") != "") {
 			params.put("name", ((String) params.get("name")).replace('*', '%'));
-			entityWrapper.andNew(
-					"UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' " + "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'");
+			entityWrapper
+					.andNew("UPPER(pinyin) like '%" + ((String) params.get("name")).toUpperCase() + "%' "
+							+ "or UPPER(name) like '%" + ((String) params.get("name")).toUpperCase() + "%'")
+					.orderBy("case when UPPER(name) like '" + ((String) params.get("name")).toUpperCase()
+							+ "%' then 1 else 99 end,UPPER(name)");
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("createBy"))) {
+			entityWrapper.eq("create_By", Integer.parseInt((String) params.get("createBy")));
+		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
+			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
+		}
+		entityWrapper.orderBy("update_at", false);
 		Page<ToolEntity> page = this.selectPage(new Query<ToolEntity>(params).getPage(), entityWrapper);
-		for(ToolEntity entity : page.getRecords()){
+		for (ToolEntity entity : page.getRecords()) {
 			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
 			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
 		}
@@ -59,19 +71,24 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 
 	@Override
 	public PageUtils toolModeRelaList(Integer id, Map<String, Object> params) {
-		Page<Map<String,Object>> page  = new Page<>(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
+		Page<Map<String, Object>> page = new Page<>(Integer.parseInt(params.get("page").toString()),
+				Integer.parseInt(params.get("limit").toString()));
 		String modelName = (String) params.get("name");
 		String code = (String) params.get("code");
 		String remark = (String) params.get("remark");
 		int modelSeriesId = 0;
 		int deptId = 0;
-		if((String) params.get("modelSeriesId")!=null && (String) params.get("modelSeriesId")!=""){
+		if ((String) params.get("modelSeriesId") != null && (String) params.get("modelSeriesId") != "") {
 			modelSeriesId = Integer.parseInt((String) params.get("modelSeriesId"));
 		}
-		if((String) params.get("deptId")!=null && (String) params.get("deptId")!=""){
+		if ((String) params.get("deptId") != null && (String) params.get("deptId") != "") {
 			deptId = Integer.parseInt((String) params.get("deptId"));
 		}
-		return new PageUtils(page.setRecords(this.baseMapper.selecttoolModel(id, page, modelName,deptId,modelSeriesId,code,remark)));
+		page = page
+				.setRecords(this.baseMapper.selecttoolModel(id, page, modelName, deptId, modelSeriesId, code, remark));
+		PageUtils pageUtils = new PageUtils(page);
+		pageUtils.setRelaName(toolService.selectById(id).getName());
+		return pageUtils;
 
 	}
 
@@ -79,8 +96,8 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Object> toolImport(Map<String, Object> map) {
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
-		for(Map<String, Object> i:maps ){
-			if(StringUtils.isEmpty((CharSequence) i.get("tool.name")) ){
+		for (Map<String, Object> i : maps) {
+			if (StringUtils.isEmpty((CharSequence) i.get("tool.name"))) {
 				return RD.INTERNAL_SERVER_ERROR("导入治工具时名称为空，请检查治工具名称是否为空");
 			}
 		}
@@ -171,10 +188,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 
 	@Override
 	public void deleteList(List<ToolEntity> toolEntityList) {
-		for(ToolEntity item : toolEntityList){
+		for (ToolEntity item : toolEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(toolEntityList.size()>0){
+		if (toolEntityList.size() > 0) {
 			this.updateAllColumnBatchById(toolEntityList);
 		}
 
@@ -183,10 +200,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	@Override
 	public void deleteByIds(Collection<? extends Serializable> ids) {
 		List<ToolEntity> toolEntityList = this.selectBatchIds(ids);
-		for(ToolEntity item : toolEntityList){
+		for (ToolEntity item : toolEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(toolEntityList.size()>0){
+		if (toolEntityList.size() > 0) {
 			this.updateAllColumnBatchById(toolEntityList);
 		}
 	}
@@ -194,10 +211,10 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 	@Override
 	public void deleteByWrapper(Wrapper<ToolEntity> wrapper) {
 		List<ToolEntity> toolEntityList = this.selectList(wrapper);
-		for(ToolEntity item: toolEntityList){
+		for (ToolEntity item : toolEntityList) {
 			item.setDeleteAt(new Date());
 		}
-		if(toolEntityList.size()>0){
+		if (toolEntityList.size() > 0) {
 			this.updateAllColumnBatchById(toolEntityList);
 		}
 	}
@@ -209,4 +226,3 @@ public class ToolServiceImpl extends ServiceImpl<ToolDao, ToolEntity> implements
 		this.updateById(toolEntity);
 	}
 }
-

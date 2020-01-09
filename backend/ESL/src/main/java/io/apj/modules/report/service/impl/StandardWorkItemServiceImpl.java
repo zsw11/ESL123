@@ -39,14 +39,11 @@ public class StandardWorkItemServiceImpl extends ServiceImpl<StandardWorkItemDao
     @Override
     public void generateStandardWorkItem(List<Integer> workBookIds, Integer standardWorkId) {
         List<StandardWorkItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
-        if (list.size() < 1) {
-            return;
+        if (list!=null&&list.size() >0) {
+            for (StandardWorkItemEntity entity : list) {
+                entity.setReportStandardWorkId(standardWorkId);
+            }
+            insertOrUpdateBatch(list);
         }
-        for (StandardWorkItemEntity entity : list) {
-            entity.setReportStandardWorkId(standardWorkId);
-        }
-
-        insertOrUpdateBatch(list);
     }
-
 }

@@ -5,6 +5,7 @@ import io.apj.modules.report.entity.ApproveHistoryEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,9 @@ public class ChangeRecordItemServiceImpl extends ServiceImpl<ChangeRecordItemDao
 
     @Override
     public List<ChangeRecordItemEntity> getListBySWId(Integer id) {
-        List<ChangeRecordItemEntity> list = Collections.EMPTY_LIST;
         EntityWrapper<ChangeRecordItemEntity> ew = new EntityWrapper<>();
         ew.eq("report_change_record_id",id);
-        list = selectList(ew);
-        return list;
+        return selectList(ew);
     }
 
 }

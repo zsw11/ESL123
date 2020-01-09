@@ -26,5 +26,7 @@ public interface ReportManMachineCombinationService extends IService<ReportManMa
     List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
     void generateReportData(List<Integer> workBookIds);
+
+    void update(ReportManMachineCombinationEntity reportManMachineCombinationEntity);
 }
 

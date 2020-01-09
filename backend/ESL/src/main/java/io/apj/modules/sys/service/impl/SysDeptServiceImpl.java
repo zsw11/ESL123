@@ -134,7 +134,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 	public List<SysDeptEntity> queryListByName(Map<String, Object> params) {
 		List<Long> deptIds = new ArrayList<>();
 		EntityWrapper<SysDeptEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper
+		entityWrapper.isNull("delete_at")
 				.in(StringUtils.isNotEmpty((String) params.get("deptType")), "dept_type",
 						(String) params.get("deptType"))
 				.in(StringUtils.isNotEmpty((String) params.get("deptLevel")), "dept_level",

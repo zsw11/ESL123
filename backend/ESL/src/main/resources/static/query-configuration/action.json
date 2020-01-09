@@ -15,6 +15,12 @@
                 "type": "string"
             },
             {
+                "code": "deptName",
+                "name": "部门",
+                "type": "string"
+            },
+
+            {
                 "code": "createAt",
                 "name": "创建时间",
                 "type": "date"

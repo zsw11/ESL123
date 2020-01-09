@@ -78,6 +78,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="name" label="治工具名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
@@ -185,7 +190,6 @@
     },
     activated () {
       const self = this
-      self.title = this.$route.params.name
       self.id = this.$route.params.id
       self.getDataList()
     },
@@ -243,6 +247,7 @@
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
         }).catch(() => {
           this.dataList = []
           this.total = 0
@@ -284,7 +289,7 @@
       // 治工具机种关系
       toolModel (id, name) {
         this.$nextTick(() => {
-          this.$router.push({path: `/tool-model/${id}/${name}`})
+          this.$router.push({path: `/tool-model/${id}`})
         })
       },
       // 详情

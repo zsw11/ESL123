@@ -405,7 +405,7 @@ CREATE TABLE basic_staff (
   delete_at timestamp
 );
 comment on table basic_staff is '人员信息';
-Create Unique Index index_codeAndUserId_UNQ On basic_staff(code,user_id);
+Create Unique Index staff_userid_rela_uniq ON basic_staff (user_id) WHERE delete_at IS NULL;
 comment on column basic_staff.job_id is '工作岗位';
 comment on column basic_staff.dept_id is '所属组织集团';
 comment on column basic_staff.user_id is '用户id';

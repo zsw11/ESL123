@@ -80,6 +80,16 @@ public class StaffController extends AbstractController {
     }
 
     /**
+     * 列表rela
+     */
+    @RequestMapping("/listrela")
+    public ResponseEntity<Object> listRela(@RequestParam Map<String, Object> params) throws ParseException {
+        PageUtils page = staffService.queryPageRela(params);
+
+        return RD.ok(page);
+    }
+
+    /**
      * 信息
      */
     @RequestMapping("/detail/{id}")
@@ -139,6 +149,7 @@ public class StaffController extends AbstractController {
      */
     @SysLog("修改人员")
     @RequestMapping("/update")
+    @Transactional(rollbackFor = Exception.class)
     @RequiresPermissions("basic:staff:update")
     public ResponseEntity<Object> update(@RequestBody StaffEntity staff) {
         staff.setUpdateBy(getUserId());
@@ -146,8 +157,13 @@ public class StaffController extends AbstractController {
         staff.setPinyin(PinyinUtil.getPinYin(staff.getName()));
         ValidatorUtils.validateEntity(staff);
         staffService.update(staff);
+        SysUserEntity user = userService.selectById(staff.getUserId());
+        if(user!=null) {
+            user.setDeptId(staff.getDeptId());
+            userService.updateById(user);
+        }
         // 更新引用表,ifUpdate仅需一次，否则最终只会存在最后一条
-        insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
+//        insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
         insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
 
         return RD.ok(staff);
@@ -187,6 +203,8 @@ public class StaffController extends AbstractController {
             // 更新引用表,ifUpdate仅需一次，否则最终只会存在最后一条
             insertTableReference("basic_staff", staff.getId(), "basic_job", staff.getJobId(), true);
             insertTableReference("basic_staff", staff.getId(), "sys_dept", staff.getDeptId(), false);
+            user.setDeptId(staff.getDeptId());
+            userService.updateById(user);
         }
         return RD.build().put("code", 200);
     }

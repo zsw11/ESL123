@@ -163,7 +163,7 @@ public class DataFilterAspect {
 
 			SysDeptEntity dept = sysDeptService.selectById(staff.getDeptId());
 
-			if (dept != null) { // 总部查询所有
+			if (dept.getName().equals("ESL")) { // ESL查询所有
 				List<Long> subDeptIdList = sysDeptService.getSubDeptIdList((long) 1);
 				subDeptIdList.add((long) 1);
 				deptIdList.addAll(subDeptIdList);

@@ -1,5 +1,10 @@
 <template>
-  <div class="workbook-detail-page" :class="[ workbookPercent, isOffline ? 'offline' : '', $route.query.readonly || lockStatus === 'fail' ? 'readonly' : '' ]">
+  <div class="workbook-detail-page"
+    :class="[
+      workbookPercent, isOffline ? 'offline' : '',
+      $route.query.readonly || lockStatus === 'fail' ? 'readonly' : '',
+      isVideoFull ? 'video-full' : 'video-adapt'
+    ]">
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
       <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save" :disabled="$route.query.readonly || lockStatus === 'fail'">保存</el-button>
@@ -36,6 +41,11 @@
             </el-option>
           </el-select>
         </el-tooltip>
+        <el-switch
+          v-model="isVideoFull"
+          active-text="全屏"
+          inactive-text="不遮挡">
+        </el-switch>
       </div>
 
       <div class="workbook-buttons">
@@ -152,6 +162,7 @@
         // 界面
         lockStatus: 'init',
         isOffline: false,
+        isVideoFull: true,
         workbookPercents,
         workbookPercent: 'half',
         // 数据
@@ -604,7 +615,7 @@
                   self.paste()
                   break
                 }
-                case 'i': {
+                case 'l': {
                   self.addStandardBook()
                   break
                 }
@@ -847,15 +858,7 @@
     }
   }
 
-  .video-player-box{
-    width: 100vw;
-    height: calc(100vh - 28px);
-    .video-js,
-    .vjs-tech,
-    .vjs-poster {
-      width: 100vw;
-      height: calc(100vh - 28px);
-    }
+  .video-player-box {
     // .vjs-control-bar,
     .vjs-big-play-button {
       display: none;
@@ -891,7 +894,29 @@
     // }
   }
 
+  &.video-full {
+    .video-player-box {
+      width: 100vw;
+      height: calc(100vh - 28px);
+      .video-js,
+      .vjs-tech,
+      .vjs-poster {
+        width: 100vw;
+        height: calc(100vh - 28px);
+      }
+    }
+  }
   &.hide {
+    .video-player-box {
+      width: 100vw;
+      height: calc(100vh - 28px);
+      .video-js,
+      .vjs-tech,
+      .vjs-poster {
+        width: 100vw;
+        height: calc(100vh - 28px);
+      }
+    }
     .vjs-control-bar {
       bottom: 0;
     }
@@ -906,6 +931,19 @@
     .workbook-content {
       height: 33%;
     }
+    &.video-adapt .video-player-box {
+      width: 100vw;
+      height: calc(67vh - 55px);
+      .video-js,
+      .vjs-tech,
+      .vjs-poster {
+        width: 100vw;
+        height: calc(67vh - 55px);
+      }
+      .vjs-control-bar {
+        bottom: 0;
+      }
+    }
   }
   &.half {
     .vjs-control-bar {
@@ -913,6 +951,19 @@
     }
     .workbook-content {
       height: 50%;
+    }
+    &.video-adapt .video-player-box {
+      width: 100vw;
+      height: calc(50vh - 56px);
+      .video-js,
+      .vjs-tech,
+      .vjs-poster {
+        width: 100vw;
+        height: calc(50vh - 56px);
+      }
+      .vjs-control-bar {
+        bottom: 0;
+      }
     }
   }
   &.full {
@@ -961,6 +1012,15 @@
           height: 22px;
           line-height: 22px;
           color: white;
+        }
+      }
+      .el-switch {
+        .el-switch__label {
+          color:rgba(255, 255, 255, .2);
+          font-size: 12px;
+          &.is-active {
+            color: white;
+          }
         }
       }
     }

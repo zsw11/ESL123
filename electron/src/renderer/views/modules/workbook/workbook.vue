@@ -64,10 +64,10 @@
 
          <el-form-item :label="'制表人'" prop="makerId" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.makerId"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
           <el-form-item :label="'制表日期'" prop="tableAt" >
@@ -83,10 +83,10 @@
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
         </div>
@@ -119,6 +119,11 @@
           header-align="left"
           align="left"
           width="50">
+        </el-table-column>
+
+        <el-table-column
+          label="序号"
+          type="index">
         </el-table-column>
 
         <el-table-column align="center" prop="workName" label="作业名" >
@@ -169,9 +174,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="makerId" label="制表人" >
+        <el-table-column align="center" prop="makerName" label="制表人" >
           <template slot-scope="scope">
-            <span>{{scope.row.makerId }}</span>
+            <span>{{scope.row.makerName }}</span>
           </template>
         </el-table-column>
 
@@ -194,7 +199,7 @@
           </template>
         </el-table-column>
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="320" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="alter(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copy(scope.row.id)">复制</el-button>
@@ -246,7 +251,7 @@ import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
 import { listWorkstation } from '@/api/workstation'
 import { listDict, listDictItem } from '@/api/dict'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 
 export default {
@@ -289,7 +294,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listDept,
       listPhase,

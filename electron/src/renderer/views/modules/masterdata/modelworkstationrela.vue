@@ -48,7 +48,6 @@
                   机种<keyword-search
                         style="margin-left:10px;"
                         v-model="addWorkstationModelId"
-                        
                         :searchApi="this.listModel"
                         :allowEmpty="true"
                         clearable>
@@ -77,6 +76,11 @@
               header-align="left"
               align="left"
               width="50">
+            </el-table-column>
+
+            <el-table-column
+              label="序号"
+              type="index">
             </el-table-column>
 
             <el-table-column align="center" prop="modelName" label="机种名称" >
@@ -219,7 +223,6 @@
     },
     activated () {
       const self = this
-      self.title = self.$route.params.name
       self.id = self.$route.params.id
       self.getDataList()
     },
@@ -241,6 +244,7 @@
         )).then(({page}) => {
           this.dataList = page.data
           this.total = page.totalCount
+          this.title = page.relaName
         }).catch(() => {
           this.dataList = []
           this.total = 0

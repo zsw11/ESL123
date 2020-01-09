@@ -36,19 +36,19 @@
 
         <el-form-item :label="'作成人'" prop="createBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.createBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
           <keyword-search 
-            :searchApi="this.listStaff" 
+            :searchApi="this.listStaffUser" 
             v-model="listQuery.updateBy"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable></keyword-search>
         </el-form-item>
 
@@ -86,6 +86,11 @@
         style="width: 100%;"
       >
         <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50">
+        </el-table-column>
+
+        <el-table-column
+          label="序号"
+          type="index">
         </el-table-column>
 
         <el-table-column align="center" prop="name" label="机种名称">
@@ -198,7 +203,7 @@ import { filterAttributes } from "@/utils";
 import { cloneDeep } from "lodash";
 import ExportData from "@/components/export-data";
 import ImportData from "@/components/import-data";
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 const defaultExport = [
   "model.name",
@@ -238,7 +243,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDept,
       listModelSeries,
       listModel,
@@ -429,19 +434,19 @@ export default {
     // 机种关联部品
     modelPart(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-part/${id}/${name}` });
+        this.$router.push({ path: `/model-part/${id}` });
       });
     },
     // 机种关联治工具
     modelTool(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-tool/${id}/${name}` });
+        this.$router.push({ path: `/model-tool/${id}` });
       });
     },
     // 机种关联工位
     modelWorkStation(id, name) {
       this.$nextTick(() => {
-        this.$router.push({ path: `/model-workstation/${id}/${name}` });
+        this.$router.push({ path: `/model-workstation/${id}` });
       });
     },
     // 删除数据

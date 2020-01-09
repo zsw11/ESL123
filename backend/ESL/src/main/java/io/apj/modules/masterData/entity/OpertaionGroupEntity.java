@@ -72,5 +72,9 @@ public class OpertaionGroupEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	@TableField(exist = false)
+	private String createName;
+	@TableField(exist = false)
+	private String updateName;
 
 }
