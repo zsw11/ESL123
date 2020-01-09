@@ -14,6 +14,7 @@
         <result property="stlst" column="stlst"/>
         <result property="monthResult" column="month_result"/>
         <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="mt" column="mt"/>
         <result property="enter" column="enter"/>
         <result property="selectnum" column="selectnum"/>

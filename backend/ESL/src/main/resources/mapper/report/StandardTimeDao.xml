@@ -13,6 +13,8 @@
         <result property="modelId" column="model_id"/>
         <result property="modelType" column="model_type"/>
         <result property="unit" column="unit"/>
+        <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

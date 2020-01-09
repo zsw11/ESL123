@@ -15,6 +15,7 @@
         <result property="stlst" column="stlst"/>
         <result property="modelType" column="model_type"/>
         <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

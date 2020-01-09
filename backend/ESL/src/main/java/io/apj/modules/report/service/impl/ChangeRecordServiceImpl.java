@@ -138,7 +138,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
 			ChangeRecordEntity entity = selectOne(entityWrapper);
 			if (entity==null) {
 				ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
@@ -148,6 +148,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				changeRecordEntity.setStlst(work.getStlst());
 				changeRecordEntity.setDeptId(work.getDeptId());
 				changeRecordEntity.setDestinations(work.getDestinations());
+				changeRecordEntity.setVersionNumber(work.getVersionNumber());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				changeRecordEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(changeRecordEntity);
