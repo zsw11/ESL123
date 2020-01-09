@@ -26,6 +26,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item prop="password">
+                <div>
                 <el-input
                   class="password"
                   v-model="dataForm.password"
@@ -33,8 +34,9 @@
                   placeholder="密码"
                   size="medium">
                 </el-input>
+                <img class="toggle-pw" src="~@/assets/img/eye.png" alt=""  @click="togglePwShow()">
+                </div>
               </el-form-item>
-              <span class="toggle-pw" @click="togglePwShow()">{{pwType[pw].title}}</span>
               <span class="toggle-login" @click="toggleLogin()">{{modesMap[currentMode].otherName}}登录</span>
               <el-form-item>
                 <el-button
@@ -293,6 +295,11 @@ export default {
 
 .toggle-pw {
   cursor: pointer;
+  width: 8% !important;
+  height: 20px !important;
+  position: absolute;
+  right: 12%;
+  top: 24%;
 }
 
 .toggle-login {
