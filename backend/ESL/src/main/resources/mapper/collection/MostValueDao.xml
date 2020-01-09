@@ -14,6 +14,8 @@
         <result property="firstColumnName" column="first_column_name"/>
         <result property="sheetName" column="sheet_name"/>
         <result property="remark" column="remark"/>
+        <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

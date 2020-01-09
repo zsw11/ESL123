@@ -67,6 +67,10 @@ public class TotalEntity implements Serializable {
 	 */
 	private String destinations;
 	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * 类别
 	 */
 	private String cotegory;

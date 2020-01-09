@@ -138,7 +138,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
 			ChangeRecordEntity entity = selectOne(entityWrapper);
 			if (entity==null) {
 				ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
@@ -148,6 +148,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				changeRecordEntity.setStlst(work.getStlst());
 				changeRecordEntity.setDeptId(work.getDeptId());
 				changeRecordEntity.setDestinations(work.getDestinations());
+				changeRecordEntity.setVersionNumber(work.getVersionNumber());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				changeRecordEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(changeRecordEntity);
@@ -179,9 +180,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 		Integer phaseId = Integer.valueOf(params.get("phaseId").toString());
 		Integer modelId = Integer.valueOf(params.get("modelId").toString());
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
 		EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		ChangeRecordEntity changeRecordEntity = selectOne(entityWrapper);
 		Integer id = null;
 		List<ChangeRecordItemEntity> list = new ArrayList<>();

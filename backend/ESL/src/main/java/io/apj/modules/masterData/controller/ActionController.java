@@ -3,10 +3,13 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import cn.hutool.core.util.PinyinUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.annotation.SysLog;
 import io.apj.common.utils.*;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.entity.ReferenceEntity;
+import io.apj.modules.sys.entity.SysDeptEntity;
+import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,8 @@ public class ActionController extends AbstractController {
 	private ActionService actionService;
 	@Autowired
 	private SysDictService sysDictService;
+	@Autowired
+	private SysDeptService deptService;
 
 	/**
 	 * 列表
@@ -125,6 +130,7 @@ public class ActionController extends AbstractController {
 	public void exportExcel(HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
 		// 过滤字段，前端传
 		List<String> list = (List<String>) map.get("exportAttributes");
+		list.add("action.deptName");
 		// 查询类型
 		String type = map.get("filterType").toString();
 		// 普通查询
@@ -139,7 +145,13 @@ public class ActionController extends AbstractController {
 		// 处理数据源
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		HashMap<String, String> dict = sysDictService.getDictDetail();
+		Map<Integer, String> deptMap = new HashMap<>();
+		List<SysDeptEntity> sysDeptEntityList = deptService.selectList(new EntityWrapper<SysDeptEntity>().isNull("delete_at"));
+		for(SysDeptEntity item : sysDeptEntityList){
+			deptMap.put(item.getId().intValue(),item.getName());
+		}
 		for (ActionEntity item : actionEntityList) {
+			item.setDeptName(deptMap.get(item.getDeptId().intValue()));
 			// 处理数据源
 			Map<String, Object> arr = DataUtils.dataChange("action", item, dict);
 			dataList.add(arr);

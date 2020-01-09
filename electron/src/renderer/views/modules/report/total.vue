@@ -27,7 +27,6 @@
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
               v-model="listQuery.modelId"
-              
               :searchApi="this.listModel"
               :allowEmpty="true"
               clearable>
@@ -38,7 +37,6 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -168,6 +166,8 @@
         style="width: 100%;"
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
+
+        <el-table-column label="序号" type="index"></el-table-column>
 
 <!--        <el-table-column align="center" prop="id" label="ID">-->
 <!--          <template slot-scope="scope">-->
@@ -340,7 +340,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst,scope.row.destinations,scope.row.versionNumber)"
               v-if="scope.row.exist"
             >提交审批</el-button>
             <el-button
@@ -414,7 +414,9 @@ export default {
         nextApproverId: null,
         modelId: null,
         phaseId: null,
-        stlst: null
+        stlst: null,
+        destinations: null,
+        versionNumber: null,
       },
       reportGroup: [],
       dataButton: 'list',
@@ -736,11 +738,15 @@ export default {
       this.approveForm.modelId = modelId
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
+      this.approveForm.destinations = destinations
+      this.approveForm.versionNumber = versionNumber
       let data = {
         name: 'Report-Total表',
         modelId,
         phaseId,
-        stlst
+        stlst,
+        destinations,
+        versionNumber
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page
@@ -789,6 +795,8 @@ export default {
         modelId: row.modelId,
         phaseId: row.phaseId,
         stlst: row.stlst,
+        destinations: row.destinations,
+        versionNumber: row.versionNumber,
         reportId: 7
       }
       downloadReportApprove(data).then(response => {

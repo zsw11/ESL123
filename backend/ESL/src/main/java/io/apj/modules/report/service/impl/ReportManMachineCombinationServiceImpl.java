@@ -81,9 +81,11 @@ public class ReportManMachineCombinationServiceImpl
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		ReportManMachineCombinationEntity reportManMachineCombinationEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
@@ -174,7 +176,8 @@ public class ReportManMachineCombinationServiceImpl
 		List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id", work.getPhaseId());
+			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
+					work.getPhaseId()).eq("destinations",work.getDestinations()).eq("version_number", work.getVersionNumber());
 			ReportManMachineCombinationEntity reportManMachineCombination = selectOne(entityWrapper);
 			if (reportManMachineCombination==null) {
 				ReportManMachineCombinationEntity reportManMachineCombinationEntity=new ReportManMachineCombinationEntity();
@@ -184,6 +187,8 @@ public class ReportManMachineCombinationServiceImpl
 				reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
 				reportManMachineCombinationEntity.setStlst(work.getStlst());
 				reportManMachineCombinationEntity.setDeptId(work.getDeptId());
+				reportManMachineCombinationEntity.setDestinations(work.getDestinations());
+				reportManMachineCombinationEntity.setVersionNumber(work.getVersionNumber());
 				insert(reportManMachineCombinationEntity);
 				results.add(reportManMachineCombinationEntity);
 			}else{

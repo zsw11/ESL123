@@ -405,7 +405,7 @@ CREATE TABLE basic_staff (
   delete_at timestamp
 );
 comment on table basic_staff is '人员信息';
-Create Unique Index index_codeAndUserId_UNQ On basic_staff(code,user_id);
+Create Unique Index staff_userid_rela_uniq ON basic_staff (user_id) WHERE delete_at IS NULL;
 comment on column basic_staff.job_id is '工作岗位';
 comment on column basic_staff.dept_id is '所属组织集团';
 comment on column basic_staff.user_id is '用户id';
@@ -1478,6 +1478,7 @@ CREATE TABLE collection_station_time (
   phase_id integer,
   stlst varchar(128),
   destinations varchar(128),
+  version_number varchar(32),
   comfirm_by integer,
   in_charge_by integer,
   create_by integer,
@@ -1540,7 +1541,9 @@ CREATE TABLE collection_most_value (
   model_id integer,
   phase_id integer,
   stlst varchar(128),
+  version_number varchar(32),
   first_column_name varchar(128),
+  destinations varchar(128),
   sheet_name varchar(128),
   remark text,
   create_by integer,
@@ -1598,6 +1601,7 @@ CREATE TABLE collection_revision_history (
   sheet_name varchar(128),
   model_id integer,
   destinations varchar(128),
+  version_number varchar(32),
   phase_id integer,
   stlst varchar(128),
   comfirm_by integer,
@@ -1684,6 +1688,7 @@ CREATE TABLE collection_compare (
   destinations varchar(128),
   comfirm_by integer,
   in_charge_by integer,
+  version_number varchar(32),
   first_column_name varchar(64),
   last_version_name varchar(64),
   current_version_name varchar(64),
@@ -1755,6 +1760,7 @@ CREATE TABLE report_total (
   phase_id integer,
   month_result timestamp,
   destinations varchar(128),
+  version_number varchar(32),
   stlst varchar(128),
   cotegory varchar(64),
   mecha varchar(64),
@@ -1853,6 +1859,8 @@ CREATE TABLE report_time_contact (
   revise_reason varchar(16),
   stlst varchar(128),
   phase_id integer,
+  version_number varchar(32),
+  destinations varchar(128),
   Rev_no varchar(64),
   all_count_sub decimal(10, 2),
   all_count_main decimal(10, 2),
@@ -1921,6 +1929,8 @@ CREATE TABLE report_standard_time (
   dept_id integer,
   title varchar(128),
   stlst varchar(128),
+  version_number varchar(32),
+  destinations varchar(128),
   phase_id integer,
   sheet_name varchar(128),
   model_id integer,
@@ -1995,6 +2005,8 @@ CREATE TABLE report_standard_work (
   coefficient decimal(10, 2),
   phase_id integer,
   Rev_No varchar(64),
+  version_number varchar(32),
+  destinations varchar(128),
   month_result timestamp,
   first_standard_work_title varchar(32),
   second_standard_work_title varchar(32),
@@ -2071,6 +2083,7 @@ CREATE TABLE report_change_record (
   phase_id integer,
   model_type varchar(64),
   destinations varchar(64),
+  version_number varchar(32),
   create_by integer,
   create_at timestamp default now(),
   update_by integer,
@@ -2130,6 +2143,8 @@ CREATE TABLE report_approve (
   model_id integer,
   phase_id integer,
   stlst varchar(128),
+  version_number varchar(32),
+  destinations varchar(128),
   report_group_id integer,
   next_approver_id integer,
   status varchar(32),
@@ -2193,6 +2208,7 @@ CREATE TABLE report_man_machine_combination (
   stlst integer,
   month_result timestamp,
   destinations varchar(128),
+  version_number varchar(32),
   mt decimal(10, 2),
   enter decimal(10, 2),
   selectNum varchar(2),

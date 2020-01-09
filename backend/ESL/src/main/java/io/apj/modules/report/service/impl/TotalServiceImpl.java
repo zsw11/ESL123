@@ -157,7 +157,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+				work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
 			TotalEntity total = selectOne(entityWrapper);
 			if (total==null) {
 				TotalEntity totalEntity = new TotalEntity();
@@ -166,7 +166,8 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 				totalEntity.setPhaseId(work.getPhaseId());
 				totalEntity.setStlst(work.getStlst());
 				totalEntity.setDeptId(work.getDeptId());
-				totalEntity.setDestinations(work.getDestinations());
+				//totalEntity.setDestinations(work.getDestinations());
+				totalEntity.setVersionNumber(work.getVersionNumber());
 				totalEntity.setSheetName("total");
 				totalEntity.setDestinations(work.getDestinations());
 				insert(totalEntity);
@@ -184,9 +185,11 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TotalEntity totalEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();

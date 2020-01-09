@@ -1,18 +1,139 @@
 <template>
-  <div class="mod-home">
+  <div class="home-page">
+    <el-row>
+      <el-col :span="17" class="functions">
+        <div class="title">欢 迎 使 用 STAMS</div>
+        <el-row>
+          <el-col :span="8" @click.native="go({ path: '/workbook-workbook'})">
+            <img src="@/assets/img/home/workbook.jpg" alt="">
+            <p>时间分析</p>
+          </el-col>
+          <el-col :span="8">
+            <img src="@/assets/img/home/report.jpg" alt="">
+            <p>数据统计</p>
+          </el-col>
+          <el-col :span="8" @click.native="go({ path: '/masterdata-model'})">
+            <img src="@/assets/img/home/master-data.jpg" alt="">
+            <p>Master Data</p>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8" @click.native="go({ path: '/report-approve'})">
+            <img src="@/assets/img/home/approve.jpg" alt="">
+            <p>报表审批</p>
+          </el-col>
+          <el-col :span="8" @click.native="go({ path: '/sys-role'})">
+            <img src="@/assets/img/home/role.jpg" alt="">
+            <p>权限管理</p>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <img src="@/assets/img/home/query.jpg" alt="">
+            <p>查询</p>
+          </el-col>
+          <el-col :span="8" @click.native="go({ path: '/sys-config'})">
+            <img src="@/assets/img/home/setting.jpg" alt="">
+            <p>系统设置</p>
+          </el-col>
+          <el-col :span="8">
+            <img src="@/assets/img/home/manual.jpg" alt="">
+            <p>操作指引</p>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="7" class="info">
+        <div>
+          <img src="@/assets/img/home/message.jpg" alt="">
+          <p>我的消息</p>
+        </div>
+        <div>
+          <img src="@/assets/img/home/operation.jpg" alt="">
+          <p>最近操作</p>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'home',
+  data () {
+    return  {
+
+    }
+  },
+  created () {
+    console.log('init')
+  },
+  methods: {
+    go (route) {
+      this.$router.push(route)
+    }
+  }
+}
+</script>
+
 <style scoped lang="scss">
-  .alyBox{
-    margin: -18px;
-    background-color: #fff;
-    height: 47px;
-    line-height: 47px;
-    font-size: 14px;
-    color: #1989FA;
-    padding-left: 30px;
-    cursor: pointer;
+  .home-page{
+    height: 100%;
+    width: 100%;
+    background-image: url("~@/assets/img/home/home-bg.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    > .el-row {
+      height: 100%;
+      > .el-col {
+        height: 100%;
+      }
+    }
+
+    .functions {
+      position: relative;
+      border-right: solid 3px skyblue;
+      padding: 3%;
+      .title {
+        margin: 0;
+        font-size: 5vh;
+      }
+      .el-row {
+        height: 30%;
+        .el-col {
+          height: 100%;
+          text-align: center;
+          img {
+            height: 30%;
+            margin-top: 20%;
+          }
+          p {
+            text-align: center;
+            font-size: 2.5vh;
+          }
+          &:hover {
+            color: #999;
+          }
+        }
+      }
+    }
+    .info {
+      padding: 10% 0;
+      div {
+        height: 50%;
+        img {
+          width: 25%;
+          margin-left: 37.5%;
+          margin-right: 37.5%;
+        }
+        p {
+          text-align: center;
+          font-size: 2.5vh;
+        }
+        &:hover {
+          color: #999;
+        }
+      }
+    }
   }
 </style>
-<script>
-</script>

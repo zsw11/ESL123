@@ -347,6 +347,14 @@ img {
 
 /* Content
 ------------------------------ */
+.site-no-sidebar-content__wrapper{
+  position: relative;
+  padding-top: 50px;
+  .site-content {
+    padding: 0;
+    height: 100%;
+  }
+}
 .site-content {
   position: relative;
   padding: 15px;

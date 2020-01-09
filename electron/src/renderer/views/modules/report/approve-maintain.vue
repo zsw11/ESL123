@@ -125,7 +125,9 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        destinations: null,
+        versionNumber: null,
       },
       dataRules: {
         deptId: [{ type: 'number', message: '所属部门需为数字值' }],
@@ -227,7 +229,9 @@ export default {
                 'createAt',
                 'updateBy',
                 'updateAt',
-                'deleteAt'
+                'deleteAt',
+                'destinations',
+                'versionNumber'
               ])
             )
           })
@@ -269,8 +273,11 @@ export default {
         modelId: this.dataForm.modelId,
         phaseId: this.dataForm.phaseId,
         stlst: this.dataForm.stlst,
+        destinations: this.dataForm.destinations,
+        versionNumber: this.dataForm.versionNumber,
         reportId: id
       }
+
       downloadReportApprove(data).then(response => {
         
       });

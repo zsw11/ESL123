@@ -145,7 +145,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 			List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
 			for (StandardWorkEntity entity : list) {
 				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-						entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 				if (filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
 					standardWorkItemService.generateStandardWorkItem(filteredWorkBookIds, entity.getId());
 				}
@@ -158,7 +158,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+				work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number",work.getVersionNumber());
 			StandardWorkEntity entity = selectOne(entityWrapper);
 			if (entity==null) {
 				StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
@@ -166,6 +166,8 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 				standardWorkEntity.setPhaseId(work.getPhaseId());
 				standardWorkEntity.setStlst(work.getStlst());
 				standardWorkEntity.setDeptId(work.getDeptId());
+				standardWorkEntity.setDestinations(work.getDestinations());
+				standardWorkEntity.setVersionNumber(work.getVersionNumber());
 				insert(standardWorkEntity);
 				results.add(standardWorkEntity);
 			}else{
@@ -182,9 +184,11 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
 		EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		StandardWorkEntity standardWorkEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();

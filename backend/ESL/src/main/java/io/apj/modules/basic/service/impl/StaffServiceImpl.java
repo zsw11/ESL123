@@ -107,6 +107,11 @@ public class StaffServiceImpl extends ServiceImpl<StaffDao, StaffEntity> impleme
     public PageUtils queryPageRela(Map<String, Object> params) {
         Wrapper<StaffEntity> entityWrapper = new EntityWrapper<StaffEntity>().isNull("delete_at").isNotNull("user_id");
         entityWrapper.orderBy("create_at", false);
+        if (StringUtils.isNotEmpty((CharSequence) params.get("keyWord"))) {
+            String name = (String) params.get("keyWord");
+            name = name.replace(",", "");
+            entityWrapper.andNew("name  like '%" + name + "%'" + " or pinyin  like '%" + name + "%'");
+        }
         Page<StaffEntity> page = this.selectPage(new Query<StaffEntity>(params).getPage(), entityWrapper);
         return new PageUtils(page);
     }

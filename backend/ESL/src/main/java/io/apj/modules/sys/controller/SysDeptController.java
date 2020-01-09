@@ -1,11 +1,13 @@
 
 package io.apj.modules.sys.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import io.apj.modules.app.entity.UserEntity;
+import io.apj.modules.sys.entity.SysUserEntity;
+import io.apj.modules.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,8 @@ import io.apj.modules.sys.service.SysDeptService;
 public class SysDeptController extends AbstractController {
 	@Autowired
 	private SysDeptService sysDeptService;
+	@Autowired
+	private SysUserService userService;
 
 	/**
 	 * 列表
@@ -50,7 +54,9 @@ public class SysDeptController extends AbstractController {
 		List<SysDeptEntity> deptList = sysDeptService.queryListByName(params);
 		HashMap<Object, Object> page = new HashMap<>();
 		page.put("data", deptList);
-		page.put("totalPage", deptList.size());
+		if(deptList!=null) {
+			page.put("totalPage", deptList.size());
+		}
 		return RD.ok(page);
 	}
 
@@ -129,6 +135,16 @@ public class SysDeptController extends AbstractController {
 		dept.setCreateAt(new Date());
 		dept.setUpdateAt(new Date());
 		dept.setCreateBy(getUserId());
+		String deptType = sysDeptService.selectById(dept.getParentId()).getDeptType();
+		if(deptType.equals("bloc")){
+			dept.setDeptType("center");
+		}else if(deptType.equals("center")){
+			dept.setDeptType("dept");
+		}else if(deptType.equals("dept")){
+			dept.setDeptType("dept");
+		}else {
+			dept.setDeptType("bloc");
+		}
 
 		sysDeptService.insert(dept);
 
@@ -145,11 +161,18 @@ public class SysDeptController extends AbstractController {
 
 		ValidatorUtils.validateEntity(dept, AddGroup.class);
 
-		SysDeptEntity d = sysDeptService.selectById(dept.getId());
-		dept.setCreateAt(d.getCreateAt());
-		dept.setCreateBy(d.getCreateBy());
 		dept.setUpdateAt(new Date());
 		dept.setUpdateBy(getUserId());
+		String deptType = sysDeptService.selectById(dept.getParentId()).getDeptType();
+		if(deptType.equals("bloc")){
+			dept.setDeptType("center");
+		}else if(deptType.equals("center")){
+			dept.setDeptType("dept");
+		}else if(deptType.equals("dept")){
+			dept.setDeptType("dept");
+		}else {
+			dept.setDeptType("bloc");
+		}
 		sysDeptService.updateById(dept);
 
 		return R.ok();
@@ -186,7 +209,10 @@ public class SysDeptController extends AbstractController {
 		SysDeptEntity dept = sysDeptService.selectById(Long.valueOf(params.get("deptId").toString()));
 		dept.setDeleteAt(new Date());
 		sysDeptService.updateById(dept);
-
+		List<SysUserEntity> entityList = userService.selectList(new EntityWrapper<SysUserEntity>().eq("dept_id",dept.getId()));
+		for(SysUserEntity item : entityList){
+			item.setDeptId(null);
+		}
 		return R.ok();
 	}
 

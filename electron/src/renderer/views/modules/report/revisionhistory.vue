@@ -162,6 +162,8 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
+        <el-table-column label="序号" type="index"></el-table-column>
+
 <!--        <el-table-column align="center" prop="id" label="ID">-->
 <!--          <template slot-scope="scope">-->
 <!--            <span>{{scope.row.id }}</span>-->
@@ -326,7 +328,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst,scope.row.destinations,scope.row.versionNumber)"
               v-if="scope.row.exist">提交审批</el-button>
             <el-button
               size="mini"
@@ -394,11 +396,11 @@ export default {
     return {
       approveShow: false,
       approveForm: {
-        reportGroupId: null,
-        nextApproverId: null,
         modelId: null,
         phaseId: null,
-        stlst: null
+        stlst: null,
+        reportGroupId: null,
+        nextApproverId: null,
       },
       reportGroup: [],
       dataButton: 'list',
@@ -711,11 +713,15 @@ export default {
       this.approveForm.modelId = modelId
       this.approveForm.phaseId = phaseId
       this.approveForm.stlst = stlst
+      this.approveForm.destinations = destinations
+      this.approveForm.versionNumber = versionNumber
       let data = {
         name: 'Collection-Revision History表',
         modelId,
         phaseId,
-        stlst
+        stlst,
+        destinations,
+        versionNumber
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page
@@ -770,6 +776,8 @@ export default {
         modelId: row.modelId,
         phaseId: row.phaseId,
         stlst: row.stlst,
+        destinations: row.destinations,
+        versionNumber: row.versionNumber,
         reportId: 6
       }
       downloadReportApprove(data).then(response => {

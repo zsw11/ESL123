@@ -121,6 +121,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="workName" label="作业名" >
           <template slot-scope="scope">
             <span>{{scope.row.workName }}</span>
@@ -194,7 +199,7 @@
           </template>
         </el-table-column>
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="320" class-name="small-padding fixed-width btn-wrp">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="alter(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copy(scope.row.id)">复制</el-button>
@@ -571,5 +576,8 @@ export default {
       display: block;
       margin-left: 0;
     }
+  }
+  .btn-wrp{
+    text-align: left !important;
   }
 </style>

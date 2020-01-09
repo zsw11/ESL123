@@ -16,6 +16,7 @@ import io.apj.modules.masterData.entity.OperationGroupOperationEntity;
 import io.apj.modules.masterData.entity.PartEntity;
 import io.apj.modules.masterData.service.OperationGroupOperationService;
 import io.apj.modules.sys.service.SysDeptService;
+import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -123,7 +124,7 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 	public ResponseEntity<Object> UpdataOpertaionGroup(Map<String, Object> map) {
 		OpertaionGroupEntity opertaionGroup = new OpertaionGroupEntity();
 		DataUtils.transMap2Bean2((Map<String, Object>) map.get("operationGroup"), opertaionGroup);
-		opertaionGroup.setUpdateBy((Integer) map.get("updateBy"));
+//		opertaionGroup.setUpdateBy((Integer) map.get("updateBy"));
 		// 更新主表
 		opertaionGroupService.updatePinAndDataById(opertaionGroup);
 		// 删除原来子表
@@ -135,7 +136,9 @@ public class OpertaionGroupServiceImpl extends ServiceImpl<OpertaionGroupDao, Op
 		List<Map<String, Object>> operations = (List<Map<String, Object>>) map.get("operations");
 		for (int i = 0; i < operations.size(); i++) {
 			OperationGroupOperationEntity operationGroupOperationEntity = new OperationGroupOperationEntity();
-			DataUtils.transMap2Bean2(operations.get(i), operationGroupOperationEntity);
+//			DataUtils.transMap2Bean2(operations.get(i), operationGroupOperationEntity);
+			operationGroupOperationEntity = JSON.parseObject(JSON.toJSONString(operations.get(i)),
+					OperationGroupOperationEntity.class);
 			operationGroupOperationEntity.setOperationGroupId(opertaionGroup.getId());
 			operationGroupOperationEntity.setPinyin(PinyinUtil.getPinYin(operationGroupOperationEntity.getOperation()));
 			operationGroupOperationService.insert(operationGroupOperationEntity);

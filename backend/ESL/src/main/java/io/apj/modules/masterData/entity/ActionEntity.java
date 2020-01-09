@@ -65,4 +65,6 @@ public class ActionEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	@TableField(exist = false)
+	private String deptName;
 }

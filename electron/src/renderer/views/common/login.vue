@@ -26,13 +26,16 @@
                 </el-input>
               </el-form-item>
               <el-form-item prop="password">
+                <div>
                 <el-input
                   class="password"
                   v-model="dataForm.password"
-                  type="password"
+                  :type="pwType[pw].type"
                   placeholder="密码"
                   size="medium">
                 </el-input>
+                <img class="toggle-pw" src="~@/assets/img/eye.png" alt=""  @click="togglePwShow()">
+                </div>
               </el-form-item>
               <span class="toggle-login" @click="toggleLogin()">{{modesMap[currentMode].otherName}}登录</span>
               <el-form-item>
@@ -74,12 +77,23 @@ const modesMap = {
   }
 }
 
+const pwType = {
+  show: {
+    type: null,
+    title: '隐藏密码'
+  },
+  hide: {
+    type: 'password',
+    title: '显示密码'
+  }
+}
 export default {
   components: {
     VerifySlide
   },
   data() {
     return {
+      pw:'hide',
       logining: false,
       currentMode: 'apo',
       dataForm: {
@@ -99,7 +113,8 @@ export default {
         jigsawVerify: [{ required: true, message: "请拖动拼图进行校验" }]
       },
       captchaPath: "",
-      modesMap
+      modesMap,
+      pwType
     };
   },
   methods: {
@@ -126,6 +141,10 @@ export default {
       this.dataForm.username = null;
       this.dataForm.password = null;
       this.currentMode = this.currentMode === 'apo' ? 'local' : 'apo';
+    },
+    // 切换密码显示
+    togglePwShow() {
+      this.pw = this.pw === 'show' ? 'hide' : 'show'
     }
   }
 };
@@ -274,7 +293,17 @@ export default {
   }
 }
 
+.toggle-pw {
+  cursor: pointer;
+  width: 8% !important;
+  height: 20px !important;
+  position: absolute;
+  right: 12%;
+  top: 24%;
+}
+
 .toggle-login {
+  margin-top: 5%;
   cursor: pointer;
   color: #1f297e;
   height: 20px;
