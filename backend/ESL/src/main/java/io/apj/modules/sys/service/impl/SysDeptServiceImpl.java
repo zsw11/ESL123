@@ -17,11 +17,14 @@
 package io.apj.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
 import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.Constant;
+import io.apj.common.utils.Query;
+import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.sys.dao.SysDeptDao;
 import io.apj.modules.sys.entity.SysDeptEntity;
 import io.apj.modules.sys.service.SysDeptService;
@@ -176,7 +179,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> i
 			return allDeptList;
 
 		} else {
-			return null;
+			return deptList;
 		}
 	}
 
