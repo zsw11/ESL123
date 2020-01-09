@@ -1,9 +1,8 @@
 {
   "name": "most",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "Freedom <furuihe@gmail.com>",
   "description": "MOST",
-  "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
