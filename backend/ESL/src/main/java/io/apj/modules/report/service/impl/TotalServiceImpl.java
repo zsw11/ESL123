@@ -144,7 +144,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 			List<TotalEntity> list = generateTotal(filteredWorkBooks);
 			for (TotalEntity entity : list) {
-				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId(),entity.getVersionNumber(),entity.getDestinations());
 				if(filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
 					totalItemService.generateTotalItem(filteredWorkBookIds, entity.getId());
 				}
