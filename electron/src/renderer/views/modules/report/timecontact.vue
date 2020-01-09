@@ -93,6 +93,8 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
+        <el-table-column label="序号" type="index"></el-table-column>
+
 
         <el-table-column align="center" prop="sheetName" label="Sheet名称">
           <template slot-scope="scope">

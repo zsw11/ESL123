@@ -121,6 +121,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="workName" label="作业名" >
           <template slot-scope="scope">
             <span>{{scope.row.workName }}</span>

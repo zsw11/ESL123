@@ -158,7 +158,7 @@ export default {
       },
       dataRules: {
         deptId: [{ required: true, type: 'number', message: '部门是必选项' }],
-        code: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        code: [{ required: true, type: 'number', message: '编号是必填项' }],
         name: [
           { required: true, message: '名字不能为空', trigger: 'blur' },
           { max: 64, message: '长度超过了64', trigger: 'blur' }

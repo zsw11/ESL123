@@ -64,6 +64,11 @@
           align="center">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="opininon" label="常用审批意见内容" >
           <template slot-scope="scope">
             <span>{{scope.row.opininon }}</span>

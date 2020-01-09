@@ -79,6 +79,11 @@
         <el-table-column fixed="left" type="selection" header-align="left" align="left" width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="modelName" label="机种名称">
           <template slot-scope="scope">
             <span>{{scope.row.modelName }}</span>

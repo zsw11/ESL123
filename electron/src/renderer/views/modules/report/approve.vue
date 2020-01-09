@@ -9,7 +9,6 @@
           <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
               v-model="listQuery.reportGroupId"
-              
               :searchApi="this.listReportGroup"
               :allowEmpty="true"
               clearable>
@@ -19,7 +18,6 @@
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
             v-model="listQuery.modelId"
-            
             :searchApi="this.listModel"
             :allowEmpty="true" clearable>
           </keyword-search>
@@ -39,7 +37,6 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -81,6 +78,7 @@
         style="width: 100%;">
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
+        <el-table-column label="序号" type="index"></el-table-column>
 
 <!--        <el-table-column align="center" prop="deptId" label="所属部门">-->
 <!--          <template slot-scope="scope">-->
