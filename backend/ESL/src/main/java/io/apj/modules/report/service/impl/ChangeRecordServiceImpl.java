@@ -162,7 +162,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 	@Override
 	public void updateEntity(ChangeRecordEntity changeRecord) {
 
-		if (changeRecord.getItems().size() > 0) {
+		if (changeRecord.getItems() != null && changeRecord.getItems().size() > 0) {
 			changeRecordItemService.insertOrUpdateBatch(changeRecord.getItems());
 		}
 		if (changeRecord.getModelId() == 0)
@@ -201,21 +201,6 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 			generateTotalData(list);
 		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
-
-//		String templateFileName = Constant.TEMPLATE_PATH + "report_change_record_template.xls";
-//		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
-//		File historyExcel = new File(exportFileName);
-//		if (historyExcel.exists()) {
-//			historyExcel.delete();
-//		}
-
-//		ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
-//		WriteSheet writeSheet = EasyExcel.writerSheet().build();
-//		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
-//		excelWriter.fill(map, writeSheet);
-//		excelWriter.fill(list, fillConfig, writeSheet);
-//		excelWriter.finish();
-//		return Arrays.asList(exportFileName);
 		String templateFileName = Constant.TEMPLATE_PATH + "report_change_record_template.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);

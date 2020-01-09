@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -33,6 +35,7 @@ public class ChangeRecordItemEntity implements Serializable {
 	/**
 	 * 制定日
 	 */
+	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	private Date makedAt;
 	/**
 	 * 版本号

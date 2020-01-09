@@ -161,7 +161,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		map.put("customer", "??");
 		map.put("esl", "??");
 		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
-		if(list!=null&&list.size()>0) {
+		if(list != null && list.size() > 0) {
 			generateTotalData(list, map);
 		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_most_value.xls";

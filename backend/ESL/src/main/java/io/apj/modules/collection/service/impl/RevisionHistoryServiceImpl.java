@@ -200,7 +200,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 			id = revisionHistoryEntity.getId();
 			map.put("factory", revisionHistoryEntity.getFactory());
 			map.put("monthResult", revisionHistoryEntity.getMonthResult());
-			map.put("rev_no", revisionHistoryEntity.getRevNo());
+			map.put("revNo", revisionHistoryEntity.getRevNo());
 			map.put("destinations", revisionHistoryEntity.getDestinations());
 			list= revisionHistoryItemService.getListBySWId(id);
 			sheetName=revisionHistoryEntity.getSheetName();
