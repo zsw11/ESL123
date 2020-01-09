@@ -160,7 +160,9 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                     break;
                 case "collection_compare":
                     List<CompareEntity> compareEntity = (List<CompareEntity>) compareService.selectList(new EntityWrapper<CompareEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    reportItemList.add(reportEntity);
+                    if(compareEntity.isEmpty()){
+                        reportItemList.add(reportEntity);
+                    }
                     break;
                 case "collection_most_value":
                     List<MostValueEntity> mostValueEntity = (List<MostValueEntity>) mostValueService.selectList(new EntityWrapper<MostValueEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
@@ -170,7 +172,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                     break;
                 case "collection_revision_history":
                     List<RevisionHistoryEntity> revisionHistoryEntity = (List<RevisionHistoryEntity>) revisionHistoryService.selectList(new EntityWrapper<RevisionHistoryEntity>().eq("model_id", mid).eq("phase_id", pid).eq("stlst", stlst));
-                    if (!revisionHistoryEntity.isEmpty()) {
+                    if (revisionHistoryEntity.isEmpty()) {
                         reportItemList.add(reportEntity);
                     }
                     break;
