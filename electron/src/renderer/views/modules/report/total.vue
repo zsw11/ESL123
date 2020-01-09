@@ -27,7 +27,6 @@
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
               v-model="listQuery.modelId"
-              
               :searchApi="this.listModel"
               :allowEmpty="true"
               clearable>
@@ -38,7 +37,6 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
