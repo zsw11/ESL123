@@ -65,9 +65,7 @@
       <div slot="header" class="clearfix">
         <div class="card-title">人机联合表</div>
         <div class="buttons">
-          <el-button v-if="isAuth('report:reportmanmachinecombination:create')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-
-          <el-button v-if="isAuth('report:reportmanmachinecombination:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+          <el-button :disabled="dataListSelections.length <= 0">批量下载</el-button>
         </div>
       </div>
       <el-table
@@ -135,7 +133,16 @@
       <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button v-if="isAuth('report:reportmanmachinecombination:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button v-if="isAuth('report:reportmanmachinecombination:delete')" size="mini" type="text" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="approve(scope.row.modelId,scope.row.phaseId,scope.row.stlst)"
+            >提交审批</el-button>
+            <!-- <el-button
+              size="mini"
+              type="text"
+              v-if="!scope.row.exist"
+            >已提交审批</el-button>           -->
             <el-button
               size="mini"
               type="text"
@@ -154,7 +161,34 @@
         :total="total"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
-
+    <el-dialog
+      customClass="dialog"
+      width="30%"
+      title="报表审批"
+      :visible.sync="approveShow">
+      <el-form :inline="true" :model="approveForm" @keyup.enter.native="getDataList()">
+        <el-form-item :label="'选择报表组'">
+          <el-radio-group v-model="approveForm.reportGroupId" size="small">
+            <el-radio :label="item.id"  v-for="item in reportGroup" :key="item.id">{{item.name}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <div>
+           <el-form-item :label="'下一审批者'" prop="nextApproverId" >
+            <keyword-search
+            v-model="approveForm.nextApproverId"
+            :searchApi="this.listStaffUser"
+            :allowEmpty="true"
+            valueColumn="userId"
+            clearable>
+          </keyword-search>
+          </el-form-item>
+        </div>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="approveShow = false">取 消</el-button>
+            <el-button type="primary" @click="approvePut">确 定</el-button>
+          </span>
+    </el-dialog>
     </el-card>
   </div>
 </template>
@@ -166,11 +200,22 @@ import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
+import { listStaffUser } from '@/api/staff'
+import { fetchReportGroup } from '@/api/report'
 
 export default {
   name: 'reportManMachineCombinationList',
   data () {
     return {
+      approveShow: false,
+      approveForm: {
+        reportGroupId: null,
+        nextApproverId: null,
+        modelId: null,
+        phaseId: null,
+        stlst: null
+      },
+      reportGroup: [],
       dataButton: 'list',
       listQuery: {
         id: null,
@@ -192,6 +237,7 @@ export default {
         updateAt: null,
         deleteAt: null,
      },
+      listStaffUser,
       listModel,
       listPhase,
       dataList: [],
@@ -330,6 +376,53 @@ export default {
           this.getDataList()
         })
       })
+    },
+        // 提交审批
+    approve (modelId, phaseId, stlst) {
+      this.approveForm.modelId = modelId
+      this.approveForm.phaseId = phaseId
+      this.approveForm.stlst = stlst
+      let data = {
+        name: '人机联合表',
+        modelId,
+        phaseId,
+        stlst
+      }
+      fetchReportGroup(data).then((page) => {
+        this.reportGroup = page
+      })
+      this.approveShow = true
+    },
+    // 确定提交
+    approvePut () {
+      if (this.approveShow) {
+        createReportApprove(this.approveForm).then((page) => {
+          if (!page) {
+            this.approveShow = false
+            this.$notify({
+              title: '成功',
+              message: '提交审批成功',
+              type: 'success',
+              duration: 2000
+            })
+          }else {
+            let name = ''
+            page.forEach((item)=>{
+              name += (item.name + '   ')
+            })
+            this.$message({
+              message: name+'未生成',
+              type: 'warning',
+              duration: 3000,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+            this.approveShow = false
+          }
+          this.getDataList()
+        })
+      }
     },
     // 字典表
     getDictByType () {

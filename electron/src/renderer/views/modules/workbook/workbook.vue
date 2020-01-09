@@ -199,7 +199,7 @@
           </template>
         </el-table-column>
 
-      <el-table-column align="center" fixed="right" :label="'操作'" width="350" class-name="small-padding fixed-width">
+      <el-table-column align="center" fixed="right" :label="'操作'" width="320" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="alter(scope.row.id)">版本修订</el-button>
             <el-button  type="text" size="small" @click="copy(scope.row.id)">复制</el-button>
