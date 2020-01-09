@@ -1,12 +1,10 @@
 
 package io.apj.modules.sys.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import io.apj.modules.app.entity.UserEntity;
 import io.apj.modules.sys.entity.SysUserEntity;
 import io.apj.modules.sys.service.SysUserService;
@@ -56,7 +54,9 @@ public class SysDeptController extends AbstractController {
 		List<SysDeptEntity> deptList = sysDeptService.queryListByName(params);
 		HashMap<Object, Object> page = new HashMap<>();
 		page.put("data", deptList);
-		page.put("totalPage", deptList.size());
+		if(deptList!=null) {
+			page.put("totalPage", deptList.size());
+		}
 		return RD.ok(page);
 	}
 
