@@ -180,9 +180,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 		Integer phaseId = Integer.valueOf(params.get("phaseId").toString());
 		Integer modelId = Integer.valueOf(params.get("modelId").toString());
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
 		EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		ChangeRecordEntity changeRecordEntity = selectOne(entityWrapper);
 		Integer id = null;
 		List<ChangeRecordItemEntity> list = new ArrayList<>();

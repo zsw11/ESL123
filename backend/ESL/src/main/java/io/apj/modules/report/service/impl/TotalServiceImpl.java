@@ -179,9 +179,11 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TotalEntity totalEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();

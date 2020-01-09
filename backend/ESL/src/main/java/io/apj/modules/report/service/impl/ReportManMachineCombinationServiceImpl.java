@@ -81,9 +81,11 @@ public class ReportManMachineCombinationServiceImpl
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		ReportManMachineCombinationEntity reportManMachineCombinationEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();

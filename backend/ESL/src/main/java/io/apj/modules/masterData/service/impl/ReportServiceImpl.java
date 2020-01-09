@@ -206,8 +206,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
             int modelId = (int) data.get("modelId");
             int phaseId = (int) data.get("phaseId");
             String stlst = (String) data.get("stlst");
+            String destinations =  (String) data.get("destinations");
+    		String versionNumber = (String) data.get("versionNumber");
             // 报表组过滤
-            List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG).ne("status", Constant.APPROVE_REPORT_STATUS_REJECT));
+            List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG)
+            		.eq("destinations", destinations).eq("version_number", versionNumber).ne("status", Constant.APPROVE_REPORT_STATUS_REJECT));
             List<Integer> reportGIds = new ArrayList<>();
             for(ApproveEntity approveEntity : approveEntityList ){
                 reportGIds = Collections.singletonList(approveEntity.getReportGroupId());

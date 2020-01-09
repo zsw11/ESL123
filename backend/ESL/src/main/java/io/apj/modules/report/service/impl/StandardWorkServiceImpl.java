@@ -184,9 +184,11 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
 		EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		StandardWorkEntity standardWorkEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();

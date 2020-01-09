@@ -651,7 +651,9 @@ export default {
         name: 'Report-时间联络表',
         modelId,
         phaseId,
-        stlst
+        stlst,
+        destinations,
+        versionNumber
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page
