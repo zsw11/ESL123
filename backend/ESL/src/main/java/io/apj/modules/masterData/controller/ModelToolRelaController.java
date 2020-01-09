@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gson.JsonElement;
 import io.apj.common.utils.RD;
+import io.apj.modules.masterData.entity.ModelPartRelaEntity;
 import io.apj.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -88,6 +89,11 @@ public class ModelToolRelaController extends AbstractController {
     @RequestMapping("/delete")
 //    @RequiresPermissions("masterData:modeltoolrela:delete")
     public RD delete(@RequestBody Integer[] ids){
+        for(int i = 0; i < ids.length; i++){
+            ModelToolRelaEntity modelToolRelaEntity = modelToolRelaService.selectById(ids[i]);
+            deleteTableReference("model", modelToolRelaEntity.getModelId().longValue());
+            deleteTableReference("tool", modelToolRelaEntity.getToolId().longValue());
+        }
 		modelToolRelaService.deleteBatchIds(Arrays.asList(ids));
 
         return RD.build().put("code", 200);

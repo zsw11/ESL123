@@ -1,11 +1,6 @@
 package io.apj.modules.report.service.impl;
 
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.ExcelUtils;
-import io.apj.common.utils.ExportExcelUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -143,6 +138,12 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 			List<TotalEntity> list = generateTotal(filteredWorkBooks);
+			for (TotalEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId(),entity.getVersionNumber(),entity.getDestinations());
+				if(filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+					totalItemService.generateTotalItem(filteredWorkBookIds, entity.getId());
+				}
+			}
 		}
 	}
 
@@ -179,12 +180,15 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TotalEntity totalEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
 		List<TotalItemEntity> list = new ArrayList<>();
 		String sheetName=null;
 		if (totalEntity != null) {

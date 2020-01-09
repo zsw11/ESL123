@@ -433,7 +433,9 @@ export default {
         name: '标准时间表',
         modelId,
         phaseId,
-        stlst
+        stlst,
+        destinations,
+        versionNumber
       }
       fetchReportGroup(data).then((page) => {
         this.reportGroup = page

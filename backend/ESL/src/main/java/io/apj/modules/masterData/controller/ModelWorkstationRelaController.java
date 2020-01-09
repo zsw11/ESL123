@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
+import io.apj.modules.masterData.entity.ModelToolRelaEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,11 @@ public class ModelWorkstationRelaController extends AbstractController {
 	@RequestMapping("/delete")
 //	@RequiresPermissions("masterData:modelworkstationrela:delete")
 	public R delete(@RequestBody Integer[] ids) {
+		for(int i = 0; i < ids.length; i++){
+			ModelWorkstationRelaEntity workstationRelaEntity = modelWorkstationRelaService.selectById(ids[i]);
+			deleteTableReference("model", workstationRelaEntity.getModelId().longValue());
+			deleteTableReference("workstation", workstationRelaEntity.getWorkstationId().longValue());
+		}
 		modelWorkstationRelaService.deleteBatchIds(Arrays.asList(ids));
 
 		return R.ok();

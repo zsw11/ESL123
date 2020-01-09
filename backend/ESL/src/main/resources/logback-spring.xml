@@ -8,7 +8,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>D:\ESL-log4j\logback.%d{yyyy-MM-dd}.log
+			<fileNamePattern>F:\Most\logs\logback.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<maxHistory>30</maxHistory>
 			<totalSizeCap>1GB</totalSizeCap>

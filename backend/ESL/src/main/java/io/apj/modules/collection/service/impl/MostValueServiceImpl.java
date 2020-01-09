@@ -163,7 +163,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		map.put("customer", "??");
 		map.put("esl", "??");
 		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
-		if(list!=null&&list.size()>0) {
+		if(list != null && list.size() > 0) {
 			generateTotalData(list, map);
 		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_most_value.xls";
@@ -178,10 +178,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
 
-//		int lastRow = 5 + list.size();
-		int lastRow = 5 + list.size();
+		int lastRow = 4 + list.size();
 		int firstRow = 5;
-		if (lastRow != firstRow) {
+		if (lastRow > firstRow) {
 
 			excelWriter.merge(firstRow, lastRow, 0, 0);
 			excelWriter.merge(firstRow, lastRow, 7, 8);

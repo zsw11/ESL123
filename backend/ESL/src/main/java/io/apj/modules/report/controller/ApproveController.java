@@ -142,6 +142,8 @@ public class ApproveController extends AbstractController {
         Validate.notNull(params.get("phaseId"));
         Validate.notNull(params.get("modelId"));
         Validate.notNull(params.get("stlst"));
+        Validate.notNull(params.get("destinations"));
+        Validate.notNull(params.get("versionNumber"));
         approveService.download(params, response);
     }
 }

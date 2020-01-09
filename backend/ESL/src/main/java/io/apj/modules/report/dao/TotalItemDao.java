@@ -3,6 +3,9 @@ package io.apj.modules.report.dao;
 import io.apj.modules.report.entity.TotalItemEntity;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Report - Total表子表
@@ -13,5 +16,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface TotalItemDao extends BaseMapper<TotalItemEntity> {
-	
+
+    List<TotalItemEntity> generateDataByWorkBook(@Param("workBookIds") List<Integer> workBookIds);
+
 }
