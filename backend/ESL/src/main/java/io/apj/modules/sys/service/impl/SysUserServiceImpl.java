@@ -78,7 +78,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		Page<SysUserEntity> page = this.selectPage(new Query<SysUserEntity>(params).getPage(), entityWrapper);
 		for (SysUserEntity sysUserEntity : page.getRecords()) {
 			SysDeptEntity sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
-			sysUserEntity.setDeptName(sysDeptEntity.getName());
+			if(sysDeptEntity.getName()!=null){
+				sysUserEntity.setDeptName(sysDeptEntity.getName());
+			}
 			sysUserEntity.setPerms(this.getDeptAllPerms(sysUserEntity.getDeptId(), "sys:user:"));
 			if (userIds.contains(sysUserEntity.getId())) {
 				sysUserEntity.setIfUsed(true);
