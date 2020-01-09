@@ -162,7 +162,8 @@ public class ReportManMachineCombinationServiceImpl
 		Double result=data - subData;
 		Integer processedData = null;
 		if(result > 0){
-			processedData=Integer.parseInt(String.valueOf((subData + 1) * 10));
+			Double afterData = (subData + 1) * 10;
+			processedData = afterData.intValue();
 		}else{
 			processedData = initData;
 		}
@@ -177,11 +178,8 @@ public class ReportManMachineCombinationServiceImpl
 			ReportManMachineCombinationEntity reportManMachineCombination = selectOne(entityWrapper);
 			if (reportManMachineCombination==null) {
 				ReportManMachineCombinationEntity reportManMachineCombinationEntity=new ReportManMachineCombinationEntity();
-				Map<String,Object> map = workBookService.dealData(work.getId());
-				if(map != null && map.size() > 0){
-					BigDecimal totalTimeValue = new BigDecimal(map.get("totalTimeValue").toString());
-					reportManMachineCombinationEntity.setMt(totalTimeValue);
-				}
+				BigDecimal timeValue = work.getTimeValue();
+				reportManMachineCombinationEntity.setMt(timeValue == null ? new BigDecimal(0) : timeValue);
 				reportManMachineCombinationEntity.setModelId(work.getModelId());
 				reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
 				reportManMachineCombinationEntity.setStlst(work.getStlst());

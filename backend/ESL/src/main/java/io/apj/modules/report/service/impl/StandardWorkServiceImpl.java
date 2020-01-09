@@ -211,7 +211,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		if (historyExcel.exists()) {
 			historyExcel.delete();
 		}
-		OutputStream out = response.getOutputStream();
+
 		ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
 		// ExcelWriter excelWriter =
 		// EasyExcel.write(out).withTemplate(templateFileName).build();
