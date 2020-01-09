@@ -70,6 +70,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
 
         <el-table-column align="center" prop="code" width="200px" label="常用指标组合编码" >
           <template slot-scope="scope">

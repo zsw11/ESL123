@@ -11,65 +11,47 @@
           
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'组织机构ID'" prop="deptId">
-            <el-input-number v-model="dataForm.deptId" ></el-input-number>
+          <el-form-item :label="'机种'" prop="modelName">
+            <el-input :disabled="true" v-model="dataForm.modelName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'标题'" prop="title">
-            <el-input v-model="dataForm.title"></el-input>
-          </el-form-item>
+          <el-form-item :label="'生产阶段'" prop="phaseName">
+            <el-input :disabled="true" v-model="dataForm.phaseName"></el-input>
+          </el-form-item>       
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="10">
+          <el-form-item :label="'ST/LST'" prop="stlst">
+              <dict-select
+                :disabled="true"
+                style="width: 100%"
+                dictType="ST"
+                class="input"
+                v-model="dataForm.stlst"
+                :allowEmpty="true"
+                clearable>
+              </dict-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="2">
           <el-form-item :label="'Sheet名称'" prop="sheetName">
             <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'生产阶段ID'" prop="phaseId">
-            <el-input-number v-model="dataForm.phaseId" ></el-input-number>
-          </el-form-item>           
-        </el-col>
       </el-row>
 
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'机种ID'" prop="modelId">
-            <el-input-number v-model="dataForm.modelId" ></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'ST/LST'" prop="stlst">
-            <el-input v-model="dataForm.stlst"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'发行日'">
-            <el-date-picker v-model="dataForm.monthResult" type="datetime" value-format="yyyy-MM-dd HH:mm:ss">
-            </el-date-picker>
-          </el-form-item>         
-        </el-col>
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'仕向'" prop="destinations">
-            <el-input v-model="dataForm.destinations"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item :label="'输入数值'" prop="enter">
-            <el-input-number v-model="dataForm.enter" ></el-input-number>
+            <el-input v-model="dataForm.enter" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item :label="'选择（N2-N6'" prop="selectnum">
-            <el-select  v-model="dataForm.selectnum">
+            <el-select style="width: 100%" v-model="dataForm.selectnum">
               <el-option value=2>2</el-option>
               <el-option value=3>3</el-option>
               <el-option value=4>4</el-option>
@@ -80,10 +62,13 @@
         </el-col>
       </el-row>
 
-
-
-
-
+      <el-row>
+        <el-col :span="10">
+          <el-form-item :label="'仕向'" prop="destinations">
+            <el-input v-model="dataForm.destinations"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
     <span class="dialog-footer">
@@ -96,6 +81,8 @@
 <script>
 import { pick } from 'lodash'
 import { fetchReportManMachineCombination, createReportManMachineCombination, updateReportManMachineCombination } from '@/api/manMachineCombination'
+import { listModel } from '@/api/model'
+import { listPhase } from '@/api/phase'
 export default {
   name: 'editReportManMachineCombination',
   data () {
@@ -113,7 +100,9 @@ export default {
         destinations: null,        
         mt: null,        
         enter: null,        
-        selectnum: null,        
+        selectnum: null,     
+        modelName: null,
+        phaseName: null
         //comfirm_by: null,        
         //createBy: null,        
         //createAt: null,        
@@ -121,6 +110,8 @@ export default {
         //updateAt: null,        
         //deleteAt: null,
       },
+      listModel,
+      listPhase,
       dataRules: {
         deptId: [
           { type: 'number', message: '组织机构ID需为数字值' }
@@ -202,7 +193,8 @@ export default {
         fetchReportManMachineCombination(this.dataForm.id).then((data) => {
           Object.assign(
             this.dataForm,
-            pick(data.reportManMachineCombination, [ 'deptId', 'title', 'sheetName', 'modelId', 'phaseId', 'stlst', 'monthResult', 'destinations', 'mt', 'enter', 'selectnum' ])
+            pick(data.reportManMachineCombination, [ 'deptId', 'title', 'sheetName', 'modelId','modelName',
+                'phaseName', 'phaseId', 'stlst', 'monthResult', 'destinations', 'mt', 'enter', 'selectnum' ])
           )
         }).finally(() => {
           this.inited = true

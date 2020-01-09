@@ -74,6 +74,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="name" label="部品名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>

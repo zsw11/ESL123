@@ -71,6 +71,11 @@
           width="50">
         </el-table-column>
 
+        <el-table-column
+          label="序号"
+          type="index">
+        </el-table-column>
+
         <el-table-column align="center" prop="code" label="手顺组合编码" >
           <template slot-scope="scope">
             <span>{{scope.row.code }}</span>

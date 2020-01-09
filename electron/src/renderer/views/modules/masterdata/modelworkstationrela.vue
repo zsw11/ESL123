@@ -48,7 +48,6 @@
                   机种<keyword-search
                         style="margin-left:10px;"
                         v-model="addWorkstationModelId"
-                        
                         :searchApi="this.listModel"
                         :allowEmpty="true"
                         clearable>
@@ -77,6 +76,11 @@
               header-align="left"
               align="left"
               width="50">
+            </el-table-column>
+
+            <el-table-column
+              label="序号"
+              type="index">
             </el-table-column>
 
             <el-table-column align="center" prop="modelName" label="机种名称" >
