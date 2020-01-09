@@ -178,10 +178,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
 
-//		int lastRow = 5 + list.size();
-		int lastRow = 5 + list.size();
+		int lastRow = 4 + list.size();
 		int firstRow = 5;
-		if (lastRow != firstRow) {
+		if (lastRow > firstRow) {
 
 			excelWriter.merge(firstRow, lastRow, 0, 0);
 			excelWriter.merge(firstRow, lastRow, 7, 8);

@@ -1,11 +1,6 @@
 package io.apj.modules.report.service.impl;
 
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.ExcelUtils;
-import io.apj.common.utils.ExportExcelUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -193,6 +188,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		TotalEntity totalEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
 		List<TotalItemEntity> list = new ArrayList<>();
 		String sheetName=null;
 		if (totalEntity != null) {
