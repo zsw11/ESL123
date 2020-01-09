@@ -93,6 +93,11 @@ public class ModelPartRelaController extends AbstractController {
 	@RequestMapping("/delete")
 //    @RequiresPermissions("masterData:modelpartrela:delete")
 	public RD delete(@RequestBody Integer[] ids) {
+		for(int i = 0; i < ids.length; i++){
+			ModelPartRelaEntity modelPartRelaEntity = modelPartRelaService.selectById(ids[i]);
+			deleteTableReference("model", modelPartRelaEntity.getModelId().longValue());
+			deleteTableReference("part", modelPartRelaEntity.getPartId().longValue());
+		}
 		modelPartRelaService.deleteBatchIds(Arrays.asList(ids));
 
 		return RD.build().put("code", 200);
