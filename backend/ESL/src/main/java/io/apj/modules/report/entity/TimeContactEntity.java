@@ -84,6 +84,14 @@ public class TimeContactEntity implements Serializable {
 	 */
 	private String revNo;
 	/**
+	 * 仕向
+	 */
+	private String destinations;
+	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * 全数sub工序用时
 	 */
 	private BigDecimal allCountSub;

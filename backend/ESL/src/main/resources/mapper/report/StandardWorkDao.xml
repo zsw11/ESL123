@@ -21,6 +21,8 @@
         <result property="thirdStandardWorkTitle" column="third_standard_work_title"/>
         <result property="comfirmBy" column="comfirm_by"/>
         <result property="inChargeBy" column="in_charge_by"/>
+        <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

@@ -69,6 +69,10 @@ public class ChangeRecordEntity implements Serializable {
 	 */
 	private String destinations;
 	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

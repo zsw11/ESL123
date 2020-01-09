@@ -82,5 +82,13 @@ public class ApproveEntity implements Serializable {
      */
     private Date deleteAt;
     private String stlst;
+    /**
+     * 仕向
+     */
+    private String destinations; 
+    /**
+     * 仕向
+     */
+    private String versionNumber; 
 
 }

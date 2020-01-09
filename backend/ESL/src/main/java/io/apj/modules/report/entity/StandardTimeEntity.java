@@ -64,6 +64,14 @@ public class StandardTimeEntity implements Serializable {
 	 */
 	private String unit;
 	/**
+	 * 仕向
+	 */
+	private String destinations;
+	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

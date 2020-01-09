@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.common.utils.RD;
@@ -205,7 +207,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
             int phaseId = (int) data.get("phaseId");
             String stlst = (String) data.get("stlst");
             // 报表组过滤
-            List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG));
+            List<ApproveEntity> approveEntityList = approveService.selectList(new EntityWrapper<ApproveEntity>().eq("model_id", modelId).eq("phase_id", phaseId).eq("stlst", stlst).eq("report_group_id", idG).ne("status", Constant.APPROVE_REPORT_STATUS_REJECT));
             List<Integer> reportGIds = new ArrayList<>();
             for(ApproveEntity approveEntity : approveEntityList ){
                 reportGIds = Collections.singletonList(approveEntity.getReportGroupId());

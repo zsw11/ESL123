@@ -48,6 +48,14 @@ public class MostValueEntity implements Serializable {
 	 */
 	private String sheetName;
 	/**
+	 * 仕向
+	 */
+	private String destinations;
+	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * 备注
 	 */
 	private String remark;

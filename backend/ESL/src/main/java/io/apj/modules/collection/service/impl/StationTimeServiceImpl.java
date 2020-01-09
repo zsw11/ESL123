@@ -131,7 +131,8 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 			List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 			List<StationTimeEntity> list = generateStationTime(filteredWorkBooks);
 			for (StationTimeEntity entity : list) {
-				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks, entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 				if(filteredWorkBookIds!=null&&filteredWorkBookIds.size()>0) {
 					stationTimeItemService.generateStationTimeItem(filteredWorkBookIds, entity.getId());
 				}
@@ -143,7 +144,8 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		List<StationTimeEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
-			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id", work.getPhaseId());
+			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
+				work.getPhaseId()).eq("destinations",work.getDestinations()).eq("version_number", work.getVersionNumber());
             StationTimeEntity stationTime = selectOne(entityWrapper);
 			if (stationTime==null) {
                 StationTimeEntity stationTimeEntity=new StationTimeEntity();
@@ -152,6 +154,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 				stationTimeEntity.setStlst(work.getStlst());
 				stationTimeEntity.setDeptId(work.getDeptId());
 				stationTimeEntity.setDestinations(work.getDestinations());
+				stationTimeEntity.setVersionNumber(work.getVersionNumber());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				stationTimeEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(stationTimeEntity);
