@@ -10,7 +10,7 @@
         </el-form-item>
         <div class="search-box">
           <el-button @click="getDataList(1)" type="primary">搜 索</el-button>
-<!--          <el-button @click="clearQuery()">清 空</el-button>-->
+         <el-button @click="clearQuery()">清 空</el-button>
         </div>
       </el-form>
     </el-card>
@@ -49,7 +49,7 @@
           label="操作">
           <template slot-scope="scope">
             <el-button v-if="isAuth('basic:dept:update') && scope.row.parentId" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+            <el-button id="delete" v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -95,6 +95,12 @@
           this.dataListLoading = false
         })
       },
+      // 清空搜索
+      clearQuery () {
+        this.listQuery = Object.assign(this.listQuery, {
+          name: null
+        })
+      },
       // 新增 / 修改
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
@@ -109,7 +115,17 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteDept(id).then(({data}) => {
+          deleteDept(id).then((page) => {
+            if(page.code === 500){
+              this.$message({
+              message: page.msg,
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          }else{
             this.$message({
               message: '操作成功',
               type: 'success',
@@ -118,6 +134,7 @@
                 this.getDataList()
               }
             })
+          }
           })
         }).catch(() => {})
       }
