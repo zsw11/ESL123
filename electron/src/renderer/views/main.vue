@@ -9,7 +9,7 @@
         <main-content />
       </div>
     </template>
-    <template v-if="!loading && $route.meta.noSidebar">
+    <template v-else-if="!loading && $route.meta.noSidebar">
       <div class="site-no-sidebar-content__wrapper" :style="{ 'height': documentClientHeight + 'px' }">
         <main-navbar />
         <main-content />
