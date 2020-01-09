@@ -34,7 +34,7 @@
                   placeholder="密码"
                   size="medium">
                 </el-input>
-                <img class="toggle-pw" src="~@/assets/img/eye.png" alt=""  @click="togglePwShow()">
+                <div :class="['toggle-pw', pw] " alt=""  @click="togglePwShow()"></div>
                 </div>
               </el-form-item>
               <span class="toggle-login" @click="toggleLogin()">{{modesMap[currentMode].otherName}}登录</span>
@@ -51,7 +51,8 @@
           <!-- 系统名称 -->
           <div class="main-right">
             <h2>标准时间分析管理系统</h2>
-            <span>Standard time analysis management system</span>
+            <span>Standard Time Analysis Management System</span>
+            <div class="version">V{{packageData.version}}</div>
           </div>
         </div>
       </div>
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import packageData from "@/../../package.json";
 import { keyBy } from 'lodash'
 import VerifySlide from "@/components/verify-slide";
 
@@ -79,7 +81,7 @@ const modesMap = {
 
 const pwType = {
   show: {
-    type: null,
+    type: 'text',
     title: '隐藏密码'
   },
   hide: {
@@ -114,7 +116,8 @@ export default {
       },
       captchaPath: "",
       modesMap,
-      pwType
+      pwType,
+      packageData
     };
   },
   methods: {
@@ -276,30 +279,45 @@ export default {
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   color: #172379;
+  text-align: center;
   h2 {
     border-radius: 30px;
     margin-top: 10%;
-    margin-left: 15%;
     font-size: 50px;
     font-weight: lighter;
     margin-bottom: 0;
+    white-space:nowrap;
   }
   span {
     margin-top: -25px;
-    margin-left: 15%;
     font-size: 25px;
+    white-space:nowrap;
     // font-family: Dotum;
     // font-weight: lighter;
+  }
+  .version {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
   }
 }
 
 .toggle-pw {
   cursor: pointer;
-  width: 8% !important;
-  height: 20px !important;
+  min-width: 0 !important;
+  width: 8%;
+  height: 20px;
   position: absolute;
   right: 12%;
   top: 24%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  &.hide {
+    background-image: url("~@/assets/img/eye-close.png");
+  }
+  &.show {
+    background-image: url("~@/assets/img/eye-open.png");
+  }
 }
 
 .toggle-login {

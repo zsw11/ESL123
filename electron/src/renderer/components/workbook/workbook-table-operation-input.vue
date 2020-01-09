@@ -150,7 +150,6 @@ export default {
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e, scope) {
-      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -239,7 +238,7 @@ export default {
             return true
           } else {
             const beginStr = this.getInputBegin()
-            console.log(beginStr + e.key, /[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key))
+            // console.log(beginStr + e.key, /[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key))
             if (e.key.length === 1) {
               if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
                 // 操作关键字
