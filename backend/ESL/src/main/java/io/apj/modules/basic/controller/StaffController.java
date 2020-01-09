@@ -85,7 +85,6 @@ public class StaffController extends AbstractController {
     @RequestMapping("/listrela")
     public ResponseEntity<Object> listRela(@RequestParam Map<String, Object> params) throws ParseException {
         PageUtils page = staffService.queryPageRela(params);
-
         return RD.ok(page);
     }
 

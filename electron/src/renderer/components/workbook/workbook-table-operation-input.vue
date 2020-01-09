@@ -61,11 +61,13 @@ export default {
   watch: {
     '$attrs.value' (v, o) {
       if (v === '[') {
-        this.addToSelection(']', false)
-        this.debounceSuggest('part')
+        if (!o) {
+          // this.addToSelection(']', false)
+        }
+        // this.debounceSuggest('part')
       } else if (v === '"') {
         if (!o) {
-          this.debounceSuggest('tool')
+          // this.debounceSuggest('tool')
         }
       } else if (v.length === 1 && !/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(v)) {
         this.debounceSuggest('action', v)
@@ -148,6 +150,7 @@ export default {
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e, scope) {
+      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -165,7 +168,7 @@ export default {
           // 补]并开始提示
           this.addToSelection(']', false)
           e.stopPropagation()
-          this.debounceSuggest('part')
+          // this.debounceSuggest('part')
           break
         }
         case ']': {
@@ -193,7 +196,7 @@ export default {
           // 补"并开始提示
           this.addToSelection('"', false)
           e.stopPropagation()
-          this.debounceSuggest('tool')
+          // this.debounceSuggest('tool')
           break
         }
         case 'ArrowLeft':
@@ -237,15 +240,20 @@ export default {
           } else {
             const beginStr = this.getInputBegin()
             console.log(beginStr + e.key, /[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key))
-            if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
-              // 操作关键字
-              this.debounceSuggest('action', beginStr + e.key)
-            } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
-              // 部品
-              this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
-            } else if (((beginStr + e.key).match(/"/g) || []).length % 2 === 1) {
-              // 治工具
-              this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
+            if (e.key.length === 1) {
+              if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
+                // 操作关键字
+                this.debounceSuggest('action', beginStr + e.key)
+              } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
+                // 部品
+                this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
+              } else if (((beginStr + e.key).match(/"/g) || []).length % 2 === 1) {
+                // 治工具
+                this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
+              } else {
+                this.endSuggest()
+                console.log(e.key)
+              }
             } else {
               this.endSuggest()
               console.log(e.key)

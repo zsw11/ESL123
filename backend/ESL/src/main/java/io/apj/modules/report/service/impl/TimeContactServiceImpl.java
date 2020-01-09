@@ -1,9 +1,6 @@
 package io.apj.modules.report.service.impl;
 
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
@@ -17,11 +14,7 @@ import io.apj.modules.workBook.service.WorkBookService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -129,9 +122,11 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TimeContactEntity timeContactEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
@@ -157,6 +152,7 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			map.put("remarkPrinting", timeContactEntity.getTowingLastVersionPrinting());
 			map.put("remarkExternalInspection", timeContactEntity.getTowingLastVersionExternalInspection());
 			map.put("remarkPacking", timeContactEntity.getTowingLastVersionPacking());
+			map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
 			sheetName=timeContactEntity.getSheetName();
 		}
 		ModelEntity model = modelService.selectById(modelId);

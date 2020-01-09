@@ -183,10 +183,9 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
-//		int lastRow = 2 + list.size();
-		int lastRow = 3 + list.size();
+		int lastRow = 2 + list.size();
 		int firstRow = 3;
-		if (lastRow != firstRow) {
+		if (lastRow > firstRow) {
 			excelWriter.merge(firstRow, lastRow, 0, 0);
 		}
 		Map<Integer, Function<CompareItemEntity, Object>> options = new HashMap<>();

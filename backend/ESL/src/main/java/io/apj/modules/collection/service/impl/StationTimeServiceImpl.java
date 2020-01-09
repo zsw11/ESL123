@@ -1,10 +1,6 @@
 package io.apj.modules.collection.service.impl;
 
-import io.apj.common.utils.Constant;
-import io.apj.common.utils.ExcelUtils;
-import io.apj.common.utils.PageUtils;
-import io.apj.common.utils.PathUtil;
-import io.apj.common.utils.Query;
+import io.apj.common.utils.*;
 import io.apj.modules.collection.dao.StationTimeDao;
 import io.apj.modules.collection.entity.StationTimeEntity;
 import io.apj.modules.collection.entity.StationTimeItemEntity;
@@ -23,11 +19,7 @@ import io.apj.modules.workBook.service.WorkBookService;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletResponse;
@@ -172,17 +164,22 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
 		EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		StationTimeEntity stationTimeEntity = selectOne(entityWrapper);
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
+		map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
+		List<StationTimeItemEntity> list = new ArrayList<>();
 		if (stationTimeEntity != null) {
 			id = stationTimeEntity.getId();
 			map.put("remark", stationTimeEntity.getRemark());
+			list = stationTimeItemService.getListBySWId(id);
+
 		}
-		List<StationTimeItemEntity> list = stationTimeItemService.getListBySWId(id);
 		ModelEntity model = modelService.selectById(modelId);
 		map.put("modelName", model.getName());
 		map.put("modelType", model.getCode());
