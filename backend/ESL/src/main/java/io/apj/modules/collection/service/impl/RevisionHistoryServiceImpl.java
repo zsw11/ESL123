@@ -140,10 +140,11 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks);
-
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks);
+		}
 	}
 
 	private List<RevisionHistoryEntity> generateRevisionHistory(List<WorkBookEntity> workBooks) {
@@ -151,12 +152,10 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
-			List<RevisionHistoryEntity> list = selectList(entityWrapper);
-			RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
-			if (list.size() > 0) {
-				revisionHistoryEntity = list.get(0);
-			} else {
+			work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
+			RevisionHistoryEntity revisionHistory= selectOne(entityWrapper);
+			if (revisionHistory==null) {
+				RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
 				// TODO 有未设置
 				revisionHistoryEntity.setModelId(work.getModelId());
 				revisionHistoryEntity.setPhaseId(work.getPhaseId());
@@ -168,8 +167,10 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 				revisionHistoryEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				revisionHistoryEntity.setDestinations(work.getDestinations());
 				insert(revisionHistoryEntity);
+				results.add(revisionHistoryEntity);
+			}else{
+				results.add(revisionHistory);
 			}
-			results.add(revisionHistoryEntity);
 		}
 		return results;
 	}

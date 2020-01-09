@@ -122,13 +122,17 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 	public void generateReportData(List<Integer> workBookIds) {
 
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<MostValueEntity> list = generateMostValue(filteredWorkBooks);
-		for (MostValueEntity entity : list) {
-			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
-			mostValueItemService.generateMostValueItem(filteredWorkBookIds, entity.getId());
+		if(workBooks!=null && workBooks.size()>0 ) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<MostValueEntity> list = generateMostValue(filteredWorkBooks);
+			for (MostValueEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
+				if (filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+					mostValueItemService.generateMostValueItem(filteredWorkBookIds, entity.getId());
+				}
+			}
 		}
 	}
 
@@ -174,7 +178,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
 
-		int lastRow = 4 + list.size();
+//		int lastRow = 5 + list.size();
+		int lastRow = 5 + list.size();
 		int firstRow = 5;
 		if (lastRow != firstRow) {
 
@@ -235,7 +240,6 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 	private List<MostValueEntity> generateMostValue(List<WorkBookEntity> workBooks) {
 		List<MostValueEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
-
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -243,19 +247,21 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 			String versionNumber = workBook.getVersionNumber();
 			MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
-				entity = new MostValueEntity();
-				entity.setModelId(modelId);
-				entity.setPhaseId(phaseId);
-				entity.setStlst(stlst);
-				entity.setDeptId(workBook.getDeptId());
-				entity.setTitle("Most Value");
-				entity.setSheetName("Most Value");
-				entity.setFirstColumnName("Most Value");
-				entity.setDestinations(destinations);
-				entity.setVersionNumber(versionNumber);
-				insert(entity);
+				MostValueEntity mostValueEntity = new MostValueEntity();
+				mostValueEntity.setModelId(modelId);
+				mostValueEntity.setPhaseId(phaseId);
+				mostValueEntity.setStlst(stlst);
+				mostValueEntity.setDeptId(workBook.getDeptId());
+				mostValueEntity.setTitle("Most Value");
+				mostValueEntity.setSheetName("Most Value");
+				mostValueEntity.setFirstColumnName("Most Value");
+				mostValueEntity.setDestinations(destinations);
+				mostValueEntity.setVersionNumber(versionNumber);
+				insert(mostValueEntity);
+				results.add(mostValueEntity);
+			}else{
+				results.add(entity);
 			}
-			results.add(entity);
 		}
 		return results;
 	}

@@ -9,7 +9,6 @@
           <el-form-item :label="'报表组'" prop="reportGroupId">
             <keyword-search
               v-model="listQuery.reportGroupId"
-              
               :searchApi="this.listReportGroup"
               :allowEmpty="true"
               clearable>
@@ -19,7 +18,6 @@
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
             v-model="listQuery.modelId"
-            
             :searchApi="this.listModel"
             :allowEmpty="true" clearable>
           </keyword-search>
@@ -39,7 +37,6 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -81,6 +78,7 @@
         style="width: 100%;">
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
+        <el-table-column label="序号" type="index"></el-table-column>
 
 <!--        <el-table-column align="center" prop="deptId" label="所属部门">-->
 <!--          <template slot-scope="scope">-->
@@ -165,9 +163,9 @@
           <keyword-search
             v-model="approveForm.nextApproverId"
             
-            :searchApi="this.listStaff"
+            :searchApi="this.listStaffUser"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable>
           </keyword-search>
         </el-form-item>
@@ -189,7 +187,7 @@ import { listModel } from '@/api/model'
 import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 import { fetchUserDetail } from '@/api/passport'
 
 export default {
@@ -222,7 +220,7 @@ export default {
         id: null,
         result: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listDept,
       listReportGroup,

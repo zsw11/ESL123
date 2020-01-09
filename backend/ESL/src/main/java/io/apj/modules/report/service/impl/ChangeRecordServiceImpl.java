@@ -126,10 +126,11 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<ChangeRecordEntity> list = generateChangeRecord(filteredWorkBooks);
-
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<ChangeRecordEntity> list = generateChangeRecord(filteredWorkBooks);
+		}
 	}
 
 	private List<ChangeRecordEntity> generateChangeRecord(List<WorkBookEntity> workBooks) {
@@ -138,11 +139,9 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 			EntityWrapper<ChangeRecordEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
 					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
-			List<ChangeRecordEntity> list = selectList(entityWrapper);
-			ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
-			if (list.size() > 0) {
-				changeRecordEntity = list.get(0);
-			} else {
+			ChangeRecordEntity entity = selectOne(entityWrapper);
+			if (entity==null) {
+				ChangeRecordEntity changeRecordEntity = new ChangeRecordEntity();
 				// TODO factory title model_type 未设置
 				changeRecordEntity.setModelId(work.getModelId());
 				changeRecordEntity.setPhaseId(work.getPhaseId());
@@ -153,8 +152,10 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				changeRecordEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(changeRecordEntity);
+				results.add(changeRecordEntity);
+			}else {
+				results.add(entity);
 			}
-			results.add(changeRecordEntity);
 		}
 		return results;
 	}
@@ -198,31 +199,43 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 			map.put("modelType", model.getCode());
 		}
 		if(list!=null&&list.size()>0) {
-			generateTotalData(list, map);
+			generateTotalData(list);
 		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 
+//		String templateFileName = Constant.TEMPLATE_PATH + "report_change_record_template.xls";
+//		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
+//		File historyExcel = new File(exportFileName);
+//		if (historyExcel.exists()) {
+//			historyExcel.delete();
+//		}
+
+//		ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
+//		WriteSheet writeSheet = EasyExcel.writerSheet().build();
+//		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+//		excelWriter.fill(map, writeSheet);
+//		excelWriter.fill(list, fillConfig, writeSheet);
+//		excelWriter.finish();
+//		return Arrays.asList(exportFileName);
 		String templateFileName = Constant.TEMPLATE_PATH + "report_change_record_template.xls";
 		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
 		}
-
-		ExcelWriter excelWriter = EasyExcel.write(templateFileName).withTemplate(templateFileName).build();
+		ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
 		WriteSheet writeSheet = EasyExcel.writerSheet().build();
 		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
 		excelWriter.finish();
-		return Arrays.asList(templateFileName);
+		return Arrays.asList(exportFileName);
 	}
 
-	private void generateTotalData(List<ChangeRecordItemEntity> list, Map<String, Object> map) {
+	private void generateTotalData(List<ChangeRecordItemEntity> list) {
 		for (ChangeRecordItemEntity entity : list) {
 			BigDecimal sub = entity.getLastValue() == null ? BigDecimal.valueOf(0) : entity.getLastValue();
-			entity.setSubValue(
-					entity.getCurrentValue() == null ? BigDecimal.valueOf(0) : entity.getCurrentValue().subtract(sub));
+			entity.setSubValue(entity.getCurrentValue() == null ? BigDecimal.valueOf(0) : entity.getCurrentValue().subtract(sub));
 		}
 	}
 

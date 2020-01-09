@@ -93,6 +93,8 @@
       >
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
+        <el-table-column label="序号" type="index"></el-table-column>
+
 
         <el-table-column align="center" prop="sheetName" label="Sheet名称">
           <template slot-scope="scope">
@@ -208,9 +210,9 @@
             <keyword-search
             v-model="approveForm.nextApproverId"
             
-            :searchApi="this.listStaff"
+            :searchApi="this.listStaffUser"
             :allowEmpty="true"
-            :valueColumn="'userId'"
+            valueColumn="userId"
             clearable>
           </keyword-search>
           </el-form-item>
@@ -233,7 +235,7 @@ import { listPhase } from '@/api/phase'
 import { keyBy } from 'lodash'
 import { listDict, listDictItem } from '@/api/dict'
 import { createReportApprove, downloadReportApprove } from '@/api/reportApprove'
-import { listStaff } from '@/api/staff'
+import { listStaffUser } from '@/api/staff'
 
 export default {
   name: 'reportTimeContactList',
@@ -291,7 +293,7 @@ export default {
         updateAt: null,
         deleteAt: null
       },
-      listStaff,
+      listStaffUser,
       listDict,
       listPhase,
       listModel,

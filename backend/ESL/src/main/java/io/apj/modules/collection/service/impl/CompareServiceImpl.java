@@ -125,15 +125,19 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
-
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-		List<CompareEntity> list = generateCompare(filteredWorkBooks);
-		for (CompareEntity entity : list) {
-			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
-			compareItemService.generateCompareItem(filteredWorkBookIds, entity);
+
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<CompareEntity> list = generateCompare(filteredWorkBooks);
+			for (CompareEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
+				if(filteredWorkBookIds!=null&&filteredWorkBookIds.size()>0) {
+					compareItemService.generateCompareItem(filteredWorkBookIds, entity);
+				}
+			}
 		}
 	}
 
@@ -179,7 +183,8 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
 		excelWriter.fill(map, writeSheet);
 		excelWriter.fill(list, fillConfig, writeSheet);
-		int lastRow = 2 + list.size();
+//		int lastRow = 2 + list.size();
+		int lastRow = 3 + list.size();
 		int firstRow = 3;
 		if (lastRow != firstRow) {
 			excelWriter.merge(firstRow, lastRow, 0, 0);
@@ -238,26 +243,29 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 			String versionNumber = workBook.getVersionNumber();
 			CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
-				entity = new CompareEntity();
-				entity.setModelId(modelId);
-				entity.setPhaseId(phaseId);
-				entity.setStlst(stlst);
-				entity.setDeptId(workBook.getDeptId());
-				entity.setTitle("Compare表");
-				entity.setSheetName("Compare表");
-				//entity.setDestinations("仕向");
-				entity.setFirstColumnName("LFP-PD内作");
-				entity.setDestinations(destinations);
-				entity.setVersionNumber(versionNumber);
+
+				CompareEntity compareEntity = new CompareEntity();
+				compareEntity.setModelId(modelId);
+				compareEntity.setPhaseId(phaseId);
+				compareEntity.setStlst(stlst);
+				compareEntity.setDeptId(workBook.getDeptId());
+				compareEntity.setTitle("Compare表");
+				compareEntity.setSheetName("Compare表");
+				//compareEntity.setDestinations("仕向");
+				compareEntity.setFirstColumnName("LFP-PD内作");
+				compareEntity.setDestinations(destinations);
+				compareEntity.setVersionNumber(versionNumber);
 
 				WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId, destinations, versionNumber);
 				if (lastWookBook != null) {
-					entity.setLastVersionName(lastWookBook.getVersionNumber());
+					compareEntity.setLastVersionName(lastWookBook.getVersionNumber());
 				}
-				entity.setCurrentVersionName(workBook.getVersionNumber());
-				insert(entity);
+				compareEntity.setCurrentVersionName(workBook.getVersionNumber());
+				insert(compareEntity);
+				results.add(compareEntity);
+			}else{
+				results.add(entity);
 			}
-			results.add(entity);
 		}
 		return results;
 	}

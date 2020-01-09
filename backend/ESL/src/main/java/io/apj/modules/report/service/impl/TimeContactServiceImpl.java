@@ -116,10 +116,11 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-
-		List<TimeContactEntity> list = generateStandardTime(filteredWorkBooks);
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<TimeContactEntity> list = generateStandardTime(filteredWorkBooks);
+		}
 	}
 
 	@Override
@@ -191,18 +192,21 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			String versionNumber = workBook.getVersionNumber();
 			TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
-				entity = new TimeContactEntity();
-				entity.setModelId(modelId);
-				entity.setPhaseId(phaseId);
-				entity.setStlst(stlst);
-				entity.setDeptId(workBook.getDeptId());
-				entity.setDestinations(destinations);
-				entity.setVersionNumber(versionNumber);
-				entity.setTitle("时间联络表");
-				entity.setSheetName("时间联络表");
-				insert(entity);
+				TimeContactEntity timeContactEntity=new TimeContactEntity();
+				timeContactEntity = new TimeContactEntity();
+				timeContactEntity.setModelId(modelId);
+				timeContactEntity.setPhaseId(phaseId);
+				timeContactEntity.setStlst(stlst);
+				timeContactEntity.setDeptId(workBook.getDeptId());
+				timeContactEntity.setDestinations(destinations);
+				timeContactEntity.setVersionNumber(versionNumber);
+				timeContactEntity.setTitle("时间联络表");
+				timeContactEntity.setSheetName("时间联络表");
+				insert(timeContactEntity);
+				results.add(timeContactEntity);
+			}else{
+				results.add(entity);
 			}
-			results.add(entity);
 		}
 		return results;
 	}

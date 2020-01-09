@@ -139,30 +139,29 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 	@Override
 	public void generateReportData(List<Integer> workBookIds) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		List<WorkBookEntity> filteredWorkBooks = workBookService
-				.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-
-		List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
-		for (StandardWorkEntity entity : list) {
-			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
-			standardWorkItemService.generateStandardWorkItem(filteredWorkBookIds, entity.getId());
+		if(workBooks!=null&&workBooks.size()>0) {
+			List<WorkBookEntity> filteredWorkBooks = workBookService
+					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
+			List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
+			for (StandardWorkEntity entity : list) {
+				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
+				if (filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+					standardWorkItemService.generateStandardWorkItem(filteredWorkBookIds, entity.getId());
+				}
+			}
 		}
-
 	}
 
 	private List<StandardWorkEntity> generateStandardWork(List<WorkBookEntity> workBooks) {
 		List<StandardWorkEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
-
 			EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number",work.getVersionNumber());
-			List<StandardWorkEntity> list = selectList(entityWrapper);
-			StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
-			if (list.size() > 0) {
-				standardWorkEntity = list.get(0);
-			} else {
+				work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number",work.getVersionNumber());
+			StandardWorkEntity entity = selectOne(entityWrapper);
+			if (entity==null) {
+				StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
 				standardWorkEntity.setModelId(work.getModelId());
 				standardWorkEntity.setPhaseId(work.getPhaseId());
 				standardWorkEntity.setStlst(work.getStlst());
@@ -170,8 +169,10 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 				standardWorkEntity.setDestinations(work.getDestinations());
 				standardWorkEntity.setVersionNumber(work.getVersionNumber());
 				insert(standardWorkEntity);
+				results.add(standardWorkEntity);
+			}else{
+				results.add(entity);
 			}
-			results.add(standardWorkEntity);
 		}
 
 		return results;
@@ -212,7 +213,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		if (historyExcel.exists()) {
 			historyExcel.delete();
 		}
-		OutputStream out = response.getOutputStream();
+
 		ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
 		// ExcelWriter excelWriter =
 		// EasyExcel.write(out).withTemplate(templateFileName).build();
