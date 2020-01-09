@@ -271,9 +271,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     }
 
     @Override
-    public WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId) {
+    public WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber) {
         EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.ne("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+        entityWrapper.ne("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
         entityWrapper.orderBy("create_at", false);
         List<WorkBookEntity> list = selectList(entityWrapper);
         if (list.size() > 0) {
@@ -424,8 +424,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         Integer phaseId = (Integer) params.get("phaseId");
         Integer modelId = (Integer) params.get("modelId");
         String stlst = params.get("stlst").toString();
+        String destinations = params.get("destinations").toString();
+        String versionNumber = params.get("versionNumber").toString();
 
-        List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+        List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
         List<String> workBookFilePaths=new ArrayList<>();
         if(workBookEntities!=null&&workBookEntities.size()>0){
             workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
@@ -442,7 +444,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             Integer phaseId = entity.getPhaseId();
             Integer modelId = entity.getModelId();
             String stlst = entity.getStlst();
-            String key = phaseId + modelId + stlst;
+            String destinations = entity.getDestinations();
+            String versionNumber = entity.getVersionNumber();
+            String key = phaseId + modelId + stlst + destinations + versionNumber;
             if (map.get(key) != null) {
                 continue;
             }
@@ -453,11 +457,11 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId,
-                                                                  String stlst, Integer phaseId) {
-        String filter = modelId + stlst + phaseId;
+                                                                  String stlst, Integer phaseId, String destinations, String versionNumber) {
+        String filter = modelId + stlst + phaseId + destinations + versionNumber;
         List<Integer> result = new ArrayList<>();
         for (WorkBookEntity entity : workBooks) {
-            String target = entity.getModelId() + entity.getStlst() + entity.getPhaseId();
+            String target = entity.getModelId() + entity.getStlst() + entity.getPhaseId() + entity.getDestinations() + entity.getVersionNumber();
             if (org.apache.commons.lang3.StringUtils.equals(filter, target)) {
                 result.add(entity.getId());
             }
@@ -465,9 +469,9 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         return result;
     }
 
-    private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+    private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber ) {
         EntityWrapper<WorkBookEntity> wrapper = new EntityWrapper<>();
-        wrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+        wrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
         return selectList(wrapper);
     }
 }

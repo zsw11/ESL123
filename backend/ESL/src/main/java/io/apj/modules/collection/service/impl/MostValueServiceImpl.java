@@ -127,7 +127,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		List<MostValueEntity> list = generateMostValue(filteredWorkBooks);
 		for (MostValueEntity entity : list) {
 			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 			mostValueItemService.generateMostValueItem(filteredWorkBookIds, entity.getId());
 		}
 	}
@@ -137,8 +137,10 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
-		MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+		MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 		List<MostValueItemEntity> list=new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		if(entity!=null) {
@@ -237,7 +239,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
-			MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+			String destinations =  workBook.getDestinations();
+			String versionNumber = workBook.getVersionNumber();
+			MostValueEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
 				entity = new MostValueEntity();
 				entity.setModelId(modelId);
@@ -247,6 +251,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 				entity.setTitle("Most Value");
 				entity.setSheetName("Most Value");
 				entity.setFirstColumnName("Most Value");
+				entity.setDestinations(destinations);
+				entity.setVersionNumber(versionNumber);
 				insert(entity);
 			}
 			results.add(entity);
@@ -254,9 +260,9 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		return results;
 	}
 
-	private MostValueEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+	private MostValueEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {
 		EntityWrapper<MostValueEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		MostValueEntity entity = selectOne(entityWrapper);
 		return entity;
 	}

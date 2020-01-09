@@ -35,7 +35,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	void createReports(Map<String, Object> params);
 
-	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId);
+	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber);
 
 	WorkBookEntity detailWithOperations(Integer id);
 
@@ -67,6 +67,6 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 
 	List<WorkBookEntity> filterUniquePhaseAndModelAndStlstOfWorkBooks(List<WorkBookEntity> workBooks);
 
-	List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId, String stlst, Integer phaseId);
+	List<Integer> filterWorkBookIdsByPhaseAndModelAndStlst(List<WorkBookEntity> workBooks, Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber);
 
 }

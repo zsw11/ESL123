@@ -119,7 +119,7 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 		List<StandardTimeEntity> list = generateStandardTime(filteredWorkBooks);
 		for (StandardTimeEntity entity : list) {
 			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 			standardTimeItemService.generateStandardTimeItem(filteredWorkBookIds, entity.getId());
 		}
 	}
@@ -129,8 +129,10 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
 
-		StandardTimeEntity standardTime = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+		StandardTimeEntity standardTime = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 		Integer standardTimeId=null;
 		List<StandardTimeItemEntity> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
@@ -201,13 +203,17 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
-			StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+			String destinations =  workBook.getDestinations();
+			String versionNumber = workBook.getVersionNumber();
+			StandardTimeEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
 				entity = new StandardTimeEntity();
 				entity.setModelId(modelId);
 				entity.setPhaseId(phaseId);
 				entity.setStlst(stlst);
 				entity.setDeptId(workBook.getDeptId());
+				entity.setDestinations(destinations);
+				entity.setVersionNumber(versionNumber);
 				entity.setTitle("标准时间表");
 				entity.setSheetName("标准时间表");
 				entity.setModelType(modelService.selectById(entity.getModelId()).getCode());
@@ -219,9 +225,9 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 		return results;
 	}
 
-	private StandardTimeEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+	private StandardTimeEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {
 		EntityWrapper<StandardTimeEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		StandardTimeEntity entity = selectOne(entityWrapper);
 		return entity;
 	}

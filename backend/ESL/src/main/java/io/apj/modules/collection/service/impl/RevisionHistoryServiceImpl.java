@@ -151,7 +151,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
 			List<RevisionHistoryEntity> list = selectList(entityWrapper);
 			RevisionHistoryEntity revisionHistoryEntity = new RevisionHistoryEntity();
 			if (list.size() > 0) {
@@ -162,7 +162,8 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 				revisionHistoryEntity.setPhaseId(work.getPhaseId());
 				revisionHistoryEntity.setStlst(work.getStlst());
 				revisionHistoryEntity.setDeptId(work.getDeptId());
-				revisionHistoryEntity.setDestinations(work.getDestinations());
+				//revisionHistoryEntity.setDestinations(work.getDestinations());
+				revisionHistoryEntity.setVersionNumber(work.getVersionNumber());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				revisionHistoryEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				revisionHistoryEntity.setDestinations(work.getDestinations());

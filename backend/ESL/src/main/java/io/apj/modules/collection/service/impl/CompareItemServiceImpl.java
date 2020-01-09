@@ -36,10 +36,16 @@ public class CompareItemServiceImpl extends ServiceImpl<CompareItemDao, CompareI
         Integer modelId = entity.getModelId();
         String stlst = entity.getStlst();
         Integer compareId = entity.getId();
+        String destinations = entity.getDestinations();
+        String versionNumber = entity.getVersionNumber();
+        
         Map<String, Object> params = new HashMap<>();
         params.put("phaseId", phaseId);
         params.put("modelId", modelId);
         params.put("stlst", stlst);
+        params.put("destinations", destinations);
+        params.put("versionNumber", versionNumber);
+        
         params.put("workBookIds", workBookIds);
 
         List<CompareItemEntity> list = baseMapper.generateDataByWorkBook(params);

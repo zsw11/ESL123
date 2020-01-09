@@ -132,7 +132,7 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		List<CompareEntity> list = generateCompare(filteredWorkBooks);
 		for (CompareEntity entity : list) {
 			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 			compareItemService.generateCompareItem(filteredWorkBookIds, entity);
 		}
 	}
@@ -142,8 +142,10 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
-
-		CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+		String destinations =  (String) params.get("destinations");
+		String versionNumber = (String) params.get("versionNumber");
+		CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
+		//CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
 		List<CompareItemEntity> list=new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		if(entity!=null) {
@@ -232,7 +234,9 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
-			CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+			String destinations = workBook.getDestinations();
+			String versionNumber = workBook.getVersionNumber();
+			CompareEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
 				entity = new CompareEntity();
 				entity.setModelId(modelId);
@@ -241,10 +245,12 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 				entity.setDeptId(workBook.getDeptId());
 				entity.setTitle("Compare表");
 				entity.setSheetName("Compare表");
-				entity.setDestinations("仕向");
+				//entity.setDestinations("仕向");
 				entity.setFirstColumnName("LFP-PD内作");
+				entity.setDestinations(destinations);
+				entity.setVersionNumber(versionNumber);
 
-				WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId);
+				WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId, destinations, versionNumber);
 				if (lastWookBook != null) {
 					entity.setLastVersionName(lastWookBook.getVersionNumber());
 				}
@@ -256,9 +262,9 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		return results;
 	}
 
-	private CompareEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+	private CompareEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId ,String destinations,String versionNumber) {
 		EntityWrapper<CompareEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations",destinations).eq("version_number", versionNumber);
 		CompareEntity entity = selectOne(entityWrapper);
 		return entity;
 	}

@@ -131,7 +131,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		List<StationTimeEntity> list = generateStationTime(filteredWorkBooks);
 		for (StationTimeEntity entity : list) {
 			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 			stationTimeItemService.generateStationTimeItem(filteredWorkBookIds, entity.getId());
 		}
 	}
@@ -142,7 +142,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 
 			EntityWrapper<StationTimeEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations",work.getDestinations()).eq("version_number", work.getVersionNumber());
 			List<StationTimeEntity> list = selectList(entityWrapper);
 			StationTimeEntity stationTimeEntity = new StationTimeEntity();
 			if (list.size() > 0) {
@@ -153,6 +153,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 				stationTimeEntity.setStlst(work.getStlst());
 				stationTimeEntity.setDeptId(work.getDeptId());
 				stationTimeEntity.setDestinations(work.getDestinations());
+				stationTimeEntity.setVersionNumber(work.getVersionNumber());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				stationTimeEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(stationTimeEntity);

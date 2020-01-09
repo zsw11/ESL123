@@ -58,6 +58,10 @@ public class ReportManMachineCombinationEntity implements Serializable {
 	 */
 	private String destinations;
 	/**
+	 * 版本号
+	 */
+	private String versionNumber;
+	/**
 	 * MT 分析表totalRemark
 	 */
 	private BigDecimal mt;
@@ -94,4 +98,5 @@ public class ReportManMachineCombinationEntity implements Serializable {
 	 */
 	private Date deleteAt;
 
+	
 }

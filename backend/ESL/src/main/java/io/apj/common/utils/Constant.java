@@ -17,6 +17,11 @@ public class Constant {
 	/** 数据权限过滤 */
 	public static final String SQL_FILTER = "sql_filter";
 
+	/** 报表审批状态 */
+	public static final String APPROVE_REPORT_STATUS_SUBMIT = "01"; // 待审批
+	public static final String APPROVE_REPORT_STATUS_AGREE = "02"; // 已审批
+	public static final String APPROVE_REPORT_STATUS_CREATE = "03"; // 未审批
+	public static final String APPROVE_REPORT_STATUS_REJECT = "04"; // 未通过
 	/**
 	 * 菜单类单型
 	 * 

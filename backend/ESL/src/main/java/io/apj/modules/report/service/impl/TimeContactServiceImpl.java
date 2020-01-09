@@ -187,13 +187,17 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
-			TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId);
+			String destinations =  workBook.getDestinations();
+			String versionNumber = workBook.getVersionNumber();
+			TimeContactEntity entity = selectOneByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
 			if (entity == null) {
 				entity = new TimeContactEntity();
 				entity.setModelId(modelId);
 				entity.setPhaseId(phaseId);
 				entity.setStlst(stlst);
 				entity.setDeptId(workBook.getDeptId());
+				entity.setDestinations(destinations);
+				entity.setVersionNumber(versionNumber);
 				entity.setTitle("时间联络表");
 				entity.setSheetName("时间联络表");
 				insert(entity);
@@ -203,9 +207,9 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 		return results;
 	}
 
-	private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId) {
+	private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {
 		EntityWrapper<TimeContactEntity> entityWrapper = new EntityWrapper<>();
-		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId);
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
 		TimeContactEntity entity = selectOne(entityWrapper);
 		return entity;
 	}

@@ -145,7 +145,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
 		for (StandardWorkEntity entity : list) {
 			List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
-					entity.getModelId(), entity.getStlst(), entity.getPhaseId());
+					entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
 			standardWorkItemService.generateStandardWorkItem(filteredWorkBookIds, entity.getId());
 		}
 
@@ -157,7 +157,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 
 			EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number",work.getVersionNumber());
 			List<StandardWorkEntity> list = selectList(entityWrapper);
 			StandardWorkEntity standardWorkEntity = new StandardWorkEntity();
 			if (list.size() > 0) {
@@ -167,6 +167,8 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 				standardWorkEntity.setPhaseId(work.getPhaseId());
 				standardWorkEntity.setStlst(work.getStlst());
 				standardWorkEntity.setDeptId(work.getDeptId());
+				standardWorkEntity.setDestinations(work.getDestinations());
+				standardWorkEntity.setVersionNumber(work.getVersionNumber());
 				insert(standardWorkEntity);
 			}
 			results.add(standardWorkEntity);

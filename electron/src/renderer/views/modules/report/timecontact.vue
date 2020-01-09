@@ -246,7 +246,9 @@ export default {
         nextApproverId: null,
         modelId: null,
         phaseId: null,
-        stlst: null
+        stlst: null,
+        destinations: null,
+        versionNumber: null
       },
       reportGroup: [],
       listQuery: {
@@ -694,6 +696,8 @@ export default {
         modelId: row.modelId,
         phaseId: row.phaseId,
         stlst: row.stlst,
+        destinations: row.destinations,
+        versionNumber: row.versionNumber,
         reportId: 9
       }
       downloadReportApprove(data).then(response => {

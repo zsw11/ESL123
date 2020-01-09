@@ -18,6 +18,8 @@
         <result property="reviseReason" column="revise_reason"/>
         <result property="stlst" column="stlst"/>
         <result property="revNo" column="rev_no"/>
+        <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="allCountSub" column="all_count_sub"/>
         <result property="allCountMain" column="all_count_main"/>
         <result property="allCountPrinting" column="all_count_printing"/>

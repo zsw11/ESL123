@@ -10,6 +10,8 @@
         <result property="modelId" column="model_id"/>
         <result property="phaseId" column="phase_id"/>
         <result property="stlst" column="stlst"/>
+        <result property="destinations" column="destinations"/>
+        <result property="versionNumber" column="version_number"/>
         <result property="reportGroupId" column="report_group_id"/>
         <result property="nextApproverId" column="next_approver_id"/>
         <result property="status" column="status"/>

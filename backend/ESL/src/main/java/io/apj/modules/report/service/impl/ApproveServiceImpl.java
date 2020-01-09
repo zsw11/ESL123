@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 
+import io.apj.common.utils.Constant;
 import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
@@ -207,10 +208,15 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Transactional
     public ResponseEntity<Object> saveView(ApproveEntity approveEntity, Map<String, Object> data) {
         approveEntity.setNextApproverId((Integer) data.get("nextApproverId"));
-        if(data.get("nextApproverId") == null){
-            approveEntity.setStatus("01");
-        }else {
-            approveEntity.setStatus("02");
+//        if(data.get("nextApproverId") == null){
+//            approveEntity.setStatus("01");
+//        }else {
+//            approveEntity.setStatus("02");
+//        }
+        if("01".equals((String) data.get("result"))){
+        	approveEntity.setStatus(Constant.APPROVE_REPORT_STATUS_AGREE);
+        }else{
+        	approveEntity.setStatus(Constant.APPROVE_REPORT_STATUS_REJECT);
         }
         approveService.updateAllColumnById(approveEntity);
         //上面更新下面保存

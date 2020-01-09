@@ -149,7 +149,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<TotalEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
 			List<TotalEntity> list = selectList(entityWrapper);
 			TotalEntity totalEntity = new TotalEntity();
 			if (list.size() > 0) {
@@ -160,7 +160,8 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 				totalEntity.setPhaseId(work.getPhaseId());
 				totalEntity.setStlst(work.getStlst());
 				totalEntity.setDeptId(work.getDeptId());
-				totalEntity.setDestinations(work.getDestinations());
+				//totalEntity.setDestinations(work.getDestinations());
+				totalEntity.setVersionNumber(work.getVersionNumber());
 				totalEntity.setSheetName("total");
 				totalEntity.setDestinations(work.getDestinations());
 				insert(totalEntity);

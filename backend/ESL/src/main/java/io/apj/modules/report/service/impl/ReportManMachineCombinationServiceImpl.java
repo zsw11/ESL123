@@ -128,7 +128,7 @@ public class ReportManMachineCombinationServiceImpl
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
-					work.getPhaseId());
+					work.getPhaseId()).eq("destinations",work.getDestinations()).eq("version_number", work.getVersionNumber());
 			List<ReportManMachineCombinationEntity> list = selectList(entityWrapper);
 			ReportManMachineCombinationEntity reportManMachineCombinationEntity = new ReportManMachineCombinationEntity();
 			if (list.size() > 0) {
@@ -138,6 +138,8 @@ public class ReportManMachineCombinationServiceImpl
 				reportManMachineCombinationEntity.setPhaseId(work.getPhaseId());
 				reportManMachineCombinationEntity.setStlst(work.getStlst());
 				reportManMachineCombinationEntity.setDeptId(work.getDeptId());
+				reportManMachineCombinationEntity.setDestinations(work.getDestinations());
+				reportManMachineCombinationEntity.setVersionNumber(work.getVersionNumber());
 				insert(reportManMachineCombinationEntity);
 			}
 			results.add(reportManMachineCombinationEntity);
