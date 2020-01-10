@@ -117,7 +117,7 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("workBook:workbook:update")
-	public ResponseEntity<Object> update(@RequestBody Map<String,Object> map) {
+	public ResponseEntity<Object> update(@RequestParam Integer id,@RequestBody Map<String,Object> map) {
 //		JSONArray jsonArray = null;
 //		try
 //		{
@@ -130,8 +130,7 @@ public class WorkBookController extends AbstractController {
 			map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
-		Integer workBookId = (Integer) map.get("id");
-		Integer lockById = workBookService.selectById(workBookId).getLockBy();
+		Integer lockById = workBookService.selectById(id).getLockBy();
 		workBookEntity.setUpdateBy(getUserId().intValue());
 		workBookEntity.setMakedAt(new Date());
 		if(lockById == null){
