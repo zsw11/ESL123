@@ -47,7 +47,7 @@ public class WorkOperationsEntity implements Serializable {
 	/**
 	 * 频度
 	 */
-	private Integer frequency;
+	private Float frequency;
 	/**
 	 * 时间值
 	 */

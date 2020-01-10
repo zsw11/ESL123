@@ -11,17 +11,17 @@
             },
             {
                 "code": "versionNumber",
-                "name": "版本信息",
+                "name": "H",
                 "type": "String"
             },
             {
                 "code": "operation",
-                "name": "手顺",
+                "name": "WorkMethod",
                 "type": "String"
             },
             {
                 "code": "a0",
-                "name": "a0",
+                "name": "A",
                 "type": "int"
             },
             {
@@ -31,7 +31,7 @@
             },
             {
                 "code": "b0",
-                "name": "b0",
+                "name": "B",
                 "type": "int"
             },
             {
@@ -41,7 +41,7 @@
             },
             {
                 "code": "g0",
-                "name": "g0",
+                "name": "G",
                 "type": "int"
             },
             {
@@ -51,7 +51,7 @@
             },
             {
                 "code": "a1",
-                "name": "a1",
+                "name": "A",
                 "type": "int"
             },
             {
@@ -61,7 +61,7 @@
             },
             {
                 "code": "b1",
-                "name": "b1",
+                "name": "B",
                 "type": "int"
             },
             {
@@ -71,7 +71,7 @@
             },
             {
                 "code": "p0",
-                "name": "p0",
+                "name": "P",
                 "type": "int"
             },
             {
@@ -81,7 +81,7 @@
             },
             {
                 "code": "m0",
-                "name": "m0",
+                "name": "M",
                 "type": "int"
             },
             {
@@ -91,7 +91,7 @@
             },
             {
                 "code": "x0",
-                "name": "x0",
+                "name": "X",
                 "type": "int"
             },
             {
@@ -101,7 +101,7 @@
             },
             {
                 "code": "i0",
-                "name": "i0",
+                "name": "I",
                 "type": "int"
             },
             {
@@ -111,7 +111,7 @@
             },
             {
                 "code": "a2",
-                "name": "a2",
+                "name": "A",
                 "type": "int"
             },
             {
@@ -121,7 +121,7 @@
             },
             {
                 "code": "b2",
-                "name": "b2",
+                "name": "B",
                 "type": "int"
             },
             {
@@ -131,7 +131,7 @@
             },
             {
                 "code": "p1",
-                "name": "p1",
+                "name": "P",
                 "type": "int"
             },
             {
@@ -141,7 +141,7 @@
             },
             {
                 "code": "a3",
-                "name": "a3",
+                "name": "A",
                 "type": "int"
             },
             {
@@ -151,12 +151,12 @@
             },
             {
                 "code": "tool",
-                "name": "tool",
+                "name": "Tool",
                 "type": "int"
             },
             {
                 "code": "a4",
-                "name": "a4",
+                "name": "A",
                 "type": "int"
             },
             {
@@ -166,7 +166,7 @@
             },
             {
                 "code": "b3",
-                "name": "b3",
+                "name": "B",
                 "type": "int"
             },
             {
@@ -176,7 +176,7 @@
             },
             {
                 "code": "p2",
-                "name": "p2",
+                "name": "P",
                 "type": "int"
             },
             {
@@ -186,23 +186,38 @@
             },
             {
                 "code": "a5",
-                "name": "a5",
+                "name": "A",
                 "type": "int"
             },
             {
                 "code": "frequency",
-                "name": "频度",
+                "name": "Fre.",
                 "type": "Integer"
             },
             {
                 "code": "remark",
-                "name": "备注",
+                "name": "Remark",
                 "type": "String"
             },
             {
-                "code": "createAt",
-                "name": "创建时间",
-                "type": "date"
+                "code": "remark1",
+                "name": "Remark",
+                "type": "String"
+            },
+            {
+                "code": "timeValue",
+                "name": "TimeValue",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "tmu",
+                "name": "TMU",
+                "type": "BigDecimal"
+            },
+            {
+                "code": "secondConvert",
+                "name": "Sec./conv",
+                "type": "BigDecimal"
             }
         ]
     }
