@@ -11,7 +11,7 @@
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <export-data type="primary" :config="exportConfig">导 出</export-data>
-      <!-- <import-data type="primary" :config="importConfig"></import-data> -->
+      <import-data type="primary" :config="importConfig"></import-data>
       <span class="work-name">{{workbook.workName}}</span>
       <el-button type="primary" icon="el-icon-info" class="info-button" @click="showInfo"></el-button>
       <span :title="videoPath" class="video-name">{{videoName}}</span>
@@ -66,7 +66,7 @@
           @select="addOperationGroup">
         </el-autocomplete>
         <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
-        <!-- <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button> -->
+        <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button>
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -204,28 +204,44 @@
             code: 'workOperations',
             name: '分析表明细',
             children: [
-              {code: 'versionNumber', name: 'H', type: 'string', required: true},
-              {code: 'operation', name: 'Work Method', type: 'string', required: true},
-              {code: 'a0', name: 'A', type: 'string', required: true},
-              {code: 'b0', name: 'b', type: 'string', required: true},
-              {code: 'g0', name: 'G', type: 'string', required: true},
-              {code: 'a1', name: 'A', type: 'string', required: true},
-              {code: 'b1', name: 'B', type: 'string', required: true},
-              {code: 'p0', name: 'P', type: 'string', required: true},
-              {code: 'm0', name: 'M', type: 'string', required: true},
-              {code: 'x0', name: 'X', type: 'string', required: true},
-              {code: 'i0', name: 'I', type: 'string', required: true},
-              {code: 'a2', name: 'A', type: 'string', required: true},
-              {code: 'b2', name: 'B', type: 'string', required: true},
-              {code: 'p1', name: 'P', type: 'string', required: true},
-              {code: 'a3', name: 'A', type: 'string', required: true},
-              {code: 'tool', name: 'Tool', type: 'string', required: true},
-              {code: 'a4', name: 'A', type: 'string', required: true},
-              {code: 'b3', name: 'B', type: 'string', required: true},
-              {code: 'p2', name: 'P', type: 'string', required: true},
-              {code: 'a5', name: 'A', type: 'string', required: true},
-              {code: 'frequency', name: 'Fre.', type: 'string', required: true},
-              {code: 'remark', name: 'Remark.', type: 'string', required: true}
+              {code: 'versionNumber', name: 'H', type: 'string'},
+              {code: 'operation', name: 'Work Method', type: 'string'},
+              {code: 'a0', name: 'A', type: 'string'},
+              {code: 'a0null', name: 'A', type: 'string'},
+              {code: 'b0', name: 'B', type: 'string'},
+              {code: 'b0null', name: 'B', type: 'string'},
+              {code: 'g0', name: 'G', type: 'string'},
+              {code: 'g0null', name: 'G', type: 'string'},
+              {code: 'a1', name: 'A', type: 'string'},
+              {code: 'a1null', name: 'A', type: 'string'},
+              {code: 'b1', name: 'B', type: 'string'},
+              {code: 'b1null', name: 'B', type: 'string'},
+              {code: 'p0', name: 'P', type: 'string'},
+              {code: 'p0null', name: 'P', type: 'string'},
+              {code: 'm0', name: 'M', type: 'string'},
+              {code: 'm0null', name: 'M', type: 'string'},
+              {code: 'x0', name: 'X', type: 'string'},
+              {code: 'x0null', name: 'X', type: 'string'},
+              {code: 'i0', name: 'I', type: 'string'},
+              {code: 'i0null', name: 'I', type: 'string'},
+              {code: 'a2', name: 'A', type: 'string'},
+              {code: 'a2null', name: 'A', type: 'string'},
+              {code: 'b2', name: 'B', type: 'string'},
+              {code: 'b2null', name: 'B', type: 'string'},
+              {code: 'p1', name: 'P', type: 'string'},
+              {code: 'p1null', name: 'P', type: 'string'},
+              {code: 'a3', name: 'A', type: 'string'},
+              {code: 'a3null', name: 'A', type: 'string'},
+              {code: 'tool', name: 'Tool', type: 'string'},
+              {code: 'a4', name: 'A', type: 'string'},
+              {code: 'a4null', name: 'A', type: 'string'},
+              {code: 'b3', name: 'B', type: 'string'},
+              {code: 'b3null', name: 'B', type: 'string'},
+              {code: 'p2', name: 'P', type: 'string'},
+              {code: 'p2null', name: 'P', type: 'string'},
+              {code: 'a5', name: 'A', type: 'string'},
+              {code: 'frequency', name: 'Fre.', type: 'string'},
+              {code: 'remark', name: 'Remark.', type: 'string'}
             ]
           }],
         // 导出
@@ -235,25 +251,40 @@
           "workOperations.versionNumber",
           "workOperations.operation",
           "workOperations.a0",
+          "workOperations.a0null",
           "workOperations.b0",
+          "workOperations.b0null",
           "workOperations.g0",
+          "workOperations.g0null",
           "workOperations.a1",
+          "workOperations.a1null",
           "workOperations.b1",
+          "workOperations.b1null",
           "workOperations.p0",
+          "workOperations.p0null",
           "workOperations.m0",
+          "workOperations.m0null",
           "workOperations.x0",
+          "workOperations.x0null",
           "workOperations.i0",
+          "workOperations.i0null",
           "workOperations.a2",
+          "workOperations.a2null",
           "workOperations.b2",
+          "workOperations.b2null",
           "workOperations.p1",
+          "workOperations.p1null",
           "workOperations.a3",
+          "workOperations.a3null",
           "workOperations.tool",
           "workOperations.a4",
+          "workOperations.a4null",
           "workOperations.b3",
+          "workOperations.b3null",
           "workOperations.p2",
-          "workOperations.a5",
-          "workOperations.frequency",
-          "workOperations.remark"
+          "workOperations.p2null",
+          "workOperations.a4",
+          "workOperations.frequency"
         ],
         // 操作
         listener: null,

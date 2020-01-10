@@ -56,6 +56,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 	@Override
 	@Transactional
 	public void workOperationImport(Map<String, Object> map) {
+		workOperationsService.deletebyWrapper(new EntityWrapper<WorkOperationsEntity>().eq("work_book_id",Integer.parseInt((String) map.get("filterId"))));
 		List<Map<String, Object>> maps = (List<Map<String, Object>>) map.get("data");
 		List<WorkOperationsEntity> operationsEntityList = new ArrayList<>();
 		for (int i = 0; i < maps.size(); i++) {
@@ -84,8 +85,91 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			ValidatorUtils.validateEntity(workOperationsEntity, i);
 			workOperationsEntity.setCreateBy((Integer) map.get("userID"));
 			workOperationsEntity.setWorkBookId(Integer.parseInt((String) map.get("filterId")));
+
+			//合并导出列
+			if(workOperationsEntity.getA0null()!=null && workOperationsEntity.getA0null()!=0){
+				workOperationsEntity.setA0(-Math.abs(workOperationsEntity.getA0null()));
+			}else if(workOperationsEntity.getA0null()!=null &&workOperationsEntity.getA0null()==0){
+				workOperationsEntity.setA0(-9999);
+			}
+			if(workOperationsEntity.getB0null()!=null && workOperationsEntity.getB0null()!=0){
+				workOperationsEntity.setB0(-Math.abs(workOperationsEntity.getB0null()));
+			}else if(workOperationsEntity.getB0null()!=null &&workOperationsEntity.getB0null()==0){
+				workOperationsEntity.setB0(-9999);
+			}
+			if(workOperationsEntity.getG0null()!=null && workOperationsEntity.getG0null()!=0){
+				workOperationsEntity.setG0(-Math.abs(workOperationsEntity.getG0null()));
+			}else if(workOperationsEntity.getG0null()!=null &&workOperationsEntity.getG0null()==0){
+				workOperationsEntity.setG0(-9999);
+			}
+			if(workOperationsEntity.getA1null()!=null && workOperationsEntity.getA1null()!=0){
+				workOperationsEntity.setA1(-Math.abs(workOperationsEntity.getA1null()));
+			}else if(workOperationsEntity.getA1null()!=null &&workOperationsEntity.getA1null()==0){
+				workOperationsEntity.setA1(-9999);
+			}
+			if(workOperationsEntity.getB1null()!=null && workOperationsEntity.getB1null()!=0){
+				workOperationsEntity.setB1(-Math.abs(workOperationsEntity.getB1null()));
+			}else if(workOperationsEntity.getB1null()!=null &&workOperationsEntity.getB1null()==0){
+				workOperationsEntity.setB1(-9999);
+			}
+			if(workOperationsEntity.getP0null()!=null && workOperationsEntity.getP0null()!=0){
+				workOperationsEntity.setP0(-Math.abs(workOperationsEntity.getP0null()));
+			}else if(workOperationsEntity.getP0null()!=null &&workOperationsEntity.getP0null()==0){
+				workOperationsEntity.setP0(-9999);
+			}
+			if(workOperationsEntity.getM0null()!=null && workOperationsEntity.getM0null()!=0){
+				workOperationsEntity.setM0(-Math.abs(workOperationsEntity.getM0null()));
+			}else if(workOperationsEntity.getM0null()!=null &&workOperationsEntity.getM0null()==0){
+				workOperationsEntity.setM0(-9999);
+			}
+			if(workOperationsEntity.getX0null()!=null && workOperationsEntity.getX0null()!=0){
+				workOperationsEntity.setX0(-Math.abs(workOperationsEntity.getX0null()));
+			}else if(workOperationsEntity.getX0null()!=null &&workOperationsEntity.getX0null()==0){
+				workOperationsEntity.setX0(-9999);
+			}
+			if(workOperationsEntity.getI0null()!=null && workOperationsEntity.getI0null()!=0){
+				workOperationsEntity.setI0(-Math.abs(workOperationsEntity.getI0null()));
+			}else if(workOperationsEntity.getI0null()!=null && workOperationsEntity.getI0null()==0){
+				workOperationsEntity.setI0(-9999);
+			}
+			if(workOperationsEntity.getA2null()!=null && workOperationsEntity.getA2null()!=0){
+				workOperationsEntity.setA2(-Math.abs(workOperationsEntity.getA2null()));
+			}else if(workOperationsEntity.getA2null()!=null &&workOperationsEntity.getA2null()==0){
+				workOperationsEntity.setA2(-9999);
+			}
+			if(workOperationsEntity.getB2null()!=null && workOperationsEntity.getB2null()!=0){
+				workOperationsEntity.setB2(-Math.abs(workOperationsEntity.getB2null()));
+			}else if(workOperationsEntity.getB2null()!=null &&workOperationsEntity.getB2null()==0){
+				workOperationsEntity.setB2(-9999);
+			}
+			if(workOperationsEntity.getP1null()!=null && workOperationsEntity.getP1null()!=0){
+				workOperationsEntity.setP1(-Math.abs(workOperationsEntity.getP1null()));
+			}else if(workOperationsEntity.getP1null()!=null &&workOperationsEntity.getP1null()==0){
+				workOperationsEntity.setP1(-9999);
+			}
+			if(workOperationsEntity.getA3null()!=null && workOperationsEntity.getA3null()!=0){
+				workOperationsEntity.setA3(-Math.abs(workOperationsEntity.getA3null()));
+			}else if(workOperationsEntity.getA3null()!=null &&workOperationsEntity.getA3null()==0){
+				workOperationsEntity.setA3(-9999);
+			}
+			if(workOperationsEntity.getA4null()!=null && workOperationsEntity.getA4null()!=0){
+				workOperationsEntity.setA4(-Math.abs(workOperationsEntity.getA4null()));
+			}else if(workOperationsEntity.getA4null()!=null &&workOperationsEntity.getA4null()==0){
+				workOperationsEntity.setA4(-9999);
+			}
+			if(workOperationsEntity.getB3null()!=null && workOperationsEntity.getB3null()!=0){
+				workOperationsEntity.setB3(-Math.abs(workOperationsEntity.getB3null()));
+			}else if(workOperationsEntity.getB3null()!=null &&workOperationsEntity.getB3null()==0){
+				workOperationsEntity.setB3(-9999);
+			}
+			if(workOperationsEntity.getP2null()!=null && workOperationsEntity.getP2null()!=0){
+				workOperationsEntity.setP2(-Math.abs(workOperationsEntity.getP2null()));
+			}else if(workOperationsEntity.getP2null()!=null &&workOperationsEntity.getP2null()==0){
+				workOperationsEntity.setP2(-9999);
+			}
 			operationsEntityList.add(workOperationsEntity);
 		}
+
 		try {
 			workOperationsService.insertBatch(operationsEntityList, Constant.importNum);
 		} catch (MybatisPlusException e) {
@@ -137,7 +221,11 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		ListFilter.add("workOperations.p2null");
 		ListFilter.add(list.get(19));
 		ListFilter.add(list.get(20));
-		ListFilter.add(list.get(21));
+//		ListFilter.add(list.get(21));
+//		ListFilter.add("workOperations.remark1");
+		ListFilter.add("workOperations.timeValue");
+		ListFilter.add("workOperations.tmu");
+		ListFilter.add("workOperations.secondConvert");
 
 		// 查询类型
 		String type = map.get("filterType").toString();

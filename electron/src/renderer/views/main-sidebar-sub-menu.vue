@@ -5,7 +5,7 @@
     <template slot="title">
       <icon-svg :name="menu.icon || ''"
                 class="site-sidebar__menu-icon"></icon-svg>
-      <span>{{ menu.name }}</span>
+      <span class="menu-font">{{ menu.name }}</span>
     </template>
     <sub-menu v-for="item in menu.subMenus"
               :key="item.id"
@@ -18,7 +18,7 @@
                 @click="gotoRouteHandle(menu)">
     <icon-svg :name="menu.icon || ''"
               class="site-sidebar__menu-icon"></icon-svg>
-    <span>{{ menu.name }}</span>
+    <span class="menu-font">{{ menu.name }}</span>
   </el-menu-item>
 </template>
 
@@ -55,3 +55,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scope>
+.menu-font{
+  font-size: 16px;
+  font-weight: 600;
+}
+</style>

@@ -56,6 +56,16 @@ export function updateWorkBook (id, data) {
 }
 
 // 修改分析表
+export function updateWorkBookRemarks (id, data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/updateremarks'),
+    method: 'put',
+    params: { id },
+    data
+  })
+}
+
+// 修改分析表
 export function updateAll (id, data) {
   return request({
     url: request.adornUrl('/api/v1/workbook/updateAll'),

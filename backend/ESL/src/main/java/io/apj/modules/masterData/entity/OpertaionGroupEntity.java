@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -43,7 +44,7 @@ public class OpertaionGroupEntity implements Serializable {
 	/**
 	 * 频率
 	 */
-	private Integer frequency;
+	private Float frequency;
 	/**
 	 * 备注
 	 */
