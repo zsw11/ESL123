@@ -43,6 +43,7 @@ Vue.prototype.isAuth = isAuth     // 权限方法
 Vue.prototype.customConfig = Conifg
 
 // 保存整站vuex本地储存初始状态
+window.SITE_CONFIG = {}
 window.SITE_CONFIG['storeState'] = cloneDeep(store.state)
 
 /* eslint-disable no-new */

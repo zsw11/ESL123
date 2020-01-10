@@ -36,7 +36,15 @@ let mainConfig = {
       {
         test: /\.node$/,
         use: 'node-loader'
-      }
+      },
+      // {
+      //   test: /\.(xls|xlsx)(\?.*)?$/,
+      //   loader: 'url-loader',
+      //   options: {
+      //     limit: 1,
+      //     name: utils.assetsPath('xlsxTemplate/[name].[ext]')
+      //   }
+      // }
     ]
   },
   node: {
