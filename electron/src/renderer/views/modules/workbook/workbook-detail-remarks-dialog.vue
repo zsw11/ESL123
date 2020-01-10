@@ -31,7 +31,7 @@
 
 <script>
 import DialogMixin from '@/mixins/dialog'
-import { updateWorkBook, fetchWorkBook } from '@/api/workBook'
+import { updateWorkBookRemarks, fetchWorkBook } from '@/api/workBook'
 
 export default {
   name: 'WorkbookDetailInfoDialog',
@@ -78,7 +78,7 @@ export default {
         remarkData.remarks.push(item.remark)
       })
       remarkData.remarks = JSON.stringify(remarkData.remarks)
-      updateWorkBook(this.workbook.id, remarkData).then((page) => {
+      updateWorkBookRemarks(this.workbook.id, remarkData).then((page) => {
         if(page.id){
             this.$message({
               message: '操作成功',
