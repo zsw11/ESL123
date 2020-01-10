@@ -62,7 +62,7 @@
           <span>
             <el-button
               v-if="$route.path.includes('edit')"
-              id="delete"
+              class="delete"
               type="text"
               size="mini"
               @click="() => remove(node, data)"

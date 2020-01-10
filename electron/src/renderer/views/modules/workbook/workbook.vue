@@ -208,7 +208,7 @@
             </el-button>
             <el-button  type="text" size="small" @click="editWorkbook(scope.row.id)">编辑</el-button>
             <el-button  type="text" size="small" @click="createReport(scope.row)">生成报表</el-button>
-            <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  v-if="$store.state.user.id === scope.row.createBy" type="text" size="small" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 

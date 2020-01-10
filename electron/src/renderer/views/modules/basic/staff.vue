@@ -191,7 +191,7 @@
                        size='mini'
                        type='text'
                        @click='deleteHandle(scope.row)'
-                       id="delete"  >删除</el-button>
+                       class="delete"  >删除</el-button>
           </template>
         </el-table-column>
       </el-table>

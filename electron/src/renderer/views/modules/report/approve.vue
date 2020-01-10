@@ -130,7 +130,7 @@
             </el-button>
             <el-button
               v-if="$store.state.user.id === scope.row.nextApproverId && scope.row.status == '03'"
-              id="delete"
+              class="delete"
               size="mini"
               type="text"
               @click="approve(scope.row.id,scope.row.reportGroupName,0)">
