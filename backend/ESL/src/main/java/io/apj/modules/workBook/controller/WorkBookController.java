@@ -130,6 +130,7 @@ public class WorkBookController extends AbstractController {
 			map.put("remarks",map.get("remarks").toString());
 		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 //		DataUtils.transMap2Bean2(map, workBookEntity);
+		workBookEntity.setId(id);
 		Integer lockById = workBookService.selectById(id).getLockBy();
 		workBookEntity.setUpdateBy(getUserId().intValue());
 		workBookEntity.setMakedAt(new Date());
