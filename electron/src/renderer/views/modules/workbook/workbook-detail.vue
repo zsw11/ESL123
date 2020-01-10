@@ -66,7 +66,7 @@
           @select="addOperationGroup">
         </el-autocomplete>
         <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
-        <!-- <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button> -->
+        <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button>
       </div>
 
       <workbook-table ref="workbookTable"></workbook-table>
@@ -248,6 +248,8 @@
         exportAttributes: cloneDeep(defaultExport),
         // 导入字段固定不可变
         importAttributes: [
+          "workOperations.versionNumber",
+          "workOperations.operation",
           "workOperations.a0",
           "workOperations.a0null",
           "workOperations.b0",
@@ -274,12 +276,15 @@
           "workOperations.p1null",
           "workOperations.a3",
           "workOperations.a3null",
+          "workOperations.tool",
           "workOperations.a4",
           "workOperations.a4null",
           "workOperations.b3",
           "workOperations.b3null",
           "workOperations.p2",
           "workOperations.p2null",
+          "workOperations.a4",
+          "workOperations.frequency"
         ],
         // 操作
         listener: null,
