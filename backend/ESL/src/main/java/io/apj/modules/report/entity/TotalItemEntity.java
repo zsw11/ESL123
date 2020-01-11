@@ -1,5 +1,6 @@
 package io.apj.modules.report.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -117,6 +118,12 @@ public class TotalItemEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
+	
+	/**
+	 * ST/LST
+	 */
+	@TableField(exist = false)
+	private String stlst;
 
 	private Integer workBookId;
 }

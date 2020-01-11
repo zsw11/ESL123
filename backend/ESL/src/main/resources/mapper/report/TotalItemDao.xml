@@ -29,7 +29,24 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
+        <result property="stlst" column="stlst"/>
     </resultMap>
 
+	<select id="generateDataByWorkBook" resultMap="totalItemMap">
+        select   w."name" as work_name,wb.work_name as process,wb.stlst as stlst,wb.second_convert as most_st_ht,wb.second_convert as most_lst_ht,
+        	wb.remark1 as most_st_mt, wb.remark1 as most_lst_mt,
+			wb.second_convert* 1.06 as st_complement, wb.second_convert* 1.06 as lst_complement ,wb.second_convert* 1.06 as st_sec,wb.second_convert* 1.06 as lst_sec,
+			wb.id as work_book_id, m.id
+        from work_book wb
+        join workstation w on wb.workstation_id = w.id
+        left join report_total_item m on m.work_book_id = wb.id
+        where 1 = 1
+        <if test="workBookIds != null and workBookIds.size() > 0">
+            and wb.id in
+            <foreach collection="workBookIds" open="(" close=")" separator="," item="item" index="index">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 
 </mapper>

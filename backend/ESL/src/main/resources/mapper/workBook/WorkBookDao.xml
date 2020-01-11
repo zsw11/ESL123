@@ -23,6 +23,7 @@
         <result property="timeValue" column="time_value"/>
         <result property="tmu" column="tmu"/>
         <result property="secondConvert" column="second_convert"/>
+        <result property="remark1" column="remark1"/>
         <result property="remarks" column="remarks"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>

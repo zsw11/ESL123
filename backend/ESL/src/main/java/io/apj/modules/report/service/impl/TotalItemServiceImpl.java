@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+
+import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.report.dao.TotalItemDao;
@@ -35,13 +37,27 @@ public class TotalItemServiceImpl extends ServiceImpl<TotalItemDao, TotalItemEnt
 
     @Override
     public void generateTotalItem(List<Integer> workBookIds, Integer recordId) {
-//        List<TotalItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
-//        if (list!=null&&list.size() >0) {
-//            for (TotalItemEntity entity : list) {
-//                entity.setReportTotalId(recordId);
-//            }
-//            insertOrUpdateBatch(list);
-//        }
+        List<TotalItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+        if (list!=null&&list.size() >0) {
+            for (TotalItemEntity entity : list) {
+                entity.setReportTotalId(recordId);
+                if(Constant.LST.equals(entity.getStlst())){
+                	entity.setStComplement(null);
+                	entity.setStSampling(null);
+                	entity.setMostStHt(null);
+                	entity.setMostStMt(null);
+                	entity.setStSec(null);
+                }else{
+                	entity.setLstComplement(null);
+                	entity.setLstSampling(null);
+                	entity.setMostLstHt(null);
+                	entity.setMostLstMt(null);
+                	entity.setLstSec(null);
+                }
+                
+            }
+            insertOrUpdateBatch(list);
+        }
     }
 
 }

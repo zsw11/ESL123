@@ -22,6 +22,11 @@ public class Constant {
 	public static final String APPROVE_REPORT_STATUS_AGREE = "02"; // 已审批
 	public static final String APPROVE_REPORT_STATUS_CREATE = "03"; // 未审批
 	public static final String APPROVE_REPORT_STATUS_REJECT = "04"; // 未通过
+	
+	/** LST/ST类型 */
+	public static final String LST = "01";
+	public static final String ST = "02";
+	
 	/**
 	 * 菜单类单型
 	 * 
