@@ -54,14 +54,6 @@ export default {
       return debounce(this.suggest, 200)
     }
   },
-  watch: {
-    '$attrs.value' (v) {
-      console.log(v)
-      if (v.length === 1) {
-        this.suggest(v)
-      }
-    }
-  },
   methods: {
     // 获取光标前文字
     getInputBegin () {

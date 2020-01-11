@@ -136,14 +136,12 @@ export default {
       const { selectionStart, selectionEnd, value } = this.$refs.operation
       const beginStr = value.slice(0, selectionStart)
       const endStr = value.slice(selectionEnd, value.length)
-      console.log(beginStr, str, endStr)
       this.$refs.operation.value = beginStr + str + endStr
       // this.$emit('input', this.$refs.operation.value)
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e) {
       this.status = 'input'
-      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -234,7 +232,6 @@ export default {
       }
     },
     keyup (e) {
-      console.log('keyup')
       this.status = 'input'
       e.stopPropagation()
       const beginStr = this.getInputBegin()
@@ -258,11 +255,11 @@ export default {
           this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr)[1])
         } else {
           this.endSuggest()
-          console.log(e.key)
+          // console.log(e.key)
         }
       } else {
         this.endSuggest()
-        console.log(e.key)
+        // console.log(e.key)
       }
       return true
     }
