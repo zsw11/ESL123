@@ -25,9 +25,9 @@
         ref="operation"
         key="operation"
         type="text"
-        v-bind="$attrs"
         @keydown="keydown($event)"
-        @input="$emit('input', $event.target.value)"
+        @keyup="keyup($event)"
+        @blur="$emit('input', $event.target.value)"
         class="custom-input">
     </popper>
   </span>
@@ -55,28 +55,20 @@ export default {
       suggestMode: null,
       popoverVisible: false,
       suggestions: [],
-      activeSugguestionIndex: null
+      activeSugguestionIndex: null,
+      status: 'input'
     }
   },
-  watch: {
-    '$attrs.value' (v, o) {
-      if (v === '[') {
-        if (!o) {
-          // this.addToSelection(']', false)
-        }
-        // this.debounceSuggest('part')
-      } else if (v === '"') {
-        if (!o) {
-          // this.debounceSuggest('tool')
-        }
-      } else if (v.length === 1 && !/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(v)) {
-        this.debounceSuggest('action', v)
-      }
-    }
+  created () {
+    this.$nextTick(() => {
+      // 双击进入的情况，刷新数据
+      this.$refs.operation.value = this.$attrs.value
+    })
   },
   computed: {
+    // 避免连续请求
     debounceSuggest () {
-      return debounce(this.suggest, 500)
+      return debounce(this.suggest, 200)
     }
   },
   methods: {
@@ -86,25 +78,24 @@ export default {
     },
     // 查询并提示
     suggest (mode, keyword) {
+      const self = this
+      self.status = 'suggest'
       this.suggestMode = mode
       this.suggestions = []
-      const self = this
       listFuncs[mode]({ name: keyword }).then(({ page }) => {
+        if (self.status !== 'suggest') return
         this.suggestions = page.data
-        setTimeout(() => {
-          this.activeSugguestionIndex = self.suggestions.length ? 0 : null
-          this.popoverVisible = true
-        }, 100)
+        this.activeSugguestionIndex = self.suggestions.length ? 0 : null
+        this.popoverVisible = true
       })
     },
-    // j结束提示
+    // 结束提示
     endSuggest () {
-      setTimeout(() => {
-        this.popoverVisible = false
-        this.$refs.popper.doClose()
-        this.activeSugguestionIndex = null
-      }, 100)
+      this.popoverVisible = false
+      this.$refs.popper.doClose()
+      this.activeSugguestionIndex = null
     },
+    // 选择提示内容
     selectSuggestion (s) {
       // 插入补品或治工具
       switch (this.suggestMode) {
@@ -145,11 +136,14 @@ export default {
       const { selectionStart, selectionEnd, value } = this.$refs.operation
       const beginStr = value.slice(0, selectionStart)
       const endStr = value.slice(selectionEnd, value.length)
+      console.log(beginStr, str, endStr)
       this.$refs.operation.value = beginStr + str + endStr
-      this.$emit('input', this.$refs.operation.value)
+      // this.$emit('input', this.$refs.operation.value)
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
-    keydown (e, scope) {
+    keydown (e) {
+      this.status = 'input'
+      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -162,12 +156,12 @@ export default {
           // 在[]间会再次提示
           if (/\[[^[\]]*$/.test(beginStr)) {
             this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr)[1])
+            e.stopPropagation()
             return e.preventDefault()
           }
           // 补]并开始提示
           this.addToSelection(']', false)
           e.stopPropagation()
-          // this.debounceSuggest('part')
           break
         }
         case ']': {
@@ -195,7 +189,6 @@ export default {
           // 补"并开始提示
           this.addToSelection('"', false)
           e.stopPropagation()
-          // this.debounceSuggest('tool')
           break
         }
         case 'ArrowLeft':
@@ -232,35 +225,46 @@ export default {
           }
           break
         }
-        default: {
-          if (e.key === 'Backspace') {
-            this.endSuggest()
-            return true
-          } else {
-            const beginStr = this.getInputBegin()
-            // console.log(beginStr + e.key, /[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key))
-            if (e.key.length === 1) {
-              if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr + e.key)) {
-                // 操作关键字
-                this.debounceSuggest('action', beginStr + e.key)
-              } else if (/\[[^[\]"]*$/.test(beginStr + e.key)) {
-                // 部品
-                this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr + e.key)[1])
-              } else if (((beginStr + e.key).match(/"/g) || []).length % 2 === 1) {
-                // 治工具
-                this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr + e.key)[1])
-              } else {
-                this.endSuggest()
-                console.log(e.key)
-              }
-            } else {
-              this.endSuggest()
-              console.log(e.key)
-            }
-          }
+        case 'Backspace': {
+          this.endSuggest()
           return true
         }
+        default: {
+        }
       }
+    },
+    keyup (e) {
+      console.log('keyup')
+      this.status = 'input'
+      e.stopPropagation()
+      const beginStr = this.getInputBegin()
+      if (
+        [
+          '[', ']', '"', 'ArrowLeft', 'ArrowRight', 'ArrowUp',
+          'ArrowDown', 'Tab', 'Enter'
+        ].includes(e.key)
+      ) {
+        return
+      }
+      if (e.key.length === 1) {
+        if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr)) {
+          // 操作关键字
+          this.debounceSuggest('action', beginStr)
+        } else if (/\[[^[\]"]*$/.test(beginStr)) {
+          // 部品
+          this.debounceSuggest('part', /\[([^[\]]*)$/.exec(beginStr)[1])
+        } else if (((beginStr).match(/"/g) || []).length % 2 === 1) {
+          // 治工具
+          this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr)[1])
+        } else {
+          this.endSuggest()
+          console.log(e.key)
+        }
+      } else {
+        this.endSuggest()
+        console.log(e.key)
+      }
+      return true
     }
   }
 }

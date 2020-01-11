@@ -25,15 +25,15 @@
         ref="key"
         key="key"
         type="text"
-        v-bind="$attrs"
         @keydown="keydown($event)"
-        @input="$emit('input', $event.target.value)"
+        @keyup="keyup($event)"
         class="custom-input">
     </popper>
   </div>
 </template>
 
 <script>
+import { debounce } from 'lodash'
 import Popper from 'vue-popperjs'
 import 'vue-popperjs/dist/vue-popper.min.css'
 import { listMeasureGroup } from '@/api/measureGroup'
@@ -46,6 +46,12 @@ export default {
       popoverVisible: false,
       suggestions: [],
       activeSugguestionIndex: null
+    }
+  },
+  computed: {
+    // 避免连续请求
+    debounceSuggest () {
+      return debounce(this.suggest, 200)
     }
   },
   watch: {
@@ -72,20 +78,16 @@ export default {
       return listMeasureGroup({ code: keyword }).then(({ page }) => {
         self.suggestions = page.data
         if (!isEnter) {
-          setTimeout(() => {
-            self.activeSugguestionIndex = self.suggestions.length ? 0 : null
-            self.popoverVisible = true
-          }, 100)
+          self.activeSugguestionIndex = self.suggestions.length ? 0 : null
+          self.popoverVisible = true
         }
       })
     },
     // j结束提示
     endSuggest () {
-      setTimeout(() => {
-        this.popoverVisible = false
-        if (this.$refs.popper) this.$refs.popper.doClose()
-        this.activeSugguestionIndex = null
-      }, 100)
+      this.popoverVisible = false
+      if (this.$refs.popper) this.$refs.popper.doClose()
+      this.activeSugguestionIndex = null
     },
     selectSuggestion (s) {
       this.$refs.key.value = ''
@@ -130,16 +132,27 @@ export default {
           }
           break
         }
-        default: {
-          if (e.key === 'Backspace') {
-            this.endSuggest()
-            return true
-          } else {
-            const beginStr = this.getInputBegin()
-            this.suggest(beginStr + e.key)
-            return true
-          }
+        case 'Backspace': {
+          this.endSuggest()
+          return true
         }
+        default: {
+        }
+      }
+    },
+    keyup (e) {
+      if (
+        [
+          'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+          'Tab', 'Enter', 'Backspace'
+        ].includes(e.key)
+      ) {
+        return
+      }
+      if (e.key.length === 1) {
+        const beginStr = this.getInputBegin()
+        this.debounceSuggest(beginStr)
+        return true
       }
     }
   }

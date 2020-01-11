@@ -124,8 +124,9 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setId(id);
 		Integer lockById = workBookService.selectById(id).getLockBy();
 		workBookEntity.setUpdateBy(getUserId().intValue());
-		workBookEntity.setMakedAt(new Date());
+//		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setLockBy(getUserId().intValue());
+		workBookEntity.setLockAt(new Date());
 		workBookService.updateById(workBookEntity);
 		return RD.success(workBookEntity);
 	}
@@ -153,7 +154,7 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setId(id);
 		Integer lockById = workBookService.selectById(id).getLockBy();
 		workBookEntity.setUpdateBy(getUserId().intValue());
-		workBookEntity.setMakedAt(new Date());
+//		workBookEntity.setMakedAt(new Date());
 		if(lockById == null){
 			workBookService.updateById(workBookEntity);
 		}else if(lockById.equals(getUserId().intValue())){

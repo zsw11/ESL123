@@ -7,7 +7,7 @@
     ]">
     <div class="header">
       <el-button type="primary" icon="el-icon-back" @click="goBack">返回</el-button>
-      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save" :disabled="$route.query.readonly || lockStatus === 'fail'">保存</el-button>
+      <el-button type="primary" icon="el-icon-upload" class="save-button" @click="save" :disabled="!!$route.query.readonly || lockStatus === 'fail'">保存</el-button>
       <el-button type="primary" icon="el-icon-open" @click="openVideo">打开视频</el-button>
       <el-button type="primary" icon="el-icon-open" @click="closeVideo">关闭视频</el-button>
       <export-data type="primary" :config="exportConfig">导 出</export-data>
