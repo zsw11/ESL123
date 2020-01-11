@@ -68,7 +68,7 @@ export default {
   computed: {
     // 避免连续请求
     debounceSuggest () {
-      return debounce(this.suggest, 300)
+      return debounce(this.suggest, 200)
     }
   },
   methods: {
@@ -143,6 +143,7 @@ export default {
     },
     keydown (e) {
       this.status = 'input'
+      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -233,6 +234,7 @@ export default {
       }
     },
     keyup (e) {
+      console.log('keyup')
       this.status = 'input'
       e.stopPropagation()
       const beginStr = this.getInputBegin()
