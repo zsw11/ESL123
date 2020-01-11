@@ -20,5 +20,7 @@ public interface RevisionHistoryItemService extends IService<RevisionHistoryItem
     PageUtils queryPage(Map<String, Object> params);
 
     List<RevisionHistoryItemEntity> getListBySWId(Integer id);
+    
+    void generateRevisionHistoryItem(List<Integer> workBookIds, Integer revisionHistoryId);
 }
 

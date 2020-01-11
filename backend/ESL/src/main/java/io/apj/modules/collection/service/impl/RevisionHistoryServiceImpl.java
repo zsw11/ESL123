@@ -144,6 +144,13 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
 			List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks);
+//			for(RevisionHistoryEntity entity : list){
+//				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
+//						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
+//				if (filteredWorkBookIds != null && filteredWorkBookIds.size() > 0) {
+//					revisionHistoryItemService.generateRevisionHistoryItem(filteredWorkBookIds, entity.getId());
+//				}
+//			}
 		}
 	}
 

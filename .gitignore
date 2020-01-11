@@ -16,3 +16,4 @@ Docs/06 Testing/标准工时分析管理系统测试课题汇总及处理表.xls
 backend/ESL/src/main/resources/application-dev.yml
 backend/ESL/src/main/resources/application-dev.yml
 electron/src/index.ejs
+electron/src/renderer/config.js

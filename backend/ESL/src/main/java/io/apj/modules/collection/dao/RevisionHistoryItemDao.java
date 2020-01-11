@@ -1,7 +1,12 @@
 package io.apj.modules.collection.dao;
 
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -13,5 +18,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 @Mapper
 public interface RevisionHistoryItemDao extends BaseMapper<RevisionHistoryItemEntity> {
+	
+	List<RevisionHistoryItemEntity> generateDataByWorkBook(@Param("workBookIds")List<Integer> workBookIds);
 	
 }
