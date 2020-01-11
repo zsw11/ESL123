@@ -49,7 +49,7 @@
           label="操作">
           <template slot-scope="scope">
             <el-button v-if="isAuth('basic:dept:update') && scope.row.parentId" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-            <el-button id="delete" v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+            <el-button class="delete" v-if="isAuth('basic:dept:delete') && scope.row.parentId" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -8,7 +8,7 @@
         class="site-sidebar__menu">
         <el-menu-item index="home" @click="$router.push({ name: 'home' })">
           <icon-svg name="shouye" class="site-sidebar__menu-icon"></icon-svg>
-          <span slot="title">首页</span>
+          <span slot="title" class="menu-font">首页</span>
         </el-menu-item>
         <sub-menu
           v-for="menu in menuList"
@@ -68,3 +68,9 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.menu-font{
+  font-size: 16px;
+  font-weight: 600;
+}
+</style>

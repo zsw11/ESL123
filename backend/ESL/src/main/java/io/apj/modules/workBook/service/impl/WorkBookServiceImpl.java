@@ -333,7 +333,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         List<WorkOperationsEntity> workOperationsList = new ArrayList<>();
         List<Map<String, Object>> workOperationsMapList = (List<Map<String, Object>>) params.get("workOperations");
         JSONArray alterInfoJson = null;
-        Integer totalTimeValue = 0;
+        Float totalTimeValue = 0.0f;
         Double totalTmu = 0.00;
         Double totalSecondVonvert = 0.00;
         for (int i = 0; i < workOperationsMapList.size(); i++) {
@@ -404,10 +404,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             Integer a5 = workOperations.getA5();
             map.put("data", a5);
             map = dealData(map);
-            Integer frequency = workOperations.getFrequency();
+            Float frequency = workOperations.getFrequency();
             frequency = frequency == null ? 0 : frequency;
             //todo 需要重新确认timeValue的计算公式
-            Integer timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6;
+            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6;
             totalTimeValue += timeValue;
             workOperations.setTimeValue(new BigDecimal(timeValue));
             Double tmu = timeValue/6.00*10;

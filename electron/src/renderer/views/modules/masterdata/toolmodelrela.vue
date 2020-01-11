@@ -104,7 +104,7 @@
         <el-table-column align="center" fixed="right" :label="'操作'" width="230">
           <template slot-scope="scope">
             <el-button  type="text" size="small" @click="details(scope.row.toolId)">详情</el-button>
-            <el-button  size="mini" type="text" id="delete" @click="deleteHandle(scope.row)">删除</el-button>
+            <el-button  size="mini" type="text" class="delete" @click="deleteHandle(scope.row)">删除</el-button>
           </template>
         </el-table-column>
 
