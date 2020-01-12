@@ -1,7 +1,7 @@
 APOIP: "LDAP://172.16.73.82"
-#templatePath: "D:\\Most\\exportTemplates\\"
+templatePath: "F:\\Most\\exportTemplates\\"
 #templatePath: "D:\\Develop\\workspacePD\\ESL-MOST\\backend\\ESL\\src\\main\\resources\\static\\exportTemplates\\"
-templatePath: "F:\\ProjectDocuments\\esl_excel\\exportTemplates\\"
+#templatePath: "F:\\ProjectDocuments\\esl_excel\\exportTemplates\\"
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource

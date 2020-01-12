@@ -22,5 +22,4 @@
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
 
-
 </mapper>

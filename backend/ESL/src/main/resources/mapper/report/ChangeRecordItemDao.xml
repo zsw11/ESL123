@@ -19,6 +19,5 @@
         <result property="updateAt" column="update_at"/>
         <result property="deleteAt" column="delete_at"/>
     </resultMap>
-
-
+	
 </mapper>

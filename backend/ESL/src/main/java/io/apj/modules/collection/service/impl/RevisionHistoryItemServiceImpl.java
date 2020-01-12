@@ -36,4 +36,14 @@ public class RevisionHistoryItemServiceImpl extends ServiceImpl<RevisionHistoryI
         return selectList(ew);
     }
 
+	@Override
+	public void generateRevisionHistoryItem(List<Integer> workBookIds, Integer revisionHistoryId) {
+		List<RevisionHistoryItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
+		if (list!=null&&list.size()>0){
+			for(RevisionHistoryItemEntity entity : list){
+				entity.setCollectionRevisionHistoryId(revisionHistoryId);
+			}
+		}
+	}
+
 }

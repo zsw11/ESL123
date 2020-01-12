@@ -345,25 +345,12 @@ public class StaffController extends AbstractController {
         }
         for (StaffEntity item : staffEntities) {
             item.setDeptName(deptMap.get(item.getDeptId().intValue()));
+//            if(map.get("deptId")==null || item.getDeptId()==map.get("deptId")){
+//                Map<String, Object> arr = DataUtils.dataChange("staff", item, dictMap);
+//                dataList.add(arr);
+//            }
             // 处理数据源
             Map<String, Object> arr = DataUtils.dataChange("staff", item, dictMap);
-            // 处理其他数据源
-//            JobEntity jobEntity;
-//            if (item.getJob() != null) {
-//                jobEntity = item.getJob();
-//            } else {
-//                jobEntity = new JobEntity();
-//            }
-//            Map<String, Object> arr2 = DataUtils.dataChange("job", jobEntity, dictMap);
-//            SysDeptEntity sysDeptEntity;
-//            if (item.getDept() != null) {
-//                sysDeptEntity = item.getDept();
-//            } else {
-//                sysDeptEntity = new SysDeptEntity();
-//            }
-//            Map<String, Object> arr3 = DataUtils.dataChange("dept", sysDeptEntity, dictMap);
-//            arr2.putAll(arr3);
-//            arr.putAll(arr2);
               dataList.add(arr);
         }
         // 返回excel数据

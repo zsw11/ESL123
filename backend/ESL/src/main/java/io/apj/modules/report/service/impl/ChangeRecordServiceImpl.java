@@ -149,6 +149,8 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				changeRecordEntity.setDeptId(work.getDeptId());
 				changeRecordEntity.setDestinations(work.getDestinations());
 				changeRecordEntity.setVersionNumber(work.getVersionNumber());
+				ModelEntity modelEntity = modelService.selectById(work.getModelId());
+				changeRecordEntity.setModelType(modelEntity.getCode());
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				changeRecordEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				insert(changeRecordEntity);

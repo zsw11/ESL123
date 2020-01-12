@@ -131,6 +131,10 @@ public class WorkBookEntity implements Serializable {
 	 */
 	private BigDecimal secondConvert;
 	/**
+	 * 机器时间
+	 */
+	private BigDecimal remark1;
+	/**
 	 * 备注
 	 */
 	private String remarks;

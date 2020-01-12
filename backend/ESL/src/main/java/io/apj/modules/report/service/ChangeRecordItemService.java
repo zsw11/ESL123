@@ -20,5 +20,6 @@ public interface ChangeRecordItemService extends IService<ChangeRecordItemEntity
     PageUtils queryPage(Map<String, Object> params);
 
     List<ChangeRecordItemEntity> getListBySWId(Integer id);
+    
 }
 

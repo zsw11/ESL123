@@ -23,8 +23,8 @@
         select wb.work_name, case wt."name" when 'SUB' then true else false end as sub, ws."name" as station_name,
         wb.second_convert as lst_value, wb.id as work_book_id, c.id
         from work_book wb
-        join workstation ws on wb.workstation_id = ws.id
-        join workstation_type wt on ws.workstation_type_id = wt.id
+        left join workstation ws on wb.workstation_id = ws.id
+        left join workstation_type wt on ws.workstation_type_id = wt.id
         left join collection_station_time_item c on wb.id = c.work_book_id
         where 1=1
         <if test="workBookIds != null and workBookIds.size() > 0">
