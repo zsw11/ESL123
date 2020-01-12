@@ -4,12 +4,14 @@
     field="operation"
     align="left"
     title="Work Method"
-    :edit-render="{ name: 'input', immediate: true }"
+    :edit-render="{ name: 'textarea', immediate: true }"
     :class-name="getCellClass"
     footer-class-name="footer-inner"
     v-bind="$attrs">
-    <template v-slot:edit="{ row }">
+    <template v-slot:edit="{ row, rowIndex, columnIndex }">
       <operation-input
+        :rowIndex="rowIndex"
+        :columnIndex="columnIndex"
         v-model="row.operation"
         @input="$emit('input', $event)" />
     </template>
