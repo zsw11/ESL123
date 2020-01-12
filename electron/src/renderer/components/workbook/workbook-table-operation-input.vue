@@ -1,6 +1,7 @@
 <template>
   <span class="operation-input-box" key="operationInputBox">
     <popper
+      append-to-body
       trigger="clickToOpen"
       ref="popper"
       :options="{
@@ -293,6 +294,7 @@ export default {
 .suggestion{
   min-width: 100px;
   text-align: left;
+  font-size: 12px;
   padding-left: 5px;
   padding-right: 5px;
   &:hover,
