@@ -887,6 +887,11 @@
     .info-button {
       float: right;
     }
+    .el-dropdown {
+      .el-button {
+      color: white;
+      }
+    }
   }
 
   .video-player-box {

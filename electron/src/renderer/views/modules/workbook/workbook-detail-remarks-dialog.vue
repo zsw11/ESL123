@@ -16,7 +16,7 @@
         :auto-resize="true"
         :mouse-config="{selected: true}"
         :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true}"
-        :edit-config="{trigger: 'dblclick', mode: 'cell' }">>
+        :edit-config="{trigger: 'click', mode: 'cell', showIcon: false }">>
 
         <vxe-table-column field="remark" title="Remarks" :edit-render="{name: 'input'}"></vxe-table-column>
 
@@ -24,6 +24,7 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
+      <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="hide()">确定</el-button>
     </span>
   </el-dialog>
@@ -68,7 +69,7 @@ export default {
         })
       })
       this.show()
-    }, 
+    },
     hide(){
       console.log(this.workbook.id)
       let remarkData = {
@@ -88,7 +89,7 @@ export default {
                 this.visible = false
               }
           })
-        } 
+        }
       })
     }
   }
@@ -98,7 +99,22 @@ export default {
 <style lang="scss">
 .workbook-detail-remarks-dialog {
   .remarks-table {
-    height: 400px;
+    height: 332px;
+    // .vxe-table,
+    // .vxe-table.t--border .vxe-header--column,
+    // .vxe-body--row .vxe-body--column {
+    //   border-color: #333;
+    // }
+    .vxe-cell,
+    .col--actived,
+    .col--actived .vxe-cell,
+    .vxe-table.vxe-editable.size--mini .vxe-body--column {
+      height: 28px;
+      padding: 0;
+    }
+    .vxe-default-input {
+      margin: 0;
+    }
   }
 }
 </style>
