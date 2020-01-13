@@ -61,6 +61,8 @@ public class RevisionHistoryItemEntity implements Serializable {
 	 * LST版本耗时差异值
 	 */
 	private BigDecimal lstInterval;
+	
+	private Integer workBookId;
 	/**
 	 * 创建者ID
 	 */

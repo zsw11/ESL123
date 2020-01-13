@@ -13,6 +13,7 @@
         <result property="content" column="content"/>
         <result property="currentValue" column="current_value"/>
         <result property="lastValue" column="last_value"/>
+         <result property="workBookId" column="work_book_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

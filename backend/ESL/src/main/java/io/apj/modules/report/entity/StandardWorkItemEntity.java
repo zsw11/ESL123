@@ -54,6 +54,10 @@ public class StandardWorkItemEntity implements Serializable {
 	 */
 	private BigDecimal thirdTime;
 	/**
+	 * 分析表ID
+	 */
+	private Integer workBookId;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

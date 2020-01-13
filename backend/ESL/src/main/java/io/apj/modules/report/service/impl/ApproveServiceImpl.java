@@ -263,14 +263,17 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                 filePaths = reportManMachineCombinationService.download(params, response);
                 break;
             case 3:
+            	// 工位时间报表
                 fileName="stationTime"+new Date().getTime();
                 filePaths = stationTimeService.download(params, response);
                 break;
             case 4:
+            	// Compare表
                 fileName="compare"+new Date().getTime();
                 filePaths = compareService.download(params, response);
                 break;
             case 5:
+            	// MOST Value表
                 fileName="mostValue"+new Date().getTime();
                 filePaths = mostValueService.download(params, response);
                 break;
@@ -280,18 +283,21 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                 filePaths = revisionHistoryService.download(params, response);
                 break;
             case 7:
+            	// Total表
                 fileName="total"+new Date().getTime();
                 filePaths = totalService.download(params, response);
                 break;
             case 8:
                 break;
             case 9:
+            	// 时间联络表
                 fileName="timeContact"+new Date().getTime();
                 filePaths = timeContactService.download(params, response);
                 break;
             case 10:
                 break;
             case 11:
+            	// 标准时间表
                 fileName="standardTime"+new Date().getTime();
                 filePaths = standardTimeService.download(params, response);
                 break;
