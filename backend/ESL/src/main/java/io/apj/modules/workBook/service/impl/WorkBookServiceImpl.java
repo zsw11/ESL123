@@ -341,7 +341,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             if (workOperationsMapList.get(i).get("frequency") != ""
                     && workOperationsMapList.get(i).get("frequency") != null) {
                 workOperationsMapList.get(i).put("frequency",
-                        Integer.parseInt(workOperationsMapList.get(i).get("frequency").toString()));
+                        Float.parseFloat(workOperationsMapList.get(i).get("frequency").toString()));
                 alterInfoJson = new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
                 workOperationsMapList.get(i).put("alterInfo", alterInfoJson.toString());
             }
