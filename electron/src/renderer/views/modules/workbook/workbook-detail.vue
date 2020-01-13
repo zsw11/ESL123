@@ -114,6 +114,7 @@
   import ImportData from '@/components/import-data'
 
   const defaultExport = [
+    "workOperations.no",
     "workOperations.versionNumber",
     "workOperations.operation",
     "workOperations.a0",
@@ -135,7 +136,10 @@
     "workOperations.p2",
     "workOperations.a5",
     "workOperations.frequency",
-    "workOperations.remark"
+    "workOperations.timeValue",
+    "workOperations.tmu",
+    "workOperations.secondConvert",
+    "workOperations.remark1"
   ];
 
   const workbookPercents = [
@@ -176,6 +180,7 @@
         dataButton: 'list',
         complexFilters: [],
         listQuery: {
+          no: null,
           versionNumber: null,
           operation: null,
           a0: null,
@@ -197,57 +202,65 @@
           p2: null,
           a5: null,
           frequency: null,
-          remark: null
+          timeValue: null,
+          tmu: null,
+          secondConvert: null,
+          remark: null,
         },
         attributes: [
           {
             code: 'workOperations',
             name: '分析表明细',
             children: [
+              {code: 'no', name: 'No.', type: 'string'},
               {code: 'versionNumber', name: 'H', type: 'string'},
               {code: 'operation', name: 'Work Method', type: 'string'},
               {code: 'a0', name: 'A', type: 'string'},
-              {code: 'a0null', name: 'A', type: 'string'},
+              {code: 'a0null', name: ' ', type: 'string'},
               {code: 'b0', name: 'B', type: 'string'},
-              {code: 'b0null', name: 'B', type: 'string'},
+              {code: 'b0null', name: ' ', type: 'string'},
               {code: 'g0', name: 'G', type: 'string'},
-              {code: 'g0null', name: 'G', type: 'string'},
+              {code: 'g0null', name: ' ', type: 'string'},
               {code: 'a1', name: 'A', type: 'string'},
-              {code: 'a1null', name: 'A', type: 'string'},
+              {code: 'a1null', name: ' ', type: 'string'},
               {code: 'b1', name: 'B', type: 'string'},
-              {code: 'b1null', name: 'B', type: 'string'},
+              {code: 'b1null', name: ' ', type: 'string'},
               {code: 'p0', name: 'P', type: 'string'},
-              {code: 'p0null', name: 'P', type: 'string'},
+              {code: 'p0null', name: ' ', type: 'string'},
               {code: 'm0', name: 'M', type: 'string'},
-              {code: 'm0null', name: 'M', type: 'string'},
+              {code: 'm0null', name: ' ', type: 'string'},
               {code: 'x0', name: 'X', type: 'string'},
-              {code: 'x0null', name: 'X', type: 'string'},
+              {code: 'x0null', name: '', type: 'string'},
               {code: 'i0', name: 'I', type: 'string'},
-              {code: 'i0null', name: 'I', type: 'string'},
+              {code: 'i0null', name: ' ', type: 'string'},
               {code: 'a2', name: 'A', type: 'string'},
-              {code: 'a2null', name: 'A', type: 'string'},
+              {code: 'a2null', name: ' ', type: 'string'},
               {code: 'b2', name: 'B', type: 'string'},
-              {code: 'b2null', name: 'B', type: 'string'},
+              {code: 'b2null', name: ' ', type: 'string'},
               {code: 'p1', name: 'P', type: 'string'},
-              {code: 'p1null', name: 'P', type: 'string'},
+              {code: 'p1null', name: ' ', type: 'string'},
               {code: 'a3', name: 'A', type: 'string'},
-              {code: 'a3null', name: 'A', type: 'string'},
+              {code: 'a3null', name: ' ', type: 'string'},
               {code: 'tool', name: 'Tool', type: 'string'},
               {code: 'a4', name: 'A', type: 'string'},
-              {code: 'a4null', name: 'A', type: 'string'},
+              {code: 'a4null', name: ' ', type: 'string'},
               {code: 'b3', name: 'B', type: 'string'},
-              {code: 'b3null', name: 'B', type: 'string'},
+              {code: 'b3null', name: ' ', type: 'string'},
               {code: 'p2', name: 'P', type: 'string'},
-              {code: 'p2null', name: 'P', type: 'string'},
+              {code: 'p2null', name: ' ', type: 'string'},
               {code: 'a5', name: 'A', type: 'string'},
               {code: 'frequency', name: 'Fre.', type: 'string'},
-              {code: 'remark', name: 'Remark.', type: 'string'}
+              {code: 'timeValue', name: 'TimeValue.', type: 'string'},
+              {code: 'tmu', name: 'TMU', type: 'string'},
+              {code: 'secondConvert', name: 'Sec./conV', type: 'string'},
+              {code: 'remark1', name: 'Remark1', type: 'string'}
             ]
           }],
         // 导出
         exportAttributes: cloneDeep(defaultExport),
         // 导入字段固定不可变
         importAttributes: [
+          "workOperations.no",
           "workOperations.versionNumber",
           "workOperations.operation",
           "workOperations.a0",
@@ -284,7 +297,11 @@
           "workOperations.p2",
           "workOperations.p2null",
           "workOperations.a4",
-          "workOperations.frequency"
+          "workOperations.frequency",
+          "workOperations.timeValue",
+          "workOperations.tmu",
+          "workOperations.secondConvert",
+          "workOperations.remark1"
         ],
         // 操作
         listener: null,
@@ -371,8 +388,8 @@
                 attributes: this.importAttributes,
                 plain: true
               }),
-              sampleDatas: [[ "66", "test", "1", "1", "1", "0", "1","1","1","1", "1", "0", "1","1","1","*0",
-                "1", "1", "0","1","34",""]],
+              sampleDatas: [[ "66", "test", "1", "", "1", "", "1","","1","", "1", "", "1","","1","*0",
+                "1", "1", "0","1","3",""]],
             }
           ],
           importApi: WorkBookImport,
