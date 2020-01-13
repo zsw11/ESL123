@@ -29,13 +29,14 @@ public class ReportBatchController {
 
     /**
      * 列表
+     * @return
      */
     @RequestMapping("/list")
     @RequiresPermissions("report:reportbatch:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = reportBatchService.queryPage(params);
 
-        return R.ok().put("page", page);
+        return RD.success(page);
     }
 
 
