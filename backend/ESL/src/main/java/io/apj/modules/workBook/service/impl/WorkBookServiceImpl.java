@@ -336,6 +336,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         Float totalTimeValue = 0.0f;
         Double totalTmu = 0.00;
         Double totalSecondVonvert = 0.00;
+        Integer totalRemark1 = 0;
         for (int i = 0; i < workOperationsMapList.size(); i++) {
             WorkOperationsEntity workOperations = new WorkOperationsEntity();
             if (workOperationsMapList.get(i).get("frequency") != ""
@@ -406,8 +407,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             map = dealData(map);
             Float frequency = workOperations.getFrequency();
             frequency = frequency == null ? 0 : frequency;
-            //todo 需要重新确认timeValue的计算公式
-            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6;
+            String tool = workOperations.getTool();
+            Integer toolInteger = Integer.valueOf(tool.substring(1,2));
+            Float frequency2 = frequency == 0 ? 1 : frequency;
+            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6+toolInteger * frequency2 * 6;
             totalTimeValue += timeValue;
             workOperations.setTimeValue(new BigDecimal(timeValue));
             Double tmu = timeValue/6.00*10;
@@ -416,6 +419,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             Double secondConvert = tmu * 0.036;
             totalSecondVonvert += secondConvert;
             workOperations.setSecondConvert(new BigDecimal(secondConvert));
+            Integer remark1 = workOperations.getRemark1();
+            if(remark1 != null){
+                Double calculate = Math.ceil((remark1 / 0.36 * 6) / Math.pow(10.00 , 1.00)) * Math.pow(10.00 , 1.00);
+                remark1 = calculate.intValue();
+                workOperations.setRemark1(remark1);
+                totalRemark1 += remark1;
+            }
             workOperations.setWorkBookId(workBookId);
             workOperationsList.add(workOperations);
         }
