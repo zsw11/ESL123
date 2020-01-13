@@ -31,7 +31,7 @@ public interface WorkstationTypeNodeService extends IService<WorkstationTypeNode
      * 通过ids软删除
      * @param ids
      */
-    void deleteByIds(Collection<? extends Serializable> ids);
+    void deleteByIds(Integer[] ids);
 
     /**
      * 根据条件软删除

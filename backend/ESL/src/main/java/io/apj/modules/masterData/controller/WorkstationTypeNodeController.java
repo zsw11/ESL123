@@ -7,6 +7,7 @@ import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.WorkstationTypeNodeEntity;
 import io.apj.modules.masterData.service.WorkstationTypeNodeService;
 import io.apj.modules.sys.controller.AbstractController;
+import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,8 @@ public class WorkstationTypeNodeController extends AbstractController {
 	@RequestMapping("/delete")
 //	@RequiresPermissions("masterData:workstationtypenode:delete")
 	public RD delete(@RequestBody Integer[] ids) {
-		workstationTypeNodeService.deleteByIds(Arrays.asList(ids));
+		Validate.notEmpty(ids);
+		workstationTypeNodeService.deleteByIds(ids);
 
 		return RD.build().put("code", 200);
 	}
