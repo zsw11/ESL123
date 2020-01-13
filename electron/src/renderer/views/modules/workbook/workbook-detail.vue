@@ -114,7 +114,7 @@
   import ImportData from '@/components/import-data'
 
   const defaultExport = [
-    "workOperations.no",
+    "workOperations.No",
     "workOperations.version",
     "workOperations.operation",
     "workOperations.a0",
@@ -197,7 +197,7 @@
         dataButton: 'list',
         complexFilters: [],
         listQuery: {
-          no: null,
+          No: null,
           version: null,
           operation: null,
           a0: null,
@@ -279,7 +279,7 @@
         exportAttributes: cloneDeep(defaultExport),
         // 导入字段固定不可变
         importAttributes: [
-          "workOperations.no",
+          "workOperations.No",
           "workOperations.version",
           "workOperations.operation",
           "workOperations.a0",
