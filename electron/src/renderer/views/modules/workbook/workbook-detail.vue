@@ -230,7 +230,7 @@
             code: 'workOperations',
             name: '分析表明细',
             children: [
-              {code: 'no', name: 'No.', type: 'string'},
+              {code: 'No', name: 'No.', type: 'string'},
               {code: 'version', name: 'H', type: 'string'},
               {code: 'operation', name: 'Work Method', type: 'string'},
               {code: 'a0', name: 'A', type: 'string'},
