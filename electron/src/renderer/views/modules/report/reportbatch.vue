@@ -54,31 +54,28 @@
     <el-card class="with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">报表批次</div>
-<!--        <div class="buttons">-->
-<!--          <el-button-->
-<!--            :disabled="dataListSelections.length <= 0"-->
-<!--          >批量下载</el-button>-->
-<!--        </div>-->
+        <div class="buttons">
+          <el-button type="primary" @click="createReport()">生成报表</el-button>
+        </div>
       </div>
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
         @selection-change="selectionChangeHandle"
-        style="width: 100%;"
-      >
+        style="width: 100%;">
         <el-table-column type="selection" header-align="left" align="left" width="50"></el-table-column>
 
         <el-table-column label="序号" type="index"></el-table-column>
 
         <el-table-column align="center" prop="modelName" label="机种">
           <template slot-scope="scope">
-            <span>{{scope.row.modelName }}</span>
+            <span>{{scope.row.modelEntity.name }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="phaseName" label="生产阶段">
           <template slot-scope="scope">
-            <span>{{scope.row.phaseName }}</span>
+            <span>{{scope.row.phaseEntity.name }}</span>
           </template>
         </el-table-column>
 
@@ -113,7 +110,7 @@
               size="mini"
               type="text"
               @click="addOrUpdateHandle(scope.row.id)"
-            >编辑</el-button>
+            >详情</el-button>
 <!--            <el-button-->
 <!--              size="mini"-->
 <!--              type="text"-->
@@ -410,9 +407,15 @@
         this.$nextTick(() => {
           this.$router.push({
             path: id
-              ? `/edit-reportbatch/${id}`
+              ? `/details-reportbatch/${id}`
               : '/add-reportbatch'
           })
+        })
+      },
+      // 生成报表
+      createReport (){
+        this.$nextTick(()=> {
+          this.$router.push('/createreport-reportbatch')
         })
       },
       // 删除数据

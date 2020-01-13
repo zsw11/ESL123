@@ -255,8 +255,8 @@ const mainRoutes = {
     { path: '/edit-manmachinecombination/:id(\\d+)', component: _import('modules/report/manmachinecombination-maintain'), name: 'edit-manmachinecombination', meta: { title: '编辑人机联合表', isTab: true } },
 
     // 报表批次
-    { path: '/add-reportbatch', component: _import('modules/report/reportbatch-maintain'), name: 'add-reportbatch', meta: { title: '新增报表批次', isTab: true } },
-    { path: '/edit-reportbatch/:id(\\d+)', component: _import('modules/report/reportbatch-maintain'), name: 'edit-reportbatch', meta: { title: '编辑报表批次', isTab: true } }
+    { path: '/createreport-reportbatch', component: _import('modules/report/reportbatch-maintain'), name: 'createreport-reportbatch', meta: { title: '生成报表', isTab: true } },
+    { path: '/details-reportbatch/:id(\\d+)', component: _import('modules/report/reportbatch-maintain'), name: 'details-reportbatch', meta: { title: '报表批次详情', isTab: true } }
 
   ],
   beforeEnter (to, from, next) {

@@ -280,6 +280,78 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     }
 
     @Override
+    public ResponseEntity<Object> createReportsByFive(Map<String, Object> params) {
+        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+        Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("stlst", workBook.get("stlst")).eq("version_number", workBook.get("versionNumber"))
+                .eq("destinations", workBook.get("destinations")).eq("model_id", workBook.get("modelId"))
+                .eq("phase_id", workBook.get("phaseId"));
+        List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+        if (workBookEntityList == null && workBookEntityList.size() == 0) {
+            return RD.FORBIDDEN("UnExist", "不存在这张分析表，请先建立分析表");
+        }
+        List<Integer> workBookIds = new ArrayList();
+        for (WorkBookEntity item : workBookEntityList) {
+            workBookIds.add(item.getId());
+        }
+        if(workBookIds.size()>0&&reportList.size()>0) {
+            reportList.forEach(e -> {
+                switch (e) {
+                    case 1:
+                        break;
+                    case 2:
+                        // 人机联合表
+                        reportManMachineCombinationService.generateReportData(workBookIds);
+                        break;
+                    case 3:
+                        // 工位时间报表
+                        stationTimeService.generateReportData(workBookIds);
+                        break;
+                    case 4:
+                        // Compare表
+                        compareService.generateReportData(workBookIds);
+                        break;
+                    case 5:
+                        // MOST Value表
+                        mostValueService.generateReportData(workBookIds);
+                        break;
+                    case 6:
+                        // Collection-Revision History表
+                        revisionHistoryService.generateReportData(workBookIds);
+                        break;
+                    case 7:
+                        // Total表
+                        totalService.generateReportData(workBookIds);
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        // 时间联络表
+                        timeContactService.generateReportData(workBookIds);
+                        break;
+                    case 10:
+                        // Process List表
+                        break;
+                    case 11:
+                        // 标准时间表
+                        standardTimeService.generateReportData(workBookIds);
+                        break;
+                    case 12:
+                        // 标准工数表
+                        standardWorkService.generateReportData(workBookIds);
+                        break;
+                    case 13:
+                        // 履历表
+                        changeRecordService.generateReportData(workBookIds);
+                        break;
+                }
+            });
+        }
+        return null;
+    }
+
+    @Override
     public WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber) {
         EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.ne("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);

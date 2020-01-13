@@ -172,7 +172,7 @@ public class ReportManMachineCombinationServiceImpl
 		return processedData;
 	}
 
-	private List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks) {
+	public List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks) {
 		List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();

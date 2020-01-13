@@ -20,7 +20,8 @@ import java.util.Map;
 public interface ReportBatchService extends IService<ReportBatchEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-    List<Object> selectAllWorkBook(Integer id);
+
+    List<Object> selectAllReport(Integer id);
 
 
 }
