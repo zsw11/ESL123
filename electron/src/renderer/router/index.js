@@ -252,7 +252,11 @@ const mainRoutes = {
 
     // 人机联合表
     { path: '/add-manmachinecombination', component: _import('modules/report/manmachinecombination-maintain'), name: 'add-manmachinecombination', meta: { title: '新增人机联合表', isTab: true } },
-    { path: '/edit-manmachinecombination/:id(\\d+)', component: _import('modules/report/manmachinecombination-maintain'), name: 'edit-manmachinecombination', meta: { title: '编辑人机联合表', isTab: true } }
+    { path: '/edit-manmachinecombination/:id(\\d+)', component: _import('modules/report/manmachinecombination-maintain'), name: 'edit-manmachinecombination', meta: { title: '编辑人机联合表', isTab: true } },
+
+    // 报表批次
+    { path: '/createreport-reportbatch', component: _import('modules/report/reportbatch-maintain'), name: 'createreport-reportbatch', meta: { title: '生成报表', isTab: true } },
+    { path: '/details-reportbatch/:id(\\d+)', component: _import('modules/report/reportbatch-maintain'), name: 'details-reportbatch', meta: { title: '报表批次详情', isTab: true } }
 
   ],
   beforeEnter (to, from, next) {

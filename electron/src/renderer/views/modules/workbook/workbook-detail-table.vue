@@ -46,8 +46,17 @@
       <vxe-table-column field="remark1" title="Remark1" width="75" :edit-render="{name: 'input'}">
         <template v-slot="scope">{{scope.row.remark1?round(scope.row.remark1*100/6, -1):undefined}}</template>
       </vxe-table-column>
-      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'input'}">
+      <vxe-table-column field="remark" title="Remark2" width="75" :edit-render="{name: 'textarea'}">
         <template v-slot="scope">{{scope.row.remark}}</template>
+        <template v-slot:edit="{ row, rowIndex, columnIndex }">
+          <table-textarea
+            :rowIndex="rowIndex"
+            :columnIndex="columnIndex"
+            class="custom-textarea"
+            v-model="row.remark"
+            @input="$emit('input', $event)">
+          </table-textarea>
+        </template>
       </vxe-table-column>
     </vxe-grid>
 
@@ -84,6 +93,7 @@ import MeasureColumn from '@/components/workbook/workbook-table-measure-column.v
 import OperationColumn from '@/components/workbook/workbook-table-operation-column.vue'
 import KeyColumn from '@/components/workbook/workbook-table-key-column.vue'
 import ToolColumn from '@/components/workbook/workbook-table-tool-column.vue'
+import TableTextarea from '@/components/workbook/workbook-table-textarea.vue'
 import { clipboard } from 'electron'
 import {
   measureColumns0,
@@ -103,7 +113,7 @@ import {
 
 export default {
   name: 'WorkbookTable',
-  components: { MeasureColumn, KeyColumn, OperationColumn, ToolColumn },
+  components: { MeasureColumn, KeyColumn, OperationColumn, ToolColumn, TableTextarea },
   data () {
     return {
       workbook: null,
@@ -667,6 +677,15 @@ export default {
       border-top: 0;
       border-bottom: solid 1px #333
     }
+  }
+
+  .custom-textarea {
+    width: 100%;
+    min-height: 1em;
+    overflow: hidden;
+    resize: none;
+    line-height: 23px;
+    padding: 0;
   }
 }
 // .more {

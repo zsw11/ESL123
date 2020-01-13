@@ -1,6 +1,7 @@
 <template>
   <div class="key-input-box" key="keyInputBox">
     <popper
+      append-to-body
       trigger="clickToOpen"
       ref="popper"
       :options="{
@@ -52,14 +53,6 @@ export default {
     // 避免连续请求
     debounceSuggest () {
       return debounce(this.suggest, 200)
-    }
-  },
-  watch: {
-    '$attrs.value' (v) {
-      console.log(v)
-      if (v.length === 1) {
-        this.suggest(v)
-      }
     }
   },
   methods: {
@@ -166,6 +159,7 @@ export default {
 .suggestion{
   min-width: 100px;
   text-align: left;
+  font-size: 12px;
   padding-left: 5px;
   padding-right: 5px;
   &:hover,

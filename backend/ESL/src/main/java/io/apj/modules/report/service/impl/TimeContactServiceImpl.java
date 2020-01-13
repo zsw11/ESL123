@@ -245,7 +245,6 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks) {
 		List<TimeContactEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
-
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -255,14 +254,15 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			if (entity == null) {
 				TimeContactEntity timeContactEntity=new TimeContactEntity();
 				timeContactEntity = new TimeContactEntity();
-				timeContactEntity.setModelId(modelId);
-				timeContactEntity.setPhaseId(phaseId);
-				timeContactEntity.setStlst(stlst);
 				timeContactEntity.setDeptId(workBook.getDeptId());
-				timeContactEntity.setDestinations(destinations);
-				timeContactEntity.setVersionNumber(versionNumber);
 				timeContactEntity.setTitle("时间联络表");
 				timeContactEntity.setSheetName("时间联络表");
+				timeContactEntity.setModelId(modelId);
+
+				timeContactEntity.setPhaseId(phaseId);
+				timeContactEntity.setStlst(stlst);
+				timeContactEntity.setDestinations(destinations);
+				timeContactEntity.setVersionNumber(versionNumber);
 				insert(timeContactEntity);
 				results.add(timeContactEntity);
 			}else{

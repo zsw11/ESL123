@@ -1,6 +1,7 @@
 <template>
   <span class="operation-input-box" key="operationInputBox">
     <popper
+      append-to-body
       trigger="clickToOpen"
       ref="popper"
       :options="{
@@ -19,7 +20,7 @@
           </div>
         </el-scrollbar>
       </div>
-      <input
+      <textarea
         slot="reference"
         id="operation-input"
         ref="operation"
@@ -28,7 +29,8 @@
         @keydown="keydown($event)"
         @keyup="keyup($event)"
         @blur="$emit('input', $event.target.value)"
-        class="custom-input">
+        class="custom-textarea">
+      </textarea>
     </popper>
   </span>
 </template>
@@ -50,6 +52,10 @@ const listFuncs = {
 export default {
   name: 'OperationInput',
   components: { Popper },
+  props: {
+    rowIndex: Number,
+    columnIndex: Number
+  },
   data () {
     return {
       suggestMode: null,
@@ -60,9 +66,13 @@ export default {
     }
   },
   created () {
+    console.log(this.rowIndex, this.columnIndex)
     this.$nextTick(() => {
       // 双击进入的情况，刷新数据
+      this.$refs.operation.style.height = '1em'
       this.$refs.operation.value = this.$attrs.value
+      this.$refs.operation.style.height = this.$refs.operation.scrollHeight + 'px'
+      this.$el.parentElement.style.height = this.$refs.operation.scrollHeight + 'px'
     })
   },
   computed: {
@@ -136,14 +146,12 @@ export default {
       const { selectionStart, selectionEnd, value } = this.$refs.operation
       const beginStr = value.slice(0, selectionStart)
       const endStr = value.slice(selectionEnd, value.length)
-      console.log(beginStr, str, endStr)
       this.$refs.operation.value = beginStr + str + endStr
       // this.$emit('input', this.$refs.operation.value)
       this.$refs.operation.selectionStart = this.$refs.operation.selectionEnd = selectionStart + (moveEnd ? str.length : 0) + moveExtra
     },
     keydown (e) {
       this.status = 'input'
-      console.log('keydown')
       switch (e.key) {
         // 匹配部品
         case '[': {
@@ -234,9 +242,18 @@ export default {
       }
     },
     keyup (e) {
-      console.log('keyup')
       this.status = 'input'
       e.stopPropagation()
+
+      // 设置高度
+      e.target.style.height = e.target.scrollHeight + 'px'
+      this.$refs.operation.style.height = '1em'
+      this.$refs.operation.style.height = this.$refs.operation.scrollHeight + 'px'
+      const hiddenCell = document.querySelector(`tr[data-rowid="row_${this.rowIndex + 1}"] .col_${this.columnIndex + 1}.fixed--hidden .vxe-cell`);
+      (hiddenCell || { style: {} }).style.height =
+        this.$el.parentElement.style.height =
+        this.$refs.operation.scrollHeight + 'px'
+
       const beginStr = this.getInputBegin()
       if (
         [
@@ -258,11 +275,11 @@ export default {
           this.debounceSuggest('tool', /"([^"]*)$/.exec(beginStr)[1])
         } else {
           this.endSuggest()
-          console.log(e.key)
+          // console.log(e.key)
         }
       } else {
         this.endSuggest()
-        console.log(e.key)
+        // console.log(e.key)
       }
       return true
     }
@@ -272,11 +289,12 @@ export default {
 
 <style lang="scss" scoped>
 .operation-input-box{
-  height: 100%;
+  overflow: hidden;
 }
 .suggestion{
   min-width: 100px;
   text-align: left;
+  font-size: 12px;
   padding-left: 5px;
   padding-right: 5px;
   &:hover,

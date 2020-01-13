@@ -5,15 +5,34 @@
     display: none;
   }
   .vxe-table {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     .vxe-cell {
       padding: 0;
       width: 100%;
-      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
       .vxe-default-input,
       .custom-input {
         width: 100%;
         height: 100%;
         border: 1px solid #dcdfe6;
+        outline-color: transparent;
+      }
+      textarea {
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        overflow: hidden;
+        resize: none;
+        line-height: 23px;
+        padding: 0;
+        outline-color: transparent;
+      }
+    }
+    .col--edit.col--actived {
+      .vxe-cell {
+        height: 100%;
       }
     }
     &.vxe-editable .vxe-body--column {
