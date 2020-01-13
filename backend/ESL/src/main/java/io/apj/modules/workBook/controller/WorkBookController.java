@@ -1,6 +1,7 @@
 package io.apj.modules.workBook.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
@@ -222,7 +223,7 @@ public class WorkBookController extends AbstractController {
 	}
 
 	/**
-	 * 生成报表
+	 * 通过id生成报表
 	 * 
 	 * @param params
 	 * @return
@@ -235,6 +236,38 @@ public class WorkBookController extends AbstractController {
 		workBookService.createReports(params);
 		return R.ok();
 	}
+
+	/**
+	 * 通过5个字段生成报表
+	 *
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/createReportbyfive")
+	// @RequiresPermissions("workBook:workbook:createReport")
+	public R createReportByFive(@RequestBody Map<String, Object> params) {
+		Validate.notNull(params.get("reports"));
+		Validate.notNull(params.get("workBook"));
+		workBookService.createReportsByFive(params);
+		return R.ok();
+	}
+
+
+
+	/**
+	 * 报表总数
+	 */
+	@RequestMapping("/reportTotal")
+	public int wrokBookTotal(@RequestParam Integer id){
+		WorkBookEntity workBookEntity= workBookService.selectById(id);
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("stlst",workBookEntity.getStlst()).eq("version_number",workBookEntity.getVersionNumber())
+				.eq("destinations",workBookEntity.getDestinations()).eq("model_id",workBookEntity.getModelId())
+				.eq("phase_id",workBookEntity.getPhaseId());
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+		return workBookEntityList.size();
+	}
+
 
 	/**
 	 * 部门报表

@@ -47,7 +47,7 @@ public class ReportBatchController {
     @RequestMapping("/detail/{id}")
     //@RequiresPermissions("report:reportbatch:info")
     public ResponseEntity<Object> info(@PathVariable("id") Integer id){
-		List list = reportBatchService.selectAllWorkBook(id);
+		List list = reportBatchService.selectAllReport(id);
 
         return RD.success(list);
     }

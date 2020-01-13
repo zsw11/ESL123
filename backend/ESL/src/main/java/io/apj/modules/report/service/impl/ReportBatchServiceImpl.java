@@ -88,7 +88,7 @@ public class ReportBatchServiceImpl
 	}
 
 	@Override
-	public List<Object> selectAllWorkBook(Integer id) {
+	public List<Object> selectAllReport(Integer id) {
 		ReportBatchEntity reportBatchEntity = reportBatchService.selectById(id);
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("stlst",reportBatchEntity.getStlst()).eq("version_number",reportBatchEntity.getVersionNumber())
