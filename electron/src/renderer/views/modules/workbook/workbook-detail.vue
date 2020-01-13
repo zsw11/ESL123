@@ -115,7 +115,7 @@
 
   const defaultExport = [
     "workOperations.no",
-    "workOperations.versionNumber",
+    "workOperations.version",
     "workOperations.operation",
     "workOperations.a0",
     "workOperations.a0null",
@@ -198,7 +198,7 @@
         complexFilters: [],
         listQuery: {
           no: null,
-          versionNumber: null,
+          version: null,
           operation: null,
           a0: null,
           b0: null,
@@ -231,7 +231,7 @@
             name: '分析表明细',
             children: [
               {code: 'no', name: 'No.', type: 'string'},
-              {code: 'versionNumber', name: 'H', type: 'string'},
+              {code: 'version', name: 'H', type: 'string'},
               {code: 'operation', name: 'Work Method', type: 'string'},
               {code: 'a0', name: 'A', type: 'string'},
               {code: 'a0null', name: 'A(Fre)', type: 'string'},
@@ -280,7 +280,7 @@
         // 导入字段固定不可变
         importAttributes: [
           "workOperations.no",
-          "workOperations.versionNumber",
+          "workOperations.version",
           "workOperations.operation",
           "workOperations.a0",
           "workOperations.a0null",
