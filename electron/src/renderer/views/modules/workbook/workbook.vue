@@ -613,16 +613,12 @@ export default {
   }
   .wookbook-dialog {
     min-width: 400px;
-    .el-checkbox {
-      display: block;
-      margin-left: 0;
+    .el-dialog__body{
+      padding: 0 10px;
     }
   }
   .btn-wrp{
     text-align: left !important;
-  }
-  .el-dialog__body{
-    padding: 0 10px;
   }
   .report{
     display: inline-block;

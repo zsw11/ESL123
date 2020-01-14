@@ -40,7 +40,7 @@
             治工具<keyword-search
             style="margin-left:10px;"
             v-model="addModelToolId"
-            
+
             :searchApi="this.listTool"
             :allowEmpty="true">
           </keyword-search>
@@ -96,7 +96,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
