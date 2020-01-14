@@ -60,15 +60,25 @@ public class WorkstationTypeNodeServiceImpl extends ServiceImpl<WorkstationTypeN
     }
 
     @Override
-    public void deleteByIds(Collection<? extends Serializable> ids) {
-        List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = this.selectBatchIds(ids);
-        for(WorkstationTypeNodeEntity item : workstationTypeNodeEntityList){
-            item.setDeleteAt(new Date());
+    public void deleteByIds(Integer[] ids) {
+        for(Integer id : ids){
+            delete(id);
         }
-        if(workstationTypeNodeEntityList.size()>0){
-            this.updateAllColumnBatchById(workstationTypeNodeEntityList);
-        }
+    }
 
+    private void delete(Integer id){
+        WorkstationTypeNodeEntity workstationTypeNodeEntity = selectById(id);
+        if(workstationTypeNodeEntity != null){
+            deleteById(id);
+            EntityWrapper<WorkstationTypeNodeEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("parent_id", id);
+            List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = selectList(entityWrapper);
+            if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+                for(WorkstationTypeNodeEntity workstationTypeNode : workstationTypeNodeEntityList){
+                    delete(workstationTypeNode.getId());
+                }
+            }
+        }
     }
 
     @Override

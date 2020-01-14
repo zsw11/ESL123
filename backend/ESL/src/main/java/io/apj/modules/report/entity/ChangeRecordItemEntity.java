@@ -60,6 +60,8 @@ public class ChangeRecordItemEntity implements Serializable {
 
 	@TableField(exist = false)
 	private BigDecimal subValue;
+	
+	private Integer workBookId;
 	/**
 	 * 创建者ID
 	 */

@@ -53,6 +53,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private Integer parentId;
 	/**
+	 * 是否是工位
+	 */
+	private Boolean isWorkstation;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;

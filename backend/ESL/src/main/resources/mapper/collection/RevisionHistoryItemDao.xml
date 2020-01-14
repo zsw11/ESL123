@@ -15,6 +15,7 @@
         <result property="lastLstTime" column="last_lst_time"/>
         <result property="currentLstTime" column="current_lst_time"/>
         <result property="lstInterval" column="lst_interval"/>
+        <result property="workBookId" column="work_book_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

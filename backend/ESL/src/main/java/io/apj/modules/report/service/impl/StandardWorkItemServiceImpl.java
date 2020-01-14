@@ -11,6 +11,7 @@ import io.apj.modules.report.service.StandardWorkItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class StandardWorkItemServiceImpl extends ServiceImpl<StandardWorkItemDao
 
     @Override
     public void generateStandardWorkItem(List<Integer> workBookIds, Integer standardWorkId) {
+    	
         List<StandardWorkItemEntity> list = baseMapper.generateDataByWorkBook(workBookIds);
         if (list!=null&&list.size() >0) {
             for (StandardWorkItemEntity entity : list) {
