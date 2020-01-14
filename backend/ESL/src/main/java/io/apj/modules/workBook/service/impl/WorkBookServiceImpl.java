@@ -15,11 +15,11 @@ import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.sys.service.SysDeptService;
@@ -86,6 +86,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private SysConfigService sysConfigService;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private ReportGroupReportRelaService reportGroupReportRelaService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -222,7 +224,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+        Integer reportGroupId = (Integer) params.get("reports");
+        List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+        List<Integer> reportList = new ArrayList<>();
+        reportGroupReportRelaEntities.forEach(i->{
+            reportList.add(i.getReportId());
+        });
         List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
         if(workBookIds.size()>0&&reportList.size()>0) {
             reportList.forEach(e -> {
@@ -281,7 +288,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public ResponseEntity<Object> createReportsByFive(Map<String, Object> params) {
-        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+        Integer reportGroupId = (Integer) params.get("reports");
+        List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+        List<Integer> reportList = new ArrayList<>();
+        reportGroupReportRelaEntities.forEach(i->{
+            reportList.add(i.getReportId());
+        });
+//        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
         Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
         EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("stlst", workBook.get("stlst")).eq("version_number", workBook.get("versionNumber"))
