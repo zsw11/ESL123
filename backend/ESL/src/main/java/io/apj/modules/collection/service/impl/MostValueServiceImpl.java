@@ -200,21 +200,30 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		BigDecimal timeTotal = BigDecimal.ZERO;
 		Map<String, BigDecimal> totalHMap = new HashMap<>();
 		for (MostValueItemEntity entity : list) {
-			timeTotal = timeTotal.add(entity.getTotal());
+			timeStTotal = timeStTotal.add(entity.getTotal());
+			//分转换成秒
 			BigDecimal timeSt = entity.getTotal().multiply(new BigDecimal(60));
-			timeTotal = timeTotal.add(timeSt);
+			timeStTotal = timeStTotal.add(timeSt);
 			entity.setTimeSt(timeSt);
 			String type = entity.getType();
+			String workName = entity.getWorkName();
 			BigDecimal totalH = totalHMap.get(type);
+			BigDecimal workNameH = totalHMap.get(workName);
 			if (totalH == null) {
-				totalHMap.put(type, timeTotal);
+				totalHMap.put(type, entity.getTotal());
 			} else {
-				totalHMap.put(type, totalH.add(timeTotal));
+				totalHMap.put(type, totalH.add(entity.getTotal()));
+			}
+			if (workNameH == null){
+				totalHMap.put(workName, entity.getTotal());
+			} else{
+				totalHMap.put(workName, workNameH.add(entity.getTotal()));
 			}
 		}
 
 		generateTotalHoursForEachOfList(list, totalHMap);
 
+		timeTotal = timeStTotal.divide(new BigDecimal(60), 3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal totalAll = timeTotal.divide(new BigDecimal(60), 3, BigDecimal.ROUND_HALF_UP);
 		map.put("timeStTotal", timeStTotal);
 		map.put("timeTotal", timeTotal);
@@ -223,6 +232,13 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 	}
 
 	private void generateTotalHoursForEachOfList(List<MostValueItemEntity> list, Map<String, BigDecimal> totalHMap) {
+		
+		for (MostValueItemEntity entity : list) {
+			String type = entity.getType();
+			BigDecimal totalM = totalHMap.get(type);
+			entity.setTotal(totalM);
+		}
+		
 		for (String key : totalHMap.keySet()) {
 			BigDecimal totalH = totalHMap.get(key);
 			totalH = totalH.divide(new BigDecimal(60), 3, BigDecimal.ROUND_HALF_UP);
@@ -230,9 +246,10 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		}
 
 		for (MostValueItemEntity entity : list) {
-			String type = entity.getType();
-			BigDecimal totalH = totalHMap.get(type);
+			String workName = entity.getWorkName();
+			BigDecimal totalH = totalHMap.get(workName);
 			entity.setTotalHours(totalH);
+			
 		}
 	}
 

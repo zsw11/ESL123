@@ -93,8 +93,8 @@ public class ReportManMachineCombinationServiceImpl
 			id = reportManMachineCombinationEntity.getId();
 			map.put("date", reportManMachineCombinationEntity.getMonthResult());
 			map.put("mt", reportManMachineCombinationEntity.getMt());
-			map.put("tableNum", reportManMachineCombinationEntity.getSelectnum());
-			map.put("enter", reportManMachineCombinationEntity.getEnter());
+			map.put("tableNum", reportManMachineCombinationEntity.getSelectnum() != null ? reportManMachineCombinationEntity.getSelectnum() : Constant.MAN_MACHINE_COMBINATION_ENTER);
+			map.put("enter", reportManMachineCombinationEntity.getEnter() != null ? reportManMachineCombinationEntity.getEnter() : Constant.MAN_MACHINE_COMBINATION_ENTER);
 			generateTotalData(map);
 		}
 		ModelEntity model = modelService.selectById(modelId);
@@ -204,7 +204,7 @@ public class ReportManMachineCombinationServiceImpl
 		BigDecimal coefficient = BigDecimal.valueOf(Double.valueOf((String) ashcraftTables.get("Coefficient")));
 		EntityWrapper<AshcraftTableEntity> ew = new EntityWrapper<>();
 
-		BigDecimal HT1 = coefficient.multiply((BigDecimal) map.get("enter"));
+		BigDecimal HT1 = coefficient.multiply(BigDecimal.valueOf(Long.valueOf(map.get("enter").toString())));
 		BigDecimal HT = HT1.subtract(BigDecimal.valueOf(0.1), new MathContext(0)).multiply(BigDecimal.valueOf(10))
 				.add(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(10), 2, RoundingMode.HALF_UP);
 		BigDecimal P1 = HT.divide((BigDecimal) map.get("mt"), 3, RoundingMode.HALF_UP);
@@ -228,13 +228,13 @@ public class ReportManMachineCombinationServiceImpl
 			map.put("STime", STime);
 			map.put("STime1", STime1);
 			map.put("N2Time", N2Time);
-		} else {
+		} else if(ashcraftTableEntity != null) {
 			// n2-n6
 			ashcraftTableEntity.getMu();
 			map.put("mu", ashcraftTableEntity.getMu());
 			map.put("sa", ashcraftTableEntity.getSa());
 			map.put("ou", ashcraftTableEntity.getOu());
-			BigDecimal tableNum = BigDecimal.valueOf(Double.valueOf((String) map.get("tableNum")));
+			BigDecimal tableNum = BigDecimal.valueOf(Double.valueOf(map.get("tableNum").toString()));
 			BigDecimal mt = (BigDecimal) map.get("mt");
 			BigDecimal i = HT.add(mt).multiply(ashcraftTableEntity.getSa()).divide(BigDecimal.valueOf(100), 0,
 					RoundingMode.HALF_UP);
