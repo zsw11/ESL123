@@ -257,8 +257,8 @@ public class WorkBookController extends AbstractController {
 	/**
 	 * 报表总数
 	 */
-	@RequestMapping("/reportTotal")
-	public int wrokBookTotal(@RequestParam Integer id){
+	@RequestMapping("/reportTotal/{id}")
+	public int wrokBookTotal(@PathVariable Integer id){
 		WorkBookEntity workBookEntity= workBookService.selectById(id);
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("stlst",workBookEntity.getStlst()).eq("version_number",workBookEntity.getVersionNumber())
