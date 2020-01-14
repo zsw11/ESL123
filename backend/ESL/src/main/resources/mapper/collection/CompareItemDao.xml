@@ -24,15 +24,13 @@
     <select id="generateDataByWorkBook" resultMap="compareItemMap">
         select case wt."name" when 'SUB' then true else false end as sub,
         w."name" as work_name,  wb.work_name as unit_name,
-        sum(wo.second_convert) * 1.06 as current_value,
-        (select sum(ws.second_convert) * 1.06 from work_book wk
-            join  work_operations ws on wk.id = ws.work_book_id
+        wb.second_convert * 1.06 as current_value,
+        (select wk.second_convert * 1.06 from work_book wk
             where wk.id = (
-            select id from work_book
-            where model_id= #{modelId} and stlst=#{stlst} and phase_id != #{phaseId} order by create_at desc limit 1)) as last_value,
+            select id from work_book where model_id= #{modelId} and stlst=#{stlst} and destinations=#{destinations} 
+            and version_number=#{versionNumber} and phase_id != #{phaseId} order by create_at desc limit 1)) as last_value,
         wb.id as work_book_id, c.id
         from work_book wb
-        join work_operations wo on wb.id = wo.work_book_id
         join workstation w on wb.workstation_id = w.id
         join workstation_type wt on w.workstation_type_id = wt.id
         left join collection_compare_item c on wb.id = c.work_book_id
@@ -43,6 +41,5 @@
                 #{item}
             </foreach>
         </if>
-        group by wt."name", w."name", wb.work_name, wb.id, c.id
     </select>
 </mapper>
