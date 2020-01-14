@@ -80,15 +80,13 @@ public class ReportBatchServiceImpl
 		if (StringUtils.isNotEmpty((CharSequence) params.get("phaseId"))) {
 			entityWrapper.eq("phase_id", Integer.parseInt((String) params.get("phaseId")));
 		}
-
-
-		Page<ReportBatchEntity> page = this.selectPage(new Query<ReportBatchEntity>(params).getPage());
+		Page<ReportBatchEntity> page = this.selectPage(new Query<ReportBatchEntity>(params).getPage(),entityWrapper);
 		for(ReportBatchEntity item : page.getRecords()){
 			item.setModelEntity(modelService.selectById(item.getModelId()));
 			item.setPhaseEntity(phaseService.selectById(item.getPhaseId()));
 		}
 
-		return new PageUtils(page);
+			return new PageUtils(page);
 	}
 
 	@Override
