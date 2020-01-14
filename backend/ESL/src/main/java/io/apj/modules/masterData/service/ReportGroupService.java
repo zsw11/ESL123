@@ -25,6 +25,8 @@ public interface ReportGroupService extends IService<ReportGroupEntity> {
 
     List<ReportGroupReportRelaEntity> reportGroupRelaList(Integer id);
 
+    void updateReportGroupDeptRela(List<Integer> ids,Integer reportGroupId);
+
     /**
      * 软删除实体对象
      * @param reportGroupEntityList

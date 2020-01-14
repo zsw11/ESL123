@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Data
 @TableName("report_group_dept_rela")
-public class ReporGrouptDeptRelaEntity implements Serializable {
+public class ReportGroupDeptRelaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
