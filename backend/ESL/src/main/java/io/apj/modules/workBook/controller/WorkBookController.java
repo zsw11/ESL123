@@ -9,6 +9,8 @@ import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.entity.ReportBatchEntity;
+import io.apj.modules.report.service.ReportBatchService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -42,6 +44,8 @@ public class WorkBookController extends AbstractController {
 	private SysDeptService sysDeptService;
 	@Autowired
 	private WorkstationService workstationService;
+	@Autowired
+	private ReportBatchService reportBatchService;
 
 
 	/**
@@ -107,7 +111,15 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
-
+		ReportBatchEntity reportBatchEntity = new ReportBatchEntity();
+		reportBatchEntity.setModelId(workBookEntity.getModelId());
+		reportBatchEntity.setDestinations(workBookEntity.getDestinations());
+		reportBatchEntity.setPhaseId(workBookEntity.getPhaseId());
+		reportBatchEntity.setStlst(workBookEntity.getStlst());
+		reportBatchEntity.setVersionNumber(workBookEntity.getVersionNumber());
+		reportBatchEntity.setCreateAt(new Date());
+		reportBatchEntity.setCreateBy(getUserId().intValue());
+		reportBatchService.insert(reportBatchEntity);
 		return R.ok();
 	}
 
