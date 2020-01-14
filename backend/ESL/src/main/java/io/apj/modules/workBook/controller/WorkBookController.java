@@ -1,17 +1,24 @@
 package io.apj.modules.workBook.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.*;
+import io.apj.modules.report.entity.ReportBatchEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
+import io.apj.modules.report.service.ReportBatchService;
+import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+import javassist.expr.NewArray;
 import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +48,20 @@ public class WorkBookController extends AbstractController {
 	private SysDeptService sysDeptService;
 	@Autowired
 	private WorkstationService workstationService;
+	@Autowired
+	private ReportBatchService reportBatchService;
+	@Autowired
+	private SysDeptService deptService;
+	@Autowired
+	private ReportGroupDeptRelaService reportGroupDeptRelaService;
+	@Autowired
+	private ReportGroupService reportGroupService;
+	@Autowired
+	private ReportGroupReportRelaService reportGroupReportRelaService;
+	@Autowired
+	private ReportService reportService;
+	@Autowired
+	private StaffService staffService;
 
 
 	/**
@@ -106,7 +127,15 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
-
+		ReportBatchEntity reportBatchEntity = new ReportBatchEntity();
+		reportBatchEntity.setModelId(workBookEntity.getModelId());
+		reportBatchEntity.setDestinations(workBookEntity.getDestinations());
+		reportBatchEntity.setPhaseId(workBookEntity.getPhaseId());
+		reportBatchEntity.setStlst(workBookEntity.getStlst());
+		reportBatchEntity.setVersionNumber(workBookEntity.getVersionNumber());
+		reportBatchEntity.setCreateAt(new Date());
+		reportBatchEntity.setCreateBy(getUserId().intValue());
+		reportBatchService.insert(reportBatchEntity);
 		return R.ok();
 	}
 
@@ -222,7 +251,7 @@ public class WorkBookController extends AbstractController {
 	}
 
 	/**
-	 * 生成报表
+	 * 通过id生成报表
 	 * 
 	 * @param params
 	 * @return
@@ -235,6 +264,78 @@ public class WorkBookController extends AbstractController {
 		workBookService.createReports(params);
 		return R.ok();
 	}
+
+	/**
+	 * 通过5个字段生成报表
+	 *
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/createReportbyfive")
+	// @RequiresPermissions("workBook:workbook:createReport")
+	public ResponseEntity<Object> createReportByFive(@RequestBody Map<String, Object> params) {
+		Validate.notNull(params.get("reports"));
+		Validate.notNull(params.get("workBook"));
+		return workBookService.createReportsByFive(params);
+	}
+
+	/**
+	 * 部门下的报表组
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/deptreportgroup")
+	public List<ReportGroupEntity> deptReportGroup(){
+		Integer deptId = getUserDeptId().intValue();
+		List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
+		List<ReportGroupEntity> reportGroupEntities = new ArrayList();
+		List<ReportEntity> reportEntityList = new ArrayList<>();
+		reportGroupDeptRelaEntityList.forEach(i->{
+			reportGroupEntities.add(reportGroupService.selectById(i.getReportGroupId()));
+			ReportGroupReportRelaEntity reportGroupReportRelaEntity = reportGroupReportRelaService.selectById(i.getReportGroupId());
+			ReportEntity reportEntity= reportService.selectById(reportGroupReportRelaEntity.getReportId());
+			reportEntityList.add(reportEntity);
+		});
+		for(ReportGroupEntity reportGroupEntity : reportGroupEntities){
+			String name = "";
+			for (ReportEntity item : reportEntityList) {
+				name += item.getName() + "/";
+			}
+			reportGroupEntity.setAllReportName(name);
+			reportGroupEntity.setCreateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
+			reportGroupEntity.setUpdateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
+		}
+		return reportGroupEntities;
+	}
+
+
+	/**
+	 * 通过id报表总数
+	 */
+	@RequestMapping("/reportTotal/{id}")
+	public int wrokBookTotal(@PathVariable Integer id){
+		WorkBookEntity workBookEntity= workBookService.selectById(id);
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("stlst",workBookEntity.getStlst()).eq("version_number",workBookEntity.getVersionNumber())
+				.eq("destinations",workBookEntity.getDestinations()).eq("model_id",workBookEntity.getModelId())
+				.eq("phase_id",workBookEntity.getPhaseId());
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+		return workBookEntityList.size();
+	}
+
+	/**
+	 * 报表总数
+	 */
+	@RequestMapping("/reporttotalbyfive")
+	public int wrokBookTotalByFive(@RequestBody Map<String, Object> params){
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("stlst",params.get("stlst")).eq("version_number",params.get("versionNumber"))
+				.eq("destinations",params.get("destinations")).eq("model_id",params.get("modelId"))
+				.eq("phase_id",params.get("phaseId"));
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+		return workBookEntityList.size();
+	}
+
 
 	/**
 	 * 部门报表

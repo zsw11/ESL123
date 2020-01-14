@@ -3,8 +3,12 @@ package io.apj.modules.report.service.impl;
 import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.ModelEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
+import io.apj.modules.masterData.entity.WorkstationTypeEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.service.WorkstationTypeService;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
 import io.apj.modules.report.dao.TimeContactDao;
 import io.apj.modules.report.entity.TimeContactEntity;
@@ -14,6 +18,7 @@ import io.apj.modules.workBook.service.WorkBookService;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +48,10 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	private ReportServiceImpl reportServiceimpl;
 	@Autowired
 	private WorkBookService workBookService;
+	@Autowired
+	private WorkstationService workstationService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -131,6 +140,11 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 		Integer id = null;
 		Map<String, Object> map = new HashMap<>();
 		String sheetName=null;
+		EntityWrapper<WorkBookEntity> workBookWrapper = new EntityWrapper<>();
+		workBookWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations)
+						.eq("version_number", versionNumber).isNull("delete_at");
+		List<WorkBookEntity> workBookList = workBookService.selectList(workBookWrapper);
+		
 		if (timeContactEntity != null) {
 			map.put("revNo", timeContactEntity.getRevNo());
 			map.put("allCountSub", timeContactEntity.getAllCountSub());
@@ -154,6 +168,57 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			map.put("remarkPacking", timeContactEntity.getTowingLastVersionPacking());
 			map.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
 			sheetName=timeContactEntity.getSheetName();
+		}
+		
+		//时间联络表因为是其它子数据的汇总报表 生成报表的时候并没有将子数据进行汇总计算并保存 所以上面直接从timeContactEntity取值是不对的
+		if(workBookList != null && workBookList.size() > 0){
+			BigDecimal allCountSubSec = BigDecimal.ZERO;
+			BigDecimal allCountMainSec = BigDecimal.ZERO;
+			BigDecimal allCountPrintingSec = BigDecimal.ZERO;
+			BigDecimal allCountExternalInspectionSec = BigDecimal.ZERO;
+			BigDecimal allCountPackingSec = BigDecimal.ZERO;
+			BigDecimal turnTimeToHourSec = BigDecimal.valueOf(3600);
+			BigDecimal secRange = BigDecimal.valueOf(1.06);
+			
+			for(WorkBookEntity workbook : workBookList){
+				if(workbook.getWorkstationId() == null){
+					continue;
+				}
+				WorkstationEntity workstation = workstationService.selectById(workbook.getWorkstationId());
+				if(workstation == null){
+					continue;
+				}
+				WorkstationTypeEntity workstationType = workstationTypeService.selectById(workstation.getWorkstationTypeId());
+				if(workstationType == null || workstationType.getName() == null){
+					continue;
+				}
+				switch(workstationType.getName()){
+					case Constant.WORKSTATION_TYPE_SUB:
+						allCountSubSec = allCountSubSec.add(workbook.getSecondConvert());
+						break;
+					case Constant.WORKSTATION_TYPE_MAIN:
+						allCountMainSec = allCountMainSec.add(workbook.getSecondConvert());
+						break;
+					case Constant.WORKSTATION_TYPE_PACKING:
+						allCountPackingSec = allCountPackingSec.add(workbook.getSecondConvert());
+						break;
+					case Constant.WORKSTATION_TYPE_PRINT:
+						allCountPrintingSec = allCountPrintingSec.add(workbook.getSecondConvert());
+						break;
+					case Constant.WORKSTATION_TYPE_EXTERNAL:
+						allCountExternalInspectionSec = allCountExternalInspectionSec.add(workbook.getSecondConvert());
+						break;
+					default:
+						break;
+				}
+					
+			}
+			//根据Sec./conv总和乘以系数1.06 再转换成小时 四舍五入 保留两位小数
+			map.put("allCountSub", allCountSubSec.multiply(secRange).divide(turnTimeToHourSec).setScale(2,BigDecimal.ROUND_HALF_UP));
+			map.put("allCountMain", allCountMainSec.multiply(secRange).divide(turnTimeToHourSec).setScale(2,BigDecimal.ROUND_HALF_UP));
+			map.put("allCountPrinting", allCountPrintingSec.multiply(secRange).divide(turnTimeToHourSec).setScale(2,BigDecimal.ROUND_HALF_UP));
+			map.put("allCountExternalInspection", allCountExternalInspectionSec.multiply(secRange).divide(turnTimeToHourSec).setScale(2,BigDecimal.ROUND_HALF_UP));
+			map.put("allCountPacking", allCountPackingSec.multiply(secRange).divide(turnTimeToHourSec).setScale(2,BigDecimal.ROUND_HALF_UP));
 		}
 		ModelEntity model = modelService.selectById(modelId);
 		if(model!=null) {
@@ -180,7 +245,6 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks) {
 		List<TimeContactEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
-
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -190,14 +254,15 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			if (entity == null) {
 				TimeContactEntity timeContactEntity=new TimeContactEntity();
 				timeContactEntity = new TimeContactEntity();
-				timeContactEntity.setModelId(modelId);
-				timeContactEntity.setPhaseId(phaseId);
-				timeContactEntity.setStlst(stlst);
 				timeContactEntity.setDeptId(workBook.getDeptId());
-				timeContactEntity.setDestinations(destinations);
-				timeContactEntity.setVersionNumber(versionNumber);
 				timeContactEntity.setTitle("时间联络表");
 				timeContactEntity.setSheetName("时间联络表");
+				timeContactEntity.setModelId(modelId);
+
+				timeContactEntity.setPhaseId(phaseId);
+				timeContactEntity.setStlst(stlst);
+				timeContactEntity.setDestinations(destinations);
+				timeContactEntity.setVersionNumber(versionNumber);
 				insert(timeContactEntity);
 				results.add(timeContactEntity);
 			}else{

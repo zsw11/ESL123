@@ -59,7 +59,8 @@
               v-model="dataForm.modelId"
               :searchApi="this.listModel"
               :allowEmpty="true"
-              :defaultOptions="defaultModel">
+              :defaultOptions="defaultModel"
+              :apiOptions="{deptId: dataForm.deptId}">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -83,7 +84,8 @@
               v-model="dataForm.workstationId"
               :searchApi="this.listWorkstation"
               :allowEmpty="true"
-              :defaultOptions="defaultWorkstation">
+              :defaultOptions="defaultWorkstation"
+              :apiOptions="{modelId: dataForm.modelId}">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -216,6 +218,14 @@ export default {
       this.init()
     }
   },
+  computed: {
+    modelChange (){
+      return this.dataForm.modelId
+    },
+    deptChange () {
+      return this.dataForm.deptId
+    }
+  },
   watch: {
     dataForm: {
       handler: function (val) {
@@ -227,7 +237,17 @@ export default {
         }
       },
       deep: true
-    }
+    },
+    modelChange: {
+      handler: () =>{
+        console.log(22222222222222222)
+      }
+    },
+    deptChange: {
+      handler: () =>{
+        console.log(1111111111111111)
+      }
+    },
   },
   methods: {
     init () {

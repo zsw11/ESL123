@@ -28,7 +28,7 @@
             <keyword-search
               clearable
               v-model="listQuery.modelId"
-              
+
               :searchApi="this.listModel"
               :allowEmpty="true">
             </keyword-search>
@@ -63,8 +63,8 @@
           </el-form-item>
 
          <el-form-item :label="'制表人'" prop="makerId" >
-          <keyword-search 
-            :searchApi="this.listStaffUser" 
+          <keyword-search
+            :searchApi="this.listStaffUser"
             v-model="listQuery.makerId"
             :allowEmpty="true"
             valueColumn="userId"
@@ -82,8 +82,8 @@
           </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
-          <keyword-search 
-            :searchApi="this.listStaffUser" 
+          <keyword-search
+            :searchApi="this.listStaffUser"
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -192,7 +192,7 @@
             <span>{{scope.row.updateName }}</span>
           </template>
         </el-table-column>
-        
+
         <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
           <template slot-scope="scope">
             <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
@@ -228,13 +228,37 @@
       width="30%"
       title="生成报表"
       :visible.sync="createShow">
-      <el-form :inline="true" :model="createForm">
-        <el-form-item>
-          <div  v-for="item in reportGroup"
-              :key="item.id">{{item.name}}</div>
-        </el-form-item>
 
-      </el-form>
+      <div class="dialog-block">
+        <h4>确定读取{{number}}张分析表</h4>
+        <h4>生成</h4>
+        <el-row>
+          <el-col :span="10">
+            <span class="span">机种: {{onlyKey.model}}</span>
+          </el-col>
+          <el-col :span="10" :offset="2">
+            <span class="span">仕向: {{onlyKey.destinations}}</span>
+          </el-col>
+        </el-row >
+        <el-row>
+          <el-col :span="10">
+            <span class="span">生产阶段: {{onlyKey.phase}}</span>
+          </el-col>
+          <el-col :span="10" :offset="2">
+            <span class="span">ST/LST: {{onlyKey.stlst}}</span>
+          </el-col>
+        </el-row>
+        <el-row >
+          <el-col :span="10">
+            <span class="span">版本号: {{onlyKey.versionNumber}}</span>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="dialog-block">
+        <h4>如下报表组中的报表:</h4>
+          <span v-for="item in reportGroup" class="span report"
+              :key="item.id">{{item.name}}</span>
+      </div>
       <span slot="footer" class="dialog-footer">
             <el-button @click="createShow = false">取 消</el-button>
             <el-button type="primary" @click="createReportOK">确 定</el-button>
@@ -245,7 +269,7 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport, fetchWorkBookTotal } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -270,6 +294,14 @@ export default {
       createForm: {
         id: []
       },
+      onlyKey: {
+        model: null,
+        phase: null,
+        stlst: null,
+        destinations: null,
+        versionNumber: null
+      },
+      number: null,
       tableAt: null,
       listQuery: {
         id: null,
@@ -516,12 +548,21 @@ export default {
     },
     // 生成报表
     createReport (row) {
+      fetchWorkBookTotal(row.id).then((data)=>{
+        this.number = data
+      })
       this.createForm.id = []
       this.reportGroup = []
       this.id = row.id
       this.selectedWorkBookIds = [row.id]
+      // 生成信息中唯一键
+      this.onlyKey.model = row.modelName
+      this.onlyKey.phase = row.phaseName
+      this.onlyKey.versionNumber = row.versionNumber
+      this.onlyKey.destinations = row.destinations
+      this.onlyKey.stlst = this.dictItemSTLST[row.stlst].name
       fetchDeptReport().then((page)=>{
-        this.reportGroup = page.data
+        this.reportGroup = page
         this.reportGroup.forEach((item)=>{
           this.createForm.id.push(item.id)
         })
@@ -534,7 +575,6 @@ export default {
     createReportOK (row) {
        createReports(Object.assign(
         {
-          workId: this.id,
           workBookIds: this.selectedWorkBookIds,
           reports: this.createForm.id
         }
@@ -572,12 +612,20 @@ export default {
   }
   .wookbook-dialog {
     min-width: 400px;
-    .el-checkbox {
-      display: block;
-      margin-left: 0;
+    .el-dialog__body{
+      padding: 0 10px 20px;
     }
   }
   .btn-wrp{
     text-align: left !important;
   }
+  .span{
+    display: inline-block;
+    padding-left: 5px;
+    margin-top: 5px;
+    &.report{
+      width: 50%;
+    }
+  }
+
 </style>

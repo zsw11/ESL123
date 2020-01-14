@@ -23,9 +23,19 @@ public class Constant {
 	public static final String APPROVE_REPORT_STATUS_CREATE = "03"; // 未审批
 	public static final String APPROVE_REPORT_STATUS_REJECT = "04"; // 未通过
 	
+	/** 工位类型组别  */
+	public static final String WORKSTATION_TYPE_SUB = "SUB";
+	public static final String WORKSTATION_TYPE_MAIN = "MAIN";
+	public static final String WORKSTATION_TYPE_PACKING = "PACKING";
+	public static final String WORKSTATION_TYPE_PRINT = "PRINT";
+	public static final String WORKSTATION_TYPE_EXTERNAL = "EXTERNAL";
+	
 	/** LST/ST类型 */
 	public static final String LST = "01";
 	public static final String ST = "02";
+	
+	/** 人机两个表输入数值 */
+	public static final Integer MAN_MACHINE_COMBINATION_ENTER = 2;
 	
 	/**
 	 * 菜单类单型

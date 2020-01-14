@@ -7,6 +7,9 @@ import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.report.entity.ReportDeptRelaEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
+import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.dao.ReportGroupDao;
 import io.apj.modules.masterData.service.ReportGroupService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("reportGroupService")
 public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGroupEntity>
@@ -31,6 +35,8 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
     private ReportService reportService;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private ReportGroupDeptRelaService reportGroupDeptRelaService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -89,6 +95,46 @@ public class ReportGroupServiceImpl extends ServiceImpl<ReportGroupDao, ReportGr
             item.setReportEntity(reportService.selectById(item.getReportId()));
         }
         return data;
+    }
+
+    @Override
+    @Transactional
+    public void updateReportGroupDeptRela(List<Integer> ids,Integer reportGroupId) {
+        if (ids.size() > 0) {
+            List<ReportGroupDeptRelaEntity> entityList1 = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("report_group_id", reportGroupId));
+            //原本的deptids
+            List<Integer> deptIds = new ArrayList<>();
+            for (ReportGroupDeptRelaEntity item : entityList1) {
+                deptIds.add(item.getDeptId());
+            }
+            for (Integer i : ids) {
+                ReportGroupDeptRelaEntity reportGroupDeptRelaEntity = new ReportGroupDeptRelaEntity();
+                reportGroupDeptRelaEntity.setDeptId(i);
+//                reportGroupDeptRelaEntity.setCreateBy(getUserId().intValue());
+                reportGroupDeptRelaEntity.setReportGroupId(reportGroupId);
+                if (reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("report_group_id", reportGroupId)).size() == 0) {
+                    reportGroupDeptRelaService.insert(reportGroupDeptRelaEntity);
+                } else {
+                    ReportGroupDeptRelaEntity entityList = reportGroupDeptRelaService.selectOne(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("report_group_id", reportGroupId).eq("dept_id", i));
+                    if (entityList != null) {
+                        reportGroupDeptRelaEntity.setId(entityList.getId());
+                        reportGroupDeptRelaService.updateAllColumnById(reportGroupDeptRelaEntity);
+                    } else if (!deptIds.contains(i)) {
+                        reportGroupDeptRelaService.insert(reportGroupDeptRelaEntity);
+                    }
+                }
+            }
+            for (Integer deptId : deptIds) {
+                if (!ids.contains(deptId)) {
+                    ReportGroupDeptRelaEntity reportGroupDeptRelaEntity1 = reportGroupDeptRelaService.selectOne(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId).eq("report_group_id", reportGroupId));
+                    reportGroupDeptRelaService.deleteById(reportGroupDeptRelaEntity1);
+                }
+            }
+
+        } else {
+            reportGroupDeptRelaService.delete(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("report_group_id", reportGroupId));
+        }
+
     }
 
     @Override

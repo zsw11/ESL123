@@ -67,7 +67,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.reportEntity.remark }}</span>
           </template>
@@ -279,7 +279,7 @@ export default {
       }
 
       downloadReportApprove(data).then(response => {
-        
+
       });
     }
   }

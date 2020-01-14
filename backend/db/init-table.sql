@@ -891,7 +891,6 @@ CREATE TABLE workstation_type_node (
   delete_at timestamp
 );
 comment on table workstation_type_node is '工位类型节点';
-Create Unique Index index_workstation_type_node_name_UNQ On workstation_type_node(name);
 comment on column workstation_type_node.name is '名称';
 comment on column workstation_type_node.pinyin is '拼音';
 comment on column workstation_type_node.workstation_id is '工位ID';
@@ -1208,6 +1207,28 @@ comment on column report_dept_rela.create_at is '创建时间';
 comment on column report_dept_rela.update_by is '更新者ID';
 comment on column report_dept_rela.update_at is '更新时间';
 comment on column report_dept_rela.delete_at is '删除时间';
+
+-- 报表组和部门关系
+drop table if exists report_group_dept_rela;
+CREATE TABLE report_group_dept_rela (
+  id serial PRIMARY KEY,
+  report_group_id integer,
+  dept_id integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table report_group_dept_rela is '报表组部门关系';
+comment on column report_group_dept_rela.report_group_id is '报表组ID';
+comment on column report_group_dept_rela.dept_id is '部门ID';
+CREATE UNIQUE INDEX report_group_dept_rela_uniq ON report_group_dept_rela (report_group_id,dept_id) WHERE delete_at IS NULL;
+comment on column report_group_dept_rela.create_by is '创建者ID';
+comment on column report_group_dept_rela.create_at is '创建时间';
+comment on column report_group_dept_rela.update_by is '更新者ID';
+comment on column report_group_dept_rela.update_at is '更新时间';
+comment on column report_group_dept_rela.delete_at is '删除时间';
 
 -- 常用指标组合
 drop table if exists measure_group;
@@ -1748,6 +1769,33 @@ comment on column collection_compare_item.update_by is '更新者ID';
 comment on column collection_compare_item.update_at is '更新时间';
 comment on column collection_compare_item.delete_at is '删除时间';
 
+
+drop table if exists report_batch;
+CREATE TABLE report_batch (
+  id serial PRIMARY KEY,
+  stlst  varchar(32),
+  model_id integer,
+  phase_id integer,
+  destinations varchar(128) not null,
+  version_number varchar(32) not null,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table report_batch is '报表批次';
+CREATE UNIQUE INDEX report_batch_uniq ON report_batch (stlst,model_id,destinations,phase_id,version_number) WHERE delete_at IS NULL;
+comment on column report_batch.STLST is 'ST/LST';
+comment on column report_batch.model_id is '机种ID';
+comment on column report_batch.destinations is '仕向';
+comment on column report_batch.phase_id is '生产阶段ID';
+comment on column report_batch.version_number is '版本号';
+comment on column report_batch.create_by is '创建者ID';
+comment on column report_batch.create_at is '创建时间';
+comment on column report_batch.update_by is '更新者ID';
+comment on column report_batch.update_at is '更新时间';
+comment on column report_batch.delete_at is '删除时间';
 
 -- Report - Total表
 drop table if exists report_total;
@@ -2541,6 +2589,11 @@ INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (565, 563, '新增', NULL, 'report:reportmanmachinecombination:save', 2, NULL, 6, NULL, '2019-11-26 13:52:46.530622', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (566, 563, '修改', NULL, 'report:reportmanmachinecombination:update', 2, NULL, 6, NULL, '2019-11-26 13:52:46.531263', NULL, NULL, NULL);
 INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (567, 563, '删除', NULL, 'report:reportmanmachinecombination:delete', 2, NULL, 6, NULL, '2019-11-26 13:52:46.53181', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (563, 506, '报表批次', 'report/reportbatch', NULL, 1, 'config', 11, NULL, '2019-11-26 13:52:46.527628', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (564, 563, '查看', NULL, 'report:reportbatch:list,report:reportbatch:detail', 2, NULL, 6, NULL, '2019-11-26 13:52:46.529281', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (565, 563, '新增', NULL, 'report:reportbatch:save', 2, NULL, 6, NULL, '2019-11-26 13:52:46.530622', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (566, 563, '修改', NULL, 'report:reportbatch:update', 2, NULL, 6, NULL, '2019-11-26 13:52:46.531263', NULL, NULL, NULL);
+INSERT INTO "public"."sys_menu"("id", "parent_id", "name", "url", "perms", "type", "icon", "order_num", "create_by", "create_at", "update_by", "update_at", "delete_at") VALUES (567, 563, '删除', NULL, 'report:reportbatch:delete', 2, NULL, 6, NULL, '2019-11-26 13:52:46.53181', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Records of sys_role

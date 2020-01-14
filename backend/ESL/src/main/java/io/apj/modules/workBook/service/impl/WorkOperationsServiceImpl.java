@@ -182,51 +182,6 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 	public void workOperationExport(Map<String, Object> map, HttpServletResponse response) throws Exception {
 		// 过滤字段，前端传
 		List<String> list = (List<String>) map.get("exportAttributes");
-		List<String> ListFilter = new ArrayList<>();
-		ListFilter.add("workOperations.No");
-		ListFilter.add(list.get(0));
-		ListFilter.add(list.get(1));
-		ListFilter.add(list.get(2));
-		ListFilter.add("workOperations.a0null");
-		ListFilter.add(list.get(3));
-		ListFilter.add("workOperations.b0null");
-		ListFilter.add(list.get(4));
-		ListFilter.add("workOperations.g0null");
-		ListFilter.add(list.get(5));
-		ListFilter.add("workOperations.a1null");
-		ListFilter.add(list.get(6));
-		ListFilter.add("workOperations.b1null");
-		ListFilter.add(list.get(7));
-		ListFilter.add("workOperations.p0null");
-		ListFilter.add(list.get(8));
-		ListFilter.add("workOperations.m0null");
-		ListFilter.add(list.get(9));
-		ListFilter.add("workOperations.x0null");
-		ListFilter.add(list.get(10));
-		ListFilter.add("workOperations.i0null");
-		ListFilter.add(list.get(11));
-		ListFilter.add("workOperations.a2null");
-		ListFilter.add(list.get(12));
-		ListFilter.add("workOperations.b2null");
-		ListFilter.add(list.get(13));
-		ListFilter.add("workOperations.p1null");
-		ListFilter.add(list.get(14));
-		ListFilter.add("workOperations.a3null");
-		ListFilter.add(list.get(15));
-		ListFilter.add(list.get(16));
-		ListFilter.add("workOperations.a4null");
-		ListFilter.add(list.get(17));
-		ListFilter.add("workOperations.b3null");
-		ListFilter.add(list.get(18));
-		ListFilter.add("workOperations.p2null");
-		ListFilter.add(list.get(19));
-		ListFilter.add(list.get(20));
-//		ListFilter.add(list.get(21));
-//		ListFilter.add("workOperations.remark1");
-		ListFilter.add("workOperations.timeValue");
-		ListFilter.add("workOperations.tmu");
-		ListFilter.add("workOperations.secondConvert");
-
 		// 查询类型
 		String type = map.get("filterType").toString();
 		Integer workBookId = Integer.parseInt((String) map.get("filterId"));
@@ -409,7 +364,7 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 			dataList.add(arr);
 		}
 		// 返回excel格式数据
-		Map<String, Object> param = DataUtils.rtlExcelData(ListFilter, "workOperations", dataList);
+		Map<String, Object> param = DataUtils.rtlExcelData(list, "workOperations", dataList);
 		ExcelData data = new ExcelData();
 		data.setTitles((List<String>) param.get("titles"));
 		data.setRows((List<List<Object>>) param.get("rows"));

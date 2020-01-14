@@ -1,25 +1,26 @@
-package io.apj.modules.masterData.entity;
+package io.apj.modules.report.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
+import io.apj.modules.masterData.entity.ModelEntity;
+import io.apj.modules.masterData.entity.PhaseEntity;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
- * 工位类型节点
- * 
+ * ${comments}
+ *
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
- * @date 2019-11-07 10:39:25
+ * @date 2019-12-24 16:26:43
  */
 @Data
-@TableName("workstation_type_node")
-public class WorkstationTypeNodeEntity implements Serializable {
+@TableName("report_Batch")
+public class ReportBatchEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,34 +29,25 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 名称
+	 * $column.comments
 	 */
-	private String name;
+	private String stlst;
 	/**
-	 * 拼音
+	 * 机种ID
 	 */
-	private String pinyin;
+	private Integer modelId;
 	/**
-	 * 工位ID
+	 * 仕向
 	 */
-	private Integer workstationId;
+	private String destinations;
 	/**
-	 * 工位类型ID
+	 * $column.comments
 	 */
-	private Integer workstationTypeId;
+	private Integer phaseId;
 	/**
-	 * 备注
+	 * 版本号
 	 */
-	private String remark;
-
-	/*
-	 * 父id
-	 */
-	private Integer parentId;
-	/**
-	 * 是否是工位
-	 */
-	private Boolean isWorkstation;
+	private String versionNumber;
 	/**
 	 * 创建者ID
 	 */
@@ -76,8 +68,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
 	@TableField(exist = false)
-	private List<WorkstationTypeNodeEntity> child;
+	private ModelEntity  modelEntity;
+	@TableField(exist = false)
+	private PhaseEntity phaseEntity;
+
 
 }

@@ -218,7 +218,10 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 		BigDecimal Sample1Total = BigDecimal.ZERO;
 		BigDecimal SampleSizeTotal = BigDecimal.ZERO;
 		BigDecimal convTotal = BigDecimal.ZERO;
+		BigDecimal secRange = BigDecimal.valueOf(1.06);
 		for (StationTimeItemEntity entity : list) {
+			//秒转换成分钟
+			entity.setLstValue(entity.getLstValue().multiply(secRange).divide(BigDecimal.valueOf(60), 5));
 			mtTotal = mtTotal.add(entity.getLstValue());
 		}
 		if (list.size() > 0) {

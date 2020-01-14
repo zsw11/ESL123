@@ -6,17 +6,17 @@
         "fieldList": [
             {
                 "code": "No",
-                "name": "No",
+                "name": "No.",
                 "type": "int"
             },
             {
-                "code": "versionNumber",
+                "code": "version",
                 "name": "H",
                 "type": "String"
             },
             {
                 "code": "operation",
-                "name": "WorkMethod",
+                "name": "Work Method",
                 "type": "String"
             },
             {
@@ -196,17 +196,17 @@
             },
             {
                 "code": "remark",
-                "name": "Remark",
+                "name": "Remark2",
                 "type": "String"
             },
             {
                 "code": "remark1",
-                "name": "Remark",
-                "type": "String"
+                "name": "Remark1",
+                "type": "Integer"
             },
             {
                 "code": "timeValue",
-                "name": "TimeValue",
+                "name": "Time value",
                 "type": "BigDecimal"
             },
             {

@@ -4,10 +4,10 @@
       <div slot="header" class="clearfix">
         <div class="card-title">{{title}}-机种</div>
       </div>
-      <el-form 
-        :inline="true" 
-        :model="listQuery" 
-        @keyup.enter.native="getDataList()"  
+      <el-form
+        :inline="true"
+        :model="listQuery"
+        @keyup.enter.native="getDataList()"
         class="clearfix form-min-width">
 
         <el-form-item :label="'机种名称'" prop="name" >
@@ -52,7 +52,7 @@
             机种<keyword-search
             style="margin-left:10px;"
             v-model="addToolModelId"
-            
+
             :searchApi="this.listModel"
             :allowEmpty="true"
             clearable>
@@ -136,7 +136,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.remark}}</span>
           </template>

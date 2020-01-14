@@ -40,8 +40,8 @@
 
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'Sheet名称'" prop="sheetName">
-            <el-input v-model="dataForm.sheetName"></el-input>
+          <el-form-item :label="'版本号'" prop="versionNumber">
+            <el-input :disabled="true" v-model="dataForm.versionNumber"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
@@ -90,8 +90,8 @@
         </el-col>
 
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'版本号'" prop="revNo">
-            <el-input v-model="dataForm.revNo"></el-input>
+          <el-form-item :label="'Sheet名称'" prop="sheetName">
+            <el-input v-model="dataForm.sheetName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -220,7 +220,7 @@ export default {
         inChargeBy: null,
         factory: null,
         monthResult: null,
-        revNo: null,
+        versionNumber: null,
         lastSTname: null,
         currentSTname: null,
         lastLSTname: null,
@@ -242,7 +242,7 @@ export default {
         inChargeBy: [{ type: 'number', message: '承认ID需为数字值' }],
         factory: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
 
-        revNo: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
+        versionNumber: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         lastSTname: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         currentSTname: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
         lastLSTname: [{ max: 64, message: '长度超过了64', trigger: 'blur' }],
@@ -309,7 +309,7 @@ export default {
                 'inChargeBy',
                 'factory',
                 'monthResult',
-                'revNo',
+                'versionNumber',
                 'lastSTname',
                 'currentSTname',
                 'lastLSTname',

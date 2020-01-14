@@ -12,6 +12,7 @@
         <result property="firstTime" column="first_time"/>
         <result property="secondTime" column="second_time"/>
         <result property="thirdTime" column="third_time"/>
+        <result property="workBookId" column="work_book_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createAt" column="create_at"/>
         <result property="updateBy" column="update_by"/>

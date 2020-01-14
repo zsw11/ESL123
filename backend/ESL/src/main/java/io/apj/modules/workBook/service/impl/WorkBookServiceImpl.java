@@ -15,11 +15,11 @@ import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.*;
 import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.sys.service.SysDeptService;
@@ -86,6 +86,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private SysConfigService sysConfigService;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private ReportGroupReportRelaService reportGroupReportRelaService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -222,7 +224,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
+        List<Integer> reportList = new ArrayList<>();
+        for(Integer reportGroupId : reportGroupIds){
+            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+            reportGroupReportRelaEntities.forEach(i->{
+                reportList.add(i.getReportId());
+            });
+        }
         List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
         if(workBookIds.size()>0&&reportList.size()>0) {
             reportList.forEach(e -> {
@@ -277,6 +286,86 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                 }
             });
         }
+    }
+
+    @Override
+    public ResponseEntity<Object> createReportsByFive(Map<String, Object> params) {
+        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
+        List<Integer> reportList = new ArrayList<>();
+        for(Integer reportGroupId : reportGroupIds){
+            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+            reportGroupReportRelaEntities.forEach(i->{
+                reportList.add(i.getReportId());
+            });
+        }
+//        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
+        Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("stlst", workBook.get("stlst")).eq("version_number", workBook.get("versionNumber"))
+                .eq("destinations", workBook.get("destinations")).eq("model_id", workBook.get("modelId"))
+                .eq("phase_id", workBook.get("phaseId"));
+        List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+        if (workBookEntityList == null || workBookEntityList.size() == 0) {
+            return RD.FORBIDDEN("UnExist", "不存在这张分析表，请先建立分析表");
+        }
+        List<Integer> workBookIds = new ArrayList();
+        for (WorkBookEntity item : workBookEntityList) {
+            workBookIds.add(item.getId());
+        }
+        if(workBookIds.size()>0&&reportList.size()>0) {
+            reportList.forEach(e -> {
+                switch (e) {
+                    case 1:
+                        break;
+                    case 2:
+                        // 人机联合表
+                        reportManMachineCombinationService.generateReportData(workBookIds);
+                        break;
+                    case 3:
+                        // 工位时间报表
+                        stationTimeService.generateReportData(workBookIds);
+                        break;
+                    case 4:
+                        // Compare表
+                        compareService.generateReportData(workBookIds);
+                        break;
+                    case 5:
+                        // MOST Value表
+                        mostValueService.generateReportData(workBookIds);
+                        break;
+                    case 6:
+                        // Collection-Revision History表
+                        revisionHistoryService.generateReportData(workBookIds);
+                        break;
+                    case 7:
+                        // Total表
+                        totalService.generateReportData(workBookIds);
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        // 时间联络表
+                        timeContactService.generateReportData(workBookIds);
+                        break;
+                    case 10:
+                        // Process List表
+                        break;
+                    case 11:
+                        // 标准时间表
+                        standardTimeService.generateReportData(workBookIds);
+                        break;
+                    case 12:
+                        // 标准工数表
+                        standardWorkService.generateReportData(workBookIds);
+                        break;
+                    case 13:
+                        // 履历表
+                        changeRecordService.generateReportData(workBookIds);
+                        break;
+                }
+            });
+        }
+        return RD.ok(workBookEntityList);
     }
 
     @Override
@@ -336,12 +425,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         Float totalTimeValue = 0.0f;
         Double totalTmu = 0.00;
         Double totalSecondVonvert = 0.00;
+        Integer totalRemark1 = 0;
         for (int i = 0; i < workOperationsMapList.size(); i++) {
             WorkOperationsEntity workOperations = new WorkOperationsEntity();
             if (workOperationsMapList.get(i).get("frequency") != ""
                     && workOperationsMapList.get(i).get("frequency") != null) {
                 workOperationsMapList.get(i).put("frequency",
-                        Integer.parseInt(workOperationsMapList.get(i).get("frequency").toString()));
+                        Float.parseFloat(workOperationsMapList.get(i).get("frequency").toString()));
                 alterInfoJson = new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
                 workOperationsMapList.get(i).put("alterInfo", alterInfoJson.toString());
             }
@@ -406,8 +496,10 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             map = dealData(map);
             Float frequency = workOperations.getFrequency();
             frequency = frequency == null ? 0 : frequency;
-            //todo 需要重新确认timeValue的计算公式
-            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6;
+            String tool = workOperations.getTool();
+            Integer toolInteger = Integer.valueOf(tool.substring(1,2));
+            Float frequency2 = frequency == 0 ? 1 : frequency;
+            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6+toolInteger * frequency2 * 6;
             totalTimeValue += timeValue;
             workOperations.setTimeValue(new BigDecimal(timeValue));
             Double tmu = timeValue/6.00*10;
@@ -416,6 +508,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             Double secondConvert = tmu * 0.036;
             totalSecondVonvert += secondConvert;
             workOperations.setSecondConvert(new BigDecimal(secondConvert));
+            Integer remark1 = workOperations.getRemark1();
+            if(remark1 != null){
+                Double calculate = Math.ceil((remark1 / 0.36 * 6) / Math.pow(10.00 , 1.00)) * Math.pow(10.00 , 1.00);
+                remark1 = calculate.intValue();
+                workOperations.setRemark1(remark1);
+                totalRemark1 += remark1;
+            }
             workOperations.setWorkBookId(workBookId);
             workOperationsList.add(workOperations);
         }

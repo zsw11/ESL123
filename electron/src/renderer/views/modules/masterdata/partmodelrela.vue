@@ -41,7 +41,7 @@
             部品<keyword-search
             style="margin-left:10px;"
             v-model="addModelPartId"
-            
+
             :searchApi="this.listPart"
             :allowEmpty="true">
           </keyword-search>
@@ -92,7 +92,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>

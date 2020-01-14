@@ -4,9 +4,9 @@
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
       </div>
-      <el-form 
-      :inline="true" 
-      :model="listQuery" 
+      <el-form
+      :inline="true"
+      :model="listQuery"
       @keyup.enter.native="getDataList()"
       class="form-min-width">
 
@@ -27,8 +27,8 @@
         </el-form-item>
 
         <el-form-item :label="'作成人'" prop="createBy" >
-          <keyword-search 
-            :searchApi="this.listStaffUser" 
+          <keyword-search
+            :searchApi="this.listStaffUser"
             v-model="listQuery.createBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -36,8 +36,8 @@
         </el-form-item>
 
         <el-form-item :label="'修改人'" prop="updateBy" >
-          <keyword-search 
-            :searchApi="this.listStaffUser" 
+          <keyword-search
+            :searchApi="this.listStaffUser"
             v-model="listQuery.updateBy"
             :allowEmpty="true"
             valueColumn="userId"
@@ -88,14 +88,14 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="id" label="报表" >
+        <el-table-column align="center" prop="id" label="报表"  min-width="200" >
           <template slot-scope="scope">
-            <span>{{scope.row.allReportName }}</span>
+            <span :title="scope.row.allReportName">{{scope.row.allReportName }}</span>
           </template>
         </el-table-column>
 
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200">
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
@@ -105,19 +105,19 @@
             <span>{{scope.row.createName }}</span>
           </template>
         </el-table-column>
-        
+
         <el-table-column align="center" prop="createAt" label="作成时间" width="100">
           <template slot-scope="scope">
             <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
           </template>
         </el-table-column>
-        
+
         <el-table-column align="center" prop="updateName" label="修改人">
           <template slot-scope="scope">
             <span>{{scope.row.updateName }}</span>
           </template>
         </el-table-column>
-        
+
         <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
           <template slot-scope="scope">
             <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
