@@ -1208,6 +1208,28 @@ comment on column report_dept_rela.update_by is '更新者ID';
 comment on column report_dept_rela.update_at is '更新时间';
 comment on column report_dept_rela.delete_at is '删除时间';
 
+-- 报表组和部门关系
+drop table if exists report_group_dept_rela;
+CREATE TABLE report_group_dept_rela (
+  id serial PRIMARY KEY,
+  report_group_id integer,
+  dept_id integer,
+  create_by integer,
+  create_at timestamp default now(),
+  update_by integer,
+  update_at timestamp default now(),
+  delete_at timestamp
+);
+comment on table report_group_dept_rela is '报表组部门关系';
+comment on column report_group_dept_rela.report_group_id is '报表组ID';
+comment on column report_group_dept_rela.dept_id is '部门ID';
+CREATE UNIQUE INDEX report_dept_rela_uniq ON report_dept_rela (report_group_id,dept_id) WHERE delete_at IS NULL;
+comment on column report_group_dept_rela.create_by is '创建者ID';
+comment on column report_group_dept_rela.create_at is '创建时间';
+comment on column report_group_dept_rela.update_by is '更新者ID';
+comment on column report_group_dept_rela.update_at is '更新时间';
+comment on column report_group_dept_rela.delete_at is '删除时间';
+
 -- 常用指标组合
 drop table if exists measure_group;
 CREATE TABLE measure_group (
