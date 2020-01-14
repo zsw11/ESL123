@@ -88,8 +88,15 @@ public class WorkstationTypeNodeController extends AbstractController {
 	public RD save(@RequestBody WorkstationTypeNodeEntity workstationTypeNode) {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNode.setCreateBy(getUserId().intValue());
-		workstationTypeNodeService.insert(workstationTypeNode);
-
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>().ne("delete_at",null).eq("name",workstationTypeNode.getName()));
+		if(workstationTypeNodeEntities.size()==0){
+			workstationTypeNodeService.insert(workstationTypeNode);
+		}else {
+			workstationTypeNodeEntities.forEach(i->{
+				i.setDeleteAt(null);
+				workstationTypeNodeService.updateAllColumnById(i);
+			});
+		}
 		return RD.build().put("status", 200);
 	}
 
