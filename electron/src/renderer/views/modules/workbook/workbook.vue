@@ -234,29 +234,29 @@
         <h4>生成</h4>
         <el-row>
           <el-col :span="10">
-            <span>机种: {{onlyKey.model}}</span>
+            <span class="span">机种: {{onlyKey.model}}</span>
           </el-col>
           <el-col :span="10" :offset="2">
-            <span>仕向: {{onlyKey.destinations}}</span>
+            <span class="span">仕向: {{onlyKey.destinations}}</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="2">
+        </el-row >
+        <el-row>
           <el-col :span="10">
-            <span>生产阶段: {{onlyKey.phase}}</span>
+            <span class="span">生产阶段: {{onlyKey.phase}}</span>
           </el-col>
           <el-col :span="10" :offset="2">
-            <span>ST/LST: {{onlyKey.stlst}}</span>
+            <span class="span">ST/LST: {{onlyKey.stlst}}</span>
           </el-col>
         </el-row>
-        <el-row :gutter="2">
+        <el-row >
           <el-col :span="10">
-            <span>版本号: {{onlyKey.versionNumber}}</span>
+            <span class="span">版本号: {{onlyKey.versionNumber}}</span>
           </el-col>
         </el-row>
       </div>
       <div class="dialog-block">
-        <h4>如下报表:</h4>
-          <span v-for="item in reportGroup" class="report"
+        <h4>如下报表组中的报表:</h4>
+          <span v-for="item in reportGroup" class="span report"
               :key="item.id">{{item.name}}</span>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -269,7 +269,7 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport, fetchWorkBookTotal } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -548,6 +548,9 @@ export default {
     },
     // 生成报表
     createReport (row) {
+      fetchWorkBookTotal(row.id).then((data)=>{
+        this.number = data
+      })
       this.createForm.id = []
       this.reportGroup = []
       this.id = row.id
@@ -572,7 +575,6 @@ export default {
     createReportOK (row) {
        createReports(Object.assign(
         {
-          workId: this.id,
           workBookIds: this.selectedWorkBookIds,
           reports: this.createForm.id
         }
@@ -610,20 +612,20 @@ export default {
   }
   .wookbook-dialog {
     min-width: 400px;
-    .el-checkbox {
-      display: block;
-      margin-left: 0;
+    .el-dialog__body{
+      padding: 0 10px;
     }
   }
   .btn-wrp{
     text-align: left !important;
   }
-  .el-dialog__body{
-    padding: 0 10px;
-  }
-  .report{
+  .span{
     display: inline-block;
     padding-left: 5px;
-    width: 50%;
+    margin-top: 5px;
+    &.report{
+      width: 50%;
+    }
   }
+
 </style>

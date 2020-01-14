@@ -23,6 +23,17 @@
             <el-input  v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="10">
+          <el-form-item :label="'部门'" prop="deptEntityList">
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.deptEntityList"
+              :allowMultiple="true"
+              :searchApi="this.listDept"
+              :allowEmpty="true">
+            </keyword-search>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="22">
@@ -53,7 +64,7 @@
           报表 <keyword-search
           style="margin-left:10px;"
           v-model="addreportgroupReportId"
-          
+
           :searchApi="this.listReport"
           :allowEmpty="true">
         </keyword-search>
@@ -80,7 +91,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.reportEntity.remark }}</span>
           </template>
@@ -120,6 +131,7 @@ import { pick } from 'lodash'
 import { fetchReportGroup, createReportGroup, updateReportGroup, fetchReportDetail } from '@/api/reportGroup'
 import { listReport } from '@/api/report'
 import { createReportGroupReportRela, deleteReportGroupReportRela } from '@/api/reportGroupReportRela'
+import {  listDept } from '@/api/dept'
 export default {
   name: 'editReportGroup',
   data () {
@@ -138,7 +150,8 @@ export default {
         createAt: null,
         updateBy: null,
         updateAt: null,
-        deleteAt: null
+        deleteAt: null,
+        deptEntityList: []
       },
       dataRules: {
         name: [
@@ -162,6 +175,7 @@ export default {
         formCode: null,
         remark: null
       },
+      listDept,
       listReport,
       dataList: [],
       pageNo: 1,
@@ -213,6 +227,7 @@ export default {
   },
   methods: {
     init () {
+      this.dataForm.deptEntityList = []
       if (!this.$route.path.includes('add')) {
         this.getDataList()
       }
@@ -227,8 +242,11 @@ export default {
         fetchReportGroup(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
           )
+          data.deptEntityList.forEach((item)=>{
+            this.dataForm.deptEntityList.push(item.id)
+          })
         }).finally(() => {
           this.inited = true
         })

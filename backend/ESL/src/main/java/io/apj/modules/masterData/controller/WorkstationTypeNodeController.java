@@ -90,7 +90,6 @@ public class WorkstationTypeNodeController extends AbstractController {
 		workstationTypeNode.setPinyin(PinyinUtil.getPinYin(workstationTypeNode.getName()));
 		workstationTypeNode.setCreateBy(getUserId().intValue());
 		workstationTypeNodeService.insert(workstationTypeNode);
-
 		return RD.build().put("status", 200);
 	}
 

@@ -59,7 +59,8 @@
               v-model="dataForm.modelId"
               :searchApi="this.listModel"
               :allowEmpty="true"
-              :defaultOptions="defaultModel">
+              :defaultOptions="defaultModel"
+              :apiOptions="dataForm">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -83,7 +84,8 @@
               v-model="dataForm.workstationId"
               :searchApi="this.listWorkstation"
               :allowEmpty="true"
-              :defaultOptions="defaultWorkstation">
+              :defaultOptions="defaultWorkstation"
+              :apiOptions="dataForm">>
             </keyword-search>
           </el-form-item>
         </el-col>

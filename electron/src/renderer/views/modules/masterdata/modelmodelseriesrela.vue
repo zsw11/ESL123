@@ -21,7 +21,7 @@
         <!-- <el-form-item class="title" :label="'机种系列'" prop="modelSeriesId" >
           <keyword-search
             v-model="listQuery.modelSeriesId"
-            
+
             :searchApi="this.listModelSeries"
             :allowEmpty="true"
             clearable>
@@ -105,7 +105,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" >
+        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
           <template slot-scope="scope">
             <span>{{scope.row.remark}}</span>
           </template>

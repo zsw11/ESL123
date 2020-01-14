@@ -6,9 +6,15 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.entity.ReportBatchEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
+import io.apj.modules.report.service.ReportBatchService;
+import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -42,6 +48,14 @@ public class WorkBookController extends AbstractController {
 	private SysDeptService sysDeptService;
 	@Autowired
 	private WorkstationService workstationService;
+	@Autowired
+	private ReportBatchService reportBatchService;
+	@Autowired
+	private SysDeptService deptService;
+	@Autowired
+	private ReportGroupDeptRelaService reportGroupDeptRelaService;
+	@Autowired
+	private ReportGroupService reportGroupService;
 
 
 	/**
@@ -107,7 +121,15 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
-
+		ReportBatchEntity reportBatchEntity = new ReportBatchEntity();
+		reportBatchEntity.setModelId(workBookEntity.getModelId());
+		reportBatchEntity.setDestinations(workBookEntity.getDestinations());
+		reportBatchEntity.setPhaseId(workBookEntity.getPhaseId());
+		reportBatchEntity.setStlst(workBookEntity.getStlst());
+		reportBatchEntity.setVersionNumber(workBookEntity.getVersionNumber());
+		reportBatchEntity.setCreateAt(new Date());
+		reportBatchEntity.setCreateBy(getUserId().intValue());
+		reportBatchService.insert(reportBatchEntity);
 		return R.ok();
 	}
 
@@ -245,25 +267,52 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/createReportbyfive")
 	// @RequiresPermissions("workBook:workbook:createReport")
-	public R createReportByFive(@RequestBody Map<String, Object> params) {
+	public ResponseEntity<Object> createReportByFive(@RequestBody Map<String, Object> params) {
 		Validate.notNull(params.get("reports"));
 		Validate.notNull(params.get("workBook"));
-		workBookService.createReportsByFive(params);
-		return R.ok();
+		return workBookService.createReportsByFive(params);
+	}
+
+	/**
+	 * 部门下的报表组
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/deptreportgroup")
+	public List<ReportGroupEntity> deptReportGroup(){
+		Integer deptId = getUserDeptId().intValue();
+		List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
+		List<ReportGroupEntity> reportGroupEntities = new ArrayList();
+		reportGroupDeptRelaEntityList.forEach(i->{
+			reportGroupEntities.add(reportGroupService.selectById(i.getReportGroupId()));
+		});
+		return reportGroupEntities;
 	}
 
 
-
 	/**
-	 * 报表总数
+	 * 通过id报表总数
 	 */
-	@RequestMapping("/reportTotal")
-	public int wrokBookTotal(@RequestParam Integer id){
+	@RequestMapping("/reportTotal/{id}")
+	public int wrokBookTotal(@PathVariable Integer id){
 		WorkBookEntity workBookEntity= workBookService.selectById(id);
 		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.eq("stlst",workBookEntity.getStlst()).eq("version_number",workBookEntity.getVersionNumber())
 				.eq("destinations",workBookEntity.getDestinations()).eq("model_id",workBookEntity.getModelId())
 				.eq("phase_id",workBookEntity.getPhaseId());
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+		return workBookEntityList.size();
+	}
+
+	/**
+	 * 报表总数
+	 */
+	@RequestMapping("/reporttotalbyfive")
+	public int wrokBookTotalByFive(@RequestBody Map<String, Object> params){
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("stlst",params.get("stlst")).eq("version_number",params.get("versionNumber"))
+				.eq("destinations",params.get("destinations")).eq("model_id",params.get("modelId"))
+				.eq("phase_id",params.get("phaseId"));
 		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
 		return workBookEntityList.size();
 	}

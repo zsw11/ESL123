@@ -2,6 +2,7 @@ package io.apj.modules.report.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import io.apj.common.utils.PageUtils;
+import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
 
@@ -22,6 +23,8 @@ public interface ReportBatchService extends IService<ReportBatchEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<Object> selectAllReport(Integer id);
+
+    List<ReportEntity> selectReportByFive(Integer id);
 
 
 }

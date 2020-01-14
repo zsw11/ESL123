@@ -14,7 +14,7 @@
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
             v-model="listQuery.modelId"
-            
+
             :searchApi="this.listModel"
             :allowEmpty="true"
             clearable>
@@ -25,7 +25,7 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
+
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -155,7 +155,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注">
+        <el-table-column align="center" prop="remark" label="备注" min-width="200">
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
@@ -633,7 +633,7 @@ export default {
         reportId: 3
       }
       downloadReportApprove(data).then(response => {
-        
+
       });
     }
   }
