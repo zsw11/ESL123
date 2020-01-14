@@ -288,7 +288,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                 .eq("destinations", workBook.get("destinations")).eq("model_id", workBook.get("modelId"))
                 .eq("phase_id", workBook.get("phaseId"));
         List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
-        if (workBookEntityList == null && workBookEntityList.size() == 0) {
+        if (workBookEntityList == null || workBookEntityList.size() == 0) {
             return RD.FORBIDDEN("UnExist", "不存在这张分析表，请先建立分析表");
         }
         List<Integer> workBookIds = new ArrayList();
@@ -348,7 +348,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                 }
             });
         }
-        return null;
+        return RD.ok(workBookEntityList);
     }
 
     @Override

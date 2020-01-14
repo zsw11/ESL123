@@ -245,17 +245,16 @@ public class WorkBookController extends AbstractController {
 	 */
 	@RequestMapping("/createReportbyfive")
 	// @RequiresPermissions("workBook:workbook:createReport")
-	public R createReportByFive(@RequestBody Map<String, Object> params) {
+	public ResponseEntity<Object> createReportByFive(@RequestBody Map<String, Object> params) {
 		Validate.notNull(params.get("reports"));
 		Validate.notNull(params.get("workBook"));
-		workBookService.createReportsByFive(params);
-		return R.ok();
+		return workBookService.createReportsByFive(params);
 	}
 
 
 
 	/**
-	 * 报表总数
+	 * 通过id报表总数
 	 */
 	@RequestMapping("/reportTotal/{id}")
 	public int wrokBookTotal(@PathVariable Integer id){
@@ -264,6 +263,19 @@ public class WorkBookController extends AbstractController {
 		entityWrapper.eq("stlst",workBookEntity.getStlst()).eq("version_number",workBookEntity.getVersionNumber())
 				.eq("destinations",workBookEntity.getDestinations()).eq("model_id",workBookEntity.getModelId())
 				.eq("phase_id",workBookEntity.getPhaseId());
+		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+		return workBookEntityList.size();
+	}
+
+	/**
+	 * 报表总数
+	 */
+	@RequestMapping("/reporttotalbyfive")
+	public int wrokBookTotalByFive(@RequestBody Map<String, Object> params){
+		EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("stlst",params.get("stlst")).eq("version_number",params.get("versionNumber"))
+				.eq("destinations",params.get("destinations")).eq("model_id",params.get("modelId"))
+				.eq("phase_id",params.get("phaseId"));
 		List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
 		return workBookEntityList.size();
 	}
