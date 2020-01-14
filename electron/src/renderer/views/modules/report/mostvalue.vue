@@ -21,7 +21,7 @@
         <el-form-item :label="'机种'" prop="modelId">
           <keyword-search
             v-model="listQuery.modelId"
-            
+
             :searchApi="this.listModel"
             :allowEmpty="true"
             clearable>
@@ -42,7 +42,7 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
+
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -173,7 +173,7 @@
 
 
 
-<!--        <el-table-column align="center" prop="remark" label="备注">-->
+<!--        <el-table-column align="center" prop="remark" label="备注" min-width="200">-->
 <!--          <template slot-scope="scope">-->
 <!--            <span>{{scope.row.remark }}</span>-->
 <!--          </template>-->
@@ -278,7 +278,7 @@
            <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
             v-model="approveForm.nextApproverId"
-            
+
             :searchApi="this.listStaffUser"
             :allowEmpty="true"
             valueColumn="userId"
@@ -613,7 +613,7 @@ export default {
         reportId: 5
       }
       downloadReportApprove(data).then(response => {
-        
+
       });
     }
   }
