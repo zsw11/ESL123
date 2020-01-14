@@ -1,6 +1,6 @@
 {
   "name": "most",
-  "version": "0.1.7",
+  "version": "0.1.10",
   "author": "Freedom <furuihe@gmail.com>",
   "description": "MOST",
   "main": "./dist/electron/main.js",

@@ -86,7 +86,7 @@
 <script>
 import day from 'dayjs'
 import XEUtils from 'xe-utils'
-import { omit, pick, clone, round, findIndex, cloneDeep } from 'lodash'
+import { omit, pick, clone, ceil, round, findIndex, cloneDeep } from 'lodash'
 import { fetchOperationGroup } from '@/api/operationGroup'
 import { fetchWorkBookWithOperations, updateAll } from '@/api/workBook'
 import MeasureColumn from '@/components/workbook/workbook-table-measure-column.vue'
@@ -231,7 +231,7 @@ export default {
             }
             case 'remark1': {
               return round(XEUtils.sum(data, row => {
-                return row.remark1?round(row.remark1*100/6, -1):undefined
+                return row.remark1?ceil(row.remark1*100/6, -1):undefined
               }))
             }
           }

@@ -294,7 +294,8 @@ export default {
 .suggestion{
   min-width: 100px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 23px;
   padding-left: 5px;
   padding-right: 5px;
   &:hover,

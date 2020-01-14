@@ -100,7 +100,7 @@ function createWindow () {
     electron.dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
-        {name: 'Movies', extensions: ['mpg', 'wmv', 'avi', 'mp4', 'mts']}
+        {name: 'Movies', extensions: ['mpg', 'wmv', 'avi', 'mp4', 'mts', 'mov']}
       ]
     }).then(result => {
       if (result && mainWindow && result.filePaths.length > 0) {
