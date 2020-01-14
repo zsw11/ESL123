@@ -891,7 +891,6 @@ CREATE TABLE workstation_type_node (
   delete_at timestamp
 );
 comment on table workstation_type_node is '工位类型节点';
-Create Unique Index index_workstation_type_node_name_UNQ On workstation_type_node(name);
 comment on column workstation_type_node.name is '名称';
 comment on column workstation_type_node.pinyin is '拼音';
 comment on column workstation_type_node.workstation_id is '工位ID';
