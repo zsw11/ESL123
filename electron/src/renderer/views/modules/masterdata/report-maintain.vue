@@ -24,19 +24,19 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
-        <el-col :span="10">
-          <el-form-item :label="'部门'" prop="deptEntityList">
-            <keyword-search
-              style="width: 100%"
-              v-model="dataForm.deptEntityList"
-              :allowMultiple="true"
-              :searchApi="this.listDept"
-              :allowEmpty="true">
-            </keyword-search>
-          </el-form-item>
-        </el-col>
-      </el-row>
+<!--      <el-row :gutter="10">-->
+<!--        <el-col :span="10">-->
+<!--          <el-form-item :label="'部门'" prop="deptEntityList">-->
+<!--            <keyword-search-->
+<!--              style="width: 100%"-->
+<!--              v-model="dataForm.deptEntityList"-->
+<!--              :allowMultiple="true"-->
+<!--              :searchApi="this.listDept"-->
+<!--              :allowEmpty="true">-->
+<!--            </keyword-search>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
       <el-row :gutter="10">
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">

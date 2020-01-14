@@ -104,7 +104,7 @@
 <!--      </div>-->
       <div class="dialog-block">
 <!--        <h4>如下报表:</h4>-->
-        <h4>确定读取{{number}}张分析表生成</h4>
+        <h4>确定读取{{number}}张分析表生成如下报表组中报表</h4>
         <span v-for="item in reportGroup" class="report"
               :key="item.id">{{item.name}}</span>
       </div>

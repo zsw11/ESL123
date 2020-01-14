@@ -137,8 +137,7 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
     </el-card>
 <!--    <el-dialog-->
 <!--      customClass="dialog"-->

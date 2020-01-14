@@ -234,29 +234,29 @@
         <h4>生成</h4>
         <el-row>
           <el-col :span="10">
-            <span>机种: {{onlyKey.model}}</span>
+            <span class="span">机种: {{onlyKey.model}}</span>
           </el-col>
           <el-col :span="10" :offset="2">
-            <span>仕向: {{onlyKey.destinations}}</span>
+            <span class="span">仕向: {{onlyKey.destinations}}</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="2">
+        </el-row >
+        <el-row>
           <el-col :span="10">
-            <span>生产阶段: {{onlyKey.phase}}</span>
+            <span class="span">生产阶段: {{onlyKey.phase}}</span>
           </el-col>
           <el-col :span="10" :offset="2">
-            <span>ST/LST: {{onlyKey.stlst}}</span>
+            <span class="span">ST/LST: {{onlyKey.stlst}}</span>
           </el-col>
         </el-row>
-        <el-row :gutter="2">
+        <el-row >
           <el-col :span="10">
-            <span>版本号: {{onlyKey.versionNumber}}</span>
+            <span class="span">版本号: {{onlyKey.versionNumber}}</span>
           </el-col>
         </el-row>
       </div>
       <div class="dialog-block">
-        <h4>如下报表:</h4>
-          <span v-for="item in reportGroup" class="report"
+        <h4>如下报表组中的报表:</h4>
+          <span v-for="item in reportGroup" class="span report"
               :key="item.id">{{item.name}}</span>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -575,7 +575,6 @@ export default {
     createReportOK (row) {
        createReports(Object.assign(
         {
-          workId: this.id,
           workBookIds: this.selectedWorkBookIds,
           reports: this.createForm.id
         }
@@ -620,9 +619,13 @@ export default {
   .btn-wrp{
     text-align: left !important;
   }
-  .report{
+  .span{
     display: inline-block;
     padding-left: 5px;
-    width: 50%;
+    margin-top: 5px;
+    &.report{
+      width: 50%;
+    }
   }
+
 </style>
