@@ -1763,6 +1763,7 @@ CREATE TABLE report_batch (
   delete_at timestamp
 );
 comment on table report_batch is '报表批次';
+CREATE UNIQUE INDEX report_batch_uniq ON report_batch (stlst,model_id,destinations,phase_id,version_number) WHERE delete_at IS NULL;
 comment on column report_batch.STLST is 'ST/LST';
 comment on column report_batch.model_id is '机种ID';
 comment on column report_batch.destinations is '仕向';
