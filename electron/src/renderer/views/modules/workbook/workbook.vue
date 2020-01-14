@@ -549,7 +549,7 @@ export default {
     // 生成报表
     createReport (row) {
       fetchWorkBookTotal(row.id).then((data)=>{
-        console.log(data)
+        this.number = data
       })
       this.createForm.id = []
       this.reportGroup = []
