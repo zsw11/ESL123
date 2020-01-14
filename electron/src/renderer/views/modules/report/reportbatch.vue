@@ -36,8 +36,8 @@
           </el-form-item>
 
 
-          <el-form-item :label="'版本号'" prop="version">
-            <el-input v-model="listQuery.version" clearable></el-input>
+          <el-form-item :label="'版本号'" prop="versionNumber">
+            <el-input v-model="listQuery.versionNumber" clearable></el-input>
           </el-form-item>
 
           <el-form-item :label="'仕向'" prop="destinations">
@@ -85,9 +85,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="version" label="版本号">
+        <el-table-column align="center" prop="versionNumber" label="版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.version }}</span>
+            <span>{{scope.row.versionNumber }}</span>
           </template>
         </el-table-column>
 
@@ -209,7 +209,7 @@
           phaseName: null,
           phaseId: null,
           stlst: null,
-          version: null,
+          versionNumber: null,
           destinations: null,
           createBy: null,
           createAt: null,
@@ -266,7 +266,7 @@
                 required: true
               },
               {
-                code: 'version',
+                code: 'versionNumber',
                 name: '版本号',
                 type: 'string',
                 required: true
@@ -370,7 +370,7 @@
           sheetName: null,
           factory: null,
           modelId: null,
-          version: null,
+          versionNumber: null,
           destinations: null,
           createBy: null,
           createAt: null,
