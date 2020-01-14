@@ -6,11 +6,15 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
 import io.apj.modules.masterData.entity.ReportEntity;
+import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportGroupService;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.entity.ReportBatchEntity;
+import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.ReportBatchService;
+import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
@@ -46,6 +50,12 @@ public class WorkBookController extends AbstractController {
 	private WorkstationService workstationService;
 	@Autowired
 	private ReportBatchService reportBatchService;
+	@Autowired
+	private SysDeptService deptService;
+	@Autowired
+	private ReportGroupDeptRelaService reportGroupDeptRelaService;
+	@Autowired
+	private ReportGroupService reportGroupService;
 
 
 	/**
@@ -263,6 +273,21 @@ public class WorkBookController extends AbstractController {
 		return workBookService.createReportsByFive(params);
 	}
 
+	/**
+	 * 部门下的报表组
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/deptreportgroup")
+	public List<ReportGroupEntity> deptReportGroup(){
+		Integer deptId = getUserDeptId().intValue();
+		List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
+		List<ReportGroupEntity> reportGroupEntities = new ArrayList();
+		reportGroupDeptRelaEntityList.forEach(i->{
+			reportGroupEntities.add(reportGroupService.selectById(i.getReportGroupId()));
+		});
+		return reportGroupEntities;
+	}
 
 
 	/**
