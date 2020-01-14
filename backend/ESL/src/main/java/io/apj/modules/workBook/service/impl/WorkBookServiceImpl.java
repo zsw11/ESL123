@@ -224,12 +224,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        Integer reportGroupId = (Integer) params.get("reports");
-        List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
         List<Integer> reportList = new ArrayList<>();
-        reportGroupReportRelaEntities.forEach(i->{
-            reportList.add(i.getReportId());
-        });
+        for(Integer reportGroupId : reportGroupIds){
+            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+            reportGroupReportRelaEntities.forEach(i->{
+                reportList.add(i.getReportId());
+            });
+        }
         List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
         if(workBookIds.size()>0&&reportList.size()>0) {
             reportList.forEach(e -> {
@@ -288,12 +290,14 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public ResponseEntity<Object> createReportsByFive(Map<String, Object> params) {
-        Integer reportGroupId = (Integer) params.get("reports");
-        List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
         List<Integer> reportList = new ArrayList<>();
-        reportGroupReportRelaEntities.forEach(i->{
-            reportList.add(i.getReportId());
-        });
+        for(Integer reportGroupId : reportGroupIds){
+            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+            reportGroupReportRelaEntities.forEach(i->{
+                reportList.add(i.getReportId());
+            });
+        }
 //        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
         Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
         EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
