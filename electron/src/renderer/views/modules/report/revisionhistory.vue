@@ -27,7 +27,7 @@
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
               v-model="listQuery.modelId"
-              
+
               :searchApi="this.listModel"
               :allowEmpty="true"
               clearable>
@@ -38,7 +38,7 @@
           <keyword-search
             style="width: 100%"
             v-model="listQuery.phaseId"
-            
+
             :searchApi="this.listPhase"
             :allowEmpty="true">
           </keyword-search>
@@ -72,8 +72,8 @@
 
 
 
-          <el-form-item :label="'版本号'" prop="revNo">
-            <el-input v-model="listQuery.revNo" clearable></el-input>
+          <el-form-item :label="'版本号'" prop="versionNumber">
+            <el-input v-model="listQuery.versionNumber" clearable></el-input>
           </el-form-item>
 
 <!--          <el-form-item :label="'上版ST'" prop="lastSTname">-->
@@ -237,9 +237,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="revNo" label="版本号">
+        <el-table-column align="center" prop="versionNumber" label="版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.revNo }}</span>
+            <span>{{scope.row.versionNumber }}</span>
           </template>
         </el-table-column>
 
@@ -362,7 +362,7 @@
            <el-form-item :label="'下一审批者'" prop="nextApproverId" >
             <keyword-search
             v-model="approveForm.nextApproverId"
-            
+
             :searchApi="this.listStaffUser"
             :allowEmpty="true"
             valueColumn="userId"
@@ -420,7 +420,7 @@ export default {
         inChargeBy: null,
         factory: null,
         monthResult: null,
-        revNo: null,
+        versionNumber: null,
         lastSTname: null,
         currentSTname: null,
         lastLSTname: null,
@@ -506,7 +506,7 @@ export default {
               required: true
             },
             {
-              code: 'revNo',
+              code: 'versionNumber',
               name: '版本号',
               type: 'string',
               required: true
@@ -641,7 +641,7 @@ export default {
         inChargeBy: null,
         factory: null,
         monthResult: null,
-        revNo: null,
+        versionNumber: null,
         lastSTname: null,
         currentSTname: null,
         lastLSTname: null,
@@ -781,7 +781,7 @@ export default {
         reportId: 6
       }
       downloadReportApprove(data).then(response => {
-        
+
       });
     }
   }

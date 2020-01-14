@@ -562,7 +562,7 @@ export default {
       this.onlyKey.destinations = row.destinations
       this.onlyKey.stlst = this.dictItemSTLST[row.stlst].name
       fetchDeptReport().then((page)=>{
-        this.reportGroup = page.data
+        this.reportGroup = page
         this.reportGroup.forEach((item)=>{
           this.createForm.id.push(item.id)
         })
@@ -613,7 +613,7 @@ export default {
   .wookbook-dialog {
     min-width: 400px;
     .el-dialog__body{
-      padding: 0 10px;
+      padding: 0 10px 20px;
     }
   }
   .btn-wrp{

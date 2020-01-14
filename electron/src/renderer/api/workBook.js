@@ -133,7 +133,7 @@ export function WorkBookExport (data) {
 // 获取当前部门报表
 export function fetchDeptReport () {
   return request({
-    url: request.adornUrl(`/api/v1/report/listByDeptId`),
+    url: request.adornUrl(`/api/v1/workbook/deptreportgroup`),
     method: 'get',
     params: request.adornParams()
   })
