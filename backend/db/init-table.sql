@@ -1223,7 +1223,7 @@ CREATE TABLE report_group_dept_rela (
 comment on table report_group_dept_rela is '报表组部门关系';
 comment on column report_group_dept_rela.report_group_id is '报表组ID';
 comment on column report_group_dept_rela.dept_id is '部门ID';
-CREATE UNIQUE INDEX report_dept_rela_uniq ON report_dept_rela (report_group_id,dept_id) WHERE delete_at IS NULL;
+CREATE UNIQUE INDEX report_group_dept_rela_uniq ON report_group_dept_rela (report_group_id,dept_id) WHERE delete_at IS NULL;
 comment on column report_group_dept_rela.create_by is '创建者ID';
 comment on column report_group_dept_rela.create_at is '创建时间';
 comment on column report_group_dept_rela.update_by is '更新者ID';

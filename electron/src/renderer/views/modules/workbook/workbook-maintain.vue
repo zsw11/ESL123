@@ -60,7 +60,7 @@
               :searchApi="this.listModel"
               :allowEmpty="true"
               :defaultOptions="defaultModel"
-              :apiOptions="dataForm">
+              :apiOptions="{deptId: dataForm.deptId}">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -85,7 +85,7 @@
               :searchApi="this.listWorkstation"
               :allowEmpty="true"
               :defaultOptions="defaultWorkstation"
-              :apiOptions="dataForm">>
+              :apiOptions="{modelId: dataForm.modelId}">
             </keyword-search>
           </el-form-item>
         </el-col>
@@ -218,6 +218,14 @@ export default {
       this.init()
     }
   },
+  computed: {
+    modelChange (){
+      return this.dataForm.modelId
+    },
+    deptChange () {
+      return this.dataForm.deptId
+    }
+  },
   watch: {
     dataForm: {
       handler: function (val) {
@@ -229,7 +237,17 @@ export default {
         }
       },
       deep: true
-    }
+    },
+    modelChange: {
+      handler: () =>{
+        console.log(22222222222222222)
+      }
+    },
+    deptChange: {
+      handler: () =>{
+        console.log(1111111111111111)
+      }
+    },
   },
   methods: {
     init () {

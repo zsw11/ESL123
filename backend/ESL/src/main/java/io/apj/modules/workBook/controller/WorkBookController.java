@@ -5,12 +5,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
+import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportGroupService;
-import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.ReportBatchService;
@@ -19,6 +18,7 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+import javassist.expr.NewArray;
 import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +56,12 @@ public class WorkBookController extends AbstractController {
 	private ReportGroupDeptRelaService reportGroupDeptRelaService;
 	@Autowired
 	private ReportGroupService reportGroupService;
+	@Autowired
+	private ReportGroupReportRelaService reportGroupReportRelaService;
+	@Autowired
+	private ReportService reportService;
+	@Autowired
+	private StaffService staffService;
 
 
 	/**
@@ -283,9 +289,22 @@ public class WorkBookController extends AbstractController {
 		Integer deptId = getUserDeptId().intValue();
 		List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
 		List<ReportGroupEntity> reportGroupEntities = new ArrayList();
+		List<ReportEntity> reportEntityList = new ArrayList<>();
 		reportGroupDeptRelaEntityList.forEach(i->{
 			reportGroupEntities.add(reportGroupService.selectById(i.getReportGroupId()));
+			ReportGroupReportRelaEntity reportGroupReportRelaEntity = reportGroupReportRelaService.selectById(i.getReportGroupId());
+			ReportEntity reportEntity= reportService.selectById(reportGroupReportRelaEntity.getReportId());
+			reportEntityList.add(reportEntity);
 		});
+		for(ReportGroupEntity reportGroupEntity : reportGroupEntities){
+			String name = "";
+			for (ReportEntity item : reportEntityList) {
+				name += item.getName() + "/";
+			}
+			reportGroupEntity.setAllReportName(name);
+			reportGroupEntity.setCreateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
+			reportGroupEntity.setUpdateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
+		}
 		return reportGroupEntities;
 	}
 

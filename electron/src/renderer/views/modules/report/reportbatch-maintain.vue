@@ -113,31 +113,54 @@
             <el-button type="primary" @click="createReportOK">确 定</el-button>
           </span>
     </el-dialog>
-    <el-card class="with-title table">
+    <el-card class="with-title table" v-if="! $route.path.includes('createreport')">
       <div slot="header" class="clearfix" >
-        <span class="tableHeader" >报表信息</span>
+        <span class="tableHeader" >报表组信息</span>
       </div>
       <el-table
         :data="dataList"
         style="width: 100%;">
-        <el-table-column align="center" prop="name" label="名称" >
+        <el-table-column align="center" prop="name" label="报表组名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="formCode" label="空Form标准编号" >
+        <el-table-column align="center" prop="id" label="报表"  min-width="200" >
           <template slot-scope="scope">
-            <span>{{scope.row.formCode }}</span>
+            <span :title="scope.row.allReportName">{{scope.row.allReportName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="remark" label="备注" min-width="200" >
+
+        <el-table-column align="center" prop="remark" label="备注" min-width="200">
           <template slot-scope="scope">
             <span>{{scope.row.remark }}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="createName" label="作成人">
+          <template slot-scope="scope">
+            <span>{{scope.row.createName }}</span>
+          </template>
+        </el-table-column>
 
+        <el-table-column align="center" prop="createAt" label="作成时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.createAt">{{scope.row.createAt | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="updateName" label="修改人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="updateAt" label="修改时间" width="100">
+          <template slot-scope="scope">
+            <span :title="scope.row.updateAt">{{scope.row.updateAt  | format('YYYY-MM-DD') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           fixed="right"
@@ -279,7 +302,6 @@
                 ])
               )
               this.defaultModel = [data[0].modelEntity]
-              this.dataList = data[1]
             })
             .finally(() => {
               this.inited = true
@@ -287,6 +309,7 @@
         } else {
           this.inited = true
         }
+        fetchDeptReport().then(data => this.dataList = data)
       },
       // 取消信息
       cancleFormSubmit () {
@@ -323,7 +346,8 @@
                 this.createForm.id = []
                 this.reportGroup = []
                 fetchDeptReport().then((page)=>{
-                  this.reportGroup = page.data
+                  this.dataList = page
+                  this.reportGroup = page
                   this.reportGroup.forEach((item)=>{
                     this.createForm.id.push(item.id)
                   })
@@ -331,7 +355,7 @@
                 this.createShow = true
               } else {
                 this.$message({
-                  message: '无符合下列信息的分析表',
+                  message: '无符合下列信息的分析表，不能生成报表',
                   type: 'warning',
                   duration: 2000,
                 })
