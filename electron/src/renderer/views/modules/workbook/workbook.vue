@@ -269,7 +269,7 @@
 
 <script>
 import { keyBy } from 'lodash'
-import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport } from '@/api/workBook'
+import { listWorkBook, deleteWorkBook, createReports, fetchDeptReport, fetchWorkBookTotal } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -548,6 +548,9 @@ export default {
     },
     // 生成报表
     createReport (row) {
+      fetchWorkBookTotal(row.id).then((data)=>{
+        console.log(data)
+      })
       this.createForm.id = []
       this.reportGroup = []
       this.id = row.id
