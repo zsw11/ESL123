@@ -63,3 +63,11 @@ export function createReports (data) {
     data
   })
 }
+
+export function workTotal (data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/reporttotalbyfive'),
+    method: 'post',
+    data
+  })
+}

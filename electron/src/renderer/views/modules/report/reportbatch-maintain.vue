@@ -113,7 +113,44 @@
             <el-button type="primary" @click="createReportOK">确 定</el-button>
           </span>
     </el-dialog>
+    <el-card class="with-title table">
+      <div slot="header" class="clearfix" >
+        <span class="tableHeader" >报表信息</span>
+      </div>
+      <el-table
+        :data="dataList"
+        style="width: 100%;">
+        <el-table-column align="center" prop="name" label="名称" >
+          <template slot-scope="scope">
+            <span>{{scope.row.name }}</span>
+          </template>
+        </el-table-column>
 
+        <el-table-column align="center" prop="formCode" label="空Form标准编号" >
+          <template slot-scope="scope">
+            <span>{{scope.row.formCode }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="remark" label="备注" >
+          <template slot-scope="scope">
+            <span>{{scope.row.remark }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          align="center"
+          fixed="right"
+          :label="'操作'"
+          width="230">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" @click="down(scope.row.id)">下载</el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
+
+    </el-card>
     <span class="dialog-footer">
       <el-button v-if="$route.path.includes('createreport')" type="primary" @click="createReport">生 成</el-button>
 <!--      <el-button type="primary" @click="dataFormSubmit()">保 存</el-button>-->
@@ -129,11 +166,13 @@
     fetchReportBatch,
     createReportBatch,
     updateReportBatch,
-    createReports
+    createReports,
+    workTotal
   } from '@/api/reportBatch'
   import { listPhase } from '@/api/phase'
   import { listModel } from '@/api/model'
   import { fetchDeptReport } from '@/api/workBook'
+  import { downloadReportApprove} from '@/api/reportApprove'
 
   export default {
     name: 'editReportBatch',
@@ -240,6 +279,7 @@
                 ])
               )
               this.defaultModel = [data[0].modelEntity]
+              this.dataList = data[1]
             })
             .finally(() => {
               this.inited = true
@@ -274,17 +314,29 @@
       },
       // 生成报表
       createReport () {
+        let form = this.dataForm
         this.$refs['dataForm'].validate(valid => {
           if(valid){
-            this.createForm.id = []
-            this.reportGroup = []
-            fetchDeptReport().then((page)=>{
-              this.reportGroup = page.data
-              this.reportGroup.forEach((item)=>{
-                this.createForm.id.push(item.id)
-              })
+            workTotal(form).then(data => {
+              this.number = data
+              if(this.number > 0){
+                this.createForm.id = []
+                this.reportGroup = []
+                fetchDeptReport().then((page)=>{
+                  this.reportGroup = page.data
+                  this.reportGroup.forEach((item)=>{
+                    this.createForm.id.push(item.id)
+                  })
+                })
+                this.createShow = true
+              } else {
+                this.$message({
+                  message: '无符合下列信息的分析表',
+                  type: 'warning',
+                  duration: 2000,
+                })
+              }
             })
-            this.createShow = true
           }
         })
       },
@@ -297,7 +349,7 @@
             reports: this.createForm.id
           }
         )).then((page) => {
-          if(page.msg === 'success'){
+          if(page.status === 200){
             this.$message({
               message: '操作成功',
               type: 'success',
@@ -309,6 +361,20 @@
         }).catch(() => {
         }).finally(() => {
         })
+      },
+      // 下载
+      down(id){
+        let data ={
+          modelId: this.dataForm.modelId,
+          phaseId: this.dataForm.phaseId,
+          stlst: this.dataForm.stlst,
+          destinations: this.dataForm.destinations,
+          versionNumber: this.dataForm.versionNumber,
+          reportId: id
+        }
+        downloadReportApprove(data).then(response => {
+
+        });
       }
     }
   }
@@ -323,4 +389,24 @@
     padding-left: 5px;
     width: 50%;
   }
+
+ .tableHeader{
+   display: inline-block;
+   width: 90px;
+   height: 30px;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   background-color: #1989FA;
+   line-height: 30px;
+   text-align: center;
+   font-size: 13px;
+   color: white;
+   margin-left: -10px;
+ }
+  .table{
+    margin-top: 100px;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
 </style>
