@@ -3,7 +3,7 @@
  * @param {*} s
  */
 export function isEmail (s) {
-  return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(s)
+  return /^([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-]+){0,3}@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]+){2,3})$/.test(s)
 }
 
 /**
@@ -77,7 +77,7 @@ export function validateMobile (rule, value, callback) {
 }
 
 export function validateEmail (rule, value, callback) {
-  if (value && !/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(value)) {
+  if (value && !isEmail(value)) {
     callback(new Error('请输入有效的邮箱地址'))
   } else {
     callback()
