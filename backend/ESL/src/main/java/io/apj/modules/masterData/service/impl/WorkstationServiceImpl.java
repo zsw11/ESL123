@@ -71,6 +71,24 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		if (StringUtils.isNotEmpty((CharSequence) params.get("updateBy"))) {
 			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
 		}
+		//根据机种查找对应的工位
+		if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
+			EntityWrapper<ModelWorkstationRelaEntity> workstationRelaWrapper = new EntityWrapper<>();
+			workstationRelaWrapper.eq("model_id",  Integer.parseInt(params.get("modelId").toString())).isNotNull("delete_at");
+			List<ModelWorkstationRelaEntity>  workstationRelaList= modelWorkstationRelaService.selectList(workstationRelaWrapper);
+			List<Integer> workstationIds = new ArrayList<>();
+			if(workstationRelaList != null && workstationRelaList.size() > 0){
+				for(ModelWorkstationRelaEntity entity : workstationRelaList){
+					workstationIds.add(entity.getWorkstationId());
+				}
+			}
+			
+			if(workstationIds.size()>0){
+				entityWrapper.in("id", workstationIds);
+			}
+			
+			//entityWrapper.eq("modelId", Integer.parseInt((String) params.get("updateBy")));
+		}
 		Page<WorkstationEntity> page = this.selectPage(new Query<WorkstationEntity>(params).getPage(), entityWrapper);
 		for(WorkstationEntity entity : page.getRecords()){
 			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
