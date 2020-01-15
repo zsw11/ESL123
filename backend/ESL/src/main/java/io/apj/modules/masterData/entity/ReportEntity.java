@@ -49,6 +49,10 @@ public class ReportEntity implements Serializable {
 	 */
 	private String remark;
 	/**
+	 * 工位结构id
+	 */
+	private Integer workstationTypeId;
+	/**
 	 * 创建者ID
 	 */
 	private Integer createBy;
