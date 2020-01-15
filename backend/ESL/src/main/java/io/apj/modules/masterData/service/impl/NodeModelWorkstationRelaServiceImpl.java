@@ -21,10 +21,10 @@ public class NodeModelWorkstationRelaServiceImpl extends ServiceImpl<NodeModelWo
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
     	EntityWrapper<NodeModelWorkstationRelaEntity> entityWrapper = new EntityWrapper<>();
-    	entityWrapper.isNull("delete_at").eq(StringUtils.isNotEmpty((CharSequence) params.get("workstationTypeNode")), "workstation_type_node_id", params);
+    	entityWrapper.isNull("delete_at").eq(StringUtils.isNotEmpty((CharSequence) params.get("workstationTypeNodeId")), "workstation_type_node_id", Integer.valueOf(params.get("workstationTypeNodeId").toString()));
     	
         Page<NodeModelWorkstationRelaEntity> page = this.selectPage(
-                new Query<NodeModelWorkstationRelaEntity>(params).getPage()
+                new Query<NodeModelWorkstationRelaEntity>(params).getPage(),entityWrapper.orderBy("create_at")
         );
 
         return new PageUtils(page);
