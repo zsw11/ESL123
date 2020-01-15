@@ -23,7 +23,7 @@
     >
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'工位类型名'" prop="name">
+          <el-form-item :label="'工位结构名'" prop="name">
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
@@ -39,6 +39,7 @@
     <el-card
       class="with-title"
       style="box-shadow: none;border: none"
+      v-if="!$route.path.includes('add')"
     >
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
         <span class="tableHeader">工位类型结构</span>
@@ -58,7 +59,7 @@
       >
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
-          <span>
+          <span v-if="!$route.path.includes('details')">
             <el-button
               type="text"
               size="mini"
@@ -67,7 +68,7 @@
             <el-button
               type="text"
               size="mini"
-              @click="() => show(1)"
+              @click="() => show(data.id)"
             >编辑</el-button>
             <el-button
               class="delete"
@@ -160,41 +161,7 @@ export default {
       listWorkstationTypeNode,
       parentNode: null,
       addReal: false, // 新增页面显示
-      data: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-          children: [{
-            label: '三级 1-1-1'
-          }]
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
-        }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
-        }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
-        }]
-      }],
+      data: [],
       defaultProps: {
         children: "children",
         label: "label"
@@ -231,16 +198,15 @@ export default {
       vm.fromFullPath = from.fullPath;
     });
   },
-  created() {
-    this.init();
-  },
   activated() {
-    if (
-      this.dataForm.id &&
-      parseInt(this.$route.params.id) !== this.dataForm.id
-    ) {
-      this.init();
-    }
+    this.init();
+    // if (
+    //   this.dataForm.id &&
+    //   parseInt(this.$route.params.id) !== this.dataForm.id
+    // ) {
+    //   this.init();
+    //
+    // }
   },
   watch: {
     dataForm: {
@@ -363,9 +329,11 @@ export default {
     },
     // 增加子节点
     addSon(node, data) {
-      console.log(data)
+      this.$nextTick(() => {
+        this.$router.push({path: `/addSon-workstationtypenode/${data.id}/${this.dataForm.id}`})
+      })
     },
-    update(){
+    update() {
 
     },
     // 处理树的数据
@@ -404,9 +372,8 @@ export default {
     // show
     show(id) {
       // this.addReal = true;
-
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}` : '/add-workstationtypenode' })
+        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}/${this.dataForm.id}` : `/add-workstationtypenode/${this.dataForm.id}`})
       })
       // this.addForm.parent = null;
       // this.addForm.name = null;

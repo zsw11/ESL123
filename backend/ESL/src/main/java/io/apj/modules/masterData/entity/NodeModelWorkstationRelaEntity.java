@@ -1,25 +1,22 @@
 package io.apj.modules.masterData.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
 import lombok.Data;
 
 /**
- * 工位类型节点
+ * 报表组部门关系
  * 
  * @author RoyLuo
  * @email RoyLuo@apjcorp.com
- * @date 2019-11-07 10:39:25
+ * @date 2020-01-15 18:11:00
  */
 @Data
-@TableName("workstation_type_node")
-public class WorkstationTypeNodeEntity implements Serializable {
+@TableName("node_model_workstation_rela")
+public class NodeModelWorkstationRelaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,34 +25,13 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 名称
+	 * 工位结构节点ID
 	 */
-	private String name;
+	private Integer workstationTypeNodeId;
 	/**
-	 * 拼音
+	 * 机种ID
 	 */
-	private String pinyin;
-	/**
-	 * 工位类型ID
-	 */
-	private Integer workstationTypeId;
-	/**
-	 * 备注
-	 */
-	private String remark;
-
-	/*
-	 * 父id
-	 */
-	private Integer parentId;
-	/**
-	 * 是否是工位
-	 */
-	private Boolean ifWorkstation;
-	/**
-	 * 是否展开
-	 */
-	private Boolean ifOpen;
+	private Integer modelId;
 	/**
 	 * 创建者ID
 	 */
@@ -76,8 +52,9 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
-	@TableField(exist = false)
-	private List<WorkstationTypeNodeEntity> child;
+	/**
+	 * 工位IDs
+	 */
+	private String workstationIds;
 
 }

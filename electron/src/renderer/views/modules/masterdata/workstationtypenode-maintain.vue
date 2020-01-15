@@ -17,15 +17,15 @@
       label-position="right"
       :size="'mini'"
       label-width="100px">
-      <el-row :gutter="10">
+      <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item :label="'节点名称'" prop="name">
             <el-input  v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'是否工位'" prop="common">
-            <el-select  v-model="dataForm.ifWorkStation">
+        <el-col :span="10">
+          <el-form-item :label="'是否工位'" prop="ifWorkstation">
+            <el-select  v-model="dataForm.ifWorkstation">
               <el-option
                 v-for="item in option"
                 :key="item.id"
@@ -36,21 +36,20 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'父工位'" prop="deptEntityList">
+      <el-row :gutter="20">
+        <el-col :span="10" v-if="!$route.params.parentId">
+          <el-form-item :label="'父节点'" prop="parentId">
             <keyword-search
               style="width: 100%"
-              v-model="dataForm.deptEntityList"
-              :allowMultiple="true"
-              :searchApi="this.listDept"
+              v-model="dataForm.parentId"
+              :searchApi="this.listWorkstationTypeNode"
               :allowEmpty="true">
             </keyword-search>
           </el-form-item>
         </el-col>
-        <el-col  :span="10" :offset="2">
-          <el-form-item :label="'展开作业名'" prop="common">
-            <el-select  v-model="dataForm.ifWorkName">
+        <el-col  :span="10">
+          <el-form-item :label="'展开作业名'" prop="ifOpen">
+            <el-select  v-model="dataForm.ifOpen">
               <el-option
                 v-for="item in option"
                 :key="item.id"
@@ -65,7 +64,6 @@
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -76,7 +74,7 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title table" v-if="!$route.path.includes('add')">
+    <el-card class="with-title table" v-if="!$route.path.includes('add-workstationtypenode')">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >工位机种关系</span>
         <el-button
@@ -104,6 +102,7 @@
                     v-model="relaForm.workstation"
                     :searchApi="this.listWorkstation"
                     :allowEmpty="true"
+                    :allowMultiple="true"
                     :apiOptions="{model: relaForm.model}">
                   </keyword-search>
                 </el-form-item>
@@ -116,14 +115,13 @@
         </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="addReal = false">取 消</el-button>
-            <el-button type="primary" @click="reportgroupReport">确 定</el-button>
+            <el-button type="primary" @click="addReal = false">确 定</el-button>
           </div>
         </el-dialog>
       </div>
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
-        @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column align="center" prop="model" label="机种" >
           <template slot-scope="scope">
@@ -173,6 +171,7 @@
   import {  listDept } from '@/api/dept'
   import { listModel} from '@/api/model'
   import { listWorkstation} from '@/api/workstation'
+  import { listWorkstationTypeNode, createWorkstationTypeNode, updateWorkstationTypeNode, fetchWorkstationTypeNode } from '@/api/workstationTypeNode'
 
   export default {
     name: 'editReportGroup',
@@ -194,7 +193,7 @@
         ],
         relaForm: {
           model: null,
-          workstation: null
+          workstation: []
         },
         addreportgroupReportId: null, // 报表id
         addReal: false, // 新增页面显示
@@ -206,16 +205,25 @@
         dataForm: {
           name: null,
           remark: null,
+          parentId: null,
+          ifWorkstation: null,
+          ifOpen: null,
+          workstationTypeId: null,
           createBy: null,
           createAt: null,
           updateBy: null,
           updateAt: null,
-          deleteAt: null,
-          deptEntityList: []
+          deleteAt: null
         },
         dataRules: {
           name: [
             { required: true, message: '名称不能为空', trigger: 'blur' }
+          ],
+          ifOpen: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ],
+          ifWorkstation: [
+            { required: true, message: '不能为空', trigger: 'blur' }
           ],
           remark: [
             { max: 512, message: '长度超过了512', trigger: 'blur' }
@@ -235,6 +243,7 @@
           formCode: null,
           remark: null
         },
+        listWorkstationTypeNode,
         listModel,
         listWorkstation,
         listDept,
@@ -254,7 +263,8 @@
             { code: 'remark', name: '备注', type: 'string', required: true }
           ]
         }],
-        complexFilters: []
+        complexFilters: [],
+        defaultParent: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -289,10 +299,11 @@
     },
     methods: {
       init () {
-        this.dataForm.deptEntityList = []
-        if (!this.$route.path.includes('add')) {
-          this.getDataList()
+        if(this.$route.params.parentId){
+          this.dataForm.parentId = Number(this.$route.params.parentId)
         }
+        console.log(this.$route.params.WId)
+        this.dataForm.workstationTypeId = this.$route.params.WId
         this.title = this.$route.meta.title
         this.$store.dispatch('common/updateTabAttrs', {
           name: this.$route.name,
@@ -301,17 +312,15 @@
         this.inited = false
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
-          // fetchReportGroup(this.dataForm.id).then(({data}) => {
-          //   Object.assign(
-          //     this.dataForm,
-          //     pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
-          //   )
-          //   data.deptEntityList.forEach((item)=>{
-          //     this.dataForm.deptEntityList.push(item.id)
-          //   })
-          // }).finally(() => {
-          //   this.inited = true
-          // })
+          this.getDataList()
+          fetchWorkstationTypeNode(this.dataForm.id).then(({data}) => {
+            Object.assign(
+              this.dataForm,
+              pick(data, [ 'name', 'remark', 'ifWorkstation', 'ifOpen', 'workstationTypeId', 'parentId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            )
+          }).finally(() => {
+            this.inited = true
+          })
         } else {
           this.inited = true
         }
@@ -328,8 +337,8 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             (this.dataForm.id
-                ? updateReportGroup(this.dataForm.id, this.dataForm)
-                : createReportGroup(this.dataForm)
+                ? updateWorkstationTypeNode(this.dataForm.id, this.dataForm)
+                : createWorkstationTypeNode(this.dataForm)
             ).then(({data}) => {
               this.$message({
                 message: '操作成功',
@@ -384,67 +393,67 @@
           this.getDataList()
         }
       },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 详情
-      details (id) {
-        // let noShow = true
-        this.$nextTick(() => {
-          this.$router.push({path: `/details-report/${id}`})
-        })
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.$nextTick(() => {
-          this.$router.push({ path: id ? `/edit-report/${id}` : '/add-report' })
-        })
-      },
-      // 删除数据
-      deleteHandle (row) {
-        var ids = row ? [row.id] : this.dataListSelections.map(item => {
-          return item.id
-        })
-        this.$confirm('此操作将删除数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteReportGroupReportRela(ids).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '删除成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getDataList()
-          })
-        })
-      },
-      // 新增报表组报表关系
-      reportgroupReport () {
-        this.$nextTick(() => {
-          if (this.addReal) {
-            let data = {
-              reportId: this.addreportgroupReportId,
-              reportGroupId: this.id
-            }
-            createReportGroupReportRela(data).then(({page, status}) => {
-              if (status === 200) {
-                this.addReal = false
-                this.getDataList()
-                this.$notify({
-                  title: '成功',
-                  message: '添加关系成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              }
-            })
-          }
-        })
-      },
+      // // 多选
+      // selectionChangeHandle (val) {
+      //   this.dataListSelections = val
+      // },
+      // // 详情
+      // details (id) {
+      //   // let noShow = true
+      //   this.$nextTick(() => {
+      //     this.$router.push({path: `/details-report/${id}`})
+      //   })
+      // },
+      // // 新增 / 修改
+      // addOrUpdateHandle (id) {
+      //   this.$nextTick(() => {
+      //     this.$router.push({ path: id ? `/edit-report/${id}` : '/add-report' })
+      //   })
+      // },
+      // // 删除数据
+      // deleteHandle (row) {
+      //   var ids = row ? [row.id] : this.dataListSelections.map(item => {
+      //     return item.id
+      //   })
+      //   this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     deleteReportGroupReportRela(ids).then(() => {
+      //       this.$notify({
+      //         title: '成功',
+      //         message: '删除成功',
+      //         type: 'success',
+      //         duration: 2000
+      //       })
+      //       this.getDataList()
+      //     })
+      //   })
+      // },
+      // // 新增报表组报表关系
+      // reportgroupReport () {
+      //   this.$nextTick(() => {
+      //     if (this.addReal) {
+      //       let data = {
+      //         reportId: this.addreportgroupReportId,
+      //         reportGroupId: this.id
+      //       }
+      //       createReportGroupReportRela(data).then(({page, status}) => {
+      //         if (status === 200) {
+      //           this.addReal = false
+      //           this.getDataList()
+      //           this.$notify({
+      //             title: '成功',
+      //             message: '添加关系成功',
+      //             type: 'success',
+      //             duration: 2000
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+      // },
       // 新增机种工位关系
       addRelaFun() {
         this.addReal = true

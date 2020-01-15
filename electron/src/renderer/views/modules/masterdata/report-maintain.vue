@@ -142,14 +142,11 @@ export default {
       this.inited = false
       this.dataForm.id = parseInt(this.$route.params.id) || 0
       if (this.dataForm.id) {
-        fetchReport(this.dataForm.id).then(({data}) => {
+        fetchReport(this.dataForm.id).then(({report}) => {
           Object.assign(
             this.dataForm,
-            pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt', 'workstationTypeId' ])
+            pick(report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt', 'workstationTypeId' ])
           )
-          data.deptEntityList.forEach((item)=>{
-            this.dataForm.deptEntityList.push(item.id)
-          })
         }).finally(() => {
           this.inited = true
         })
