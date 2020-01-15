@@ -23,7 +23,7 @@
     >
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'工位类型名'" prop="name">
+          <el-form-item :label="'工位结构名'" prop="name">
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
@@ -44,7 +44,7 @@
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
         <span class="tableHeader">工位类型结构</span>
         <el-button
-          @click="show"
+          @click="show()"
           type="primary"
           style="float: right"
           v-if="!$route.path.includes('details')"
@@ -59,9 +59,18 @@
       >
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
-          <span>
+          <span v-if="!$route.path.includes('details')">
             <el-button
-              v-if="$route.path.includes('edit')"
+              type="text"
+              size="mini"
+              @click="() => addSon(node, data)"
+            >新增子节点</el-button>
+            <el-button
+              type="text"
+              size="mini"
+              @click="() => show(1)"
+            >编辑</el-button>
+            <el-button
               class="delete"
               type="text"
               size="mini"
@@ -273,7 +282,7 @@ export default {
         }
       });
     },
-    // 树的操作
+    // 树的操作 删除
     remove(node, data) {
       let arr = [data.id];
       this.$confirm("此操作将删除数据, 是否继续?", "提示", {
@@ -319,6 +328,13 @@ export default {
         }
       });
     },
+    // 增加子节点
+    addSon(node, data) {
+      console.log(data)
+    },
+    update(){
+
+    },
     // 处理树的数据
     tree(list) {
       let data = JSON.parse(JSON.stringify(list).replace(/name/g, "label"));
@@ -353,11 +369,15 @@ export default {
       this.data = parents;
     },
     // show
-    show() {
-      this.addReal = true;
-      this.addForm.parent = null;
-      this.addForm.name = null;
-      this.addForm.remark = null;
+    show(id) {
+      // this.addReal = true;
+
+      this.$nextTick(() => {
+        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}` : '/add-workstationtypenode' })
+      })
+      // this.addForm.parent = null;
+      // this.addForm.name = null;
+      // this.addForm.remark = null;
     }
   }
 };

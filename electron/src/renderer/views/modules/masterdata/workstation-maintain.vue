@@ -17,17 +17,17 @@
             <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10" :offset="2">
-          <el-form-item :label="'工位类型'" prop="workstationTypeId">
-            <keyword-search
-              style="width: 100%"
-              v-model="dataForm.workstationTypeId"
-              
-              :searchApi="this.listWorkstationType"
-              :allowEmpty="true">
-            </keyword-search>
-          </el-form-item>
-        </el-col>
+<!--        <el-col :span="10" :offset="2">-->
+<!--          <el-form-item :label="'工位类型'" prop="workstationTypeId">-->
+<!--            <keyword-search-->
+<!--              style="width: 100%"-->
+<!--              v-model="dataForm.workstationTypeId"-->
+<!--              -->
+<!--              :searchApi="this.listWorkstationType"-->
+<!--              :allowEmpty="true">-->
+<!--            </keyword-search>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
       </el-row>
       <el-row :gutter="10">
         <el-col :span="22">

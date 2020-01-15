@@ -173,13 +173,13 @@ const mainRoutes = {
     { path: '/workstation-model/:id(\\d+)', component: _import('modules/masterdata/modelworkstationrela'), name: 'workstation-model', meta: { title: '工位-机种', isTab: true } },
 
     // 工位类型
-    { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '工位类型-新增', isTab: true } },
-    { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '工位类型-编辑', isTab: true } },
-    { path: '/details-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'details-workstationtype', meta: { title: '工位类型-详情', isTab: true } },
+    { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '工位结构-新增', isTab: true } },
+    { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '工位结构-编辑', isTab: true } },
+    { path: '/details-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'details-workstationtype', meta: { title: '工位结构-详情', isTab: true } },
 
     // 工位类型节点
-    { path: '/add-workstationtypenode', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'add-workstationtypenode', meta: { title: '新增工位类型节点', isTab: true } },
-    { path: '/edit-workstationtypenode/:id(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'edit-workstationtypenode', meta: { title: '编辑工位类型节点', isTab: true } },
+    { path: '/add-workstationtypenode', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'add-workstationtypenode', meta: { title: '新增工位结构节点', isTab: true } },
+    { path: '/edit-workstationtypenode/:id(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'edit-workstationtypenode', meta: { title: '编辑工位结构节点', isTab: true } },
 
     // 组织机构工位关系
     { path: '/add-deptworkstationrela', component: _import('modules/masterdata/deptworkstationrela-maintain'), name: 'add-deptworkstationrela', meta: { title: '新增组织机构工位关系', isTab: true } },
