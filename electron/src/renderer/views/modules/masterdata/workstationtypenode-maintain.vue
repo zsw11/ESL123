@@ -24,8 +24,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'是否工位'" prop="ifWorkStation">
-            <el-select  v-model="dataForm.ifWorkStation">
+          <el-form-item :label="'是否工位'" prop="ifWorkstation">
+            <el-select  v-model="dataForm.ifWorkstation">
               <el-option
                 v-for="item in option"
                 :key="item.id"
@@ -49,8 +49,8 @@
           </el-form-item>
         </el-col>
         <el-col  :span="10" :offset="2">
-          <el-form-item :label="'展开作业名'" prop="ifWorkName">
-            <el-select  v-model="dataForm.ifWorkName">
+          <el-form-item :label="'展开作业名'" prop="ifOpen">
+            <el-select  v-model="dataForm.ifOpen">
               <el-option
                 v-for="item in option"
                 :key="item.id"
@@ -207,8 +207,9 @@
           name: null,
           remark: null,
           parentId: null,
-          ifWorkStation: null,
-          ifWorkName: null,
+          ifWorkstation: null,
+          ifOpen: null,
+          workstationTypeId: null,
           createBy: null,
           createAt: null,
           updateBy: null,
@@ -292,6 +293,8 @@
     },
     methods: {
       init () {
+        console.log(this.$route.query.id)
+        this.dataForm.workstationId = this.$route.query.id
         this.title = this.$route.meta.title
         this.$store.dispatch('common/updateTabAttrs', {
           name: this.$route.name,
@@ -304,7 +307,7 @@
           fetchWorkstationTypeNode(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
-              pick(data.reportGroup, [ 'name', 'remark', 'ifWorkStation', 'ifWorkName', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+              pick(data.reportGroup, [ 'name', 'remark', 'ifWorkstation', 'ifOpen', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
             )
             data.deptEntityList.forEach((item)=>{
               this.dataForm.deptEntityList.push(item.id)
