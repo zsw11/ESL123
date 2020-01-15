@@ -123,7 +123,6 @@
       <el-table
         :data="dataList"
         v-loading="dataListLoading"
-        @selection-change="selectionChangeHandle"
         style="width: 100%;">
         <el-table-column align="center" prop="model" label="机种" >
           <template slot-scope="scope">
