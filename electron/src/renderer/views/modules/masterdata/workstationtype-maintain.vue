@@ -68,7 +68,7 @@
             <el-button
               type="text"
               size="mini"
-              @click="() => show(1)"
+              @click="() => show(data.id)"
             >编辑</el-button>
             <el-button
               class="delete"
@@ -198,16 +198,15 @@ export default {
       vm.fromFullPath = from.fullPath;
     });
   },
-  created() {
-    this.init();
-  },
   activated() {
-    if (
-      this.dataForm.id &&
-      parseInt(this.$route.params.id) !== this.dataForm.id
-    ) {
-      this.init();
-    }
+    this.init();
+    // if (
+    //   this.dataForm.id &&
+    //   parseInt(this.$route.params.id) !== this.dataForm.id
+    // ) {
+    //   this.init();
+    //
+    // }
   },
   watch: {
     dataForm: {
@@ -330,9 +329,11 @@ export default {
     },
     // 增加子节点
     addSon(node, data) {
-      console.log(data)
+      this.$nextTick(() => {
+        this.$router.push({path: `/addSon-workstationtypenode/${data.id}/${this.dataForm.id}`})
+      })
     },
-    update(){
+    update() {
 
     },
     // 处理树的数据
@@ -372,8 +373,7 @@ export default {
     show(id) {
       // this.addReal = true;
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}` : '/add-workstationtypenode'
-          ,query:{id: this.dataForm.id}})
+        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}/${this.dataForm.id}` : `/add-workstationtypenode/${this.dataForm.id}`})
       })
       // this.addForm.parent = null;
       // this.addForm.name = null;

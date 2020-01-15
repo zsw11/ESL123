@@ -17,13 +17,13 @@
       label-position="right"
       :size="'mini'"
       label-width="100px">
-      <el-row :gutter="10">
+      <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item :label="'节点名称'" prop="name">
             <el-input  v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10" :offset="2">
+        <el-col :span="10">
           <el-form-item :label="'是否工位'" prop="ifWorkstation">
             <el-select  v-model="dataForm.ifWorkstation">
               <el-option
@@ -36,9 +36,9 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="10">
-          <el-form-item :label="'父工位'" prop="parentId">
+      <el-row :gutter="20">
+        <el-col :span="10" v-if="!$route.params.parentId">
+          <el-form-item :label="'父节点'" prop="parentId">
             <keyword-search
               style="width: 100%"
               v-model="dataForm.parentId"
@@ -47,7 +47,7 @@
             </keyword-search>
           </el-form-item>
         </el-col>
-        <el-col  :span="10" :offset="2">
+        <el-col  :span="10">
           <el-form-item :label="'展开作业名'" prop="ifOpen">
             <el-select  v-model="dataForm.ifOpen">
               <el-option
@@ -64,7 +64,6 @@
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
             <el-input
-
               type="textarea"
               :rows="6"
               placeholder="请输入内容"
@@ -75,7 +74,7 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title table" v-if="!$route.path.includes('add')">
+    <el-card class="with-title table" v-if="!$route.path.includes('add-workstationtypenode')">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >工位机种关系</span>
         <el-button
@@ -103,6 +102,7 @@
                     v-model="relaForm.workstation"
                     :searchApi="this.listWorkstation"
                     :allowEmpty="true"
+                    :allowMultiple="true"
                     :apiOptions="{model: relaForm.model}">
                   </keyword-search>
                 </el-form-item>
@@ -193,7 +193,7 @@
         ],
         relaForm: {
           model: null,
-          workstation: null
+          workstation: []
         },
         addreportgroupReportId: null, // 报表id
         addReal: false, // 新增页面显示
@@ -218,6 +218,12 @@
         dataRules: {
           name: [
             { required: true, message: '名称不能为空', trigger: 'blur' }
+          ],
+          ifOpen: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ],
+          ifWorkstation: [
+            { required: true, message: '不能为空', trigger: 'blur' }
           ],
           remark: [
             { max: 512, message: '长度超过了512', trigger: 'blur' }
@@ -257,7 +263,8 @@
             { code: 'remark', name: '备注', type: 'string', required: true }
           ]
         }],
-        complexFilters: []
+        complexFilters: [],
+        defaultParent: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -292,8 +299,11 @@
     },
     methods: {
       init () {
-        console.log(this.$route.query.id)
-        this.dataForm.workstationId = this.$route.query.id
+        if(this.$route.params.parentId){
+          this.dataForm.parentId = Number(this.$route.params.parentId)
+        }
+        console.log(this.$route.params.WId)
+        this.dataForm.workstationTypeId = this.$route.params.WId
         this.title = this.$route.meta.title
         this.$store.dispatch('common/updateTabAttrs', {
           name: this.$route.name,
