@@ -23,7 +23,7 @@
     >
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'工位类型名'" prop="name">
+          <el-form-item :label="'工位结构名'" prop="name">
             <el-input v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
@@ -39,6 +39,7 @@
     <el-card
       class="with-title"
       style="box-shadow: none;border: none"
+      v-if="!$route.path.includes('add')"
     >
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
         <span class="tableHeader">工位类型结构</span>
@@ -58,7 +59,7 @@
       >
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
-          <span>
+          <span v-if="!$route.path.includes('details')">
             <el-button
               type="text"
               size="mini"
