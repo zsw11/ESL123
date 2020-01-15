@@ -371,9 +371,9 @@ export default {
     // show
     show(id) {
       // this.addReal = true;
-
       this.$nextTick(() => {
-        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}` : '/add-workstationtypenode' })
+        this.$router.push({ path: id ? `/edit-workstationtypenode/${id}` : '/add-workstationtypenode'
+          ,query:{id: this.dataForm.id}})
       })
       // this.addForm.parent = null;
       // this.addForm.name = null;
