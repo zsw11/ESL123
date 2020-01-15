@@ -12,8 +12,8 @@
 		<result property="name" column="name" />
 		<result property="pinyin" column="pinyin" />
 		<result property="workstationTypeId" column="workstation_type_id" />
-		<result property="isWorkstation" column="is_workstation" />
-		<result property="isOpen" column="is_open" />
+		<result property="ifWorkstation" column="if_workstation" />
+		<result property="ifOpen" column="if_open" />
 		<result property="remark" column="remark" />
 		<result property="createBy" column="create_by" />
 		<result property="createAt" column="create_at" />
