@@ -51,11 +51,11 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	/**
 	 * 是否是工位
 	 */
-	private Boolean isWorkstation;
+	private Boolean ifWorkstation;
 	/**
 	 * 是否展开
 	 */
-	private Boolean isOpen;
+	private Boolean ifOpen;
 	/**
 	 * 创建者ID
 	 */
