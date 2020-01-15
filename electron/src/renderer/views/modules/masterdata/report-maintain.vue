@@ -24,19 +24,18 @@
           </el-form-item>
         </el-col>
       </el-row>
-<!--      <el-row :gutter="10">-->
-<!--        <el-col :span="10">-->
-<!--          <el-form-item :label="'部门'" prop="deptEntityList">-->
-<!--            <keyword-search-->
-<!--              style="width: 100%"-->
-<!--              v-model="dataForm.deptEntityList"-->
-<!--              :allowMultiple="true"-->
-<!--              :searchApi="this.listDept"-->
-<!--              :allowEmpty="true">-->
-<!--            </keyword-search>-->
-<!--          </el-form-item>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
+      <el-row :gutter="10">
+        <el-col :span="10">
+          <el-form-item :label="'工位结构'" prop="workstationTypeId">
+            <keyword-search
+              style="width: 100%"
+              v-model="dataForm.workstationTypeId"
+              :searchApi="this.listWorkstationType"
+              :allowEmpty="true">
+            </keyword-search>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row :gutter="10">
         <el-col :span="22">
           <el-form-item style="display: block" :label="'备注'" prop="remark">
@@ -64,6 +63,8 @@
 import { pick } from 'lodash'
 import { fetchReport, createReport, updateReport, listReport } from '@/api/report'
 import {  listDept } from '@/api/dept'
+import { listWorkstationType } from '@/api/workstationType'
+
 export default {
   name: 'editReport',
   data () {
@@ -77,10 +78,12 @@ export default {
         name: null,
         formCode: null,
         remark: null,
-        deptEntityList: []
+        deptEntityList: [],
+        workstationTypeId: null
       },
       listDept,
       listReport,
+      listWorkstationType,
       dataRules: {
         name: [
           { required: true, message: '名称不能为空', trigger: 'blur' }
@@ -142,7 +145,7 @@ export default {
         fetchReport(this.dataForm.id).then(({data}) => {
           Object.assign(
             this.dataForm,
-            pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            pick(data.report, [ 'name', 'formCode', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt', 'workstationTypeId' ])
           )
           data.deptEntityList.forEach((item)=>{
             this.dataForm.deptEntityList.push(item.id)
