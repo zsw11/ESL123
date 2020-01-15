@@ -62,6 +62,10 @@ public class ReportManMachineCombinationEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * MT 分析表totalRemark
 	 */
 	private BigDecimal mt;

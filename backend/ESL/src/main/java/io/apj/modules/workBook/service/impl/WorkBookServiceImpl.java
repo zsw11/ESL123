@@ -224,67 +224,73 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
-        List<Integer> reportList = new ArrayList<>();
-        for(Integer reportGroupId : reportGroupIds){
-            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
-            reportGroupReportRelaEntities.forEach(i->{
-                reportList.add(i.getReportId());
-            });
-        }
-        List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
-        if(workBookIds.size()>0&&reportList.size()>0) {
-            reportList.forEach(e -> {
-                switch (e) {
-                    case 1:
-                        break;
-                    case 2:
-                        // 人机联合表
-                        reportManMachineCombinationService.generateReportData(workBookIds);
-                        break;
-                    case 3:
-                        // 工位时间报表
-                        stationTimeService.generateReportData(workBookIds);
-                        break;
-                    case 4:
-                        // Compare表
-                        compareService.generateReportData(workBookIds);
-                        break;
-                    case 5:
-                        // MOST Value表
-                        mostValueService.generateReportData(workBookIds);
-                        break;
-                    case 6:
-                        // Collection-Revision History表
-                        revisionHistoryService.generateReportData(workBookIds);
-                        break;
-                    case 7:
-                        // Total表
-                        totalService.generateReportData(workBookIds);
-                        break;
-                    case 8:
-                        break;
-                    case 9:
-                        // 时间联络表
-                        timeContactService.generateReportData(workBookIds);
-                        break;
-                    case 10:
-                        // Process List表
-                        break;
-                    case 11:
-                        // 标准时间表
-                        standardTimeService.generateReportData(workBookIds);
-                        break;
-                    case 12:
-                        // 标准工数表
-                        standardWorkService.generateReportData(workBookIds);
-                        break;
-                    case 13:
-                        // 履历表
-                        changeRecordService.generateReportData(workBookIds);
-                        break;
+        List<Integer> reportGroupIds = (List<Integer>) params.get("reportGroupIds");
+        if(reportGroupIds != null && reportGroupIds.size() > 0){
+            HashSet<Integer> reportSet = new HashSet<>();
+            for(Integer reportGroupId : reportGroupIds){
+                List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+                if(reportGroupReportRelaEntities != null && reportGroupReportRelaEntities.size() > 0){
+                    reportGroupReportRelaEntities.forEach(i->{
+                        reportSet.add(i.getReportId());
+                    });
                 }
-            });
+            }
+            if(reportSet != null && reportSet.size() > 0){
+                List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
+                if(workBookIds.size()>0&&reportSet.size()>0) {
+                    for(Integer reportId : reportSet){
+                        switch (reportId) {
+                            case 1:
+                                break;
+                            case 2:
+                                // 人机联合表
+                                reportManMachineCombinationService.generateReportData(workBookIds,reportId);
+                                break;
+                            case 3:
+                                // 工位时间报表
+                                stationTimeService.generateReportData(workBookIds);
+                                break;
+                            case 4:
+                                // Compare表
+                                compareService.generateReportData(workBookIds);
+                                break;
+                            case 5:
+                                // MOST Value表
+                                mostValueService.generateReportData(workBookIds);
+                                break;
+                            case 6:
+                                // Collection-Revision History表
+                                revisionHistoryService.generateReportData(workBookIds);
+                                break;
+                            case 7:
+                                // Total表
+                                totalService.generateReportData(workBookIds);
+                                break;
+                            case 8:
+                                break;
+                            case 9:
+                                // 时间联络表
+                                timeContactService.generateReportData(workBookIds);
+                                break;
+                            case 10:
+                                // Process List表
+                                break;
+                            case 11:
+                                // 标准时间表
+                                standardTimeService.generateReportData(workBookIds);
+                                break;
+                            case 12:
+                                // 标准工数表
+                                standardWorkService.generateReportData(workBookIds);
+                                break;
+                            case 13:
+                                // 履历表
+                                changeRecordService.generateReportData(workBookIds);
+                                break;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -313,13 +319,13 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             workBookIds.add(item.getId());
         }
         if(workBookIds.size()>0&&reportList.size()>0) {
-            reportList.forEach(e -> {
-                switch (e) {
+            for(Integer reportId : reportList){
+                switch (reportId) {
                     case 1:
                         break;
                     case 2:
                         // 人机联合表
-                        reportManMachineCombinationService.generateReportData(workBookIds);
+                        reportManMachineCombinationService.generateReportData(workBookIds,reportId);
                         break;
                     case 3:
                         // 工位时间报表
@@ -363,7 +369,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                         changeRecordService.generateReportData(workBookIds);
                         break;
                 }
-            });
+            }
+
         }
         return RD.ok(workBookEntityList);
     }

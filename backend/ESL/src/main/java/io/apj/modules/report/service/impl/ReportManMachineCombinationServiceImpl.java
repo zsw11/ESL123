@@ -5,9 +5,11 @@ import io.apj.common.utils.ExportExcelUtils;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.WorkstationEntity;
+import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.service.WorkstationTypeNodeService;
+import io.apj.modules.masterData.service.WorkstationTypeService;
 import io.apj.modules.report.dao.ReportManMachineCombinationDao;
 import io.apj.modules.report.entity.AshcraftTableEntity;
 import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
@@ -67,6 +69,12 @@ public class ReportManMachineCombinationServiceImpl
 	private WorkBookService workBookService;
 	@Autowired
 	private WorkOperationsService workOperationsService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private ReportService reportService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -123,11 +131,11 @@ public class ReportManMachineCombinationServiceImpl
 	}
 
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds,Integer reportId) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
-		if(workBooks!=null&&workBooks.size()>0) {
+		if(workBooks != null && workBooks.size() > 0) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			generateReportManMachineCombination(filteredWorkBooks);
+			generateReportManMachineCombination(filteredWorkBooks,reportId);
 		}
 	}
 
@@ -172,7 +180,19 @@ public class ReportManMachineCombinationServiceImpl
 		return processedData;
 	}
 
-	public List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks) {
+	public List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks,Integer reportId) {
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>().eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = new ArrayList<>();
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				//TODO 获取NodeModelWorkstationRela实体
+
+			}
+		}
+
 		List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
