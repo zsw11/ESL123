@@ -42,7 +42,6 @@
             <keyword-search
               style="width: 100%"
               v-model="dataForm.parentId"
-              :allowMultiple="true"
               :searchApi="this.listWorkstationTypeNode"
               :allowEmpty="true">
             </keyword-search>
@@ -172,7 +171,7 @@
   import {  listDept } from '@/api/dept'
   import { listModel} from '@/api/model'
   import { listWorkstation} from '@/api/workstation'
-  import { listWorkstationTypeNode, createWorkstationTypeNode, updateWorkstationTypeNode } from '@/api/workstationTypeNode'
+  import { listWorkstationTypeNode, createWorkstationTypeNode, updateWorkstationTypeNode, fetchWorkstationTypeNode } from '@/api/workstationTypeNode'
 
   export default {
     name: 'editReportGroup',
@@ -307,11 +306,8 @@
           fetchWorkstationTypeNode(this.dataForm.id).then(({data}) => {
             Object.assign(
               this.dataForm,
-              pick(data.reportGroup, [ 'name', 'remark', 'ifWorkstation', 'ifOpen', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+              pick(data, [ 'name', 'remark', 'ifWorkstation', 'ifOpen', 'workstationTypeId', 'parentId', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
             )
-            data.deptEntityList.forEach((item)=>{
-              this.dataForm.deptEntityList.push(item.id)
-            })
           }).finally(() => {
             this.inited = true
           })
