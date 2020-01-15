@@ -72,9 +72,8 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    show: false,
     useContentSize: true,
-    width: 1000,
     webPreferences: {
       nodeIntegration: true
     //   webSecurity: false
@@ -82,6 +81,8 @@ function createWindow () {
     title: '',
     icon: `${__dirname}/../../icon-sm.ico`
   })
+  mainWindow.maximize()
+  mainWindow.show()
 
   mainWindow.loadURL(winURL, {
     extraHeaders: "Content-Security-Policy: default-src 'self'"
