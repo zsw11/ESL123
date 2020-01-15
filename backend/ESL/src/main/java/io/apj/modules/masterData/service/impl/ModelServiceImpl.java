@@ -68,12 +68,12 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 		}
 		if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
 			EntityWrapper<ModelWorkstationRelaEntity> workstationRelaWrapper = new EntityWrapper<>();
-			workstationRelaWrapper.eq("workstation_id",  Integer.parseInt(params.get("modelId").toString())).isNotNull("delete_at");
+			workstationRelaWrapper.eq("workstation_id",  Integer.parseInt(params.get("workstationId").toString())).isNull("delete_at");
 			List<ModelWorkstationRelaEntity>  workstationRelaList= modelWorkStationRelaService.selectList(workstationRelaWrapper);
 			List<Integer> modelIds = new ArrayList<>();
 			if(workstationRelaList != null && workstationRelaList.size() > 0){
 				for(ModelWorkstationRelaEntity entity : workstationRelaList){
-					modelIds.add(entity.getWorkstationId());
+					modelIds.add(entity.getModelId());
 				}
 			}
 			

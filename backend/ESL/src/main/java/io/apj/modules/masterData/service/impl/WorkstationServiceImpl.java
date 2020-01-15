@@ -74,7 +74,7 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 		//根据机种查找对应的工位
 		if (StringUtils.isNotEmpty((CharSequence) params.get("modelId"))) {
 			EntityWrapper<ModelWorkstationRelaEntity> workstationRelaWrapper = new EntityWrapper<>();
-			workstationRelaWrapper.eq("model_id",  Integer.parseInt(params.get("modelId").toString())).isNotNull("delete_at");
+			workstationRelaWrapper.eq("model_id",  Integer.parseInt(params.get("modelId").toString())).isNull("delete_at");
 			List<ModelWorkstationRelaEntity>  workstationRelaList= modelWorkstationRelaService.selectList(workstationRelaWrapper);
 			List<Integer> workstationIds = new ArrayList<>();
 			if(workstationRelaList != null && workstationRelaList.size() > 0){
