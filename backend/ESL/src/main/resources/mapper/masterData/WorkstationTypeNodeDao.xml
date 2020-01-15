@@ -11,9 +11,9 @@
 		<result property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="pinyin" column="pinyin" />
-		<result property="workstationId" column="workstation_id" />
 		<result property="workstationTypeId" column="workstation_type_id" />
 		<result property="isWorkstation" column="is_workstation" />
+		<result property="isOpen" column="is_open" />
 		<result property="remark" column="remark" />
 		<result property="createBy" column="create_by" />
 		<result property="createAt" column="create_at" />

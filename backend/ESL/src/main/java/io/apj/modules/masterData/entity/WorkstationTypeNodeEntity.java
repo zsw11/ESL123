@@ -36,10 +36,6 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 */
 	private String pinyin;
 	/**
-	 * 工位ID
-	 */
-	private Integer workstationId;
-	/**
 	 * 工位类型ID
 	 */
 	private Integer workstationTypeId;
@@ -56,6 +52,10 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	 * 是否是工位
 	 */
 	private Boolean isWorkstation;
+	/**
+	 * 是否展开
+	 */
+	private Boolean isOpen;
 	/**
 	 * 创建者ID
 	 */
