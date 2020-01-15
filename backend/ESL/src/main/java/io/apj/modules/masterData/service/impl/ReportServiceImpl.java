@@ -272,7 +272,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportDao, ReportEntity> impl
         wrapper.eq("dept_id",deptId);
         List<ReportDeptRelaEntity> reportDeptRelaEntityList = reportDeptRelaService.selectList(wrapper);
         if(reportDeptRelaEntityList != null && reportDeptRelaEntityList.size() > 0){
-            List<ReportEntity> reportEntityList=new ArrayList<>();
+            List<ReportEntity> reportEntityList = new ArrayList<>();
             for(ReportDeptRelaEntity reportDeptRelaEntity : reportDeptRelaEntityList){
                 Integer reportId = reportDeptRelaEntity.getReportId();
                 ReportEntity reportEntity = selectById(reportId);

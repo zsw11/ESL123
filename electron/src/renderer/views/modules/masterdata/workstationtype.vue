@@ -10,7 +10,7 @@
         @keyup.enter.native="getDataList()"
         class="form-min-width">
 
-        <el-form-item :label="'工位类型名称'" prop="name" >
+        <el-form-item :label="'工位结构名称'" prop="name" >
           <el-input v-model="listQuery.name" clearable></el-input>
         </el-form-item>
 
@@ -46,7 +46,7 @@
     </el-card>
     <el-card class="with-title">
       <div slot="header" class="clearfix">
-        <div class="card-title">工位类型信息</div>
+        <div class="card-title">工位结构信息</div>
         <div class="buttons">
           <el-button  type="primary" @click="addOrUpdateHandle()">新增</el-button>
 
@@ -77,7 +77,7 @@
         </el-table-column>
 
 
-        <el-table-column align="center" prop="name" label="工位类型名称" >
+        <el-table-column align="center" prop="name" label="工位结构名称" >
           <template slot-scope="scope">
             <span>{{scope.row.name }}</span>
           </template>
