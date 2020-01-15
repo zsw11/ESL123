@@ -722,10 +722,32 @@
                   self.delete()
                   break
                 }
+                default: {
+                }
               }
-            }
-            if (e.key === 'Delete') {
-              self.delete()
+            } else {
+              console.log(e.key)
+              switch (e.key) {
+                case 'Delete': {
+                  self.delete()
+                }
+                case 'F3': {
+                  self.tag()
+                  break
+                }
+                case 'F2': {
+                  self.prevCount++
+                  self.debouncePrevTag()
+                  break
+                }
+                case 'F4': {
+                  self.nextCount++
+                  self.debounceNextTag()
+                  break
+                }
+                default: {
+                }
+              }
             }
           }
           document.addEventListener('keydown', this.listener)

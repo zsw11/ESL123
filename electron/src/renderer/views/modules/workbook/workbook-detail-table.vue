@@ -317,7 +317,10 @@ export default {
     // ========================================
     isRowChanged (row1, row2) {
       if (!row1 || !row2) return false
-      return !!defaultFields.find(f => !(row1[f] === row2[f]))
+      return !!defaultFields.find(f => {
+        if (f==='operation') console.log(row1, row2, f, row1[f], row2[f], row1[f] === row2[f])
+        return !(row1[f] === row2[f])
+      })
     },
     selectedChanged (val) {
       if (this.lastSelected) {
@@ -385,10 +388,14 @@ export default {
               if (dataChanged) this.dataChanged()
             }
           } else {
-            // 行值变更
-            if (this.isRowChanged(this.lastSelected.row, this.lastSelectedRow)) {
-              this.dataChanged()
-            }
+            // 行值变更，selectedChanged时，blur设置值可能还没进行
+            const row1 = this.lastSelected.row
+            const row2 = this.lastSelectedRow
+            setTimeout(() => {
+              if (this.isRowChanged(row1, row2)) {
+                this.dataChanged()
+              }
+            }, 100);
           }
           // 记录行值
           this.lastSelectedRow = cloneDeep(omit(val.row, ['_XID']))
