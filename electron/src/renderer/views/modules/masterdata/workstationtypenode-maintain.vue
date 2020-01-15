@@ -24,7 +24,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
-          <el-form-item :label="'是否工位'" prop="common">
+          <el-form-item :label="'是否工位'" prop="ifWorkStation">
             <el-select  v-model="dataForm.ifWorkStation">
               <el-option
                 v-for="item in option"
@@ -38,18 +38,18 @@
       </el-row>
       <el-row>
         <el-col :span="10">
-          <el-form-item :label="'父工位'" prop="deptEntityList">
+          <el-form-item :label="'父工位'" prop="parentId">
             <keyword-search
               style="width: 100%"
-              v-model="dataForm.deptEntityList"
+              v-model="dataForm.parentId"
               :allowMultiple="true"
-              :searchApi="this.listDept"
+              :searchApi="this.listWorkstationTypeNode"
               :allowEmpty="true">
             </keyword-search>
           </el-form-item>
         </el-col>
         <el-col  :span="10" :offset="2">
-          <el-form-item :label="'展开作业名'" prop="common">
+          <el-form-item :label="'展开作业名'" prop="ifWorkName">
             <el-select  v-model="dataForm.ifWorkName">
               <el-option
                 v-for="item in option"
@@ -116,7 +116,7 @@
         </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="addReal = false">取 消</el-button>
-            <el-button type="primary" @click="reportgroupReport">确 定</el-button>
+            <el-button type="primary" @click="addReal = false">确 定</el-button>
           </div>
         </el-dialog>
       </div>
@@ -173,6 +173,7 @@
   import {  listDept } from '@/api/dept'
   import { listModel} from '@/api/model'
   import { listWorkstation} from '@/api/workstation'
+  import { listWorkstationTypeNode, createWorkstationTypeNode, updateWorkstationTypeNode } from '@/api/workstationTypeNode'
 
   export default {
     name: 'editReportGroup',
@@ -206,12 +207,14 @@
         dataForm: {
           name: null,
           remark: null,
+          parentId: null,
+          ifWorkStation: null,
+          ifWorkName: null,
           createBy: null,
           createAt: null,
           updateBy: null,
           updateAt: null,
-          deleteAt: null,
-          deptEntityList: []
+          deleteAt: null
         },
         dataRules: {
           name: [
@@ -235,6 +238,7 @@
           formCode: null,
           remark: null
         },
+        listWorkstationTypeNode,
         listModel,
         listWorkstation,
         listDept,
@@ -289,10 +293,6 @@
     },
     methods: {
       init () {
-        this.dataForm.deptEntityList = []
-        if (!this.$route.path.includes('add')) {
-          this.getDataList()
-        }
         this.title = this.$route.meta.title
         this.$store.dispatch('common/updateTabAttrs', {
           name: this.$route.name,
@@ -301,17 +301,18 @@
         this.inited = false
         this.dataForm.id = parseInt(this.$route.params.id) || 0
         if (this.dataForm.id) {
-          // fetchReportGroup(this.dataForm.id).then(({data}) => {
-          //   Object.assign(
-          //     this.dataForm,
-          //     pick(data.reportGroup, [ 'name', 'remark', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
-          //   )
-          //   data.deptEntityList.forEach((item)=>{
-          //     this.dataForm.deptEntityList.push(item.id)
-          //   })
-          // }).finally(() => {
-          //   this.inited = true
-          // })
+          this.getDataList()
+          fetchWorkstationTypeNode(this.dataForm.id).then(({data}) => {
+            Object.assign(
+              this.dataForm,
+              pick(data.reportGroup, [ 'name', 'remark', 'ifWorkStation', 'ifWorkName', 'createBy', 'createAt', 'updateBy', 'updateAt', 'deleteAt' ])
+            )
+            data.deptEntityList.forEach((item)=>{
+              this.dataForm.deptEntityList.push(item.id)
+            })
+          }).finally(() => {
+            this.inited = true
+          })
         } else {
           this.inited = true
         }
@@ -328,8 +329,8 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             (this.dataForm.id
-                ? updateReportGroup(this.dataForm.id, this.dataForm)
-                : createReportGroup(this.dataForm)
+                ? updateWorkstationTypeNode(this.dataForm.id, this.dataForm)
+                : createWorkstationTypeNode(this.dataForm)
             ).then(({data}) => {
               this.$message({
                 message: '操作成功',
@@ -384,67 +385,67 @@
           this.getDataList()
         }
       },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 详情
-      details (id) {
-        // let noShow = true
-        this.$nextTick(() => {
-          this.$router.push({path: `/details-report/${id}`})
-        })
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.$nextTick(() => {
-          this.$router.push({ path: id ? `/edit-report/${id}` : '/add-report' })
-        })
-      },
-      // 删除数据
-      deleteHandle (row) {
-        var ids = row ? [row.id] : this.dataListSelections.map(item => {
-          return item.id
-        })
-        this.$confirm('此操作将删除数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteReportGroupReportRela(ids).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '删除成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getDataList()
-          })
-        })
-      },
-      // 新增报表组报表关系
-      reportgroupReport () {
-        this.$nextTick(() => {
-          if (this.addReal) {
-            let data = {
-              reportId: this.addreportgroupReportId,
-              reportGroupId: this.id
-            }
-            createReportGroupReportRela(data).then(({page, status}) => {
-              if (status === 200) {
-                this.addReal = false
-                this.getDataList()
-                this.$notify({
-                  title: '成功',
-                  message: '添加关系成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              }
-            })
-          }
-        })
-      },
+      // // 多选
+      // selectionChangeHandle (val) {
+      //   this.dataListSelections = val
+      // },
+      // // 详情
+      // details (id) {
+      //   // let noShow = true
+      //   this.$nextTick(() => {
+      //     this.$router.push({path: `/details-report/${id}`})
+      //   })
+      // },
+      // // 新增 / 修改
+      // addOrUpdateHandle (id) {
+      //   this.$nextTick(() => {
+      //     this.$router.push({ path: id ? `/edit-report/${id}` : '/add-report' })
+      //   })
+      // },
+      // // 删除数据
+      // deleteHandle (row) {
+      //   var ids = row ? [row.id] : this.dataListSelections.map(item => {
+      //     return item.id
+      //   })
+      //   this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     deleteReportGroupReportRela(ids).then(() => {
+      //       this.$notify({
+      //         title: '成功',
+      //         message: '删除成功',
+      //         type: 'success',
+      //         duration: 2000
+      //       })
+      //       this.getDataList()
+      //     })
+      //   })
+      // },
+      // // 新增报表组报表关系
+      // reportgroupReport () {
+      //   this.$nextTick(() => {
+      //     if (this.addReal) {
+      //       let data = {
+      //         reportId: this.addreportgroupReportId,
+      //         reportGroupId: this.id
+      //       }
+      //       createReportGroupReportRela(data).then(({page, status}) => {
+      //         if (status === 200) {
+      //           this.addReal = false
+      //           this.getDataList()
+      //           this.$notify({
+      //             title: '成功',
+      //             message: '添加关系成功',
+      //             type: 'success',
+      //             duration: 2000
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+      // },
       // 新增机种工位关系
       addRelaFun() {
         this.addReal = true
