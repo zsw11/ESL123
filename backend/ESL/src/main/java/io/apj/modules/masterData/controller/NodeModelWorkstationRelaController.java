@@ -36,7 +36,7 @@ public class NodeModelWorkstationRelaController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("masterData:nodemodelworkstationrela:list")
+    //@RequiresPermissions("masterData:nodemodelworkstationrela:list")
     public ResponseEntity<Object> list(@RequestParam Map<String, Object> params){
         PageUtils page = nodeModelWorkstationRelaService.queryPage(params);
 
@@ -48,7 +48,7 @@ public class NodeModelWorkstationRelaController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("masterData:nodemodelworkstationrela:info")
+    //@RequiresPermissions("masterData:nodemodelworkstationrela:info")
     public RD info(@PathVariable("id") Integer id){
 		NodeModelWorkstationRelaEntity nodeModelWorkstationRela = nodeModelWorkstationRelaService.selectById(id);
 
@@ -59,7 +59,7 @@ public class NodeModelWorkstationRelaController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("masterData:nodemodelworkstationrela:save")
+    //@RequiresPermissions("masterData:nodemodelworkstationrela:save")
     public RD save(@RequestBody NodeModelWorkstationRelaEntity nodeModelWorkstationRela){
 		nodeModelWorkstationRelaService.insert(nodeModelWorkstationRela);
 
@@ -70,7 +70,7 @@ public class NodeModelWorkstationRelaController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("masterData:nodemodelworkstationrela:update")
+    //@RequiresPermissions("masterData:nodemodelworkstationrela:update")
     public RD update(@RequestBody NodeModelWorkstationRelaEntity nodeModelWorkstationRela){
 		nodeModelWorkstationRelaService.updateById(nodeModelWorkstationRela);
 
@@ -81,7 +81,7 @@ public class NodeModelWorkstationRelaController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("masterData:nodemodelworkstationrela:delete")
+    //@RequiresPermissions("masterData:nodemodelworkstationrela:delete")
     public RD delete(@RequestBody Integer[] ids){
 		nodeModelWorkstationRelaService.deleteBatchIds(Arrays.asList(ids));
 
