@@ -66,6 +66,22 @@ public class ModelServiceImpl extends ServiceImpl<ModelDao, ModelEntity> impleme
 			entityWrapper.andNew("UPPER(name)  like '%" + name.toUpperCase() + "%'" + " or UPPER(pinyin)  like '%"
 					+ name.toUpperCase() + "%'");
 		}
+		if (StringUtils.isNotEmpty((CharSequence) params.get("workstationId"))) {
+			EntityWrapper<ModelWorkstationRelaEntity> workstationRelaWrapper = new EntityWrapper<>();
+			workstationRelaWrapper.eq("workstation_id",  Integer.parseInt(params.get("modelId").toString())).isNotNull("delete_at");
+			List<ModelWorkstationRelaEntity>  workstationRelaList= modelWorkStationRelaService.selectList(workstationRelaWrapper);
+			List<Integer> modelIds = new ArrayList<>();
+			if(workstationRelaList != null && workstationRelaList.size() > 0){
+				for(ModelWorkstationRelaEntity entity : workstationRelaList){
+					modelIds.add(entity.getWorkstationId());
+				}
+			}
+			
+			if(modelIds.size()>0){
+				entityWrapper.in("id", modelIds);
+			}
+		}
+		
 		Page<ModelEntity> page = this.selectPage(new Query<ModelEntity>(params).getPage(), entityWrapper);
 		for (ModelEntity entity : page.getRecords()) {
 			entity.setModelSeriesEntity(modelSeriesService.selectById(entity.getModelSeriesId()));
