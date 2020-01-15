@@ -576,7 +576,7 @@ export default {
        createReports(Object.assign(
         {
           workBookIds: this.selectedWorkBookIds,
-          reports: this.createForm.id
+          reportGroupIds: this.createForm.id
         }
       )).then((page) => {
         if(page.msg === 'success'){
