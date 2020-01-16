@@ -135,6 +135,7 @@ public class SysLoginController extends AbstractController {
 	public ResponseEntity<Object> userDetail() {
 		SysUserEntity user = getUser();
 		user.setDeptName(sysDeptService.selectById(user.getDeptId()).getName());
+		user.setUsername(staffService.selectNameByUserId(user.getId().intValue()));
 		return RD.ok(SysUserEntityVo.makeVo(user));
 	}
 
