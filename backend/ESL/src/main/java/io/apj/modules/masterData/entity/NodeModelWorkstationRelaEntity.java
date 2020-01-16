@@ -1,10 +1,13 @@
 package io.apj.modules.masterData.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -56,5 +59,29 @@ public class NodeModelWorkstationRelaEntity implements Serializable {
 	 * 工位IDs
 	 */
 	private String workstationIds;
-
+	/**
+	 * 工位名称集合
+	 */
+	@TableField(exist=false)
+	private String workstationName;
+	/**
+	 * 工位id集合
+	 */
+	@TableField(exist=false)
+	private List<Integer> workstationIdList;
+	/**
+	 * 工位实体集合
+	 */
+	@TableField(exist=false)
+	private List<WorkstationEntity> workstationList;
+	/**
+	 * 机种名称
+	 */
+	@TableField(exist=false)
+	private String modelName;
+	/**
+	 * 机种名称
+	 */
+	@TableField(exist=false)
+	private ModelEntity modelEntity;
 }
