@@ -92,7 +92,8 @@
                   <keyword-search
                     v-model="relaForm.modelId"
                     :searchApi="this.listModel"
-                    :allowEmpty="true">
+                    :allowEmpty="true"
+                    :defaultOptions="defaultModel">
                   </keyword-search>
                 </el-form-item>
               </el-col>
@@ -271,7 +272,8 @@
           ]
         }],
         complexFilters: [],
-        defaultParent: []
+        defaultParent: [],
+        defaultModel: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -469,6 +471,8 @@
         this.addReal = true
         this.relaTitle = '新增'
         this.relaForm.id = 0
+        this.relaForm.modelId = null,
+        this.relaForm.workstationIdList = []
       },
       // 编辑机种工位关系
       updateRela(id) {
@@ -476,7 +480,8 @@
         this.relaTitle = '编辑'
         this.relaForm.id = id
         fetchWorkstationNodeModel(id).then((data)=>{
-          console.log(data, 11111111111111111)
+          this.relaForm = data.nodeModelWorkstationRela
+          this.defaultModel = [data.nodeModelWorkstationRela.modelEntity]
         })
       },
       // 提交关系
@@ -484,7 +489,13 @@
         (this.relaForm.id === 0 
         ? createWorkstationNodeModel(this.relaForm) 
         : updateWorkstationNodeModel(this.relaForm)).then((data)=>{
-            console.log(data,'=================')
+             this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+            })
+            this.getDataList()
+            this.addReal = false
           })
       
       }
