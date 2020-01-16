@@ -394,7 +394,7 @@
           stlst: this.dataForm.stlst,
           destinations: this.dataForm.destinations,
           versionNumber: this.dataForm.versionNumber,
-          reportId: id
+          reportGroupId: id
         }
         downloadReportApprove(data).then(response => {
 
