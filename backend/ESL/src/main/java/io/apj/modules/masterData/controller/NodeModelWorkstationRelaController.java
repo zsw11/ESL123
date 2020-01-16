@@ -86,7 +86,7 @@ public class NodeModelWorkstationRelaController {
 			}
 			if(workstationList.size()>0){
 				for(WorkstationEntity workstation : workstationList){
-					workstationName = workstation.getName()+"/";
+					workstationName = workstationName + workstation.getName()+"/";
 				}
 			}
 			nodeModelWorkstationRela.setWorkstationIdList(workstationIdList);

@@ -64,7 +64,7 @@ public class NodeModelWorkstationRelaServiceImpl extends ServiceImpl<NodeModelWo
         			}
         			if(workstationList.size()>0){
         				for(WorkstationEntity workstation : workstationList){
-        					workstationName = workstation.getName()+"/";
+        					workstationName = workstationName + workstation.getName()+"/";
         				}
         			}
         			entity.setWorkstationIdList(workstationIdList);
