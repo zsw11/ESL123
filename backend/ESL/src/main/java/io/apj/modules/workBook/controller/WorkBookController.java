@@ -288,18 +288,25 @@ public class WorkBookController extends AbstractController {
 	public List<ReportGroupEntity> deptReportGroup(){
 		Integer deptId = getUserDeptId().intValue();
 		List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
-		if(reportGroupDeptRelaEntityList != null && reportGroupDeptRelaEntityList.size() > 0){
-			List<ReportGroupEntity> reportGroupEntityList = new ArrayList<>();
-			for(ReportGroupDeptRelaEntity reportGroupDeptRelaEntity : reportGroupDeptRelaEntityList){
-				Integer reportGroupId = reportGroupDeptRelaEntity.getReportGroupId();
-				ReportGroupEntity reportGroupEntity = reportGroupService.selectById(reportGroupId);
-				if(reportGroupEntity != null) {
-					reportGroupEntityList.add(reportGroupEntity);
-				}
+		List<ReportGroupEntity> reportGroupEntities = new ArrayList<>();
+		reportGroupDeptRelaEntityList.forEach(i->{
+			reportGroupEntities.add(reportGroupService.selectById(i.getReportGroupId()));
+		});
+		for(ReportGroupEntity reportGroupEntity : reportGroupEntities){
+			List<ReportEntity> reportEntityList = new ArrayList<>();
+			List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupEntity.getId()));
+			for(ReportGroupReportRelaEntity item:reportGroupReportRelaEntities){
+				reportEntityList.add(reportService.selectById(item.getReportId()));
 			}
-			return reportGroupEntityList;
+			String name = "";
+			for (ReportEntity item : reportEntityList) {
+				name += item.getName() + "/";
+			}
+			reportGroupEntity.setAllReportName(name);
+			reportGroupEntity.setCreateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
+			reportGroupEntity.setUpdateName(staffService.selectNameByUserId(reportGroupEntity.getCreateBy()));
 		}
-		return null;
+		return reportGroupEntities;
 	}
 
 
