@@ -74,7 +74,7 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title table" v-if="!$route.path.includes('add-workstationtypenode') && dataForm.ifWorkstation">
+    <el-card class="with-title table" v-if="!$route.path.includes('add') && dataForm.ifWorkstation">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >工位机种关系</span>
         <el-button
