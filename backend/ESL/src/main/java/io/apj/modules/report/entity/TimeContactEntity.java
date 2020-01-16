@@ -92,6 +92,10 @@ public class TimeContactEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * 全数sub工序用时
 	 */
 	private BigDecimal allCountSub;

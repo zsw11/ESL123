@@ -83,6 +83,10 @@ public class StandardWorkEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * 发行日
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

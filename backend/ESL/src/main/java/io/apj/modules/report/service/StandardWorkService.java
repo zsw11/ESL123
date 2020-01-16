@@ -23,7 +23,7 @@ public interface StandardWorkService extends IService<StandardWorkEntity> {
 
     PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
-    void generateReportData(List<Integer> workBookIds);
+    void generateReportData(List<Integer> workBookIds,Integer reportId);
 
     List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 

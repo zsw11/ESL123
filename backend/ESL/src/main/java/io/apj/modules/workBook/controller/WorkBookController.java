@@ -260,7 +260,7 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/createReport")
 	// @RequiresPermissions("workBook:workbook:createReport")
 	public R createReport(@RequestBody Map<String, Object> params) {
-		Validate.notNull(params.get("reports"));
+		Validate.notNull(params.get("reportGroupIds"));
 		Validate.notNull(params.get("workBookIds"));
 		workBookService.createReports(params);
 		return R.ok();

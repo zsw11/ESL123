@@ -22,7 +22,7 @@ public interface CompareService extends IService<CompareEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    void generateReportData(List<Integer> workBookIds);
+    void generateReportData(List<Integer> workBookIds, Integer reportId);
 
     List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 

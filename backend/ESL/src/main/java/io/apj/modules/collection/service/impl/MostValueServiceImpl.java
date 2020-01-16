@@ -11,12 +11,8 @@ import io.apj.modules.collection.entity.MostValueEntity;
 import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.MostValueItemService;
 import io.apj.modules.collection.service.MostValueService;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PhaseEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.entity.*;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
@@ -60,6 +56,13 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 	private ReportService reportService;
 	@Autowired
 	private WorkBookService workBookService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -119,13 +122,13 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 	}
 
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds ,Integer reportId) {
 
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
 		if(workBooks!=null && workBooks.size()>0 ) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			List<MostValueEntity> list = generateMostValue(filteredWorkBooks);
+			List<MostValueEntity> list = generateMostValue(filteredWorkBooks,reportId);
 			for (MostValueEntity entity : list) {
 				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
 						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
@@ -167,7 +170,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 			generateTotalData(list, map);
 		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_most_value.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + entity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + entity.getSheetName() + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
@@ -253,9 +256,10 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 		}
 	}
 
-	private List<MostValueEntity> generateMostValue(List<WorkBookEntity> workBooks) {
+	private List<MostValueEntity> generateMostValue(List<WorkBookEntity> workBooks,Integer reportId) {
 		List<MostValueEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
+			Integer workstationId = workBook.getWorkstationId();
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -273,6 +277,8 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 				mostValueEntity.setFirstColumnName("Most Value");
 				mostValueEntity.setDestinations(destinations);
 				mostValueEntity.setVersionNumber(versionNumber);
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				mostValueEntity.setWorkstationType(workstationType);
 				insert(mostValueEntity);
 				results.add(mostValueEntity);
 			}else{
@@ -280,6 +286,56 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 			}
 		}
 		return results;
+	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
 	}
 
 	private MostValueEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {

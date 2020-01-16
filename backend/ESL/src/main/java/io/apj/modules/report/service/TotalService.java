@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.service.IService;
+import io.swagger.models.auth.In;
 
 /**
  * Report - Total表
@@ -23,7 +24,7 @@ public interface TotalService extends IService<TotalEntity> {
 
     PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
-    void generateReportData(List<Integer> workBookIds);
+    void generateReportData(List<Integer> workBookIds, Integer reportId);
 
     List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
