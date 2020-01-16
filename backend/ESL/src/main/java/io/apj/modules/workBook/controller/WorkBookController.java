@@ -6,9 +6,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.R;
 import io.apj.common.utils.RD;
 import io.apj.modules.basic.service.StaffService;
-import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
@@ -18,6 +16,7 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+import io.swagger.models.Model;
 import javassist.expr.NewArray;
 import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -62,6 +61,8 @@ public class WorkBookController extends AbstractController {
 	private ReportService reportService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ModelWorkstationRelaService modelWorkstationRelaService;
 
 
 	/**
@@ -387,4 +388,31 @@ public class WorkBookController extends AbstractController {
 
 	}
 
+	@RequestMapping("/deptmodel")
+	public Boolean deptModel(@RequestParam Integer deptId, @RequestParam Integer modelId) {
+		List<ModelEntity> modelEntityList = modelService.selectList(new EntityWrapper<ModelEntity>().eq("dept_id", deptId));
+		List<Integer> modelIds = new ArrayList<>();
+		modelEntityList.forEach(i->{
+			modelIds.add(i.getId());
+		});
+		if(modelIds.contains(modelId)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@RequestMapping("/modelworkstation")
+	public Boolean modelWorkstation(@RequestParam Integer modelId, @RequestParam Integer workstationId) {
+		List<ModelWorkstationRelaEntity> modelWorkstationRelaEntityList = modelWorkstationRelaService.selectList(new EntityWrapper<ModelWorkstationRelaEntity>().eq("model_id", modelId));
+		List<Integer> workstationIds = new ArrayList<>();
+		modelWorkstationRelaEntityList.forEach(i->{
+			workstationIds.add(i.getWorkstationId());
+		});
+		if(workstationIds.contains(workstationId)){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
