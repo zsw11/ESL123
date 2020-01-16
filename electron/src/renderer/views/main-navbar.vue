@@ -26,7 +26,7 @@
         <el-menu-item class="site-navbar__avatar user-data show-right" index="3">
           <el-dropdown :show-timeout="0" placement="bottom" size="small">
             <span class="el-dropdown-link user-wrp">
-              <img src="~@/assets/img/logo.png" :alt="userName" />
+              <img src="~@/assets/img/user.jpg" :alt="userName" />
               <span class="user-wrp">
                 <span class="user">{{ userName }}</span><span class="department">{{ department }}</span>
                 <p class="time">{{date}}</p>

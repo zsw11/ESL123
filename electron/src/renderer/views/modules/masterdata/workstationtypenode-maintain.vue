@@ -37,7 +37,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="10" v-if="!$route.params.parentId">
+        <el-col :span="10">
           <el-form-item :label="'父节点'" prop="parentId">
             <keyword-search
               style="width: 100%"
@@ -104,7 +104,7 @@
                     :searchApi="this.listWorkstation"
                     :allowEmpty="true"
                     :allowMultiple="true"
-                    :apiOptions="{model: relaForm.model}">
+                    :apiOptions="{modelId: relaForm.modelId}">
                   </keyword-search>
                 </el-form-item>
               </el-col>
@@ -178,6 +178,7 @@
           listWorkstationNodeModel, createWorkstationNodeModel, 
           updateWorkstationNodeModel, fetchWorkstationNodeModel
         } from '@/api/workstationTypeNode'
+  import { modelWorkstation } from '@/api/workBook'
 
   export default {
     name: 'editReportGroup',
@@ -239,11 +240,9 @@
           createBy: [
             { type: 'number', message: '创建者ID需为数字值' }
           ],
-
           updateBy: [
             { type: 'number', message: '更新者ID需为数字值' }
           ]
-
         },
         dataButton: 'list',
         listQuery: {
@@ -305,6 +304,22 @@
           }
         },
         deep: true
+      },
+      'relaForm.modelId': {
+      handler: function　(newVal, oldVal)　{
+        if (oldVal) {
+          let data = {
+            workstationId: this.relaForm.workstationIdList,
+            modelId: newVal
+          }
+          modelWorkstation(data).then((page)=>{
+            if (!page) {
+              this.dataForm.workstationIdList = []
+            }
+          })
+        }
+      }
+        
       }
     },
     methods: {
