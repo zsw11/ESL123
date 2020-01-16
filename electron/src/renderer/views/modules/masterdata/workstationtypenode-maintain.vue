@@ -314,7 +314,7 @@
           }
           modelWorkstation(data).then((page)=>{
             if (!page) {
-              this.dataForm.workstationIdList = []
+              this.relaForm.workstationIdList = []
             }
           })
         }

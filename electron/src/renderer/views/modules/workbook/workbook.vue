@@ -563,12 +563,7 @@ export default {
       this.onlyKey.stlst = this.dictItemSTLST[row.stlst].name
       fetchDeptReport().then((page)=>{
         this.reportGroup = page
-        this.reportGroup.forEach((item)=>{
-          this.createForm.id.push(item.id)
-        })
-        // console.log(this.createForm.id, 222222222222222222)
       })
-      //  console.log(this.createForm.id, 111111111111111111)
       this.createShow = true
     },
     // 确定生成报表
@@ -576,7 +571,6 @@ export default {
        createReports(Object.assign(
         {
           workBookIds: this.selectedWorkBookIds,
-          reportGroupIds: this.createForm.id
         }
       )).then((page) => {
         if(page.msg === 'success'){
