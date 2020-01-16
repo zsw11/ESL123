@@ -389,7 +389,9 @@ public class WorkBookController extends AbstractController {
 	}
 
 	@RequestMapping("/deptmodel")
-	public Boolean deptModel(@RequestParam Integer deptId, @RequestParam Integer modelId) {
+	public Boolean deptModel(@RequestBody Map<String,Integer> map) {
+		Integer deptId = map.get("deptId");
+		Integer modelId = map.get("modelId");
 		List<ModelEntity> modelEntityList = modelService.selectList(new EntityWrapper<ModelEntity>().eq("dept_id", deptId));
 		List<Integer> modelIds = new ArrayList<>();
 		modelEntityList.forEach(i->{
@@ -403,7 +405,9 @@ public class WorkBookController extends AbstractController {
 	}
 
 	@RequestMapping("/modelworkstation")
-	public Boolean modelWorkstation(@RequestParam Integer modelId, @RequestParam Integer workstationId) {
+	public Boolean modelWorkstation(@RequestBody Map<String,Integer> map) {
+		Integer workstationId = map.get("workstationId");
+		Integer modelId = map.get("modelId");
 		List<ModelWorkstationRelaEntity> modelWorkstationRelaEntityList = modelWorkstationRelaService.selectList(new EntityWrapper<ModelWorkstationRelaEntity>().eq("model_id", modelId));
 		List<Integer> workstationIds = new ArrayList<>();
 		modelWorkstationRelaEntityList.forEach(i->{
