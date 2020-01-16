@@ -74,7 +74,7 @@
       </el-row>
     </el-form>
 
-    <el-card class="with-title table" v-if="!$route.path.includes('add-workstationtypenode')">
+    <el-card class="with-title table" v-if="!$route.path.includes('add') && dataForm.ifWorkstation">
       <div slot="header" class="clearfix" >
         <span class="tableHeader" >工位机种关系</span>
         <el-button
@@ -88,18 +88,19 @@
         <el-form v-model="relaForm" label-position="right" label-width="50px">
             <el-row :gutter="20">
               <el-col :span="10">
-                <el-form-item :label="'机种'" prop="model">
+                <el-form-item :label="'机种'" prop="modelId">
                   <keyword-search
-                    v-model="relaForm.model"
+                    v-model="relaForm.modelId"
                     :searchApi="this.listModel"
-                    :allowEmpty="true">
+                    :allowEmpty="true"
+                    :defaultOptions="defaultModel">
                   </keyword-search>
                 </el-form-item>
               </el-col>
               <el-col :span="10" >
-                <el-form-item :label="'工位'" prop="workstation">
+                <el-form-item :label="'工位'" prop="workstationIdList">
                   <keyword-search
-                    v-model="relaForm.workstation"
+                    v-model="relaForm.workstationIdList"
                     :searchApi="this.listWorkstation"
                     :allowEmpty="true"
                     :allowMultiple="true"
@@ -115,7 +116,7 @@
         </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="addReal = false">取 消</el-button>
-            <el-button type="primary" @click="addReal = false">确 定</el-button>
+            <el-button type="primary" @click="submitRela()">确 定</el-button>
           </div>
         </el-dialog>
       </div>
@@ -123,15 +124,15 @@
         :data="dataList"
         v-loading="dataListLoading"
         style="width: 100%;">
-        <el-table-column align="center" prop="model" label="机种" >
+        <el-table-column align="center" prop="modelName" label="机种" >
           <template slot-scope="scope">
-            <span>{{scope.row.model }}</span>
+            <span>{{scope.row.modelName}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="workstation" label="工位" >
+        <el-table-column align="center" prop="workstationName" label="工位" min-width="200">
           <template slot-scope="scope">
-            <span>{{scope.row.workstation }}</span>
+            <span>{{scope.row.workstationName }}</span>
           </template>
         </el-table-column>
 
@@ -171,7 +172,12 @@
   import {  listDept } from '@/api/dept'
   import { listModel} from '@/api/model'
   import { listWorkstation} from '@/api/workstation'
-  import { listWorkstationTypeNode, createWorkstationTypeNode, updateWorkstationTypeNode, fetchWorkstationTypeNode } from '@/api/workstationTypeNode'
+  import { 
+          listWorkstationTypeNode, createWorkstationTypeNode,
+          updateWorkstationTypeNode, fetchWorkstationTypeNode, 
+          listWorkstationNodeModel, createWorkstationNodeModel, 
+          updateWorkstationNodeModel, fetchWorkstationNodeModel
+        } from '@/api/workstationTypeNode'
 
   export default {
     name: 'editReportGroup',
@@ -192,8 +198,10 @@
           }
         ],
         relaForm: {
-          model: null,
-          workstation: []
+          workstationTypeNodeId: null,
+          id: null,
+          modelId: null,
+          workstationIdList: []
         },
         addreportgroupReportId: null, // 报表id
         addReal: false, // 新增页面显示
@@ -239,8 +247,8 @@
         },
         dataButton: 'list',
         listQuery: {
-          name: null,
-          formCode: null,
+          modelName: null,
+          workstationName: null,
           remark: null
         },
         listWorkstationTypeNode,
@@ -264,7 +272,8 @@
           ]
         }],
         complexFilters: [],
-        defaultParent: []
+        defaultParent: [],
+        defaultModel: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -275,6 +284,7 @@
     created () {
       const self = this
       self.id = this.$route.params.id
+      self.relaForm.workstationTypeNodeId = parseInt(self.id)
       this.init()
     },
     activated () {
@@ -357,8 +367,10 @@
         }
         this.dataButton = 'list'
         this.dataListLoading = true
-        fetchReportDetail(this.id).then(({data}) => {
-          this.dataList = data.data
+        let dataId = { workstationTypeNodeId: this.id}
+        
+        listWorkstationNodeModel(dataId).then(({page}) => {
+          this.dataList = page.data
         }).catch(() => {
           this.dataList = []
           this.total = 0
@@ -369,7 +381,7 @@
       // 清除查询条件
       clearQuery () {
         this.listQuery = Object.assign(this.listQuery, {
-          name: null,
+          modelId: null,
           formCode: null,
           remark: null
         })
@@ -458,11 +470,34 @@
       addRelaFun() {
         this.addReal = true
         this.relaTitle = '新增'
+        this.relaForm.id = 0
+        this.relaForm.modelId = null,
+        this.relaForm.workstationIdList = []
       },
       // 编辑机种工位关系
-      updateRela() {
+      updateRela(id) {
         this.addReal = true
         this.relaTitle = '编辑'
+        this.relaForm.id = id
+        fetchWorkstationNodeModel(id).then((data)=>{
+          this.relaForm = data.nodeModelWorkstationRela
+          this.defaultModel = [data.nodeModelWorkstationRela.modelEntity]
+        })
+      },
+      // 提交关系
+      submitRela(){
+        (this.relaForm.id === 0 
+        ? createWorkstationNodeModel(this.relaForm) 
+        : updateWorkstationNodeModel(this.relaForm)).then((data)=>{
+             this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+            })
+            this.getDataList()
+            this.addReal = false
+          })
+      
       }
     }
   }
