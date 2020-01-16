@@ -1,5 +1,9 @@
 package io.apj.modules.report.service.impl;
 
+import io.apj.modules.masterData.entity.ReportGroupEntity;
+import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.lettuce.core.api.reactive.RedisGeoReactiveCommands;
+import org.apache.poi.ss.usermodel.DateUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -27,6 +31,8 @@ import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,13 +40,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
+
+import static io.apj.common.utils.ExportExcelUtils.copySheet;
+import static io.apj.common.utils.ExportExcelUtils.exportExcel;
 
 
 @Service("approveService")
@@ -249,73 +253,103 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response)  throws IOException {
-        Integer reportId = (Integer)params.get("reportId");
-        List<String> filePaths = null;
-        String fileName = null;
-        switch (reportId) {
-            case 1:
-                fileName="workBook"+new Date().getTime();
-                filePaths = workBookService.download(params, response);
-                break;
-            case 2:
-                //人机联合
-                fileName="reportManMachineCombination"+new Date().getTime();
-                filePaths = reportManMachineCombinationService.download(params, response);
-                break;
-            case 3:
-            	// 工位时间报表
-                fileName="stationTime"+new Date().getTime();
-                filePaths = stationTimeService.download(params, response);
-                break;
-            case 4:
-            	// Compare表
-                fileName="compare"+new Date().getTime();
-                filePaths = compareService.download(params, response);
-                break;
-            case 5:
-            	// MOST Value表
-                fileName="mostValue"+new Date().getTime();
-                filePaths = mostValueService.download(params, response);
-                break;
-            case 6:
-                // Collection-Revision History表
-                fileName="revisionHistory"+new Date().getTime();
-                filePaths = revisionHistoryService.download(params, response);
-                break;
-            case 7:
-            	// Total表
-                fileName="total"+new Date().getTime();
-                filePaths = totalService.download(params, response);
-                break;
-            case 8:
-                break;
-            case 9:
-            	// 时间联络表
-                fileName="timeContact"+new Date().getTime();
-                filePaths = timeContactService.download(params, response);
-                break;
-            case 10:
-                break;
-            case 11:
-            	// 标准时间表
-                fileName="standardTime"+new Date().getTime();
-                filePaths = standardTimeService.download(params, response);
-                break;
-            case 12:
-                // 标准工数表
-                fileName="standardWork"+new Date().getTime();
-                filePaths = standardWorkService.download(params, response);
-                break;
-            case 13:
-                // 履历表
-                fileName="changeRecord"+new Date().getTime();
-                filePaths = changeRecordService.download(params, response);
-                break;
+        Integer reportGroupId = (Integer) params.get("reportGroupId");
+        if(reportGroupId != null){
+            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntityList = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
+            if(reportGroupReportRelaEntityList != null && reportGroupReportRelaEntityList.size() > 0){
+                deleteExcel();
+                for(ReportGroupReportRelaEntity reportGroupReportRelaEntity : reportGroupReportRelaEntityList){
+                    Integer reportId = reportGroupReportRelaEntity.getReportId();
+                    switch (reportId) {
+                        case 1:
+                            workBookService.download(params, response);
+                            break;
+                        case 2:
+                            //人机联合
+                            reportManMachineCombinationService.download(params, response);
+                            break;
+                        case 3:
+                            // 工位时间报表
+                            stationTimeService.download(params, response);
+                            break;
+                        case 4:
+                            // Compare表
+                            compareService.download(params, response);
+                            break;
+                        case 5:
+                            // MOST Value表
+                            mostValueService.download(params, response);
+                            break;
+                        case 6:
+                            // Collection-Revision History表
+                            revisionHistoryService.download(params, response);
+                            break;
+                        case 7:
+                            // Total表
+                            totalService.download(params, response);
+                            break;
+                        case 8:
+                            break;
+                        case 9:
+                            // 时间联络表
+                            timeContactService.download(params, response);
+                            break;
+                        case 10:
+                            break;
+                        case 11:
+                            // 标准时间表
+                            standardTimeService.download(params, response);
+                            break;
+                        case 12:
+                            // 标准工数表
+                            standardWorkService.download(params, response);
+                            break;
+                        case 13:
+                            // 履历表
+                            changeRecordService.download(params, response);
+                            break;
+                    }
+                }
+                List<String> filePathList = getMergeExcelPath();
+                if( filePathList != null && filePathList.size() > 0) {
+                    ReportGroupEntity reportGroupEntity = reportGroupService.selectById(reportGroupId);
+                    String fileName = reportGroupEntity.getName() + new Date().getTime();
+                    ExportExcelUtils.exportExcel(filePathList, response, fileName);
+                }
+            }
         }
-        ExportExcelUtils.exportExcel(filePaths, response, fileName);
-
     }
 
+    private List<String> getMergeExcelPath(){
+        String path = Constant.TEMPLATE_PATH + "template";
+        File filePath = new File(path);
+        File[] files = filePath.listFiles();
+        if(files.length > 0){
+            List<String> filePahtList = new ArrayList<>();
+            for(File file : files){
+                if(file.isFile()){
+                    filePahtList.add(file.toString());
+                }
+            }
+            return filePahtList;
+        }
+        return null;
+    }
 
+    //清空文件夹excel
+    private void deleteExcel(){
+        String templateStr = Constant.TEMPLATE_PATH + "template";
+        File template = new File(templateStr);
+        if(template.exists()){
+            File[] files = template.listFiles();
+            if(files.length > 0){
+                for(File file : files){
+                    file.delete();
+                }
+            }
+        }else{
+            template.mkdir();
+        }
+    }
 
 }

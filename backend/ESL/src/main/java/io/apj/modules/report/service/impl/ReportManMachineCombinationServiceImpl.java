@@ -6,10 +6,7 @@ import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
 import io.apj.modules.masterData.entity.*;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.masterData.service.WorkstationTypeNodeService;
-import io.apj.modules.masterData.service.WorkstationTypeService;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.dao.ReportManMachineCombinationDao;
 import io.apj.modules.report.entity.AshcraftTableEntity;
 import io.apj.modules.report.entity.ReportManMachineCombinationEntity;
@@ -35,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.apj.modules.workBook.service.WorkOperationsService;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -75,6 +73,8 @@ public class ReportManMachineCombinationServiceImpl
 	private ReportService reportService;
 	@Autowired
 	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -110,7 +110,7 @@ public class ReportManMachineCombinationServiceImpl
 		map.put("modelType", model.getCode());
 
 		// TODO 添加调用模版方法及生成目标excel文件方法
-		String exportFileName = Constant.TEMPLATE_PATH + reportManMachineCombinationEntity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + reportManMachineCombinationEntity.getSheetName() + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
@@ -181,22 +181,12 @@ public class ReportManMachineCombinationServiceImpl
 	}
 
 	public List<ReportManMachineCombinationEntity> generateReportManMachineCombination(List<WorkBookEntity> workBooks,Integer reportId) {
-		//查询工位结构信息
-		ReportEntity reportEntity = reportService.selectById(reportId);
-		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
-		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>().eq("workstation_type_id",workstationTypeEntity.getId()));
-		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
-			List<WorkstationTypeNodeEntity> workstationTypeNodeEntities = new ArrayList<>();
-			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
-				//TODO 获取NodeModelWorkstationRela实体
-
-			}
-		}
-
 		List<ReportManMachineCombinationEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
+			Integer modelId = work.getModelId();
+			Integer workstationId = work.getWorkstationId();
 			EntityWrapper<ReportManMachineCombinationEntity> entityWrapper = new EntityWrapper<>();
-			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
+			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", modelId).eq("phase_id",
 					work.getPhaseId()).eq("destinations",work.getDestinations()).eq("version_number", work.getVersionNumber());
 			ReportManMachineCombinationEntity reportManMachineCombination = selectOne(entityWrapper);
 			if (reportManMachineCombination==null) {
@@ -209,6 +199,8 @@ public class ReportManMachineCombinationServiceImpl
 				reportManMachineCombinationEntity.setDeptId(work.getDeptId());
 				reportManMachineCombinationEntity.setDestinations(work.getDestinations());
 				reportManMachineCombinationEntity.setVersionNumber(work.getVersionNumber());
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				reportManMachineCombinationEntity.setWorkstationType(workstationType);
 				insert(reportManMachineCombinationEntity);
 				results.add(reportManMachineCombinationEntity);
 			}else{
@@ -216,6 +208,56 @@ public class ReportManMachineCombinationServiceImpl
 			}
 		}
 		return results;
+	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
 	}
 
 	private void generateTotalData(Map<String, Object> map) throws IOException {

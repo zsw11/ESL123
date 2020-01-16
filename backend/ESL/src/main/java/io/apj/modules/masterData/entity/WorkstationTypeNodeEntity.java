@@ -80,4 +80,7 @@ public class WorkstationTypeNodeEntity implements Serializable {
 	@TableField(exist = false)
 	private List<WorkstationTypeNodeEntity> child;
 
+	@TableField(exist = false)
+	private NodeModelWorkstationRelaEntity modelWorkstation;
+
 }

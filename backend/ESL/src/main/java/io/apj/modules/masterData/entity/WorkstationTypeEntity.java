@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -61,4 +63,8 @@ public class WorkstationTypeEntity implements Serializable {
 	private String createName;
 	@TableField(exist = false)
 	private String updateName;
+
+	@TableField(exist = false)
+	private List<WorkstationTypeNodeEntity> workstationTypeNodeList;
+
 }

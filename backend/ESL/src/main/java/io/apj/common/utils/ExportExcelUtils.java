@@ -186,7 +186,7 @@ public class ExportExcelUtils {
 //		FileUtil.deleteBatchByFilePaths(paths);
 	}
 
-	private static void exportMergedExcel(List<String> paths, OutputStream out) throws IOException {
+	public static void exportMergedExcel(List<String> paths, OutputStream out) throws IOException {
 		HSSFWorkbook newExcelCreat = new HSSFWorkbook();
 		try {
 

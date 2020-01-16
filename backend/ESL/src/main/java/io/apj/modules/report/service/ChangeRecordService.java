@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 
 import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.ChangeRecordEntity;
+import io.swagger.models.auth.In;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,7 +30,7 @@ public interface ChangeRecordService extends IService<ChangeRecordEntity> {
      */
     PageUtils selectListTest(Map<String, Object> params);
 
-    void generateReportData(List<Integer> workBookIds);
+    void generateReportData(List<Integer> workBookIds, Integer reportId);
 
     void updateEntity(ChangeRecordEntity changeRecord);
 

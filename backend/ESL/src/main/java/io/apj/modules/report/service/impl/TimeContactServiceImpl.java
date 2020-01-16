@@ -1,14 +1,8 @@
 package io.apj.modules.report.service.impl;
 
 import io.apj.common.utils.*;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.entity.WorkstationEntity;
-import io.apj.modules.masterData.entity.WorkstationTypeEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.WorkstationService;
-import io.apj.modules.masterData.service.WorkstationTypeService;
+import io.apj.modules.masterData.entity.*;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.masterData.service.impl.ReportServiceImpl;
 import io.apj.modules.report.dao.TimeContactDao;
 import io.apj.modules.report.entity.TimeContactEntity;
@@ -52,6 +46,13 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	private WorkstationService workstationService;
 	@Autowired
 	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
+	@Autowired
+	private ReportService reportService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -116,12 +117,12 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 	}
 
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds,Integer reportId) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
 		if(workBooks!=null&&workBooks.size()>0) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			List<TimeContactEntity> list = generateStandardTime(filteredWorkBooks);
+			List<TimeContactEntity> list = generateStandardTime(filteredWorkBooks,reportId);
 		}
 	}
 
@@ -228,7 +229,7 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "report_time_contact_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
@@ -242,9 +243,10 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 		return Arrays.asList(exportFileName);
 	}
 
-	private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks) {
+	private List<TimeContactEntity> generateStandardTime(List<WorkBookEntity> workBooks,Integer reportId) {
 		List<TimeContactEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
+			Integer workstationId = workBook.getWorkstationId();
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -263,6 +265,8 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 				timeContactEntity.setStlst(stlst);
 				timeContactEntity.setDestinations(destinations);
 				timeContactEntity.setVersionNumber(versionNumber);
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				timeContactEntity.setWorkstationType(workstationType);
 				insert(timeContactEntity);
 				results.add(timeContactEntity);
 			}else{
@@ -270,6 +274,56 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 			}
 		}
 		return results;
+	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
 	}
 
 	private TimeContactEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {

@@ -66,6 +66,10 @@ public class StationTimeEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * 确认ID
 	 */
 	private Integer comfirmBy;

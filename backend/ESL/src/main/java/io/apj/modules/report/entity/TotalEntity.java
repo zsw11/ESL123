@@ -71,6 +71,10 @@ public class TotalEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * 类别
 	 */
 	private String cotegory;

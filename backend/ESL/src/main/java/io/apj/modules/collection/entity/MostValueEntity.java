@@ -56,6 +56,10 @@ public class MostValueEntity implements Serializable {
 	 */
 	private String versionNumber;
 	/**
+	 * 工位结构
+	 */
+	private String workstationType;
+	/**
 	 * 备注
 	 */
 	private String remark;

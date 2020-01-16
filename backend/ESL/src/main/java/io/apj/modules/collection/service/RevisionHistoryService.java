@@ -23,7 +23,7 @@ public interface RevisionHistoryService extends IService<RevisionHistoryEntity> 
 
     PageUtils queryPage(Map<String, Object> params) throws ParseException;
 
-    void generateReportData(List<Integer> workBookIds);
+    void generateReportData(List<Integer> workBookIds,Integer reportId);
 
     void updateEntity(RevisionHistoryEntity revisionHistory);
 

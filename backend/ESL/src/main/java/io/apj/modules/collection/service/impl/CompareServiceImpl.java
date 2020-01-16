@@ -11,12 +11,8 @@ import io.apj.modules.collection.entity.CompareEntity;
 import io.apj.modules.collection.entity.CompareItemEntity;
 import io.apj.modules.collection.service.CompareItemService;
 import io.apj.modules.collection.service.CompareService;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.PhaseEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.entity.*;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
@@ -59,6 +55,13 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 	private CompareService compareService;
 	@Autowired
 	private ReportService reportService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -124,13 +127,13 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 	}
 
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds,Integer reportId) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
 
 		if(workBooks!=null&&workBooks.size()>0) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			List<CompareEntity> list = generateCompare(filteredWorkBooks);
+			List<CompareEntity> list = generateCompare(filteredWorkBooks,reportId);
 			for (CompareEntity entity : list) {
 				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
 						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
@@ -173,7 +176,7 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 			generateTotalData(list, map);
 		}
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_compare.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + entity.getSheetName() + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + entity.getSheetName() + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
@@ -231,10 +234,10 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 		map.put("minuteDifferenceTotal", minuteDifferenceTotal);
 	}
 
-	private List<CompareEntity> generateCompare(List<WorkBookEntity> workBooks) {
+	private List<CompareEntity> generateCompare(List<WorkBookEntity> workBooks,Integer reportId) {
 		List<CompareEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity workBook : workBooks) {
-
+			Integer workstationId = workBook.getWorkstationId();
 			Integer phaseId = workBook.getPhaseId();
 			Integer modelId = workBook.getModelId();
 			String stlst = workBook.getStlst();
@@ -254,6 +257,8 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 				compareEntity.setFirstColumnName("LFP-PD内作");
 				compareEntity.setDestinations(destinations);
 				compareEntity.setVersionNumber(versionNumber);
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				compareEntity.setWorkstationType(workstationType);
 
 				WorkBookEntity lastWookBook = workBookService.getLastVersion(modelId, stlst, phaseId, destinations, versionNumber);
 				if (lastWookBook != null) {
@@ -267,6 +272,57 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 			}
 		}
 		return results;
+	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
 	}
 
 	private CompareEntity selectOneByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId ,String destinations,String versionNumber) {

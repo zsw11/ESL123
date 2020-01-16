@@ -9,13 +9,8 @@ import io.apj.modules.collection.entity.RevisionHistoryEntity;
 import io.apj.modules.collection.entity.RevisionHistoryItemEntity;
 import io.apj.modules.collection.service.RevisionHistoryItemService;
 import io.apj.modules.collection.service.RevisionHistoryService;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.entity.WorkstationEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
-import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.masterData.entity.*;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 
@@ -63,6 +58,13 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 	private WorkBookService workBookService;
 	@Autowired
 	private WorkstationService workstationService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -138,12 +140,12 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 	}
 
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds,Integer reportId) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
 		if(workBooks!=null&&workBooks.size()>0) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks);
+			List<RevisionHistoryEntity> list = generateRevisionHistory(filteredWorkBooks,reportId);
 //			for(RevisionHistoryEntity entity : list){
 //				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
 //						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
@@ -154,9 +156,11 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 		}
 	}
 
-	private List<RevisionHistoryEntity> generateRevisionHistory(List<WorkBookEntity> workBooks) {
+	private List<RevisionHistoryEntity> generateRevisionHistory(List<WorkBookEntity> workBooks,Integer reportId) {
 		List<RevisionHistoryEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
+			Integer workstationId = work.getWorkstationId();
+			Integer modelId = work.getModelId();
 			EntityWrapper<RevisionHistoryEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
 			work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number", work.getVersionNumber());
@@ -170,6 +174,8 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 				revisionHistoryEntity.setDeptId(work.getDeptId());
 				//revisionHistoryEntity.setDestinations(work.getDestinations());
 				revisionHistoryEntity.setVersionNumber(work.getVersionNumber());
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				revisionHistoryEntity.setWorkstationType(workstationType);
 				WorkstationEntity workstation = workstationService.selectById(work.getWorkstationId());
 				revisionHistoryEntity.setSheetName(workstation.getName() + " " + work.getWorkName());
 				revisionHistoryEntity.setDestinations(work.getDestinations());
@@ -180,6 +186,56 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 			}
 		}
 		return results;
+	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -223,7 +279,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 		// TODO 添加调用模版方法及生成目标excel文件方法
 
 		String templateFileName = Constant.TEMPLATE_PATH + "collection_revision_history_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();

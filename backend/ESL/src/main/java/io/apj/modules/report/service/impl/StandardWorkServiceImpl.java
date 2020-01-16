@@ -4,11 +4,8 @@ import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
 import io.apj.common.utils.Query;
-import io.apj.modules.masterData.entity.ModelEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
-import io.apj.modules.masterData.service.ModelService;
-import io.apj.modules.masterData.service.PhaseService;
-import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.entity.*;
+import io.apj.modules.masterData.service.*;
 import io.apj.modules.report.dao.StandardWorkDao;
 import io.apj.modules.report.entity.StandardWorkEntity;
 import io.apj.modules.report.entity.StandardWorkItemEntity;
@@ -60,6 +57,13 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 	private ReportService reportService;
 	@Autowired
 	private WorkBookService workBookService;
+	@Autowired
+	private WorkstationTypeService workstationTypeService;
+	@Autowired
+	private WorkstationTypeNodeService workstationTypeNodeService;
+	@Autowired
+	private NodeModelWorkstationRelaService nodeModelWorkstationRelaService;
+
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) throws ParseException {
@@ -137,12 +141,12 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 	 * report 加数据
 	 */
 	@Override
-	public void generateReportData(List<Integer> workBookIds) {
+	public void generateReportData(List<Integer> workBookIds,Integer reportId) {
 		List<WorkBookEntity> workBooks = workBookService.selectBatchIds(workBookIds);
 		if(workBooks!=null&&workBooks.size()>0) {
 			List<WorkBookEntity> filteredWorkBooks = workBookService
 					.filterUniquePhaseAndModelAndStlstOfWorkBooks(workBooks);
-			List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks);
+			List<StandardWorkEntity> list = generateStandardWork(filteredWorkBooks,reportId);
 			for (StandardWorkEntity entity : list) {
 				List<Integer> filteredWorkBookIds = workBookService.filterWorkBookIdsByPhaseAndModelAndStlst(workBooks,
 						entity.getModelId(), entity.getStlst(), entity.getPhaseId(), entity.getDestinations(), entity.getVersionNumber());
@@ -153,9 +157,11 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		}
 	}
 
-	private List<StandardWorkEntity> generateStandardWork(List<WorkBookEntity> workBooks) {
+	private List<StandardWorkEntity> generateStandardWork(List<WorkBookEntity> workBooks,Integer reportId) {
 		List<StandardWorkEntity> results = new ArrayList<>(workBooks.size());
 		for (WorkBookEntity work : workBooks) {
+			Integer modelId = work.getModelId();
+			Integer workstationId = work.getWorkstationId();
 			EntityWrapper<StandardWorkEntity> entityWrapper = new EntityWrapper<>();
 			entityWrapper.eq("stlst", work.getStlst()).eq("model_id", work.getModelId()).eq("phase_id",
 				work.getPhaseId()).eq("destinations", work.getDestinations()).eq("version_number",work.getVersionNumber());
@@ -168,6 +174,9 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 				standardWorkEntity.setDeptId(work.getDeptId());
 				standardWorkEntity.setDestinations(work.getDestinations());
 				standardWorkEntity.setVersionNumber(work.getVersionNumber());
+				String workstationType = getWorkstationTypeDetail(reportId ,modelId ,workstationId);
+				standardWorkEntity.setWorkstationType(workstationType);
+
 				insert(standardWorkEntity);
 				results.add(standardWorkEntity);
 			}else{
@@ -177,6 +186,57 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 
 		return results;
 	}
+
+	List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = new ArrayList<>();
+	private String getWorkstationTypeDetail(Integer reportId ,Integer fromModelId ,Integer fromWorkstationId){
+		workstationTypeNodeEntityList.clear();
+		//查询工位结构信息
+		ReportEntity reportEntity = reportService.selectById(reportId);
+		WorkstationTypeEntity workstationTypeEntity = workstationTypeService.selectById(reportEntity.getWorkstationTypeId());
+		List<WorkstationTypeNodeEntity> workstationTypeNodeEntityList = workstationTypeNodeService.selectList(new EntityWrapper<WorkstationTypeNodeEntity>()
+				.eq("workstation_type_id",workstationTypeEntity.getId()));
+		if(workstationTypeNodeEntityList != null && workstationTypeNodeEntityList.size() > 0){
+			for(WorkstationTypeNodeEntity workstationTypeNodeEntity : workstationTypeNodeEntityList){
+				if(workstationTypeNodeEntity.getIfWorkstation()){
+					List<NodeModelWorkstationRelaEntity> nodeModelWorkstationRelaEntityList = nodeModelWorkstationRelaService.selectList(
+							new EntityWrapper<NodeModelWorkstationRelaEntity>().eq("workstation_type_node_id",workstationTypeNodeEntity.getId()));
+					if(nodeModelWorkstationRelaEntityList != null && nodeModelWorkstationRelaEntityList.size() > 0){
+						for(NodeModelWorkstationRelaEntity nodeModelWorkstationRelaEntity : nodeModelWorkstationRelaEntityList){
+							Integer modelId = nodeModelWorkstationRelaEntity.getModelId();
+							String workstationIds = nodeModelWorkstationRelaEntity.getWorkstationIds();
+							String[] workstationIdArr = workstationIds.split(",");
+							for(String workstationId : workstationIdArr){
+								if(fromModelId == modelId && fromWorkstationId == Integer.valueOf(workstationId)){
+									workstationTypeNodeEntity.setModelWorkstation(nodeModelWorkstationRelaEntity);
+									workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+									Integer parentId = workstationTypeNodeEntity.getParentId();
+									getParent(parentId);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(workstationTypeNodeEntityList.size() > 0){
+				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
+			}
+		}
+		return workstationTypeEntity.toString();
+	}
+	private void getParent(Integer parentId){
+		if(parentId != null) {
+			WorkstationTypeNodeEntity workstationTypeNodeEntity = workstationTypeNodeService.selectById(parentId);
+			if (workstationTypeNodeEntity != null) {
+				workstationTypeNodeEntityList.add(workstationTypeNodeEntity);
+				Integer parentIdGet = workstationTypeNodeEntity.getParentId();
+				if (parentIdGet != null) {
+					getParent(parentIdGet);
+				}
+			}
+		}
+	}
+
 
 	@Override
 	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
@@ -210,7 +270,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 		}
 		// TODO 添加调用模版方法及生成目标excel文件方法
 		String templateFileName = Constant.TEMPLATE_PATH + "report_standard_work_template.xls";
-		String exportFileName = Constant.TEMPLATE_PATH + sheetName + ".xls";
+		String exportFileName = Constant.TEMPLATE_PATH + "template\\" + sheetName + ".xls";
 		File historyExcel = new File(exportFileName);
 		if (historyExcel.exists()) {
 			historyExcel.delete();
