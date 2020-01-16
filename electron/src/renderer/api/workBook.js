@@ -147,3 +147,21 @@ export function fetchWorkBookTotal (id) {
     params: request.adornParams()
   })
 }
+
+// 获取部门机种是否关联
+export function deptModel (data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/deptmodel'),
+    method: 'post',
+    data
+  })
+}
+
+// 获取机种工位是否关联
+export function modelWorkstation (data) {
+  return request({
+    url: request.adornUrl('/api/v1/workbook/modelworkstation'),
+    method: 'post',
+    data
+  })
+}
