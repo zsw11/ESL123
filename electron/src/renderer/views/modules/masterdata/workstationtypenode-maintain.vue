@@ -352,9 +352,10 @@
       },
       // 取消信息
       cancleFormSubmit () {
+        let id = this.dataForm.workstationTypeId
+        console.log(id)
         this.$store.dispatch('common/closeActiveTab')
-        // this.$router.push({ name: 'masterdata-reportgroup' })
-        this.$router.back()
+        this.$router.push( `/edit-workstationtype/${id}`)
         this.$destroy()
       },
       // 表单提交

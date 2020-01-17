@@ -172,15 +172,15 @@ const mainRoutes = {
     { path: '/details-workstation/:id(\\d+)', component: _import('modules/masterdata/workstation-maintain'), name: 'details-workstation', meta: { title: '工位-详情', isTab: true } },
     { path: '/workstation-model/:id(\\d+)', component: _import('modules/masterdata/modelworkstationrela'), name: 'workstation-model', meta: { title: '工位-机种', isTab: true } },
 
-    // 工位类型
+    // 工位结构
     { path: '/add-workstationtype', component: _import('modules/masterdata/workstationtype-maintain'), name: 'add-workstationtype', meta: { title: '工位结构-新增', isTab: true } },
     { path: '/edit-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'edit-workstationtype', meta: { title: '工位结构-编辑', isTab: true } },
     { path: '/details-workstationtype/:id(\\d+)', component: _import('modules/masterdata/workstationtype-maintain'), name: 'details-workstationtype', meta: { title: '工位结构-详情', isTab: true } },
 
-    // 工位类型节点
+    // 工位结构节点
     { path: '/add-workstationtypenode/:WId(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'add-workstationtypenode', meta: { title: '新增工位结构节点', isTab: true } },
     { path: '/edit-workstationtypenode/:id(\\d+)/:WId(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'edit-workstationtypenode', meta: { title: '编辑工位结构节点', isTab: true } },
-    { path: '/addSon-workstationtypenode/:parentId(\\d+)/:WId(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'addSon-workstationtypenode', meta: { title: '新增子工位结构节点', isTab: true } },
+    { path: '/addSon-workstationtypenode/:parentId(\\d+)/:WId(\\d+)', component: _import('modules/masterdata/workstationtypenode-maintain'), name: 'addSon-workstationtypenode', meta: { title: '新增工位结构子节点', isTab: true } },
 
     // 组织机构工位关系
     { path: '/add-deptworkstationrela', component: _import('modules/masterdata/deptworkstationrela-maintain'), name: 'add-deptworkstationrela', meta: { title: '新增组织机构工位关系', isTab: true } },
@@ -206,6 +206,7 @@ const mainRoutes = {
     { path: '/copy-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'copy-workbook', meta: { title: '复制分析表', isTab: true } },
     { path: '/alter-workbook/:id(\\d+)', component: _import('modules/workbook/workbook-maintain'), name: 'alter-workbook', meta: { title: '修订分析表', isTab: true } },
     { path: '/workbook-detail/:id(\\d+)', component: _import('modules/workbook/workbook-detail'), name: 'workbook-detail', meta: { title: '分析表录入', isFull: true } },
+    { path: '/workbook1', component: _import('modules/workbook/workbook1'), name: 'workbook1', meta: { title: '分析表', isTab: true } },
 
     // Collection - Compare表
     { path: '/add-compare', component: _import('modules/report/compare-maintain'), name: 'add-compare', meta: { title: '新增Collection - Compare表', isTab: true } },

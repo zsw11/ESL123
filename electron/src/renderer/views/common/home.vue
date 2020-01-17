@@ -4,39 +4,39 @@
       <el-col :span="17" class="functions">
         <div class="title">欢 迎 使 用 STAMS</div>
         <el-row>
-          <el-col :span="8" @click.native="go({ path: '/workbook-workbook'})">
+          <el-col :span="7" @click.native="go({ path: '/workbook-workbook'})">
             <img src="@/assets/img/home/workbook.jpg" alt="">
             <p>时间分析</p>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <img src="@/assets/img/home/report.jpg" alt="">
             <p>数据统计</p>
           </el-col>
-          <el-col :span="8" @click.native="go({ path: '/masterdata-model'})">
+          <el-col :span="7" @click.native="go({ path: '/masterdata-model'})">
             <img src="@/assets/img/home/master-data.jpg" alt="">
             <p>Master Data</p>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8" @click.native="go({ path: '/report-approve'})">
+          <el-col :span="7" @click.native="go({ path: '/report-approve'})">
             <img src="@/assets/img/home/approve.jpg" alt="">
             <p>报表审批</p>
           </el-col>
-          <el-col :span="8" @click.native="go({ path: '/sys-role'})">
+          <el-col :span="7" @click.native="go({ path: '/sys-role'})">
             <img src="@/assets/img/home/role.jpg" alt="">
             <p>权限管理</p>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col :span="7">
             <img src="@/assets/img/home/query.jpg" alt="">
             <p>查询</p>
           </el-col>
-          <el-col :span="8" @click.native="go({ path: '/sys-config'})">
+          <el-col :span="7" @click.native="go({ path: '/sys-config'})">
             <img src="@/assets/img/home/setting.jpg" alt="">
             <p>系统设置</p>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <img src="@/assets/img/home/manual.jpg" alt="">
             <p>操作指引</p>
           </el-col>
@@ -79,7 +79,7 @@ export default {
   .home-page{
     height: 100%;
     width: 100%;
-    background-image: url("~@/assets/img/home/home-bg.jpg");
+    background-color: #f3f3f3;
     background-size: 100% 100%;
     background-repeat: no-repeat;
 
@@ -97,12 +97,17 @@ export default {
       .title {
         margin: 0;
         font-size: 5vh;
+        font-weight: bold;
       }
       .el-row {
-        height: 30%;
+        height: 25%;
+        margin-top: 10px;
         .el-col {
+          cursor: pointer;
           height: 100%;
           text-align: center;
+          background-color: #fff;
+          margin: 0 5px;
           img {
             height: 30%;
             margin-top: 20%;
@@ -113,15 +118,18 @@ export default {
           }
           &:hover {
             color: #999;
+            border: 2px solid #eeeeee
           }
         }
       }
     }
     .info {
-      padding: 10% 0;
       div {
-        height: 50%;
+        height: 47%;
+        margin: 10px;
+        background-color: #fff;
         img {
+          margin-top: 25%;
           width: 25%;
           margin-left: 37.5%;
           margin-right: 37.5%;
@@ -132,6 +140,7 @@ export default {
         }
         &:hover {
           color: #999;
+          border: 4px solid #eeeeee
         }
       }
     }
