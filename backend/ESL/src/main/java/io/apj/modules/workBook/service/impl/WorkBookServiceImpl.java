@@ -28,6 +28,7 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private StaffService staffService;
     @Autowired
     private ReportGroupReportRelaService reportGroupReportRelaService;
+    @Autowired
+    private ReportGroupDeptRelaService reportGroupDeptRelaService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -224,10 +227,12 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        List<Integer> reportGroupIds = (List<Integer>) params.get("reportGroupIds");
-        if(reportGroupIds != null && reportGroupIds.size() > 0){
+        Integer deptId = Integer.valueOf((String)params.get("deptId"));
+        List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
+        if(reportGroupDeptRelaEntityList != null && reportGroupDeptRelaEntityList.size() > 0){
             HashSet<Integer> reportSet = new HashSet<>();
-            for(Integer reportGroupId : reportGroupIds){
+            for(ReportGroupDeptRelaEntity reportGroupDeptRelaEntity : reportGroupDeptRelaEntityList){
+                Integer reportGroupId = reportGroupDeptRelaEntity.getReportGroupId();
                 List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
                 if(reportGroupReportRelaEntities != null && reportGroupReportRelaEntities.size() > 0){
                     reportGroupReportRelaEntities.forEach(i->{
@@ -236,7 +241,24 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                 }
             }
             if(reportSet != null && reportSet.size() > 0){
-                List<Integer> workBookIds = (List<Integer>) params.get("workBookIds");
+                List<Integer> workBookIds = new ArrayList<>();
+                List<Integer> workBookIdsGet = (List<Integer>) params.get("workBookIds");
+                if(workBookIds != null && workBookIds.size() > 0){
+                    workBookIds.addAll(workBookIdsGet);
+                }else{
+                    Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
+                    EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+                    entityWrapper.eq("stlst", workBook.get("stlst")).eq("version_number", workBook.get("versionNumber"))
+                            .eq("destinations", workBook.get("destinations")).eq("model_id", workBook.get("modelId"))
+                            .eq("phase_id", workBook.get("phaseId"));
+                    List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
+                    if(workBookEntityList != null && workBookEntityList.size() > 0){
+                        for(WorkBookEntity workBookEntity : workBookEntityList){
+                            workBookIds.add(workBookEntity.getId());
+                        }
+                    }
+                }
+
                 if(workBookIds.size()>0&&reportSet.size()>0) {
                     for(Integer reportId : reportSet){
                         switch (reportId) {
@@ -292,87 +314,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                 }
             }
         }
-    }
-
-    @Override
-    public ResponseEntity<Object> createReportsByFive(Map<String, Object> params) {
-        List<Integer> reportGroupIds = (List<Integer>) params.get("reports");
-        List<Integer> reportList = new ArrayList<>();
-        for(Integer reportGroupId : reportGroupIds){
-            List<ReportGroupReportRelaEntity> reportGroupReportRelaEntities = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
-            reportGroupReportRelaEntities.forEach(i->{
-                reportList.add(i.getReportId());
-            });
-        }
-//        ArrayList<Integer> reportList = (ArrayList<Integer>) params.get("reports");
-        Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
-        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("stlst", workBook.get("stlst")).eq("version_number", workBook.get("versionNumber"))
-                .eq("destinations", workBook.get("destinations")).eq("model_id", workBook.get("modelId"))
-                .eq("phase_id", workBook.get("phaseId"));
-        List<WorkBookEntity> workBookEntityList = workBookService.selectList(entityWrapper);
-        if (workBookEntityList == null || workBookEntityList.size() == 0) {
-            return RD.FORBIDDEN("UnExist", "不存在这张分析表，请先建立分析表");
-        }
-        List<Integer> workBookIds = new ArrayList();
-        for (WorkBookEntity item : workBookEntityList) {
-            workBookIds.add(item.getId());
-        }
-        if(workBookIds.size()>0&&reportList.size()>0) {
-            for(Integer reportId : reportList){
-                switch (reportId) {
-                    case 1:
-                        break;
-                    case 2:
-                        // 人机联合表
-                        reportManMachineCombinationService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 3:
-                        // 工位时间报表
-                        stationTimeService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 4:
-                        // Compare表
-                        compareService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 5:
-                        // MOST Value表
-                        mostValueService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 6:
-                        // Collection-Revision History表
-                        revisionHistoryService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 7:
-                        // Total表
-                        totalService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 8:
-                        break;
-                    case 9:
-                        // 时间联络表
-                        timeContactService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 10:
-                        // Process List表
-                        break;
-                    case 11:
-                        // 标准时间表
-                        standardTimeService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 12:
-                        // 标准工数表
-                        standardWorkService.generateReportData(workBookIds,reportId);
-                        break;
-                    case 13:
-                        // 履历表
-                        changeRecordService.generateReportData(workBookIds,reportId);
-                        break;
-                }
-            }
-
-        }
-        return RD.ok(workBookEntityList);
     }
 
     @Override
