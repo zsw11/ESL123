@@ -23,7 +23,7 @@ public interface ReportManMachineCombinationService extends IService<ReportManMa
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+    void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
     void generateReportData(List<Integer> workBookIds,Integer reportId);
 

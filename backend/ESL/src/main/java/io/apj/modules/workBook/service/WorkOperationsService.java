@@ -34,5 +34,4 @@ public interface WorkOperationsService extends IService<WorkOperationsEntity> {
 	 */
 	void deletebyWrapper(Wrapper<WorkOperationsEntity> wrapper);
 
-    List<String> getWorkBookFilePaths(List<WorkBookEntity> workBookEntities) throws IOException;
 }

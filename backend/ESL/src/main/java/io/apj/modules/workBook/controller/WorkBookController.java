@@ -128,15 +128,6 @@ public class WorkBookController extends AbstractController {
 		workBookEntity.setMakedAt(new Date());
 		workBookEntity.setCreateBy(getUserId().intValue());
 		workBookService.insert(workBookEntity);
-		ReportBatchEntity reportBatchEntity = new ReportBatchEntity();
-		reportBatchEntity.setModelId(workBookEntity.getModelId());
-		reportBatchEntity.setDestinations(workBookEntity.getDestinations());
-		reportBatchEntity.setPhaseId(workBookEntity.getPhaseId());
-		reportBatchEntity.setStlst(workBookEntity.getStlst());
-		reportBatchEntity.setVersionNumber(workBookEntity.getVersionNumber());
-		reportBatchEntity.setCreateAt(new Date());
-		reportBatchEntity.setCreateBy(getUserId().intValue());
-		reportBatchService.insert(reportBatchEntity);
 		return R.ok();
 	}
 
@@ -262,6 +253,8 @@ public class WorkBookController extends AbstractController {
 	public R createReport(@RequestBody Map<String, Object> params) {
 		Integer deptId = getUserDeptId().intValue();
 		params.put("deptId", deptId);
+		Long userId = getUserId();
+		params.put("userId" ,userId);
 		workBookService.createReports(params);
 		return R.ok();
 	}

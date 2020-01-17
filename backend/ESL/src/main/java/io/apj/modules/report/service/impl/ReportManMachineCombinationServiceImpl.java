@@ -85,7 +85,7 @@ public class ReportManMachineCombinationServiceImpl
 	}
 
 	@Override
-	public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+	public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
 		Integer phaseId = (Integer) params.get("phaseId");
 		Integer modelId = (Integer) params.get("modelId");
 		String stlst = params.get("stlst").toString();
@@ -127,7 +127,6 @@ public class ReportManMachineCombinationServiceImpl
 		FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
 		excelWriter.fill(map, fillConfig, writeSheet);
 		excelWriter.finish();
-		return Arrays.asList(exportFileName);
 	}
 
 	@Override
