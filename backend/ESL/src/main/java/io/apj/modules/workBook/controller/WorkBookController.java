@@ -260,24 +260,10 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/createReport")
 	// @RequiresPermissions("workBook:workbook:createReport")
 	public R createReport(@RequestBody Map<String, Object> params) {
-		Validate.notNull(params.get("reportGroupIds"));
-		Validate.notNull(params.get("workBookIds"));
+		Integer deptId = getUserDeptId().intValue();
+		params.put("deptId", deptId);
 		workBookService.createReports(params);
 		return R.ok();
-	}
-
-	/**
-	 * 通过5个字段生成报表
-	 *
-	 * @param params
-	 * @return
-	 */
-	@RequestMapping("/createReportbyfive")
-	// @RequiresPermissions("workBook:workbook:createReport")
-	public ResponseEntity<Object> createReportByFive(@RequestBody Map<String, Object> params) {
-		Validate.notNull(params.get("reports"));
-		Validate.notNull(params.get("workBook"));
-		return workBookService.createReportsByFive(params);
 	}
 
 	/**
