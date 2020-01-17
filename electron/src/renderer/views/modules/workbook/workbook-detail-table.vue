@@ -15,8 +15,9 @@
       :footer-method="footerMethod"
       :auto-resize="true"
       :mouse-config="{selected: true}"
-      :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
+      :keyboard-config="{ isArrow: true, isDel: true, isTab: true, isEnter: true, isEdit: true, editMethod: keyboardEdit, enterToColumnIndex: 2 }"
       :edit-config="{trigger: 'dblclick', mode: 'cell', activeMethod: canEdit }"
+      @edit-actived="editActived"
       @selected-changed="selectedChanged">
       <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
       <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}" :footer-class-name="'footer-inner'"></vxe-table-column>
@@ -292,6 +293,13 @@ export default {
         return false
       }
       return true
+    },
+    // 处理回车无效的问题
+    editActived ({ cell }) {
+      const editor = cell.querySelector('textearea') || cell.querySelector('input')
+      if (!editor) {
+        this.$refs.workbookTable.setActiveCell(this.lastSelected.row, this.lastSelected.column.property)
+      }
     },
     // 调到指定位置
     jump (row, field, to) {
