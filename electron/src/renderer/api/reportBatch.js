@@ -55,15 +55,6 @@ export function deleteCollectionStationTime (id) {
   })
 }
 
-// 生成报表
-export function createReports (data) {
-  return request({
-    url: request.adornUrl('/api/v1/workbook/createReportbyfive'),
-    method: 'post',
-    data
-  })
-}
-
 export function workTotal (data) {
   return request({
     url: request.adornUrl('/api/v1/workbook/reporttotalbyfive'),

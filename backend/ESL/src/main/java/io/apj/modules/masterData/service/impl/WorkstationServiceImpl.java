@@ -83,7 +83,10 @@ public class WorkstationServiceImpl extends ServiceImpl<WorkstationDao, Workstat
 				}
 			}
 			
-			if(workstationIds.size()>0){
+			if(workstationIds.size()==0){
+				workstationIds.add(0);
+				entityWrapper.in("id", workstationIds);
+			}else {
 				entityWrapper.in("id", workstationIds);
 			}
 			

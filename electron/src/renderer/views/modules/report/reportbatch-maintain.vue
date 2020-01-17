@@ -189,12 +189,11 @@
     fetchReportBatch,
     createReportBatch,
     updateReportBatch,
-    createReports,
     workTotal
   } from '@/api/reportBatch'
   import { listPhase } from '@/api/phase'
   import { listModel } from '@/api/model'
-  import { fetchDeptReport } from '@/api/workBook'
+  import { fetchDeptReport, createReports } from '@/api/workBook'
   import { downloadReportApprove} from '@/api/reportApprove'
 
   export default {
@@ -211,18 +210,11 @@
         reportGroup: [],
         model: null,
         dataForm: {
-          id: 0,
           stlst: null,
           modelId: null,
           destinations: null,
           phaseId: null,
-          versionNumber: null,
-          createBy: null,
-          createAt: null,
-          updateBy: null,
-          updateAt: null,
-          deleteAt: null,
-          items: []
+          versionNumber: null
         },
         dataRules: {
           deptId: [{ type: 'number', message: '组织机构ID需为数字值' }],
@@ -348,9 +340,6 @@
                 fetchDeptReport().then((page)=>{
                   this.dataList = page
                   this.reportGroup = page
-                  this.reportGroup.forEach((item)=>{
-                    this.createForm.id.push(item.id)
-                  })
                 })
                 this.createShow = true
               } else {
@@ -366,11 +355,9 @@
       },
       // 确定生成
       createReportOK (row) {
-        console.log(this.createForm.id, this.dataForm)
         createReports(Object.assign(
           {
-            workBook: this.dataForm,
-            reports: this.createForm.id
+            workBook: this.dataForm
           }
         )).then((page) => {
           if(page.status === 200){

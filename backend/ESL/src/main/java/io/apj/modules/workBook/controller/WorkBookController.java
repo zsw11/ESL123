@@ -391,15 +391,15 @@ public class WorkBookController extends AbstractController {
 	}
 
 	@RequestMapping("/modelworkstation")
-	public Boolean modelWorkstation(@RequestBody Map<String,Integer> map) {
-		Integer workstationId = map.get("workstationId");
-		Integer modelId = map.get("modelId");
+	public Boolean modelWorkstation(@RequestBody Map<String,Object> map) {
+		List<Object> workstationId = Collections.singletonList(map.get("workstationId"));
+		Integer modelId = (Integer) map.get("modelId");
 		List<ModelWorkstationRelaEntity> modelWorkstationRelaEntityList = modelWorkstationRelaService.selectList(new EntityWrapper<ModelWorkstationRelaEntity>().eq("model_id", modelId));
 		List<Integer> workstationIds = new ArrayList<>();
 		modelWorkstationRelaEntityList.forEach(i->{
 			workstationIds.add(i.getWorkstationId());
 		});
-		if(workstationIds.contains(workstationId)){
+		if(workstationIds.containsAll(workstationId)){
 			return true;
 		}else{
 			return false;

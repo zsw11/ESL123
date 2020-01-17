@@ -14,13 +14,13 @@
       <el-row :gutter="10">
         <el-col :span="10">
           <el-form-item :label="'作业名'" prop="workName">
-            <el-input :disabled="$route.path.includes('update')" v-model="dataForm.workName"></el-input>
+            <el-input :disabled="$route.path.includes('alter')" v-model="dataForm.workName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="2">
           <el-form-item  :label="'部门'" prop="deptId">
             <tree-select
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               style="width: 100%"
               v-model='dataForm.deptId' :api='listDept' />
           </el-form-item>
@@ -30,7 +30,7 @@
         <el-col :span="10">
           <el-form-item :label="'LST/ST'" prop="stlst">
             <dict-select
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               style="width: 100%"
               dictType="ST"
               v-model="dataForm.stlst">
@@ -40,7 +40,6 @@
         <el-col :span="10" :offset="2">
           <el-form-item :label="'生产阶段'" prop="phaseId">
             <keyword-search
-              :disabled="$route.path.includes('update')"
               style="width: 100%"
               v-model="dataForm.phaseId"
               :searchApi="this.listPhase"
@@ -54,7 +53,7 @@
         <el-col :span="10">
           <el-form-item :label="'机种'" prop="modelId">
             <keyword-search
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               style="width: 100%"
               v-model="dataForm.modelId"
               :searchApi="this.listModel"
@@ -67,7 +66,7 @@
         <el-col :span="10" :offset="2">
         <el-form-item :label="'仕向'" prop="destinations">
             <el-input
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               v-model="dataForm.destinations">
             </el-input>
           </el-form-item>
@@ -79,7 +78,7 @@
         <el-col :span="10">
           <el-form-item :label="'工位'" prop="workstationId">
             <keyword-search
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               style="width: 100%"
               v-model="dataForm.workstationId"
               :searchApi="this.listWorkstation"
@@ -92,7 +91,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item :label="'制表日期'" prop="makedAt">
             <el-date-picker
-              :disabled="$route.path.includes('update')"
+              :disabled="$route.path.includes('alter')"
               style="width: 100%"
               v-model="dataForm.makedAt">
             </el-date-picker>
@@ -123,7 +122,8 @@
 
 <script>
 import { pick } from 'lodash'
-import { fetchWorkBook, createWorkBook, updateWorkBook, copyWorkBook } from '@/api/workBook'
+import { fetchWorkBook, createWorkBook, updateWorkBook, copyWorkBook,
+deptModel, modelWorkstation } from '@/api/workBook'
 import { listDept } from '@/api/dept'
 import { listPhase } from '@/api/phase'
 import { listModel } from '@/api/model'
@@ -214,6 +214,7 @@ export default {
     this.init()
   },
   activated () {
+    console.log(this.$route.path)
     if (this.dataForm.id && parseInt(this.$route.params.id) !== this.dataForm.id) {
       this.init()
     }
@@ -238,16 +239,39 @@ export default {
       },
       deep: true
     },
-    modelChange: {
-      handler: () =>{
-        console.log(22222222222222222)
+    'dataForm.modelId': {
+      handler: function　(newVal, oldVal)　{
+        if (oldVal) {
+          let data = {
+            workstationId: [this.dataForm.workstationId],
+            modelId: newVal
+          }
+          modelWorkstation(data).then((page)=>{
+            if (!page) {
+              this.dataForm.workstationId = null
+            }
+          })
+        
+        }
+        
       }
     },
-    deptChange: {
-      handler: () =>{
-        console.log(1111111111111111)
+    'dataForm.deptId':{
+      handler: function (newVal, oldVal) {
+        if (oldVal) {
+          let data = {
+            deptId: newVal,
+            modelId: this.dataForm.modelId
+          }
+          deptModel(data).then((page)=>{
+            if (!page) {
+              this.dataForm.modelId = null
+              this.dataForm.workstationId = null
+            }
+          })
+        }
       }
-    },
+    }
   },
   methods: {
     init () {
