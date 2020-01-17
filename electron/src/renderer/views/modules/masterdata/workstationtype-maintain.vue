@@ -42,7 +42,7 @@
       v-if="!$route.path.includes('add')"
     >
       <div style="border-bottom: 1px solid #BBBBBB;width: 600px;margin-bottom: 20px">
-        <span class="tableHeader">工位类型结构</span>
+        <span class="tableHeader">工位结构节点</span>
         <el-button
           @click="show()"
           type="primary"
@@ -79,48 +79,6 @@
           </span>
         </span>
       </el-tree>
-      <el-dialog
-        custom-class="worktype-dialog"
-        width="40%"
-        title="新增工位类型结构"
-        :visible.sync="addReal"
-        v-if="addReal"
-      >
-        <el-form ref="dialogForm" :model="addForm" :rules="dialogRules">
-          <!--          <el-form-item :label="'父工位'" prop="parent">-->
-          <!--            <keyword-search-->
-          <!--              v-model="addForm.parent"-->
-          <!--              -->
-          <!--              :searchApi="this.listWorkstationTypeNode"-->
-          <!--              :allowEmpty=true clearable>-->
-          <!--            </keyword-search>-->
-          <!--          </el-form-item>-->
-
-          <el-form-item :label="'父工位'" prop="parent">
-            <el-select v-model="addForm.parent" filterable placeholder="请选择" clearable>
-              <el-option v-for="item in node" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item :label="'名称'" prop="name">
-            <el-input v-model="addForm.name" clearable></el-input>
-          </el-form-item>
-
-          <el-form-item :label="'备注'" prop="remark">
-            <el-input
-              type="textarea"
-              style="width:350px"
-              :rows="6"
-              placeholder="请输入内容"
-              v-model="addForm.remark"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="addReal = false">取 消</el-button>
-          <el-button type="primary" @click="addNode">确 定</el-button>
-        </div>
-      </el-dialog>
     </el-card>
     <span class="dialog-footer">
       <el-button
@@ -230,6 +188,7 @@ export default {
       });
       this.inited = false;
       this.dataForm.id = parseInt(this.$route.params.id) || 0;
+      console.log(this.dataForm.id)
       if (this.dataForm.id) {
         fetchTypeNode(this.dataForm.id).then(page => {
           this.tree(page.data);

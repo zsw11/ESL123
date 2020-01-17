@@ -3,6 +3,9 @@
     <el-card class="filter-card with-title">
       <div slot="header" class="clearfix">
         <div class="card-title">条件查询</div>
+        <div class="buttons">
+          <!-- <el-button type="primary" @click="toggleWorkbook()">切换</el-button> -->
+        </div>
       </div>
       <el-form
         :inline="true"
@@ -104,7 +107,12 @@
         <div class="card-title">分析表</div>
         <div class="buttons">
           <el-button  type="primary" @click="addWorkbook()">新增分析表</el-button>
-          <el-button  type="primary" @click="createReportFromSelected()" :disabled="dataListSelections.length <= 0">批量生成报表</el-button>
+          <el-button  
+          type="primary" 
+          @click="createReportFromSelected()" 
+          :disabled="dataListSelections.length <= 0">
+            批量生成报表
+          </el-button>
           <el-button type="danger" @click="deleteHandle()" :disabled="deleteFlag">批量删除</el-button>
         </div>
       </div>
@@ -366,6 +374,7 @@ export default {
     self.listQuery.makedAt = null
     self.getDictByType()
     self.getDataList()
+    console.log(self.$route)
   },
   methods: {
     // 普通查询
@@ -528,17 +537,6 @@ export default {
         this.dictItemSTLST = keyBy(data, 'code')
       })
     },
-    // 全选生成报表
-    // handleCheckAllChange () {
-    //   if (this.flag) {
-    //     this.createForm.id = this.reportGroup.map(item => item.id)
-    //     this.flag = !this.flag
-    //   } else {
-    //     this.createForm.id = []
-    //     this.flag = !this.flag
-    //   }
-    //   this.isIndeterminate = false
-    // },
     // 多选
     handleCheckedCitiesChange () {
       let checkedCount = this.createForm.id.length
@@ -582,13 +580,8 @@ export default {
         }
         this.createForm.id = []
         this.createShow = false
-        //this.dataList = page.data
-        //this.total = page.totalCount
       }).catch(() => {
-        //this.dataList = []
-        //this.total = 0
       }).finally(() => {
-        //this.dataListLoading = false
       })
     },
     createReportFromSelected () {
@@ -596,6 +589,12 @@ export default {
       this.selectedWorkBookIds = this.dataListSelections.map(item => {
         return item.id
       });
+    },
+    // 切换分析表
+    toggleWorkbook () {
+      this.$nextTick(()=>{
+        this.$router.push( { path: '/workbook1'} )
+      })
     }
   }
 }
