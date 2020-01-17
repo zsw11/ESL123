@@ -63,7 +63,7 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	 */
 	void deleteByIds(Collection<? extends Serializable> ids);
 
-	List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
+	void download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
 	List<WorkBookEntity> filterUniquePhaseAndModelAndStlstOfWorkBooks(List<WorkBookEntity> workBooks);
 

@@ -1,5 +1,9 @@
 package io.apj.modules.workBook.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,9 +19,10 @@ import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
 import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.entity.ReportEntity;
-import io.apj.modules.masterData.entity.ReportGroupEntity;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
+import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.*;
+import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.*;
@@ -28,13 +33,13 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -91,6 +96,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private ReportGroupReportRelaService reportGroupReportRelaService;
     @Autowired
     private ReportGroupDeptRelaService reportGroupDeptRelaService;
+    @Autowired
+    private ReportBatchService reportBatchService;
 
     @Override
     @DataFilter(subDept = true, user = true, deptId = "dept_id")
@@ -227,7 +234,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
 
     @Override
     public void createReports(Map<String, Object> params) {
-        Integer deptId = Integer.valueOf((String)params.get("deptId"));
+        Integer deptId = (Integer)params.get("deptId");
         List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
         if(reportGroupDeptRelaEntityList != null && reportGroupDeptRelaEntityList.size() > 0){
             HashSet<Integer> reportSet = new HashSet<>();
@@ -243,7 +250,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             if(reportSet != null && reportSet.size() > 0){
                 List<Integer> workBookIds = new ArrayList<>();
                 List<Integer> workBookIdsGet = (List<Integer>) params.get("workBookIds");
-                if(workBookIds != null && workBookIds.size() > 0){
+                if(workBookIdsGet != null && workBookIdsGet.size() > 0){
                     workBookIds.addAll(workBookIdsGet);
                 }else{
                     Map<String,Object> workBook = (Map<String, Object>) params.get("workBook");
@@ -309,6 +316,31 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                                 // 履历表
                                 changeRecordService.generateReportData(workBookIds, reportId);
                                 break;
+                        }
+                    }
+                    for(Integer workBookId : workBookIds){
+                        WorkBookEntity workBookEntity = selectById(workBookId);
+                        if(workBookEntity != null) {
+                            String stlst = workBookEntity.getStlst();
+                            String versionNumber = workBookEntity.getVersionNumber();
+                            String destinations = workBookEntity.getDestinations();
+                            Integer modelId = workBookEntity.getModelId();
+                            Integer phaseId = workBookEntity.getPhaseId();
+                            EntityWrapper<ReportBatchEntity> wrapper = new EntityWrapper<>();
+                            wrapper.eq("stlst", stlst).eq("version_number", versionNumber).eq("destinations", destinations).
+                                    eq("model_id", modelId).eq("phase_id", phaseId);
+                            ReportBatchEntity reportBatchEntity = reportBatchService.selectOne(wrapper);
+                            if (reportBatchEntity == null) {
+                                ReportBatchEntity reportBatchEntityCreate = new ReportBatchEntity();
+                                reportBatchEntityCreate.setModelId(modelId);
+                                reportBatchEntityCreate.setDestinations(destinations);
+                                reportBatchEntityCreate.setPhaseId(phaseId);
+                                reportBatchEntityCreate.setStlst(stlst);
+                                reportBatchEntityCreate.setVersionNumber(versionNumber);
+                                reportBatchEntityCreate.setCreateAt(new Date());
+                                reportBatchEntityCreate.setCreateBy((Integer) params.get("userId"));
+                                reportBatchService.insert(reportBatchEntity);
+                            }
                         }
                     }
                 }
@@ -553,21 +585,85 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     }
 
     @Override
-    public List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public void download(Map<String, Object> params, HttpServletResponse response) throws IOException {
         Integer phaseId = (Integer) params.get("phaseId");
         Integer modelId = (Integer) params.get("modelId");
         String stlst = params.get("stlst").toString();
         String destinations = params.get("destinations").toString();
         String versionNumber = params.get("versionNumber").toString();
-
-        List<WorkBookEntity> workBookEntities = selectByPhaseAndModelAndStlst(phaseId, stlst, modelId, destinations, versionNumber);
-        List<String> workBookFilePaths=new ArrayList<>();
-        if(workBookEntities!=null&&workBookEntities.size()>0){
-            workBookFilePaths = workOperationService.getWorkBookFilePaths(workBookEntities);
-            String fileName = "test";
-            ExportExcelUtils.exportExcel(workBookFilePaths, response, fileName);
+        EntityWrapper<WorkBookEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
+        List<WorkBookEntity> workBookEntityList = selectList(wrapper);
+        if(workBookEntityList != null && workBookEntityList.size() > 0){
+            for(WorkBookEntity workBookEntity : workBookEntityList){
+                downloadWorkbook(workBookEntity);
+            }
         }
-        return workBookFilePaths;
+    }
+
+    private void downloadWorkbook(WorkBookEntity workBookEntity) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("date", DateUtils.format(new Date(), "yyyy/MM/dd"));
+        String workName = workBookEntity.getWorkName();
+        params.put("workName", workName);
+
+        WorkstationEntity workstation = workstationService.selectById(workBookEntity.getWorkstationId());
+        if(workstation != null) {
+            String workstationName = workstation.getName();
+            params.put("workstationName", workstationName);
+        }
+
+        EntityWrapper<WorkOperationsEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("work_book_id", workBookEntity.getId());
+        List<WorkOperationsEntity> workOperationsEntityList = workOperationService.selectList(wrapper);
+        if(workOperationsEntityList != null && workOperationsEntityList.size() > 0) {
+            generateTotalData(workOperationsEntityList, params);
+        }
+
+        String templateFileName = Constant.TEMPLATE_PATH + "work_operations.xls";
+        String exportFileName = Constant.TEMPLATE_PATH + "template\\" + workName + ".xls";
+        File historyExcel = new File(exportFileName);
+        if (historyExcel.exists()) {
+            historyExcel.delete();
+        }
+
+        ExcelWriter excelWriter = EasyExcel.write(exportFileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        excelWriter.fill(params, writeSheet);
+        excelWriter.fill(workOperationsEntityList, fillConfig, writeSheet);
+        excelWriter.finish();
+    }
+
+    private void generateTotalData(List<WorkOperationsEntity> workOperationsEntityList, Map<String, Object> params) {
+        BigDecimal timeValueTotal = BigDecimal.ZERO;
+        BigDecimal tmuTotal = BigDecimal.ZERO;
+        BigDecimal secondConvertTotal = BigDecimal.ZERO;
+        Integer remark1Total = 0;
+
+        for (WorkOperationsEntity workOperationsEntity : workOperationsEntityList) {
+            BigDecimal timeValue = workOperationsEntity.getTimeValue();
+            BigDecimal tmu = workOperationsEntity.getTmu();
+            BigDecimal secondConvert = workOperationsEntity.getSecondConvert();
+            Integer remark1 = workOperationsEntity.getRemark1();
+
+            if(timeValue!=null) {
+                timeValueTotal = timeValueTotal.add(timeValue);
+            }
+            if(tmu!=null) {
+                tmuTotal = tmuTotal.add(tmu);
+            }
+            if(secondConvert!=null) {
+                secondConvertTotal = secondConvertTotal.add(secondConvert);
+            }
+            if(remark1 != null){
+                remark1Total += remark1;
+            }
+        }
+        params.put("timeValueTotal", timeValueTotal);
+        params.put("tmuTotal", tmuTotal);
+        params.put("secondConvertTotal", secondConvertTotal);
+        params.put("remark1Total", remark1Total);
     }
 
     @Override
@@ -639,12 +735,6 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             return map;
         }
         return null;
-    }
-
-    private List<WorkBookEntity> selectByPhaseAndModelAndStlst(Integer phaseId, String stlst, Integer modelId, String destinations, String versionNumber) {
-        EntityWrapper<WorkBookEntity> wrapper = new EntityWrapper<>();
-        wrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
-        return selectList(wrapper);
     }
 
     private Map<String, Integer> dealData(Map<String, Integer> map) {

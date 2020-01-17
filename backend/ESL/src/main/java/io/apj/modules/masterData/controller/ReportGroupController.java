@@ -96,8 +96,9 @@ public class ReportGroupController extends AbstractController {
 	@RequestMapping("/create")
 	@RequiresPermissions("masterData:reportgroup:create")
 	public RD save(@RequestBody Map<String, Object> map) {
-		ReportGroupEntity reportGroupEntity = (ReportGroupEntity) map.get("reportGroup");
-		reportGroupEntity.setPinyin(PinyinUtil.getPinYin(reportGroupEntity.getName()));
+		ReportGroupEntity reportGroupEntity = new ReportGroupEntity();
+		reportGroupEntity.setPinyin(PinyinUtil.getPinYin((String)map.get("name")));
+		reportGroupEntity.setRemark((String)map.get("remark"));
 		reportGroupEntity.setCreateBy(getUserId().intValue());
 		reportGroupEntity.setCreateAt(new Date());
 		reportGroupService.insert(reportGroupEntity);

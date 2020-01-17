@@ -138,7 +138,6 @@ public class ApproveController extends AbstractController {
     @RequestMapping("/download")
 //    @RequiresPermissions("report:approve:list")
     public void download(@RequestBody Map<String, Object> params, HttpServletResponse response) throws IOException {
-        Validate.notNull(params.get("reportGroupId"));
         Validate.notNull(params.get("phaseId"));
         Validate.notNull(params.get("modelId"));
         Validate.notNull(params.get("stlst"));

@@ -253,70 +253,114 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
 
     @Override
     public void download(Map<String, Object> params, HttpServletResponse response)  throws IOException {
-        Integer reportGroupId = (Integer) params.get("reportGroupId");
-        if(reportGroupId != null){
+        List<Integer> reportIds = new ArrayList<>();
+        String fileName = null;
+        Boolean isReportGroup = false;
+        if((Integer) params.get("reportId") != null){
+            reportIds.add((Integer) params.get("reportId"));
+        }
+        if((Integer) params.get("reportGroupId") != null){
+            isReportGroup = true;
+            Integer reportGroupId = (Integer) params.get("reportGroupId");
+            ReportGroupEntity reportGroupEntity = reportGroupService.selectById(reportGroupId);
+            fileName = reportGroupEntity.getName() + new Date().getTime();
             List<ReportGroupReportRelaEntity> reportGroupReportRelaEntityList = reportGroupReportRelaService.selectList(new EntityWrapper<ReportGroupReportRelaEntity>().eq("report_group_id", reportGroupId));
-            if(reportGroupReportRelaEntityList != null && reportGroupReportRelaEntityList.size() > 0){
-                deleteExcel();
-                for(ReportGroupReportRelaEntity reportGroupReportRelaEntity : reportGroupReportRelaEntityList){
-                    Integer reportId = reportGroupReportRelaEntity.getReportId();
-                    switch (reportId) {
-                        case 1:
-                            workBookService.download(params, response);
-                            break;
-                        case 2:
-                            //人机联合
-                            reportManMachineCombinationService.download(params, response);
-                            break;
-                        case 3:
-                            // 工位时间报表
-                            stationTimeService.download(params, response);
-                            break;
-                        case 4:
-                            // Compare表
-                            compareService.download(params, response);
-                            break;
-                        case 5:
-                            // MOST Value表
-                            mostValueService.download(params, response);
-                            break;
-                        case 6:
-                            // Collection-Revision History表
-                            revisionHistoryService.download(params, response);
-                            break;
-                        case 7:
-                            // Total表
-                            totalService.download(params, response);
-                            break;
-                        case 8:
-                            break;
-                        case 9:
-                            // 时间联络表
-                            timeContactService.download(params, response);
-                            break;
-                        case 10:
-                            break;
-                        case 11:
-                            // 标准时间表
-                            standardTimeService.download(params, response);
-                            break;
-                        case 12:
-                            // 标准工数表
-                            standardWorkService.download(params, response);
-                            break;
-                        case 13:
-                            // 履历表
-                            changeRecordService.download(params, response);
-                            break;
-                    }
-                }
-                List<String> filePathList = getMergeExcelPath();
-                if( filePathList != null && filePathList.size() > 0) {
-                    ReportGroupEntity reportGroupEntity = reportGroupService.selectById(reportGroupId);
-                    String fileName = reportGroupEntity.getName() + new Date().getTime();
-                    ExportExcelUtils.exportExcel(filePathList, response, fileName);
+            if (reportGroupReportRelaEntityList != null && reportGroupReportRelaEntityList.size() > 0) {
+                for (ReportGroupReportRelaEntity reportGroupReportRelaEntity : reportGroupReportRelaEntityList) {
+                    reportIds.add(reportGroupReportRelaEntity.getReportId());
                 }
             }
+        }
+        if(reportIds.size() > 0){
+            deleteExcel();
+            for(Integer reportId : reportIds) {
+                switch (reportId) {
+                    case 1:
+                        if(!isReportGroup){
+                            fileName="workBook"+new Date().getTime();
+                        }
+                        workBookService.download(params, response);
+                        break;
+                    case 2:
+                        //人机联合
+                        if(!isReportGroup){
+                            fileName="reportManMachineCombination"+new Date().getTime();
+                        }
+                        reportManMachineCombinationService.download(params, response);
+                        break;
+                    case 3:
+                        // 工位时间报表
+                        if(!isReportGroup){
+                            fileName="stationTime"+new Date().getTime();
+                        }
+                        stationTimeService.download(params, response);
+                        break;
+                    case 4:
+                        // Compare表
+                        if(!isReportGroup){
+                            fileName="compare"+new Date().getTime();
+                        }
+                        compareService.download(params, response);
+                        break;
+                    case 5:
+                        // MOST Value表
+                        if(!isReportGroup){
+                            fileName="mostValue"+new Date().getTime();
+                        }
+                        mostValueService.download(params, response);
+                        break;
+                    case 6:
+                        // Collection-Revision History表
+                        if(!isReportGroup){
+                            fileName="revisionHistory"+new Date().getTime();
+                        }
+                        revisionHistoryService.download(params, response);
+                        break;
+                    case 7:
+                        // Total表
+                        if(!isReportGroup){
+                            fileName="total"+new Date().getTime();
+                        }
+                        totalService.download(params, response);
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        // 时间联络表
+                        if(!isReportGroup){
+                            fileName="timeContact"+new Date().getTime();
+                        }
+                        timeContactService.download(params, response);
+                        break;
+                    case 10:
+                        break;
+                    case 11:
+                        // 标准时间表
+                        if(!isReportGroup){
+                            fileName="standardTime"+new Date().getTime();
+                        }
+                        standardTimeService.download(params, response);
+                        break;
+                    case 12:
+                        // 标准工数表
+                        if(!isReportGroup){
+                            fileName="standardWork"+new Date().getTime();
+                        }
+                        standardWorkService.download(params, response);
+                        break;
+                    case 13:
+                        // 履历表
+                        if(!isReportGroup){
+                            fileName="changeRecord"+new Date().getTime();
+                        }
+                        changeRecordService.download(params, response);
+                        break;
+                }
+            }
+        }
+        List<String> filePathList = getMergeExcelPath();
+        if (filePathList != null && filePathList.size() > 0) {
+            ExportExcelUtils.exportExcel(filePathList, response, fileName);
         }
     }
 
@@ -336,7 +380,7 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
         return null;
     }
 
-    //清空文件夹excel
+    //清空文件夹excel或新建文件夹
     private void deleteExcel(){
         String templateStr = Constant.TEMPLATE_PATH + "template";
         File template = new File(templateStr);
