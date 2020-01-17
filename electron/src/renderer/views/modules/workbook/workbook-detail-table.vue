@@ -318,7 +318,6 @@ export default {
     isRowChanged (row1, row2) {
       if (!row1 || !row2) return false
       return !!defaultFields.find(f => {
-        if (f==='operation') console.log(row1, row2, f, row1[f], row2[f], row1[f] === row2[f])
         return !(row1[f] === row2[f])
       })
     },
@@ -362,7 +361,7 @@ export default {
         }
 
         // 判断是否变更
-        console.log(val.row !== this.lastSelected.row, this.isRowChanged(this.lastSelected.row, this.lastSelectedRow))
+        // console.log(val.row !== this.lastSelected.row, this.isRowChanged(this.lastSelected.row, this.lastSelectedRow))
         // 换行
         if (val.row !== this.lastSelected.row) {
           if (this.workbook.ifAlter) {

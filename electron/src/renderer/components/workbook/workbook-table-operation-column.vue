@@ -13,7 +13,8 @@
         :rowIndex="rowIndex"
         :columnIndex="columnIndex"
         v-model="row.operation"
-        @input="$emit('input', $event)" />
+        @input="$emit('input', $event)"
+        @move="move($event, row, columnIndex)" />
     </template>
   </vxe-table-column>
 </template>
@@ -39,6 +40,11 @@ export default {
     getCellClass (scope) {
       this.$refs.operation.$table.updateStatus(scope)
       return typeClasses[scope.row.type]
+    },
+    async move (direction, row, columnIndex) {
+      const toColumn = this.$parent.getColumns(columnIndex)
+      await this.$parent.clearActived()
+      await this.$parent.setSelectCell(row, toColumn.property)
     }
   }
 }

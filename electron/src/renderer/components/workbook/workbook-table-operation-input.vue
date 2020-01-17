@@ -58,6 +58,7 @@ export default {
   },
   data () {
     return {
+      moveOut: false,
       suggestMode: null,
       popoverVisible: false,
       suggestions: [],
@@ -66,11 +67,11 @@ export default {
     }
   },
   created () {
-    console.log(this.rowIndex, this.columnIndex)
     this.$nextTick(() => {
       // 双击进入的情况，刷新数据
       this.$refs.operation.style.height = '1em'
       this.$refs.operation.value = this.$attrs.value
+      if ([null, undefined, ''].includes(this.$attrs.value)) this.moveOut = true
       this.$refs.operation.style.height = this.$refs.operation.scrollHeight + 'px'
       this.$el.parentElement.style.height = this.$refs.operation.scrollHeight + 'px'
     })
@@ -199,9 +200,20 @@ export default {
           e.stopPropagation()
           break
         }
-        case 'ArrowLeft':
+        case 'ArrowLeft': {
+          if (this.popoverVisible) this.endSuggest()
+          if (this.moveOut) {
+            this.$emit('move', 'left')
+            e.preventDefault()
+          }
+          break
+        }
         case 'ArrowRight': {
           if (this.popoverVisible) this.endSuggest()
+          if (this.moveOut) {
+            this.$emit('move', 'right')
+            e.preventDefault()
+          }
           break
         }
         // 向下选择
@@ -211,6 +223,11 @@ export default {
             else if (this.activeSugguestionIndex === null) this.activeSugguestionIndex = 0
             else if (this.activeSugguestionIndex < this.suggestions.length - 1) ++this.activeSugguestionIndex
             e.preventDefault()
+          } else {
+            if (this.moveOut) {
+              this.$emit('move', 'down')
+              e.preventDefault()
+            }
           }
           break
         }
@@ -220,6 +237,11 @@ export default {
             if (!this.suggestions.length) return
             else if (this.activeSugguestionIndex > 0) --this.activeSugguestionIndex
             e.preventDefault()
+          } else {
+            if (this.moveOut) {
+              this.$emit('move', 'up')
+              e.preventDefault()
+            }
           }
           break
         }
