@@ -286,7 +286,7 @@ export default {
         return
       }
       if (e.key.length === 1) {
-        if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]|\s/.test(beginStr)) {
+        if (!/[~!@#$%^&*()\-_=+[\]{}\\|;':",./<>?]/.test(beginStr)) {
           // 操作关键字
           this.debounceSuggest('action', beginStr)
         } else if (/\[[^[\]"]*$/.test(beginStr)) {

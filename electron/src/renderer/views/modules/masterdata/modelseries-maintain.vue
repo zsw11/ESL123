@@ -11,10 +11,10 @@
       :model="dataForm"
       label-position="right"
       :size="'mini'"
-      label-width="100px" >
+      label-width="120px" >
       <el-row :gutter="10">
         <el-col :span="10">
-          <el-form-item :label="'名称'" prop="name">
+          <el-form-item :label="'机种系列名称'" prop="name">
             <el-input   v-model="dataForm.name"></el-input>
           </el-form-item>
         </el-col>
