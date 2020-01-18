@@ -20,13 +20,13 @@
       @edit-actived="editActived"
       @selected-changed="selectedChanged">
       <vxe-table-column type="index" fixed="left" field="index" width="50" title="No."></vxe-table-column>
-      <vxe-table-column field="version" fixed="left" title="H" :edit-render="{name: 'input'}" :footer-class-name="'footer-inner'"></vxe-table-column>
+      <vxe-table-column field="version" fixed="left" title="H" width="50" :edit-render="{name: 'input'}" :footer-class-name="'footer-inner'"></vxe-table-column>
       <operation-column key="operationColumn" fixed="left" min-width="240"></operation-column>
       <key-column key="keyColumn" fixed="left" @select="selectMeasureGroup" header-class-name="bg-dark-grey" class-name="bg-dark-grey" footer-class-name="bg-dark-grey" width="60"></key-column>
       <measure-column v-for="c in measureColumns0" :key="c.field" :config="c" @jump="jump"></measure-column>
       <tool-column @jump="jump"></tool-column>
       <measure-column v-for="c in measureColumns1" :key="c.field" :config="c" @jump="jump"></measure-column>
-      <vxe-table-column field="frequency" title="Fre." class-name="frequency-column" :edit-render="{name: 'input'}">
+      <vxe-table-column field="frequency" title="Fre." width="27" class-name="frequency-column" :edit-render="{name: 'input'}">
         <template v-slot="scope">{{scope.row.frequency}}</template>
       </vxe-table-column>
       <vxe-table-column field="tv" title="TimeValue" width="65">

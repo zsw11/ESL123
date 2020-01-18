@@ -1,7 +1,7 @@
 <template>
   <vxe-table-column
     ref="measure"
-    width="36"
+    width="27"
     :field="config.field"
     :title="config.title"
     :edit-render="{name: 'input'}"

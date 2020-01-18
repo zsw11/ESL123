@@ -3,7 +3,7 @@
     ref="tool"
     field="tool"
     title="Tool"
-    width="60"
+    width="36"
     header-class-name="bg-table-color1"
     footer-class-name="footer-inner"
     class-name="bg-table-color1"
