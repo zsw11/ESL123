@@ -208,32 +208,49 @@ export default {
     },
     // 表尾合计
     footerMethod ({ columns, data }) {
+      const row1 = columns.map((column, columnIndex) => {
+        if (columnIndex === 0) {
+          return 'Sum'
+        }
+        // if (['tv', 'tmu', 'scv', 'remark1'].includes(column.property)) {
+        switch (column.property) {
+          case 'tv': {
+            return round(XEUtils.sum(data, row => {
+              return this.getTimeValue({ row })
+            }), 2)
+          }
+          case 'tmu': {
+            return round(XEUtils.sum(data, row => {
+              return this.getTmu({ row })
+            }), 2)
+          }
+          case 'scv': {
+            return round(XEUtils.sum(data, row => {
+              return this.getSecConv({ row })
+            }), 2)
+          }
+          case 'remark1': {
+            return round(XEUtils.sum(data, row => {
+              return row.remark1?ceil(row.remark1*100/6, -1):undefined
+            }))
+          }
+        }
+        return null
+      })
       return [
+        row1,
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return 'Sum'
+            return 'x1.06'
           }
-          // if (['tv', 'tmu', 'scv', 'remark1'].includes(column.property)) {
           switch (column.property) {
-            case 'tv': {
-              return round(XEUtils.sum(data, row => {
-                return this.getTimeValue({ row })
-              }), 2)
-            }
-            case 'tmu': {
-              return round(XEUtils.sum(data, row => {
-                return this.getTmu({ row })
-              }), 2)
-            }
+            case 'tv':
+            case 'tmu':
             case 'scv': {
-              return round(XEUtils.sum(data, row => {
-                return this.getSecConv({ row })
-              }), 2)
+              return round(row1[columnIndex] * 1.06, 2)
             }
             case 'remark1': {
-              return round(XEUtils.sum(data, row => {
-                return row.remark1?ceil(row.remark1*100/6, -1):undefined
-              }))
+              return round(row1[columnIndex] * 1.06)
             }
           }
           return null
@@ -243,25 +260,8 @@ export default {
             return 'x1.06'
           }
           switch (column.property) {
-            case 'tv': {
-              return round(XEUtils.sum(data, row => {
-                return this.getTimeValue({ row })
-              }) * 1.06, 2)
-            }
-            case 'tmu': {
-              return round(XEUtils.sum(data, row => {
-                return this.getTmu({ row })
-              }) * 1.06, 2)
-            }
             case 'scv': {
-              return round(XEUtils.sum(data, row => {
-                return this.getSecConv({ row })
-              }) * 1.06, 2)
-            }
-            case 'remark1': {
-              return round(XEUtils.sum(data, row => {
-                return row.remark1?round(row.remark1*100/6, -1):undefined
-              }) * 1.06)
+              return round(row1[columnIndex] / 60, 2)
             }
           }
           return null
@@ -582,6 +582,7 @@ export default {
       this.hasUnchacheData = true
       this.hasUnsavedData = true
       await this.$refs.workbookTable.refreshData()
+      await this.$refs.workbookTable.updateFooter()
       this.logChange()
     },
     // 记录数据变更

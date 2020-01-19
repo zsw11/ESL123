@@ -1,7 +1,7 @@
 <template>
   <section class="site-content">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive>
+      <keep-alive exclude="WorkbookDetail">
         <router-view :key="key"></router-view>
       </keep-alive>
     </transition>
