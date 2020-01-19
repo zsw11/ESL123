@@ -77,6 +77,8 @@ export default {
 
 <style scoped lang="scss">
   .home-page{
+    min-width: 800px;
+    min-height: 600px;
     height: 100%;
     width: 100%;
     background-color: #f3f3f3;
@@ -96,7 +98,7 @@ export default {
       padding: 3%;
       .title {
         margin: 0;
-        font-size: 5vh;
+        font-size: 28px;
         font-weight: bold;
       }
       .el-row {
@@ -110,11 +112,11 @@ export default {
           margin: 0 5px;
           img {
             height: 30%;
-            margin-top: 20%;
+            margin-top: 14%;
           }
           p {
             text-align: center;
-            font-size: 2.5vh;
+            font-size: 16px;
           }
           &:hover {
             color: #999;
@@ -136,10 +138,10 @@ export default {
         }
         p {
           text-align: center;
-          font-size: 2.5vh;
+          font-size: 20px;
+          font-weight: bold;
         }
         &:hover {
-          color: #999;
           border: 4px solid #eeeeee
         }
       }

@@ -6,6 +6,11 @@
           <el-button type="primary" @click="toggleWorkbook()">切换</el-button>
         </div>
     </div>
+    <div class="titleUrl">
+      <span @click="backTo('model')">{{department}}</span>
+      <span v-if="modelShow" @click="backTo('phase')">>>{{model}}</span>
+      <span v-if="phaseShow">>>{{phase}}</span>
+    </div>
       <el-table
         :data="dataList">
         <!-- <el-table-column
@@ -23,7 +28,10 @@
 
         <el-table-column align="center" prop="name" :label="label" >
           <template slot-scope="scope">
-            <span class="name" @click="next()"><img class="file" src="~@/assets/img/file.jpg">{{scope.row.name }}</span>
+            <span class="name" @click="next(scope.row.name)">
+              <img class="file" src="~@/assets/img/file.jpg">
+                {{scope.row.name }}
+            </span>
           </template>
         </el-table-column>
 
@@ -50,7 +58,7 @@
             title: '工位',
             code: 4
           }
-  }
+       }
   export default {
     name: "workbook1.vue",
       data () {
@@ -58,12 +66,30 @@
           dataList:[],
           code: null,
           label: null,
+          dept: null,
+          model: null,
+          modelShow: false,
+          phase: null,
+          phaseShow: false,
+          workstation: null,
         }
       },
       activated() {
-        this.code = 'model'
-        this.label = '机种'
-        this.init()
+        let self = this
+        self.code = 'model'
+        self.label = '机种'
+        self.dept = self.$store.state.user
+        console.log(self.dept.department)
+        self.init()
+      },
+      mounted () {
+      },
+      computed: {
+        department: {
+          get () {
+            return this.$store.state.user.department
+          }
+        }
       },
       methods: {
         init () {
@@ -99,22 +125,36 @@
             this.$router.push({ name: 'workbook-workbook' })
           })
         },
-        next () {
+        next (name) {
           switch (this.code) {
             case 'model': {
               this.code = 'phase'
               this.init()
+              this.model = name
+              this.modelShow = true
               break
             }
             case 'phase': {
               this.code = 'workstation'
               this.init()
+              this.phase = name
+              this.phaseShow = true
               break
             }
             default: {
               break
             }
           }
+        },
+        backTo (code) {
+          if (code === 'model') {
+            this.modelShow = false
+            this.phaseShow = false
+          } else if (code === 'phase') {
+            this.phaseShow = false
+          }
+          this.code = code
+          this.init()
         }
       }
     }
@@ -126,6 +166,13 @@
   .file{
     width: 30px;
     padding-right: 10px ;
+  }
+}
+.titleUrl{
+  span{
+    color: blueviolet;
+    font-size: 16px;
+    font-weight: bold;
   }
 }
 
