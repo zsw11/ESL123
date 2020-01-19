@@ -93,12 +93,6 @@
           type="index">
         </el-table-column>
 
-        <el-table-column align="center" prop="name" label="机种名称">
-          <template slot-scope="scope">
-            <span>{{scope.row.name }}</span>
-          </template>
-        </el-table-column>
-
         <el-table-column align="center" prop="deptName" label="部门">
           <template slot-scope="scope">
             <span>{{scope.row.deptName }}</span>
@@ -108,6 +102,12 @@
         <el-table-column align="center" label="机种系列">
           <template slot-scope="scope">
             <span v-if="scope.row.modelSeriesEntity">{{scope.row.modelSeriesEntity.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="name" label="机种名称">
+          <template slot-scope="scope">
+            <span>{{scope.row.name }}</span>
           </template>
         </el-table-column>
 

@@ -61,4 +61,16 @@ export default {
   font-size: 16px;
   font-weight: 600;
 }
+.el-submenu__title{
+  background-color: #fff !important;
+  &:hover{
+    background-color: #d9d9d9 !important;
+  }
+}
+.el-menu--inline{
+  background-color: #fff !important;
+}
+.el-menu-item:hover{
+  background-color: #d9d9d9 !important;
+}
 </style>

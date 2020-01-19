@@ -314,6 +314,7 @@ export default {
           this.inited = true
         })
       } else {
+        this.dataForm.makedAt = new Date()
         this.inited = true
       }
     },
