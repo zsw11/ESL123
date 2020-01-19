@@ -88,11 +88,6 @@
           type="index">
         </el-table-column>
 
-        <el-table-column align="center" prop="modelName" label="机种名称" >
-          <template slot-scope="scope">
-            <span>{{scope.row.modelName }}</span>
-          </template>
-        </el-table-column>
 
         <el-table-column align="center" prop="deptName" label="部门" >
           <template slot-scope="scope">
@@ -106,6 +101,12 @@
           </template>
         </el-table-column>
 
+
+        <el-table-column align="center" prop="modelName" label="机种名称" >
+          <template slot-scope="scope">
+            <span>{{scope.row.modelName }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="code" label="型号" >
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
