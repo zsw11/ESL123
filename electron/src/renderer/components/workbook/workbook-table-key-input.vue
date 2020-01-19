@@ -1,5 +1,5 @@
 <template>
-  <div class="key-input-box" key="keyInputBox">
+  <span class="key-input-box" key="keyInputBox">
     <popper
       append-to-body
       trigger="clickToOpen"
@@ -28,9 +28,10 @@
         type="text"
         @keydown="keydown($event)"
         @keyup="keyup($event)"
+        @blur="$emit('input', $event.target.value)"
         class="custom-input">
     </popper>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -65,15 +66,13 @@ export default {
       return this.$refs.key.value.substr(this.$refs.key.selectionEnd, this.$refs.key.value.length)
     },
     // 查询并提示
-    suggest (keyword, isEnter = false) {
+    suggest (keyword) {
       const self = this
       self.suggestions = []
-      return listMeasureGroup({ code: keyword }).then(({ page }) => {
+      listMeasureGroup({ code: keyword }).then(({ page }) => {
         self.suggestions = page.data
-        if (!isEnter) {
-          self.activeSugguestionIndex = self.suggestions.length ? 0 : null
-          self.popoverVisible = true
-        }
+        self.activeSugguestionIndex = self.suggestions.length ? 0 : null
+        self.popoverVisible = true
       })
     },
     // j结束提示
