@@ -18,7 +18,7 @@
             <el-badge
               :value="this.$store.getters.unreadCount === 0 ? null:this.$store.getters.unreadCount"
             >
-              <icon-svg name="pinglun" width="100%" height="100%"></icon-svg>
+              <!-- <icon-svg name="pinglun" width="100%" height="100%"></icon-svg> -->
             </el-badge>
             <span>消息</span>
           </template>
