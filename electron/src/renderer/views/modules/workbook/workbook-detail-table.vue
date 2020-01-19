@@ -683,6 +683,8 @@ export default {
       border-top: solid 1px #333;
       border-bottom: 0;
       border-color: #333;
+      font-weight: bold;
+      color: black;
       &.footer-inner {
         border-right-color: transparent;
       }
