@@ -8,8 +8,8 @@
     </div>
     <div class="titleUrl">
       <span @click="backTo('model')">{{department}}</span>
-      <span v-if="modelShow" @click="backTo('phase')">>>{{model}}</span>
-      <span v-if="phaseShow">>>{{phase}}</span>
+      <span v-if="modelShow" @click="backTo('phase')"> >> {{model}}</span>
+      <span v-if="phaseShow"> >> {{phase}}</span>
     </div>
       <el-table
         :data="dataList">
@@ -34,8 +34,16 @@
             </span>
           </template>
         </el-table-column>
-
     </el-table>
+    <el-pagination
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
+      :current-page="pageNo"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageSize"
+      :total="total"
+      layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
   </el-card>
 
 </template>
@@ -72,6 +80,9 @@
           phase: null,
           phaseShow: false,
           workstation: null,
+          pageNo: 1,
+          pageSize: 10,
+          total: 0
         }
       },
       activated() {
@@ -92,6 +103,25 @@
         }
       },
       methods: {
+        // 每页数
+        sizeChangeHandle (val) {
+          this.pageSize = val
+          this.pageNo = 1
+          this.doDataSearch()
+        },
+        // 当前页
+        currentChangeHandle (val) {
+          this.pageNo = val
+          this.doDataSearch()
+        },
+        // 查询数据
+        doDataSearch () {
+          if (this.dataButton === 'complex') {
+            this.doComplexSearch()
+          } else {
+            this.getDataList()
+          }
+        },
         init () {
           switch (this.code) {
             case 'model': {
@@ -169,11 +199,14 @@
   }
 }
 .titleUrl{
+  cursor: pointer;
   span{
     color: blueviolet;
     font-size: 16px;
     font-weight: bold;
   }
 }
-
+.el-pagination{
+  text-align: center !important;
+}
 </style>
