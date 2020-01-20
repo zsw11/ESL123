@@ -3,7 +3,7 @@
       custom-class="special-dialog"
       title="特殊字符"
       :visible.sync="specialVisible"
-      width="20%">
+      width="25%">
         <el-select v-model="specialValue" placeholder="请选择">
           <el-option
             v-for="item in specialData"
@@ -12,7 +12,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <div @click="returnSpecial()">
           <vxe-table
             class="specialTable"
             ref="xTable"
@@ -32,7 +31,6 @@
             <vxe-table-column field="code6" ></vxe-table-column>
             <vxe-table-column field="code7" ></vxe-table-column>
           </vxe-table>
-          </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="returnSpecial()">确 定</el-button>
           <el-button @click="specialVisible = false">取 消</el-button>
@@ -45,6 +43,7 @@ export default {
   components:{},
   data(){
     return {
+        str: null,
         specialVisible: false,
         specialValue: 0,
         specialData: [
@@ -100,6 +99,7 @@ export default {
   },
   methods:{
     init () {
+        this.str = null
         this.specialVisible = true
         let arr1, arr2, specialItem
         this.specialDataList = []
@@ -120,10 +120,12 @@ export default {
         })
       },
     returnSpecial () {
-      // console.log(this.$refs.xTable, 1111111111111111111)
+      this.specialVisible = false
+      return this.str
     },
     selectedChanged (val) {
-      console.log(val, 22222222222222222222)
+      let code = val.column.property
+      this.str = val.row[code]
     }
   },
 }

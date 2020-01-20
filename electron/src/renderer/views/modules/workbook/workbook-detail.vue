@@ -91,7 +91,7 @@
         </el-tabs>
       </div>
     </div>
-    <!-- <special-dialog ref="specialDialog"></special-dialog> -->
+    <special-dialog ref="specialDialog"></special-dialog>
     <info-dialog ref="infoDialog" :workbook="workbook"></info-dialog>
     <remarks-dialog ref="remarksDialog" :workbook="workbook"></remarks-dialog>
   </div>
