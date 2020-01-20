@@ -3,11 +3,11 @@ package io.apj.modules.masterData.controller;
 import java.util.*;
 
 import cn.hutool.core.util.PinyinUtil;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.apj.common.utils.RD;
-import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
-import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import io.apj.modules.sys.controller.AbstractController;
@@ -40,8 +40,6 @@ import io.apj.common.utils.PageUtils;
 public class ReportGroupController extends AbstractController {
 	@Autowired
 	private ReportGroupService reportGroupService;
-	@Autowired
-	private ReportGroupReportRelaService reportGroupReportRelaService;
 	@Autowired
 	private ReportGroupDeptRelaService reportGroupDeptRelaService;
 	@Autowired
@@ -96,14 +94,14 @@ public class ReportGroupController extends AbstractController {
 	@RequestMapping("/create")
 	@RequiresPermissions("masterData:reportgroup:create")
 	public RD save(@RequestBody Map<String, Object> map) {
-		ReportGroupEntity reportGroupEntity = new ReportGroupEntity();
-		reportGroupEntity.setPinyin(PinyinUtil.getPinYin((String)map.get("name")));
-		reportGroupEntity.setRemark((String)map.get("remark"));
-		reportGroupEntity.setCreateBy(getUserId().intValue());
-		reportGroupEntity.setCreateAt(new Date());
-		reportGroupService.insert(reportGroupEntity);
-		reportGroupService.updateReportGroupDeptRela((List<Integer>) map.get("deptEntityList"),reportGroupEntity.getId());
-
+		ReportGroupEntity reportGroupEntity = JSON.parseObject(JSON.toJSONString(map),ReportGroupEntity.class);
+		if(reportGroupEntity != null) {
+			reportGroupEntity.setPinyin(PinyinUtil.getPinYin(reportGroupEntity.getName()));
+			reportGroupEntity.setCreateBy(getUserId().intValue());
+			reportGroupEntity.setCreateAt(new Date());
+			reportGroupService.insert(reportGroupEntity);
+			reportGroupService.updateReportGroupDeptRela((List<Integer>) map.get("deptEntityList"), reportGroupEntity.getId());
+		}
 		return RD.build().put("code", 200);
 	}
 
@@ -114,12 +112,11 @@ public class ReportGroupController extends AbstractController {
 	@RequiresPermissions("masterData:reportgroup:update")
 	@Transactional
 	public RD update(@RequestBody Map<String, Object> map) {
-		ReportGroupEntity reportGroupEntity = new ReportGroupEntity();
-		reportGroupEntity.setRemark((String) map.get("remark"));
-		reportGroupEntity.setName((String) map.get("name"));
-		reportGroupEntity.setId((Integer) map.get("id"));
-		reportGroupService.updatePinAndDataById(reportGroupEntity);
-		reportGroupService.updateReportGroupDeptRela((List<Integer>) map.get("deptEntityList"),reportGroupEntity.getId());
+		ReportGroupEntity reportGroupEntity = JSON.parseObject(JSON.toJSONString(map),ReportGroupEntity.class);
+		if(reportGroupEntity != null) {
+			reportGroupService.updatePinAndDataById(reportGroupEntity);
+			reportGroupService.updateReportGroupDeptRela((List<Integer>) map.get("deptEntityList"), reportGroupEntity.getId());
+		}
 		return RD.build().put("code", 200);
 	}
 
