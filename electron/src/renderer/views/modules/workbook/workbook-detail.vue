@@ -65,8 +65,7 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
-         <el-button type="primary" class="special" @click="specialShow()">特殊字符</el-button>
-        <!-- <el-button type="primary" icon="el-icon-s-comment" @click="showRemarks">特殊字符</el-button> -->
+         <!-- <el-button type="primary" class="special" @click="specialShow()">特殊字符</el-button> -->
         <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
         <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button>
       </div>
