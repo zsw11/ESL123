@@ -1,5 +1,6 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.DateUtils;
 import io.apj.common.utils.ExcelUtils;
@@ -323,7 +324,7 @@ public class MostValueServiceImpl extends ServiceImpl<MostValueDao, MostValueEnt
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

@@ -1,5 +1,6 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import io.apj.common.utils.*;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.*;
@@ -311,7 +312,7 @@ public class TimeContactServiceImpl extends ServiceImpl<TimeContactDao, TimeCont
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

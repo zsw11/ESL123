@@ -19,6 +19,7 @@ import io.apj.modules.masterData.service.ModelSeriesService;
 import io.apj.modules.masterData.service.ModelService;
 import io.apj.modules.masterData.service.PartService;
 import io.apj.modules.sys.service.SysDeptService;
+import org.omg.CORBA.PERSIST_STORE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
+		Page pageConfig = new Query<PartEntity>(params).getPage();
 		EntityWrapper<PartEntity> entityWrapper = new EntityWrapper<>();
 		entityWrapper.isNull("delete_at")
 				.eq(params.get("common") != null && params.get("common") != "", "common",
@@ -61,13 +63,36 @@ public class PartServiceImpl extends ServiceImpl<PartDao, PartEntity> implements
 			entityWrapper.eq("update_by", Integer.parseInt((String) params.get("updateBy")));
 		}
 		entityWrapper.orderBy("update_at", false);
-		Page<PartEntity> page = this.selectPage(new Query<PartEntity>(params).getPage(), entityWrapper);
-		for (PartEntity entity : page.getRecords()) {
-			entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
-			entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+		Page<PartEntity> page = this.selectPage(pageConfig, entityWrapper);
+		Integer modelId = (Integer)params.get("modelId");
+		if(modelId != null){
+			List<PartEntity> partEntityList = new ArrayList<>();
+			for (PartEntity entity : page.getRecords()) {
+				if (entity.getCommon()) {
+					partEntityList.add(entity);
+				} else {
+					EntityWrapper<ModelPartRelaEntity> wrapper = new EntityWrapper<>();
+					wrapper.eq("part_id", entity.getId());
+					List<ModelPartRelaEntity> modelPartRelaEntityList = modelPartRelaService.selectList(wrapper);
+					if (modelPartRelaEntityList != null && modelPartRelaEntityList.size() > 0) {
+						for (ModelPartRelaEntity modelPartRelaEntity : modelPartRelaEntityList) {
+							if (modelId.equals(modelPartRelaEntity.getModelId())) {
+								partEntityList.add(entity);
+							}
+						}
+					}
+				}
+				entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+				entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+			}
+			return new PageUtils(partEntityList,partEntityList.size(),pageConfig.getSize(),pageConfig.getCurrent());
+		}else{
+			for (PartEntity entity : page.getRecords()) {
+				entity.setUpdateName(staffService.selectNameByUserId(entity.getUpdateBy()));
+				entity.setCreateName(staffService.selectNameByUserId(entity.getCreateBy()));
+			}
+			return new PageUtils(page);
 		}
-
-		return new PageUtils(page);
 	}
 
 	@Override

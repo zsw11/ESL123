@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -270,7 +271,7 @@ public class StandardTimeServiceImpl extends ServiceImpl<StandardTimeDao, Standa
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

@@ -217,7 +217,7 @@ public class TotalServiceImpl extends ServiceImpl<TotalDao, TotalEntity> impleme
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {
