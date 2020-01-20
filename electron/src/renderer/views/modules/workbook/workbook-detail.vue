@@ -868,10 +868,12 @@
       // 打开视频
       openVideo () {
         ipcRenderer.send('openVideo')
+        this.workbookPercent = 'half'
       },
       // 关闭视频
       closeVideo () {
         this.playerOptions.sources[0].src = ''
+        this.workbookPercent = 'full'
         this.clearTags()
       },
       // 设置标签
