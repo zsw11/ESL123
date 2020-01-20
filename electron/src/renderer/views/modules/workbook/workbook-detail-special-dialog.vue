@@ -24,7 +24,7 @@
             :edit-config="{trigger: 'dblclick', mode: 'cell'}"
             :keyboard-config="{isArrow: true, isTab: true}"
             @selected-changed="selectedChanged">
-            <vxe-table-column field="code1"  :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+            <vxe-table-column field="code1" ></vxe-table-column>
             <vxe-table-column field="code2" ></vxe-table-column>
             <vxe-table-column field="code3" ></vxe-table-column>
             <vxe-table-column field="code4" ></vxe-table-column>
