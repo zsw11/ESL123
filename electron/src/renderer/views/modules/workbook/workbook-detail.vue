@@ -97,13 +97,21 @@
     <remarks-dialog ref="remarksDialog" :workbook="workbook"></remarks-dialog>
     <!-- 特殊字符 -->
     <el-dialog
-      custom-class="special"
+      custom-class="special-dialog"
       title="特殊字符"
       :visible.sync="specialVisible">
+        <el-select v-model="specialValue" placeholder="请选择">
+          <el-option
+            v-for="item in specialData"
+            :key="item.value"
+            :label="item.name"
+            :value="item.value">
+          </el-option>
+        </el-select>
           <vxe-table
+          class="specialTable"
           border
           show-overflow
-          height="500"
           :data="specialDataList"
           :mouse-config="{selected: true}"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -226,29 +234,36 @@
         complexFilters: [],
         // 特殊字符
         specialVisible: false,
+        specialValue: 0,
         specialData: [
           {
             name:'数字',
+            value: 0,
             chars: ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳' ]
           },
           {
             name: '箭头',
+            value: 1,
             chars: ['←','↑','→','↓']
           },
           {
             name: '希腊文',
+            value: 2,
             chars: ['Ω','Φ','ϴ']
           },
           {
             name: '计算符',
+            value: 3,
             chars: ['<','=','>','≠','≤','≥','±','×','√']
           },
           {
             name: '几何符',
+            value: 4,
             chars: ['■','□','▲','△','▽','▼','◆','◇','○','◎','●','★','☆']
           },
           {
             name: '平假名',
+            value: 5,
             chars: [ 'あ','い','う','え','お','か','が','き','ぎ','く','ぐ','げ','こ','ご','さ','ざ','し',
               'じ','す','ず','せ','ぜ','そ','ぞ','た','だ','ち','ぢ','つ','づ','て','で','と','ど','な',
               'に','ぬ','ね','の','は','ば','ぱ','ひ','び','ぴ','ふ','ぶ','ぷ','へ','べ','ぺ','ほ','ぼ',
@@ -256,6 +271,7 @@
           },
           {
             name: '偏假名',
+            value: 6,
             chars: ['ア','イ','ウ','エ','オ','カ','ガ','キ','ギ','ク','グ','ケ','ゲ','コ','ゴ','サ','ザ','シ','ジ',
               'ス','ズ','セ','ゼ','ソ','ゾ','タ','ダ','チ','ヂ','ツ','ヅ','テ','デ','ト','ド','ナ','ニ','ヌ','ネ','ノ',
               'ハ','バ','パ','ヒ','ビ','ピ','フ','ブ','プ','ヘ','ベ','ペ','ホ','ボ','ポ','マ','ミ','ム','メ','モ','ヤ',
@@ -528,6 +544,9 @@
             this.refreshWorkbookData(workName)
           })
         }
+      },
+      specialValue (val) {
+        this.initSpecial(val)
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -705,20 +724,18 @@
       // 特殊字符初始化
       specialShow () {
         this.specialVisible = true
-        this.initSpecial()
+        this.initSpecial(this.specialValue)
       },
-      initSpecial () {
+      initSpecial (i) {
+        let arr1, arr2, specialItem
         this.specialDataList = []
-        let arr1 = this.specialData[6].chars
-        let arr2 = []
-        let specialItem = { code1: null, code2: null, code3: null, code4: null, code5: null, code6: null, code7: null }
+        arr1 = this.specialData[i].chars
+        arr2 = []
+        specialItem = { code1: null, code2: null, code3: null, code4: null, code5: null, code6: null, code7: null }
         for(let i = 0;i < arr1.length;i = i + 7){
-          arr2.push(arr1.splice(i,7))
+          arr2.push(arr1.slice(i, i + 7))
         }
-        for (let prop in specialItem) {
-          console.log(prop)
-        }
-        console.log(arr2)
+        console.log(arr1)
         arr2.forEach((item) => {
           let i = 0
           for (let prop in specialItem){
@@ -728,6 +745,7 @@
           this.specialDataList.push(specialItem)
           specialItem = { code1: null, code2: null, code3: null, code4: null, code5: null, code6: null, code7: null }
         })
+        arr1 = []
       },
       // 编辑备注
       showRemarks () {
@@ -1328,9 +1346,12 @@
     }
   }
 }
-.special{
+.special-dialog{
   .vxe-header--row{
     display: none !important;
+  }
+  .specialTable{
+    margin-top: 20px;
   }
 }
 </style>
