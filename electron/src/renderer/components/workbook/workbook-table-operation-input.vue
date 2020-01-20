@@ -54,7 +54,8 @@ export default {
   components: { Popper },
   props: {
     rowIndex: Number,
-    columnIndex: Number
+    columnIndex: Number,
+    workbookInfo: Object
   },
   data () {
     return {
@@ -93,7 +94,7 @@ export default {
       self.status = 'suggest'
       this.suggestMode = mode
       this.suggestions = []
-      listFuncs[mode]({ name: keyword }).then(({ page }) => {
+      listFuncs[mode]({ name: keyword, workbookId: this.workbookInfo.id }).then(({ page }) => {
         if (self.status !== 'suggest') return
         this.suggestions = page.data
         this.activeSugguestionIndex = self.suggestions.length ? 0 : null

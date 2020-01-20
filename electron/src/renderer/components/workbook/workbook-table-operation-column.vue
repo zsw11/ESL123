@@ -12,6 +12,7 @@
       <operation-input
         :rowIndex="rowIndex"
         :columnIndex="columnIndex"
+        :workbookInfo="workbookInfo"
         v-model="row.operation"
         @input="$emit('input', $event)"
         @move="move($event, row, columnIndex)" />
@@ -31,6 +32,7 @@ export default {
   name: 'WorkbookOperationColumn',
   components: { OperationInput },
   props: {
+    workbookInfo: Object
   },
   data () {
     return {
