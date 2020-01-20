@@ -40,8 +40,6 @@ public class ReportBatchServiceImpl
 	@Autowired
 	private ReportBatchService reportBatchService;
 	@Autowired
-	private WorkBookService workBookService;
-	@Autowired
 	private CompareService compareService;
 	@Autowired
 	private StationTimeService stationTimeService;

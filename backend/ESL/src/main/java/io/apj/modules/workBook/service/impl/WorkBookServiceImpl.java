@@ -339,7 +339,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                                 reportBatchEntityCreate.setVersionNumber(versionNumber);
                                 reportBatchEntityCreate.setCreateAt(new Date());
                                 reportBatchEntityCreate.setCreateBy((Integer) params.get("userId"));
-                                reportBatchService.insert(reportBatchEntity);
+                                reportBatchService.insert(reportBatchEntityCreate);
                             }
                         }
                     }
@@ -406,104 +406,105 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
         Double totalTmu = 0.00;
         Double totalSecondVonvert = 0.00;
         Integer totalRemark1 = 0;
-        for (int i = 0; i < workOperationsMapList.size(); i++) {
-            WorkOperationsEntity workOperations = new WorkOperationsEntity();
-            if (workOperationsMapList.get(i).get("frequency") != ""
-                    && workOperationsMapList.get(i).get("frequency") != null) {
-                workOperationsMapList.get(i).put("frequency",
-                        Float.parseFloat(workOperationsMapList.get(i).get("frequency").toString()));
-                alterInfoJson = new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
-                workOperationsMapList.get(i).put("alterInfo", alterInfoJson.toString());
-            }
-            workOperations = JSON.parseObject(JSON.toJSONString(workOperationsMapList.get(i)),
-                    WorkOperationsEntity.class);
+        if(workOperationsMapList != null && workOperationsMapList.size() > 0) {
+            for (int i = 0; i < workOperationsMapList.size(); i++) {
+                WorkOperationsEntity workOperations = new WorkOperationsEntity();
+                Object frequencyObj = workOperationsMapList.get(i).get("frequency");
+                if (frequencyObj != "" && frequencyObj != null) {
+                    workOperationsMapList.get(i).put("frequency", Float.parseFloat(frequencyObj.toString()));
+                    alterInfoJson = new JSONArray(Collections.singletonList(workOperationsMapList.get(i).get("alterInfo")));
+                    workOperationsMapList.get(i).put("alterInfo", alterInfoJson.toString());
+                }
+                workOperations = JSON.parseObject(JSON.toJSONString(workOperationsMapList.get(i)), WorkOperationsEntity.class);
 //			DataUtils.transMap2Bean2(workOperationsMapList.get(i), workOperations);
-            Map<String, Integer> map = new HashMap<>();
-            Integer totalPositive = 0;
-            map.put("totalPositive", totalPositive);
-            Integer totalNegative = 0;
-            map.put("totalNegative", totalNegative);
-            Integer a0 = workOperations.getA0();
-            map.put("data", a0);
-            map = dealData(map);
-            Integer b0 = workOperations.getB0();
-            map.put("data", b0);
-            map = dealData(map);
-            Integer g0 = workOperations.getG0();
-            map.put("data", g0);
-            map = dealData(map);
-            Integer a1 = workOperations.getA1();
-            map.put("data", a1);
-            map = dealData(map);
-            Integer b1 = workOperations.getB1();
-            map.put("data", b1);
-            map = dealData(map);
-            Integer p0 = workOperations.getP0();
-            map.put("data", p0);
-            map = dealData(map);
-            Integer m0 = workOperations.getM0();
-            map.put("data", m0);
-            map = dealData(map);
-            Integer x0 = workOperations.getX0();
-            map.put("data", x0);
-            map = dealData(map);
-            Integer i0 = workOperations.getI0();
-            map.put("data", i0);
-            map = dealData(map);
-            Integer a2 = workOperations.getA2();
-            map.put("data", a2);
-            map = dealData(map);
-            Integer b2 = workOperations.getB2();
-            map.put("data", b2);
-            map = dealData(map);
-            Integer p1 = workOperations.getP1();
-            map.put("data", p1);
-            map = dealData(map);
-            Integer a3 = workOperations.getA3();
-            map.put("data", a3);
-            map = dealData(map);
-            Integer a4 = workOperations.getA4();
-            map.put("data", a4);
-            map = dealData(map);
-            Integer b3 = workOperations.getB3();
-            map.put("data", b3);
-            map = dealData(map);
-            Integer p2 = workOperations.getP2();
-            map.put("data", p2);
-            map = dealData(map);
-            Integer a5 = workOperations.getA5();
-            map.put("data", a5);
-            map = dealData(map);
-            Float frequency = workOperations.getFrequency();
-            frequency = frequency == null ? 0 : frequency;
-            String tool = workOperations.getTool();
-            Integer toolInteger = Integer.valueOf(tool.substring(1,2));
-            Float frequency2 = frequency == 0 ? 1 : frequency;
-            Float timeValue = (map.get("totalPositive")+map.get("totalNegative") * frequency) * 6+toolInteger * frequency2 * 6;
-            totalTimeValue += timeValue;
-            workOperations.setTimeValue(new BigDecimal(timeValue));
-            Double tmu = timeValue/6.00*10;
-            totalTmu += tmu;
-            workOperations.setTmu(new BigDecimal(tmu));
-            Double secondConvert = tmu * 0.036;
-            totalSecondVonvert += secondConvert;
-            workOperations.setSecondConvert(new BigDecimal(secondConvert));
-            Integer remark1 = workOperations.getRemark1();
-            if(remark1 != null){
-                Double calculate = Math.ceil((remark1 / 0.36 * 6) / Math.pow(10.00 , 1.00)) * Math.pow(10.00 , 1.00);
-                remark1 = calculate.intValue();
-                workOperations.setRemark1(remark1);
-                totalRemark1 += remark1;
+                Map<String, Integer> map = new HashMap<>();
+                Integer totalPositive = 0;
+                map.put("totalPositive", totalPositive);
+                Integer totalNegative = 0;
+                map.put("totalNegative", totalNegative);
+                Integer a0 = workOperations.getA0();
+                map.put("data", a0);
+                map = dealData(map);
+                Integer b0 = workOperations.getB0();
+                map.put("data", b0);
+                map = dealData(map);
+                Integer g0 = workOperations.getG0();
+                map.put("data", g0);
+                map = dealData(map);
+                Integer a1 = workOperations.getA1();
+                map.put("data", a1);
+                map = dealData(map);
+                Integer b1 = workOperations.getB1();
+                map.put("data", b1);
+                map = dealData(map);
+                Integer p0 = workOperations.getP0();
+                map.put("data", p0);
+                map = dealData(map);
+                Integer m0 = workOperations.getM0();
+                map.put("data", m0);
+                map = dealData(map);
+                Integer x0 = workOperations.getX0();
+                map.put("data", x0);
+                map = dealData(map);
+                Integer i0 = workOperations.getI0();
+                map.put("data", i0);
+                map = dealData(map);
+                Integer a2 = workOperations.getA2();
+                map.put("data", a2);
+                map = dealData(map);
+                Integer b2 = workOperations.getB2();
+                map.put("data", b2);
+                map = dealData(map);
+                Integer p1 = workOperations.getP1();
+                map.put("data", p1);
+                map = dealData(map);
+                Integer a3 = workOperations.getA3();
+                map.put("data", a3);
+                map = dealData(map);
+                Integer a4 = workOperations.getA4();
+                map.put("data", a4);
+                map = dealData(map);
+                Integer b3 = workOperations.getB3();
+                map.put("data", b3);
+                map = dealData(map);
+                Integer p2 = workOperations.getP2();
+                map.put("data", p2);
+                map = dealData(map);
+                Integer a5 = workOperations.getA5();
+                map.put("data", a5);
+                map = dealData(map);
+                Float frequency = workOperations.getFrequency();
+                frequency = frequency == null ? 0 : frequency;
+                String tool = workOperations.getTool();
+                Integer toolInteger = Integer.valueOf(tool.substring(1, 2));
+                Float frequency2 = frequency == 0 ? 1 : frequency;
+                Float timeValue = (map.get("totalPositive") + map.get("totalNegative") * frequency) * 6 + toolInteger * frequency2 * 6;
+                totalTimeValue += timeValue;
+                workOperations.setTimeValue(new BigDecimal(timeValue));
+                Double tmu = timeValue / 6.00 * 10;
+                totalTmu += tmu;
+                workOperations.setTmu(new BigDecimal(tmu));
+                Double secondConvert = tmu * 0.036;
+                totalSecondVonvert += secondConvert;
+                workOperations.setSecondConvert(new BigDecimal(secondConvert));
+                Integer remark1 = workOperations.getRemark1();
+                if (remark1 != null) {
+                    Double calculate = Math.ceil((remark1 / 0.36 * 6) / Math.pow(10.00, 1.00)) * Math.pow(10.00, 1.00);
+                    remark1 = calculate.intValue();
+                    workOperations.setRemark1(remark1);
+                    totalRemark1 += remark1;
+                }
+                workOperations.setWorkBookId(workBookId);
+                workOperationsList.add(workOperations);
             }
-            workOperations.setWorkBookId(workBookId);
-            workOperationsList.add(workOperations);
-        }
-        workBookEntity.setTimeValue(new BigDecimal(totalTimeValue));
-        workBookEntity.setTmu(new BigDecimal(totalTmu));
-        workBookEntity.setSecondConvert(new BigDecimal(totalSecondVonvert));
-        updateById(workBookEntity);
-        if(workOperationsList.size()>0){
-            workOperationService.insertBatch(workOperationsList);
+            workBookEntity.setTimeValue(new BigDecimal(totalTimeValue));
+            workBookEntity.setTmu(new BigDecimal(totalTmu));
+            workBookEntity.setSecondConvert(new BigDecimal(totalSecondVonvert));
+            workBookEntity.setRemark1(new BigDecimal(totalRemark1));
+            updateById(workBookEntity);
+            if (workOperationsList.size() > 0) {
+                workOperationService.insertBatch(workOperationsList);
+            }
         }
         return RD.success(workBookEntity);
     }

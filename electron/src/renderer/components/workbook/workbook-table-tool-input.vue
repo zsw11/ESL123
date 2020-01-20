@@ -21,6 +21,8 @@ export default {
       } else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[*flcmtrs0-9]$/i.test(e.key)) {
         this.$message.error('请输入*flcmtrs或者数字')
         e.preventDefault()
+      } else {
+        this.$emit('keydown', e)
       }
       //  else if (!isCtrlKeys(e) && e.key.length === 1 && !/^[flcmtrs]\d{0,2}$/i.test(e.target.value + e.key)) {
       //   this.$message.error('格式不正确')

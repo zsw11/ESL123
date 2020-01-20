@@ -2,6 +2,7 @@
   <textarea
     ref="textarea"
     key="textarea"
+    @keydown="$emit('keydown', $event)"
     @keyup="keyup($event)"
     @blur="$emit('input', $event.target.value)"
     class="custom-textarea">

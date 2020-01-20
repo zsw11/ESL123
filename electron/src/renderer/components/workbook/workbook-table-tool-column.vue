@@ -13,7 +13,10 @@
       <tool-input
         type="text"
         v-model="scope.row.tool"
-        @keydown="$emit('keydown', $event)"
+        @keydown="workbook.cellKeyDown({
+          row: scope.row,
+          column: scope.column
+        }, $event)"
         @jump="$emit('jump', scope.row, 'tool', $event)"
         @input="input(scope, $event)"
         class="custom-input" />
@@ -27,10 +30,13 @@ import ToolInput from './workbook-table-tool-input'
 export default {
   name: 'WorkbookTableColumn',
   components: { ToolInput },
+  props: {
+    workbook: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
-    keydown (e, row) {
-      this.$emit('keydown', e, row)
-    },
     input (scope, e) {
       this.$refs.tool.$table.updateStatus(scope)
     }

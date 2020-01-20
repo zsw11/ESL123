@@ -14,7 +14,10 @@
         type="text"
         v-model.number="scope.row[config.field]"
         :config="config"
-        @keydown="$emit('keydown', $event)"
+        @keydown="workbook.cellKeyDown({
+          row: scope.row,
+          column: scope.column
+        }, $event)"
         @jump="$emit('jump', scope.row, config.field, $event)"
         @input="input(scope, $event)"
         class="custom-input" />
@@ -32,15 +35,16 @@ export default {
     config: {
       type: Object,
       required: true
+    },
+    workbook: {
+      type: Object,
+      required: true
     }
   },
   methods: {
     abs (val) {
       if (val === -9999) return 0
       return /^-?\d+$/.test(val) ? Math.abs(val) : val
-    },
-    keydown (e, row) {
-      this.$emit('keydown', e, row)
     },
     input (scope, e) {
       this.$refs.measure.$table.updateStatus(scope)

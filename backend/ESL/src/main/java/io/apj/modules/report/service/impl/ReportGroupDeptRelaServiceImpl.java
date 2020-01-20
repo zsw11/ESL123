@@ -4,11 +4,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.Query;
-import io.apj.modules.report.dao.ReportDeptRelaDao;
 import io.apj.modules.report.dao.ReportGroupDeptRelaDao;
-import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
-import io.apj.modules.report.service.ReportDeptRelaService;
 import io.apj.modules.report.service.ReportGroupDeptRelaService;
 import org.springframework.stereotype.Service;
 
