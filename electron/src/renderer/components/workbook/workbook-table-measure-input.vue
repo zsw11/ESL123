@@ -54,6 +54,8 @@ export default {
       } else if (/^[a-z`~!@#$%^&*()\-_=+[\]{}\\|;':",/<>?]$/.test(e.key)) {
         this.$message.error('无效字符')
         e.preventDefault()
+      } else {
+        this.$emit('keydown', e)
       }
     }
   }
