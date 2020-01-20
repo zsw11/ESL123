@@ -1,5 +1,6 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.DateUtils;
 import io.apj.common.utils.ExcelUtils;
@@ -309,7 +310,7 @@ public class CompareServiceImpl extends ServiceImpl<CompareDao, CompareEntity> i
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 
 	private void getParent(Integer parentId){

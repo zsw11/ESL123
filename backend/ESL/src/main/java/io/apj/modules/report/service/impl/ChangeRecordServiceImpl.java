@@ -1,5 +1,6 @@
 package io.apj.modules.report.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import io.apj.common.utils.Constant;
 import io.apj.common.utils.PageUtils;
 import io.apj.common.utils.PathUtil;
@@ -207,7 +208,7 @@ public class ChangeRecordServiceImpl extends ServiceImpl<ChangeRecordDao, Change
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

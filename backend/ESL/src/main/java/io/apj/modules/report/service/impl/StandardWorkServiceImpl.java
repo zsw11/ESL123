@@ -222,7 +222,7 @@ public class StandardWorkServiceImpl extends ServiceImpl<StandardWorkDao, Standa
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

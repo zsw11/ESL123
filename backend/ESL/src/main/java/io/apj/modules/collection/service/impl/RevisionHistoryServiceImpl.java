@@ -223,7 +223,7 @@ public class RevisionHistoryServiceImpl extends ServiceImpl<RevisionHistoryDao, 
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {

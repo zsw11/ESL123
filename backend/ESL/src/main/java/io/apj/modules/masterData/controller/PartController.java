@@ -64,6 +64,7 @@ public class PartController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("masterData:part:list")
 	public ResponseEntity<Object> list(@RequestParam Map<String, Object> params) {
+		params.put("modelId",848);
 		PageUtils page = partService.queryPage(params);
 		return RD.ok(page);
 	}

@@ -1,5 +1,6 @@
 package io.apj.modules.collection.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import io.apj.common.utils.*;
 import io.apj.modules.collection.dao.StationTimeDao;
 import io.apj.modules.collection.entity.StationTimeEntity;
@@ -198,7 +199,7 @@ public class StationTimeServiceImpl extends ServiceImpl<StationTimeDao, StationT
 				workstationTypeEntity.setWorkstationTypeNodeList(workstationTypeNodeEntityList);
 			}
 		}
-		return workstationTypeEntity.toString();
+		return JSON.toJSONString(workstationTypeEntity);
 	}
 	private void getParent(Integer parentId){
 		if(parentId != null) {
