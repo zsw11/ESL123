@@ -65,6 +65,8 @@
           placeholder="手顺组合"
           @select="addOperationGroup">
         </el-autocomplete>
+         <el-button type="primary" class="special" @click="specialShow()">特殊字符</el-button>
+        <!-- <el-button type="primary" icon="el-icon-s-comment" @click="showRemarks">特殊字符</el-button> -->
         <span class="workbook-title">{{[...(lockStatus === 'fail' || $route.query.readonly ? ['只读'] : []),  ...(workbook.ifAlter? ['修订']:[])].join(', ')}}</span>
         <el-button type="primary" icon="el-icon-s-comment" class="remarks-button" @click="showRemarks">备注</el-button>
       </div>
@@ -93,6 +95,32 @@
 
     <info-dialog ref="infoDialog" :workbook="workbook"></info-dialog>
     <remarks-dialog ref="remarksDialog" :workbook="workbook"></remarks-dialog>
+    <!-- 特殊字符 -->
+    <el-dialog
+      custom-class="special"
+      title="特殊字符"
+      :visible.sync="specialVisible">
+          <vxe-table
+          border
+          show-overflow
+          height="500"
+          :data="specialDataList"
+          :mouse-config="{selected: true}"
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEnter: true,}">
+          <vxe-table-column field="code1" ></vxe-table-column>
+          <vxe-table-column field="code2" ></vxe-table-column>
+          <vxe-table-column field="code3" ></vxe-table-column>
+          <vxe-table-column field="code4" ></vxe-table-column>
+          <vxe-table-column field="code5" ></vxe-table-column>
+          <vxe-table-column field="code6" ></vxe-table-column>
+          <vxe-table-column field="code7" ></vxe-table-column>
+          </vxe-table>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="specialVisible = false">取 消</el-button>
+          <el-button type="primary" @click="specialVisible = false">确 定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -196,6 +224,45 @@
         lockInterval: null,
         dataButton: 'list',
         complexFilters: [],
+        // 特殊字符
+        specialVisible: false,
+        specialData: [
+          {
+            name:'数字',
+            chars: ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳' ]
+          },
+          {
+            name: '箭头',
+            chars: ['←','↑','→','↓']
+          },
+          {
+            name: '希腊文',
+            chars: ['Ω','Φ','ϴ']
+          },
+          {
+            name: '计算符',
+            chars: ['<','=','>','≠','≤','≥','±','×','√']
+          },
+          {
+            name: '几何符',
+            chars: ['■','□','▲','△','▽','▼','◆','◇','○','◎','●','★','☆']
+          },
+          {
+            name: '平假名',
+            chars: [ 'あ','い','う','え','お','か','が','き','ぎ','く','ぐ','げ','こ','ご','さ','ざ','し',
+              'じ','す','ず','せ','ぜ','そ','ぞ','た','だ','ち','ぢ','つ','づ','て','で','と','ど','な',
+              'に','ぬ','ね','の','は','ば','ぱ','ひ','び','ぴ','ふ','ぶ','ぷ','へ','べ','ぺ','ほ','ぼ',
+              'ぽ','ま','み','む','め','も','や','ゆ','よ','ら','り','る','れ','ろ','わ','ゐ','ゑ','を','ん' ]
+          },
+          {
+            name: '偏假名',
+            chars: ['ア','イ','ウ','エ','オ','カ','ガ','キ','ギ','ク','グ','ケ','ゲ','コ','ゴ','サ','ザ','シ','ジ',
+              'ス','ズ','セ','ゼ','ソ','ゾ','タ','ダ','チ','ヂ','ツ','ヅ','テ','デ','ト','ド','ナ','ニ','ヌ','ネ','ノ',
+              'ハ','バ','パ','ヒ','ビ','ピ','フ','ブ','プ','ヘ','ベ','ペ','ホ','ボ','ポ','マ','ミ','ム','メ','モ','ヤ',
+              'ユ','ヨ','ラ','リ','ル','レ','ロ','ワ','ヰ','ヱ','ヲ','ン']
+          }
+        ],
+        specialDataList: [],
         listQuery: {
           No: null,
           version: null,
@@ -634,6 +701,33 @@
       // 显示分析表信息
       showInfo () {
         if (this.$refs.infoDialog) this.$refs.infoDialog.show()
+      },
+      // 特殊字符初始化
+      specialShow () {
+        this.specialVisible = true
+        this.initSpecial()
+      },
+      initSpecial () {
+        this.specialDataList = []
+        let arr1 = this.specialData[6].chars
+        let arr2 = []
+        let specialItem = { code1: null, code2: null, code3: null, code4: null, code5: null, code6: null, code7: null }
+        for(let i = 0;i < arr1.length;i = i + 7){
+          arr2.push(arr1.splice(i,7))
+        }
+        for (let prop in specialItem) {
+          console.log(prop)
+        }
+        console.log(arr2)
+        arr2.forEach((item) => {
+          let i = 0
+          for (let prop in specialItem){
+            specialItem[prop] = item[i]
+            i++
+          }
+          this.specialDataList.push(specialItem)
+          specialItem = { code1: null, code2: null, code3: null, code4: null, code5: null, code6: null, code7: null }
+        })
       },
       // 编辑备注
       showRemarks () {
@@ -1184,6 +1278,10 @@
         margin-right: 10px;
         padding: 0;
       }
+      .special{
+        margin-left: 10px;
+        padding: 0;
+      }
     }
     .vxe-table.size--mini .vxe-body--column:not(.col--ellipsis),
     .vxe-table.size--mini .vxe-footer--column:not(.col--ellipsis),
@@ -1228,6 +1326,11 @@
         }
       }
     }
+  }
+}
+.special{
+  .vxe-header--row{
+    display: none !important;
   }
 }
 </style>

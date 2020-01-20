@@ -8,7 +8,6 @@ import io.apj.common.utils.RD;
 import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.masterData.entity.*;
 import io.apj.modules.masterData.service.*;
-import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
 import io.apj.modules.report.service.ReportBatchService;
 import io.apj.modules.report.service.ReportGroupDeptRelaService;
@@ -16,9 +15,6 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
-import io.swagger.models.Model;
-import javassist.expr.NewArray;
-import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -109,19 +105,7 @@ public class WorkBookController extends AbstractController {
 	@RequestMapping("/create")
 	@RequiresPermissions("workBook:workbook:create")
 	public R save(@RequestBody Map<String,Object> map) {
-//		JSONArray jsonArray = null;
-//		try
-//		{
-//			jsonArray=new JSONArray(Collections.singletonList(map.get("remarks")));
-//		} catch (JSONException e)
-//		{
-//			e.printStackTrace();
-//		}
-		WorkBookEntity workBookEntity;
-		if(map.get("remarks").toString()!=null){
-			map.put("remarks",map.get("remarks").toString());
-		}
-		workBookEntity  = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
+		WorkBookEntity workBookEntity = JSON.parseObject(JSON.toJSONString(map), WorkBookEntity.class);
 		workBookEntity.setDeptId(getUserDeptId().intValue());
 		workBookEntity.setIfAlter(false);
 		workBookEntity.setMakerId(getUserId().intValue());
@@ -254,7 +238,7 @@ public class WorkBookController extends AbstractController {
 		Integer deptId = getUserDeptId().intValue();
 		params.put("deptId", deptId);
 		Long userId = getUserId();
-		params.put("userId" ,userId);
+		params.put("userId" ,userId.intValue());
 		workBookService.createReports(params);
 		return R.ok();
 	}

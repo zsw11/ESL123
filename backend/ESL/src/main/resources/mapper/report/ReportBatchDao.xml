@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.apj.modules.report.dao.ReportBatchDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.apj.modules.report.entity.ReportBatchEntity" id="reportBatchMap">
+        <result property="id" column="id"/>
+        <result property="stlst" column="stlst"/>
+        <result property="modelId" column="model_id"/>
+        <result property="destinations" column="destinations"/>
+        <result property="phaseId" column="phase_id"/>
+        <result property="versionNumber" column="version_number"/>
+        <result property="destinations" column="destinations"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createAt" column="create_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="deleteAt" column="delete_at"/>
+    </resultMap>
+
+
+</mapper>
