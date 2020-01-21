@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.apj.common.annotation.DataFilter;
 import io.apj.common.utils.*;
 import io.apj.modules.basic.service.StaffService;
+import io.apj.modules.collection.entity.MostValueItemEntity;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
 import io.apj.modules.collection.service.RevisionHistoryService;
@@ -736,6 +737,33 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             return map;
         }
         return null;
+    }
+
+    @Override
+    public PageUtils uniqueTreeModel(Map<String, Object> params) {
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+        entityWrapper.setSqlSelect("model_id").eq("dept_id",params.get("deptId")).groupBy("model_id");
+        Page<WorkBookEntity> workBookEntityPage = selectPage(new Query<WorkBookEntity>(params).getPage(),entityWrapper);
+        return new PageUtils(workBookEntityPage);
+    }
+
+    @Override
+    public PageUtils uniqueTreePhase(Map<String, Object> params) {
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+        Integer modelId = Integer.valueOf((String)params.get("modelId"));
+        entityWrapper.setSqlSelect("phase_id").eq("dept_id",params.get("deptId")).eq("model_id",modelId).groupBy("phase_id");
+        Page<WorkBookEntity> workBookEntityPage = selectPage(new Query<WorkBookEntity>(params).getPage(),entityWrapper);
+        return new PageUtils(workBookEntityPage);
+    }
+
+    @Override
+    public PageUtils uniqueTreeWorkstation(Map<String, Object> params) {
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+        Integer modelId = Integer.valueOf((String)params.get("modelId"));
+        Integer phaseId = Integer.valueOf((String)params.get("phaseId"));
+        entityWrapper.setSqlSelect("workstation_id").eq("dept_id",params.get("deptId")).eq("model_id",modelId).eq("phase_id",phaseId).groupBy("workstation_id");
+        Page<WorkBookEntity> workBookEntityPage = selectPage(new Query<WorkBookEntity>(params).getPage(),entityWrapper);
+        return new PageUtils(workBookEntityPage);
     }
 
     private Map<String, Integer> dealData(Map<String, Integer> map) {
