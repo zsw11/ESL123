@@ -1,5 +1,29 @@
 package io.apj.modules.workBook.service.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
@@ -11,8 +35,14 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+
 import io.apj.common.annotation.DataFilter;
-import io.apj.common.utils.*;
+import io.apj.common.utils.Constant;
+import io.apj.common.utils.DataUtils;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.Query;
+import io.apj.common.utils.RD;
 import io.apj.modules.basic.service.StaffService;
 import io.apj.modules.collection.service.CompareService;
 import io.apj.modules.collection.service.MostValueService;
@@ -21,11 +51,24 @@ import io.apj.modules.collection.service.StationTimeService;
 import io.apj.modules.masterData.entity.ReportEntity;
 import io.apj.modules.masterData.entity.ReportGroupReportRelaEntity;
 import io.apj.modules.masterData.entity.WorkstationEntity;
-import io.apj.modules.masterData.service.*;
+import io.apj.modules.masterData.service.ModelService;
+import io.apj.modules.masterData.service.PhaseService;
+import io.apj.modules.masterData.service.ReportGroupReportRelaService;
+import io.apj.modules.masterData.service.ReportService;
+import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
-import io.apj.modules.report.service.*;
+import io.apj.modules.report.service.ChangeRecordService;
+import io.apj.modules.report.service.ProcessListService;
+import io.apj.modules.report.service.ReportBatchService;
+import io.apj.modules.report.service.ReportDeptRelaService;
+import io.apj.modules.report.service.ReportGroupDeptRelaService;
+import io.apj.modules.report.service.ReportManMachineCombinationService;
+import io.apj.modules.report.service.StandardTimeService;
+import io.apj.modules.report.service.StandardWorkService;
+import io.apj.modules.report.service.TimeContactService;
+import io.apj.modules.report.service.TotalService;
 import io.apj.modules.sys.service.SysConfigService;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.dao.WorkBookDao;
@@ -33,19 +76,6 @@ import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkBookService;
 import io.apj.modules.workBook.service.WorkOperationsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Service("workBookService")
 public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity> implements WorkBookService {
@@ -71,6 +101,8 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     private MostValueService mostValueService;
     @Autowired
     private TimeContactService timeContactService;
+    @Autowired
+    private ProcessListService processListService;
     @Autowired
     private CompareService compareService;
     @Autowired
@@ -235,6 +267,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
     @Override
     public void createReports(Map<String, Object> params) {
         Integer deptId = (Integer)params.get("deptId");
+        Integer userId =Integer.parseInt(String.valueOf(params.get("userId")));
         List<ReportGroupDeptRelaEntity> reportGroupDeptRelaEntityList = reportGroupDeptRelaService.selectList(new EntityWrapper<ReportGroupDeptRelaEntity>().eq("dept_id", deptId));
         if(reportGroupDeptRelaEntityList != null && reportGroupDeptRelaEntityList.size() > 0){
             HashSet<Integer> reportSet = new HashSet<>();
@@ -277,11 +310,11 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                                 break;
                             case 3:
                                 // 工位时间报表
-                                stationTimeService.generateReportData(workBookIds, reportId);
+                                stationTimeService.generateReportData(workBookIds,reportId);
                                 break;
                             case 4:
                                 // Compare表
-                                compareService.generateReportData(workBookIds, reportId);
+                                compareService.generateReportData(workBookIds,reportId);
                                 break;
                             case 5:
                                 // MOST Value表
@@ -303,6 +336,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                                 break;
                             case 10:
                                 // Process List表
+                            	processListService.generateReportData(workBookIds,reportId,userId);
                                 break;
                             case 11:
                                 // 标准时间表
@@ -338,7 +372,7 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
                                 reportBatchEntityCreate.setStlst(stlst);
                                 reportBatchEntityCreate.setVersionNumber(versionNumber);
                                 reportBatchEntityCreate.setCreateAt(new Date());
-                                reportBatchEntityCreate.setCreateBy((Integer) params.get("userId"));
+                                reportBatchEntityCreate.setCreateBy(userId);
                                 reportBatchService.insert(reportBatchEntityCreate);
                             }
                         }
