@@ -15,11 +15,14 @@ import io.apj.modules.sys.controller.AbstractController;
 import io.apj.modules.sys.service.SysDeptService;
 import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.service.WorkBookService;
+import org.apache.commons.lang3.Validate;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.text.ParseException;
 import java.util.*;
 
@@ -382,4 +385,32 @@ public class WorkBookController extends AbstractController {
 			return false;
 		}
 	}
+
+	@RequestMapping(value = "/unique/tree/model")
+	public R treeModel(@RequestParam Map<String, Object> params){
+		Integer deptId = getUserDeptId().intValue();
+		params.put("deptId", deptId);
+		PageUtils page = workBookService.uniqueTreeModel(params);
+		return R.ok().put("page", page);
+	}
+
+	@RequestMapping(value = "/unique/tree/phase")
+	public R treePhase(@RequestParam Map<String, Object> params){
+		Validate.notNull(params.get("modelId"));
+		Integer deptId = getUserDeptId().intValue();
+		params.put("deptId", deptId);
+		PageUtils page = workBookService.uniqueTreePhase(params);
+		return R.ok().put("page", page);
+	}
+
+	@RequestMapping(value = "/unique/tree/workstation")
+	public R treeWorkstation(@RequestParam Map<String, Object> params){
+		Validate.notNull(params.get("modelId"));
+		Validate.notNull(params.get("phaseId"));
+		Integer deptId = getUserDeptId().intValue();
+		params.put("deptId", deptId);
+		PageUtils page = workBookService.uniqueTreeWorkstation(params);
+		return R.ok().put("page", page);
+	}
+
 }

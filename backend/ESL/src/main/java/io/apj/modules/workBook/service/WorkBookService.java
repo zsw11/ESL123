@@ -78,4 +78,10 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	 */
 	Map<String , Object> dealData(Integer workBookId);
 
+	PageUtils uniqueTreeModel(Map<String, Object> params);
+
+	PageUtils uniqueTreePhase(Map<String, Object> params);
+
+	PageUtils uniqueTreeWorkstation(Map<String, Object> params);
+
 }
