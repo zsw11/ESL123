@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.service.IService;
 
-import io.apj.common.utils.PageUtils;
 import io.apj.modules.report.entity.AssembleProcessListEntity;
 
 /**
@@ -20,12 +19,9 @@ import io.apj.modules.report.entity.AssembleProcessListEntity;
  */
 public interface ProcessListService extends IService<AssembleProcessListEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
-
-    void generateReportData(List<Integer> workBookIds,Integer reportId,Integer userId);
+   void generateReportData(List<Integer> workBookIds,Integer reportId,Integer userId);
 
     List<String> download(Map<String, Object> params, HttpServletResponse response) throws IOException;
 
-    PageUtils selectListTest(Map<String, Object> params);
 }
 

@@ -36,6 +36,8 @@ public interface WorkBookService extends IService<WorkBookEntity> {
 	void createReports(Map<String, Object> params);
 
 	WorkBookEntity getLastVersion(Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber);
+	
+	List<WorkBookEntity> selectListByCondition(Integer modelId, String stlst, Integer phaseId, String destinations, String versionNumber);
 
 	WorkBookEntity detailWithOperations(Integer id);
 

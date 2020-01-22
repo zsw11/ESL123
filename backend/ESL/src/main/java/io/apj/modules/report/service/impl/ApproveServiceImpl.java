@@ -68,6 +68,8 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
     @Autowired
     private TimeContactService timeContactService;
     @Autowired
+    private ProcessListService processListService;
+    @Autowired
     private CompareService compareService;
     @Autowired
     private ChangeRecordService changeRecordService;
@@ -333,6 +335,10 @@ public class ApproveServiceImpl extends ServiceImpl<ApproveDao, ApproveEntity> i
                         timeContactService.download(params, response);
                         break;
                     case 10:
+                    	if(!isReportGroup) {
+                    		fileName="assembleProcessList"+new Date().getTime();
+                    	}
+                    	processListService.download(params, response);
                         break;
                     case 11:
                         // 标准时间表

@@ -1,8 +1,10 @@
 package io.apj.modules.report.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -68,5 +70,26 @@ public class AssembleProcessListEntity implements Serializable {
 	 * 删除时间
 	 */
 	private Date deleteAt;
-
+	
+	@TableField(exist = false)
+	private String workName;
+	
+	
+	@TableField(exist = false)
+	private String stationName;
+	
+	@TableField(exist = false)
+	private String standardBookNum;
+	
+	@TableField(exist = false)
+	private BigDecimal manHourSecond;
+	
+	@TableField(exist = false)
+	private BigDecimal manHourMin;
+	
+	@TableField(exist = false)
+	private BigDecimal manHourMinTotal;
+	
+	@TableField(exist =false)
+	private Integer personnelAllocation;
 }

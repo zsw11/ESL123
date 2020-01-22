@@ -56,6 +56,7 @@ import io.apj.modules.masterData.service.PhaseService;
 import io.apj.modules.masterData.service.ReportGroupReportRelaService;
 import io.apj.modules.masterData.service.ReportService;
 import io.apj.modules.masterData.service.WorkstationService;
+import io.apj.modules.report.entity.AssembleProcessListEntity;
 import io.apj.modules.report.entity.ReportBatchEntity;
 import io.apj.modules.report.entity.ReportDeptRelaEntity;
 import io.apj.modules.report.entity.ReportGroupDeptRelaEntity;
@@ -789,6 +790,17 @@ public class WorkBookServiceImpl extends ServiceImpl<WorkBookDao, WorkBookEntity
             }
         }
         return map;
+    }
+    
+    
+    @Override
+    public List<WorkBookEntity> selectListByCondition(Integer modelId,String stlst, Integer phaseId, String destinations, String versionNumber) {
+        
+        EntityWrapper<WorkBookEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("phase_id", phaseId).eq("stlst", stlst).eq("model_id", modelId).eq("destinations", destinations).eq("version_number", versionNumber);
+		List<WorkBookEntity> entityList = selectList(entityWrapper);
+		
+        return entityList;
     }
 
 }

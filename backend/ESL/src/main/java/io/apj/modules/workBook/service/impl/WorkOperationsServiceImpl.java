@@ -1,37 +1,38 @@
 package io.apj.modules.workBook.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+
 import io.apj.common.exception.RRException;
-import io.apj.common.utils.*;
+import io.apj.common.utils.Constant;
+import io.apj.common.utils.DataUtils;
+import io.apj.common.utils.DateUtils;
+import io.apj.common.utils.ExcelData;
+import io.apj.common.utils.ExportExcelUtils;
+import io.apj.common.utils.PageUtils;
+import io.apj.common.utils.Query;
 import io.apj.common.validator.ValidatorUtils;
-import io.apj.modules.masterData.entity.ActionEntity;
-import io.apj.modules.masterData.entity.WorkstationEntity;
 import io.apj.modules.masterData.service.WorkstationService;
 import io.apj.modules.sys.service.SysDictService;
 import io.apj.modules.workBook.dao.WorkOperationsDao;
-import io.apj.modules.workBook.entity.WorkBookEntity;
 import io.apj.modules.workBook.entity.WorkOperationsEntity;
 import io.apj.modules.workBook.service.WorkOperationsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service("workOperationsService")
 public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, WorkOperationsEntity>
@@ -382,6 +383,16 @@ public class WorkOperationsServiceImpl extends ServiceImpl<WorkOperationsDao, Wo
 		if (WorkOperationsList.size() > 0) {
 			this.updateAllColumnBatchById(WorkOperationsList);
 		}
+	}
+	
+	
+	@Override
+	public List<WorkOperationsEntity> selectListByBookId(Integer bookId) {
+		EntityWrapper<WorkOperationsEntity> entityWrapper = new EntityWrapper<>();
+		entityWrapper.eq("work_book_id",bookId).isNull("delete_at").orderBy("update_at", false);
+		List<WorkOperationsEntity> listBookOperations= this.selectList(entityWrapper);
+
+		return listBookOperations;
 	}
 
 }
